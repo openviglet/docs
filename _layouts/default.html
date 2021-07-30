@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{%- include head.html -%}
+
+
+<body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style>
+    {%- include header.html -%}
+    <header class="p-3 border-bottom">
+        <div class="container">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                    <li class="breadcrumb-item active">Documentation
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </header>
+    <div>
+        <div class="row text-center" style="display: inherit;margin:0px;background:orangered;color: white; font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif " ">
+            <div class=" col-lg-9 col-md-9 col-sm-10 col-xs-11 col-centered " style=" padding:80px ">
+                <p style=" font-size:70px;text-align:center;line-height: 120%; ">
+                    <b>{{page.banner-title}}</b>
+                </p>
+                <div style=" font-size:30px;text-align:center;line-height: 120%; ">
+                    <p>{{page.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=" container " style=" font-family: 'ProximaNovaLight' , 'Helvetica Neue' , Helvetica, Arial, sans-serif ">
+        {% assign stable_solutions = site.solutions %} {%- include solution-list.html -%}
+    </div>
+
+</body>
+
+</html>
