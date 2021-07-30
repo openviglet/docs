@@ -3,7 +3,7 @@ title: Minium TAP
 status: stable
 order: 2
 identifier: minium
-permalink: /minium/
+permalink: https://minium.vilt.io/docs/
 get-started: https://minium.vilt.io/docs/
 github: https://github.com/viltgroup/minium-developer
 github-org: viltgroup
