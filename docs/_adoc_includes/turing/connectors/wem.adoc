@@ -1,0 +1,457 @@
+[[wem]]
+== OpenText WEM Listener
+OpenText WEM Listener to publish content to Viglet Turing
+
+[[wem-installation]]
+=== Installation
+
+[[wem-download]]
+==== Download
+Go to https://viglet.com/turing/download/ and click on "Integration > WEM Listener" link to download it.
+
+Extract the turing-wem.zip file to /appl/viglet/turing/wem
+
+```shell
+mkdir -p /appl/viglet/turing/wem
+unzip turing-wem.zip -d /appl/viglet/turing/wem
+```
+
+[[wem-classpath]]
+==== Classpath
+1. Copy the  turing-wem-all.jar to WEM and CDS Library directory, for example:
++
+```shell
+cp /appl/viglet/turing/wem/turing-wem-all.jar /appl/ot/WEM/Content/<VERSION>/lib/
+```
++
+2. Edit the `cda.classpath` file of Management and Delivery Stages, for examples:
++
+```shell
+/appl/otwork/WEM/inst-vgninst/cfgagent/vcm-vgninst/cdsvcs/stage-mgmt/cds-mgmt/cda-mgmt/conf/cda.classpath
+/appl/otwork/WEM/inst-vgninst/cfgagent/vcm-vgninst/cdsvcs/stage-Live/cds-Live/cda-Live/conf/cda.classpath
+```
++
+3. These cda.classpath files contain the following lines:
++
+```properties
+CLASSPATH.6=\#INSTALL_DIR\#/lib/jaxws
+CLASSPATH.5=\#INSTALL_DIR\#/lib
+CLASSPATH.4=\#INSTALL_DIR\#/lib/appsvcsda/jsp-api.jar
+CLASSPATH.3=\#INSTALL_DIR\#/lib/appsvcsda/vgn-appsvcs-dadataobject.jar
+CLASSPATH.2=\#INSTALL_DIR\#/lib/jax-qname.jar
+CLASSPATH.1=\#INSTALL_DIR\#/jdbc
+```
++
+4. Add the following line in each cda.classpath
++
+```properties
+CLASSPATH.7=\#INSTALL_DIR\#/lib/turing-wem-all.jar
+```
++
+
+
+<<<
+
+[[wem-deploy]]
+==== WEM Deploy
+
+Add the turing-wem-all.jar into WEM using configp:
+
+....
+$ ./configp
+============================================================
+
+Configuration Program Main Menu
+
+-----------------------------------------
+   1.  Connect to WEM Server
+   2.  Create a Disconnected Configuration Agent
+   3.  Remove a Disconnected Configuration Agent
+   4.  Repair Management Server
+
+   q.  Quit
+
+   > 1
+============================================================
+Connect to WEM Server: WEM Server Connection Information
+
+
+WEM Server host: wemserver
+WEM Server port: 27110
+WEM Server administrator: vgnadmin
+WEM Server administrative password:
+
+*****************************************
+ You have entered the following:
+
+  WEM Server host = wemserver
+  WEM Server port = 27110
+  WEM Server administrator = vgnadmin
+  WEM Server administrative password = ********
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel )?[y]:
+Connecting...
+Connected to t3://wemserver:27110
+============================================================
+
+Managing Configuration Services
+-----------------------------------------
+   1.  Manage a Product Instance
+   2.  Create a Configuration Agent
+   3.  Remove a Configuration Agent
+   4.  Register a Configuration Agent
+   5.  Manage Applications
+   6.  List Configuration Settings
+
+   b.  Back
+   q.  Quit
+
+   > 5
+============================================================
+Manage Applications: Manage Application
+
+
+  To register or unregister Extension Modules, select
+  Register Product Extensions. To modify an existing
+  deployed application, select Update Runtime Services.
+
+Select type of application update
+---------------------------------
+   1.  Register Product Extensions
+   2.  Update Runtime Services
+
+   b.  Back
+   c.  Cancel
+
+   > 1
+
+*****************************************
+ You have entered the following:
+
+  Select type of application update = Register Product Extensions
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]:
+============================================================
+Manage Applications: Deployment Types
+
+
+  You can choose to deploy an extension which exists
+  within the VCM ear container or a standalone application
+  outside of the VCM ear container.
+
+Do you want to deploy an extension or standalone application?
+--------------------------------------------------
+   1.  Extension
+   2.  Standalone Application
+
+   b.  Back
+   c.  Cancel
+
+   > 1
+
+*****************************************
+ You have entered the following:
+
+  Do you want to deploy an extension or standalone application? = Extension
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]:
+============================================================
+Manage Applications: Deployment Actions
+
+
+Register Extension Type
+-----------------------
+   1.  JAR Extension Module
+   2.  WAR Extension Module
+   3.  Multiple Extension Modules - can include both JAR and WAR files
+
+   b.  Back
+   c.  Cancel
+
+   > 1
+Deployment Action
+-----------------
+   1.  Deploy Extension
+   2.  Undeploy Extension
+
+   b.  Back
+   c.  Cancel
+
+   > 1
+
+*****************************************
+ You have entered the following:
+
+  Register Extension Type = jarext (JAR Extension Module)
+  Deployment Action = Deploy Extension
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]:
+============================================================
+Manage Applications: Extension JAR Path
+
+
+  Enter the path to the archive file containing the
+  extension. This file is registered with the repository
+  and deployed to the application server.
+
+  Important!! Deployment of an extension could take
+  up to 15 mins.
+
+JAR Path (example: C:\vign_extn.jar): /appl/viglet/turing/wem/turing-wem-all.jar
+
+*****************************************
+ You have entered the following:
+
+  JAR Path (example: C:\vign_extn.jar) = /appl/viglet/turing/wem/turing-wem-all.jar
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]: y
+============================================================
+Manage Applications: Confirm Configuration
+
+
+  Are you ready to perform this action?
+
+
+
+Continue? ( (y)es, (n)o, (b)ack, (c)ancel )? [y]: y
+
+Confirm Configuration:
+
+  All the information has been collected. Would you
+  like to commit the configuration? (y/n) [y]: y
+
+Step 1 of 3: Validating Input ...
+Step 2 of 3: Check Configuration Status ...
+Step 3 of 3: Updating Application ...
+
+Success:
+
+The configuration wizard completed successfully.
+
+....
+
+
+
+<<<
+
+[[wem-resource]]
+==== Resource
+Access the Configuration Console (http://wem_host:wem_port/configconsole) and add the VigletTuring Generic Resource in each Delivery Stage that will index to Turing Semantic Navigation.
+
+For example: 
+
+1. Click on right-button on `Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Resources`, select Add Resource
+2. In Resource Type, select "Generic Resource" and click Next
+3. In Resource Name, type: `VigletTuring` and click Next
+4. In Generic Resource Type, select "Other(Any stage-specific resource subtype information)" and click Next
+5. In Resource Subtype, type: `Properties` and click Next
+6. In Resource Information > Non-Encrypted Data type: `fill later` and Encrypted Data leaves blank and click Next
+7. In Confirm Configuration click Finish.
+8. Edit "Configuration Console > Content > Delivery Services > Content Delivery Stage - SebraeNA > Resources > Resource Type - Generic > Resource - VigletTuring > Generic Resource > DATA" and replace "fill later" for:
+```properties
+turing.url=http://localhost:2700
+turing.mappingsxml=/appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml
+turing.login=admin
+turing.password=admin
+
+cda.default.urlprefix=http://localhost
+cda.default.contextname=sites
+sn.default.site=Sample
+sn.it_IT.site=SampleIT
+
+sites.association.priority=SampleSite
+```
+
+<<<
+Where
+
+.VigletTuring Generic Resource Properties
+[%header,cols=3*] 
+|===
+| Parameter | Required | Description
+| turing.url | yes | Turing URL.
+| turing.mappingsxml | yes | XML File.
+| turing.login | yes | Turing Login.
+| turing.password | yes | Turing Password.
+| cda.default.urlprefix | no | Prefix will be used to create URL of content in Search.
+| cda.default.contextname | no | Context Name of DPS.
+| sn.default.site | yes | Name of site on Turing Semantic Navigation, that will be used to index the WEM Content.
+| sn.<locale>.site | no | If the content has locale attribute, you can specify a different Semantic Navigation Site that will be indexed.
+| sites.association.priority | no | If the content is associated with more than one site, you can define which site will be chosen to avoid conflict.
+|===
+
+NOTE: Repeat this procedure in other Management and Delivery Stages that will use Turing Semantic Navigation
+
+IMPORTANT: The Listener uses URL Scheme from Site to generate Content URL.
+
+<<<
+
+[[wem-events]]
+==== Events
+Access the Configuration Console (http://wem_host:wem_port/configconsole) and add the EventListener in each Delivery Stage that will index to Turing Semantic Navigation.
+
+Configure the Deployment.ManagedObjectCreate, Update and Delete listeners.
+
+1. Register the required listeners to the events as specified below:
+** `Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Content Delivery Services - Live > Application Services > Events > Deployment.ManagedObjectCreate`
++
+....
+com.viglet.turing.wem.listener.DeploymentEventListener
+....
++
+**	`Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Content Delivery Services - Live > Application Services > Events > Deployment.ManagedObjectDelete`
++
+....
+com.viglet.turing.wem.listener.DeploymentEventListener
+....
++
+** `Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Content Delivery Services - Live > Application Services > Events > Deployment.ManagedObjectUpdate`
++
+....
+com.viglet.turing.wem.listener.DeploymentEventListener
+....
+NOTE: Be sure to copy any existing listeners from the current run value and append the new listener to    the end of the list during registration. If needed, see section 6 of the Management Console Extensibility SDK guide for more information on registering event listeners.
++
+2. Commit the configuration changes and restart the DA
+
+[[wem-command-line]]
+==== Command Line
+
+Copy `/appl/viglet/turing/wem/command-line/<WEM_VERSION>/turing-wem` to `<WEM_DIR>/bin`, it works a lot like `vgncontentindex` command line.
+
+<<<
+
+[[wem-configuration]]
+=== Configuration
+
+[[wem-configuration-mapping]]
+==== Mapping
+
+Create a /appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml file with the following lines:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<mappingDefinitions>
+    <common-index-attrs>
+        <srcAttr className="com.viglet.turing.wem.ext.TurCTDName" mandatory="true">
+            <tag>type</tag>
+        </srcAttr>
+        <srcAttr className="com.viglet.turing.wem.ext.TurWEMPublicationDate" mandatory="true">
+            <tag>publication_date</tag>
+        </srcAttr>
+        <srcAttr className="com.viglet.turing.wem.ext.TurWEMModificationDate" mandatory="true">
+            <tag>modification_date</tag>
+        </srcAttr>
+        <srcAttr className="com.viglet.turing.wem.ext.TurSiteName" mandatory="true">
+            <tag>site</tag>
+        </srcAttr>
+        <srcAttr className="com.viglet.turing.wem.ext.HTML2Text">
+            <tag>text</tag>
+        </srcAttr>
+        <srcAttr className="com.viglet.turing.wem.ext.HTML2Text">
+            <tag>abstract</tag>
+        </srcAttr>
+        <srcAttr className="com.viglet.turing.wem.ext.DPSUrl" mandatory="true">
+            <tag>url</tag>
+        </srcAttr>
+    </common-index-attrs>
+    <mappingDefinition contentType="INNOVATE_PRESS_RELEASE">
+        <index-attrs>
+            <srcAttr xmlName="title">
+                <tag>title</tag>
+            </srcAttr>
+            <srcAttr xmlName="teaser">
+                <tag>abstract</tag>
+            </srcAttr>
+            <srcAttr xmlName="body">
+                <tag>text</tag>
+            </srcAttr>
+            <srcAttr textValue="foo bar">
+                <tag>text</tag>
+            </srcAttr>
+        </index-attrs>
+    </mappingDefinition>
+</mappingDefinitions>
+```
+NOTE: There should be a srcAttr element for each content type field to be indexed by Turing AI.  The xmlName attribute should contain the XML Name of the relevant field.
+
+<<<
+
+[[wem-xml-elements]]
+=== CTD-Turing-Mappings.xml Elements
+The following sections describe the delements defined in the CTD-Turing-Mappings.xml file under the root element `<mappingDefinitions>`:
+
+[[wem-xml-elements-common-index-attrs]]
+==== common-index-attrs
+
+.srcAttr (common-index-attrs) Element Definition
+[%header,cols=2*] 
+|===
+| Element | Description 
+| srcAttr | List of tags (turing fields) that can be used by CTDs in mappingDefinition.   
+|===
+
+.srcAttr (common-index-attrs) Attributes
+[%header,cols=4*] 
+|===
+| Attribute | Required/ Optional | Default Value | Description
+| mandatory | Optional | "false" | If "true", it means the tag will always be inserted in all CTDS.
+| classname | Required | - | Custom class to process the field value. Implicitly define this custom class to process the field value className in mappingDefinition srcAttr when the same tag is used.
+|===
+
+<<<
+
+[[wem-xml-elements-mapping-definition]]
+==== mappingDefinition
+
+.mappingDefinition Element Definition
+[%header,cols=2*] 
+|===
+| Element | Description
+| mappingDefinition | CTD Mapping.
+|===
+
+.mappingDefinition Attribute
+[%header,cols=4*] 
+|===
+| Attribute | Required/ Optional | Default Value | Description
+| contentType | Required | - | Content Type XML Name.
+|===
+
+.index-attrs Element Definition
+[%header,cols=2*] 
+|===
+| Element | Description
+| index-attrs | List of Content Type Field
+|===
+
+.srcAttr (mappingDefinition) Element Definitiion
+[%header,cols=2*] 
+|===
+| Element | Description
+| srcAttr | Content Type Field to be indexed by Turing AI.  
+|===
+
+.srcAttr (mappingDefinition) Attributes
+[%header,cols=4*] 
+|===
+| Attribute | Required/ Optional | Default Value | Description
+| xmlName | Required (if className or textValue is missing) | - | Content Type Field XML Name.
+| relation | Optional | - | Content Type Relation XML Name.
+| uniqueValues | Optional | "false" | A List return unique values.
+| valueType | Optional | - | If "html" then convert HTML to Text.
+| classname | Required (if xmlName or textValue is missing) | - | Custom class to process the field value.
+| textValue | Required (if xmlName or classname is missing) | - | returns a text for the tag (Turing field)
+|===
+
+.tag Element Definition
+[%header,cols=2*] 
+|===
+| Element | Element Description
+| tag | Turing AI Semantic Navigation Field
+|===

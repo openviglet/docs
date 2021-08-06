@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{%- include head.html -%}
+
+
+<body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style>
+    {%- include header.html -%}
+    <header class="p-3 border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                        aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                            <li class="breadcrumb-item"><a href="/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
+                            </li>
+                            {%- if page.breadcrumb-title -%}
+                            <li class="breadcrumb-item" aria-current="page"><a href="/turing/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);;">Turing</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ page.breadcrumb-title | escape }}
+                            </li>
+                            {%- else -%}
+                            <li class="breadcrumb-item active" aria-current="page">Turing</li>
+                            {%- endif -%}
+                        </ol>
+                    </nav>
+                </div>
+                {%- if page.breadcrumb-title -%}
+                <div class="col-2" style="text-align: right;color: indianred;"><a style="text-align: center;color: indianred;" href="{{ page.pdf }}" target="_blank">Download PDF</a>
+                </div>
+                {%- endif -%}
+            </div>
+        </div>
+    </header>
+    {{ content }}
+</body>
+<script>
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+</html>

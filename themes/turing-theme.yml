@@ -1,0 +1,48 @@
+extends: default
+title_page:
+  logo_image: image:img/viglet_turing.png[]
+page:
+  layout: portrait
+  margin: [3.2cm, 2cm, 2.2cm, 2cm]
+  size: A4
+base:
+  font_color: #333333
+  font_family: Helvetica
+  font_size: 12
+  line_height_length: 17
+  line_height: $base_line_height_length / $base_font_size
+vertical_rhythm: $base_line_height_length
+heading:
+  font_size: 17
+  font_style: bold
+  line_height: 1.2
+  margin_bottom: $vertical_rhythm
+link:
+  font-color: #4169e1  
+outline_list:
+  indent: $base_font_size * 1.5
+header:
+  font_color: 999999
+  height: 0.5in
+  recto:
+    columns: "<40% =20% >40%"
+    left:
+      content: '_{document-title}_'
+    center:
+      content: image:img/turing-logo.png[pdfwidth=0.25in]
+    right:
+      content: '_{document-subtitle}_'
+  verso:
+    columns: $header_recto_columns
+    left:
+      content: $header_recto_right_content
+    center:
+      content: $header_recto_center_content
+footer:
+  height: 0.45in
+  recto:
+    right:
+      content: '{section-or-chapter-title} | {page-number}'
+  verso:
+    left:
+      content: '{page-number} | {chapter-title}'

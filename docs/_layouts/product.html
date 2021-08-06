@@ -1,0 +1,64 @@
+---
+layout: default
+---
+<div
+    style="margin:0px;background:orangered;color: white; font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif;padding:80px">
+    <p style=" font-size:70px;text-align:center;line-height: 120%; ">
+        <b>{{page.banner-title}}</b>
+    </p>
+    {%- if site.documentation.size > 0 -%}
+    <div class="container px-4 py-5">
+
+        <div class="row g-4 row-cols-1 row-cols-lg-3">
+            {% for documentation in site.documentation %}
+            <a href="{{ documentation.docurl }}" class="py-2" style="text-decoration: none;color: inherit">
+                <div class="col d-flex align-items-start">
+                    <div style="margin-right: 10px;">
+                       <img src="/static_files/img/document.png">
+                    </div>
+                    <div>
+                        <h2>{{ documentation.title }}</h2>
+                        <p>{{ documentation.description }}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {%- endif -%}
+</div>
+<div class="container">
+        <!-- Contact Section -->
+        <section id="contact" class="container px-4 py-5" style="margin-top: 20px;font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="pb-2 border-bottom" style="margin-bottom: 18px;">Contact</h2>
+                </div>
+            </div>
+            <form action="https://formspree.io/f/moqyjjka" method="POST" name="sentMessage" id="contactForm" class="form-floating">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="name" id="name" required data-validation-required-message="Please enter your name." placeholder="name@example.com">
+                    <label for="floatingInput">Name</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" name="_replyto" class="form-control" id="email" required data-validation-required-message="Please enter your email address." placeholder="Email Address">
+                    <label for="email">Email Address</label>
+                </div>
+                <div>
+                    <input type="hidden" name="_subject" value="Become a partner">
+                    <input type="text" name="_gotcha" style="display:none" />
+                </div>
+                <div class="form-floating mb-3">
+                    <textarea rows="5" style="min-height: 150px;" name="message" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message."></textarea>
+                    <label for="message">Message</label>
+                </div>
+                <div id="contact-status"></div>
+                <div class="row">
+                    <div class="form-group col-xs-12 d-grid gap-2" style="text-align: center;">
+                        <button class="btn btn-lg" style="background:orangered;color: white;" type="submit">Send</button>
+    
+                    </div>
+                </div>
+            </form>
+        </section>
+</div>
