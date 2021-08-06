@@ -10,7 +10,7 @@
                 <h5>Documentation</h5>
                 <ul class="list-unstyled text-small">
 
-                    {% assign stable_solutions = site.solutions | where:"status", "stable" %} {% for solution in stable_solutions %}
+                    {% assign stable_solutions = site.solutions %} {% for solution in stable_solutions %}
                     <li class="mb-1" style="margin-bottom: 10px !important;"><a class="link-secondary text-decoration-none" href="{{ solution.permalink }}">
                             {%- include solution-footer-logo.html -%}
                             <span style="margin-left: 5px;">{{ solution.short-name }}</span>

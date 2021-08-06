@@ -9,7 +9,7 @@ ifdef::backend-pdf[:toc: left]
 :revnumber: 0.3.2 
 :revdate: 17-12-2019
 :source-highlighter: rouge
-:pdf-theme: turing
+:pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Getting Started
 :page-permalink: /vecchio/getting-started/

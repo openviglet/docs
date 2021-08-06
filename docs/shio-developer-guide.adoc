@@ -8,7 +8,7 @@ ifdef::backend-pdf[:toc: left]
 :doctype: book
 :revnumber: 0.3.8 
 :revdate: 06-08-2021
-:pdf-theme: turing
+:pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Developer Guide
 :page-permalink: /shio/developer-guide/

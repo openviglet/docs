@@ -9,7 +9,7 @@ ifdef::backend-pdf[:toc: left]
 :revnumber: 0.3.4
 :revdate: 05-08-2021
 :source-highlighter: rouge
-:pdf-theme: turing
+:pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Connectors
 :page-permalink: /turing/connectors/

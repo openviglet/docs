@@ -1,6 +1,6 @@
 extends: default
 title_page:
-  logo_image: image:img/viglet_turing.png[]
+  logo_image: image:../docs/static_files/img/banner.jpg[]
 page:
   layout: portrait
   margin: [3.2cm, 2cm, 2.2cm, 2cm]
@@ -18,7 +18,7 @@ heading:
   line_height: 1.2
   margin_bottom: $vertical_rhythm
 link:
-  font-color: #4169e1  
+  font-color: #FF5349 
 outline_list:
   indent: $base_font_size * 1.5
 header:
@@ -29,7 +29,7 @@ header:
     left:
       content: '_{document-title}_'
     center:
-      content: image:img/turing-logo.png[pdfwidth=0.25in]
+      content: ''
     right:
       content: '_{document-subtitle}_'
   verso:
