@@ -10,7 +10,8 @@ layout: default
     <div class="container px-4 py-5">
 
         <div class="row g-4 row-cols-1 row-cols-lg-3">
-            {% for documentation in site.documentation %}
+            {% assign filtered_documentation = site.documentation | where:"product", page.product %}
+            {% for documentation in filtered_documentation %}
             <a href="{{ documentation.docurl }}" class="py-2" style="text-decoration: none;color: inherit">
                 <div class="col d-flex align-items-start">
                     <div style="margin-right: 10px;">

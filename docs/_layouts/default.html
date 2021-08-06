@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% assign solution = site.solutions | where:"identifier", page.product | first %}
 {%- include head.html -%}
 
 
@@ -25,13 +26,13 @@
                                     style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
                             </li>
                             {%- if page.breadcrumb-title -%}
-                            <li class="breadcrumb-item" aria-current="page"><a href="/turing/"
-                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);;">Turing</a>
+                            <li class="breadcrumb-item" aria-current="page"><a href="/{{ page.product }}/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">{{ solution.short-name }}</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">{{ page.breadcrumb-title | escape }}
                             </li>
                             {%- else -%}
-                            <li class="breadcrumb-item active" aria-current="page">Turing</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ solution.short-name }}</li>
                             {%- endif -%}
                         </ol>
                     </nav>

@@ -1,0 +1,142 @@
+= Viglet Vecchio Auth: Developer Guide
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Vecchio Auth
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.2 
+:revdate: 17-12-2019
+:title-logo-image: image:assets/vecchio-logo.png[pdfwidth=4.25in,align=center]
+:source-highlighter: rouge
+:pdf-theme: turing
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Developer Guide
+:page-permalink: /vecchio/developer-guide/
+:imagesdir: ../../
+:page-pdf: /vecchio/vecchio-developer-guide.pdf
+:page-product: vecchio
+
+== About the author
+
+You can contact Alexandre Oliveira at alexandre.oliveira@viglet.com.
+
+Alexandre Oliveira loves developing corporate applications.
+
+:numbered:
+== Introduction
+
+This chapter provides concepts and other information required to perform development tasks in Vecchio Auth.
+
+Include the following topics:
+
+* <<About Vecchio Auth>>
+* <<Features>>
+
+=== About Vecchio Auth
+
+Viglet Vecchio Auth allows to create authentication and authorization layers to access API, with proactive monitoring.
+
+=== Features
+
+* Significantly lowers integration costs, decreases total cost of ownership, and reduces deployment risks
+* Connects mobile devices to existing enterprise systems
+* Provides a lightweight API gateway for securing and managing APIs
+* Offers rich integration with many identity and access management platforms
+* Helps streamline regulatory compliance through authentication, authorization, and audit capabilities
+
+== Mapping Resources
+For example, in Mapping Console (http://localhost:2702/console/#!/mapping) add the following URLs:
+
+GitHub - openviglet
+
+* Context: /proxy/github/openviglet
+* Proxy: https://api.github.com/users/openviglet
+
+[#mapping-screenshot]
+.Mapping
+image::assets/mapping.png[]
+
+== Apps
+Create a new App (http://localhost:2702/console/#!/app/new) and copy the values of "Keys and Access Tokens" tab.
+
+[#sample-app]
+.Sample App
+image::assets/sample-app.png[]
+
+Will generate the following keys an tokens for your App, for instance:
+
+|===
+|Token |Value
+
+|Consumer Key (API Key)
+|4d2aade33fa53baf07d88165e8ecf58f
+
+|Consumer Secret (API Secret)
+|4b7104ebd32471eef9feda56563ba8f4
+
+|Access Token
+|f7d2c3475cae32d1a464bcea3a57023b
+
+|Access Token Secret
+|2a383e82b72ab6f47dbdccd23c35e3e8
+|===
+
+== Grant Types
+You can access the API Resources using your Access Token, ou generate new Access Token using the followings Grant Types:
+
+=== Authorization Code
+Use the *Consumer Key (API Key)* to generate the Authorization Code:
+
+[source,bash]
+----
+curl -I -X GET 'http://localhost:2702/api/authorize?response_type=code&client_id=4d2aade33fa53baf07d88165e8ecf58f&redirect_uri=http://localhost:2702/console/oauth2/receive_authcode'
+----
+
+Will return the Location, so get the *Authorization Code*:
+
+[source,bash]
+----
+Location: http://localhost:2702/console/oauth2/receive_authcode?code=e31d6626d203aaea0811305e33136d59`
+----
+
+Use the Authorization Code to generate the *Access Token*, for instance: b516216e45610d4be3716c8dfab70985:
+
+[source,bash]
+----
+curl -I -X GET 'http://localhost:2702/api/token' -d 'grant_type=authorization_code&code=e31d6626d203aaea0811305e33136d59'
+----
+
+=== Implicit
+
+Use the *Consumer Key (API Key)* to generate the Authorization Code:
+
+[source,bash]
+----
+curl -I -X GET 'http://localhost:2702/api/authorize?response_type=token&client_id=4d2aade33fa53baf07d88165e8ecf58f&redirect_uri=http://localhost:2702/console/oauth2/receive_implicit_token'
+----
+
+Will return the Location, so get the *Access Token*, for instance: b516216e45610d4be3716c8dfab70985:
+
+[source,bash]
+----
+Location: http://localhost:2702/console/oauth2/receive_implicit_token?access_token=b516216e45610d4be3716c8dfab70985&state=xyz&token_type=bearer&expires_in=3600
+----
+
+=== Using API Resources
+
+Ready! You can access the following API Resources using the *Access Token* from Authorization Code or Implicit Grant Types or App Settings (Your Access Token), for instance f7d2c3475cae32d1a464bcea3a57023b, if you use an invalid Access Token, it will return empty response.
+
+[source,bash]
+----
+curl -X GET "localhost:2702/github/openviglet" -H  "accept: application/json" -H  "content-type: application/json" -H  "authorization: Bearer f7d2c3475cae32d1a464bcea3a57023b"
+----
+
+== Dashboard
+
+Dashboard Console (http://localhost:2702/console/#!/dashboard) shows response time report.
+
+[#dashboard-screenshot]
+.Dashboard shows response time report
+image::assets/dashboard.png[]
