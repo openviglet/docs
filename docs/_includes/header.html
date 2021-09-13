@@ -14,7 +14,7 @@
             </div>
             {% assign solution = site.solutions | where:"identifier", page.product | first %}
             {%- if solution.github -%}
-            <a href="https://viglet.com{{solution.permalink}}" target="_blank" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            <a href="https://viglet.com{{solution.permalink}}" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
             style="color:#ffc63a">Go to {{solution.short-name}} Website</a>
             {%- else -%}
             <a href="https://viglet.com" target="_blank" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
