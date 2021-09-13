@@ -12,8 +12,14 @@
                 <input type="checkbox" id="switch-theme-checkbox" />
                 <label for="switch-theme-checkbox">Dark Theme</label>
             </div>
+            {% assign solution = site.solutions | where:"identifier", page.product | first %}
+            {%- if solution.github -%}
+            <a href="https://viglet.com{{solution.permalink}}" target="_blank" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            style="color:#ffc63a">Go to {{solution.short-name}} Website</a>
+            {%- else -%}
             <a href="https://viglet.com" target="_blank" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
             style="color:#ffc63a">viglet.com</a>
+            {%- endif -%}
         </div>
     </div>
 </header>

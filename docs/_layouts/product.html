@@ -1,6 +1,8 @@
 ---
 layout: default
 ---
+{% assign solution = site.solutions | where:"identifier", page.product | first %}
+{%- include github_link.html -%}
 <div
     style="margin:0px;background:orangered;color: white; font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif;padding:80px">
     <p style=" font-size:70px;text-align:center;line-height: 120%; ">
