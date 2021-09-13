@@ -1,5 +1,4 @@
 ---
-layout: solution
 title: Viglet Vecchio Auth
 status: unstable
 order: 5
