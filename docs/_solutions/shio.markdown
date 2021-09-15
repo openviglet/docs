@@ -5,7 +5,7 @@ order: 3
 identifier: shio
 permalink: /shio/
 get-started: https://shio.readme.io/
-github: https://github.com/ShioCMS
+github: https://github.com/ShioCMS/shio
 github-org: ShioCMS
 release: 0.3.7
 main-color: tomato
