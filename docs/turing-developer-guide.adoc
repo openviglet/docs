@@ -50,23 +50,32 @@ We are using Eclipse, Visual Studio Code and IntelliJ as IDEs.
 
 Use the git command line to download the repository to your computer.
 
+==== Turing Server and Connectors
+
 ```shell
-git clone https://github.com/openturing/turing.git
+git clone https://github.com/openturing/turing.git 
+```
+==== Turing Java SDK
+
+```shell
+git clone https://github.com/openturing/turing-java-sdk.git
 ```
 
-=== Run
+=== Run during Development
 
-To run Turing AI, just execute the following lines:
+To run Turing AI, execute the following lines:
 
 ==== Turing Server
 
 ```shell
+cd turing 
 ./gradlew turing-app:bootrun
 ```
+
 ==== New Turing UI
 
 ```shell
-cd turing-ui
+cd turing/turing-ui
 
 ## Console
 ng serve console
@@ -77,7 +86,17 @@ ng serve sn
 ## Chatbot
 ng serve converse
 ```
+IMPORTANT: You need start the Turing Server and Solr first.
 
+==== Java SDK
+
+```shell
+cd turing-java-sdk
+./gradlew shadowJar
+java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.TurSNClientSample
+
+```
+IMPORTANT: You need start the Turing Server and Solr first.
 
 === Docker Compose
 
@@ -89,5 +108,11 @@ docker-compose up
 
 === URLs
 
+==== Turing Server
 * Administration Console: http://localhost:2700. (admin/admin)
 * Semantic Navigation Sample: http://localhost:2700/sn/Sample.
+
+==== New Turing UI
+* Console http://localhost:4200
+* Search Page http://localhost:4200/sn/Sample
+* Converse http://localhost:4200/converse
