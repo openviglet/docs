@@ -18,61 +18,64 @@ ifdef::backend-pdf[:toc: left]
 :page-product: turing
 
 [preface]
-= Preface
+== Preface
 
 Viglet Turing AI (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 :numbered:
 
-== Get Started
-
-=== More Documentation
+== More Documentation
 
 Technical documentation on Turing AI is available at https://docs.viglet.com/turing.
 
-=== Development Structure
+== Development Structure
 
-Turing AI was developed using Spring Boot for its backend.
+=== Frameworks
+Turing AI was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
 
-The UI is currently using AngularJS, but a new UI is being developed using Angular 12 with CSS Primer.
+The UI is currently using AngularJS (https://angularjs.org), but a new UI is being developed using Angular 12 (https://angular.io) with Primer CSS (https://primer.style/css).
 
-By default it uses the H2 database, but can be changed to other databases using Spring Boot properties. It comes bundled with OpenNLP in the same JVM.
+In addition to Java, you also need to have Git (https://git-scm.com/downloads) and NodeJS (https://nodejs.org/en/download/) installed.
 
-It uses Java 14 and its deployment is done with Gradle 7.2 and works on Linux and Windows.
+=== Databases
+By default it uses the H2 database (https://www.h2database.com), but can be changed to other databases using Spring Boot properties. It comes bundled with OpenNLP (https://opennlp.apache.org/) in the same JVM.
 
-To use Semantic Navigation and Chatbot you must have a Solr service available. If you prefer to work with all the services Turing depends on, you can use docker-compose to start these services, we use the Docker Desktop installed on computer.
+=== Language and Deploy
+It uses Java 14 (https://adoptopenjdk.net/archive.html?variant=openjdk14&jvmVariant=hotspot) and its deployment is done with Gradle 7.2 (https://gradle.org/) and works on Linux and Windows.
 
-In addition to Java 14, you also need to have Git and NodeJS installed.
+=== Docker
+To use Semantic Navigation and Chatbot you must have a Solr (https://solr.apache.org) service available. If you prefer to work with all the services Turing depends on, you can use docker-compose (https://docs.docker.com/compose/install) to start these services, we use the Docker Desktop (https://www.docker.com/products/docker-desktop) installed on computer.
 
-We are using Eclipse, Visual Studio Code and IntelliJ as IDEs.
+=== IDE
+You can use Spring Tools 4 for Eclipse (https://spring.io/tools) or Eclipse (https://www.eclipse.org/downloads/) or Visual Studio Code (https://code.visualstudio.com/) or IntelliJ (https://www.jetbrains.com/pt-br/idea/) as IDEs.
 
-=== Download
+== Download
 
 Use the git command line to download the repository to your computer.
 
-==== Turing Server and Connectors
+=== Turing Server and Connectors
 
 ```shell
 git clone https://github.com/openturing/turing.git 
 ```
-==== Turing Java SDK
+=== Turing Java SDK
 
 ```shell
 git clone https://github.com/openturing/turing-java-sdk.git
 ```
 
-=== Run during Development
+== Run during Development
 
 To run Turing AI, execute the following lines:
 
-==== Turing Server
+=== Turing Server
 
 ```shell
 cd turing 
 ./gradlew turing-app:bootrun
 ```
 
-==== New Turing UI
+=== New Turing UI
 
 ```shell
 cd turing/turing-ui
@@ -88,7 +91,7 @@ ng serve converse
 ```
 IMPORTANT: You need start the Turing Server and Solr first.
 
-==== Java SDK
+=== Java SDK
 
 ```shell
 cd turing-java-sdk
@@ -98,7 +101,7 @@ java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.T
 
 IMPORTANT: You need start the Turing Server and Solr first.
 
-=== Docker Compose
+== Docker Compose
 
 You can start the Turing AI using MariaDB, Solr and Nginx.
 
@@ -106,18 +109,18 @@ You can start the Turing AI using MariaDB, Solr and Nginx.
 docker-compose up
 ```
 
-=== URLs
+== URLs
 
-==== Turing Server
+=== Turing Server
 * Administration Console: http://localhost:2700. (admin/admin)
 * Semantic Navigation Sample: http://localhost:2700/sn/Sample.
 
-==== New Turing UI
+=== New Turing UI
 * Console http://localhost:4200
 * Search Page http://localhost:4200/sn/Sample
 * Converse http://localhost:4200/converse
 
-==== Code Quality
+=== Code Quality
 
 You can check the quality of Turing Code at:
 
