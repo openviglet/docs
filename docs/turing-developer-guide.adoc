@@ -94,8 +94,8 @@ IMPORTANT: You need start the Turing Server and Solr first.
 cd turing-java-sdk
 ./gradlew shadowJar
 java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.TurSNClientSample
-
 ```
+
 IMPORTANT: You need start the Turing Server and Solr first.
 
 === Docker Compose
@@ -116,3 +116,12 @@ docker-compose up
 * Console http://localhost:4200
 * Search Page http://localhost:4200/sn/Sample
 * Converse http://localhost:4200/converse
+
+==== Quality Code
+
+You can check the quality of Turing Code at:
+
+* SonarCloud at https://sonarcloud.io/organizations/viglet-turing/projects
+* Github Actions at https://github.com/openturing/turing/actions
+* Github Security at https://github.com/openturing/turing/security/code-scanning
+* Codecov at https://app.codecov.io/gh/openturing/turing
