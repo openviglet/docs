@@ -117,7 +117,7 @@ docker-compose up
 * Search Page http://localhost:4200/sn/Sample
 * Converse http://localhost:4200/converse
 
-==== Quality Code
+==== Code Quality
 
 You can check the quality of Turing Code at:
 
