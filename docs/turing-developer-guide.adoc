@@ -30,16 +30,42 @@ Viglet Turing AI (https://viglet.com/turing) is an open source solution (https:/
 
 Technical documentation on Turing AI is available at https://docs.viglet.com/turing.
 
+=== Development Structure
+
+Turing AI was developed using Spring Boot for its backend.
+
+The UI is currently using AngularJS, but a new UI is being developed using Angular 12 with CSS Primer.
+
+By default it uses the H2 database, but can be changed to other databases using Spring Boot properties. It comes bundled with OpenNLP in the same JVM.
+
+It uses Java 14 and its deployment is done with Gradle 7.2 and works on Linux and Windows.
+
+To use Semantic Navigation and Chatbot you must have a Solr service available. If you prefer to work with all the services Turing depends on, you can use docker-compose to start these services, we use the Docker Desktop installed on computer.
+
+In addition to Java 14, you also need to have Git and NodeJS installed.
+
+We are using Eclipse, Visual Studio Code and IntelliJ as IDEs.
+
+=== Download
+
+Use the git command line to download the repository to your computer.
+
+```shell
+git clone https://github.com/openturing/turing.git
+```
+
 === Run
 
 To run Turing AI, just execute the following lines:
 
+==== Turing Server
+
 ```shell
-# Turing App
 ./gradlew turing-app:bootrun
+```
+==== New Turing UI
 
-# New Turing AI UI using Angular 12 and Primer CSS.
-
+```shell
 cd turing-ui
 
 ## Console
@@ -51,6 +77,7 @@ ng serve sn
 ## Chatbot
 ng serve converse
 ```
+
 
 === Docker Compose
 
