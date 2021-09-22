@@ -106,6 +106,7 @@ IMPORTANT: You need start the Turing Server and Solr first.
 You can start the Turing AI using MariaDB, Solr and Nginx.
 
 ```shell
+./gradlew turing-app:build -x test -i --stacktrace
 docker-compose up
 ```
 
