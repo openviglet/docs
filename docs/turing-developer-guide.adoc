@@ -109,6 +109,7 @@ You can start the Turing AI using MariaDB, Solr and Nginx.
 ./gradlew turing-app:build -x test -i --stacktrace
 docker-compose up
 ```
+NOTE: If you have problems with permissions on directories, run `chmod -R 777 volumes`
 
 == URLs
 
@@ -120,6 +121,11 @@ docker-compose up
 * Console http://localhost:4200
 * Search Page http://localhost:4200/sn/Sample
 * Converse http://localhost:4200/converse
+
+=== Docker Compose
+* Administration Console: http://localhost. (admin/admin)
+* Semantic Navigation Sample: http://localhost/sn/Sample.
+* Solr: http://localhost:8983
 
 === Code Quality
 
