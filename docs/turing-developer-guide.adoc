@@ -172,12 +172,10 @@ You can check the quality of Turing Code at:
 
 == Installation Modes
 
-=== Turing Server
+=== Turing AI Server
 ==== Simple. 
 
-*Installation and Configuration Hours*: 2 hours
-
-Turing will be installed only using OpenNLP and H2 bank embedded in Turing AI itself.
+Turing AI will be installed only using OpenNLP and H2 bank embedded in Turing AI itself.
 
 ===== Prerequisites
 
@@ -190,15 +188,19 @@ Turing will be installed only using OpenNLP and H2 bank embedded in Turing AI it
 
 Ideal for development and testing environment. Because it requires fewer components and little memory usage
 
+===== Estimated Hours
+
+2 hours
+
+IMPORTANT: Servers will be provided by the customer.
+
 ==== Docker Compose
 
-*Installation and Configuration Hours*: 16 hours
+Turing AI and its dependencies will be raised using Docker Compose, which will include the following services:
 
-Turing and its dependencies will be raised using Docker Compose, which will include the following services:
-
-* MariaDB – to store Turing system tables
-* Solr – Used by Turing's Semantic Navigation and Chatbot
-* Nginx – WebServer for Turing to use port 80
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing AI to use port 80
 * Turing AI.
 
 ===== Prerequisites
@@ -210,15 +212,19 @@ Turing and its dependencies will be raised using Docker Compose, which will incl
 ===== Target Audience
 Ideal for environment that needs better complexity but avoids installing product by product. It can be used in an QA or Production environment.
 
+===== Estimated Hours
+
+16 hours
+
+IMPORTANT: Servers and docker configuration will be provided by the customer.
+
 ==== Kubernetes
 
-*Installation and Configuration Hours*: 24 hours
+Turing AI and its dependencies will be raised using Kubernetes, which will include the following services:
 
-Turing and its dependencies will be raised using Kubernetes, which will include the following services:
-
-* MariaDB – to store Turing system tables
-* Solr – Used by Turing's Semantic Navigation and Chatbot
-* Nginx – WebServer for Turing to use port 80
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing AI to use port 80
 * Turing AI.
 
 ===== Prerequisites
@@ -231,15 +237,19 @@ Turing and its dependencies will be raised using Kubernetes, which will include 
 
 Ideal for customers who want to use cloud solutions like Google, AWS, Oracle, etc. Can be used in Production and scalable.
 
-==== Installation of Services. 
+===== Estimated Hours
 
-*Installation and Configuration Hours*: 24 hours
+20 hours
+
+IMPORTANT: Cloud infrastructure and servers will be provided by the customer.
+
+==== Installation of Services
 
 The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
 
-* MariaDB – to store Turing system tables
-* Solr – Used by Turing's Semantic Navigation and Chatbot
-* Apache – WebServer for Turing to use port 80
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Apache – WebServer for Turing AI to use port 80
 * Turing AI.
 
 ===== Prerequisites
@@ -252,9 +262,15 @@ The services will be installed individually on the servers following the Install
 
 Ideal for customers who prefer the on-premise structure. And you want to have the services installed directly on the servers. It can be used in Development, QA and Production.
 
+===== Estimated Hours
+
+20 hours
+
+IMPORTANT: Servers will be provided by the customer.
+
 === Connectors
 
-Turing has several connectors to allow you to index the contents in Semantic Navigation:
+Turing AI has several connectors to allow you to index the contents in Semantic Navigation:
 
 * Apache Nutch (Crawler)
 * Wordpress
@@ -262,4 +278,24 @@ Turing has several connectors to allow you to index the contents in Semantic Nav
 * FileSystem
 * Database
 
-On average it will take *16 hours* to configure the connector and have the first indexing version in Turing.
+===== Prerequisites
+1. Linux or server where will be installed the services.
+2. 50 of Storage for each server.
+
+===== Estimated Hours
+
+On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing AI.
+
+=== NLP 
+
+The customer can choose the NLP that will be used by Turing AI:
+
+* Apache OpenNLP (Embedded)
+* SpaCy NLP
+* Stanford CoreNLP
+* OpenText Content Analytics
+* Poliglot
+
+===== Estimated Hours
+
+On average, it will take *4 hours* to configure NLP and configure Turing AI to use it.
