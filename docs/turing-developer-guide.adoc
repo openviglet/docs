@@ -186,7 +186,7 @@ Turing AI will be installed only using OpenNLP and H2 database embedded in Turin
 
 ===== Target Audience
 
-Ideal for development and testing environment. Because it requires fewer components and little memory usage
+Ideal for development and testing environment. Because it requires fewer components and lower memory usage.
 
 ===== Estimated Hours
 
