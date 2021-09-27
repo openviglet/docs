@@ -182,7 +182,7 @@ Turing AI will be installed only using OpenNLP and H2 database embedded in Turin
 1. Linux server
 2. Java 14
 3. 50Gb HDD
-4.2 Gb of RAM
+4. 2 Gb of RAM
 
 ===== Target Audience
 
@@ -280,7 +280,7 @@ Turing AI has several connectors to allow you to index the contents in Semantic 
 
 ==== Prerequisites
 
-1. Linux or server where will be installed the services.
+1. New linux server or existing server with content or files that will be indexed.
 2. 50 of Storage for each server.
 
 ==== Estimated Hours
@@ -296,6 +296,11 @@ The customer can choose the NLP that will be used by Turing AI:
 * Stanford CoreNLP
 * OpenText Content Analytics
 * Poliglot
+
+==== Prerequisites
+
+1. Linux server
+2. 50 of Storage for each server.
 
 ==== Estimated Hours
 
