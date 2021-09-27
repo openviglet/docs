@@ -278,11 +278,12 @@ Turing AI has several connectors to allow you to index the contents in Semantic 
 * FileSystem
 * Database
 
-===== Prerequisites
+==== Prerequisites
+
 1. Linux or server where will be installed the services.
 2. 50 of Storage for each server.
 
-===== Estimated Hours
+==== Estimated Hours
 
 On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing AI.
 
@@ -296,6 +297,6 @@ The customer can choose the NLP that will be used by Turing AI:
 * OpenText Content Analytics
 * Poliglot
 
-===== Estimated Hours
+==== Estimated Hours
 
 On average, it will take *4 hours* to configure NLP and configure Turing AI to use it.
