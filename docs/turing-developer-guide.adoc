@@ -236,7 +236,7 @@ Turing AI and its dependencies will be installed using Kubernetes scripts, inclu
 
 ===== Target Audience
 
-Customers who want to use cloud solutions like Google, AWS, Oracle, etc. Can be used in Production and scalable.
+Customers who want to use cloud solutions like Google, AWS, Oracle, etc. It can be used in the production environment in a scalable way.
 
 ===== Estimated Hours
 
