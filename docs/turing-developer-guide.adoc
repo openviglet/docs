@@ -244,7 +244,7 @@ Customers who want to use cloud solutions like Google, AWS, Oracle, etc. Can be 
 
 IMPORTANT: Cloud infrastructure and servers will be provided by the customer.
 
-==== Installation of Services
+==== Manual Installation of Services
 
 The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
 
@@ -261,7 +261,7 @@ The services will be installed individually on the servers following the Install
 
 ===== Target Audience
 
-Customers who prefer the on-premise structure. And you want to have the services installed directly on the servers. It can be used in Development, QA and Production.
+Customers who prefer the on-premise structure and want to have the services installed directly on the servers. It can be used in Development, QA and Production.
 
 ===== Estimated Hours
 
