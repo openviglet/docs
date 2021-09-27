@@ -232,7 +232,7 @@ Turing AI and its dependencies will be installed using Kubernetes scripts, inclu
 
 1. Linux Server with Kubernetes installed or Cloud that supports Kubernetes
 2. 100Gb of Storage
-3. Use of 4Gb RAM
+3. 4Gb RAM
 
 ===== Target Audience
 
@@ -255,7 +255,7 @@ The services will be installed individually on the servers following the Install
 
 ===== Prerequisites
 1. One Linux server or up to 4 Linux servers to install services
-2. 50 - 100Gb of Storage for each server.
+2. 50 - 100Gb of Storage for each server
 3. Minimum 2Gb RAM for each Server
 4. The services will be installed individually on the servers following the Installation Guide procedure.
 
@@ -301,7 +301,8 @@ The customer can choose the NLP that will be used by Turing AI:
 ==== Prerequisites
 
 1. Linux server
-2. 50 of Storage for each server.
+2. 50 of Storage for each server
+3. Minimum 2 Gb of RAM
 
 ==== Estimated Hours
 
