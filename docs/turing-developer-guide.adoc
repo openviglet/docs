@@ -175,7 +175,7 @@ You can check the quality of Turing Code at:
 === Turing AI Server
 ==== Simple. 
 
-Turing AI will be installed only using OpenNLP and H2 bank embedded in Turing AI itself.
+Turing AI will be installed only using OpenNLP and H2 database embedded in Turing AI itself.
 
 ===== Prerequisites
 
