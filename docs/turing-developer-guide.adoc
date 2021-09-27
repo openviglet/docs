@@ -186,7 +186,7 @@ Turing AI will be installed only using OpenNLP and H2 database embedded in Turin
 
 ===== Target Audience
 
-Ideal for development and testing environment. Because it requires fewer components and lower memory usage.
+Development and testing environment. Because it requires fewer components and lower memory usage.
 
 ===== Estimated Hours
 
@@ -210,7 +210,8 @@ Turing AI and its dependencies will be raised using Docker Compose, which will i
 4. 4Gb of RAM
 
 ===== Target Audience
-Ideal for environment that needs better complexity but avoids installing product by product. It can be used in an QA or Production environment.
+
+Customers who need more complex environments, but avoid the installation and configuration of each product. It can be used in an QA or Production environment.
 
 ===== Estimated Hours
 
@@ -235,7 +236,7 @@ Turing AI and its dependencies will be raised using Kubernetes, which will inclu
 
 ===== Target Audience
 
-Ideal for customers who want to use cloud solutions like Google, AWS, Oracle, etc. Can be used in Production and scalable.
+Customers who want to use cloud solutions like Google, AWS, Oracle, etc. Can be used in Production and scalable.
 
 ===== Estimated Hours
 
@@ -260,7 +261,7 @@ The services will be installed individually on the servers following the Install
 
 ===== Target Audience
 
-Ideal for customers who prefer the on-premise structure. And you want to have the services installed directly on the servers. It can be used in Development, QA and Production.
+Customers who prefer the on-premise structure. And you want to have the services installed directly on the servers. It can be used in Development, QA and Production.
 
 ===== Estimated Hours
 
