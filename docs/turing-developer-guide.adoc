@@ -105,11 +105,45 @@ IMPORTANT: You need start the Turing Server and Solr first.
 
 You can start the Turing AI using MariaDB, Solr and Nginx.
 
-```shell
+```shellshell
 ./gradlew turing-app:build -x test -i --stacktrace
 docker-compose up
 ```
 NOTE: If you have problems with permissions on directories, run `chmod -R 777 volumes`
+
+=== Docker Commands
+
+==== Turing
+
+```shell
+docker exec -it turing /bin/bash
+```
+
+==== Solr
+
+```shell
+docker exec -it turing-solr /bin/bash
+```
+
+Check logs
+
+```shell
+docker-compose exec turing-solr cat /opt/solr/server/logs/solr.log
+# or 
+docker-compose exec turing-solr tail -f /opt/solr/server/logs/solr.log
+```
+
+==== MariaDB
+
+```shell
+docker exec -it turing-mariadb /bin/bash
+```
+
+==== Nginx
+
+```shell
+docker exec -it turing-nginx /bin/bash
+```
 
 == URLs
 
@@ -135,3 +169,97 @@ You can check the quality of Turing Code at:
 * Github Actions at https://github.com/openturing/turing/actions
 * Github Security at https://github.com/openturing/turing/security/code-scanning
 * Codecov at https://app.codecov.io/gh/openturing/turing
+
+== Installation Modes
+
+=== Turing Server
+==== Simple. 
+
+*Installation and Configuration Hours*: 2 hours
+
+Turing will be installed only using OpenNLP and H2 bank embedded in Turing AI itself.
+
+===== Prerequisites
+
+1. Linux server
+2. Java 14
+3. 50Gb HDD
+4.2 Gb of RAM
+
+===== Target Audience
+
+Ideal for development and testing environment. Because it requires fewer components and little memory usage
+
+==== Docker Compose
+
+*Installation and Configuration Hours*: 16 hours
+
+Turing and its dependencies will be raised using Docker Compose, which will include the following services:
+
+* MariaDB – to store Turing system tables
+* Solr – Used by Turing's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing to use port 80
+* Turing AI.
+
+===== Prerequisites
+1. Linux server
+2. Docker and Docker Compose installed
+3. 50Gb HDD
+4. 4Gb of RAM
+
+===== Target Audience
+Ideal for environment that needs better complexity but avoids installing product by product. It can be used in an QA or Production environment.
+
+==== Kubernetes
+
+*Installation and Configuration Hours*: 24 hours
+
+Turing and its dependencies will be raised using Kubernetes, which will include the following services:
+
+* MariaDB – to store Turing system tables
+* Solr – Used by Turing's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing to use port 80
+* Turing AI.
+
+===== Prerequisites
+
+1. Linux Server with Kubernetes installed or Cloud that supports Kubernetes
+2. 100Gb of Storage
+3. Use of 4Gb RAM
+
+===== Target Audience
+
+Ideal for customers who want to use cloud solutions like Google, AWS, Oracle, etc. Can be used in Production and scalable.
+
+==== Installation of Services. 
+
+*Installation and Configuration Hours*: 24 hours
+
+The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
+
+* MariaDB – to store Turing system tables
+* Solr – Used by Turing's Semantic Navigation and Chatbot
+* Apache – WebServer for Turing to use port 80
+* Turing AI.
+
+===== Prerequisites
+1. One Linux server or up to 4 Linux servers to install services
+2. 50 - 100Gb of Storage for each server.
+3. Minimum 2Gb RAM for each Server
+4. The services will be installed individually on the servers following the Installation Guide procedure.
+
+===== Target Audience
+
+Ideal for customers who prefer the on-premise structure. And you want to have the services installed directly on the servers. It can be used in Development, QA and Production.
+
+=== Connectors
+
+Turing has several connectors to allow you to index the contents in Semantic Navigation:
+
+* Apache Nutch (Crawler)
+* Wordpress
+* OpenText WEM Listener
+* FileSystem
+* Database
+
+On average it will take *16 hours* to configure the connector and have the first indexing version in Turing.
