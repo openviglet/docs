@@ -196,7 +196,7 @@ IMPORTANT: Servers will be provided by the customer.
 
 ==== Docker Compose
 
-Turing AI and its dependencies will be raised using Docker Compose, which will include the following services:
+Turing AI and its dependencies will be installed using Docker Compose script, including the following services:
 
 * MariaDB – to store Turing AI system tables
 * Solr – Used by Turing AI's Semantic Navigation and Chatbot
@@ -221,7 +221,7 @@ IMPORTANT: Servers and docker configuration will be provided by the customer.
 
 ==== Kubernetes
 
-Turing AI and its dependencies will be raised using Kubernetes, which will include the following services:
+Turing AI and its dependencies will be installed using Kubernetes scripts, including the following services:
 
 * MariaDB – to store Turing AI system tables
 * Solr – Used by Turing AI's Semantic Navigation and Chatbot
