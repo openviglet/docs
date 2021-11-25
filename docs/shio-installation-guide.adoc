@@ -60,11 +60,9 @@ This section describes the minimum and suggested features for systems on which y
 2 GB available memory
 |===
 
-In addition, the following is required for all resource modes in Windows:
+In addition, the following is required:
 
 * 1GB of disk space for software.
-* 300 MB additional disk space per component for registry and configuration files.
-* One NTFS disk partition.
 * A compatible version of a database.
 
 [[configuring-databases]]
