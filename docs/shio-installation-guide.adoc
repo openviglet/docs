@@ -1,0 +1,348 @@
+= Viglet Shio CMS: Installation Guide
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Shio
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.4
+:revdate: 05-08-2021
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Installation Guide
+:page-permalink: /shio/installation-guide/
+:imagesdir: ../../
+:page-pdf: /shio/shio-installation-guide.pdf
+:page-product: shio
+
+include::_adoc_includes/shio/installation/preface.adoc[]
+
+:numbered:
+
+[[installing-java]]
+== Installing Java
+
+Shio CMS requires Java.
+
+NOTE: Shio CMS only supports Java 17.
+
+During installation, Shio CMS reads the ​​JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
+
+* On Windows:
+** Set the JAVA_HOME system variable to point to the JAVA location.
+** Attach the PATH system variable with %JAVA_HOME%/bin.
+
+* On Unix:
+** Create an environment variable called JAVA_HOME.
+** Provide the JAVA bin path in the PATH variable.
+
+[[requirements]]
+== Shio CMS Requirements
+
+The information below describes the resource modes available to run Shio CMS.
+
+NOTE: Use a screen resolution of at least 1024 x 768 for optimum clarity.
+
+This section describes the minimum and suggested features for systems on which you can configure Shio CMS.
+
+[[hardware-requirements]]
+=== Hardware Requirements
+
+[cols="2,1"]
+|===
+|Minimum |Recommended  
+
+|Single 1.5 GHz processor
+1 GB available memory
+|Dual 2 GHz processors with Hyper-Threading enabled
+2 GB available memory
+|===
+
+In addition, the following is required for all resource modes in Windows:
+
+* 1GB of disk space for software.
+* 300 MB additional disk space per component for registry and configuration files.
+* One NTFS disk partition.
+* A compatible version of a database.
+
+[[configuring-databases]]
+== Installing and Configuring Databases
+Shio CMS supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Shio CMS. The following sections describe these requirements.
+
+[[configuring-databases-table-requirements]]
+=== Shio CMS Database Table Requirements
+Shio CMS uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.
+
+[[configuring-databases-oracle-requirements]]
+==== Oracle Database Requirements
+
+This section describes configuration requirements for an existing database.
+
+To set up an Oracle database:
+
+1. Install and configure a single database instance for use by Shio CMS.
+2. Create a database schema to contain the Shio CMS system tables.
+3. Configure the Shio CMS admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.
+
+[[configuring-databases-msql-requirements]]
+==== Microsoft SQL Server Database Requirements
+This section discusses the steps required to configure Microsoft SQL Server for your Shio CMS databases.
+
+Creating the Shio CMS Database before you begin, be sure to refer to the following guides:
+
+The following procedure describes how to create and configure a Microsoft SQL Server database for use by Shio CMS.
+
+When creating the Shio CMS database, use the following options:
+
+* You must install the Database Engine feature and Management Tools are recommended. All other features are optional.
+* Set the Collation configuration variable to SQL_Latin1_General_CP1_CS_AS or Latin1_General / Case-sensitive / Accent-Sensitive.
+* Set authentication mode to mixed mode.
+* Shio CMS system user cannot be sa.
+
+[[configuring-databases-msql-database-schemas]]
+===== Configuring the SQL Server Database and Schemas
+
+This section discusses the steps required to create and configure a SQL Server database for use by Shio CMS.
+
+NOTE: The database and usernames provided are examples only.
+
+To create the SQL Server database:
+
+1. Select Databases > New Database.
+2. Enter the database name (eg shio) and the size of the data and log files according to the environment.
+3. Go to the Options page and set the following values:
+* Collation = Latin1_General_CS_AS or SQL_Latin1_General_CP1_CS_AS
+* Miscellaneous > Allow Snapshot Isolation = True
+* Miscellaneous > Is Read Committed Snapshot On = True
+
+[source,sql]
+----
+USE master
+GO
+ALTER DATABASE shio
+SET SINGLE_USER
+WITH ROLLBACK IMMEDIATE
+GO
+ALTER DATABASE shio
+SET ALLOW_SNAPSHOT_ISOLATION ON
+GO
+ALTER DATABASE shio
+SET READ_COMMITTED_SNAPSHOT ON
+GO
+ALTER DATABASE shio
+SET MULTI_USER
+GO
+----
+
+1. Under Security > Logins, select New Login and set the following attributes:
+
+* Enter the Login name (for example, shio)
+* Deselect the Enforce Password Expiration option.
+* Set the Default database.
+
+2. On the User Mapping page, set the following attributes for the shio database:
+
+* Default user = shio
+* Default schema = shio
+* With the shio database is selected, select the option for db_owner
+
+3. Click OK.
+
+[[configuring-databases-postgresql-requirements]]
+==== PostgreSQL Database Requirements
+This section discusses the steps required to configure PostgreSQL for your Shio CMS databases:
+
+* Installing and configuring the PostgreSQL Database
+* Configuring the Shio CMS user, database, and schema
+* Installing and configuring the PostgreSQL Database
+
+[[configuring-databases-postgresql-database]]
+===== Installing and configuring the PostgreSQL Database
+This section describes the steps required to install and configure a PostgreSQL database for your Shio CMS environment. You will also need to configure the Shio user, database and schemas.
+
+To install the PostgreSQL database:
+
+1. Navigate to the following URL and follow the instructions provided for your supported version of PostgreSQL: https://www.postgresql.org/docs/manuals/
+
+To configure the PostgreSQL instance:
+
+* Open the postgresql.conf file (located in <PostgreSQL_installDir>\<version>\data\) and set the following parameters:
+
+[source,ini]
+----
+max_connections = 10
+max_prepared_transactions = 10
+shared_buffers = 512MB
+autovacuum = off
+----
+
+IMPORTANT:  The autovacuum daemon is used to reclaim memory/storage space the database is no longer using. You must re-enable this utility after you have finished installing and configuring Shio CMS.
+
+NOTE: Configuration values will vary for higher transaction environments and numbers of users.
+max_prepared_transactions should be at least as large as max_connections so that every session can have a prepared transaction pending.
+
+[[configuring-databases-postgresql-configuring-user-database-schemas]]
+===== Configuring the Shio user, database, and schemas
+This section discusses the steps required to configure the users, database and schemas for your Shio CMS environment.
+
+NOTE: You must be a PostgreSQL super-user or have createuser privileges to create Shio users. To create and configure the Shio CMS database, you must be a super-user or have create privileges.
+
+IMPORTANT: When you create a database table in PostgreSQL, the field name must be lowercase.
+
+To configure the Shio CMS user:
+
+1. Create a user as the owner of the Shio CMS database:
+
+[source,sql]
+----
+CREATE USER shio PASSWORD <password> with createuser;
+----
+
+1. Create a Shio CMS database:
+
+[source,sql]
+----
+CREATE DATABASE shio_db;
+ALTER DATABASE shio_db OWNER TO shio;
+----
+
+To create and access the Shio CMS user and schema:
+
+* Log in to the shio (database) using the shio account. For example, on the operating system command prompt:
+
+[source,bash]
+----
+$psql -U shio -d shio_db
+----
+
+* Create the Shio schema and grant ownership to the Shio user:
+
+[source,sql]
+----
+CREATE SCHEMA shio;
+ALTER SCHEMA shio OWNER TO shio;
+----
+
+* Set the PostgreSQL search_path variable to the user to allow direct access to the respective schemas:
+
+[source,sql]
+----
+ALTER USER shio SET SEARCH_PATH = shio;
+----
+
+<<<
+[[installing-shio]]
+== Installing Shio CMS
+
+[[installing-shio-download]]
+=== Shio CMS Download
+
+Go to https://viglet.org/shio/download/ and click on "Download Shio CMS" button to download the viglet-shio.jar executable.
+
+Copy the viglet-shio.jar to /appl/viglet/shio/server
+
+```shell
+mkdir -p /appl/viglet/shio/server
+cp viglet-shio.jar /appl/viglet/shio/server
+chmod 770 /appl/viglet/shio/server/viglet-shio.jar
+```
+
+[[installing-shio-database]]
+=== Database
+
+By default, Shio uses H2 as its embedded database, but if you prefer another database you can follow the procedure below, creating `/appl/viglet/shio/server/viglet-shio.conf` file with following lines:
+
+[[installing-shio-database-mysql]]
+==== MySQL
+
+Below is an example of how to configure Shio for MySQL.
+
+.viglet-shio.conf for MySQL
+```shell
+JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:mariadb://localhost:3306/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=org.mariadb.jdbc.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect"
+
+```
+
+[[installing-shio-database-oracle]]
+==== Oracle Database
+
+Below is an example of how to configure Shio for Oracle Database.
+
+.viglet-shio.conf for Oracle Database
+```shell
+JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:oracle:thin:@localhost:1521/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=oracle.jdbc.OracleDriver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect"
+```
+
+<<<
+[[installing-shio-database-postgresql]]
+==== PostgreSQL
+
+Below is an example of how to configure Shio for PostgreSQL.
+
+.viglet-shio.conf for PostgreSQL
+```shell
+JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:postgresql://localhost:5432/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=org.postgresql.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect"
+```
+
+[[installing-shio-database-encrypting-password]]
+=== Encrypting the Database Password
+For more security, it is possible to encrypt the Database password in viglet-shio.conf following the procedure below:
+
+
+```shell
+cd /appl/viglet/shio/utils/scripts
+./turGenerateDBPassword.sh /appl/viglet/shio/server
+Password:
+Retype Password:
+
+Thanks, the password was successfully generated in /appl/viglet/shio/server/db-encrypted.properties
+
+cat /appl/viglet/shio/server/db-encrypted.properties
+clqp6QxceJQIp6lnaiKelQc9DvdNKNxg
+
+```
+Copy the content of /appl/viglet/shio/server/db-encrypted.properties and replace the  `-Dspring.datasource.password=<PLAIN_TEXT_PASSWORD>` value of `/appl/viglet/shio/server/viglet-shio.conf` file  with `-Dspring.datasource.password=ENC(<ENCRYPTED_PASSWORD>)`.
+
+For example: `-Dspring.datasource.password=ENC(clqp6QxceJQIp6lnaiKelQc9DvdNKNxg)`
+
+<<<
+[[installing-shio-service-linux]]
+=== Creating Shio CMS Service on Linux
+
+[[installing-shio-service-linux-rh-centos]]
+==== Red Hat and CentOS
+As root, create a `/etc/systemd/system/shio.service` file with the following lines:
+
+....
+[Unit]
+Description=Viglet Shio CMS
+After=syslog.target
+
+[Service]
+User=viglet
+ExecStart=/appl/viglet/shio/server/viglet-shio.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
+....
+
+This way, you can interact with the Shio CMS service:
+
+```shell
+./systemctl start shio.service
+./systemctl stop shio.service
+./systemctl restart shio.service
+./systemctl status shio.service
+```
+
+<<<
+
+[[installing-shio-accessing-console]]
+=== Accessing the Shio Console
+
+Shio provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following default URL: http://localhost:2710/content.
+
+By default the login/password are: admin/admin

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 asciidoctor-pdf --base-dir docs docs/shio-developer-guide.adoc -a imagesdir=/ -o shio/shio-getting-started.pdf
-asciidoctor-pdf --base-dir docs docs/shio-getting-started.adoc -a imagesdir=/ -o shio/shio-getting-started.pdf
+asciidoctor-pdf --base-dir docs docs/shio-installation-guide.adoc -a imagesdir=/ -o shio/shio-installation-guide.pdf
 
 asciidoctor-pdf --base-dir docs docs/turing-administration-guide.adoc -a imagesdir=/ -o turing/turing-administration-guide.pdf
 asciidoctor-pdf --base-dir docs docs/turing-connectors.adoc -a imagesdir=/ -o turing/turing-connectors.pdf
