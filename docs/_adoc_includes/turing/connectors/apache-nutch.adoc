@@ -293,15 +293,15 @@ or with parameter, for instance:
 ```shell
 # 1.12 (Alternative 1)
 cd /appl/apache/nutch/
-bin/crawl -D turing.force.config=true -D turing.site="Sample_EN" -i urls/ crawl-output/ 5
+bin/crawl -D turing.force.config=true -D turing.site="Sample" -Dturing.locale="en_US" -i urls/ crawl-output/ 5
 
 # 1.12 (Alternative 2)
 cd /appl/apache/nutch/
-bin/crawl -D solr.server.url="http://localhost:2700/Sample_EN" -i urls/ crawl-output/ 5
+bin/crawl -D solr.server.url="http://localhost:2700/Sample" -i urls/ crawl-output/ 5
 
 # 1.18
 cd /appl/apache/nutch/
-bin/crawl -D turing.site="Sample_EN" -i -s urls/ crawl-output/ 5
+bin/crawl -D turing.site="Sample" -i -s urls/ crawl-output/ 5
 ```
 +
 .crawl Parameters
