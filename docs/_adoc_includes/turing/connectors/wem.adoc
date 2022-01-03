@@ -365,11 +365,8 @@ IMPORTANT: The ~/OpenText/turing-wem.log is always created during command line e
 
 <<<
 
-[[wem-configuration]]
-=== Configuration
-
 [[wem-configuration-mapping]]
-==== Mapping
+=== Mapping
 
 Create a /appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml file with the following lines:
 
@@ -501,7 +498,7 @@ The following sections describe the delements defined in the CTD-Turing-Mappings
 <<<
 
 [[wem-xml-extensions]]
-==== Extensions
+=== Extensions
 
 There are ready-made extensions to be used when indexing WEM content through the Turing Listener.
 
@@ -525,7 +522,7 @@ There are ready-made extensions to be used when indexing WEM content through the
 |===
 
 [[wem-spotlight]]
-==== Spotlight
+=== Spotlight
 
 The Turing AI Semantic Navigation Site allows you to create spotlights that will be highlighted in the search, based on the registered terms.
 There are two types of Spotlight:
