@@ -258,13 +258,24 @@ turing.url=http://localhost:2700
 turing.mappingsxml=/appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml
 turing.login=admin
 turing.password=admin
+turing.provider.name="WEM"
 
-cda.default.urlprefix=http://localhost
-cda.default.contextname=sites
-sn.default.site=Sample
-sn.it_IT.site=SampleIT
+dps.config.association.priority=SampleSite
+dps.config.filesource.path=/opentext/otwork/WEM/inst-vgninst/file_source
 
-sites.association.priority=SampleSite
+dps.site.default.urlprefix=http://mywemsite.example.com
+dps.site.default.contextname=sites
+dps.site.default.sn.site=Sample
+dps.site.default.sn.locale=en_US
+dps.site.default.en.sn.site=SampleEN
+
+dps.site.Intranet.urlprefix=http://intranet.example.com
+dps.site.Intranet.contextname=sites
+dps.site.Intranet.sn.site=Intra
+dps.site.Intranet.sn.locale=en_US
+dps.site.Intranet.it_IT.sn.locale=it
+dps.site.Intranet.es.sn.site=IntraES
+
 ```
 
 <<<
@@ -278,11 +289,20 @@ Where
 | turing.mappingsxml | yes | XML File.
 | turing.login | yes | Turing Login.
 | turing.password | yes | Turing Password.
-| cda.default.urlprefix | no | Prefix will be used to create URL of content in Search.
-| cda.default.contextname | no | Context Name of DPS.
-| sn.default.site | yes | Name of site on Turing Semantic Navigation, that will be used to index the WEM Content.
-| sn.<locale>.site | no | If the content has locale attribute, you can specify a different Semantic Navigation Site that will be indexed.
-| sites.association.priority | no | If the content is associated with more than one site, you can define which site will be chosen to avoid conflict.
+| turing.provider.name | yes | Provider Identifier that will be send to Turing during the indexing.
+| dps.config.association.priority | no | If the content is associated with more than one site, you can define which site will be chosen to avoid conflict.
+| dps.config.filesource.path | yes |Used when processing a file using `com.viglet.turing.wem.ext.TurStaticFile`, in order to locate the file in the file sytem.
+| dps.site.default.urlprefix | no | Prefix will be used to create URL of content in Search.
+| dps.site.default.contextname | no | Context Name of DPS.
+| dps.site.default.sn.site | yes | Name of site on Turing Semantic Navigation, that will be used to index the WEM Content.
+| dps.site.default.sn.locale | no | If the content has no locale attribute, you can specify a default Semantic Navigation Site that will be indexed.
+| dps.site.default.<locale>.sn.site | no | If the content has locale attribute, you can specify a different Semantic Navigation Site that will be indexed.
+| dps.site.<site>.urlprefix | no | Prefix will be used to create URL of content in Search for specific site.
+| dps.site.<site>.contextname | no | Context Name of DPS for specific site.
+| dps.site.<site>.sn.site | no | Name of site on Turing Semantic Navigation for specific site, that will be used to index the WEM Content.
+| dps.site.<site>.sn.locale | no | If the content for specific site has no locale attribute, you can specify a default Semantic Navigation Site that will be indexed.
+| dps.site.<site>.<locale>.sn.locale | no | If the content of a specific site has a locale attribute, you can change the current locale to a new one that will be indexed.
+| dps.site.<site>.<locale>.sn.site | no | If the content for specific site has locale attribute, you can specify a different Semantic Navigation Site that will be indexed.
 |===
 
 NOTE: Repeat this procedure in other Management and Delivery Stages that will use Turing Semantic Navigation
@@ -295,7 +315,7 @@ IMPORTANT: The Listener uses URL Scheme from Site to generate Content URL.
 ==== Events
 Access the Configuration Console (http://wem_host:wem_port/configconsole) and add the EventListener in each Delivery Stage that will index to Turing Semantic Navigation.
 
-Configure the Deployment.ManagedObjectCreate, Update and Delete listeners.
+Configure the Event listeners.
 
 1. Register the required listeners to the events as specified below:
 ** `Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Content Delivery Services - Live > Application Services > Events > Deployment.ManagedObjectCreate`
@@ -303,17 +323,18 @@ Configure the Deployment.ManagedObjectCreate, Update and Delete listeners.
 ....
 com.viglet.turing.wem.listener.DeploymentEventListener
 ....
-+
-**	`Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Content Delivery Services - Live > Application Services > Events > Deployment.ManagedObjectDelete`
-+
-....
-com.viglet.turing.wem.listener.DeploymentEventListener
-....
+
 +
 ** `Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Content Delivery Services - Live > Application Services > Events > Deployment.ManagedObjectUpdate`
 +
 ....
 com.viglet.turing.wem.listener.DeploymentEventListener
+....
++
+**	`Configuration Console > Content > Delivery Services > Content Delivery Stage - Live > Content Delivery Services - Live > Application Services > Events > PrePersistence.Delete`
++
+....
+com.viglet.turing.wem.listener.PrePersistenceEventListener
 ....
 NOTE: Be sure to copy any existing listeners from the current run value and append the new listener to    the end of the list during registration. If needed, see section 6 of the Management Console Extensibility SDK guide for more information on registering event listeners.
 +
@@ -323,6 +344,24 @@ NOTE: Be sure to copy any existing listeners from the current run value and appe
 ==== Command Line
 
 Copy `/appl/viglet/turing/wem/command-line/<WEM_VERSION>/turing-wem` to `<WEM_DIR>/bin`, it works a lot like `vgncontentindex` command line.
+
+[%header,cols=5*] 
+|===
+| Parameter | Alternative Parameter | Required | Default | Description
+| --all | -a | No | false | Index all instances of all content types and object types.
+| --content-type | -c | No | - | The XML name of the content type or object type whose instances are to be indexed.
+| --debug | - | No |- | Change the log level to debug
+| --guids | -g | No |- | The path to a file containing the GUID(s) of content instances or static files to be indexed.
+| --help | - | No | - |  Print usage instructions
+| --host | -h | Yes | - | The host on which Content Management server is installed.
+| --page-size | -z | No | 500 | The page size. After processing a page the processed count is written to an offset file. This helps the indexer to resume from that page even after failure.
+| --password | -p | No | - | The password for the user name.
+| --siteName | -s | Yes | Sample | WEM site name.
+| --username | -u | Yes | - | A username to log in to the Content Management Server.
+| --working-dir | -w | Yes | - | The working directory where the vgncfg.properties file is located.
+|===
+
+IMPORTANT: The `~/OpenText/turing-wem.log` is always created during command line execution.
 
 <<<
 
@@ -372,6 +411,9 @@ Create a /appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml file with the foll
                 <tag>text</tag>
             </srcAttr>
             <srcAttr textValue="foo bar">
+                <tag>text</tag>
+            </srcAttr>
+            <srcAttr xmlName="image" className="com.viglet.turing.wem.ext.TurStaticFile">
                 <tag>text</tag>
             </srcAttr>
         </index-attrs>
@@ -442,7 +484,7 @@ The following sections describe the delements defined in the CTD-Turing-Mappings
 |===
 | Attribute | Required/ Optional | Default Value | Description
 | xmlName | Required (if className or textValue is missing) | - | Content Type Field XML Name.
-| relation | Optional | - | Content Type Relation XML Name.
+| relation | Required (if xmlName is missing) | - | Content Type Relation XML Name.
 | uniqueValues | Optional | "false" | A List return unique values.
 | valueType | Optional | - | If "html" then convert HTML to Text.
 | classname | Required (if xmlName or textValue is missing) | - | Custom class to process the field value.
@@ -455,3 +497,64 @@ The following sections describe the delements defined in the CTD-Turing-Mappings
 | Element | Element Description
 | tag | Turing AI Semantic Navigation Field
 |===
+
+<<<
+
+[[wem-xml-extensions]]
+==== Extensions
+
+There are ready-made extensions to be used when indexing WEM content through the Turing Listener.
+
+.Extensions 
+[%header,cols=2*] 
+|===
+| Plugin | Description
+| com.viglet.turing.wem.ext.TurCTDName | Content Type Name.
+| com.viglet.turing.wem.ext.TurWEMPublicationDate | Publication Date of Content Instance, if not exist use Modification Date.
+| com.viglet.turing.wem.ext.TurWEMModificationDate | Modification Date of Content Instance.
+| com.viglet.turing.wem.ext.TurSiteName | Site name associated.
+| com.viglet.turing.wem.ext.TurHTML2Text | Convert HTML to Text.
+| com.viglet.turing.wem.ext.TurDPSUrl | DPS URL based on URL Scheme.
+| com.viglet.turing.wem.ext.TurSpotlightExtraFields | Extract attributes of Spotlight Content Instance.
+| com.viglet.turing.wem.ext.TurChannelDescription | Channel Description.
+| com.viglet.turing.wem.ext.TurChannelPageName | Name of Channel Page.
+| com.viglet.turing.wem.ext.TurChannelPageUrl | URL of Channel Page.
+| com.viglet.turing.wem.ext.TurChannelPath | Channel Path.
+| com.viglet.turing.wem.ext.TurParentChannel | Parent Channel of Content Instance.
+|===
+
+[[wem-spotlight]]
+==== Spotlight
+
+The Turing AI Semantic Navigation Site allows you to create spotlights that will be highlighted in the search, based on the registered terms.
+There are two types of Spotlight:
+
+* Managed - Manipulated on the Turing AI console.
+* Unmanaged - Created externally and not manipulated in the Turing AI console.
+
+In this case, it is possible to create Unmanaged Spotlights using WEM, creating a CTD and whenever handled Content Instances of this CTD, the WEM Listener will send this Content and the Turing AI will treat this content with a different flow, which will allow creating new Unmanaged Spotlight.
+For this, you need to import the Spotlight CTD into WEM using the following command line, for example:
+
+```shell
+$ ./vgnimport -h localhost:27110 -u vgnadmin -p vgnadmin -f /appl/viglet/turing/wem/imports/turing-ctd.zip -l /appl/viglet/turing/wem/imports/turing-ctd.log
+```
+In /appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml file you need to add the following lines:
+
+```xml
+<mappingDefinition contentType="TUR_SPOTLIGHT">
+    <index-attrs>
+        <srcAttr xmlName="NAME-TUR-SPOTLIGHT">
+            <tag>name</tag>
+        </srcAttr>
+        <srcAttr xmlName="TERMS-TUR-SPOTLIGHT">
+            <tag>terms</tag>
+        </srcAttr>
+        <srcAttr relation="WEMSYS-TUR-SPOTLIGHT-CONTENT" className="com.viglet.turing.wem.ext.TurSpotlightExtraFields">
+            <tag>content</tag>
+        </srcAttr>
+    </index-attrs>
+</mappingDefinition>
+```
+
+IMPORTANT: Need to configure Turing Listener in WEM as described in this documentation.
+
