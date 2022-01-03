@@ -444,54 +444,38 @@ When Turing AI is started for the first time, it will do the initial setup and s
 
 ....
 $ ./viglet-turing.jar
-Viglet Turing starting...
- __   ___      _     _     _____         _
- \ \ / (_)__ _| |___| |_  |_   _|  _ _ _(_)_ _  __ _
-  \ V /| / _` | / -_)  _|   | || || | '_| | ' \/ _` |
-   \_/ |_\__, |_\___|\__|   |_| \_,_|_| |_|_||_\__, |  (v0.3.3-aa28530)
-         |___/                                 |___/
+  _____            _                 _    ___
+ |_   _|_  _  _ _ (_) _ _   __ _    /_\  |_ _|
+   | | | || || '_|| || ' \ / _` |  / _ \  | |
+   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|  (v0.3.5-2a5118b)
+                           |___/
 
-:: Copyright (C) 2016-2021, Viglet Team <opensource@viglet.com>
+:: Copyright (C) 2016-2022, Viglet Team <opensource@viglet.com>
 
-:: Built with Spring Boot :: 2.5.0
+:: Built with Spring Boot :: 2.6.2
 
+Starting TuringAI v0.3.5-2a5118b using Java 14.0.2 on LEGION with PID 24752 (/appl/viglet/turing/server/viglet-turing.jar started by alexa in /appl/viglet/turing/server)
+The following profiles are active: production
+Started TuringAI in 12.554 seconds (JVM running for 13.349)
 First Time Configuration ...
-Path: /appl/viglet/turing/server/models/opennlp/en/en-ner-date.bin
-Downloading OpenNLP Models...
-Downloading en-ner-date.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-ner-person.bin
-Downloading en-ner-person.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-ner-location.bin
-Downloading en-ner-location.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-ner-money.bin
-Downloading en-ner-money.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-ner-organization.bin
-Downloading en-ner-organization.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-ner-percentage.bin
-Downloading en-ner-percentage.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-ner-time.bin
-Downloading en-ner-time.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-parser-chunking.bin
-Downloading en-parser-chunking.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-pos-maxent.bin
-Downloading en-pos-maxent.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-pos-perceptron.bin
-Downloading en-pos-perceptron.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-sent.bin
-Downloading en-sent.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/en/en-token.bin
-Downloading en-token.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/pt/pt-pos-maxent.bin
-Downloading pt-pos-maxent.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/pt/pt-pos-perceptron.bin
-Downloading pt-pos-perceptron.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/pt/pt-sent.bin
-Downloading pt-sent.bin Model...[ OK ]
-Path: /appl/viglet/turing/server/models/opennlp/pt/pt-token.bin
-Downloading pt-token.bin Model...[ OK ]
-OpenNLP Models downloaded...
+[ OK ] en-ner-date.bin model
+[ OK ] en-ner-person.bin model
+[ OK ] en-ner-location.bin model
+[ OK ] en-ner-money.bin model
+[ OK ] en-ner-organization.bin model
+[ OK ] en-ner-percentage.bin model
+[ OK ] en-ner-time.bin model
+[ OK ] en-parser-chunking.bin model
+[ OK ] en-pos-maxent.bin model
+[ OK ] en-pos-perceptron.bin model
+[ OK ] en-sent.bin model
+[ OK ] en-token.bin model
+[ OK ] pt-pos-maxent.bin model
+[ OK ] pt-pos-perceptron.bin model
+[ OK ] pt-sent.bin model
+[ OK ] pt-token.bin model
+
 Configuration finished.
-Viglet Turing started
 ....
 
 [[installing-turing-accessing-console]]

@@ -176,7 +176,6 @@ It is possible create or edit a Search Engine with following attributes:
 | Vendor | Select the Vendor of Search Engine. For now it only supports Solr.
 | Host | Host name where the Search Engine service is installed
 | Port | Port of Search Engine Service
-| Language | Language of Search Engine Service.
 | Enabled | If the Search Engine is enabled.
 |===
 
@@ -189,22 +188,78 @@ It is possible create or edit a Search Engine with following attributes:
 .Semantic Navigation Page
 image::img/screenshots/turing-sn.png[Semantic Navigation Page]
 
-[[turing-console-sn-detail-tab]]
-===== Detail Tab
+[[turing-console-sn-settings-tab]]
+===== Settings Tab
 
-The Detail of Semantic Navigation Site contains the following attributes:
+The Settings of Semantic Navigation Site contains the following attributes:
 
-.Semantic Navitation Site Detail
+.Semantic Navitation Site Settings
 [%header,cols=2*] 
 |===
 | Attribute | Description
 | Name | Name of Semantic Navigation Site.
 | Description | Description of Semantic Navigation Site.
 | Search Engine | Select the Search Engine that was created in Search Engine Section. The Semantic Navigation Site will use this Search Engine to store and retrieve data.
-| NLP | Select the NLP that was created in NLP Section. THe Semantic Navigation Site will use this NLP to detect entities during indexing.
+| NLP Vendor | NLP Vendor for this site.
 | Thesaurus | If will use Thesaurus.
-| Language | Language of Semantic Navigation Site.
-| Core | Name of core of Search Engine where will be stored and retrieved the data.
+|===
+
+[[turing-console-sn-multi-languages-tab]]
+===== Multi Languages Tab
+
+The Multi Languages of Semantic Navigation Site contains the following attributes:
+
+.Multi Language Settings
+[%header,cols=2*] 
+|===
+| Attribute | Description
+| Language | Language for Semantic Navigation SIte.
+| NLP Instance | NLP Instance to detect entities during indexing.
+| Core | Solr Core Name to store and to search indexed content.
+|===
+
+<<<
+[[turing-console-sn-behavior-tab]]
+===== Behavior Tab
+
+Contains the following attributes:
+
+.Semantic Navitation Site Appearance Attributes
+[%header,cols=3*] 
+|===
+| Section | Attribute | Description
+| Behavior| Number of items per page | Number of items that will appear in search.
+.2+| Facet | Facet enabled | If it will be show Facet (Filters) on search.
+| Number of items per facet | Number of items that will appear in each Facet (Filter).
+.3+| Highlighting | Highlighting enabled | Define whether to show highlighted lines.
+| Pre Tag | HTML Tag that will be used on begin of term. For example: <mark>
+| Post Tag | HTML Tag that will be used on the end of term. For example: </mark>
+.2+| Did you mean? | "Did you mean?" enabled | Use "did you mean?" feature.
+| Always show the search with the corrected term. | If the term is misspelled, it already shows the search with the corrected term. If disabled, it shows the search with the entered term in the search.
+| MLT | More Like This enabled? | Define whether to show MLT
+.6+| Default Fields | Title | Field that will be used as title that is defined in Solr schema.xml
+| Text | Field that will be used as title that is defined in Solr schema.xml
+| Description | Field that will be used as description that is defined in Solr schema.xml
+| Date | Field that will be used as date that is defined in Solr schema.xml
+| Image | Field that will be used as Image URL that is defined in Solr schema.xml
+| URL | Field that will be used as URL that is defined in Solr schema.xml
+|===
+
+<<<
+[[turing-console-sn-merge-providers-tab]]
+===== Merge Providers Details Tab
+
+Merge Providers Details Tab contains the following attributes:
+.Semantic Navitation Site Merge Providers Attributes
+[%header,cols=3*] 
+|===
+| Section | Attribute | Description
+.2+| Providers| Source | Name of Source Provider.
+| Destination | Name of Destination Provider.
+.2+| Relations | Source | Relation Identifier of Source Provider.
+| Destination | Relation Identifier of Destination Provider.
+| Description | Description | More about merge providers.
+| Overwritten Fields| Name | Name of Source Field that overwritten destination field or create new one.
 |===
 
 <<<
@@ -250,37 +305,27 @@ When click in Field appear a new page with Field Details with the following attr
 |===
 
 <<<
-[[turing-console-sn-appearance-tab]]
-===== Appearance Tab
+[[turing-console-sn-spotlight-tab]]
+===== Spotlight Details Tab
 
-Contains the following attributes:
-
-.Semantic Navitation Site Appearance Attributes
-[%header,cols=3*] 
+Spotlighet Details Tab contains the following attributes:
+.Semantic Navitation Site Spotlight Attributes
+[%header,cols=2*] 
 |===
-| Section | Attribute | Description
-| Appearance| Number of items per page | Number of items that will appear in search.
-.2+| Facet | Facet enabled? | If it will be show Facet (Filters) on search.
-| Number of items per facet | Number of items that will appear in each Facet (Filter).
-.3+| Highlighting | Highlighting enabled? | Define whether to show highlighted lines.
-| Pre Tag | HTML Tag that will be used on begin of term. For example: <mark>
-| Post Tag | HTML Tag that will be used on the end of term. For example: </mark>
-| MLT | More Like This enabled? | Define whether to show MLT
-.6+| Default Fields | Title | Field that will be used as title that is defined in Solr schema.xml
-| Text | Field that will be used as title that is defined in Solr schema.xml
-| Description | Field that will be used as description that is defined in Solr schema.xml
-| Date | Field that will be used as date that is defined in Solr schema.xml
-| Image | Field that will be used as Image URL that is defined in Solr schema.xml
-| URL | Field that will be used as URL that is defined in Solr schema.xml
+| Attribute | Description
+| Name | Spotlight Name
+| Description | Spotlight Description
+| Terms | If any of these terms are searched for, this will trigger documents to display as spotlights.
+| Indexed Documents| These documents will display as spotlights when there are search terms.
 |===
 
 <<<
-[[turing-console-sn-site-page]]
-==== Site Page
+[[turing-console-sn-search-page]]
+==== Search Page
 
-[[turing-sn-site-page-html]]
+[[turing-sn-search-page-html]]
 ===== HTML
-In `Turing AI Console` > `Semantic Navigation` > `<SITE_NAME>`, click in `Configure` button and click `Search Page` button. 
+In `Turing AI Console` > `Semantic Navigation` > `<SITE_NAME>` > `Multi languages` > click in  `Open Search` button of some language. 
 
 It will open a Search Page that uses the pattern:
 
@@ -288,7 +333,7 @@ It will open a Search Page that uses the pattern:
 GET http://localhost:2700/sn/<SITE_NAME>
 ....
 
-[[turing-console-sn-site-page-json]]
+[[turing-console-sn-search-page-json]]
 ===== JSON
 This page requests the Turing Rest API via AJAX. For example, to return all results of Semantic Navigation Site in JSON Format: 
 
@@ -306,14 +351,20 @@ GET http://localhost:2700/api/sn/<SITE_NAME>/search?p=1&q=*&sort=relevance
 | fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
 | tr[] | Optional | Targeting Rule. Restrict search based in: *FIELD*: *VALUE*. | tr[]=department:foobar
 | rows | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Required | Locale of Semantic Navigation Site
 |===
 == Customer Case Studies
 
-=== Insurance Company
+=== Brazil
+==== Insurance Company
 On Intranet of Insurance Company uses OpenText WEM and OpenText Portal integrated with Dynamic Portal Module, a consolidated search was created in Viglet Turing AI, using the connectors: WEM, Database with File System. In this way it was possible to display all the contents and files of the search Intranet, with targeting rules, allowing only to display content that the user has permission. The OpenText Portal accesses Viglet Turing AI Java API, so it was not necessary to create complex queries to return the results.
 
-=== Government Company
+==== Government Company
 A set of API Rest was created to make all Government Company content available to partners. All these contents are in OpenText WEM and the WEM connector was used to index the contents on Viglet Turing AI. A Spring Boot application was created with the Rest API set that consumes Turing AI content through the Viglet Turing AI Java API.
 
-=== Brazilian University
+==== University
 Brazilian University website was developed using Viglet Shio CMS (https://viglet.com/shio), and all contents are indexed in Viglet Turing AI automatically. This configuration was made in content modeling and the development of the search template was made in Viglet Shio CMS.
+
+=== Spanish
+==== Insurance Company
+Institutional website of the insurance company using OpenText Dynamic Site Module with multi languages, an integrated search was created with Turing AI, using connectors: WEM and Apache Nutch.

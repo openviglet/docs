@@ -70,13 +70,29 @@ To run Turing AI, execute the following lines:
 
 === Turing Server
 
+==== Development
+
+===== With UI
 ```shell
 cd turing 
 ./gradlew turing-app:bootrun
 ```
 
-=== New Turing UI
+===== Without update UI
+```shell
+cd turing 
+./gradlew turing-app:bootrun -Pno-ui
+```
 
+==== New Turing UI
+
+Start the Turing Server using dev-ui profile
+```shell
+cd turing 
+./gradlew turing-app:bootrun --args='--spring.profiles.active=dev-ui' -Pno-ui
+```
+
+And start one of the components of turing-ui
 ```shell
 cd turing/turing-ui
 
@@ -88,16 +104,75 @@ ng serve sn
 
 ## Chatbot
 ng serve converse
+
+## Chatbot
+ng serve welcome
 ```
 IMPORTANT: You need start the Turing Server and Solr first.
 
-=== Java SDK
+==== Build
+```shell
+cd turing 
+./gradlew turing-app:build
+```
 
+=== Java SDK
+==== Development
 ```shell
 cd turing-java-sdk
 ./gradlew shadowJar
 java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.TurSNClientSample
 ```
+IMPORTANT: You need start the Turing Server and Solr first.
+
+=== Build
+```shell
+cd turing-java-sdk
+./gradlew build
+```
+Or use the jitpack into your project at https://jitpack.io/#openturing/turing-java-sdk
+
+=== WEM Listener
+
+```shell
+cd turing
+./gradlew turing-wem:shadowJar
+```
+For development, copy the turing-wem/build/libs/turing-wem-all.jar into WEM_DIR/libs and test the listener using turing-wem command line.
+
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+
+=== Database Connector
+
+```shell
+cd turing
+./gradlew turing-jdbc:shadowJar
+```
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+=== Filesystem Connector
+
+```shell
+cd turing
+./gradlew turing-filesystem:shadowJar
+```
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+=== Nutch
+==== Nutch 1.12
+```shell
+cd turing/
+./gradlew turing-nuch:nutch1_12:packageDistribution
+```
+For development, copy the files of turing-nutch/nutch1_12/build/extracted_dist to APACHE_NUTCH1_12/plugins/indexer-viglet-turing
+
+==== Nutch 1.18
+```shell
+cd turing/
+./gradlew turing-nuch:nutch1_18:packageDistribution
+```
+For development, copy the files of turing-nutch/nutch1_18/build/extracted_dist to APACHE_NUTCH1_18/plugins/indexer-viglet-turing
 
 IMPORTANT: You need start the Turing Server and Solr first.
 
@@ -152,8 +227,9 @@ docker exec -it turing-nginx /bin/bash
 * Semantic Navigation Sample: http://localhost:2700/sn/Sample.
 
 === New Turing UI
-* Console http://localhost:4200
-* Search Page http://localhost:4200/sn/Sample
+* Welcome http://localhost:4200/welcome
+* Console http://localhost:4200/console
+* Search Page http://localhost:4200/sn/template?_setsite=Sample&_setlocale=en_US
 * Converse http://localhost:4200/converse
 
 === Docker Compose

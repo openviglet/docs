@@ -258,10 +258,10 @@ Modify the following parameters:
 [[nutch-configuration-112-precedence-sn-site]]
 ===== Precedence of Semantic Navigation Site
 
-You can change the Semantic Navigation website in the following ways:
+You can change the Semantic Navigation Site in the following ways:
 
 1. Change using `solr.server.url` where is Turing URL + "/" + Turing Semantic Navigation Site, via `nutch-site.xml` or as a command line parameter. This setting is useful when using Nutch Provider in WEM where WEM uses solr.server.url to pass information about Solr to Nutch. In the case of the Turing plugin in Nutch, it reuses this configuration to know which Turing server and which site to use.
-2. Change using `turing.site`, via `nutch-site.xml` or as a command line parameter. If using `turing.force=true` as parameter. This setting will override `solr.server.url`.
+2. Change using `turing.site`, via `nutch-site.xml` or as a command line parameter. If using `turing.force.config=true` as parameter. This setting will override `solr.server.url`.
 3. Adding in the `turing.xml` file, for example: `<site url="https://viglet.com" snSite="Sample"/>`. If you have this setting, it will overwrite the Semantic Navigation Site of `solr.server.url` and `turing.site`.
 
 <<<
@@ -420,4 +420,7 @@ In Nutch Provider Configuration at WEM Configuration Console, change the variabl
 	</configuration>
 </nutch-config>
 ```
+
 IMPORTANT: If you are using the Turing AI Semantic Navigation Site's multilingual functionality, you can repeat the Site name in the `core` for each `locale` of this setting.
+
+TIP: In Nutch 1.12, if there are many sites with different semantic navigation sites, use the turing-mapping.xml file to create association between the URL definitions and the semantic navigation site, for example: <site url = "https:// viglet.com" snSite = "Sample" />
