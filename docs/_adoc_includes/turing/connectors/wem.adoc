@@ -252,7 +252,7 @@ For example:
 5. In Resource Subtype, type: `Properties` and click Next
 6. In Resource Information > Non-Encrypted Data type: `fill later` and Encrypted Data leaves blank and click Next
 7. In Confirm Configuration click Finish.
-8. Edit "Configuration Console > Content > Delivery Services > Content Delivery Stage - SebraeNA > Resources > Resource Type - Generic > Resource - VigletTuring > Generic Resource > DATA" and replace "fill later" for:
+8. Edit "Configuration Console > Content > Delivery Services > Content Delivery Stage - Production > Resources > Resource Type - Generic > Resource - VigletTuring > Generic Resource > DATA" and replace "fill later" for:
 ```properties
 turing.url=http://localhost:2700
 turing.mappingsxml=/appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml
