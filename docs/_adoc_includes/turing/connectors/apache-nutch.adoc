@@ -100,7 +100,7 @@ This step is only for Apache Nutch 1.12. Edit the /appl/apache/nutch/conf/nutch-
   </description>
 </property>
 <property>
-  <name>turing.field.source_app</name>
+  <name>turing.field.source_appS</name>
   <value>Nutch</value>
   <description>
       Name of Source Application. The default value is "Nutch".
@@ -124,6 +124,63 @@ This step is only for Apache Nutch 1.12. Edit the /appl/apache/nutch/conf/nutch-
 -->
 ```
 
+If you want to add metatag values, make sure parse-metatags is set in plugin.includes and add the following parameters:
+
+```xml
+<property>
+    <name>metatags.names</name>
+    <value>*</value>
+    <description> Names of the metatags to extract, separated by ','.
+  Use '*' to extract all metatags. Prefixes the names with 'metatag.'
+  in the parse-metadata. For instance to index description and keywords,
+  you need to activate the plugin index-metadata and set the value of the
+  parameter 'index.parse.md' to 'metatag.description,metatag.keywords'.
+</description>
+  </property>
+
+
+  <property>
+    <name>index.parse.md</name>
+    <value>metatag.description,metatag.keywords,metatag.language</value>
+    <description>
+  Comma-separated list of keys to be taken from the parse metadata to generate fields.
+  Can be used e.g. for 'description' or 'keywords' provided that these values are generated
+  by a parser (see parse-metatags plugin)
+  </description>
+  </property>
+
+  <property>
+    <name>http.content.limit</name>
+    <value>6553600</value>
+  </property>
+```
+
+[[nutch-configuration-112-turing-xml]]
+=====  turing.xml File
+The plugin uses /appl/apache/nutch/conf/turing-mapping.xml to perform the actions:
+
+1. Rename the fields using, for example: `<field source =" content "dest =" text "/>` where the `source` attribute is the original field name and the ` dest` attribute is the new attribute name.
+2. Dynamically add the semantic navigation site name, based on the page URL, for example: `<site url="https://viglet.com" snSite="Sample"/>`, where the `url` attribute is the URL prefix and the `snSite` attribute is the semantic navigation site name that was configured in the Turing console.
+3. Defines the attribute which is the unique key that will be used when indexing in Turing semantic navigation, for example: `<uniqueKey>id</uniqueKey>`, where the value into `uniqueKey` tag is the attribute.
+
+```xml
+<mapping>
+  <fields>
+    <field source="content" dest="text"/>
+    <field source="title" dest="title"/>
+    <field source="host" dest="host"/>
+    <field source="segment" dest="segment"/>
+    <field source="boost" dest="boost" remove="true"/>
+    <field source="digest" dest="digest"/>
+    <field source="tstamp" dest="tstamp"/>
+    <field source="metatag.description" dest="description" />
+  </fields>
+  <sites>
+    <site url="https://viglet.com" snSite="Sample"/>
+  </sites>
+  <uniqueKey>id</uniqueKey>
+</mapping>
+```
 <<<
 [[nutch-configuration-112-timestamp-field]]
 =====  Field with Timestamp
@@ -143,11 +200,11 @@ Can specify what is the field will be used to store the timestamp of indexing. T
 [[nutch-configuration-112-source-app-field]]
 =====  Source App Name
 
-Turing AI Semantic Navigation Site allows to index content from many sources, so can identify where the content was indexed, can specify the name of the source changing the `turing.field.source_app` into nutch-site.xml file. The default value is `Nutch`:
+Turing AI Semantic Navigation Site allows to index content from many sources, so can identify where the content was indexed, can specify the name of the source changing the `turing.field.source_apps` into nutch-site.xml file. The default value is `Nutch`:
 
 ```xml
 <property>
-  <name>turing.field.source_app</name>
+  <name>turing.field.source_apps</name>
   <value>Nutch</value>
   <description>
       Name of Source Application. The default value is "Nutch".
@@ -197,6 +254,16 @@ Modify the following parameters:
 | turing.timestamp.field | Field used to store the timestamp of indexing. | tstamp
 | turing.field.`FIELD_NAME` | Modify or create a custom field during indexing. | -
 |===
+
+[[nutch-configuration-112-precedence-sn-site]]
+===== Precedence of Semantic Navigation Site
+
+You can change the Semantic Navigation website in the following ways:
+
+1. Change using `solr.server.url` where is Turing URL + "/" + Turing Semantic Navigation Site, via `nutch-site.xml` or as a command line parameter. This setting is useful when using Nutch Provider in WEM where WEM uses solr.server.url to pass information about Solr to Nutch. In the case of the Turing plugin in Nutch, it reuses this configuration to know which Turing server and which site to use.
+2. Change using `turing.site`, via `nutch-site.xml` or as a command line parameter. If using `turing.force=true` as parameter. This setting will override `solr.server.url`.
+3. Adding in the `turing.xml` file, for example: `<site url="https://viglet.com" snSite="Sample"/>`. If you have this setting, it will overwrite the Semantic Navigation Site of `solr.server.url` and `turing.site`.
+
 <<<
 
 [[nutch-configuration-118]]
@@ -353,3 +420,4 @@ In Nutch Provider Configuration at WEM Configuration Console, change the variabl
 	</configuration>
 </nutch-config>
 ```
+IMPORTANT: If you are using the Turing AI Semantic Navigation Site's multilingual functionality, you can repeat the Site name in the `core` for each `locale` of this setting.
