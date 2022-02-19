@@ -1,6 +1,6 @@
 ---
 title: Connectors
 description: Installing and Configuring Connectors of Turing AI.
-docurl: connectors/
+docurl: /turing/0.3.5/connectors/
 product: turing
 ---

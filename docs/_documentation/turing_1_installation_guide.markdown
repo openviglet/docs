@@ -1,6 +1,6 @@
 ---
 title: Installation Guide
 description: About how install Turing AI.
-docurl: installation-guide/
+docurl: /turing/0.3.5/installation-guide/
 product: turing
 ---
