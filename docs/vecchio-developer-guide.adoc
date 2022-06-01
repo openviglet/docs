@@ -13,9 +13,9 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Developer Guide
-:page-permalink: /vecchio/developer-guide/
+:page-permalink: /docs/vecchio/developer-guide/
 :imagesdir: ../../
-:page-pdf: /vecchio/vecchio-developer-guide.pdf
+:page-pdf: /docs/vecchio/vecchio-developer-guide.pdf
 :page-product: vecchio
 
 == About the author

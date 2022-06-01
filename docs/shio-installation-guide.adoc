@@ -12,9 +12,9 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Installation Guide
-:page-permalink: /shio/installation-guide/
+:page-permalink: /docs/shio/installation-guide/
 :imagesdir: ../../
-:page-pdf: /shio/shio-installation-guide.pdf
+:page-pdf: /docs/shio/shio-installation-guide.pdf
 :page-product: shio
 
 include::_adoc_includes/shio/installation/preface.adoc[]

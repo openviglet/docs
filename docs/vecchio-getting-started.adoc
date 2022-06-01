@@ -12,9 +12,9 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Getting Started
-:page-permalink: /vecchio/getting-started/
+:page-permalink: /docs/vecchio/getting-started/
 :imagesdir: ../../
-:page-pdf: /vecchio/vecchio-getting-started.pdf
+:page-pdf: /docs/vecchio/vecchio-getting-started.pdf
 :page-product: vecchio
 
 :numbered:

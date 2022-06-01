@@ -12,9 +12,9 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Administration Guide
-:page-permalink: /turing/0.3.5/administration-guide/
+:page-permalink: /docs/turing/0.3.5/administration-guide/
 :imagesdir: ../../../
-:page-pdf: /turing/turing-administration-guide-0.3.5.pdf
+:page-pdf: /docs/turing/turing-administration-guide-0.3.5.pdf
 :page-product: turing
 
 [preface]
