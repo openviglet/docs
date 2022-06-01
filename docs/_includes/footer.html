@@ -11,7 +11,8 @@
                 <ul class="list-unstyled text-small">
 
                     {% assign stable_solutions = site.solutions %} {% for solution in stable_solutions %}
-                    <li class="mb-1" style="margin-bottom: 10px !important;"><a class="link-secondary text-decoration-none" href="{{ solution.permalink }}">
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/{{ solution.permalink }}">
                             {%- include solution-footer-logo.html -%}
                             <span style="margin-left: 5px;">{{ solution.short-name }}</span>
                         </a></li>
@@ -23,32 +24,11 @@
             <div class="col-4 col-md">
                 <h5>Resources</h5>
                 <ul class="list-unstyled text-small" style="margin-bottom: 5px !important;">
-                    <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://viglet.com">Website</a></li>
-                    <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://viglet.com/research">Research</a></li>
-                    <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://docs.viglet.com">Documentation</a></li>
-                    <li class="mb-1"><a class="link-secondary text-decoration-none" href="https://viglet.com/partner">Become a Partner</a>
+                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                            href="https://openviglet.github.io/docs">Documentation</a></li>
                     </li>
                     <li>
                         <div class="row" style="margin:0px">
-                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
-                                <a title="LinkedIn" href="https://linkedin.com/company/viglet" target="_blank"><i
-                                        class="bi bi-linkedin" style="color:#6c757d;font-size: 25px;"
-                                        aria-hidden="true"></i></a>
-                            </div>
-                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
-                                <a title="YouTube" href="https://www.youtube.com/channel/UCMOUMnOecpTV05LpLytawuw" target="_blank"><i class="bi bi-youtube" style="color:#6c757d;font-size: 25px;"
-                                        aria-hidden="true"></i></a>
-                            </div>
-                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
-                                <a title="Twitter" href="https://twitter.com/VigletTweet" target="_blank"><i
-                                        class="bi bi-twitter" style="color:#6c757d;font-size: 25px;"
-                                        aria-hidden="true"></i></a>
-                            </div>
-                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
-                                <a title="Facebook" href="https://facebook.com/viglet" target="_blank"><i
-                                        class="bi bi-facebook" style="color:#6c757d;font-size: 25px;"
-                                        aria-hidden="true"></i></a>
-                            </div>
                             <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
                                 <a title="GitHub" href="https://github.com/openviglet" target="_blank"><i
                                         class="bi bi-github" style="color:#6c757d;font-size: 25px;"
