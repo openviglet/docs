@@ -12,7 +12,7 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Installation Guide
-:page-permalink: /docs/turing/0.3.6/installation-guide/
+:page-permalink: /turing/0.3.6/installation-guide/
 :imagesdir: ../
 :page-pdf: /docs/turing/turing-installation-guide-0.3.6.pdf
 :page-product: turing

@@ -13,7 +13,7 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Developer Guide
-:page-permalink: /docs/vecchio/developer-guide/
+:page-permalink: /vecchio/developer-guide/
 :imagesdir: ../../
 :page-pdf: /docs/vecchio/vecchio-developer-guide.pdf
 :page-product: vecchio

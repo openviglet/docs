@@ -11,7 +11,7 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Developer Guide
-:page-permalink: /docs/shio/developer-guide/
+:page-permalink: /shio/developer-guide/
 :imagesdir: ../../
 :page-pdf: /docs/shio/shio-developer-guide.pdf
 :page-product: shio
