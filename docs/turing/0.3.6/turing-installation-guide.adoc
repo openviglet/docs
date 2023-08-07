@@ -26,7 +26,7 @@ include::_adoc_includes/turing/0.3.6/installation/preface.adoc[]
 
 Turing AI requires Java.
 
-NOTE: Turing AI only supports Java 14.
+NOTE: Turing AI only supports Java 17.
 
 During installation, Turing AI reads the ​​JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
 
