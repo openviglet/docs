@@ -447,16 +447,16 @@ $ ./viglet-turing.jar
   _____            _                 _    ___
  |_   _|_  _  _ _ (_) _ _   __ _    /_\  |_ _|
    | | | || || '_|| || ' \ / _` |  / _ \  | |
-   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|  (v0.3.5-2a5118b)
+   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|  (v0.3.6-d9fc453)
                            |___/
 
 :: Copyright (C) 2016-2022, Viglet Team <opensource@viglet.com>
 
-:: Built with Spring Boot :: 2.6.2
+:: Built with Spring Boot :: 2.7.6
 
-Starting TuringAI v0.3.5-2a5118b using Java 14.0.2 on LEGION with PID 24752 (/appl/viglet/turing/server/viglet-turing.jar started by alexa in /appl/viglet/turing/server)
-The following profiles are active: production
-Started TuringAI in 12.554 seconds (JVM running for 13.349)
+Starting TuringAI v0.3.6-d9fc453 using Java 17.0.1 on LEGION with PID 20232 (/appl/viglet/turing/server/viglet-turing.jar started by alexa in /appl/viglet/turing/servers)
+The following 1 profile is active: "production"
+Started TuringAI in 16.432 seconds (JVM running for 17.358)
 First Time Configuration ...
 [ OK ] en-ner-date.bin model
 [ OK ] en-ner-person.bin model
