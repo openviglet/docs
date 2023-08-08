@@ -567,12 +567,13 @@ IMPORTANT: Need to configure Turing Listener in WEM as described in this documen
 
 It is possible to define whether the content instance will be indexed or not, so it is necessary to add the custom class in the validToIndex attribute.
 
+.Sample into Mapping Definition XML File using validToIndex attribute.
 ```xml
 <mappingDefinition contentType="CTD_Sample" validToIndex="sample.SampleValidToIndex">
 ...
 </mappingDefinition>
 ```
-
+.Sample Class file to validate the Content Instance. 
 ```java
 package sample;
 
