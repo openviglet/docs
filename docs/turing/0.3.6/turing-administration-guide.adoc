@@ -39,25 +39,104 @@ Apache OpenNLP is a machine learning based toolkit for the processing of natural
 
 Website: https://opennlp.apache.org/
 
+.OpenNLP Attributes
+[%header,cols=2*] 
+|===
+| Attribute | Description
+| Title | OpenNLP Title
+| Description | Description of OpenNLP
+| Vendor | Select OpenNLP.
+| Endpoint URL | This attribute is not used.
+| Key | This attribute is not used.
+| Enabled | If the OpenNLP is enabled.
+|===
+
 === OpenText Content Analytics
 It transforms data into insights for better decision-making and information management while freeing up resources and time.
 
 Website: https://www.opentext.com/
+
+.OTCA Attributes
+[%header,cols=2*] 
+|===
+| Attribute | Description
+| Title | OTCA Title
+| Description | Description of OTCA
+| Vendor | Select OTCA.
+| Endpoint URL | Service URL, for example: http://localhost:40000
+| Key | This attribute is not used.
+| Enabled | If the OTCA is enabled.
+|===
 
 === CoreNLP
 CoreNLP is your one stop shop for natural language processing in Java! CoreNLP enables users to derive linguistic annotations for text, including token and sentence boundaries, parts of speech, named entities, numeric and time values, dependency and constituency parses, coreference, sentiment, quote attributions, and relations. CoreNLP currently supports 6 languages: Arabic, Chinese, English, French, German, and Spanish.
 
 Website: https://stanfordnlp.github.io/CoreNLP/,
 
+.CoreNLP Attributes
+[%header,cols=2*] 
+|===
+| Attribute | Description
+| Title | CoreNLP Title
+| Description | Description of CoreNLP
+| Vendor | Select CoreNLP.
+| Endpoint URL | Service URL, for example: http://localhost:9001
+| Key | This attribute is not used.
+| Enabled | If the CoreNLP is enabled.
+|===
+
 === SpaCy
 It is a free open-source library for Natural Language Processing in Python. It features NER, POS tagging, dependency parsing, word vectors and more.
 
 Website: https://spacy.io
 
+.SpaCy Attributes
+[%header,cols=2*] 
+|===
+| Attribute | Description
+| Title | SpaCy Title
+| Description | Description of SpaCy
+| Vendor | Select SpaCy.
+| Endpoint URL | Service URL, for example: http://localhost:2800
+| Key | This attribute is not used.
+| Enabled | If the SpaCy is enabled.
+|===
+
 === Polyglot NLP
 Polyglot is a natural language pipeline that supports massive multilingual applications.
 
 Website: https://polyglot.readthedocs.io
+
+.Polyglot Attributes
+[%header,cols=2*] 
+|===
+| Attribute | Description
+| Title | Polyglot Title
+| Description | Description of Polyglot
+| Vendor | Select Polyglot.
+| Endpoint URL | Service URL, for example: http://localhost:2810
+| Key | This attribute is not used.
+| Enabled | If the Polyglot is enabled.
+|===
+
+=== Google Cloud Platform NLP
+Analyze text with AI using pre-trained API or custom AutoML machine learning models to extract relevant entities, understand sentiment, and more.
+
+Website: https://cloud.google.com/natural-language
+
+Update the following attributes:
+
+.Google Cloud Platform NLP Attributes
+[%header,cols=2*] 
+|===
+| Attribute | Description
+| Title | GCP NLP Title
+| Description | Description of  GCP NLP
+| Vendor | Select Google Cloud Platform NLP.
+| Endpoint URL | Service URL, for example: https://language.googleapis.com/v1/documents:analyzeEntities
+| Key | Key of Google Cloud Platform NLP
+| Enabled | If the GCP NLP is enabled.
+|===
 
 == Documents and OCR
 
@@ -308,8 +387,8 @@ When click in Field appear a new page with Field Details with the following attr
 [[turing-console-sn-spotlight-tab]]
 ===== Spotlight Details Tab
 
-Spotlighet Details Tab contains the following attributes:
-.Semantic Navitation Site Spotlight Attributes
+Spotlight Details Tab contains the following attributes:
+.Semantic Navigation Site Spotlight Attributes
 [%header,cols=2*] 
 |===
 | Attribute | Description
@@ -318,6 +397,13 @@ Spotlighet Details Tab contains the following attributes:
 | Terms | If any of these terms are searched for, this will trigger documents to display as spotlights.
 | Indexed Documents| These documents will display as spotlights when there are search terms.
 |===
+
+[[turing-console-sn-top-search-terms-tab]]
+===== Top Search Terms Tab
+
+During search, Turing AI saves information about search terms and generate Top Search Terms reports.
+
+There are the following reports: Today, This Week, This Month and All Time. These reports show the first 50 terms and statistics about the period.
 
 <<<
 [[turing-console-sn-search-page]]
