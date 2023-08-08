@@ -437,20 +437,8 @@ GET http://localhost:2700/api/sn/<SITE_NAME>/search?p=1&q=*&sort=relevance
 | fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
 | tr[] | Optional | Targeting Rule. Restrict search based in: *FIELD*: *VALUE*. | tr[]=department:foobar
 | rows | Optional | Number of rows that query will return. | rows=10
-| _setlocale | Required | Locale of Semantic Navigation Site
+| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+| nfpr | Optional | Disable Auto Correction | nfpr=1
+| group | Optional | Group by attribute | group=type
 |===
-== Customer Case Studies
 
-=== Brazil
-==== Insurance Company
-On Intranet of Insurance Company uses OpenText WEM and OpenText Portal integrated with Dynamic Portal Module, a consolidated search was created in Viglet Turing AI, using the connectors: WEM, Database with File System. In this way it was possible to display all the contents and files of the search Intranet, with targeting rules, allowing only to display content that the user has permission. The OpenText Portal accesses Viglet Turing AI Java API, so it was not necessary to create complex queries to return the results.
-
-==== Government Company
-A set of API Rest was created to make all Government Company content available to partners. All these contents are in OpenText WEM and the WEM connector was used to index the contents on Viglet Turing AI. A Spring Boot application was created with the Rest API set that consumes Turing AI content through the Viglet Turing AI Java API.
-
-==== University
-Brazilian University website was developed using Viglet Shio CMS (https://viglet.com/shio), and all contents are indexed in Viglet Turing AI automatically. This configuration was made in content modeling and the development of the search template was made in Viglet Shio CMS.
-
-=== Spanish
-==== Insurance Company
-Institutional website of the insurance company using OpenText Dynamic Site Module with multi languages, an integrated search was created with Turing AI, using connectors: WEM and Apache Nutch.
