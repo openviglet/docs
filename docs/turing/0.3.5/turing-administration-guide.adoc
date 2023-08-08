@@ -308,16 +308,8 @@ When click in Field appear a new page with Field Details with the following attr
 [[turing-console-sn-spotlight-tab]]
 ===== Spotlight Details Tab
 
-During search, Turing AI saves information about search terms and generate Top Search Terms reports.
+Spotlight Details Tab contains the following attributes:
 
-There are the following reports: Today, This Week, This Month and All Time. These reports show the first 50 terms and statistics about the period.
-
-[[turing-console-sn-top-search-terms-tab]]
-===== Top Search Terms Tab
-
-
-
-Spotlighet Details Tab contains the following attributes:
 .Semantic Navitation Site Spotlight Attributes
 [%header,cols=2*] 
 |===
@@ -327,6 +319,13 @@ Spotlighet Details Tab contains the following attributes:
 | Terms | If any of these terms are searched for, this will trigger documents to display as spotlights.
 | Indexed Documents| These documents will display as spotlights when there are search terms.
 |===
+
+[[turing-console-sn-top-search-terms-tab]]
+===== Top Search Terms Tab
+
+During search, Turing AI saves information about search terms and generate Top Search Terms reports.
+
+There are the following reports: Today, This Week, This Month and All Time. These reports show the first 50 terms and statistics about the period.
 
 <<<
 [[turing-console-sn-search-page]]
