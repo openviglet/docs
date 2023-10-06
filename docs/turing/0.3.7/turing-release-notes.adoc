@@ -12,9 +12,9 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Connectors
-:page-permalink: /turing/0.3.6/release-notes/
+:page-permalink: /turing/0.3.7/release-notes/
 :imagesdir: ../
-:page-pdf: /docs/turing/turing-release-notes-0.3.6.pdf
+:page-pdf: /docs/turing/turing-release-notes-0.3.7.pdf
 :page-product: turing
 
 == 0.3.7

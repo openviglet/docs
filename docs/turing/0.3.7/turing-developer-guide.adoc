@@ -12,9 +12,9 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Developer Guide
-:page-permalink: /turing/0.3.6/developer-guide/
+:page-permalink: /turing/0.3.7/developer-guide/
 :imagesdir: ../
-:page-pdf: /docs/turing/turing-developer-guide-0.3.6.pdf
+:page-pdf: /docs/turing/turing-developer-guide-0.3.7.pdf
 :page-product: turing
 
 [preface]
@@ -390,11 +390,12 @@ On average, it will take *4 hours* to configure NLP and configure Turing AI to u
 === Search
 This page requests the Turing Rest API via AJAX. For example, to return all results of Semantic Navigation Site in JSON Format: 
 
+==== Endpoint
 ....
 GET http://localhost:2700/api/sn/<SITE_NAME>/search?p=1&q=*&sort=relevance
 ....
 
-.Semantic Navigation Rest API Get Attributes
+==== Path Parameters
 [%header,cols=4*] 
 |===
 | Attribute | Required / Optional | Description | Example
@@ -407,6 +408,185 @@ GET http://localhost:2700/api/sn/<SITE_NAME>/search?p=1&q=*&sort=relevance
 | nfpr | Optional | Disable Auto Correction | nfpr=1
 | group | Optional | Group by attribute | group=type
 |===
+
+==== Example - Request
+```
+curl -X GET \
+  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
+  -H 'Authorization: Bearer {{Enter your Access Token}}' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -H 'accept: application/json' 
+```
+
+==== Example - Response
+```json
+{
+  "pagination": [
+    {
+      "type": "FIRST",
+      "text": "string",
+      "href": "string",
+      "page": 0
+    }
+  ],
+  "queryContext": {
+    "count": 0,
+    "index": "string",
+    "limit": 0,
+    "offset": 0,
+    "page": 0,
+    "pageCount": 0,
+    "pageEnd": 0,
+    "pageStart": 0,
+    "responseTime": 0,
+    "query": {
+      "queryString": "string",
+      "sort": "string",
+      "locale": "string"
+    },
+    "defaultFields": {
+      "title": "string",
+      "date": "string",
+      "description": "string",
+      "text": "string",
+      "image": "string",
+      "url": "string"
+    }
+  },
+  "results": {
+    "document": [
+      {
+        "source": "string",
+        "elevate": true,
+        "metadata": [
+          {
+            "href": "string",
+            "text": "string"
+          }
+        ],
+        "fields": {
+          "additionalProp1": {},
+          "additionalProp2": {},
+          "additionalProp3": {}
+        }
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "string",
+      "count": 0,
+      "page": 0,
+      "pageCount": 0,
+      "pageEnd": 0,
+      "pageStart": 0,
+      "limit": 0,
+      "results": {
+        "document": [
+          {
+            "source": "string",
+            "elevate": true,
+            "metadata": [
+              {
+                "href": "string",
+                "text": "string"
+              }
+            ],
+            "fields": {
+              "additionalProp1": {},
+              "additionalProp2": {},
+              "additionalProp3": {}
+            }
+          }
+        ]
+      },
+      "pagination": [
+        {
+          "type": "FIRST",
+          "text": "string",
+          "href": "string",
+          "page": 0
+        }
+      ]
+    }
+  ],
+  "widget": {
+    "facet": [
+      {
+        "facets": [
+          {
+            "count": 0,
+            "link": "string",
+            "label": "string"
+          }
+        ],
+        "label": {
+          "lang": "string",
+          "text": "string"
+        },
+        "name": "string",
+        "description": "string",
+        "type": "INT",
+        "multiValued": true
+      }
+    ],
+    "facetToRemove": {
+      "facets": [
+        {
+          "count": 0,
+          "link": "string",
+          "label": "string"
+        }
+      ],
+      "label": {
+        "lang": "string",
+        "text": "string"
+      },
+      "name": "string",
+      "description": "string",
+      "type": "INT",
+      "multiValued": true
+    },
+    "similar": [
+      {
+        "id": "string",
+        "title": "string",
+        "type": "string",
+        "url": "string"
+      }
+    ],
+    "spellCheck": {
+      "correctedText": true,
+      "usingCorrectedText": true,
+      "original": {
+        "text": "string",
+        "link": "string"
+      },
+      "corrected": {
+        "text": "string",
+        "link": "string"
+      }
+    },
+    "locales": [
+      {
+        "locale": "string",
+        "link": "string"
+      }
+    ],
+    "spotlights": [
+      {
+        "id": "string",
+        "position": 0,
+        "title": "string",
+        "type": "string",
+        "referenceId": "string",
+        "content": "string",
+        "link": "string"
+      }
+    ]
+  }
+}
+```
 
 ....
 POST http://localhost:2700/api/sn/<SITE_NAME>/search?p=1&q=*&sort=relevance

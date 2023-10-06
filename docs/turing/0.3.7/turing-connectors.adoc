@@ -12,9 +12,9 @@ ifdef::backend-pdf[:toc: left]
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Connectors
-:page-permalink: /turing/0.3.6/connectors/
+:page-permalink: /turing/0.3.7/connectors/
 :imagesdir: ../
-:page-pdf: /docs/turing/turing-connectors-0.3.6.pdf
+:page-pdf: /docs/turing/turing-connectors-0.3.7.pdf
 :page-product: turing
 
 [preface]
