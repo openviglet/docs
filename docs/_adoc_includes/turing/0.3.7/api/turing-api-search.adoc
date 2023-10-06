@@ -30,10 +30,8 @@ GET http://localhost:2700/api/sn/{{siteName}}/search?p=1&q=*&sort=relevance
 
 ===== Example - Request
 ```
-curl -X GET \
-  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
-  -H 'Authorization: Bearer {{Enter your Access Token}}' \
-  -H 'Key: {{Enter your API KEY}}' \
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foo&p=1&fq[]=state:WA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
   -H 'accept: application/json' 
 ```
 

@@ -14,10 +14,8 @@ GET http://localhost:2700/api/sn/{{siteName}}/search/locales
 
 ===== Example - Request
 ```
-curl -X GET \
-  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
-  -H 'Authorization: Bearer {{Enter your Access Token}}' \
-  -H 'Key: {{Enter your API KEY}}' \
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search/locales' \
   -H 'accept: application/json' 
 ```
 
@@ -25,8 +23,12 @@ curl -X GET \
 ```json
 [
   {
-    "locale": "string",
-    "link": "string"
+    "locale": "en_US",
+    "link": "/api/sn/Sample/search?_setlocale=en_US"
+  },
+  {
+    "locale": "pt_BR",
+    "link": "/api/sn/Sample/search?_setlocale=pt_BR"
   }
 ]
 ```

@@ -24,10 +24,8 @@ GET http://localhost:2700/api/sn/{{siteName}}/{{locale}}/spell-check
 
 ===== Example - Request
 ```
-curl -X GET \
-  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
-  -H 'Authorization: Bearer {{Enter your Access Token}}' \
-  -H 'Key: {{Enter your API KEY}}' \
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/en_US/spell-check?q=fuu' \
   -H 'accept: application/json' 
 ```
 

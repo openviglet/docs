@@ -34,19 +34,24 @@ POST http://localhost:2700/api/sn/{{siteName}}/search?p=1&q=*&sort=relevance
 ===== Request Parameters
 [%header,cols=5*] 
 |===
-| Attribute | Type | Required / Optional | Description | Example
-| userId | String| Optional | User Id | userId=john
-| targetingRules | String[] | Optional | Targeting Rule. Restrict search based in: *FIELD*: *VALUE*. | targetingRules=department:foobar
-| populateMetrics | Boolean | Optional | If populate metrics | populateMetrics=true
+| Attribute | Type | Required / Optional | Description
+| userId | String| Optional | User Id 
+| targetingRules | String[] | Optional | Targeting Rule. Restrict search based in: *FIELD*: *VALUE*.
+| populateMetrics | Boolean | Optional | If populate metrics
 |===
 
 ===== Example - Request
 ```
-curl -X GET \
-  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
-  -H 'Authorization: Bearer {{Enter your Access Token}}' \
-  -H 'Key: {{Enter your API KEY}}' \
-  -H 'accept: application/json' 
+curl -X 'POST' \
+  'http://localhost:2700/api/sn/Sample/search?q=foo&p=1&fq%5B%5D=state%3AWA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "string",
+  "populateMetrics": true,
+  "targetingRules": [
+    "department"
+  ]
+}'
 ```
 
 ===== Example - Response

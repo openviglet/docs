@@ -2,7 +2,7 @@
 
 ===== Endpoint
 ....
-GET http://localhost:2700/api/sn/{siteName}/search/latest
+GET http://localhost:2700/api/sn/{{siteName}}/search/latest
 ....
 
 ===== Path Parameters
@@ -29,17 +29,20 @@ GET http://localhost:2700/api/sn/{siteName}/search/latest
 |===
 
 ===== Example - Request
-```
-curl -X GET \
-  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
-  -H 'Authorization: Bearer {{Enter your Access Token}}' \
-  -H 'Key: {{Enter your API KEY}}' \
+```bash
+curl -X 'POST' \
+  'http://localhost:2700/api/sn/Sample/search/latest?rows=5&_setlocale=en_US' \
   -H 'accept: application/json' 
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": "user1"
+}'
 ```
 
 ===== Example - Response
 ```json
 [
-  "string"
+  "foo",
+  "bar"
 ]
 ```

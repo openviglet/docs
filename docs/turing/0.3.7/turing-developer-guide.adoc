@@ -403,5 +403,3 @@ include::_adoc_includes/turing/0.3.7/api/turing-api-spell-check.adoc[]
 === Cognitive
 
 include::_adoc_includes/turing/0.3.7/api/turing-api-cognitive-spell-check.adoc[]
-
-include::_adoc_includes/turing/0.3.7/api/turing-api-cognitive-detect-language.adoc[]
