@@ -1,0 +1,38 @@
+= Viglet Turing AI: Connectors
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Turing
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.7
+:revdate: 06-10-2023
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Connectors
+:page-permalink: /turing/0.3.6/connectors/
+:imagesdir: ../
+:page-pdf: /docs/turing/turing-connectors-0.3.6.pdf
+:page-product: turing
+
+[preface]
+= Preface
+There are several connectors to allow you to index content in Viglet Turing AI.
+
+:numbered:
+
+include::_adoc_includes/turing/0.3.6/connectors/apache-nutch.adoc[]
+
+<<<
+include::_adoc_includes/turing/0.3.6/connectors/database.adoc[]
+
+<<<
+include::_adoc_includes/turing/0.3.6/connectors/filesystem.adoc[]
+
+<<<
+include::_adoc_includes/turing/0.3.6/connectors/wem.adoc[]
+
+<<<
+include::_adoc_includes/turing/0.3.6/connectors/wordpress.adoc[]

@@ -1,0 +1,780 @@
+= Viglet Turing AI: Developer Guide
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Turing
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.7
+:revdate: 06-10-2023
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Developer Guide
+:page-permalink: /turing/0.3.6/developer-guide/
+:imagesdir: ../
+:page-pdf: /docs/turing/turing-developer-guide-0.3.6.pdf
+:page-product: turing
+
+[preface]
+== Preface
+
+Viglet Turing AI (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+
+:numbered:
+
+== More Documentation
+
+Technical documentation on Turing AI is available at https://docs.viglet.com/turing.
+
+== Development Structure
+
+=== Frameworks
+Turing AI was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
+
+The UI is currently using AngularJS (https://angularjs.org), but a new UI is being developed using Angular 12 (https://angular.io) with Primer CSS (https://primer.style/css).
+
+In addition to Java, you also need to have Git (https://git-scm.com/downloads) and NodeJS (https://nodejs.org/en/download/) installed.
+
+=== Databases
+By default it uses the H2 database (https://www.h2database.com), but can be changed to other databases using Spring Boot properties. It comes bundled with OpenNLP (https://opennlp.apache.org/) in the same JVM.
+
+=== Language and Deploy
+It uses Java 14 (https://adoptopenjdk.net/archive.html?variant=openjdk14&jvmVariant=hotspot) and its deployment is done with Gradle 7.2 (https://gradle.org/) and works on Linux and Windows.
+
+=== Docker
+To use Semantic Navigation and Chatbot you must have a Solr (https://solr.apache.org) service available. If you prefer to work with all the services Turing depends on, you can use docker-compose (https://docs.docker.com/compose/install) to start these services, we use the Docker Desktop (https://www.docker.com/products/docker-desktop) installed on computer.
+
+=== IDE
+You can use Spring Tools 4 for Eclipse (https://spring.io/tools) or Eclipse (https://www.eclipse.org/downloads/) or Visual Studio Code (https://code.visualstudio.com/) or IntelliJ (https://www.jetbrains.com/pt-br/idea/) as IDEs.
+
+== Download
+
+Use the git command line to download the repository to your computer.
+
+=== Turing Server and Connectors
+
+```shell
+git clone https://github.com/openturing/turing.git 
+```
+=== Turing Java SDK
+
+```shell
+git clone https://github.com/openturing/turing-java-sdk.git
+```
+
+== Run during Development
+
+To run Turing AI, execute the following lines:
+
+=== Turing Server
+
+==== Development
+
+===== With UI
+```shell
+cd turing 
+./gradlew turing-app:bootrun
+```
+
+===== Without update UI
+```shell
+cd turing 
+./gradlew turing-app:bootrun -Pno-ui
+```
+
+==== New Turing UI
+
+Start the Turing Server using dev-ui profile
+```shell
+cd turing 
+./gradlew turing-app:bootrun --args='--spring.profiles.active=dev-ui' -Pno-ui
+```
+
+And start one of the components of turing-ui
+```shell
+cd turing/turing-ui
+
+## Console
+ng serve console
+
+## Search
+ng serve sn
+
+## Chatbot
+ng serve converse
+
+## Chatbot
+ng serve welcome
+```
+IMPORTANT: You need start the Turing Server and Solr first.
+
+==== Build
+```shell
+cd turing 
+./gradlew turing-app:build
+```
+
+=== Java SDK
+==== Development
+```shell
+cd turing-java-sdk
+./gradlew shadowJar
+java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.TurSNClientSample
+```
+IMPORTANT: You need start the Turing Server and Solr first.
+
+=== Build
+```shell
+cd turing-java-sdk
+./gradlew build
+```
+Or use the jitpack into your project at https://jitpack.io/#openturing/turing-java-sdk
+
+=== WEM Listener
+
+```shell
+cd turing
+./gradlew turing-wem:shadowJar
+```
+For development, copy the turing-wem/build/libs/turing-wem-all.jar into WEM_DIR/libs and test the listener using turing-wem command line.
+
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+
+=== Database Connector
+
+```shell
+cd turing
+./gradlew turing-jdbc:shadowJar
+```
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+=== Filesystem Connector
+
+```shell
+cd turing
+./gradlew turing-filesystem:shadowJar
+```
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+=== Nutch
+==== Nutch 1.12
+```shell
+cd turing/
+./gradlew turing-nuch:nutch1_12:packageDistribution
+```
+For development, copy the files of turing-nutch/nutch1_12/build/extracted_dist to APACHE_NUTCH1_12/plugins/indexer-viglet-turing
+
+==== Nutch 1.18
+```shell
+cd turing/
+./gradlew turing-nuch:nutch1_18:packageDistribution
+```
+For development, copy the files of turing-nutch/nutch1_18/build/extracted_dist to APACHE_NUTCH1_18/plugins/indexer-viglet-turing
+
+IMPORTANT: You need start the Turing Server and Solr first.
+
+== Docker Compose
+
+You can start the Turing AI using MariaDB, Solr and Nginx.
+
+```shellshell
+./gradlew turing-app:build -x test -i --stacktrace
+docker-compose up
+```
+NOTE: If you have problems with permissions on directories, run `chmod -R 777 volumes`
+
+=== Docker Commands
+
+==== Turing
+
+```shell
+docker exec -it turing /bin/bash
+```
+
+==== Solr
+
+```shell
+docker exec -it turing-solr /bin/bash
+```
+
+Check logs
+
+```shell
+docker-compose exec turing-solr cat /opt/solr/server/logs/solr.log
+# or 
+docker-compose exec turing-solr tail -f /opt/solr/server/logs/solr.log
+```
+
+==== MariaDB
+
+```shell
+docker exec -it turing-mariadb /bin/bash
+```
+
+==== Nginx
+
+```shell
+docker exec -it turing-nginx /bin/bash
+```
+
+== URLs
+
+=== Turing Server
+* Administration Console: http://localhost:2700. (admin/admin)
+* Semantic Navigation Sample: http://localhost:2700/sn/Sample.
+
+=== New Turing UI
+* Welcome http://localhost:4200/welcome
+* Console http://localhost:4200/console
+* Search Page http://localhost:4200/sn/template?_setsite=Sample&_setlocale=en_US
+* Converse http://localhost:4200/converse
+
+=== Docker Compose
+* Administration Console: http://localhost. (admin/admin)
+* Semantic Navigation Sample: http://localhost/sn/Sample.
+* Solr: http://localhost:8983
+
+=== Code Quality
+
+You can check the quality of Turing Code at:
+
+* SonarCloud at https://sonarcloud.io/organizations/viglet-turing/projects
+* Github Actions at https://github.com/openturing/turing/actions
+* Github Security at https://github.com/openturing/turing/security/code-scanning
+* Codecov at https://app.codecov.io/gh/openturing/turing
+
+== Installation Modes
+
+=== Turing AI Server
+==== Simple. 
+
+Turing AI will be installed only using OpenNLP and H2 database embedded in Turing AI itself.
+
+===== Prerequisites
+
+1. Linux server
+2. Java 14
+3. 50Gb HDD
+4. 2 Gb of RAM
+
+===== Target Audience
+
+Development and testing environment. Because it requires fewer components and lower memory usage.
+
+===== Estimated Hours
+
+2 hours
+
+IMPORTANT: Servers will be provided by the customer.
+
+==== Docker Compose
+
+Turing AI and its dependencies will be installed using Docker Compose script, including the following services:
+
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing AI to use port 80
+* Turing AI.
+
+===== Prerequisites
+1. Linux server
+2. Docker and Docker Compose installed
+3. 50Gb HDD
+4. 4Gb of RAM
+
+===== Target Audience
+
+Customers who need more complex environments, but avoid the installation and configuration of each product. It can be used in an QA or Production environment.
+
+===== Estimated Hours
+
+16 hours
+
+IMPORTANT: Servers and docker configuration will be provided by the customer.
+
+==== Kubernetes
+
+Turing AI and its dependencies will be installed using Kubernetes scripts, including the following services:
+
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing AI to use port 80
+* Turing AI.
+
+===== Prerequisites
+
+1. Linux Server with Kubernetes installed or Cloud that supports Kubernetes
+2. 100Gb of Storage
+3. 4Gb RAM
+
+===== Target Audience
+
+Customers who want to use cloud solutions like Google, AWS, Oracle, etc. It can be used in the production environment in a scalable way.
+
+===== Estimated Hours
+
+20 hours
+
+IMPORTANT: Cloud infrastructure and servers will be provided by the customer.
+
+==== Manual Installation of Services
+
+The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
+
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Apache – WebServer for Turing AI to use port 80
+* Turing AI.
+
+===== Prerequisites
+1. One Linux server or up to 4 Linux servers to install services
+2. 50 - 100Gb of Storage for each server
+3. Minimum 2Gb RAM for each Server
+4. The services will be installed individually on the servers following the Installation Guide procedure.
+
+===== Target Audience
+
+Customers who prefer the on-premise structure and want to have the services installed directly on the servers. It can be used in Development, QA and Production.
+
+===== Estimated Hours
+
+20 hours
+
+IMPORTANT: Servers will be provided by the customer.
+
+=== Connectors
+
+Turing AI has several connectors to allow you to index the contents in Semantic Navigation:
+
+* Apache Nutch (Crawler)
+* Wordpress
+* OpenText WEM Listener
+* FileSystem
+* Database
+
+==== Prerequisites
+
+1. New linux server or existing server with content or files that will be indexed.
+2. 50 of Storage for each server.
+
+==== Estimated Hours
+
+On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing AI.
+
+=== NLP 
+
+The customer can choose the NLP that will be used by Turing AI:
+
+* Apache OpenNLP (Embedded)
+* SpaCy NLP
+* Stanford CoreNLP
+* OpenText Content Analytics
+* Poliglot
+
+==== Prerequisites
+
+1. Linux server
+2. 50 of Storage for each server
+3. Minimum 2 Gb of RAM
+
+==== Estimated Hours
+
+On average, it will take *4 hours* to configure NLP and configure Turing AI to use it.
+
+== REST API
+[[sn-search-page-json]]
+
+=== Search
+This page requests the Turing Rest API via AJAX. For example, to return all results of Semantic Navigation Site in JSON Format: 
+
+....
+GET http://localhost:2700/api/sn/<SITE_NAME>/search?p=1&q=*&sort=relevance
+....
+
+.Semantic Navigation Rest API Get Attributes
+[%header,cols=4*] 
+|===
+| Attribute | Required / Optional | Description | Example
+| q | Required | Search Query. | q=foo
+| p | Required | Page Number, first page is 1. | p=1
+| sort | Required | Sort values: `relevance`, `newest` and `oldest`. | sort=relevance
+| fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
+| rows | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+| nfpr | Optional | Disable Auto Correction | nfpr=1
+| group | Optional | Group by attribute | group=type
+|===
+
+....
+POST http://localhost:2700/api/sn/<SITE_NAME>/search?p=1&q=*&sort=relevance
+....
+
+.Semantic Navigation Rest API Post Attributes
+
+Query String
+[%header,cols=4*] 
+
+|===
+| Attribute | Required / Optional | Description | Example
+| q | Required | Search Query. | q=foo
+| p | Required | Page Number, first page is 1. | p=1
+| sort | Required | Sort values: `relevance`, `newest` and `oldest`. | sort=relevance
+| fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
+
+| rows | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+| nfpr | Optional | Disable Auto Correction | nfpr=1
+| group | Optional | Group by attribute | group=type
+|===
+
+
+Post Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| userId | String| Optional | User Id | userId=john
+| targetingRules | String[] | Optional | Targeting Rule. Restrict search based in: *FIELD*: *VALUE*. | targetingRules=department:foobar
+| populateMetrics | Boolean | Optional | If populate metrics | populateMetrics=true
+|===
+
+Return 
+
+```json
+{
+  "pagination": [
+    {
+      "type": "FIRST",
+      "text": "string",
+      "href": "string",
+      "page": 0
+    }
+  ],
+  "queryContext": {
+    "count": 0,
+    "index": "string",
+    "limit": 0,
+    "offset": 0,
+    "page": 0,
+    "pageCount": 0,
+    "pageEnd": 0,
+    "pageStart": 0,
+    "responseTime": 0,
+    "query": {
+      "queryString": "string",
+      "sort": "string",
+      "locale": "string"
+    },
+    "defaultFields": {
+      "title": "string",
+      "date": "string",
+      "description": "string",
+      "text": "string",
+      "image": "string",
+      "url": "string"
+    }
+  },
+  "results": {
+    "document": [
+      {
+        "source": "string",
+        "elevate": true,
+        "metadata": [
+          {
+            "href": "string",
+            "text": "string"
+          }
+        ],
+        "fields": {
+          "additionalProp1": {},
+          "additionalProp2": {},
+          "additionalProp3": {}
+        }
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "string",
+      "count": 0,
+      "page": 0,
+      "pageCount": 0,
+      "pageEnd": 0,
+      "pageStart": 0,
+      "limit": 0,
+      "results": {
+        "document": [
+          {
+            "source": "string",
+            "elevate": true,
+            "metadata": [
+              {
+                "href": "string",
+                "text": "string"
+              }
+            ],
+            "fields": {
+              "additionalProp1": {},
+              "additionalProp2": {},
+              "additionalProp3": {}
+            }
+          }
+        ]
+      },
+      "pagination": [
+        {
+          "type": "FIRST",
+          "text": "string",
+          "href": "string",
+          "page": 0
+        }
+      ]
+    }
+  ],
+  "widget": {
+    "facet": [
+      {
+        "facets": [
+          {
+            "count": 0,
+            "link": "string",
+            "label": "string"
+          }
+        ],
+        "label": {
+          "lang": "string",
+          "text": "string"
+        },
+        "name": "string",
+        "description": "string",
+        "type": "INT",
+        "multiValued": true
+      }
+    ],
+    "facetToRemove": {
+      "facets": [
+        {
+          "count": 0,
+          "link": "string",
+          "label": "string"
+        }
+      ],
+      "label": {
+        "lang": "string",
+        "text": "string"
+      },
+      "name": "string",
+      "description": "string",
+      "type": "INT",
+      "multiValued": true
+    },
+    "similar": [
+      {
+        "id": "string",
+        "title": "string",
+        "type": "string",
+        "url": "string"
+      }
+    ],
+    "spellCheck": {
+      "correctedText": true,
+      "usingCorrectedText": true,
+      "original": {
+        "text": "string",
+        "link": "string"
+      },
+      "corrected": {
+        "text": "string",
+        "link": "string"
+      }
+    },
+    "locales": [
+      {
+        "locale": "string",
+        "link": "string"
+      }
+    ],
+    "spotlights": [
+      {
+        "id": "string",
+        "position": 0,
+        "title": "string",
+        "type": "string",
+        "referenceId": "string",
+        "content": "string",
+        "link": "string"
+      }
+    ]
+  }
+}
+```
+
+=== Auto Complete
+
+....
+GET http://localhost:2700/api/sn/<SITE_NAME>/ac?q=foo&rows=10&_setlocale=en_US
+....
+GET Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| q | String| Required | Search Query. | q=foo
+| rows | Integer | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Boolean | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+|===
+
+Return
+```json
+[
+  "string"
+]
+```
+
+=== Spell Check
+
+....
+GET http://localhost:2700/api/sn/{siteName}/{locale}/spell-check
+....
+
+Path
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| sitename | String| Required | Site Name. | Sample
+| locale | String | Required | Locale of Semantic Navigation Site | en_US
+|===
+
+Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| q | String| Required | Search Query. | q=foo
+| rows | Integer | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Boolean | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+|===
+
+Return
+```json
+{
+  "correctedText": true,
+  "usingCorrectedText": true,
+  "original": {
+    "text": "string",
+    "link": "string"
+  },
+  "corrected": {
+    "text": "string",
+    "link": "string"
+  }
+}
+```
+
+=== Search Latest
+
+....
+GET http://localhost:2700/api/sn/{siteName}/search/latest
+....
+
+Path
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| sitename | String| Required | Site Name. | Sample
+|===
+
+Parameters
+[%header,cols=6*] 
+|===
+| Attribute | Type | Required / Optional | Description | Default | Example
+| q | String| Required | Search Query. | - | q=foo
+| rows | Integer | Optional | Number of rows that query will return. | 5 | rows=10
+| _setlocale | Boolean | Required | Locale of Semantic Navigation Site | - |  _setlocale=en_US
+|===
+
+Request body
+[%header,cols=6*] 
+|===
+| Attribute | Type | Required / Optional | Description | Default | Example
+| userId | String| Optional | User Id | userId=john
+|===
+
+Return
+```json
+[
+  "string"
+]
+```
+
+=== Locales
+
+....
+GET http://localhost:2700/api/sn/{siteName}/search/locales
+....
+
+Path
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| sitename | String| Required | Site Name. | Sample
+|===
+
+Returns
+```json
+[
+  {
+    "locale": "string",
+    "link": "string"
+  }
+]
+```
+
+
+== Cognitive
+
+=== Spell Check
+
+....
+GET http://localhost:2700/api/cognitive/spell-checker/{locale}
+....
+
+Path
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| locale | String | Required | Locale of Semantic Navigation Site | en_US
+|===
+
+Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| text | String | Required | Text to validated | text=fuu ber
+|===
+
+Returns
+```json
+[
+  "string"
+]
+```
+
+=== Detect Language
+
+....
+GET http://localhost:2700/api/cognitive/detect-language
+....
+
+
+Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| text | String | Required | Text to validated | text=fuu ber
+|===
+
+Returns
+```json
+ "string"
+```
