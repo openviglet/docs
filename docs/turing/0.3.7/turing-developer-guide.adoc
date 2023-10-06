@@ -389,6 +389,8 @@ On average, it will take *4 hours* to configure NLP and configure Turing AI to u
 === Search
 include::_adoc_includes/turing/0.3.7/api/turing-api-search.adoc[]
 
+include::_adoc_includes/turing/0.3.7/api/turing-api-search-with-targeting-rules.adoc[]
+
 include::_adoc_includes/turing/0.3.7/api/turing-api-search-latest.adoc[]
 
 include::_adoc_includes/turing/0.3.7/api/turing-api-search-locales.adoc[]
