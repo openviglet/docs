@@ -1,0 +1,425 @@
+==== Search
+
+This page requests the Turing Rest API via AJAX. For example, to return all results of Semantic Navigation Site in JSON Format: 
+
+===== Endpoint
+....
+GET http://localhost:2700/api/sn/{{siteName}}/search?p=1&q=*&sort=relevance
+....
+
+===== Path Parameters
+[%header,cols=4*] 
+|===
+| Attribute | Required / Optional | Description | Example
+| siteName | Required | Site Name | Sample
+|===
+
+===== Query String
+[%header,cols=4*] 
+|===
+| Attribute | Required / Optional | Description | Example
+| q | Required | Search Query. | q=foo
+| p | Required | Page Number, first page is 1. | p=1
+| sort | Required | Sort values: `relevance`, `newest` and `oldest`. | sort=relevance
+| fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
+| rows | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+| nfpr | Optional | Disable Auto Correction | nfpr=1
+| group | Optional | Group by attribute | group=type
+|===
+
+===== Example - Request
+```
+curl -X GET \
+  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
+  -H 'Authorization: Bearer {{Enter your Access Token}}' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -H 'accept: application/json' 
+```
+
+===== Example - Response
+```json
+{
+  "pagination": [
+    {
+      "type": "FIRST",
+      "text": "string",
+      "href": "string",
+      "page": 0
+    }
+  ],
+  "queryContext": {
+    "count": 0,
+    "index": "string",
+    "limit": 0,
+    "offset": 0,
+    "page": 0,
+    "pageCount": 0,
+    "pageEnd": 0,
+    "pageStart": 0,
+    "responseTime": 0,
+    "query": {
+      "queryString": "string",
+      "sort": "string",
+      "locale": "string"
+    },
+    "defaultFields": {
+      "title": "string",
+      "date": "string",
+      "description": "string",
+      "text": "string",
+      "image": "string",
+      "url": "string"
+    }
+  },
+  "results": {
+    "document": [
+      {
+        "source": "string",
+        "elevate": true,
+        "metadata": [
+          {
+            "href": "string",
+            "text": "string"
+          }
+        ],
+        "fields": {
+          "additionalProp1": {},
+          "additionalProp2": {},
+          "additionalProp3": {}
+        }
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "string",
+      "count": 0,
+      "page": 0,
+      "pageCount": 0,
+      "pageEnd": 0,
+      "pageStart": 0,
+      "limit": 0,
+      "results": {
+        "document": [
+          {
+            "source": "string",
+            "elevate": true,
+            "metadata": [
+              {
+                "href": "string",
+                "text": "string"
+              }
+            ],
+            "fields": {
+              "additionalProp1": {},
+              "additionalProp2": {},
+              "additionalProp3": {}
+            }
+          }
+        ]
+      },
+      "pagination": [
+        {
+          "type": "FIRST",
+          "text": "string",
+          "href": "string",
+          "page": 0
+        }
+      ]
+    }
+  ],
+  "widget": {
+    "facet": [
+      {
+        "facets": [
+          {
+            "count": 0,
+            "link": "string",
+            "label": "string"
+          }
+        ],
+        "label": {
+          "lang": "string",
+          "text": "string"
+        },
+        "name": "string",
+        "description": "string",
+        "type": "INT",
+        "multiValued": true
+      }
+    ],
+    "facetToRemove": {
+      "facets": [
+        {
+          "count": 0,
+          "link": "string",
+          "label": "string"
+        }
+      ],
+      "label": {
+        "lang": "string",
+        "text": "string"
+      },
+      "name": "string",
+      "description": "string",
+      "type": "INT",
+      "multiValued": true
+    },
+    "similar": [
+      {
+        "id": "string",
+        "title": "string",
+        "type": "string",
+        "url": "string"
+      }
+    ],
+    "spellCheck": {
+      "correctedText": true,
+      "usingCorrectedText": true,
+      "original": {
+        "text": "string",
+        "link": "string"
+      },
+      "corrected": {
+        "text": "string",
+        "link": "string"
+      }
+    },
+    "locales": [
+      {
+        "locale": "string",
+        "link": "string"
+      }
+    ],
+    "spotlights": [
+      {
+        "id": "string",
+        "position": 0,
+        "title": "string",
+        "type": "string",
+        "referenceId": "string",
+        "content": "string",
+        "link": "string"
+      }
+    ]
+  }
+}
+```
+
+===== Endpoint
+....
+POST http://localhost:2700/api/sn/{{siteName}}/search?p=1&q=*&sort=relevance
+....
+===== Path Parameters
+[%header,cols=4*] 
+|===
+| Attribute | Required / Optional | Description | Example
+| siteName | Required | Site Name | Sample
+|===
+
+===== Query String
+[%header,cols=4*] 
+
+|===
+| Attribute | Required / Optional | Description | Example
+| q | Required | Search Query. | q=foo
+| p | Required | Page Number, first page is 1. | p=1
+| sort | Required | Sort values: `relevance`, `newest` and `oldest`. | sort=relevance
+| fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
+
+| rows | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+| nfpr | Optional | Disable Auto Correction | nfpr=1
+| group | Optional | Group by attribute | group=type
+|===
+
+
+===== Request Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| userId | String| Optional | User Id | userId=john
+| targetingRules | String[] | Optional | Targeting Rule. Restrict search based in: *FIELD*: *VALUE*. | targetingRules=department:foobar
+| populateMetrics | Boolean | Optional | If populate metrics | populateMetrics=true
+|===
+
+===== Example - Request
+```
+curl -X GET \
+  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
+  -H 'Authorization: Bearer {{Enter your Access Token}}' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -H 'accept: application/json' 
+```
+
+===== Example - Response
+
+```json
+{
+  "pagination": [
+    {
+      "type": "FIRST",
+      "text": "string",
+      "href": "string",
+      "page": 0
+    }
+  ],
+  "queryContext": {
+    "count": 0,
+    "index": "string",
+    "limit": 0,
+    "offset": 0,
+    "page": 0,
+    "pageCount": 0,
+    "pageEnd": 0,
+    "pageStart": 0,
+    "responseTime": 0,
+    "query": {
+      "queryString": "string",
+      "sort": "string",
+      "locale": "string"
+    },
+    "defaultFields": {
+      "title": "string",
+      "date": "string",
+      "description": "string",
+      "text": "string",
+      "image": "string",
+      "url": "string"
+    }
+  },
+  "results": {
+    "document": [
+      {
+        "source": "string",
+        "elevate": true,
+        "metadata": [
+          {
+            "href": "string",
+            "text": "string"
+          }
+        ],
+        "fields": {
+          "additionalProp1": {},
+          "additionalProp2": {},
+          "additionalProp3": {}
+        }
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "string",
+      "count": 0,
+      "page": 0,
+      "pageCount": 0,
+      "pageEnd": 0,
+      "pageStart": 0,
+      "limit": 0,
+      "results": {
+        "document": [
+          {
+            "source": "string",
+            "elevate": true,
+            "metadata": [
+              {
+                "href": "string",
+                "text": "string"
+              }
+            ],
+            "fields": {
+              "additionalProp1": {},
+              "additionalProp2": {},
+              "additionalProp3": {}
+            }
+          }
+        ]
+      },
+      "pagination": [
+        {
+          "type": "FIRST",
+          "text": "string",
+          "href": "string",
+          "page": 0
+        }
+      ]
+    }
+  ],
+  "widget": {
+    "facet": [
+      {
+        "facets": [
+          {
+            "count": 0,
+            "link": "string",
+            "label": "string"
+          }
+        ],
+        "label": {
+          "lang": "string",
+          "text": "string"
+        },
+        "name": "string",
+        "description": "string",
+        "type": "INT",
+        "multiValued": true
+      }
+    ],
+    "facetToRemove": {
+      "facets": [
+        {
+          "count": 0,
+          "link": "string",
+          "label": "string"
+        }
+      ],
+      "label": {
+        "lang": "string",
+        "text": "string"
+      },
+      "name": "string",
+      "description": "string",
+      "type": "INT",
+      "multiValued": true
+    },
+    "similar": [
+      {
+        "id": "string",
+        "title": "string",
+        "type": "string",
+        "url": "string"
+      }
+    ],
+    "spellCheck": {
+      "correctedText": true,
+      "usingCorrectedText": true,
+      "original": {
+        "text": "string",
+        "link": "string"
+      },
+      "corrected": {
+        "text": "string",
+        "link": "string"
+      }
+    },
+    "locales": [
+      {
+        "locale": "string",
+        "link": "string"
+      }
+    ],
+    "spotlights": [
+      {
+        "id": "string",
+        "position": 0,
+        "title": "string",
+        "type": "string",
+        "referenceId": "string",
+        "content": "string",
+        "link": "string"
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,36 @@
+==== Spell Check
+
+===== Endpoint
+....
+GET http://localhost:2700/api/cognitive/spell-checker/{{locale}}
+....
+
+===== Path Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| locale | String | Required | Locale of Semantic Navigation Site | en_US
+|===
+
+===== Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| text | String | Required | Text to validated | text=fuu ber
+|===
+
+===== Example - Request
+```
+curl -X GET \
+  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
+  -H 'Authorization: Bearer {{Enter your Access Token}}' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -H 'accept: application/json' 
+```
+
+===== Example - Response
+```json
+[
+  "string"
+]
+```

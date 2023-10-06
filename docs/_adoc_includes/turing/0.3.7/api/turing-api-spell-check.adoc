@@ -1,0 +1,48 @@
+=== Spell Check
+
+==== Endpoint
+....
+GET http://localhost:2700/api/sn/{{siteName}}/{{locale}}/spell-check
+....
+
+==== Path Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| sitename | String| Required | Site Name. | Sample
+| locale | String | Required | Locale of Semantic Navigation Site | en_US
+|===
+
+===== Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| q | String| Required | Search Query. | q=foo
+| rows | Integer | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Boolean | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+|===
+
+===== Example - Request
+```
+curl -X GET \
+  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
+  -H 'Authorization: Bearer {{Enter your Access Token}}' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -H 'accept: application/json' 
+```
+
+===== Example - Response
+```json
+{
+  "correctedText": true,
+  "usingCorrectedText": true,
+  "original": {
+    "text": "string",
+    "link": "string"
+  },
+  "corrected": {
+    "text": "string",
+    "link": "string"
+  }
+}
+```
