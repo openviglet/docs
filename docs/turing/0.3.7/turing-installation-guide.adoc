@@ -484,3 +484,187 @@ Configuration finished.
 Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: http://<host>:<port>/console where <host>:<port> is the listening host and port for the Turing AI that you created in the application server. The default port is 2700 for the Console.
 
 By default the login/password are: admin/admin
+
+[appendix]
+== Installation Modes
+
+=== Turing AI Server
+==== Simple. 
+
+Turing AI will be installed only using OpenNLP and H2 database embedded in Turing AI itself.
+
+===== Prerequisites
+
+1. Linux server
+2. Java 14
+3. 50Gb HDD
+4. 2 Gb of RAM
+
+===== Target Audience
+
+Development and testing environment. Because it requires fewer components and lower memory usage.
+
+===== Estimated Hours
+
+2 hours
+
+IMPORTANT: Servers will be provided by the customer.
+
+==== Docker Compose
+
+Turing AI and its dependencies will be installed using Docker Compose script, including the following services:
+
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing AI to use port 80
+* Turing AI.
+
+===== Prerequisites
+1. Linux server
+2. Docker and Docker Compose installed
+3. 50Gb HDD
+4. 4Gb of RAM
+
+===== Target Audience
+
+Customers who need more complex environments, but avoid the installation and configuration of each product. It can be used in an QA or Production environment.
+
+===== Estimated Hours
+
+16 hours
+
+IMPORTANT: Servers and docker configuration will be provided by the customer.
+
+==== Kubernetes
+
+Turing AI and its dependencies will be installed using Kubernetes scripts, including the following services:
+
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing AI to use port 80
+* Turing AI.
+
+===== Prerequisites
+
+1. Linux Server with Kubernetes installed or Cloud that supports Kubernetes
+2. 100Gb of Storage
+3. 4Gb RAM
+
+===== Target Audience
+
+Customers who want to use cloud solutions like Google, AWS, Oracle, etc. It can be used in the production environment in a scalable way.
+
+===== Estimated Hours
+
+20 hours
+
+IMPORTANT: Cloud infrastructure and servers will be provided by the customer.
+
+==== Manual Installation of Services
+
+The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
+
+* MariaDB – to store Turing AI system tables
+* Solr – Used by Turing AI's Semantic Navigation and Chatbot
+* Apache – WebServer for Turing AI to use port 80
+* Turing AI.
+
+===== Prerequisites
+1. One Linux server or up to 4 Linux servers to install services
+2. 50 - 100Gb of Storage for each server
+3. Minimum 2Gb RAM for each Server
+4. The services will be installed individually on the servers following the Installation Guide procedure.
+
+===== Target Audience
+
+Customers who prefer the on-premise structure and want to have the services installed directly on the servers. It can be used in Development, QA and Production.
+
+===== Estimated Hours
+
+20 hours
+
+IMPORTANT: Servers will be provided by the customer.
+
+=== Connectors
+
+Turing AI has several connectors to allow you to index the contents in Semantic Navigation:
+
+* Apache Nutch (Crawler)
+* Wordpress
+* OpenText WEM Listener
+* FileSystem
+* Database
+
+==== Prerequisites
+
+1. New linux server or existing server with content or files that will be indexed.
+2. 50 of Storage for each server.
+
+==== Estimated Hours
+
+On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing AI.
+
+=== NLP 
+
+The customer can choose the NLP that will be used by Turing AI:
+
+* Apache OpenNLP (Embedded)
+* SpaCy NLP
+* Stanford CoreNLP
+* OpenText Content Analytics
+* Poliglot
+
+==== Prerequisites
+
+1. Linux server
+2. 50 of Storage for each server
+3. Minimum 2 Gb of RAM
+
+==== Estimated Hours
+
+On average, it will take *4 hours* to configure NLP and configure Turing AI to use it.
+
+[appendix]
+== Docker Compose
+
+You can start the Turing AI using MariaDB, Solr and Nginx.
+
+```shell
+./gradlew turing-app:build -x test -i --stacktrace
+docker-compose up
+```
+NOTE: If you have problems with permissions on directories, run `chmod -R 777 volumes`
+
+=== Docker Commands
+
+==== Turing
+
+```shell
+docker exec -it turing /bin/bash
+```
+
+==== Solr
+
+```shell
+docker exec -it turing-solr /bin/bash
+```
+
+Check logs
+
+```shell
+docker-compose exec turing-solr cat /opt/solr/server/logs/solr.log
+# or 
+docker-compose exec turing-solr tail -f /opt/solr/server/logs/solr.log
+```
+
+==== MariaDB
+
+```shell
+docker exec -it turing-mariadb /bin/bash
+```
+
+==== Nginx
+
+```shell
+docker exec -it turing-nginx /bin/bash
+```
