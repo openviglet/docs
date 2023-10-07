@@ -2,11 +2,14 @@
 
 Detect a language of text was sent.
 
-===== Endpoint
+===== API Endpoint
 ....
 GET http://localhost:2700/api/cognitive/detect-language
 ....
 
+===== Headers
+
+include::_adoc_includes/turing/0.3.7/api/turing-api-headers.adoc
 
 ===== Query String
 [%header,cols=5*] 

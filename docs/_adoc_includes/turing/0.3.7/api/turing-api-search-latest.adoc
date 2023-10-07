@@ -1,6 +1,6 @@
 ==== Search Latest
 
-Return the last terms searched by the user in the search.
+Returns the last terms searched by the user in the search.
 
 ===== Endpoint
 ....
