@@ -1,5 +1,7 @@
 ==== Detect Language
 
+Detect a language of text was sent.
+
 ===== Endpoint
 ....
 GET http://localhost:2700/api/cognitive/detect-language

@@ -1,5 +1,7 @@
 ==== Search Latest
 
+Return the last terms searched by the user in the search.
+
 ===== Endpoint
 ....
 GET http://localhost:2700/api/sn/{{siteName}}/search/latest

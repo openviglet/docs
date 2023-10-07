@@ -1,5 +1,7 @@
 ==== Search With Group By
 
+Search on the semantic navigation site by grouping the search into groups.
+
 ===== Endpoint
 ....
 GET|POST http://localhost:2700/api/sn/{{siteName}}/search

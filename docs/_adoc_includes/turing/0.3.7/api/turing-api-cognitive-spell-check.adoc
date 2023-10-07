@@ -1,5 +1,7 @@
 ==== Spell Check
 
+Corrects text based on the given language.
+
 ===== Endpoint
 ....
 GET http://localhost:2700/api/cognitive/spell-checker/{{locale}}

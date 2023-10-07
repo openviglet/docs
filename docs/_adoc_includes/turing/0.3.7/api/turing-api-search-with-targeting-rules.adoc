@@ -1,5 +1,6 @@
 ==== Search with Targeting Rules
 
+Search on the semantic navigation site adding segmentation, restricting content based on defined segments.
 
 ===== Endpoint
 ....
