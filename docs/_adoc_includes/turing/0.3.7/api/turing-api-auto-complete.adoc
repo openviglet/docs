@@ -2,7 +2,7 @@
 
 Returns a term array that starts with the query value.
 
-===== Endpoint
+===== API Endpoint
 ....
 GET http://localhost:2700/api/sn/{{siteName}}/ac
 ....

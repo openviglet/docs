@@ -9,7 +9,7 @@ GET|POST http://localhost:2700/api/sn/{{siteName}}/search
 
 ===== Headers
 
-include::_adoc_includes/turing/0.3.7/api/turing-api-headers.adoc
+include::turing-api-headers.adoc[]
 
 ===== Path Parameters
 [%header,cols=4*] 
