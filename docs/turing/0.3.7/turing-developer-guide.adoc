@@ -209,6 +209,32 @@ You can check the quality of Turing Code at:
 
 Turing AI offers a variety of robust, convenient, and simple RESTful Web service APIs to integrate data from Turing to any external system. Through Turing's API, your developers can create Web applications to interact directly with data that resides in Turing. Among the available features include RESTful APIs using JSON format, authentication via API Key invoking the existing user-level governance and security model built into Turing as well as a developer to manage access to API documentation and API keys. We have APIs to deliver search and cognitive features.
 
+=== Generate an API Key
+
+==== Step 1
+
+Sign in Turing Administration Console (http://localhost:2700).
+
+image::img/screenshots/turing-login.png[Sign in]  
+
+==== Step 2
+
+Access API Token Section.
+
+image::img/turing/0.3.7/api-token-menu.png[API Token Section]  
+
+==== Step 3
+
+Create a new API Token with Title and Description. 
+
+image::img/turing/0.3.7/api-token-new.png[New API Token]  
+
+==== Step 4
+
+Will be create a new random API Token.
+
+image::img/turing/0.3.7/api-token-hash.png[API Token was generated]  
+
 === Search
 include::_adoc_includes/turing/0.3.7/api/turing-api-search.adoc[]
 
