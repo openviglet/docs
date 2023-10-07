@@ -20,10 +20,11 @@ GET http://localhost:2700/api/cognitive/spell-checker/{{locale}}
 |===
 
 ===== Example - Request
-```
-curl -X 'GET' \
-  'http://localhost:2700/api/cognitive/spell-checker/en_US?text=urange' \
-  -H 'accept: application/json' 
+```bash
+curl -X GET \
+  "http://localhost:2700/api/cognitive/spell-checker/en_US?text=urange" \
+  -H "Accept: application/json" \
+  -H "Key: {{Enter your API KEY}}"
 ```
 
 ===== Example - Response

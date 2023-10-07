@@ -22,7 +22,7 @@ GET http://localhost:2700/api/sn/{{siteName}}/ac
 |===
 
 ==== Example - Request
-```
+```bash
 curl -X 'GET' \
   'http://localhost:2700/api/sn/Sample/ac?q=dis&rows=10&_setlocale=en_US' \
   -H 'Content-Type: application/json'

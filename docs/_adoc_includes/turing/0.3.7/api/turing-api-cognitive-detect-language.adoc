@@ -14,12 +14,12 @@ GET http://localhost:2700/api/cognitive/detect-language
 |===
 
 ===== Example - Request
-```
-curl -X GET \
-  https://api2.sprinklr.com/{{env}}/api/v2/knowledgebase/64216a8b7ef3971d6d75782f' \
-  -H 'Authorization: Bearer {{Enter your Access Token}}' \
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/cognitive/detect-language?text="Hello World"' \
+  -H 'Content-Type: application/json' \
   -H 'Key: {{Enter your API KEY}}' \
-  -H 'accept: application/json' 
+ 
 ```
 
 ===== Example - Response

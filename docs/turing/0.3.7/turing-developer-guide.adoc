@@ -386,6 +386,10 @@ On average, it will take *4 hours* to configure NLP and configure Turing AI to u
 
 == REST API
 
+=== API Overview
+
+Turing AI offers a variety of robust, convenient, and simple RESTful Web service APIs to integrate data from Turing to any external system. Through Turing's API, your developers can create Web applications to interact directly with data that resides in Turing. Among the available features include RESTful APIs using JSON format, authentication via API Key invoking the existing user-level governance and security model built into Turing as well as a developer to manage access to API documentation and API keys. We have APIs to deliver search and cognitive features.
+
 === Search
 include::_adoc_includes/turing/0.3.7/api/turing-api-search.adoc[]
 

@@ -30,13 +30,13 @@ GET http://localhost:2700/api/sn/{{siteName}}/search/latest
 
 ===== Example - Request
 ```bash
-curl -X 'POST' \
+curl -X POST \
   'http://localhost:2700/api/sn/Sample/search/latest?rows=5&_setlocale=en_US' \
-  -H 'accept: application/json' 
-  -H 'Content-Type: application/json' \
+  -H 'Content-Type: application/json'
+  -H 'Key: {{Enter your API KEY}}'
   -d '{
   "userId": "user1"
-}'
+  }'
 ```
 
 ===== Example - Response
