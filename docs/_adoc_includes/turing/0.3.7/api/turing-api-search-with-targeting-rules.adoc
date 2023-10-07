@@ -2,7 +2,7 @@
 
 Search on the semantic navigation site adding segmentation, restricting content based on defined segments.
 
-===== Endpoint
+===== API Endpoint
 ....
 POST http://localhost:2700/api/sn/{{siteName}}/search
 ....

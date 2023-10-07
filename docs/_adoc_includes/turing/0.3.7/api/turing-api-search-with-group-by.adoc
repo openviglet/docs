@@ -2,7 +2,7 @@
 
 Search on the semantic navigation site by grouping the search into groups.
 
-===== Endpoint
+===== API Endpoint
 ....
 GET|POST http://localhost:2700/api/sn/{{siteName}}/search
 ....

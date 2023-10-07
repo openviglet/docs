@@ -2,7 +2,7 @@
 
 Corrects the text based on the semantic navigation site search database in a given language.
 
-===== Endpoint
+===== API Endpoint
 ....
 GET http://localhost:2700/api/sn/{{siteName}}/{{locale}}/spell-check
 ....

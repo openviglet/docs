@@ -2,7 +2,7 @@
 
 List all locales on the semanantic navigation site.
 
-===== Endpoint
+===== API Endpoint
 ....
 GET http://localhost:2700/api/sn/{{siteName}}/search/locales
 ....
