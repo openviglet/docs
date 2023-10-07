@@ -28,63 +28,62 @@ Viglet Turing AI (https://viglet.com/turing) is an open source solution (https:/
 
 Technical documentation on Turing AI is available at https://docs.viglet.com/turing.
 
-== Development Structure
+== Open Source Development
 
-=== Frameworks
+You can collaborate with Turing, participating in its development. Below are the steps to create your Turing environment.
+
+=== Development Structure
+
+==== Frameworks
 Turing AI was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
 
 The UI is currently using AngularJS (https://angularjs.org), but a new UI is being developed using Angular 12 (https://angular.io) with Primer CSS (https://primer.style/css).
 
 In addition to Java, you also need to have Git (https://git-scm.com/downloads) and NodeJS (https://nodejs.org/en/download/) installed.
 
-=== Databases
+==== Databases
 By default it uses the H2 database (https://www.h2database.com), but can be changed to other databases using Spring Boot properties. It comes bundled with OpenNLP (https://opennlp.apache.org/) in the same JVM.
 
-=== Language and Deploy
-It uses Java 14 (https://adoptopenjdk.net/archive.html?variant=openjdk14&jvmVariant=hotspot) and its deployment is done with Gradle 7.2 (https://gradle.org/) and works on Linux and Windows.
+==== Language and Deploy
+It uses Java 17 (https://adoptopenjdk.net/archive.html?variant=openjdk17&jvmVariant=hotspot) and its deployment is done with Gradle 8 (https://gradle.org/) and works on Linux and Windows.
 
-=== Docker
+==== Docker
 To use Semantic Navigation and Chatbot you must have a Solr (https://solr.apache.org) service available. If you prefer to work with all the services Turing depends on, you can use docker-compose (https://docs.docker.com/compose/install) to start these services, we use the Docker Desktop (https://www.docker.com/products/docker-desktop) installed on computer.
 
-=== IDE
+==== IDE
 You can use Spring Tools 4 for Eclipse (https://spring.io/tools) or Eclipse (https://www.eclipse.org/downloads/) or Visual Studio Code (https://code.visualstudio.com/) or IntelliJ (https://www.jetbrains.com/pt-br/idea/) as IDEs.
 
-== Download
+=== Download
 
 Use the git command line to download the repository to your computer.
 
-=== Turing Server and Connectors
+==== Turing Server and Connectors
 
 ```shell
 git clone https://github.com/openturing/turing.git 
 ```
-=== Turing Java SDK
 
-```shell
-git clone https://github.com/openturing/turing-java-sdk.git
-```
-
-== Run during Development
+=== Run during Development
 
 To run Turing AI, execute the following lines:
 
-=== Turing Server
+==== Turing Server
 
-==== Development
+===== Development
 
-===== With UI
+====== With UI
 ```shell
 cd turing 
 ./gradlew turing-app:bootrun
 ```
 
-===== Without update UI
+====== Without update UI
 ```shell
 cd turing 
 ./gradlew turing-app:bootrun -Pno-ui
 ```
 
-==== New Turing UI
+===== New Turing UI
 
 Start the Turing Server using dev-ui profile
 ```shell
@@ -110,14 +109,14 @@ ng serve welcome
 ```
 IMPORTANT: You need start the Turing Server and Solr first.
 
-==== Build
+===== Build
 ```shell
 cd turing 
 ./gradlew turing-app:build
 ```
 
-=== Java SDK
-==== Development
+==== Java SDK
+===== Development
 ```shell
 cd turing-java-sdk
 ./gradlew shadowJar
@@ -125,14 +124,14 @@ java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.T
 ```
 IMPORTANT: You need start the Turing Server and Solr first.
 
-=== Build
+==== Build
 ```shell
 cd turing-java-sdk
 ./gradlew build
 ```
 Or use the jitpack into your project at https://jitpack.io/#openturing/turing-java-sdk
 
-=== WEM Listener
+==== WEM Listener
 
 ```shell
 cd turing
@@ -143,7 +142,7 @@ For development, copy the turing-wem/build/libs/turing-wem-all.jar into WEM_DIR/
 IMPORTANT: You need start the Turing Server and Solr first and restart WEM
 
 
-=== Database Connector
+==== Database Connector
 
 ```shell
 cd turing
@@ -151,7 +150,7 @@ cd turing
 ```
 IMPORTANT: You need start the Turing Server and Solr first and restart WEM
 
-=== Filesystem Connector
+==== Filesystem Connector
 
 ```shell
 cd turing
@@ -159,15 +158,15 @@ cd turing
 ```
 IMPORTANT: You need start the Turing Server and Solr first and restart WEM
 
-=== Nutch
-==== Nutch 1.12
+==== Nutch
+===== Nutch 1.12
 ```shell
 cd turing/
 ./gradlew turing-nuch:nutch1_12:packageDistribution
 ```
 For development, copy the files of turing-nutch/nutch1_12/build/extracted_dist to APACHE_NUTCH1_12/plugins/indexer-viglet-turing
 
-==== Nutch 1.18
+===== Nutch 1.18
 ```shell
 cd turing/
 ./gradlew turing-nuch:nutch1_18:packageDistribution
@@ -177,24 +176,24 @@ For development, copy the files of turing-nutch/nutch1_18/build/extracted_dist t
 IMPORTANT: You need start the Turing Server and Solr first.
 
 
-== URLs
+=== URLs
 
-=== Turing Server
+==== Turing Server
 * Administration Console: http://localhost:2700. (admin/admin)
 * Semantic Navigation Sample: http://localhost:2700/sn/Sample.
 
-=== New Turing UI
+==== New Turing UI
 * Welcome http://localhost:4200/welcome
 * Console http://localhost:4200/console
 * Search Page http://localhost:4200/sn/template?_setsite=Sample&_setlocale=en_US
 * Converse http://localhost:4200/converse
 
-=== Docker Compose
+==== Docker Compose
 * Administration Console: http://localhost. (admin/admin)
 * Semantic Navigation Sample: http://localhost/sn/Sample.
 * Solr: http://localhost:8983
 
-=== Code Quality
+==== Code Quality
 
 You can check the quality of Turing Code at:
 
