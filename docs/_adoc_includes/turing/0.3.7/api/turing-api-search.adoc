@@ -1,10 +1,8 @@
 ==== Search
 
-This page requests the Turing Rest API via AJAX. For example, to return all results of Semantic Navigation Site in JSON Format: 
-
 ===== Endpoint
 ....
-GET http://localhost:2700/api/sn/{{siteName}}/search?p=1&q=*&sort=relevance
+GET http://localhost:2700/api/sn/{{siteName}}/search
 ....
 
 ===== Path Parameters
