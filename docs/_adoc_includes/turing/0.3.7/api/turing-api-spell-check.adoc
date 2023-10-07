@@ -1,11 +1,11 @@
-=== Spell Check
+==== Spell Check
 
-==== Endpoint
+===== Endpoint
 ....
 GET http://localhost:2700/api/sn/{{siteName}}/{{locale}}/spell-check
 ....
 
-==== Path Parameters
+===== Path Parameters
 [%header,cols=5*] 
 |===
 | Attribute | Type | Required / Optional | Description | Example

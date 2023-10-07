@@ -22,10 +22,10 @@ GET http://localhost:2700/api/sn/{{siteName}}/search/latest
 |===
 
 ===== Request Parameters
-[%header,cols=6*] 
+[%header,cols=5*] 
 |===
-| Attribute | Type | Required / Optional | Description | Default | Example
-| userId | String| Optional | User Id | userId=john
+| Attribute | Type   | Required / Optional | Description | Example
+| userId    | String | Required            | User Id     | userId=john
 |===
 
 ===== Example - Request
@@ -35,7 +35,7 @@ curl -X POST \
   -H 'Content-Type: application/json'
   -H 'Key: {{Enter your API KEY}}'
   -d '{
-  "userId": "user1"
+  "userId": "john"
   }'
 ```
 

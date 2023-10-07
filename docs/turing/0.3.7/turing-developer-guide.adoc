@@ -235,7 +235,7 @@ Will be create a new random API Token.
 
 image::img/turing/0.3.7/api-token-hash.png[API Token was generated]  
 
-=== Search
+=== Semantic Navigation
 include::_adoc_includes/turing/0.3.7/api/turing-api-search.adoc[]
 
 include::_adoc_includes/turing/0.3.7/api/turing-api-search-with-targeting-rules.adoc[]
