@@ -13,7 +13,7 @@ ifdef::backend-pdf[:toc: left]
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Developer Guide
 :page-permalink: /turing/0.3.7/developer-guide/
-:imagesdir: ../
+:imagesdir: ../../../
 :page-pdf: /docs/turing/turing-developer-guide-0.3.7.pdf
 :page-product: turing
 
