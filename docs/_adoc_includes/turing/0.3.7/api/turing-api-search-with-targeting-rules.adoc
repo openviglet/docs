@@ -43,7 +43,7 @@ POST http://localhost:2700/api/sn/{{siteName}}/search
 ===== Example - Request
 ```bash
 curl -X 'POST' \
-  'http://localhost:2700/api/sn/Sample/search?q=foo&p=1&fq%5B%5D=state%3AWA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&fq%5B%5D=state%3AWA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
   -H 'Content-Type: application/json' \
   -H 'Key: {{Enter your API KEY}}' \
   -d '{

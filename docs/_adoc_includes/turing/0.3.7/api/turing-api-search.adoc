@@ -31,7 +31,7 @@ GET http://localhost:2700/api/sn/{{siteName}}/search
 ===== Example - Request
 ```bash
 curl -X 'GET' \
-  'http://localhost:2700/api/sn/Sample/search?q=foo&p=1&fq[]=state:WA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&fq[]=state:WA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
   -H 'Content-Type: application/json'
 ```
 

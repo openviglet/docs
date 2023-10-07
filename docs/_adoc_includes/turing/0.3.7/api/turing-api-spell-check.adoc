@@ -35,14 +35,14 @@ curl -X 'GET' \
 ```json
 {
   "correctedText": true,
-  "usingCorrectedText": true,
+  "usingCorrectedText": false,
   "original": {
-    "text": "string",
-    "link": "string"
+    "text": "fuu",
+    "link": "/api/sn/Sample/en_US/spell-check?q=fuu&nfpr=1"
   },
   "corrected": {
-    "text": "string",
-    "link": "string"
+    "text": "foo",
+    "link": "/api/sn/Sample/en_US/spell-check?q=foo"
   }
 }
 ```
