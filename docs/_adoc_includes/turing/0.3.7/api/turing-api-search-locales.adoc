@@ -1,6 +1,6 @@
 ==== Search Locales
 
-List all locales on the semanantic navigation site.
+List all locales on the semantic navigation site.
 
 ===== API Endpoint
 ....

@@ -24,7 +24,7 @@ include::turing-api-headers.adoc[]
 | Attribute | Required / Optional | Description | Example
 | q | Required | Search Query. | q=foo
 | p | Required | Page Number, first page is 1. | p=1
-| sort | Required | Sort values: `relevance`, `newest` and `oldest`. | sort=relevance
+| sort | Required | Sort values: `relevance`, `newest` and `oldest`. Or *FIELD*: *SORT* | sort=relevance or sort=title:asc
 | fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
 | rows | Optional | Number of rows that query will return. | rows=10
 | _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
