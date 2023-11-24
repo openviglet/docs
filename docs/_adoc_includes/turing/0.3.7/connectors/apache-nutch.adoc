@@ -200,7 +200,7 @@ Can specify what is the field will be used to store the timestamp of indexing. T
 [[nutch-configuration-112-source-app-field]]
 =====  Source App Name
 
-Turing AI Semantic Navigation Site allows to index content from many sources, so can identify where the content was indexed, can specify the name of the source changing the `turing.field.source_apps` into nutch-site.xml file. The default value is `Nutch`:
+Turing ES Semantic Navigation Site allows to index content from many sources, so can identify where the content was indexed, can specify the name of the source changing the `turing.field.source_apps` into nutch-site.xml file. The default value is `Nutch`:
 
 ```xml
 <property>
@@ -245,12 +245,12 @@ Modify the following parameters:
 |===
 | Parameter | Description | Default value
 | solr.server.url | Turing URL + "/" + Turing Semantic Navigation Site. | -
-| turing.url | Defines the fully qualified URL of Turing AI into which data should be indexed. | http://localhost:2700
+| turing.url | Defines the fully qualified URL of Turing ES into which data should be indexed. | http://localhost:2700
 | turing.site | Turing Semantic Navigation Site Name. |  Sample
 | turing.weight.field | Field's name where the weight of the documents will be written. If it is empty no field will be used. | -
-| turing.auth | Whether to enable HTTP basic authentication for communicating with Turing AI. Use the `username` and `password` properties to configure your credentials. | true
-| turing.username | The username of Turing AI server. | admin
-| turing.password | The password of Turing AI server. | admin
+| turing.auth | Whether to enable HTTP basic authentication for communicating with Turing ES. Use the `username` and `password` properties to configure your credentials. | true
+| turing.username | The username of Turing ES server. | admin
+| turing.password | The password of Turing ES server. | admin
 | turing.timestamp.field | Field used to store the timestamp of indexing. | tstamp
 | turing.field.`FIELD_NAME` | Modify or create a custom field during indexing. | -
 |===
@@ -311,15 +311,15 @@ Modify the following parameters:
 [%header,cols=3*] 
 |===
 | Parameter | Description | Default value
-| url | Defines the fully qualified URL of Turing AI into which data should be indexed. | http://localhost:2700
+| url | Defines the fully qualified URL of Turing ES into which data should be indexed. | http://localhost:2700
 | site | Turing Semantic Navigation Site Name. |  Sample
 | weight.field | Field's name where the weight of the documents will be written. If it is empty no field will be used. | -
-| commitSize | Defines the number of documents to send to Turing AI in a single update batch. Decrease when handling very large documents to prevent Nutch from running out of memory.
+| commitSize | Defines the number of documents to send to Turing ES in a single update batch. Decrease when handling very large documents to prevent Nutch from running out of memory.
 
 **Note**: It does not explicitly trigger a server side commit. | 1000
-| auth | Whether to enable HTTP basic authentication for communicating with Turing AI. Use the `username` and `password` properties to configure your credentials. | true
-| username | The username of Turing AI server. | admin
-| password | The password of Turing AI server. | admin
+| auth | Whether to enable HTTP basic authentication for communicating with Turing ES. Use the `username` and `password` properties to configure your credentials. | true
+| username | The username of Turing ES server. | admin
+| password | The password of Turing ES server. | admin
 |===
 
 <<<
@@ -342,7 +342,7 @@ echo "https://viglet.com" > urls/seed.txt
 +
 TIP: You can also limit crawling to a certain hostname etc. by setting a regular expression in `/appl/apache/nutch/runtime/local/config/regex-filter.txt`
 
-2. Index the content with Turing AI
+2. Index the content with Turing ES
 +
 ```shell
 # 1.12
@@ -377,11 +377,11 @@ bin/crawl -D turing.site="Sample" -i -s urls/ crawl-output/ 5
 | Parameter | Example  | Description
 | -D solr.server.url | -D solr.server.url="http://localhost:2700/Sample" | Turing URL + "/" + Turing Semantic Navigation Site.
 | -D turing.force.config | -D turing.force.config=true  | Use turing.url and turing.site instead of solr.sever.url
-| -D turing.url | -D turing.url="localhost:2700" | Defines the fully qualified URL of Turing AI into which data should be indexed.
+| -D turing.url | -D turing.url="localhost:2700" | Defines the fully qualified URL of Turing ES into which data should be indexed.
 | -D turing.site | -D turing.url="Sample" | Turing Semantic Navigation Site Name.
-| -D turing.auth  | -D turing.auth=false  | Whether to enable HTTP basic authentication for communicating with Turing AI. Use the `username` and `password` properties to configure your credentials.
-| -D turing.username  | -D turing.username="admin" | The username of Turing AI server.
-| -D turing.password  | -D turing.password="admin" | The password of Turing AI server.
+| -D turing.auth  | -D turing.auth=false  | Whether to enable HTTP basic authentication for communicating with Turing ES. Use the `username` and `password` properties to configure your credentials.
+| -D turing.username  | -D turing.username="admin" | The username of Turing ES server.
+| -D turing.password  | -D turing.password="admin" | The password of Turing ES server.
 |===
 
 <<<
@@ -421,6 +421,6 @@ In Nutch Provider Configuration at WEM Configuration Console, change the variabl
 </nutch-config>
 ```
 
-IMPORTANT: If you are using the Turing AI Semantic Navigation Site's multilingual functionality, you can repeat the Site name in the `core` for each `locale` of this setting.
+IMPORTANT: If you are using the Turing ES Semantic Navigation Site's multilingual functionality, you can repeat the Site name in the `core` for each `locale` of this setting.
 
 TIP: In Nutch 1.12, if there are many sites with different semantic navigation sites, use the turing-mapping.xml file to create association between the URL definitions and the semantic navigation site, for example: <site url = "https:// viglet.com" snSite = "Sample" />
