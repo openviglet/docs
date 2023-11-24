@@ -1,8 +1,8 @@
 ---
 layout: product
-title: Turing AI Documentation
-banner-title: Turing AI Reference Documentation
-description: Documentation about Turing AI.
+title: Turing SE Documentation
+banner-title: Turing SE Reference Documentation
+description: Documentation about Turing SE.
 product: turing
-product-name: Turing AI
+product-name: Turing SE
 ---

@@ -417,7 +417,7 @@ Create a /appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml file with the foll
     </mappingDefinition>
 </mappingDefinitions>
 ```
-NOTE: There should be a srcAttr element for each content type field to be indexed by Turing AI.  The xmlName attribute should contain the XML Name of the relevant field.
+NOTE: There should be a srcAttr element for each content type field to be indexed by Turing ES.  The xmlName attribute should contain the XML Name of the relevant field.
 
 <<<
 
@@ -474,7 +474,7 @@ The following sections describe the delements defined in the CTD-Turing-Mappings
 [%header,cols=2*] 
 |===
 | Element | Description
-| srcAttr | Content Type Field to be indexed by Turing AI.  
+| srcAttr | Content Type Field to be indexed by Turing ES.  
 |===
 
 .srcAttr (mappingDefinition) Attributes
@@ -493,7 +493,7 @@ The following sections describe the delements defined in the CTD-Turing-Mappings
 [%header,cols=2*] 
 |===
 | Element | Element Description
-| tag | Turing AI Semantic Navigation Field
+| tag | Turing ES Semantic Navigation Field
 |===
 
 <<<
@@ -518,7 +518,7 @@ There are ready-made extensions to be used when indexing WEM content through the
 | com.viglet.turing.wem.ext.TurParentChannel | Parent Channel of Content Instance.
 | com.viglet.turing.wem.ext.TurSiteName | Site name associated.
 | com.viglet.turing.wem.ext.TurSpotlightExtraFields | JSON with info about Spotlight Content Instance (internal)
-| com.viglet.turing.wem.ext.TurStaticFile | Get WEM ID from defined attribute and convert to file://path_of_file, using the `dps.config.filesource.path` properties of `VigletTuring Resource`. This extension modifies the listener workflow, as it adds the files of this content instance to the zip file along with export.json and sends it to the Turing AI, which will process these files and add the content in the attributes of export.json, before its indexing.
+| com.viglet.turing.wem.ext.TurStaticFile | Get WEM ID from defined attribute and convert to file://path_of_file, using the `dps.config.filesource.path` properties of `VigletTuring Resource`. This extension modifies the listener workflow, as it adds the files of this content instance to the zip file along with export.json and sends it to the Turing ES, which will process these files and add the content in the attributes of export.json, before its indexing.
 | com.viglet.turing.wem.ext.TurStaticFileSize | Static File Size
 | com.viglet.turing.wem.ext.TurWEMPublicationDate | Publication Date of Content Instance, if not exist use Modification Date.
 | com.viglet.turing.wem.ext.TurWEMModificationDate | Modification Date of Content Instance.
@@ -529,13 +529,13 @@ There are ready-made extensions to be used when indexing WEM content through the
 [[wem-spotlight]]
 === Spotlight
 
-The Turing AI Semantic Navigation Site allows you to create spotlights that will be highlighted in the search, based on the registered terms.
+The Turing ES Semantic Navigation Site allows you to create spotlights that will be highlighted in the search, based on the registered terms.
 There are two types of Spotlight:
 
-* Managed - Manipulated on the Turing AI console.
-* Unmanaged - Created externally and not manipulated in the Turing AI console.
+* Managed - Manipulated on the Turing ES console.
+* Unmanaged - Created externally and not manipulated in the Turing ES console.
 
-In this case, it is possible to create Unmanaged Spotlights using WEM, creating a CTD and whenever handled Content Instances of this CTD, the WEM Listener will send this Content and the Turing AI will treat this content with a different flow, which will allow creating new Unmanaged Spotlight.
+In this case, it is possible to create Unmanaged Spotlights using WEM, creating a CTD and whenever handled Content Instances of this CTD, the WEM Listener will send this Content and the Turing ES will treat this content with a different flow, which will allow creating new Unmanaged Spotlight.
 For this, you need to import the Spotlight CTD into WEM using the following command line, for example:
 
 ```shell

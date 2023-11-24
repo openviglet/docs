@@ -1,4 +1,4 @@
-= Viglet Turing AI: Installation Guide
+= Viglet Turing ES: Installation Guide
 Viglet Team <opensource@viglet.com>
 :page-layout: documentation
 :organization: Viglet Turing
@@ -24,11 +24,11 @@ include::_adoc_includes/turing/0.3.7/installation/preface.adoc[]
 [[installing-java]]
 == Installing Java
 
-Turing AI requires Java.
+Turing ES requires Java.
 
-NOTE: Turing AI only supports Java 17.
+NOTE: Turing ES only supports Java 17.
 
-During installation, Turing AI reads the ​​JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
+During installation, Turing ES reads the ​​JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
 
 * On Windows:
 ** Set the JAVA_HOME system variable to point to the JAVA location.
@@ -39,13 +39,13 @@ During installation, Turing AI reads the ​​JAVA_HOME and PATH variables to i
 ** Provide the JAVA bin path in the PATH variable.
 
 [[requirements]]
-== Turing AI Requirements
+== Turing ES Requirements
 
-The information below describes the resource modes available to run Turing AI.
+The information below describes the resource modes available to run Turing ES.
 
 NOTE: Use a screen resolution of at least 1024 x 768 for optimum clarity.
 
-This section describes the minimum and suggested features for systems on which you can configure Turing AI.
+This section describes the minimum and suggested features for systems on which you can configure Turing ES.
 
 [[hardware-requirements]]
 === Hardware Requirements
@@ -67,11 +67,11 @@ In addition, the following is required:
 
 [[configuring-databases]]
 == Installing and Configuring Databases
-Turing AI supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Turing AI. The following sections describe these requirements.
+Turing ES supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Turing ES. The following sections describe these requirements.
 
 [[configuring-databases-table-requirements]]
-=== Turing AI Database Table Requirements
-Turing AI uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.
+=== Turing ES Database Table Requirements
+Turing ES uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.
 
 [[configuring-databases-oracle-requirements]]
 ==== Oracle Database Requirements
@@ -80,29 +80,29 @@ This section describes configuration requirements for an existing database.
 
 To set up an Oracle database:
 
-1. Install and configure a single database instance for use by Turing AI.
-2. Create a database schema to contain the Turing AI system tables.
-3. Configure the Turing AI admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.
+1. Install and configure a single database instance for use by Turing ES.
+2. Create a database schema to contain the Turing ES system tables.
+3. Configure the Turing ES admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.
 
 [[configuring-databases-msql-requirements]]
 ==== Microsoft SQL Server Database Requirements
-This section discusses the steps required to configure Microsoft SQL Server for your Turing AI databases.
+This section discusses the steps required to configure Microsoft SQL Server for your Turing ES databases.
 
-Creating the Turing AI Database before you begin, be sure to refer to the following guides:
+Creating the Turing ES Database before you begin, be sure to refer to the following guides:
 
-The following procedure describes how to create and configure a Microsoft SQL Server database for use by Turing AI.
+The following procedure describes how to create and configure a Microsoft SQL Server database for use by Turing ES.
 
-When creating the Turing AI database, use the following options:
+When creating the Turing ES database, use the following options:
 
 * You must install the Database Engine feature and Management Tools are recommended. All other features are optional.
 * Set the Collation configuration variable to SQL_Latin1_General_CP1_CS_AS or Latin1_General / Case-sensitive / Accent-Sensitive.
 * Set authentication mode to mixed mode.
-* Turing AI system user cannot be sa.
+* Turing ES system user cannot be sa.
 
 [[configuring-databases-msql-database-schemas]]
 ===== Configuring the SQL Server Database and Schemas
 
-This section discusses the steps required to create and configure a SQL Server database for use by Turing AI.
+This section discusses the steps required to create and configure a SQL Server database for use by Turing ES.
 
 NOTE: The database and usernames provided are examples only.
 
@@ -150,15 +150,15 @@ GO
 
 [[configuring-databases-postgresql-requirements]]
 ==== PostgreSQL Database Requirements
-This section discusses the steps required to configure PostgreSQL for your Turing AI databases:
+This section discusses the steps required to configure PostgreSQL for your Turing ES databases:
 
 * Installing and configuring the PostgreSQL Database
-* Configuring the Turing AI user, database, and schema
+* Configuring the Turing ES user, database, and schema
 * Installing and configuring the PostgreSQL Database
 
 [[configuring-databases-postgresql-database]]
 ===== Installing and configuring the PostgreSQL Database
-This section describes the steps required to install and configure a PostgreSQL database for your Turing AI environment. You will also need to configure the Turing user, database and schemas.
+This section describes the steps required to install and configure a PostgreSQL database for your Turing ES environment. You will also need to configure the Turing user, database and schemas.
 
 To install the PostgreSQL database:
 
@@ -176,29 +176,29 @@ shared_buffers = 512MB
 autovacuum = off
 ----
 
-IMPORTANT:  The autovacuum daemon is used to reclaim memory/storage space the database is no longer using. You must re-enable this utility after you have finished installing and configuring Turing AI.
+IMPORTANT:  The autovacuum daemon is used to reclaim memory/storage space the database is no longer using. You must re-enable this utility after you have finished installing and configuring Turing ES.
 
 NOTE: Configuration values will vary for higher transaction environments and numbers of users.
 max_prepared_transactions should be at least as large as max_connections so that every session can have a prepared transaction pending.
 
 [[configuring-databases-postgresql-configuring-user-database-schemas]]
 ===== Configuring the Turing user, database, and schemas
-This section discusses the steps required to configure the users, database and schemas for your Turing AI environment.
+This section discusses the steps required to configure the users, database and schemas for your Turing ES environment.
 
-NOTE: You must be a PostgreSQL super-user or have createuser privileges to create Turing users. To create and configure the Turing AI database, you must be a super-user or have create privileges.
+NOTE: You must be a PostgreSQL super-user or have createuser privileges to create Turing users. To create and configure the Turing ES database, you must be a super-user or have create privileges.
 
 IMPORTANT: When you create a database table in PostgreSQL, the field name must be lowercase.
 
-To configure the Turing AI user:
+To configure the Turing ES user:
 
-1. Create a user as the owner of the Turing AI database:
+1. Create a user as the owner of the Turing ES database:
 
 [source,sql]
 ----
 CREATE USER turing PASSWORD <password> with createuser;
 ----
 
-1. Create a Turing AI database:
+1. Create a Turing ES database:
 
 [source,sql]
 ----
@@ -206,7 +206,7 @@ CREATE DATABASE turing_db;
 ALTER DATABASE turing_db OWNER TO turing;
 ----
 
-To create and access the Turing AI user and schema:
+To create and access the Turing ES user and schema:
 
 * Log in to the turing (database) using the turing account. For example, on the operating system command prompt:
 
@@ -233,7 +233,7 @@ ALTER USER turing SET SEARCH_PATH = turing;
 [[utils]]
 == Turing Utils
 
-First you need install Turing Utils, that contains sample configurations and script to facilitate the use of Turing AI, so go to https://viglet.org/turing/download/ and click on "Integration > Utils" link to download it.
+First you need install Turing Utils, that contains sample configurations and script to facilitate the use of Turing ES, so go to https://viglet.org/turing/download/ and click on "Integration > Utils" link to download it.
 
 Extract the turing-utils.zip to /appl/viglet/turing/utils
 
@@ -251,7 +251,7 @@ You need to configure Solr to be able to store Semantic Navigation and ChatBot d
 
 [[solr-configuration-ootb]]
 === OOTB
-With Solr running, go to Turing Utils and create the new cores that will be used by Turing AI.
+With Solr running, go to Turing Utils and create the new cores that will be used by Turing ES.
 
 1. Install the cores into solr:
 +
@@ -332,12 +332,12 @@ cd <IF_API>/bin
 
 <<<
 [[installing-turing]]
-== Installing Turing AI
+== Installing Turing ES
 
 [[installing-turing-download]]
-=== Turing AI Download
+=== Turing ES Download
 
-Go to https://viglet.org/turing/download/ and click on "Download Turing AI" button to download the viglet-turing.jar executable.
+Go to https://viglet.org/turing/download/ and click on "Download Turing ES" button to download the viglet-turing.jar executable.
 
 Copy the viglet-turing.jar to /appl/viglet/turing/server
 
@@ -407,7 +407,7 @@ For example: `-Dspring.datasource.password=ENC(clqp6QxceJQIp6lnaiKelQc9DvdNKNxg)
 
 <<<
 [[installing-turing-service-linux]]
-=== Creating Turing AI Service on Linux
+=== Creating Turing ES Service on Linux
 
 [[installing-turing-service-linux-rh-centos]]
 ==== Red Hat and CentOS
@@ -415,7 +415,7 @@ As root, create a `/etc/systemd/system/turing.service` file with the following l
 
 ....
 [Unit]
-Description=Viglet Turing AI
+Description=Viglet Turing ES
 After=syslog.target
 
 [Service]
@@ -427,7 +427,7 @@ SuccessExitStatus=143
 WantedBy=multi-user.target
 ....
 
-This way, you can interact with the Turing AI service:
+This way, you can interact with the Turing ES service:
 
 ```shell
 ./systemctl start turing.service
@@ -438,9 +438,9 @@ This way, you can interact with the Turing AI service:
 
 <<<
 [[installing-turing-starting]]
-=== Starting Turing AI
+=== Starting Turing ES
 
-When Turing AI is started for the first time, it will do the initial setup and start downloading the OpenNLP models.
+When Turing ES is started for the first time, it will do the initial setup and start downloading the OpenNLP models.
 
 ....
 $ ./viglet-turing.jar
@@ -481,17 +481,17 @@ Configuration finished.
 [[installing-turing-accessing-console]]
 === Accessing the Turing Console
 
-Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: http://<host>:<port>/console where <host>:<port> is the listening host and port for the Turing AI that you created in the application server. The default port is 2700 for the Console.
+Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: http://<host>:<port>/console where <host>:<port> is the listening host and port for the Turing ES that you created in the application server. The default port is 2700 for the Console.
 
 By default the login/password are: admin/admin
 
 [appendix]
 == Installation Modes
 
-=== Turing AI Server
+=== Turing ES Server
 ==== Simple. 
 
-Turing AI will be installed only using OpenNLP and H2 database embedded in Turing AI itself.
+Turing ES will be installed only using OpenNLP and H2 database embedded in Turing ES itself.
 
 ===== Prerequisites
 
@@ -512,12 +512,12 @@ IMPORTANT: Servers will be provided by the customer.
 
 ==== Docker Compose
 
-Turing AI and its dependencies will be installed using Docker Compose script, including the following services:
+Turing ES and its dependencies will be installed using Docker Compose script, including the following services:
 
-* MariaDB – to store Turing AI system tables
-* Solr – Used by Turing AI's Semantic Navigation and Chatbot
-* Nginx – WebServer for Turing AI to use port 80
-* Turing AI.
+* MariaDB – to store Turing ES system tables
+* Solr – Used by Turing ES's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing ES to use port 80
+* Turing ES.
 
 ===== Prerequisites
 1. Linux server
@@ -537,12 +537,12 @@ IMPORTANT: Servers and docker configuration will be provided by the customer.
 
 ==== Kubernetes
 
-Turing AI and its dependencies will be installed using Kubernetes scripts, including the following services:
+Turing ES and its dependencies will be installed using Kubernetes scripts, including the following services:
 
-* MariaDB – to store Turing AI system tables
-* Solr – Used by Turing AI's Semantic Navigation and Chatbot
-* Nginx – WebServer for Turing AI to use port 80
-* Turing AI.
+* MariaDB – to store Turing ES system tables
+* Solr – Used by Turing ES's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing ES to use port 80
+* Turing ES.
 
 ===== Prerequisites
 
@@ -564,10 +564,10 @@ IMPORTANT: Cloud infrastructure and servers will be provided by the customer.
 
 The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
 
-* MariaDB – to store Turing AI system tables
-* Solr – Used by Turing AI's Semantic Navigation and Chatbot
-* Apache – WebServer for Turing AI to use port 80
-* Turing AI.
+* MariaDB – to store Turing ES system tables
+* Solr – Used by Turing ES's Semantic Navigation and Chatbot
+* Apache – WebServer for Turing ES to use port 80
+* Turing ES.
 
 ===== Prerequisites
 1. One Linux server or up to 4 Linux servers to install services
@@ -587,7 +587,7 @@ IMPORTANT: Servers will be provided by the customer.
 
 === Connectors
 
-Turing AI has several connectors to allow you to index the contents in Semantic Navigation:
+Turing ES has several connectors to allow you to index the contents in Semantic Navigation:
 
 * Apache Nutch (Crawler)
 * Wordpress
@@ -602,11 +602,11 @@ Turing AI has several connectors to allow you to index the contents in Semantic 
 
 ==== Estimated Hours
 
-On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing AI.
+On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing ES.
 
 === NLP 
 
-The customer can choose the NLP that will be used by Turing AI:
+The customer can choose the NLP that will be used by Turing ES:
 
 * Apache OpenNLP (Embedded)
 * SpaCy NLP
@@ -622,12 +622,12 @@ The customer can choose the NLP that will be used by Turing AI:
 
 ==== Estimated Hours
 
-On average, it will take *4 hours* to configure NLP and configure Turing AI to use it.
+On average, it will take *4 hours* to configure NLP and configure Turing ES to use it.
 
 [appendix]
 == Docker Compose
 
-You can start the Turing AI using MariaDB, Solr and Nginx.
+You can start the Turing ES using MariaDB, Solr and Nginx.
 
 ```shell
 ./gradlew turing-app:build -x test -i --stacktrace

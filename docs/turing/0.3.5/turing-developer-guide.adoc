@@ -1,4 +1,4 @@
-= Viglet Turing AI: Developer Guide
+= Viglet Turing ES: Developer Guide
 Viglet Team <opensource@viglet.com>
 :page-layout: documentation
 :organization: Viglet Turing
@@ -20,18 +20,18 @@ ifdef::backend-pdf[:toc: left]
 [preface]
 == Preface
 
-Viglet Turing AI (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 :numbered:
 
 == More Documentation
 
-Technical documentation on Turing AI is available at https://docs.viglet.com/turing.
+Technical documentation on Turing ES is available at https://docs.viglet.com/turing.
 
 == Development Structure
 
 === Frameworks
-Turing AI was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
+Turing ES was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
 
 The UI is currently using AngularJS (https://angularjs.org), but a new UI is being developed using Angular 12 (https://angular.io) with Primer CSS (https://primer.style/css).
 
@@ -66,7 +66,7 @@ git clone https://github.com/openturing/turing-java-sdk.git
 
 == Run during Development
 
-To run Turing AI, execute the following lines:
+To run Turing ES, execute the following lines:
 
 === Turing Server
 
@@ -178,7 +178,7 @@ IMPORTANT: You need start the Turing Server and Solr first.
 
 == Docker Compose
 
-You can start the Turing AI using MariaDB, Solr and Nginx.
+You can start the Turing ES using MariaDB, Solr and Nginx.
 
 ```shellshell
 ./gradlew turing-app:build -x test -i --stacktrace
@@ -248,10 +248,10 @@ You can check the quality of Turing Code at:
 
 == Installation Modes
 
-=== Turing AI Server
+=== Turing ES Server
 ==== Simple. 
 
-Turing AI will be installed only using OpenNLP and H2 database embedded in Turing AI itself.
+Turing ES will be installed only using OpenNLP and H2 database embedded in Turing ES itself.
 
 ===== Prerequisites
 
@@ -272,12 +272,12 @@ IMPORTANT: Servers will be provided by the customer.
 
 ==== Docker Compose
 
-Turing AI and its dependencies will be installed using Docker Compose script, including the following services:
+Turing ES and its dependencies will be installed using Docker Compose script, including the following services:
 
-* MariaDB – to store Turing AI system tables
-* Solr – Used by Turing AI's Semantic Navigation and Chatbot
-* Nginx – WebServer for Turing AI to use port 80
-* Turing AI.
+* MariaDB – to store Turing ES system tables
+* Solr – Used by Turing ES's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing ES to use port 80
+* Turing ES.
 
 ===== Prerequisites
 1. Linux server
@@ -297,12 +297,12 @@ IMPORTANT: Servers and docker configuration will be provided by the customer.
 
 ==== Kubernetes
 
-Turing AI and its dependencies will be installed using Kubernetes scripts, including the following services:
+Turing ES and its dependencies will be installed using Kubernetes scripts, including the following services:
 
-* MariaDB – to store Turing AI system tables
-* Solr – Used by Turing AI's Semantic Navigation and Chatbot
-* Nginx – WebServer for Turing AI to use port 80
-* Turing AI.
+* MariaDB – to store Turing ES system tables
+* Solr – Used by Turing ES's Semantic Navigation and Chatbot
+* Nginx – WebServer for Turing ES to use port 80
+* Turing ES.
 
 ===== Prerequisites
 
@@ -324,10 +324,10 @@ IMPORTANT: Cloud infrastructure and servers will be provided by the customer.
 
 The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
 
-* MariaDB – to store Turing AI system tables
-* Solr – Used by Turing AI's Semantic Navigation and Chatbot
-* Apache – WebServer for Turing AI to use port 80
-* Turing AI.
+* MariaDB – to store Turing ES system tables
+* Solr – Used by Turing ES's Semantic Navigation and Chatbot
+* Apache – WebServer for Turing ES to use port 80
+* Turing ES.
 
 ===== Prerequisites
 1. One Linux server or up to 4 Linux servers to install services
@@ -347,7 +347,7 @@ IMPORTANT: Servers will be provided by the customer.
 
 === Connectors
 
-Turing AI has several connectors to allow you to index the contents in Semantic Navigation:
+Turing ES has several connectors to allow you to index the contents in Semantic Navigation:
 
 * Apache Nutch (Crawler)
 * Wordpress
@@ -362,11 +362,11 @@ Turing AI has several connectors to allow you to index the contents in Semantic 
 
 ==== Estimated Hours
 
-On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing AI.
+On average, it will take *16 hours* to configure the connector and have the first indexing version in Turing ES.
 
 === NLP 
 
-The customer can choose the NLP that will be used by Turing AI:
+The customer can choose the NLP that will be used by Turing ES:
 
 * Apache OpenNLP (Embedded)
 * SpaCy NLP
@@ -382,4 +382,4 @@ The customer can choose the NLP that will be used by Turing AI:
 
 ==== Estimated Hours
 
-On average, it will take *4 hours* to configure NLP and configure Turing AI to use it.
+On average, it will take *4 hours* to configure NLP and configure Turing ES to use it.

@@ -1,4 +1,4 @@
-= Viglet Turing AI: Connectors
+= Viglet Turing ES: Connectors
 Viglet Team <opensource@viglet.com>
 :page-layout: documentation
 :organization: Viglet Turing
@@ -19,7 +19,7 @@ ifdef::backend-pdf[:toc: left]
 
 [preface]
 = Preface
-There are several connectors to allow you to index content in Viglet Turing AI.
+There are several connectors to allow you to index content in Viglet Turing ES.
 
 :numbered:
 

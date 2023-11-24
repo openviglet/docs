@@ -1,4 +1,4 @@
-= Viglet Turing AI: Administration Guide
+= Viglet Turing ES: Administration Guide
 Viglet Team <opensource@viglet.com>
 :page-layout: documentation
 :organization: Viglet Turing
@@ -20,14 +20,14 @@ ifdef::backend-pdf[:toc: left]
 [preface]
 = Preface
 
-Viglet Turing AI (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 :numbered:
 
 == Architecture
 
 [#img-architecture] 
-.Turing AI Architecture  
+.Turing ES Architecture  
 image::img/turing-diagram.png[Architecture]  
 
 == NLP
@@ -120,7 +120,7 @@ Website: https://polyglot.readthedocs.io
 |===
 
 === Google Cloud Platform NLP
-Analyze text with AI using pre-trained API or custom AutoML machine learning models to extract relevant entities, understand sentiment, and more.
+Analyze text with ES using pre-trained API or custom AutoML machine learning models to extract relevant entities, understand sentiment, and more.
 
 Website: https://cloud.google.com/natural-language
 
@@ -190,7 +190,7 @@ Define attributes that will be used as filters for your navigation, consolidatin
 Through attributes defined in the contents, it is possible to use them to restrict their display based on the user's profile.
 
 === SDK Java
-Java API (https://github.com/openturing/turing-java-sdk) facilitates the use and access to Viglet Turing AI, without the need for consumer search content with complex queries.
+Java API (https://github.com/openturing/turing-java-sdk) facilitates the use and access to Viglet Turing ES, without the need for consumer search content with complex queries.
 
 == Chatbot
 Communicate with your client and elaborate complex intents, obtain reports and progressively evolve your interaction.
@@ -217,17 +217,17 @@ Shows the conversation history and reports.
 
 == OpenText Blazon Integration
 
-Turing AI detects Entities of OpenText Blazon Documents using OCR and NLP, generating Blazon XML to show the entities into document.
+Turing ES detects Entities of OpenText Blazon Documents using OCR and NLP, generating Blazon XML to show the entities into document.
 
 [[turing-console]]
-== Turing AI Console
+== Turing ES Console
 
-Turing AI has many components: Search Engine, NLP, Converse (Chatbot), Semantic Navigation
+Turing ES has many components: Search Engine, NLP, Converse (Chatbot), Semantic Navigation
 
 [[turing-console-login]]
 === Login
 
-When access the Turing AI, appear a login page. For default the login/password is `admin`/`admin`
+When access the Turing ES, appear a login page. For default the login/password is `admin`/`admin`
 
 [#img-login] 
 .Login Page 
@@ -401,7 +401,7 @@ Spotlight Details Tab contains the following attributes:
 [[turing-console-sn-top-search-terms-tab]]
 ===== Top Search Terms Tab
 
-During search, Turing AI saves information about search terms and generate Top Search Terms reports.
+During search, Turing ES saves information about search terms and generate Top Search Terms reports.
 
 There are the following reports: Today, This Week, This Month and All Time. These reports show the first 50 terms and statistics about the period.
 
@@ -411,7 +411,7 @@ There are the following reports: Today, This Week, This Month and All Time. Thes
 
 [[turing-sn-search-page-html]]
 ===== HTML
-In `Turing AI Console` > `Semantic Navigation` > `<SITE_NAME>` > `Multi languages` > click in  `Open Search` button of some language. 
+In `Turing ES Console` > `Semantic Navigation` > `<SITE_NAME>` > `Multi languages` > click in  `Open Search` button of some language. 
 
 It will open a Search Page that uses the pattern:
 

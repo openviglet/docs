@@ -1,4 +1,4 @@
-= Viglet Turing AI: Developer Guide
+= Viglet Turing ES: Developer Guide
 Viglet Team <opensource@viglet.com>
 :page-layout: documentation
 :organization: Viglet Turing
@@ -20,13 +20,13 @@ ifdef::backend-pdf[:toc: left]
 [preface]
 == Preface
 
-Viglet Turing AI (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 :numbered:
 
 == More Documentation
 
-Technical documentation on Turing AI is available at https://docs.viglet.com/turing.
+Technical documentation on Turing ES is available at https://docs.viglet.com/turing.
 
 == Open Source Development
 
@@ -35,7 +35,7 @@ You can collaborate with Turing, participating in its development. Below are the
 === Development Structure
 
 ==== Frameworks
-Turing AI was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
+Turing ES was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
 
 The UI is currently using AngularJS (https://angularjs.org), but a new UI is being developed using Angular 12 (https://angular.io) with Primer CSS (https://primer.style/css).
 
@@ -65,7 +65,7 @@ git clone https://github.com/openturing/turing.git
 
 === Run during Development
 
-To run Turing AI, execute the following lines:
+To run Turing ES, execute the following lines:
 
 ==== Turing Server
 
@@ -206,7 +206,7 @@ You can check the quality of Turing Code at:
 
 === API Overview
 
-Turing AI offers a variety of robust, convenient, and simple RESTful Web service APIs to integrate data from Turing to any external system. Through Turing's API, your developers can create Web applications to interact directly with data that resides in Turing. Among the available features include RESTful APIs using JSON format, authentication via API Key invoking the existing user-level governance and security model built into Turing as well as a developer to manage access to API documentation and API keys. We have APIs to deliver search and cognitive features.
+Turing ES offers a variety of robust, convenient, and simple RESTful Web service APIs to integrate data from Turing to any external system. Through Turing's API, your developers can create Web applications to interact directly with data that resides in Turing. Among the available features include RESTful APIs using JSON format, authentication via API Key invoking the existing user-level governance and security model built into Turing as well as a developer to manage access to API documentation and API keys. We have APIs to deliver search and cognitive features.
 
 === OpenAPI 3.0
 
