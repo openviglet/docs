@@ -32,7 +32,7 @@ include::turing-api-headers.adoc[]
 | group | Optional | Group by attribute | group=type
 |===
 
-Will user fq[] to define the dates using the expression:
+You will use fq[] to define the dates using the expression:
 
 ===== Between Dates
 ....
