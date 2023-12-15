@@ -257,6 +257,8 @@ include::_adoc_includes/turing/0.3.7/api/turing-api-search-with-targeting-rules.
 
 include::_adoc_includes/turing/0.3.7/api/turing-api-search-with-group-by.adoc[]
 
+include::_adoc_includes/turing/0.3.7/api/turing-api-search-between-dates.adoc[]
+
 include::_adoc_includes/turing/0.3.7/api/turing-api-search-latest.adoc[]
 
 include::_adoc_includes/turing/0.3.7/api/turing-api-search-locales.adoc[]
