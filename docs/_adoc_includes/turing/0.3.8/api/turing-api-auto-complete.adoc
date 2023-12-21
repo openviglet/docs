@@ -1,0 +1,41 @@
+==== Auto Complete
+
+Returns a term array that starts with the query value.
+
+===== API Endpoint
+....
+GET http://localhost:2700/api/sn/{{siteName}}/ac
+....
+
+===== Path Parameters
+[%header,cols=4*] 
+|===
+| Attribute | Required / Optional | Description | Example
+| siteName | Required | Site Name | Sample
+|===
+
+===== Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| q | String| Required | Search Query. | q=foo
+| rows | Integer | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Boolean | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+|===
+
+===== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/ac?q=dis&rows=10&_setlocale=en_US' \
+  -H 'Content-Type: application/json'
+```
+
+===== Example - Response
+```json
+[
+  "disc",
+  "discovery"
+  "disco"
+  "disney"
+]
+```

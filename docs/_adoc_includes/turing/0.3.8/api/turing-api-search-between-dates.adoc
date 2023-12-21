@@ -1,0 +1,72 @@
+==== Search Between Dates
+
+Search on the semantic navigation site between Dates
+
+===== API Endpoint
+....
+GET|POST http://localhost:2700/api/sn/{{siteName}}/search
+....
+
+===== Headers
+
+include::turing-api-headers.adoc[]
+
+===== Path Parameters
+[%header,cols=4*] 
+|===
+| Attribute | Required / Optional | Description | Example
+| siteName | Required | Site Name | Sample
+|===
+
+===== Query String
+[%header,cols=4*] 
+|===
+| Attribute | Required / Optional | Description | Example
+| q | Required | Search Query. | q=foo
+| p | Required | Page Number, first page is 1. | p=1
+| sort | Required | Sort values: `relevance`, `newest` and `oldest`. Or *FIELD*: *SORT* | sort=relevance or sort=title:asc
+| *fq[]* | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
+| rows | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+| nfpr | Optional | Disable Auto Correction | nfpr=1
+| group | Optional | Group by attribute | group=type
+|===
+
+You will use fq[] to define the dates using the expression with the following date format: `yyyy-MM-dd'T'HH:mm:ss'Z`
+
+
+===== Between Dates
+....
+fq[]=attribute:[InitialDate TO EndDate].
+....
+
+====== Example - Request 
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&_setlocale=en_US&fq[]=modificationDate:[2023-07-23T00:00:00Z+TO+2023-11-30T00:00:00Z]' \
+  -H 'Content-Type: application/json'
+```
+
+===== From a date
+....
+fq[]=attribute:[InitialDate TO *].
+....
+
+===== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&_setlocale=en_US&fq[]=modificationDate:[2023-07-23T00:00:00Z+TO+*]' \
+  -H 'Content-Type: application/json'
+```
+
+===== Until a date
+....
+fq[]=attribute:[* TO EndDate].
+....
+
+===== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&_setlocale=en_US&fq[]=modificationDate:[*+TO+2023-11-30T00:00:00Z]' \
+  -H 'Content-Type: application/json'
+```

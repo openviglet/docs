@@ -7,7 +7,7 @@ permalink: /turing/
 get-started: https://openviglet.github.io/docs/turing/
 github: https://github.com/openturing/turing
 github-org: openturing
-release: 0.3.6
+release: 0.3.8
 main-color: royalblue
 logo-acronym: Tu
 logo-section: ES
@@ -18,7 +18,7 @@ github-ci-url: https://github.com/openturing/turing/actions/workflows/build.yml
 twitter-url: https://twitter.com/VigletTuring
 download-message: Download Turing ES and add more value to your content.
 download-size: 233 MB
-download-url: https://github.com/openturing/turing/releases/download/v0.3.6/viglet-turing.jar
+download-url: https://github.com/openturing/turing/releases/download/v0.3.8/viglet-turing.jar
 run-jar: viglet-turing.jar
 run-port: 2700
 social-image: https://avatars.githubusercontent.com/u/44909290?s=280&amp;v=4

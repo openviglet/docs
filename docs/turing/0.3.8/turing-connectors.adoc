@@ -6,15 +6,15 @@ ifdef::backend-pdf[:toc: left]
 :toclevels: 5
 :toc-title: Table of Content
 :doctype: book
-:revnumber: 0.3.7
-:revdate: 06-10-2023
+:revnumber: 0.3.8
+:revdate: 21-12-2023
 :source-highlighter: rouge
 :pdf-theme: viglet
 :pdf-themesdir: {docdir}/../themes/
 :page-breadcrumb-title: Connectors
-:page-permalink: /turing/0.3.7/connectors/
+:page-permalink: /turing/0.3.8/connectors/
 :imagesdir: ../
-:page-pdf: /docs/turing/turing-connectors-0.3.7.pdf
+:page-pdf: /docs/turing/turing-connectors-0.3.8.pdf
 :page-product: turing
 
 [preface]
@@ -23,16 +23,16 @@ There are several connectors to allow you to index content in Viglet Turing ES.
 
 :numbered:
 
-include::_adoc_includes/turing/0.3.7/connectors/apache-nutch.adoc[]
+include::_adoc_includes/turing/0.3.8/connectors/apache-nutch.adoc[]
 
 <<<
-include::_adoc_includes/turing/0.3.7/connectors/database.adoc[]
+include::_adoc_includes/turing/0.3.8/connectors/database.adoc[]
 
 <<<
-include::_adoc_includes/turing/0.3.7/connectors/filesystem.adoc[]
+include::_adoc_includes/turing/0.3.8/connectors/filesystem.adoc[]
 
 <<<
-include::_adoc_includes/turing/0.3.7/connectors/wem.adoc[]
+include::_adoc_includes/turing/0.3.8/connectors/wem.adoc[]
 
 <<<
-include::_adoc_includes/turing/0.3.7/connectors/wordpress.adoc[]
+include::_adoc_includes/turing/0.3.8/connectors/wordpress.adoc[]
