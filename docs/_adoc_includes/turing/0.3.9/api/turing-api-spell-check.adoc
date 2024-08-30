@@ -1,0 +1,48 @@
+==== Spell Check
+
+Corrects the text based on the semantic navigation site search database in a given language.
+
+===== API Endpoint
+....
+GET http://localhost:2700/api/sn/{{siteName}}/{{locale}}/spell-check
+....
+
+===== Path Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| sitename | String| Required | Site Name. | Sample
+| locale | String | Required | Locale of Semantic Navigation Site | en_US
+|===
+
+===== Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| q | String| Required | Search Query. | q=foo
+| rows | Integer | Optional | Number of rows that query will return. | rows=10
+| _setlocale | Boolean | Required | Locale of Semantic Navigation Site | _setlocale=en_US
+|===
+
+===== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/en_US/spell-check?q=fuu' \
+  -H 'Content-Type: application/json' 
+```
+
+===== Example - Response
+```json
+{
+  "correctedText": true,
+  "usingCorrectedText": false,
+  "original": {
+    "text": "fuu",
+    "link": "/api/sn/Sample/en_US/spell-check?q=fuu&nfpr=1"
+  },
+  "corrected": {
+    "text": "foo",
+    "link": "/api/sn/Sample/en_US/spell-check?q=foo"
+  }
+}
+```
