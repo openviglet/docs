@@ -1,4 +1,4 @@
-= Viglet Turing AI: Release Notes
+= Viglet Turing ES: Release Notes
 Viglet Team <opensource@viglet.com>
 :page-layout: documentation
 :organization: Viglet Turing
