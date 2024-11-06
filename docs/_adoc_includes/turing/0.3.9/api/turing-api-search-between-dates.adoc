@@ -12,27 +12,20 @@ GET|POST http://localhost:2700/api/sn/{{siteName}}/search
 include::turing-api-headers.adoc[]
 
 ===== Path Parameters
-[%header,cols=4*] 
-|===
-| Attribute | Required / Optional | Description | Example
-| siteName | Required | Site Name | Sample
-|===
+
+include::turing-api-path.adoc[]
 
 ===== Query String
-[%header,cols=4*] 
-|===
-| Attribute | Required / Optional | Description | Example
-| q | Required | Search Query. | q=foo
-| p | Required | Page Number, first page is 1. | p=1
-| sort | Required | Sort values: `relevance`, `newest` and `oldest`. Or *FIELD*: *SORT* | sort=relevance or sort=title:asc
-| *fq[]* | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
-| rows | Optional | Number of rows that query will return. | rows=10
-| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
-| nfpr | Optional | Disable Auto Correction | nfpr=1
-| group | Optional | Group by attribute | group=type
-|===
 
-You will use fq[] to define the dates using the expression with the following date format: `yyyy-MM-dd'T'HH:mm:ss'Z`
+include::turing-api-query-string.adoc[]
+
+*IMPORTANT* You will use `fq[]`, `fq.and[]` and `fq.or[]` to define the dates using the expression with the following date format: `yyyy-MM-dd'T'HH:mm:ss'Z`
+
+===== Request Parameters
+
+include::turing-api-request.adoc[]
+
+*IMPORTANT* You will use `fq`, `fqAnd`, `fqOr` to define the dates using the expression with the following date format: `yyyy-MM-dd'T'HH:mm:ss'Z`
 
 
 ===== Between Dates

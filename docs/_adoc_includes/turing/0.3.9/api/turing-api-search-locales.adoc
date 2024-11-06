@@ -8,11 +8,8 @@ GET http://localhost:2700/api/sn/{{siteName}}/search/locales
 ....
 
 ===== Path Parameters
-[%header,cols=5*] 
-|===
-| Attribute | Type | Required / Optional | Description | Example
-| sitename | String| Required | Site Name. | Sample
-|===
+
+include::turing-api-path.adoc[]
 
 ===== Example - Request
 ```bash

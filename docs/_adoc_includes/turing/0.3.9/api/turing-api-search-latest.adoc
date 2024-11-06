@@ -12,11 +12,8 @@ POST http://localhost:2700/api/sn/{{siteName}}/search/latest
 include::turing-api-headers.adoc[]
 
 ===== Path Parameters
-[%header,cols=5*] 
-|===
-| Attribute | Type | Required / Optional | Description | Example
-| sitename | String| Required | Site Name. | Sample
-|===
+
+include::turing-api-path.adoc[]
 
 ===== Query String
 [%header,cols=6*] 

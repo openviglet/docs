@@ -12,37 +12,17 @@ POST http://localhost:2700/api/sn/{{siteName}}/search
 include::turing-api-headers.adoc[]
 
 ===== Path Parameters
-[%header,cols=4*] 
-|===
-| Attribute | Required / Optional | Description | Example
-| siteName | Required | Site Name | Sample
-|===
+
+include::turing-api-path.adoc[]
 
 ===== Query String
-[%header,cols=4*] 
 
-|===
-| Attribute | Required / Optional | Description | Example
-| q | Required | Search Query. | q=foo
-| p | Required | Page Number, first page is 1. | p=1
-| sort | Required | Sort values: `relevance`, `newest` and `oldest`. Or *FIELD*: *SORT* | sort=relevance or sort=title:asc
-| fq[] | Optional | Query Field. Filter by field, using the following pattern: *FIELD*: *VALUE*. | fq[]=title:bar
-
-| rows | Optional | Number of rows that query will return. | rows=10
-| _setlocale | Required | Locale of Semantic Navigation Site | _setlocale=en_US
-| nfpr | Optional | Disable Auto Correction | nfpr=1
-| group | Optional | Group by attribute | group=type
-|===
+include::turing-api-query-string.adoc[]
 
 
 ===== Request Parameters
-[%header,cols=4*] 
-|===
-| Attribute | Type | Required / Optional | Description
-| userId | String| Optional | User Id 
-| *targetingRules* | String[] | Optional | Targeting Rule. Restrict search based in: *FIELD*: *VALUE*.
-| populateMetrics | Boolean | Optional | If populate metrics
-|===
+
+include::turing-api-request.adoc[]
 
 ===== Example - Request
 ```bash
@@ -57,6 +37,48 @@ curl -X 'POST' \
     "department:HR",
     "profile:Principal"
   ]
+}'
+```
+
+===== Example - Request
+```bash
+curl -X 'POST' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&fq%5B%5D=state%3AWA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
+  -H 'Content-Type: application/json' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -d '{
+  "userId": "string",
+  "populateMetrics": true,
+  "targetingRulesCondition": {
+        "type:News": [
+            "department:HR",
+            "profile:Principal"
+        ],
+        "type:Article": [
+            "department:IT",
+            "profile:Consultant"
+        ]
+   },
+   "targetingRulesConditionAND": {
+        "type:Event": [
+            "department:HR",
+            "profile:Manager"
+        ],
+        "type:Report": [
+            "department:IT",
+            "profile:Coordinator"
+        ]
+   },
+   "targetingRulesConditionOR": {
+        "type:Faq": [
+            "department:HR",
+            "profile:Junior"
+        ],
+        "type:Text": [
+            "department:IT",
+            "profile:Junior"
+        ]
+   }
 }'
 ```
 
