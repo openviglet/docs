@@ -243,6 +243,10 @@ unzip turing-utils.zip -d /appl/viglet/turing/utils
 ```
 
 <<<
+  
+include::_adoc_includes/turing/0.3.9/installation/keycloak.adoc[]
+
+<<<
 
 [[solr-configuration]]
 == Solr Configuration

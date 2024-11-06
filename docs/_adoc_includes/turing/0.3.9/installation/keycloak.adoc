@@ -1,0 +1,98 @@
+== Keycloak Configuration
+
+=== Database 
+
+Create the Database and User in MariaDB or MySQL
+
+[source,sql]
+----
+CREATE USER 'keycloak'@'%' IDENTIFIED BY 'keycloak';
+CREATE DATABASE IF NOT EXISTS keycloak;
+GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'%' WITH GRANT OPTION;
+----
+
+=== Create the keystore file
+
+[source,bash]
+----
+keytool -genkeypair -alias localhost -keyalg RSA -keysize 2048 -validity 365 -keystore server.keystore -dname "cn=Server Administrator,o=Acme,c=GB" -keypass secret -storepass secret
+----
+
+=== Keycloak configuration
+
+Edit the /appl/keycloak/conf/keycloak.conf file with the configuration:
+
+[source,properties]
+----
+# Database
+
+# The database vendor.
+db=mariadb
+
+# The username of the database user.
+db-username=keycloak
+
+# The password of the database user.
+db-password=keycloak
+
+# The full database JDBC URL. If not provided, a default URL is set based on the selected database vendor.
+db-url=jdbc:mariadb://localhost:3306/keycloak
+----
+
+
+[source,bash]
+----
+./kc.sh build --http-relative-path=/kc
+----
+
+=== Keycloak Linux Service
+
+Create the /appl/systemd/systemd-env script file.
+
+[source,bash]
+----
+JAVA_HOME=/appl/java/jdk21
+PATH=/appl/java/jdk21/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+----
+
+Create the /etc/systemd/system/keycloak.service file.
+
+[source,init]
+----
+[Unit]
+Description=Keycloak Application Server
+After=syslog.target network.target
+
+[Service]
+EnvironmentFile=/appl/systemd/systemd-env
+Type=simple
+TimeoutStopSec=0
+KillSignal=SIGTERM
+KillMode=process
+SuccessExitStatus=143
+LimitMEMLOCK=infinity
+SendSIGKILL=no
+WorkingDirectory=/appl/keycloak/
+User=vilt
+Group=vilt
+LimitNOFILE=102642
+ExecStart=/appl/keycloak/bin/kc.sh start --optimized --https-key-store-password=secret --hostname=https://localhost/kc --hostname-admin=https://localhost/kc
+
+[Install]
+WantedBy=multi-user.target
+----
+
+=== Configuring the Apache HTTP Server
+
+Add the follow lines in Apache HTTP Server configuration:
+
+[source,init]
+----
+SSLProxyVerify none
+SSLProxyCheckPeerCN off
+SSLProxyCheckPeerName off
+SSLProxyCheckPeerExpire off
+
+ProxyPass "/kc/" "https://localhost:8443/kc/"
+ProxyPassReverse "/kc/" "https://localhost:8443/kc/"
+----
