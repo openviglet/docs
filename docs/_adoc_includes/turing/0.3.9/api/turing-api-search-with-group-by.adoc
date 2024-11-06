@@ -1,29 +1,8 @@
-==== Search With Group By
+===== Group By
 
 Search on the semantic navigation site by grouping the search into groups.
 
-===== API Endpoint
-....
-GET|POST http://localhost:2700/api/sn/{{siteName}}/search
-....
-
-===== Headers
-
-include::turing-api-headers.adoc[]
-
-===== Path Parameters
-
-include::turing-api-path.adoc[]
-
-===== Query String
-
-include::turing-api-query-string.adoc[]
-
-===== Request Parameters
-
-include::turing-api-request.adoc[]
-
-===== Example - Request
+====== Example - Request
 ```bash
 curl -X 'GET' \
   'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&group=type&sort=relevance&rows=10_setlocale=en_US' \
@@ -31,7 +10,7 @@ curl -X 'GET' \
 ```
 
 
-===== Example - Request
+====== Example - Request
 ```bash
 curl -X 'POST' \
   'http://localhost:2700/api/sn/Sample/search' \
@@ -47,7 +26,7 @@ curl -X 'POST' \
 }'
 ```
 
-===== Example - Response
+====== Example - Response
 ```json
 {
   "pagination": [
@@ -56,36 +35,6 @@ curl -X 'POST' \
       "text": "1",
       "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type",
       "page": 1
-    },
-    {
-      "type": "PAGE",
-      "text": "2",
-      "href": "/api/sn/Sample/search?q=foobar&p=2&_setlocale=en_US&sort=relevance&group=type",
-      "page": 2
-    },
-    {
-      "type": "PAGE",
-      "text": "3",
-      "href": "/api/sn/Sample/search?q=foobar&p=3&_setlocale=en_US&sort=relevance&group=type",
-      "page": 3
-    },
-    {
-      "type": "PAGE",
-      "text": "4",
-      "href": "/api/sn/Sample/search?q=foobar&p=4&_setlocale=en_US&sort=relevance&group=type",
-      "page": 4
-    },
-    {
-      "type": "NEXT",
-      "text": "Next",
-      "href": "/api/sn/Sample/search?q=foobar&p=2&_setlocale=en_US&sort=relevance&group=type",
-      "page": 2
-    },
-    {
-      "type": "LAST",
-      "text": "Last",
-      "href": "/api/sn/Sample/search?q=foobar&p=480&_setlocale=en_US&sort=relevance&group=type",
-      "page": 480
     }
   ],
   "queryContext": {

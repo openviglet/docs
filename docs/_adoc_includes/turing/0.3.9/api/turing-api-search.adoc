@@ -283,3 +283,9 @@ curl -X 'POST' \
     }
 }
 ```
+
+include::turing-api-search-with-targeting-rules.adoc[]
+
+include::turing-api-search-with-group-by.adoc[]
+
+include::turing-api-search-between-dates.adoc[]
