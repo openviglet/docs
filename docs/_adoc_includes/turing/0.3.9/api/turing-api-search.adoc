@@ -23,7 +23,9 @@ include::turing-api-query-string.adoc[]
 
 include::turing-api-request.adoc[]
 
-===== Example - Request
+===== Regular Search
+
+====== Example - Request
 ```bash
 curl -X 'GET' \
   'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&fq[]=state:WA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
@@ -45,7 +47,7 @@ curl -X 'POST' \
 }'
 ```
 
-===== Example - Response
+====== Example - Response
 ```json
 {
     "pagination": [
