@@ -1,5 +1,5 @@
 
-*IMPORTANT* These parameters have precedence over the query string.
+IMPORTANT: These parameters have precedence over the query string.
 
 [%header,cols=4*] 
 |===
