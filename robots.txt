@@ -1,0 +1,1 @@
+Sitemap: https://openviglet.github.io/docs/sitemap.xml
