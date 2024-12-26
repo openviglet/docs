@@ -1,0 +1,41 @@
+===== Dates
+
+Search on the semantic navigation site between Dates
+
+IMPORTANT: You will use `fq[]`, `fq.and[]` and `fq.or[]` (query string) or `fq`, `fqAnd`, `fqOr` (request body) to define the dates using the expression with the following date format: `yyyy-MM-dd'T'HH:mm:ss'Z`
+
+===== Between Dates
+....
+fq[]=attribute:[InitialDate TO EndDate].
+....
+
+====== Example - Request 
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&_setlocale=en_US&fq[]=modificationDate:[2023-07-23T00:00:00Z+TO+2023-11-30T00:00:00Z]' \
+  -H 'Content-Type: application/json'
+```
+
+===== From a date
+....
+fq[]=attribute:[InitialDate TO *].
+....
+
+====== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&_setlocale=en_US&fq[]=modificationDate:[2023-07-23T00:00:00Z+TO+*]' \
+  -H 'Content-Type: application/json'
+```
+
+===== Until a date
+....
+fq[]=attribute:[* TO EndDate].
+....
+
+====== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&_setlocale=en_US&fq[]=modificationDate:[*+TO+2023-11-30T00:00:00Z]' \
+  -H 'Content-Type: application/json'
+```

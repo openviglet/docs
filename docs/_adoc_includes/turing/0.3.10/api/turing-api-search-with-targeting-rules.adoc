@@ -1,0 +1,61 @@
+===== Targeting Rules
+
+Search on the semantic navigation site adding segmentation, restricting content based on defined segments.
+
+====== Example - Request
+```bash
+curl -X 'POST' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&fq%5B%5D=state%3AWA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
+  -H 'Content-Type: application/json' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -d '{
+  "userId": "string",
+  "populateMetrics": true,
+  "targetingRules": [
+    "department:HR",
+    "profile:Principal"
+  ]
+}'
+```
+
+====== Example - Request
+```bash
+curl -X 'POST' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&fq%5B%5D=state%3AWA&sort=relevance&rows=10&nfpr=0&_setlocale=en_US' \
+  -H 'Content-Type: application/json' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -d '{
+  "userId": "string",
+  "populateMetrics": true,
+  "targetingRulesCondition": {
+        "type:News": [
+            "department:HR",
+            "profile:Principal"
+        ],
+        "type:Article": [
+            "department:IT",
+            "profile:Consultant"
+        ]
+   },
+   "targetingRulesConditionAND": {
+        "type:Event": [
+            "department:HR",
+            "profile:Manager"
+        ],
+        "type:Report": [
+            "department:IT",
+            "profile:Coordinator"
+        ]
+   },
+   "targetingRulesConditionOR": {
+        "type:Faq": [
+            "department:HR",
+            "profile:Junior"
+        ],
+        "type:Text": [
+            "department:IT",
+            "profile:Junior"
+        ]
+   }
+}'
+```

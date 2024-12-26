@@ -1,0 +1,33 @@
+==== Detect Language
+
+Detect a language of text was sent.
+
+===== API Endpoint
+....
+GET http://localhost:2700/api/cognitive/detect-language
+....
+
+===== Headers
+
+include::turing-api-headers.adoc[]
+
+===== Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| text | String | Required | Text to validated | text=fuu ber
+|===
+
+===== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/cognitive/detect-language?text="Hello World"' \
+  -H 'Content-Type: application/json' \
+  -H 'Key: {{Enter your API KEY}}' \
+ 
+```
+
+===== Example - Response
+```json
+ "en_US"
+```

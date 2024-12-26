@@ -1,0 +1,51 @@
+==== Search Latest
+
+Returns the last terms searched by the user in the search.
+
+===== API Endpoint
+....
+POST http://localhost:2700/api/sn/{{siteName}}/search/latest
+....
+
+===== Headers
+
+include::turing-api-headers.adoc[]
+
+===== Path Parameters
+
+include::turing-api-path.adoc[]
+
+===== Query String
+[%header,cols=6*] 
+|===
+| Attribute | Type | Required / Optional | Description | Default | Example
+| q | String| Required | Search Query. | - | q=foo
+| rows | Integer | Optional | Number of rows that query will return. | 5 | rows=10
+| _setlocale | Boolean | Required | Locale of Semantic Navigation Site | - |  _setlocale=en_US
+|===
+
+===== Request Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type   | Required / Optional | Description | Example
+| userId    | String | Required            | User Id     | userId=john
+|===
+
+===== Example - Request
+```bash
+curl -X POST \
+  'http://localhost:2700/api/sn/Sample/search/latest?rows=5&_setlocale=en_US' \
+  -H 'Content-Type: application/json'
+  -H 'Key: {{Enter your API KEY}}'
+  -d '{
+  "userId": "john"
+  }'
+```
+
+===== Example - Response
+```json
+[
+  "foo",
+  "bar"
+]
+```

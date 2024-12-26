@@ -1,0 +1,46 @@
+==== Spell Check
+
+Corrects text based on the given language.
+
+===== API Endpoint
+....
+GET http://localhost:2700/api/cognitive/spell-checker/{{locale}}
+....
+
+===== Headers
+
+include::turing-api-headers.adoc[]
+
+===== Path Parameters
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| locale | String | Required | Locale of Semantic Navigation Site | en_US
+|===
+
+===== Query String
+[%header,cols=5*] 
+|===
+| Attribute | Type | Required / Optional | Description | Example
+| text | String | Required | Text to validated | text=fuu ber
+|===
+
+===== Example - Request
+```bash
+curl -X GET \
+  "http://localhost:2700/api/cognitive/spell-checker/en_US?text=urange" \
+  -H "Accept: application/json" \
+  -H "Key: {{Enter your API KEY}}"
+```
+
+===== Example - Response
+```json
+[
+  "range",
+  "orange",
+  "grange",
+  "Grange",
+  "Orange",
+  "u range"
+]
+```

@@ -1,0 +1,396 @@
+===== Group By
+
+Search on the semantic navigation site by grouping the search into groups.
+
+====== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search?q=foobar&p=1&group=type&sort=relevance&rows=10_setlocale=en_US' \
+  -H 'Content-Type: application/json'
+```
+
+
+====== Example - Request
+```bash
+curl -X 'POST' \
+  'http://localhost:2700/api/sn/Sample/search' \
+  -H 'Key: {{Enter your API KEY}}' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "query": "foobar",
+  "page": 1,
+  "group": "type",
+  "sort": "relevance",
+  "rows": 10,
+  "locale": "en_US"
+}'
+```
+
+====== Example - Response
+```json
+{
+  "pagination": [
+    {
+      "type": "CURRENT",
+      "text": "1",
+      "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type",
+      "page": 1
+    }
+  ],
+  "queryContext": {
+    "count": 4795,
+    "index": "Sample",
+    "limit": 10,
+    "offset": 0,
+    "page": 1,
+    "pageCount": 480,
+    "pageEnd": 10,
+    "pageStart": 1,
+    "responseTime": 73,
+    "query": {
+      "queryString": "foobar",
+      "sort": "relevance",
+      "locale": "en_US"
+    },
+    "defaultFields": {
+      "title": "title",
+      "date": "publicationDate",
+      "description": "texts",
+      "text": "text",
+      "image": "image",
+      "url": "url"
+    }
+  },
+  "results": { "document": [] },
+  "groups": [
+    {
+      "name": "News",
+      "count": 485,
+      "page": 1,
+      "pageCount": 49,
+      "pageEnd": 10,
+      "pageStart": 1,
+      "limit": 10,
+      "results": {
+        "document": [
+          {
+            "source": "https://www.example.com/ufs/ma/noticias/premio-nacional-de-foobar-recebe-inscricoes-ate-2-de-outubro,0df43c64ebeeb710VgnVCM100000d701210aRCRD",
+            "elevate": false,
+            "metadata": [
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=state%3AMA",
+                "text": "MA"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=site%3ASample Site",
+                "text": "Sample Site"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=categories%3AInova%C3%A7%C3%A3o",
+                "text": "Inovation"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=type%3ANews",
+                "text": "News"
+              }
+            ],
+            "fields": {
+              "author": "john",
+              "description": "...",
+              "title": "...",
+              "type": "News",
+              "url": "https://www.example.com/0df43c64ebeeb710VgnVCM100000d701210aRCRD",
+              "state": ["MA"],
+              "modificationDate": "2021-09-16T13:28:54.000+00:00",
+              "site": "Sample Site",
+              "texts": [
+                "..."
+              ],
+              "provider": "Sample Site",
+              "_version_": 1765073243578826752,
+              "id": "0df43c64ebeeb710VgnVCM100000d701210aRCRD",
+              "categories": ["Inovation"],
+              "source_apps": ["WEM"],
+              "publicationDate": "2021-09-16T13:28:59.000+00:00"
+            }
+          },
+          {
+            "source": "https://www.example.com/ufs/1e929c110e49c710VgnVCM100000d701210aRCRD",
+            "elevate": false,
+            "metadata": [
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=state%3AMA",
+                "text": "MA"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=site%3ASample Site",
+                "text": "Sample Site"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=categories%3AInova%C3%A7%C3%A3o",
+                "text": "Inovation"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=type%3ANews",
+                "text": "News"
+              }
+            ],
+            "fields": {
+              "author": "john",
+              "description": "...",
+              "title": "...",
+              "type": "News",
+              "url": "https://www.example.com/1e929c110e49c710VgnVCM100000d701210aRCRD",
+              "state": ["MA"],
+              "modificationDate": "2021-10-18T20:01:04.000+00:00",
+              "site": "Sample Site",
+              "texts": [
+                "..."
+              ],
+              "provider": "Sample Site",
+              "_version_": 1765073243259011072,
+              "id": "1e929c110e49c710VgnVCM100000d701210aRCRD",
+              "categories": ["Inovation"],
+              "source_apps": ["WEM"],
+              "publicationDate": "2021-10-18T20:01:11.000+00:00"
+            }
+          }
+     
+        ]
+      },
+      "pagination": [
+        {
+          "type": "CURRENT",
+          "text": "1",
+          "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&fq[]=News",
+          "page": 1
+        },
+        {
+          "type": "PAGE",
+          "text": "2",
+          "href": "/api/sn/Sample/search?q=foobar&p=2&_setlocale=en_US&sort=relevance&fq[]=News",
+          "page": 2
+        },
+        {
+          "type": "PAGE",
+          "text": "3",
+          "href": "/api/sn/Sample/search?q=foobar&p=3&_setlocale=en_US&sort=relevance&fq[]=News",
+          "page": 3
+        },
+        {
+          "type": "PAGE",
+          "text": "4",
+          "href": "/api/sn/Sample/search?q=foobar&p=4&_setlocale=en_US&sort=relevance&fq[]=News",
+          "page": 4
+        },
+        {
+          "type": "NEXT",
+          "text": "Next",
+          "href": "/api/sn/Sample/search?q=foobar&p=2&_setlocale=en_US&sort=relevance&fq[]=News",
+          "page": 2
+        },
+        {
+          "type": "LAST",
+          "text": "Last",
+          "href": "/api/sn/Sample/search?q=foobar&p=49&_setlocale=en_US&sort=relevance&fq[]=News",
+          "page": 49
+        }
+      ]
+    },
+    {
+      "name": "Article",
+      "count": 2343,
+      "page": 1,
+      "pageCount": 235,
+      "pageEnd": 10,
+      "pageStart": 1,
+      "limit": 10,
+      "results": {
+        "document": [
+          {
+            "source": "https://www.example.com/dc926de4cced1810VgnVCM100000d701210aRCRD",
+            "elevate": false,
+            "metadata": [
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=state%3ANA",
+                "text": "NA"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=site%3ASample Site",
+                "text": "Sample Site"
+              },
+              {
+                "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=type%3AArticle",
+                "text": "Article"
+              }
+            ],
+            "fields": {
+              "author": "john",
+              "htmls": [
+                "..."
+              ],
+              "description": "...",
+              "title": "...",
+              "type": "Article",
+              "url": "https://www.example.com/dc926de4cced1810VgnVCM100000d701210aRCRD",
+              "state": ["NA"],
+              "modificationDate": "2022-07-12T14:00:58.000+00:00",
+              "site": "Sample Site",
+              "texts": [
+                "..."
+              ],
+              "provider": "Sample Site",
+              "_version_": 1765071551980371968,
+              "id": "dc926de4cced1810VgnVCM100000d701210aRCRD",
+              "categories": ["Inovation"],
+              "source_apps": ["WEM"],
+              "publicationDate": "2022-07-12T14:03:16.000+00:00"
+            }
+          }
+        ]
+      },
+      "pagination": [
+        {
+          "type": "CURRENT",
+          "text": "1",
+          "href": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&fq[]=Article",
+          "page": 1
+        },
+        {
+          "type": "PAGE",
+          "text": "2",
+          "href": "/api/sn/Sample/search?q=foobar&p=2&_setlocale=en_US&sort=relevance&fq[]=Article",
+          "page": 2
+        },
+        {
+          "type": "PAGE",
+          "text": "3",
+          "href": "/api/sn/Sample/search?q=foobar&p=3&_setlocale=en_US&sort=relevance&fq[]=Article",
+          "page": 3
+        },
+        {
+          "type": "PAGE",
+          "text": "4",
+          "href": "/api/sn/Sample/search?q=foobar&p=4&_setlocale=en_US&sort=relevance&fq[]=Article",
+          "page": 4
+        },
+        {
+          "type": "NEXT",
+          "text": "Next",
+          "href": "/api/sn/Sample/search?q=foobar&p=2&_setlocale=en_US&sort=relevance&fq[]=Article",
+          "page": 2
+        },
+        {
+          "type": "LAST",
+          "text": "Last",
+          "href": "/api/sn/Sample/search?q=foobar&p=235&_setlocale=en_US&sort=relevance&fq[]=Article",
+          "page": 235
+        }
+      ]
+    }
+  
+  ],
+  "widget": {
+    "facet": [
+      {
+        "facets": [
+          {
+            "count": 2343,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=type%3AArticle",
+            "label": "Article"
+          },
+          {
+            "count": 485,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=type%3ANews",
+            "label": "News"
+          }
+        ],
+        "label": { "lang": "en", "text": "Types" },
+        "name": "type",
+        "description": "Content Type Field",
+        "type": "STRING",
+        "multiValued": false
+      },
+      {
+        "facets": [
+          {
+            "count": 4764,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=site%3ASample Site",
+            "label": "Sample Site"
+          }
+        ],
+        "label": { "lang": "en", "text": "Sites" },
+        "name": "site",
+        "description": "Site Name",
+        "type": "STRING",
+        "multiValued": false
+      },
+      {
+        "facets": [
+          {
+            "count": 2603,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=categories%3AInova%C3%A7%C3%A3o",
+            "label": "Inovation"
+          },
+          {
+            "count": 1106,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=categories%3AEmpreendedorismo",
+            "label": "Empreendedorismo"
+          }
+        ],
+        "label": { "lang": "en", "text": "Categories" },
+        "name": "categories",
+        "description": "Categories",
+        "type": "STRING",
+        "multiValued": true
+      },
+      {
+        "facets": [
+          {
+            "count": 2145,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=state%3ANA",
+            "label": "NA"
+          },
+          {
+            "count": 325,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=state%3ASC",
+            "label": "SC"
+          },
+          {
+            "count": 297,
+            "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&fq[]=state%3APE",
+            "label": "PE"
+          }
+        ],
+        "label": { "lang": "en", "text": "States" },
+        "name": "state",
+        "description": "State",
+        "type": "STRING",
+        "multiValued": true
+      }
+    ],
+    "facetToRemove": null,
+    "similar": null,
+    "spellCheck": {
+      "correctedText": false,
+      "usingCorrectedText": true,
+      "original": {
+        "text": "foobar",
+        "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type&nfpr=1"
+      },
+      "corrected": {
+        "text": "",
+        "link": "/api/sn/Sample/search?q=&p=1&_setlocale=en_US&sort=relevance&group=type"
+      }
+    },
+    "locales": [
+      {
+        "locale": "en_US",
+        "link": "/api/sn/Sample/search?q=foobar&p=1&_setlocale=en_US&sort=relevance&group=type"
+      }
+    ],
+    "spotlights": []
+  }
+}
+
+```

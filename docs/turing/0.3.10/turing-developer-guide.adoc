@@ -1,0 +1,262 @@
+= Viglet Turing ES: Developer Guide
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Turing
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.10
+:revdate: 25-12-2024
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Developer Guide
+:page-permalink: /turing/0.3.9/developer-guide/
+:imagesdir: ../../../
+:page-pdf: /docs/turing/turing-developer-guide-0.3.9.pdf
+:page-product: turing
+
+[preface]
+== Preface
+
+Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+
+:numbered:
+
+== More Documentation
+
+Technical documentation on Turing ES is available at https://docs.viglet.com/turing.
+
+== Open Source Development
+
+You can collaborate with Turing, participating in its development. Below are the steps to create your Turing environment.
+
+=== Development Structure
+
+==== Frameworks
+Turing ES was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
+
+The UI is currently using AngularJS (https://angularjs.org), but a new UI is being developed using Angular 12 (https://angular.io) with Primer CSS (https://primer.style/css).
+
+In addition to Java, you also need to have Git (https://git-scm.com/downloads) and NodeJS (https://nodejs.org/en/download/) installed.
+
+==== Databases
+By default it uses the H2 database (https://www.h2database.com), but can be changed to other databases using Spring Boot properties. It comes bundled with OpenNLP (https://opennlp.apache.org/) in the same JVM.
+
+==== Programming Language and Deploy
+It uses Java 21 (https://adoptium.net/temurin/releases/?package=jdk&version=21) and its deployment is done with Maven and works on Unix and Windows.
+
+==== Docker
+To use Semantic Navigation and Chatbot you must have a Solr (https://solr.apache.org) service available. If you prefer to work with all the services Turing depends on, you can use docker-compose (https://docs.docker.com/compose/install) to start these services, we use the Docker Desktop (https://www.docker.com/products/docker-desktop) installed on computer.
+
+==== IDE
+You can use Spring Tools 4 for Eclipse (https://spring.io/tools) or Eclipse (https://www.eclipse.org/downloads/) or Visual Studio Code (https://code.visualstudio.com/) or IntelliJ (https://www.jetbrains.com/pt-br/idea/) as IDEs.
+
+=== Download
+
+Use the git command line to download the repository to your computer.
+
+==== Turing Server and Connectors
+
+```shell
+git clone https://github.com/openturing/turing.git 
+```
+
+=== Run during Development
+
+To run Turing ES, execute the following lines:
+
+==== Turing Server
+
+===== Development
+
+====== With UI
+```shell
+cd turing 
+mvn spring-boot:run -pl turing-app
+```
+
+====== Without update UI
+```shell
+cd turing 
+mvn spring-boot:run -pl turing-app -Dskip.npm
+```
+
+===== New Turing UI
+
+Start the Turing Server using dev-ui profile
+```shell
+cd turing 
+mvn spring-boot:run -pl turing-app -Dskip.npm  -Dspring-boot.run.profiles=dev-ui
+```
+
+And start one of the components of turing-ui
+```shell
+cd turing/turing-ui
+
+## Console
+ng serve console
+
+## Search
+ng serve sn
+
+## Chatbot
+ng serve converse
+
+## Chatbot
+ng serve welcome
+```
+IMPORTANT: You need start the Turing Server and Solr first.
+
+===== Build
+```shell
+cd turing 
+mvn clean install
+mvn package -pl turing-app
+```
+
+==== Java SDK
+===== Development
+```shell
+cd turing-java-sdk
+mvn package
+java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.TurSNClientSample
+```
+IMPORTANT: You need start the Turing Server and Solr first.
+
+==== Build
+```shell
+cd turing-java-sdk
+mvn package
+```
+Or use the jitpack into your project at https://jitpack.io/#openturing/turing-java-sdk
+
+==== WEM Listener
+
+```shell
+cd turing
+mvn package -pl turing-wem
+```
+For development, copy the turing-wem/build/libs/turing-wem-all.jar into WEM_DIR/libs and test the listener using turing-wem command line.
+
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+
+==== Database Connector
+
+```shell
+cd turing
+mvn package -pl turing-db
+```
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+==== Filesystem Connector
+
+```shell
+cd turing
+mvn package -pl turing-filesystem
+```
+IMPORTANT: You need start the Turing Server and Solr first and restart WEM
+
+==== Nutch
+===== Nutch 1.20
+```shell
+cd turing/
+mvn package -pl turing-nutch1_20
+```
+For development, copy the files of turing-nutch/nutch1_18/build/extracted_dist to APACHE_NUTCH1_18/plugins/indexer-viglet-turing
+
+IMPORTANT: You need start the Turing Server and Solr first.
+
+
+=== URLs
+
+==== Turing Server
+* Administration Console: http://localhost:2700. (admin/admin)
+* Semantic Navigation Sample: http://localhost:2700/sn/Sample.
+
+==== New Turing UI
+* Welcome http://localhost:4200/welcome
+* Console http://localhost:4200/console
+* Search Page http://localhost:4200/sn/template?_setsite=Sample&_setlocale=en_US
+* Converse http://localhost:4200/converse
+
+==== Docker Compose
+* Administration Console: http://localhost. (admin/admin)
+* Semantic Navigation Sample: http://localhost/sn/Sample.
+* Solr: http://localhost:8983
+
+==== Code Quality
+
+You can check the quality of Turing Code at:
+
+* SonarCloud at https://sonarcloud.io/organizations/viglet-turing/projects
+* Github Actions at https://github.com/openturing/turing/actions
+* Github Security at https://github.com/openturing/turing/security/code-scanning
+* Codecov at https://app.codecov.io/gh/openturing/turing
+
+== REST API
+
+=== API Overview
+
+Turing ES offers a variety of robust, convenient, and simple RESTful Web service APIs to integrate data from Turing to any external system. Through Turing's API, your developers can create Web applications to interact directly with data that resides in Turing. Among the available features include RESTful APIs using JSON format, authentication via API Key invoking the existing user-level governance and security model built into Turing as well as a developer to manage access to API documentation and API keys. We have APIs to deliver search and cognitive features.
+
+=== OpenAPI 3.0
+
+The OpenAPI Specification (OAS) defines a standard, language-agnostic interface to HTTP APIs which allows both humans and computers to discover and understand the capabilities of the service without access to source code, documentation, or through network traffic inspection. When properly defined, a consumer can understand and interact with the remote service with a minimal amount of implementation logic.
+
+An OpenAPI definition can then be used by documentation generation tools to display the API, code generation tools to generate servers and clients in various programming languages, testing tools, and many other use cases.
+
+Turing OpenAPI 3.0 is available at http://localhost:2700/v3/api-docs.
+
+=== Swagger
+
+Swagger allows you to describe the structure of your APIs so that machines can read them. The ability of APIs to describe their own structure is the root of all awesomeness in Swagger. Swagger does this by asking your API to return a YAML or JSON that contains a detailed description of your entire API. This file is essentially a resource listing of your API which adheres to OpenAPI Specification.
+
+You can access the Turing API documentation and test it directly using Swagger at http://localhost:2700/swagger-ui.html.
+
+<<<
+=== Generate an API Key
+
+==== Step 1
+
+Sign in Turing Administration Console (http://localhost:2700).
+
+image::img/screenshots/turing-login.png[Sign in]  
+
+==== Step 2
+
+Access API Token Section.
+
+image::img/turing/0.3.9/api-token-menu.png[API Token Section]  
+
+==== Step 3
+
+Create a new API Token with Title and Description. 
+
+image::img/turing/0.3.9/api-token-new.png[New API Token]  
+
+==== Step 4
+
+Will be create a new random API Token.
+
+image::img/turing/0.3.9/api-token-hash.png[API Token was generated]  
+
+<<<
+=== Semantic Navigation
+include::_adoc_includes/turing/0.3.9/api/turing-api-search.adoc[]
+
+include::_adoc_includes/turing/0.3.9/api/turing-api-search-latest.adoc[]
+
+include::_adoc_includes/turing/0.3.9/api/turing-api-search-locales.adoc[]
+
+
+include::_adoc_includes/turing/0.3.9/api/turing-api-auto-complete.adoc[]
+
+include::_adoc_includes/turing/0.3.9/api/turing-api-spell-check.adoc[]
+
+<<<
+=== Cognitive
+
+include::_adoc_includes/turing/0.3.9/api/turing-api-cognitive-spell-check.adoc[]

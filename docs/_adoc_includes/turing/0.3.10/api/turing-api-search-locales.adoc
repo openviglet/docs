@@ -1,0 +1,33 @@
+==== Search Locales
+
+List all locales on the semantic navigation site.
+
+===== API Endpoint
+....
+GET http://localhost:2700/api/sn/{{siteName}}/search/locales
+....
+
+===== Path Parameters
+
+include::turing-api-path.adoc[]
+
+===== Example - Request
+```bash
+curl -X 'GET' \
+  'http://localhost:2700/api/sn/Sample/search/locales' \
+  -H 'Content-Type: application/json'
+```
+
+===== Example - Response
+```json
+[
+  {
+    "locale": "en_US",
+    "link": "/api/sn/Sample/search?_setlocale=en_US"
+  },
+  {
+    "locale": "pt_BR",
+    "link": "/api/sn/Sample/search?_setlocale=pt_BR"
+  }
+]
+```

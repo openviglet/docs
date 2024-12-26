@@ -1,0 +1,71 @@
+
+[[database]]
+== Database
+Command line that uses the same concept as sqoop (https://sqoop.apache.org/), to create complex queries and map attributes to index based on the result.
+
+[[database-installation]]
+=== Installation
+Go to https://viglet.com/turing/download/ and click on "Integration > Database Connector" link to download it.
+
+Copy the turing-jdbc.jar file to /appl/viglet/turing/jdbc
+
+```shell
+mkdir -p /appl/viglet/turing/jdbc
+cp turing-jdbc.jar.jar /appl/viglet/turing/jdbc
+```
+
+<<<
+
+[[database-run]]
+=== Run
+
+To run Turing JDBC Connector executable JAR file, just execute the following line:
+
+```shell
+$ java -jar /appl/viglet/turing/jdbc/turing-jdbc.jar <PARAMETERS>
+```
+
+[[database-run-parameters]]
+==== Parameters
+
+.Turing JDBC parameters
+[%header,cols=4*] 
+|===
+|Parameter | Required | Default Value | Description  
+|--connect, -c | yes | | Specify JDBC connect string
+|--driver, -d | yes | | Manually specify JDBC driver class to use
+|--query, -q | yes | | Import the results of statement
+|--site | yes | | Specify the Semantic Navigation Site
+
+|--chunk, -z | no | 100 | Number of items to be sent to the queue
+|--class-name | no | | Customized Class to modified rows
+|--deindex-before-importing | no | false | Deindex before importing
+|--encoding | no | UTF-8 | Encoding Source
+|--file-content-field | no | | Field that shows Content of File
+|--file-path-field | no | | Field with File Path
+|--file-size-field | no | | Field that shows Size of File in bytes
+|--help | no | | Print usage instructions
+|--include-type-in-id, -i | no | false | Include Content Type name in Id
+|--max-content-size | no | 5 | Maximum size that content can be indexed (megabytes)
+|--multi-valued-field | no | | Multi Valued Fields
+|--password, -p | no | | Set authentication password
+|--remove-html-tags-field | no | | Remove HTML Tags into content of field
+|--server, -s | no | http://localhost:2700 | Viglet Turing Server
+|--show-output, -o | no | false | Show Output
+|--type, -t | no | CONTENT_TYPE | Set Content Type name
+|--username, -u | no | | Set authentication username
+|===
+
+[[database-run-example]]
+==== Example
+
+```shell
+java -jar ./turing-jdbc.jar --deindex-before-importing true \
+--include-type-in-id true -z 1 \
+--file-path-field filePath --file-content-field text \
+--file-size-field fileSize -t Document \
+--multi-valued-separator ";" --multi-valued-field field1,field2 \
+--class-name com.viglet.turing.tool.ext.TurJDBCCustomSample \
+-d com.mysql.jdbc.Driver -c jdbc:mysql://localhost/sampleDB  \
+-q "select * from sampleTable" -u sampleUser -p samplePassword
+```
