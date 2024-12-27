@@ -21,8 +21,31 @@ ifdef::backend-pdf[:toc: left]
 
 Under Development
 
+== 0.3.8
+April 10th 2023
+
+=== New
+* Targeting Rules AND and OR
+* Facets Types AND and OR
+* Facet Range
+* OCR Rest API
+* LLM Redaction
+* AEM: Using JsonPath
+* Targeting Rules With Condition
+* Web Crawler
+* AEM: Once indexing
+* Multi Language Facet
+
+=== Improved
+* Facet Global Sort
+* FQ without two points
+* WebCrawler using TurMultiValue
+* Group By until 100 groups
+* Spring Boot 3.2.5
+* Java 21
+
 == 0.3.7
-December 21nd 2023
+December 21st 2023
 
 === New
 * Maven

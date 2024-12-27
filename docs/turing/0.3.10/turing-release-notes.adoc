@@ -22,10 +22,57 @@ ifdef::backend-pdf[:toc: left]
 Under Development
 
 == 0.3.9
-December 25nd 2024
+December 25th 2024
+
+=== New
+* Exact Match
+* Sprinklr Connector
+* Semantic Navigation Search with Cache
+* Secondary Facets
+* Cleanup Facets links
+* Facets and Facet Items using AND and OR
+* Auto complete sort
+* OCR Rest API
+
+=== Improved
+* Removed Java 21 Preview features
+* Nutch connector 1.20
+* AEM connector delta date
+* AEM connector void index when service is down
+* Removed OTCA
+* Sample modules for connectors
+* Git commit hash in version of connectors
+* Auto Complete refactory using State Machine
+* Web Crawler improvements
+* AEM Connector improvements
+* Spring Boot 3.4.0
+* Angular 18
+
+== 0.3.8
+April 10th 2023
+
+=== New
+* Targeting Rules AND and OR
+* Facets Types AND and OR
+* Facet Range
+* OCR Rest API
+* LLM Redaction
+* AEM: Using JsonPath
+* Targeting Rules With Condition
+* Web Crawler
+* AEM: Once indexing
+* Multi Language Facet
+
+=== Improved
+* Facet Global Sort
+* FQ without two points
+* WebCrawler using TurMultiValue
+* Group By until 100 groups
+* Spring Boot 3.2.5
+* Java 21
 
 == 0.3.7
-December 21nd 2023
+December 21st 2023
 
 === New
 * Maven
