@@ -1,0 +1,1 @@
+Sitemap: https://docs.viglet.com/sitemap.xml
