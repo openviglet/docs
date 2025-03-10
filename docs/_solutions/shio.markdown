@@ -4,7 +4,7 @@ status: stable
 order: 3
 identifier: shio
 permalink: /shio/
-get-started: https://openviglet.github.io/docs/shio
+get-started: https://docs.viglet.com/shio
 github: https://github.com/ShioCMS/shio
 github-org: ShioCMS
 release: 0.3.7
