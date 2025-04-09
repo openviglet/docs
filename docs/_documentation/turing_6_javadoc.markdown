@@ -1,6 +1,6 @@
 ---
 title: Javadoc
 description: Turing ES Source Code Documentation.
-docurl: https://openturing.github.io/turing/0.3.10/javadoc/
+docurl: https://turing.viglet.com/latest/javadoc/
 product: turing
 ---

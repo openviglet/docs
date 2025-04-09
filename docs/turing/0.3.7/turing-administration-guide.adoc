@@ -20,7 +20,7 @@ ifdef::backend-pdf[:toc: left]
 [preface]
 = Preface
 
-Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openviglet), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 :numbered:
 
@@ -190,7 +190,7 @@ Define attributes that will be used as filters for your navigation, consolidatin
 Through attributes defined in the contents, it is possible to use them to restrict their display based on the user's profile.
 
 === SDK Java
-Java API (https://github.com/openturing/turing-java-sdk) facilitates the use and access to Viglet Turing ES, without the need for consumer search content with complex queries.
+Java API (https://github.com/openviglet/turing-java-sdk) facilitates the use and access to Viglet Turing ES, without the need for consumer search content with complex queries.
 
 == Chatbot
 Communicate with your client and elaborate complex intents, obtain reports and progressively evolve your interaction.

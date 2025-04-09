@@ -20,7 +20,7 @@ ifdef::backend-pdf[:toc: left]
 [preface]
 == Preface
 
-Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openturing), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openviglet), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 :numbered:
 
@@ -56,12 +56,12 @@ Use the git command line to download the repository to your computer.
 === Turing Server and Connectors
 
 ```shell
-git clone https://github.com/openturing/turing.git 
+git clone https://github.com/openviglet/turing.git 
 ```
 === Turing Java SDK
 
 ```shell
-git clone https://github.com/openturing/turing-java-sdk.git
+git clone https://github.com/openviglet/turing-java-sdk.git
 ```
 
 == Run during Development
@@ -130,7 +130,7 @@ IMPORTANT: You need start the Turing Server and Solr first.
 cd turing-java-sdk
 ./gradlew build
 ```
-Or use the jitpack into your project at https://jitpack.io/#openturing/turing-java-sdk
+Or use the jitpack into your project at https://jitpack.io/#openviglet/turing-java-sdk
 
 === WEM Listener
 
@@ -242,9 +242,9 @@ docker exec -it turing-nginx /bin/bash
 You can check the quality of Turing Code at:
 
 * SonarCloud at https://sonarcloud.io/organizations/viglet-turing/projects
-* Github Actions at https://github.com/openturing/turing/actions
-* Github Security at https://github.com/openturing/turing/security/code-scanning
-* Codecov at https://app.codecov.io/gh/openturing/turing
+* Github Actions at https://github.com/openviglet/turing/actions
+* Github Security at https://github.com/openviglet/turing/security/code-scanning
+* Codecov at https://app.codecov.io/gh/openviglet/turing
 
 == Installation Modes
 
