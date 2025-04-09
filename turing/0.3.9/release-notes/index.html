@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Viglet Turing ES: Release Notes</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="Viglet Turing ES: Release Notes">
+  <meta property="og:site_name" content="Viglet">
+  <meta property="og:url" content="https://docs.viglet.com/turing/0.3.9/release-notes/">
+  <meta property="og:image" content="https://docs.viglet.com/static_files/img/banner.jpg" />
+  <meta property="og:description" content="">
+  <meta name="twitter:image:src" content="https://docs.viglet.com/static_files/img/banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@VigletTweet">
+  <meta name="twitter:creator" content="@VigletTweet">
+  <meta name="twitter:title" content="Viglet Turing ES: Release Notes">
+  <meta name="twitter:description" content=""><link rel="shortcut icon" type="image/x-icon" href="/static_files/img/favicon.ico">
+<link rel="stylesheet" href="/static_files/css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="/static_files/css/viglet.css">
+<link rel="stylesheet" href="/static_files/site.css">
+<script src="/static_files/setup.js"></script>
+<script defer src="/static_files/site.js"></script></head><body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style><header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img style="margin: 5px; margin-top:10px; padding: 0px; width: 110px; height: 30px" alt="Viglet" src="/static_files/img/viglet_logo_header.png"><span style="font-size: x-large;
+                color: orangered;">Docs</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" style="padding-top: 4px;">
+            </ul>
+            <div id="switch-theme">
+                <input type="checkbox" id="switch-theme-checkbox" />
+                <label for="switch-theme-checkbox">Dark Theme</label>
+            </div>
+            <a href="https://www.viglet.com/turing/" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            style="color:#ffc63a">Go to Turing ES Website</a></div>
+    </div>
+</header><header class="p-3 border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                        aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                            <li class="breadcrumb-item"><a href="/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
+                            </li><li class="breadcrumb-item" aria-current="page"><a href="/turing/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Turing ES</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Connectors
+                            </li></ol>
+                    </nav>
+                </div><div class="col-2" style="text-align: right;color: indianred;"><a style="text-align: center;color: indianred;" href="/turing/turing-release-notes-0.3.9.pdf" target="_blank">Download PDF</a>
+                </div></div>
+        </div>
+    </header>
+    <div>
+    <a href="https://github.com/openviglet/turing" target="_blank" aria-label="GitHub repository" title="GitHub repository"
+  style="position: absolute;top: 0px;right: 0px"><svg width="77" height="77" viewBox="0 0 250 250" aria-hidden="true"
+    fill="royalblue">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+    <path
+      d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+      fill="white" class="octo-arm" style="transform-origin: 130px 106px;"></path>
+    <path
+      d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+      fill="white" class="octo-body"></path>
+  </svg></a><button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top" style="display: block;
+background-image: url(/static_files/svg/up.svg);
+background-repeat: no-repeat;
+height: 30px;background-position: center;">
+
+    </button>
+
+    <div id="tocbar-container" class="container" role="navigation">
+        <div id="tocbar" class="contained" role="navigation">
+            <button id="toggle-toc"></button>
+        </div>
+    </div>
+    <div id="main-container" class="container">
+        <div id="main" class="contained">
+            <div id="doc" class="doc">
+                <div id="header">
+                    <div id="toc" class="toc2">
+                        <div id="toctitle">Table of Contents</div>
+                        <ul class="sectlevel1">
+<li><a href="#_0-3-9">0.3.9</a></li>
+<li><a href="#_0-3-8">0.3.8</a>
+<ul class="sectlevel2">
+<li><a href="#_new">New</a></li>
+<li><a href="#_improved">Improved</a></li>
+</ul>
+</li>
+<li><a href="#_0-3-7">0.3.7</a>
+<ul class="sectlevel2">
+<li><a href="#_new-2">New</a></li>
+<li><a href="#_improved-2">Improved</a></li>
+</ul>
+</li>
+<li><a href="#_0-3-6">0.3.6</a>
+<ul class="sectlevel2">
+<li><a href="#_new-3">New</a></li>
+<li><a href="#_improved-3">Improved</a></li>
+</ul>
+</li>
+<li><a href="#_0-3-5">0.3.5</a>
+<ul class="sectlevel2">
+<li><a href="#_new-4">New</a></li>
+<li><a href="#_improved-4">Improved</a></li>
+</ul>
+</li>
+<li><a href="#_0-3-4">0.3.4</a>
+<ul class="sectlevel2">
+<li><a href="#_improved-5">Improved</a></li>
+</ul>
+</li>
+<li><a href="#_0-3-3">0.3.3</a>
+<ul class="sectlevel2">
+<li><a href="#_new-5">New</a></li>
+</ul>
+</li>
+<li><a href="#_0-3-2">0.3.2</a>
+<ul class="sectlevel2">
+<li><a href="#_new-6">New</a></li>
+</ul>
+</li>
+</ul>
+                    </div>
+                </div>
+                <div id="content">
+                    <div class="sect1">
+<h2 id="_0-3-9">0.3.9</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Under Development</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0-3-8">0.3.8</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>April 10th 2023</p>
+</div>
+<div class="sect2">
+<h3 id="_new">New</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Targeting Rules AND and OR</p>
+</li>
+<li>
+<p>Facets Types AND and OR</p>
+</li>
+<li>
+<p>Facet Range</p>
+</li>
+<li>
+<p>OCR Rest API</p>
+</li>
+<li>
+<p>LLM Redaction</p>
+</li>
+<li>
+<p>AEM: Using JsonPath</p>
+</li>
+<li>
+<p>Targeting Rules With Condition</p>
+</li>
+<li>
+<p>Web Crawler</p>
+</li>
+<li>
+<p>AEM: Once indexing</p>
+</li>
+<li>
+<p>Multi Language Facet</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_improved">Improved</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Facet Global Sort</p>
+</li>
+<li>
+<p>FQ without two points</p>
+</li>
+<li>
+<p>WebCrawler using TurMultiValue</p>
+</li>
+<li>
+<p>Group By until 100 groups</p>
+</li>
+<li>
+<p>Spring Boot 3.2.5</p>
+</li>
+<li>
+<p>Java 21</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0-3-7">0.3.7</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>December 21st 2023</p>
+</div>
+<div class="sect2">
+<h3 id="_new-2">New</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Maven</p>
+</li>
+<li>
+<p>Ranking Rules</p>
+</li>
+<li>
+<p>Unit Tests</p>
+</li>
+<li>
+<p>Integration Tests</p>
+</li>
+<li>
+<p>AEM Connector</p>
+</li>
+<li>
+<p>Keycloak Integration</p>
+</li>
+<li>
+<p>ApiKey</p>
+</li>
+<li>
+<p>SN: Facets using OR</p>
+</li>
+<li>
+<p>SN: fq.op parameter</p>
+</li>
+<li>
+<p>SN: Search using asterisk when return no results.</p>
+</li>
+<li>
+<p>Create solr core automatically</p>
+</li>
+<li>
+<p>Using Artemis</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_improved-2">Improved</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Spring Boot 3.2.0</p>
+</li>
+<li>
+<p>Angular 17</p>
+</li>
+<li>
+<p>Spotlight</p>
+</li>
+<li>
+<p>UI Flow</p>
+</li>
+<li>
+<p>UI: Order by</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0-3-6">0.3.6</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>September 22nd 2022</p>
+</div>
+<div class="sect2">
+<h3 id="_new-3">New</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Store information about user accesses and searches performed.</p>
+</li>
+<li>
+<p>Reports - Generates access report, including targeting rules.</p>
+</li>
+<li>
+<p>Latest searches - Allows you to show the latest searches performed by the user.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_improved-3">Improved</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Java 17.</p>
+</li>
+<li>
+<p>Spring Boot 2.7.6.</p>
+</li>
+<li>
+<p>Gradle 7.5.1.</p>
+</li>
+<li>
+<p>Angular 15.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0-3-5">0.3.5</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>December 3rd 2021</p>
+</div>
+<div class="sect2">
+<h3 id="_new-4">New</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Spotlight - Show featured content in search terms based on terms. Search positions can be defined.</p>
+</li>
+<li>
+<p>Multi language - Can have multiple languages ​​for each site, using a language-specific solr core. During indexing you can define which language will be indexed.</p>
+</li>
+<li>
+<p>UI: Angular 13</p>
+</li>
+<li>
+<p>Access Logs - Generate turing access log.</p>
+</li>
+<li>
+<p>Did you mean? - It is now possible to parameterize to show \"What did you mean?\" showing and correcting the search term automatically.</p>
+</li>
+<li>
+<p>Merge provider - If two indexing sources are from the same indexed content, you can use the Merge Provider to merge these content, for example: Indexing the same page by WEM and Apache Nutch.</p>
+</li>
+<li>
+<p>turing.solr.timeout property</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_improved-4">Improved</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Java 14.</p>
+</li>
+<li>
+<p>Spring Boot 2.6.4.</p>
+</li>
+<li>
+<p>Gradle 7.4.</p>
+</li>
+<li>
+<p>Auto Complete using Stop words.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0-3-4">0.3.4</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>June 18th 2021</p>
+</div>
+<div class="sect2">
+<h3 id="_improved-5">Improved</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Bugs were fixed.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0-3-3">0.3.3</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>May 31st 2021</p>
+</div>
+<div class="sect2">
+<h3 id="_new-5">New</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Chatbot.</p>
+</li>
+<li>
+<p>PostgreSQL JDBC.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_0-3-2">0.3.2</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>February 8th 2019</p>
+</div>
+<div class="sect2">
+<h3 id="_new-6">New</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Unit Test.</p>
+</li>
+<li>
+<p>SpaCy Plugin.</p>
+</li>
+<li>
+<p>DockerFile.</p>
+</li>
+<li>
+<p>SN Site: Import.</p>
+</li>
+<li>
+<p>Export SN Site.</p>
+</li>
+<li>
+<p>Default Fields into Search.</p>
+</li>
+<li>
+<p>NLP and Thesaurus Activation.</p>
+</li>
+<li>
+<p>Dynamic Fields: Text, Description and Date.</p>
+</li>
+<li>
+<p>SN: MaxRows.</p>
+</li>
+<li>
+<p>Deindexing by Type.</p>
+</li>
+<li>
+<p>Check Box fields on SN were fixed.</p>
+</li>
+<li>
+<p>Using lib instead of modules.</p>
+</li>
+<li>
+<p>Release Resources: HTTPClient and SolrServer.</p>
+</li>
+<li>
+<p>SNSite using UUID.</p>
+</li>
+<li>
+<p>Remove newline and trim to concatenated Text.</p>
+</li>
+<li>
+<p>Spring Boot 2.1.2.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="container py-3" style="font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-4 col-md">
+                <img class="mb-2" src="/static_files/img/viglet_logo_sm.png" alt="" style="width:30px; height:30px">
+                <span style="font-size: larger;font-weight: bolder;margin-left: 3px;">Viglet.</span>
+                <small class="d-block mb-3 text-muted">© 2017 – 2025</small>
+            </div>
+            <div class="col-4 col-md">
+                <h5>Documentation</h5>
+                <ul class="list-unstyled text-small">
+
+                     
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/shio/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            CMS
+        </div>
+        <div>
+            <span>Sh</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Shio CMS</span>
+                        </a></li>
+                    
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/turing/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            ES
+        </div>
+        <div>
+            <span>Tu</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Turing ES</span>
+                        </a></li>
+                    
+                </ul>
+            </div>
+
+
+            <div class="col-4 col-md">
+                <h5>Resources</h5>
+                <ul class="list-unstyled text-small" style="margin-bottom: 5px !important;">
+                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                            href="https://docs.viglet.com">Documentation</a></li>
+                    </li>
+                    <li>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
+                                <a title="GitHub" href="https://www.viglet.com" target="_blank"><i
+                                        class="bi bi-github" style="color:#6c757d;font-size: 25px;"
+                                        aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+<script>
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+</html>

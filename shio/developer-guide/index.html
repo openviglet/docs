@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Viglet Shio CMS: Developer Guide</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="Viglet Shio CMS: Developer Guide">
+  <meta property="og:site_name" content="Viglet">
+  <meta property="og:url" content="https://docs.viglet.com/shio/developer-guide/">
+  <meta property="og:image" content="https://docs.viglet.com/static_files/img/banner.jpg" />
+  <meta property="og:description" content="">
+  <meta name="twitter:image:src" content="https://docs.viglet.com/static_files/img/banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@VigletTweet">
+  <meta name="twitter:creator" content="@VigletTweet">
+  <meta name="twitter:title" content="Viglet Shio CMS: Developer Guide">
+  <meta name="twitter:description" content=""><link rel="shortcut icon" type="image/x-icon" href="/static_files/img/favicon.ico">
+<link rel="stylesheet" href="/static_files/css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="/static_files/css/viglet.css">
+<link rel="stylesheet" href="/static_files/site.css">
+<script src="/static_files/setup.js"></script>
+<script defer src="/static_files/site.js"></script></head><body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style><header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img style="margin: 5px; margin-top:10px; padding: 0px; width: 110px; height: 30px" alt="Viglet" src="/static_files/img/viglet_logo_header.png"><span style="font-size: x-large;
+                color: orangered;">Docs</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" style="padding-top: 4px;">
+            </ul>
+            <div id="switch-theme">
+                <input type="checkbox" id="switch-theme-checkbox" />
+                <label for="switch-theme-checkbox">Dark Theme</label>
+            </div>
+            <a href="https://www.viglet.com/shio/" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            style="color:#ffc63a">Go to Shio CMS Website</a></div>
+    </div>
+</header><header class="p-3 border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                        aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                            <li class="breadcrumb-item"><a href="/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
+                            </li><li class="breadcrumb-item" aria-current="page"><a href="/shio/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Shio CMS</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Developer Guide
+                            </li></ol>
+                    </nav>
+                </div><div class="col-2" style="text-align: right;color: indianred;"><a style="text-align: center;color: indianred;" href="/shio/shio-developer-guide.pdf" target="_blank">Download PDF</a>
+                </div></div>
+        </div>
+    </header>
+    <div>
+    <a href="https://github.com/ShioCMS/shio" target="_blank" aria-label="GitHub repository" title="GitHub repository"
+  style="position: absolute;top: 0px;right: 0px"><svg width="77" height="77" viewBox="0 0 250 250" aria-hidden="true"
+    fill="tomato">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+    <path
+      d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+      fill="white" class="octo-arm" style="transform-origin: 130px 106px;"></path>
+    <path
+      d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+      fill="white" class="octo-body"></path>
+  </svg></a><button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top" style="display: block;
+background-image: url(/static_files/svg/up.svg);
+background-repeat: no-repeat;
+height: 30px;background-position: center;">
+
+    </button>
+
+    <div id="tocbar-container" class="container" role="navigation">
+        <div id="tocbar" class="contained" role="navigation">
+            <button id="toggle-toc"></button>
+        </div>
+    </div>
+    <div id="main-container" class="container">
+        <div id="main" class="contained">
+            <div id="doc" class="doc">
+                <div id="header">
+                    <div id="toc" class="toc2">
+                        <div id="toctitle">Table of Contents</div>
+                        <ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_about-the-shio-cms">1.1. About the Shio CMS</a>
+<ul class="sectlevel3">
+<li><a href="#_page-layouts-and-regions">1.1.1. Page Layouts and Regions</a></li>
+<li><a href="#_api-for-components">1.1.2. API for Components</a></li>
+</ul>
+</li>
+<li><a href="#_o-que-será-coberto-neste-livro">1.2. O que será coberto neste livro</a></li>
+<li><a href="#_documentações-necessárias">1.3. Documentações necessárias</a></li>
+</ul>
+</li>
+<li><a href="#_arquitetura-de-implementação">2. Arquitetura de Implementação</a>
+<ul class="sectlevel2">
+<li><a href="#_visão-geral">2.1. Visão Geral</a></li>
+<li><a href="#_tabela-de-deploy">2.2. Tabela de Deploy</a></li>
+<li><a href="#_explicação-do-diagrama-e-da-tabela">2.3. Explicação do Diagrama e da Tabela</a>
+<ul class="sectlevel3">
+<li><a href="#_viglet-shio-jar">2.3.1. viglet.shio.jar</a></li>
+<li><a href="#_viglet-shio-conf">2.3.2. viglet-shio.conf</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_features">3. Features</a>
+<ul class="sectlevel2">
+<li><a href="#_general">3.1. General</a>
+<ul class="sectlevel3">
+<li><a href="#_search-ready">3.1.1. Search Ready</a></li>
+<li><a href="#_native-cache">3.1.2. Native Cache</a></li>
+<li><a href="#_pure-javascript">3.1.3. Pure Javascript</a></li>
+<li><a href="#_microservices">3.1.4. Microservices</a></li>
+</ul>
+</li>
+<li><a href="#_databases">3.2. Databases</a></li>
+<li><a href="#_on-install">3.3. On Install</a></li>
+<li><a href="#_version-control">3.4. Version Control</a></li>
+<li><a href="#_publishing">3.5. Publishing</a></li>
+<li><a href="#_graphql">3.6. GraphQL</a></li>
+<li><a href="#_modeling">3.7. Modeling</a>
+<ul class="sectlevel3">
+<li><a href="#_post-type">3.7.1. Post Type</a></li>
+<li><a href="#_fields">3.7.2. Fields</a>
+<ul class="sectlevel4">
+<li><a href="#_search-navigation">Search Navigation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_configuration-console">3.8. Configuration Console</a>
+<ul class="sectlevel3">
+<li><a href="#_auth-providers">3.8.1. Auth Providers</a></li>
+<li><a href="#_exchange-providers">3.8.2. Exchange Providers</a>
+<ul class="sectlevel4">
+<li><a href="#_otcs-opentext-content-services">OTCS - OpenText Content Services</a></li>
+<li><a href="#_otmm-opentext-media-management">OTMM - OpenText Media Management</a></li>
+</ul>
+</li>
+<li><a href="#_search-providers">3.8.3. Search Providers</a></li>
+<li><a href="#_email">3.8.4. Email</a></li>
+</ul>
+</li>
+<li><a href="#_users">3.9. Users</a></li>
+<li><a href="#_groups">3.10. Groups</a></li>
+<li><a href="#_administration">3.11. Administration</a>
+<ul class="sectlevel3">
+<li><a href="#_permissions">3.11.1. Permissions</a>
+<ul class="sectlevel4">
+<li><a href="#_console">Console</a></li>
+<li><a href="#_page">Page</a></li>
+</ul>
+</li>
+<li><a href="#_protected-page">3.11.2. Protected Page</a></li>
+<li><a href="#_properties-of-site">3.11.3. Properties of Site</a></li>
+<li><a href="#_search">3.11.4. Search</a></li>
+<li><a href="#_order-the-list-of-objects-of-folder-per">3.11.5. Order the list of objects of folder per:</a></li>
+<li><a href="#_select-objects-of-folder-per">3.11.6. Select objects of folder per:</a></li>
+<li><a href="#_popup-action-on-mouse-over-of-folder-as">3.11.7. Popup action on mouse over of Folder as:</a></li>
+<li><a href="#_popup-action-on-mouse-over-of-post-as">3.11.8. Popup action on mouse over of Post as:</a></li>
+<li><a href="#_select-multiple-objects-and-define-an-actions-as">3.11.9. Select multiple objects and define an actions as:</a></li>
+</ul>
+</li>
+<li><a href="#_post-types">3.12. Post Types</a>
+<ul class="sectlevel3">
+<li><a href="#_text">3.12.1. Text</a></li>
+<li><a href="#_photo">3.12.2. Photo</a></li>
+<li><a href="#_video">3.12.3. Video</a></li>
+<li><a href="#_quote">3.12.4. Quote</a></li>
+<li><a href="#_link">3.12.5. Link</a></li>
+<li><a href="#_file">3.12.6. File</a></li>
+<li><a href="#_region">3.12.7. Region</a></li>
+<li><a href="#_theme">3.12.8. Theme</a></li>
+<li><a href="#_page-layout">3.12.9. Page Layout</a></li>
+<li><a href="#_alias">3.12.10. Alias</a></li>
+<li><a href="#_folder-index">3.12.11. Folder Index</a></li>
+</ul>
+</li>
+<li><a href="#_field-types">3.13. Field Types</a>
+<ul class="sectlevel3">
+<li><a href="#_hidden">3.13.1. Hidden</a></li>
+<li><a href="#_text-2">3.13.2. Text</a></li>
+<li><a href="#_text-area">3.13.3. Text Area</a></li>
+<li><a href="#_ace-editor-html">3.13.4. Ace Editor - HTML</a></li>
+<li><a href="#_ace-editor-javascript">3.13.5. Ace Editor - Javascript</a></li>
+<li><a href="#_html-editor">3.13.6. HTML Editor</a></li>
+<li><a href="#_content-select">3.13.7. Content Select</a></li>
+<li><a href="#_relator">3.13.8. Relator</a></li>
+<li><a href="#_combo-box">3.13.9. Combo Box</a></li>
+<li><a href="#_recaptcha">3.13.10. Recaptcha</a></li>
+<li><a href="#_form-configuration">3.13.11. Form Configuration</a></li>
+<li><a href="#_date">3.13.12. Date</a></li>
+<li><a href="#_multi-select">3.13.13. Multi Select</a></li>
+<li><a href="#_tab">3.13.14. Tab</a></li>
+<li><a href="#_check-box">3.13.15. Check Box</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_criando-page-layouts">4. Criando Page Layouts</a>
+<ul class="sectlevel2">
+<li><a href="#_javascript">4.1. Javascript</a></li>
+<li><a href="#_desenvolvendo-regiões">4.2. Desenvolvendo Regiões</a>
+<ul class="sectlevel3">
+<li><a href="#_para-que-uma-região-é-utilizada">4.2.1. Para que uma Região é utilizada</a></li>
+<li><a href="#_utilizando-url-de-imagens-e-conteúdos">4.2.2. Utilizando URL de Imagens e Conteúdos</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_glossário">Glossário</a></li>
+</ul>
+                    </div>
+                </div>
+                <div id="content">
+                    <div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter provides concepts and other information required to perform Shio CMS development tasks.</p>
+</div>
+<div class="paragraph">
+<p>Include the following topics:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#_about-the-shio-cms">About the Shio CMS</a></p>
+</li>
+<li>
+<p><a href="#What will be covered in this book">[What will be covered in this book]</a></p>
+</li>
+<li>
+<p><a href="#Necessary documentation">[Necessary documentation]</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_about-the-shio-cms">1.1. About the Shio CMS</h3>
+<div class="paragraph">
+<p>Viglet Shio CMS allows administrators and contributors to use a graphical interface to define how content is presented on web sites. The <strong>Themes</strong> area is where presentation objects are managed. <strong>View Page</strong> shows the page completely rendered.</p>
+</div>
+<div class="paragraph">
+<p>There are 2 types of site views: <strong>Management</strong> and <strong>Published</strong>, where:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Management</strong>: Contains all content on the site, both published and unpublished and drafts</p>
+</li>
+<li>
+<p><strong> Published</strong>: Site that displays only published content. It is necessary to publish the contents for them to be displayed.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Shio CMS has example Page Layouts and Regions, which can be viewed when the site is created, and can serve as a starting point for creating your site. In addition, there are ways to programmatically develop and customize these templates, which we will discuss in this document.</p>
+</div>
+<div class="sect3">
+<h4 id="_page-layouts-and-regions">1.1.1. Page Layouts and Regions</h4>
+<div class="paragraph">
+<p>A Page Layout is a basic building block for creating and managing pages using repeated patterns. Each page generated is associated with exactly one Page Layout, which controls the layout, theme and regions on the page.</p>
+</div>
+<div class="paragraph">
+<p>The basic purpose of the presentation is to display folders and contents from the Shio CMS repository as web pages. At this point, you need to associate folders and content with Page Layouts.</p>
+</div>
+<div class="paragraph">
+<p>A single template can be applied to various folders and content, which greatly facilitates the process of development and management of the website and allows for a consistent appearance and characteristics.</p>
+</div>
+<div class="paragraph">
+<p>The minimum model is to have a single Page Layout for all Folders and another Page Layout for all content. Many customer sites have multiple Page Layouts and can be built using between three and ten templates. Carefully the Page Layouts are planned and it results in an easier development and makes it easier to maintain your site (s).</p>
+</div>
+<div class="paragraph">
+<p>A region is an area of ​​the page where the content is rendered. Models are organized into regions. The regions can be defined as curly or not. For example, a content region may be specialized in presenting content, such as header and footer regions that are never changed and repeated between Page Layouts and thus defined as Cacheada. And the non-cached regions are defined in the Page Layout specific to each presentation.</p>
+</div>
+<div id="page-layout-4-regions" class="imageblock">
+<div class="content">
+<img src="../../assets/page-layout-4-regions.png" alt="page layout 4 regions" width="50%" height="50%">
+</div>
+<div class="title">Figure 1. Shows a template with four regions.</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_api-for-components">1.1.2. API for Components</h4>
+<div class="paragraph">
+<p>In Page Layots and Regions you can have API for Components, which are responsible for being able to render different types of content sources from the Shio CMS repository. For example, a <strong>Query Component</strong> can be used to filter a list of contents in a folder, while a <strong>Navigation Component</strong> can render folders as menus on your website.</p>
+</div>
+<div id="page-layout-components" class="imageblock">
+<div class="content">
+<img src="../../assets/page-layout-components.png" alt="page layout components" width="50%" height="50%">
+</div>
+<div class="title">Figure 2. Page Layout with Component API in your regions.</div>
+</div>
+<div class="paragraph">
+<p>The hierarchical structure of this template and its regions with Component API is as follows:</p>
+</div>
+<div class="dlist">
+<div class="title">Page Layout</div>
+<dl>
+<dt class="hdlist1">Header Region</dt>
+<dd>
+<p>Navigation Component</p>
+</dd>
+<dt class="hdlist1">Navigation Region</dt>
+<dd>
+<p>Navigation Component</p>
+</dd>
+<dt class="hdlist1">Content Region</dt>
+<dd>
+<p>Query Component</p>
+</dd>
+<dt class="hdlist1">Footer Region</dt>
+<dd>
+<p>Navigation Component</p>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The header is optional.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_o-que-será-coberto-neste-livro">1.2. O que será coberto neste livro</h3>
+<div class="paragraph">
+<p>Na tabela abaixo, resume os tópico que serão cobertos neste documento e como eles são aplicados no desenvolvimento do Shio CMS.
+.Tópicos neste Livro</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Tópico</th>
+<th class="tableblock halign-left valign-top">Veja&#8230;&#8203;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entendendo como as aplicações são deployadas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Arquitetura de Deploy" na página 17</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use Javascript para controlar como o conteúdo será exibido na página ou em uma região</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Usando Renderizadores Customizados" na página 35</p>
+<p class="tableblock">"Desenvolvendo Display Views", na página 42</p>
+<p class="tableblock">"Desenvolvendo Layouts de Região", na página 58</p>
+<p class="tableblock">"Desenvolvendo Page Layouts", na página 67</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use CSS, Javascript, AJAX e tecnologias relacionadas para aplicar um tema em uma pasta ou em um conteúdo.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Desenvolvendo Temas", na página 71</p>
+<p class="tableblock">"Ativando Renderização de AJAX JSP", na página 139</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Entendendo a tag library do Shio CMS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Personalizando o Shio CMS" na página 73</p>
+<p class="tableblock">"Usando a Tag Library do Shio CMS" na página 75</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Opcional. Desenvolva grids e estilos personalizados</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Personalizando o Shio CMS" na página 73</p>
+<p class="tableblock"> "Usando a Tag Library do Shio CMS" na página 75</p>
+<p class="tableblock"> "Criando um Grid Personalizado" na página 77</p>
+<p class="tableblock"> "Criando Estilos e Tipos de Estilos" na página 79</p>
+<p class="tableblock">"Exemplos de Grid e Estilo personalizado" na página 79</p>
+<p class="tableblock">"Implementando Grid, Tipos de Estilo e Estilos" página 88</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Opcional. Desenvolver Tipos de Componentes de Conteúdo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Tipo de Componente de Conteúdo" página 91</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Consulte o Javadoc para tópicos não cobertos neste livro (como usando cache e desenvolvimento modificadores de request)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shio CMS &lt;version&gt; Public API Javadocs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Construa e deploye suas aplicação</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Construindo e Deployando Aplicações/Extensões" página 131</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_documentações-necessárias">1.3. Documentações necessárias</h3>
+<div class="paragraph">
+<p>Para outras documentações sobre o Shio CMS, incluindo Javadoc, Javascript API, vá em Getting Started (<a href="https://shio.readme.io/docs" class="bare">https://shio.readme.io/docs</a>).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_arquitetura-de-implementação">2. Arquitetura de Implementação</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Neste capítulo descreve e ilustra aplicações, componentes e arquivos que são implementados com o Shio CMS incluindo os seguintes tópicos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#_visão-geral">Visão Geral</a></p>
+</li>
+<li>
+<p><a href="#Diagrama de Implementação">[Diagrama de Implementação]</a></p>
+</li>
+<li>
+<p><a href="#_tabela-de-deploy">Tabela de Deploy</a></p>
+</li>
+<li>
+<p><a href="#_explicação-do-diagrama-e-da-tabela">Explicação do Diagrama e da Tabela</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_visão-geral">2.1. Visão Geral</h3>
+<div class="paragraph">
+<p>Para personalizar o Shio CMS, você deve implementar Java Archive (JAR) nas seguintes localizações:</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tabela-de-deploy">2.2. Tabela de Deploy</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Diretório</th>
+<th class="tableblock halign-left valign-top">Arquivo implementado</th>
+<th class="tableblock halign-left valign-top">Quem provê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;SHIO_DIR&gt;/</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">viglet-shio.jar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shio</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;SHIO_DIR&gt;/</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">viglet-shio.conf</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Você</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_explicação-do-diagrama-e-da-tabela">2.3. Explicação do Diagrama e da Tabela</h3>
+<div class="sect3">
+<h4 id="_viglet-shio-jar">2.3.1. viglet.shio.jar</h4>
+<div class="paragraph">
+<p>Este arquivo JAR é implementado quando você instala e configura o Shio CMS.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_viglet-shio-conf">2.3.2. viglet-shio.conf</h4>
+<div class="paragraph">
+<p>O arquivo viglet-shio.conf especifica configurações do Shio CMS, podendo especificar variáveis e ajustes da JVM. O Shio CMS é baseado no Spring Boot 2, portanto todas as configurações presentes esta solução são validas. Mais informações em: <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/deployment.html#deployment-script-customization-when-it-runs" target="_blank" rel="noopener">Customizing a Script When It Runs</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_features">3. Features</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_general">3.1. General</h3>
+<div class="sect3">
+<h4 id="_search-ready">3.1.1. Search Ready</h4>
+<div class="paragraph">
+<p>Contents are indexed automatically. This way, you can use embedded search engine in your site. Simple and powerful.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_native-cache">3.1.2. Native Cache</h4>
+<div class="paragraph">
+<p>Your site will be optimized with native cache. Faster and hassle free.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_pure-javascript">3.1.3. Pure Javascript</h4>
+<div class="paragraph">
+<p>Entire development use directly themes using Javascript language. No deploy, just create and ready.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_microservices">3.1.4. Microservices</h4>
+<div class="paragraph">
+<p>Run Multi-container Docker applications using Docker Compose, integrating with Nginx, MariaDB and MongoDB.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_databases">3.2. Databases</h3>
+<div class="paragraph">
+<p>Supports all databases supported of Spring Framework as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>H2</p>
+</li>
+<li>
+<p>MySQL</p>
+</li>
+<li>
+<p>Oracle</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_on-install">3.3. On Install</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Import the Sample Site using sample-site repository</p>
+</li>
+<li>
+<p>Create a Stock Site using stock-site-import repository</p>
+</li>
+<li>
+<p>Import the Post Types</p>
+</li>
+<li>
+<p>Create admin user using the password: admin</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_version-control">3.4. Version Control</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Use the Github to create a version of object.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_publishing">3.5. Publishing</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>When is created a post, its status will be <strong>Draft</strong>.</p>
+</li>
+<li>
+<p>If the post was saved and it was published, it will appear on Site and its status will be <strong>Published</strong>.</p>
+</li>
+<li>
+<p>If the post is published, but the post was changed, its status will be <strong>Stale</strong>.</p>
+</li>
+<li>
+<p>If the post is unpublished will disappear on Site and its status will be <strong>Unpublished</strong>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_graphql">3.6. GraphQL</h3>
+<div class="paragraph">
+<p>Allows access the Content using GraphQL</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modeling">3.7. Modeling</h3>
+<div class="paragraph">
+<p>Create new Post Types with different attributes, that fit your business.</p>
+</div>
+<div class="sect3">
+<h4 id="_post-type">3.7.1. Post Type</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Define the Name, Description and Identifier for Post Type</p>
+</li>
+<li>
+<p>Define how will responsible for publishing, that will receive a email always that Post of Post Type is published.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_fields">3.7.2. Fields</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Order the Fields of Post Type</p>
+</li>
+<li>
+<p>Create a Text, Decription and Identifier for each Field</p>
+</li>
+<li>
+<p>Define if the Field is Tite and/or Description of Post Type.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="_search-navigation">Search Navigation</h5>
+<div class="paragraph">
+<p>Define how the content will be index into Viglet Turing</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Search Field Association: Use default fields of Viglet Turing Semantic Navigation</p>
+</li>
+<li>
+<p>Create Addtional Search Field: Use a custom field of Viglet Turing Semantic Navigation, can choose the same name of field or other.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuration-console">3.8. Configuration Console</h3>
+<div class="sect3">
+<h4 id="_auth-providers">3.8.1. Auth Providers</h4>
+<div class="paragraph">
+<p>Define how the can be the authentication of Console:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Shio Native</p>
+</li>
+<li>
+<p>OpenText Directory Service</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exchange-providers">3.8.2. Exchange Providers</h4>
+<div class="paragraph">
+<p>Define the provider can be import content to Shio CMS. It is possible many instances of same provider.
+Supports the following Providers,</p>
+</div>
+<div class="sect4">
+<h5 id="_otcs-opentext-content-services">OTCS - OpenText Content Services</h5>
+<div class="paragraph">
+<p>Import Documents from OTCS</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_otmm-opentext-media-management">OTMM - OpenText Media Management</h5>
+<div class="paragraph">
+<p>Import Files from OTMM</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_search-providers">3.8.3. Search Providers</h4>
+<div class="paragraph">
+<p>Define how the Search of Site will work.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_email">3.8.4. Email</h4>
+<div class="paragraph">
+<p>Configure the Email Service to send email for Notification.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_users">3.9. Users</h3>
+<div class="paragraph">
+<p>Allow create, modify or delete a user that can access the console or protect page of site.
+Associate the user to Groups</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_groups">3.10. Groups</h3>
+<div class="paragraph">
+<p>Allow create, modify or delete a groups and add user into groups</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_administration">3.11. Administration</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Reorder the posts into folder and show the results instantly into page of site.</p>
+</li>
+<li>
+<p>Generate spreadsheet of folder, where each sheet is a Post Type.</p>
+</li>
+<li>
+<p>Download the site</p>
+</li>
+<li>
+<p>Import Site</p>
+</li>
+<li>
+<p>Create Site with theme pre-defined</p>
+</li>
+<li>
+<p>Create worflow</p>
+</li>
+<li>
+<p>Create folders</p>
+</li>
+<li>
+<p>Create post types</p>
+</li>
+<li>
+<p>Create posts</p>
+</li>
+<li>
+<p>Upload multiple files into folder</p>
+</li>
+<li>
+<p>Change Folder View: List or Thumbnail</p>
+</li>
+<li>
+<p>Navigate between folders through breadcrumb</p>
+</li>
+<li>
+<p>Preview of Site using button "View Site"</p>
+</li>
+<li>
+<p>See all commits changes of site</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_permissions">3.11.1. Permissions</h4>
+<div class="sect4">
+<h5 id="_console">Console</h5>
+<div class="paragraph">
+<p>Define Permission of Console, adding Groups and Users</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_page">Page</h5>
+<div class="paragraph">
+<p>Define Permission of Pages of Site, adding Groups and Users</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_protected-page">3.11.2. Protected Page</h4>
+<div class="paragraph">
+<p>Through Page Permission the Site allow Protected Page, with Users defined on Administration Page</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_properties-of-site">3.11.3. Properties of Site</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Name</p>
+</li>
+<li>
+<p>Description</p>
+</li>
+<li>
+<p>URL</p>
+</li>
+<li>
+<p>Define the Association between Post Type and Page Layout</p>
+</li>
+<li>
+<p>Define what content will be searchable</p>
+</li>
+<li>
+<p>Define which Folder will be save posts of Form when the result be success.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_search">3.11.4. Search</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Search global</p>
+</li>
+<li>
+<p>Search posts per folder</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_order-the-list-of-objects-of-folder-per">3.11.5. Order the list of objects of folder per:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Name</p>
+</li>
+<li>
+<p>Description</p>
+</li>
+<li>
+<p>Date</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_select-objects-of-folder-per">3.11.6. Select objects of folder per:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Content</p>
+</li>
+<li>
+<p>Folder</p>
+</li>
+<li>
+<p>Everything</p>
+</li>
+<li>
+<p>Invert Selection</p>
+</li>
+<li>
+<p>Nothing</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_popup-action-on-mouse-over-of-folder-as">3.11.7. Popup action on mouse over of Folder as:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Edit</p>
+</li>
+<li>
+<p>Copy</p>
+</li>
+<li>
+<p>Move</p>
+</li>
+<li>
+<p>Clone</p>
+</li>
+<li>
+<p>Delete</p>
+</li>
+<li>
+<p>View Page</p>
+</li>
+<li>
+<p>Clear Cache</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_popup-action-on-mouse-over-of-post-as">3.11.8. Popup action on mouse over of Post as:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Copy</p>
+</li>
+<li>
+<p>Move</p>
+</li>
+<li>
+<p>Clone</p>
+</li>
+<li>
+<p>Delete</p>
+</li>
+<li>
+<p>View Page</p>
+</li>
+<li>
+<p>Clear Cache</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_select-multiple-objects-and-define-an-actions-as">3.11.9. Select multiple objects and define an actions as:</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Copy</p>
+</li>
+<li>
+<p>Move</p>
+</li>
+<li>
+<p>Delete</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_post-types">3.12. Post Types</h3>
+<div class="paragraph">
+<p>System Post Types as:</p>
+</div>
+<div class="sect3">
+<h4 id="_text">3.12.1. Text</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_photo">3.12.2. Photo</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_video">3.12.3. Video</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_quote">3.12.4. Quote</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_link">3.12.5. Link</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_file">3.12.6. File</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_region">3.12.7. Region</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_theme">3.12.8. Theme</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_page-layout">3.12.9. Page Layout</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_alias">3.12.10. Alias</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_folder-index">3.12.11. Folder Index</h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="_field-types">3.13. Field Types</h3>
+<div class="paragraph">
+<p>Create complex custom Post Types using many Field Types:</p>
+</div>
+<div class="sect3">
+<h4 id="_hidden">3.13.1. Hidden</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_text-2">3.13.2. Text</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_text-area">3.13.3. Text Area</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_ace-editor-html">3.13.4. Ace Editor - HTML</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_ace-editor-javascript">3.13.5. Ace Editor - Javascript</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_html-editor">3.13.6. HTML Editor</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_content-select">3.13.7. Content Select</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_relator">3.13.8. Relator</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_combo-box">3.13.9. Combo Box</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_recaptcha">3.13.10. Recaptcha</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_form-configuration">3.13.11. Form Configuration</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_date">3.13.12. Date</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_multi-select">3.13.13. Multi Select</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_tab">3.13.14. Tab</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_check-box">3.13.15. Check Box</h4>
+
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_criando-page-layouts">4. Criando Page Layouts</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Neste capítulo descreve os tipos de Page Layout e explica com um template é construído. Incluem os seguintes tópicos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#_javascript">Javascript</a></p>
+</li>
+<li>
+<p><a href="#_desenvolvendo-regiões">Desenvolvendo Regiões</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_javascript">4.1. Javascript</h3>
+<div class="paragraph">
+<p>O Javascript é permitido ser utilizada em Page Layout e Region. Provendo as seguintes funcionalidades.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Suporta bibliotecas Javascript</strong> - Usato para incluir qualquer arquivo de Javascript personalizado  para usar no código Javascript.</p>
+</li>
+<li>
+<p><strong>Código Javascript</strong> - Usado no server-side, ou seja para ser processado pelo servidor, que irá no final retornar uma renderização para a view. No código voc&amp;e pode consturir um objeto Javascript e usar o código do HTML para gerar a renderização.</p>
+</li>
+<li>
+<p><strong>Código HTML</strong> - Usado para separar a renderização, que pode ser usado no campo do Código Javascript para gerar a renderização para a view.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As views de Javascripts precisam ser escritas em Javascript usando a bibliotecas Javascript do Viglet Shio, pode ser utilizado especificando o <strong>shObject</strong> em seu código. Mais informaçõesm no Javascript API (<a href="https://shiocms.github.io/shio/javascript/" class="bare">https://shiocms.github.io/shio/javascript/</a>)</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_desenvolvendo-regiões">4.2. Desenvolvendo Regiões</h3>
+<div class="paragraph">
+<p>Shio CMS prove um número pré-configurado de componentes( como Navigation Component, Query Component) que simplifica a construção de uma página web.
+Cada região pode chamar um ou mais componentes.</p>
+</div>
+<div class="paragraph">
+<p>O resultado final da região é cacheada, ao menos que time-to-live (TTL) esteja configurado para zero (0).</p>
+</div>
+<div class="sect3">
+<h4 id="_para-que-uma-região-é-utilizada">4.2.1. Para que uma Região é utilizada</h4>
+<div class="paragraph">
+<p>Regiões são essencialmente um fragmento de renderização. O desenvolvedor web associa a região ao um Page Layout ou outra Região para criar o resultado final pretendido.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_utilizando-url-de-imagens-e-conteúdos">4.2.2. Utilizando URL de Imagens e Conteúdos</h4>
+<div class="paragraph">
+<p>Quando está escrevendo uma região, se o componente contem um atributo com link ou media, as informações armazenadas são apenas IDs que precisam ser convertidos para URLs.
+Pode ser utilizado usando os seguintes métodos do shObject:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>generateFolderLink(id) - Gera link de uma Pasta</p>
+</li>
+<li>
+<p>generatePostLink(id) - Gera link de Post ou Arquivo</p>
+</li>
+<li>
+<p>generateObjectLink(id) - Gera link de qualquer objeto, podendo ser Pasta, Post ou Arquivo</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_glossário">Glossário</h2>
+<div class="sectionbody">
+<div class="dlist glossary">
+<dl>
+<dt>book</dt>
+<dd>
+<p>livro, documento</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="container py-3" style="font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-4 col-md">
+                <img class="mb-2" src="/static_files/img/viglet_logo_sm.png" alt="" style="width:30px; height:30px">
+                <span style="font-size: larger;font-weight: bolder;margin-left: 3px;">Viglet.</span>
+                <small class="d-block mb-3 text-muted">© 2017 – 2025</small>
+            </div>
+            <div class="col-4 col-md">
+                <h5>Documentation</h5>
+                <ul class="list-unstyled text-small">
+
+                     
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/shio/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            CMS
+        </div>
+        <div>
+            <span>Sh</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Shio CMS</span>
+                        </a></li>
+                    
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/turing/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            ES
+        </div>
+        <div>
+            <span>Tu</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Turing ES</span>
+                        </a></li>
+                    
+                </ul>
+            </div>
+
+
+            <div class="col-4 col-md">
+                <h5>Resources</h5>
+                <ul class="list-unstyled text-small" style="margin-bottom: 5px !important;">
+                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                            href="https://docs.viglet.com">Documentation</a></li>
+                    </li>
+                    <li>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
+                                <a title="GitHub" href="https://www.viglet.com" target="_blank"><i
+                                        class="bi bi-github" style="color:#6c757d;font-size: 25px;"
+                                        aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+<script>
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+</html>

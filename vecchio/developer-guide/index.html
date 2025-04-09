@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Viglet Vecchio Auth: Developer Guide</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="Viglet Vecchio Auth: Developer Guide">
+  <meta property="og:site_name" content="Viglet">
+  <meta property="og:url" content="https://docs.viglet.com/vecchio/developer-guide/">
+  <meta property="og:image" content="https://docs.viglet.com/static_files/img/banner.jpg" />
+  <meta property="og:description" content="">
+  <meta name="twitter:image:src" content="https://docs.viglet.com/static_files/img/banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@VigletTweet">
+  <meta name="twitter:creator" content="@VigletTweet">
+  <meta name="twitter:title" content="Viglet Vecchio Auth: Developer Guide">
+  <meta name="twitter:description" content=""><link rel="shortcut icon" type="image/x-icon" href="/static_files/img/favicon.ico">
+<link rel="stylesheet" href="/static_files/css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="/static_files/css/viglet.css">
+<link rel="stylesheet" href="/static_files/site.css">
+<script src="/static_files/setup.js"></script>
+<script defer src="/static_files/site.js"></script></head><body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style><header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img style="margin: 5px; margin-top:10px; padding: 0px; width: 110px; height: 30px" alt="Viglet" src="/static_files/img/viglet_logo_header.png"><span style="font-size: x-large;
+                color: orangered;">Docs</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" style="padding-top: 4px;">
+            </ul>
+            <div id="switch-theme">
+                <input type="checkbox" id="switch-theme-checkbox" />
+                <label for="switch-theme-checkbox">Dark Theme</label>
+            </div>
+            <a href="https://www.viglet.com" target="_blank" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            style="color:#ffc63a">viglet.com</a></div>
+    </div>
+</header><header class="p-3 border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                        aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                            <li class="breadcrumb-item"><a href="/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
+                            </li><li class="breadcrumb-item" aria-current="page"><a href="/vecchio/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);"></a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Developer Guide
+                            </li></ol>
+                    </nav>
+                </div><div class="col-2" style="text-align: right;color: indianred;"><a style="text-align: center;color: indianred;" href="/docs/vecchio/vecchio-developer-guide.pdf" target="_blank">Download PDF</a>
+                </div></div>
+        </div>
+    </header>
+    <div>
+    <button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top" style="display: block;
+background-image: url(/static_files/svg/up.svg);
+background-repeat: no-repeat;
+height: 30px;background-position: center;">
+
+    </button>
+
+    <div id="tocbar-container" class="container" role="navigation">
+        <div id="tocbar" class="contained" role="navigation">
+            <button id="toggle-toc"></button>
+        </div>
+    </div>
+    <div id="main-container" class="container">
+        <div id="main" class="contained">
+            <div id="doc" class="doc">
+                <div id="header">
+                    <div id="toc" class="toc2">
+                        <div id="toctitle">Table of Contents</div>
+                        <ul class="sectlevel1">
+<li><a href="#_about-the-author">About the author</a></li>
+<li><a href="#_introduction">1. Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_about-vecchio-auth">1.1. About Vecchio Auth</a></li>
+<li><a href="#_features">1.2. Features</a></li>
+</ul>
+</li>
+<li><a href="#_mapping-resources">2. Mapping Resources</a></li>
+<li><a href="#_apps">3. Apps</a></li>
+<li><a href="#_grant-types">4. Grant Types</a>
+<ul class="sectlevel2">
+<li><a href="#_authorization-code">4.1. Authorization Code</a></li>
+<li><a href="#_implicit">4.2. Implicit</a></li>
+<li><a href="#_using-api-resources">4.3. Using API Resources</a></li>
+</ul>
+</li>
+<li><a href="#_dashboard">5. Dashboard</a></li>
+</ul>
+                    </div>
+                </div>
+                <div id="content">
+                    <div class="sect1">
+<h2 id="_about-the-author">About the author</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can contact Alexandre Oliveira at <a href="mailto:alexandre.oliveira@viglet.com">alexandre.oliveira@viglet.com</a>.</p>
+</div>
+<div class="paragraph">
+<p>Alexandre Oliveira loves developing corporate applications.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This chapter provides concepts and other information required to perform development tasks in Vecchio Auth.</p>
+</div>
+<div class="paragraph">
+<p>Include the following topics:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#_about-vecchio-auth">About Vecchio Auth</a></p>
+</li>
+<li>
+<p><a href="#_features">Features</a></p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_about-vecchio-auth">1.1. About Vecchio Auth</h3>
+<div class="paragraph">
+<p>Viglet Vecchio Auth allows to create authentication and authorization layers to access API, with proactive monitoring.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_features">1.2. Features</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Significantly lowers integration costs, decreases total cost of ownership, and reduces deployment risks</p>
+</li>
+<li>
+<p>Connects mobile devices to existing enterprise systems</p>
+</li>
+<li>
+<p>Provides a lightweight API gateway for securing and managing APIs</p>
+</li>
+<li>
+<p>Offers rich integration with many identity and access management platforms</p>
+</li>
+<li>
+<p>Helps streamline regulatory compliance through authentication, authorization, and audit capabilities</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_mapping-resources">2. Mapping Resources</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>For example, in Mapping Console (<a href="http://localhost:2702/console/#!/mapping" class="bare">http://localhost:2702/console/#!/mapping</a>) add the following URLs:</p>
+</div>
+<div class="paragraph">
+<p>GitHub - openviglet</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Context: /proxy/github/openviglet</p>
+</li>
+<li>
+<p>Proxy: <a href="https://api.github.com/users/openviglet" class="bare">https://api.github.com/users/openviglet</a></p>
+</li>
+</ul>
+</div>
+<div id="mapping-screenshot" class="imageblock">
+<div class="content">
+<img src="../../assets/mapping.png" alt="mapping">
+</div>
+<div class="title">Figure 1. Mapping</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_apps">3. Apps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a new App (<a href="http://localhost:2702/console/#!/app/new" class="bare">http://localhost:2702/console/#!/app/new</a>) and copy the values of "Keys and Access Tokens" tab.</p>
+</div>
+<div id="sample-app" class="imageblock">
+<div class="content">
+<img src="../../assets/sample-app.png" alt="sample app">
+</div>
+<div class="title">Figure 2. Sample App</div>
+</div>
+<div class="paragraph">
+<p>Will generate the following keys an tokens for your App, for instance:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Token</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Consumer Key (API Key)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4d2aade33fa53baf07d88165e8ecf58f</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Consumer Secret (API Secret)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4b7104ebd32471eef9feda56563ba8f4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">f7d2c3475cae32d1a464bcea3a57023b</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Access Token Secret</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2a383e82b72ab6f47dbdccd23c35e3e8</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_grant-types">4. Grant Types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can access the API Resources using your Access Token, ou generate new Access Token using the followings Grant Types:</p>
+</div>
+<div class="sect2">
+<h3 id="_authorization-code">4.1. Authorization Code</h3>
+<div class="paragraph">
+<p>Use the <strong>Consumer Key (API Key)</strong> to generate the Authorization Code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">curl <span class="nt">-I</span> <span class="nt">-X</span> GET <span class="s1">'http://localhost:2702/api/authorize?response_type=code&amp;client_id=4d2aade33fa53baf07d88165e8ecf58f&amp;redirect_uri=http://localhost:2702/console/oauth2/receive_authcode'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Will return the Location, so get the <strong>Authorization Code</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">Location: http://localhost:2702/console/oauth2/receive_authcode?code<span class="o">=</span>e31d6626d203aaea0811305e33136d59<span class="sb">`</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the Authorization Code to generate the <strong>Access Token</strong>, for instance: b516216e45610d4be3716c8dfab70985:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">curl <span class="nt">-I</span> <span class="nt">-X</span> GET <span class="s1">'http://localhost:2702/api/token'</span> <span class="nt">-d</span> <span class="s1">'grant_type=authorization_code&amp;code=e31d6626d203aaea0811305e33136d59'</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_implicit">4.2. Implicit</h3>
+<div class="paragraph">
+<p>Use the <strong>Consumer Key (API Key)</strong> to generate the Authorization Code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">curl <span class="nt">-I</span> <span class="nt">-X</span> GET <span class="s1">'http://localhost:2702/api/authorize?response_type=token&amp;client_id=4d2aade33fa53baf07d88165e8ecf58f&amp;redirect_uri=http://localhost:2702/console/oauth2/receive_implicit_token'</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Will return the Location, so get the <strong>Access Token</strong>, for instance: b516216e45610d4be3716c8dfab70985:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">Location: http://localhost:2702/console/oauth2/receive_implicit_token?access_token<span class="o">=</span>b516216e45610d4be3716c8dfab70985&amp;state<span class="o">=</span>xyz&amp;token_type<span class="o">=</span>bearer&amp;expires_in<span class="o">=</span>3600</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using-api-resources">4.3. Using API Resources</h3>
+<div class="paragraph">
+<p>Ready! You can access the following API Resources using the <strong>Access Token</strong> from Authorization Code or Implicit Grant Types or App Settings (Your Access Token), for instance f7d2c3475cae32d1a464bcea3a57023b, if you use an invalid Access Token, it will return empty response.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">curl <span class="nt">-X</span> GET <span class="s2">"localhost:2702/github/openviglet"</span> <span class="nt">-H</span>  <span class="s2">"accept: application/json"</span> <span class="nt">-H</span>  <span class="s2">"content-type: application/json"</span> <span class="nt">-H</span>  <span class="s2">"authorization: Bearer f7d2c3475cae32d1a464bcea3a57023b"</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dashboard">5. Dashboard</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dashboard Console (<a href="http://localhost:2702/console/#!/dashboard" class="bare">http://localhost:2702/console/#!/dashboard</a>) shows response time report.</p>
+</div>
+<div id="dashboard-screenshot" class="imageblock">
+<div class="content">
+<img src="../../assets/dashboard.png" alt="dashboard">
+</div>
+<div class="title">Figure 3. Dashboard shows response time report</div>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="container py-3" style="font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-4 col-md">
+                <img class="mb-2" src="/static_files/img/viglet_logo_sm.png" alt="" style="width:30px; height:30px">
+                <span style="font-size: larger;font-weight: bolder;margin-left: 3px;">Viglet.</span>
+                <small class="d-block mb-3 text-muted">© 2017 – 2025</small>
+            </div>
+            <div class="col-4 col-md">
+                <h5>Documentation</h5>
+                <ul class="list-unstyled text-small">
+
+                     
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/shio/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            CMS
+        </div>
+        <div>
+            <span>Sh</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Shio CMS</span>
+                        </a></li>
+                    
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/turing/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            ES
+        </div>
+        <div>
+            <span>Tu</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Turing ES</span>
+                        </a></li>
+                    
+                </ul>
+            </div>
+
+
+            <div class="col-4 col-md">
+                <h5>Resources</h5>
+                <ul class="list-unstyled text-small" style="margin-bottom: 5px !important;">
+                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                            href="https://docs.viglet.com">Documentation</a></li>
+                    </li>
+                    <li>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
+                                <a title="GitHub" href="https://www.viglet.com" target="_blank"><i
+                                        class="bi bi-github" style="color:#6c757d;font-size: 25px;"
+                                        aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+<script>
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+</html>

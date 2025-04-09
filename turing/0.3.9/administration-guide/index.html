@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Viglet Turing ES: Administration Guide</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="Viglet Turing ES: Administration Guide">
+  <meta property="og:site_name" content="Viglet">
+  <meta property="og:url" content="https://docs.viglet.com/turing/0.3.9/administration-guide/">
+  <meta property="og:image" content="https://docs.viglet.com/static_files/img/banner.jpg" />
+  <meta property="og:description" content="">
+  <meta name="twitter:image:src" content="https://docs.viglet.com/static_files/img/banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@VigletTweet">
+  <meta name="twitter:creator" content="@VigletTweet">
+  <meta name="twitter:title" content="Viglet Turing ES: Administration Guide">
+  <meta name="twitter:description" content=""><link rel="shortcut icon" type="image/x-icon" href="/static_files/img/favicon.ico">
+<link rel="stylesheet" href="/static_files/css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="/static_files/css/viglet.css">
+<link rel="stylesheet" href="/static_files/site.css">
+<script src="/static_files/setup.js"></script>
+<script defer src="/static_files/site.js"></script></head><body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style><header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img style="margin: 5px; margin-top:10px; padding: 0px; width: 110px; height: 30px" alt="Viglet" src="/static_files/img/viglet_logo_header.png"><span style="font-size: x-large;
+                color: orangered;">Docs</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" style="padding-top: 4px;">
+            </ul>
+            <div id="switch-theme">
+                <input type="checkbox" id="switch-theme-checkbox" />
+                <label for="switch-theme-checkbox">Dark Theme</label>
+            </div>
+            <a href="https://www.viglet.com/turing/" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            style="color:#ffc63a">Go to Turing ES Website</a></div>
+    </div>
+</header><header class="p-3 border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                        aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                            <li class="breadcrumb-item"><a href="/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
+                            </li><li class="breadcrumb-item" aria-current="page"><a href="/turing/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Turing ES</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Administration Guide
+                            </li></ol>
+                    </nav>
+                </div><div class="col-2" style="text-align: right;color: indianred;"><a style="text-align: center;color: indianred;" href="/turing/turing-administration-guide-0.3.9.pdf" target="_blank">Download PDF</a>
+                </div></div>
+        </div>
+    </header>
+    <div>
+    <a href="https://github.com/openviglet/turing" target="_blank" aria-label="GitHub repository" title="GitHub repository"
+  style="position: absolute;top: 0px;right: 0px"><svg width="77" height="77" viewBox="0 0 250 250" aria-hidden="true"
+    fill="royalblue">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+    <path
+      d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+      fill="white" class="octo-arm" style="transform-origin: 130px 106px;"></path>
+    <path
+      d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+      fill="white" class="octo-body"></path>
+  </svg></a><button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top" style="display: block;
+background-image: url(/static_files/svg/up.svg);
+background-repeat: no-repeat;
+height: 30px;background-position: center;">
+
+    </button>
+
+    <div id="tocbar-container" class="container" role="navigation">
+        <div id="tocbar" class="contained" role="navigation">
+            <button id="toggle-toc"></button>
+        </div>
+    </div>
+    <div id="main-container" class="container">
+        <div id="main" class="contained">
+            <div id="doc" class="doc">
+                <div id="header">
+                    <div id="toc" class="toc2">
+                        <div id="toctitle">Table of Contents</div>
+                        <ul class="sectlevel1">
+<li><a href="#_preface">Preface</a></li>
+<li><a href="#_architecture">1. Architecture</a></li>
+<li><a href="#_nlp">2. NLP</a>
+<ul class="sectlevel2">
+<li><a href="#_opennlp">2.1. OpenNLP</a></li>
+<li><a href="#_opentext-content-analytics">2.2. OpenText Content Analytics</a></li>
+<li><a href="#_corenlp">2.3. CoreNLP</a></li>
+<li><a href="#_spacy">2.4. SpaCy</a></li>
+<li><a href="#_polyglot-nlp">2.5. Polyglot NLP</a></li>
+<li><a href="#_google-cloud-platform-nlp">2.6. Google Cloud Platform NLP</a></li>
+</ul>
+</li>
+<li><a href="#_documents-and-ocr">3. Documents and OCR</a></li>
+<li><a href="#_semantic-navigation">4. Semantic Navigation</a>
+<ul class="sectlevel2">
+<li><a href="#_connectors">4.1. Connectors</a>
+<ul class="sectlevel3">
+<li><a href="#_apache-nutch">4.1.1. Apache Nutch</a></li>
+<li><a href="#_database">4.1.2. Database</a></li>
+<li><a href="#_file-system">4.1.3. File System</a></li>
+<li><a href="#_opentext-wem-listener">4.1.4. OpenText WEM Listener</a></li>
+<li><a href="#_wordpress">4.1.5. Wordpress</a></li>
+</ul>
+</li>
+<li><a href="#_named-entity-recognition-ner">4.2. Named Entity Recognition (NER)</a></li>
+<li><a href="#_facets">4.3. Facets</a></li>
+<li><a href="#_targeting-rules">4.4. Targeting Rules</a></li>
+<li><a href="#_sdk-java">4.5. SDK Java</a></li>
+</ul>
+</li>
+<li><a href="#_chatbot">5. Chatbot</a>
+<ul class="sectlevel2">
+<li><a href="#_agent">5.1. Agent</a></li>
+<li><a href="#_intent">5.2. Intent</a></li>
+<li><a href="#_actions">5.3. Actions</a></li>
+<li><a href="#_entity">5.4. Entity</a></li>
+<li><a href="#_training">5.5. Training</a></li>
+<li><a href="#_history">5.6. History</a></li>
+</ul>
+</li>
+<li><a href="#_opentext-blazon-integration">6. OpenText Blazon Integration</a></li>
+<li><a href="#turing-console">7. Turing ES Console</a>
+<ul class="sectlevel2">
+<li><a href="#turing-console-login">7.1. Login</a></li>
+<li><a href="#turing-console-se">7.2. Search Engine</a>
+<ul class="sectlevel3">
+<li><a href="#_configuration">7.2.1. Configuration</a></li>
+</ul>
+</li>
+<li><a href="#turing-console-sn">7.3. Semantic Navigation</a>
+<ul class="sectlevel3">
+<li><a href="#_configuration-2">7.3.1. Configuration</a>
+<ul class="sectlevel4">
+<li><a href="#turing-console-sn-settings-tab">Settings Tab</a></li>
+<li><a href="#turing-console-sn-multi-languages-tab">Multi Languages Tab</a></li>
+<li><a href="#turing-console-sn-behavior-tab">Behavior Tab</a></li>
+<li><a href="#turing-console-sn-merge-providers-tab">Merge Providers Details Tab</a></li>
+<li><a href="#turing-console-sn-fields-tab">Fields Tab</a></li>
+<li><a href="#turing-console-sn-spotlight-tab">Spotlight Details Tab</a></li>
+<li><a href="#turing-console-sn-top-search-terms-tab">Top Search Terms Tab</a></li>
+</ul>
+</li>
+<li><a href="#turing-console-sn-search-page">7.3.2. Search Page</a>
+<ul class="sectlevel4">
+<li><a href="#turing-sn-search-page-html">HTML</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+                    </div>
+                </div>
+                <div id="content">
+                    <div class="sect1">
+<h2 id="_preface">Preface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Viglet Turing ES (<a href="https://viglet.com/turing" class="bare">https://viglet.com/turing</a>) is an open source solution (<a href="https://github.com/openviglet" class="bare">https://github.com/openviglet</a>), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_architecture">1. Architecture</h2>
+<div class="sectionbody">
+<div id="img-architecture" class="imageblock">
+<div class="content">
+<img src="../../../img/turing-diagram.png" alt="Architecture">
+</div>
+<div class="title">Figure 1. Turing ES Architecture</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_nlp">2. NLP</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Turing support the followings providers:</p>
+</div>
+<div class="sect2">
+<h3 id="_opennlp">2.1. OpenNLP</h3>
+<div class="paragraph">
+<p>Apache OpenNLP is a machine learning based toolkit for the processing of natural language text.</p>
+</div>
+<div class="paragraph">
+<p>Website: <a href="https://opennlp.apache.org/" class="bare">https://opennlp.apache.org/</a></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. OpenNLP Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OpenNLP Title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of OpenNLP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select OpenNLP.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Endpoint URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute is not used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute is not used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the OpenNLP is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_opentext-content-analytics">2.2. OpenText Content Analytics</h3>
+<div class="paragraph">
+<p>It transforms data into insights for better decision-making and information management while freeing up resources and time.</p>
+</div>
+<div class="paragraph">
+<p>Website: <a href="https://www.opentext.com/" class="bare">https://www.opentext.com/</a></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. OTCA Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OTCA Title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of OTCA</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select OTCA.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Endpoint URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service URL, for example: <a href="http://localhost:40000" class="bare">http://localhost:40000</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute is not used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the OTCA is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_corenlp">2.3. CoreNLP</h3>
+<div class="paragraph">
+<p>CoreNLP is your one stop shop for natural language processing in Java! CoreNLP enables users to derive linguistic annotations for text, including token and sentence boundaries, parts of speech, named entities, numeric and time values, dependency and constituency parses, coreference, sentiment, quote attributions, and relations. CoreNLP currently supports 6 languages: Arabic, Chinese, English, French, German, and Spanish.</p>
+</div>
+<div class="paragraph">
+<p>Website: <a href="https://stanfordnlp.github.io/CoreNLP/" class="bare">https://stanfordnlp.github.io/CoreNLP/</a>,</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. CoreNLP Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CoreNLP Title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of CoreNLP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select CoreNLP.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Endpoint URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service URL, for example: <a href="http://localhost:9001" class="bare">http://localhost:9001</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute is not used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the CoreNLP is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_spacy">2.4. SpaCy</h3>
+<div class="paragraph">
+<p>It is a free open-source library for Natural Language Processing in Python. It features NER, POS tagging, dependency parsing, word vectors and more.</p>
+</div>
+<div class="paragraph">
+<p>Website: <a href="https://spacy.io" class="bare">https://spacy.io</a></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. SpaCy Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SpaCy Title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of SpaCy</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select SpaCy.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Endpoint URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service URL, for example: <a href="http://localhost:2800" class="bare">http://localhost:2800</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute is not used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the SpaCy is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_polyglot-nlp">2.5. Polyglot NLP</h3>
+<div class="paragraph">
+<p>Polyglot is a natural language pipeline that supports massive multilingual applications.</p>
+</div>
+<div class="paragraph">
+<p>Website: <a href="https://polyglot.readthedocs.io" class="bare">https://polyglot.readthedocs.io</a></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. Polyglot Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Polyglot Title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of Polyglot</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select Polyglot.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Endpoint URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service URL, for example: <a href="http://localhost:2810" class="bare">http://localhost:2810</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute is not used.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the Polyglot is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_google-cloud-platform-nlp">2.6. Google Cloud Platform NLP</h3>
+<div class="paragraph">
+<p>Analyze text with ES using pre-trained API or custom AutoML machine learning models to extract relevant entities, understand sentiment, and more.</p>
+</div>
+<div class="paragraph">
+<p>Website: <a href="https://cloud.google.com/natural-language" class="bare">https://cloud.google.com/natural-language</a></p>
+</div>
+<div class="paragraph">
+<p>Update the following attributes:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. Google Cloud Platform NLP Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GCP NLP Title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of  GCP NLP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select Google Cloud Platform NLP.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Endpoint URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service URL, for example: <a href="https://language.googleapis.com/v1/documents:analyzeEntities" class="bare">https://language.googleapis.com/v1/documents:analyzeEntities</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key of Google Cloud Platform NLP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the GCP NLP is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_documents-and-ocr">3. Documents and OCR</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>It can read PDFs and Documents and convert to plain text and also it uses OCR to detect text in images and images into documents.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_semantic-navigation">4. Semantic Navigation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_connectors">4.1. Connectors</h3>
+<div class="paragraph">
+<p>Semantic Navigation uses Connectors to index the content from many sources.</p>
+</div>
+<div class="sect3">
+<h4 id="_apache-nutch">4.1.1. Apache Nutch</h4>
+<div class="paragraph">
+<p>Plugin for Apache Nutch to index content using crawler.</p>
+</div>
+<div class="paragraph">
+<p>Learn more at <a href="https://docs.viglet.com/turing/connectors/#nutch" class="bare">https://docs.viglet.com/turing/connectors/#nutch</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_database">4.1.2. Database</h4>
+<div class="paragraph">
+<p>Command line that uses the same concept as sqoop (<a href="https://sqoop.apache.org/" class="bare">https://sqoop.apache.org/</a>), to create complex queries and map attributes to index based on the result.</p>
+</div>
+<div class="paragraph">
+<p>Learn more at <a href="https://docs.viglet.com/turing/connectors/#database" class="bare">https://docs.viglet.com/turing/connectors/#database</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_file-system">4.1.3. File System</h4>
+<div class="paragraph">
+<p>Command line to index files, extracting text from files such as Word, Excel, PDF, including images, through OCR.</p>
+</div>
+<div class="paragraph">
+<p>Learn more at <a href="https://docs.viglet.com/turing/connectors/#file-system" class="bare">https://docs.viglet.com/turing/connectors/#file-system</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_opentext-wem-listener">4.1.4. OpenText WEM Listener</h4>
+<div class="paragraph">
+<p>OpenText WEM Listener to publish content to Viglet Turing.</p>
+</div>
+<div class="paragraph">
+<p>Learn more at <a href="https://docs.viglet.com/turing/connectors/#wem" class="bare">https://docs.viglet.com/turing/connectors/#wem</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_wordpress">4.1.5. Wordpress</h4>
+<div class="paragraph">
+<p>Wordpress plugin that allows you to index posts.</p>
+</div>
+<div class="paragraph">
+<p>Learn more at <a href="https://docs.viglet.com/turing/connectors/#wordpress" class="bare">https://docs.viglet.com/turing/connectors/#wordpress</a></p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_named-entity-recognition-ner">4.2. Named Entity Recognition (NER)</h3>
+<div class="paragraph">
+<p>With NLP it is possible to detect entities such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>People</p>
+</li>
+<li>
+<p>Places</p>
+</li>
+<li>
+<p>Organizations</p>
+</li>
+<li>
+<p>Money</p>
+</li>
+<li>
+<p>Time</p>
+</li>
+<li>
+<p>Percentage</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_facets">4.3. Facets</h3>
+<div class="paragraph">
+<p>Define attributes that will be used as filters for your navigation, consolidating the total content in your display</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_targeting-rules">4.4. Targeting Rules</h3>
+<div class="paragraph">
+<p>Through attributes defined in the contents, it is possible to use them to restrict their display based on the user&#8217;s profile.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sdk-java">4.5. SDK Java</h3>
+<div class="paragraph">
+<p>Java API (<a href="https://github.com/openviglet/turing-java-sdk" class="bare">https://github.com/openviglet/turing-java-sdk</a>) facilitates the use and access to Viglet Turing ES, without the need for consumer search content with complex queries.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_chatbot">5. Chatbot</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Communicate with your client and elaborate complex intents, obtain reports and progressively evolve your interaction.</p>
+</div>
+<div class="paragraph">
+<p>Its components:</p>
+</div>
+<div class="sect2">
+<h3 id="_agent">5.1. Agent</h3>
+<div class="paragraph">
+<p>Handles conversations with your end users. It is a natural language processing module that understands the nuances of human language</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_intent">5.2. Intent</h3>
+<div class="paragraph">
+<p>An intent categorizes an end user&#8217;s intention for taking a conversation shift. For each agent, you define several intents, where your combined intents can handle a complete conversation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_actions">5.3. Actions</h3>
+<div class="paragraph">
+<p>The field of action is a simple field of convenience that helps to execute logic in the service.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_entity">5.4. Entity</h3>
+<div class="paragraph">
+<p>Each intent parameter has a type, called an entity type, that dictates exactly how the data in an end user expression is extracted.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_training">5.5. Training</h3>
+<div class="paragraph">
+<p>Defines and corrects intents.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_history">5.6. History</h3>
+<div class="paragraph">
+<p>Shows the conversation history and reports.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_opentext-blazon-integration">6. OpenText Blazon Integration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Turing ES detects Entities of OpenText Blazon Documents using OCR and NLP, generating Blazon XML to show the entities into document.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="turing-console">7. Turing ES Console</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Turing ES has many components: Search Engine, NLP, Converse (Chatbot), Semantic Navigation</p>
+</div>
+<div class="sect2">
+<h3 id="turing-console-login">7.1. Login</h3>
+<div class="paragraph">
+<p>When access the Turing ES, appear a login page. For default the login/password is <code>admin</code>/<code>admin</code></p>
+</div>
+<div id="img-login" class="imageblock">
+<div class="content">
+<img src="../../../img/screenshots/turing-login.png" alt="Login">
+</div>
+<div class="title">Figure 2. Login Page</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="turing-console-se">7.2. Search Engine</h3>
+<div class="sect3">
+<h4 id="_configuration">7.2.1. Configuration</h4>
+<div class="paragraph">
+<p>Search Engine is used by Turing to store and retrieve data of Converse (Chatbot) and Semantic Navigation Sites.</p>
+</div>
+<div id="img-se" class="imageblock">
+<div class="content">
+<img src="../../../img/screenshots/turing-se.png" alt="Search Page">
+</div>
+<div class="title">Figure 3. Search Engine Page</div>
+</div>
+<div class="paragraph">
+<p>It is possible create or edit a Search Engine with following attributes:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. Search Engine Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Search Engine</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of Search Engine</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select the Vendor of Search Engine. For now it only supports Solr.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Host name where the Search Engine service is installed</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Port of Search Engine Service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the Search Engine is enabled.</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="turing-console-sn">7.3. Semantic Navigation</h3>
+<div class="sect3">
+<h4 id="_configuration-2">7.3.1. Configuration</h4>
+<div id="img-sn" class="imageblock">
+<div class="content">
+<img src="../../../img/screenshots/turing-sn.png" alt="Semantic Navigation Page">
+</div>
+<div class="title">Figure 4. Semantic Navigation Page</div>
+</div>
+<div class="sect4">
+<h5 id="turing-console-sn-settings-tab">Settings Tab</h5>
+<div class="paragraph">
+<p>The Settings of Semantic Navigation Site contains the following attributes:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. Semantic Navitation Site Settings</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Semantic Navigation Site.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of Semantic Navigation Site.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Search Engine</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Select the Search Engine that was created in Search Engine Section. The Semantic Navigation Site will use this Search Engine to store and retrieve data.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NLP Vendor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NLP Vendor for this site.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Thesaurus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If will use Thesaurus.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="turing-console-sn-multi-languages-tab">Multi Languages Tab</h5>
+<div class="paragraph">
+<p>The Multi Languages of Semantic Navigation Site contains the following attributes:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. Multi Language Settings</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Language</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Language for Semantic Navigation SIte.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NLP Instance</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NLP Instance to detect entities during indexing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Core</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solr Core Name to store and to search indexed content.</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="turing-console-sn-behavior-tab">Behavior Tab</h5>
+<div class="paragraph">
+<p>Contains the following attributes:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Semantic Navitation Site Appearance Attributes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Section</th>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Behavior</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of items per page</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of items that will appear in search.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Facet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Facet enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If it will be show Facet (Filters) on search.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of items per facet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of items that will appear in each Facet (Filter).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">Highlighting</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Highlighting enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Define whether to show highlighted lines.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pre Tag</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTML Tag that will be used on begin of term. For example: &lt;mark&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Post Tag</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTML Tag that will be used on the end of term. For example: &lt;/mark&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Did you mean?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"Did you mean?" enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use "did you mean?" feature.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always show the search with the corrected term.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the term is misspelled, it already shows the search with the corrected term. If disabled, it shows the search with the entered term in the search.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MLT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">More Like This enabled?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Define whether to show MLT</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="6"><p class="tableblock">Default Fields</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that will be used as title that is defined in Solr schema.xml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that will be used as title that is defined in Solr schema.xml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that will be used as description that is defined in Solr schema.xml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that will be used as date that is defined in Solr schema.xml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Image</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that will be used as Image URL that is defined in Solr schema.xml</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that will be used as URL that is defined in Solr schema.xml</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="turing-console-sn-merge-providers-tab">Merge Providers Details Tab</h5>
+<div class="paragraph">
+<p>Merge Providers Details Tab contains the following attributes:
+.Semantic Navitation Site Merge Providers Attributes</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Section</th>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Providers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Source Provider.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Destination</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Destination Provider.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Relations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relation Identifier of Source Provider.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Destination</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Relation Identifier of Destination Provider.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">More about merge providers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Overwritten Fields</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Source Field that overwritten destination field or create new one.</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="turing-console-sn-fields-tab">Fields Tab</h5>
+<div class="paragraph">
+<p>Fields Tab contains a table with the following columns:
+.Semantic Navitation Site Fields Columns</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Column Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type of Field. It can be:</p>
+<p class="tableblock">- NER (Named Entity Recognition) used by NLP.</p>
+<p class="tableblock">- Seach Engine used by Solr.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Field.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the field is enabled or not.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MLT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this field will be used in MLT.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Facets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To use this field like a facet (filter)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Highlighting</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this field will show highlighted lines.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NLP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this field will be processed by NLP to detect Entities (NER) like People, Organization and Place.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>When click in Field appear a new page with Field Details with the following attributes:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. Semantic Navitation Site Fields Detail Attributes</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Field</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description of Field</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type of Field. It can be: <code>INT</code>, <code>LONG</code>, <code>STRING</code>, <code>DATE</code> and <code>BOOL</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multi Valued</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If is a array</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Facet Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Label of Facet (Filter) on Search Page.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Facet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To use this field like a facet (filter)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Highlighting</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this field will show highlighted lines.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MLT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this field will be used in MLT.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the field is enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the field is required.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default Value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Case the content is indexed without these field, that is the default value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NLP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this field will be processed by NLP to detect Entities (NER) like People, Organization and Place.</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="turing-console-sn-spotlight-tab">Spotlight Details Tab</h5>
+<div class="paragraph">
+<p>Spotlight Details Tab contains the following attributes:
+.Semantic Navigation Site Spotlight Attributes</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spotlight Name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spotlight Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Terms</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If any of these terms are searched for, this will trigger documents to display as spotlights.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indexed Documents</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">These documents will display as spotlights when there are search terms.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="turing-console-sn-top-search-terms-tab">Top Search Terms Tab</h5>
+<div class="paragraph">
+<p>During search, Turing ES saves information about search terms and generate Top Search Terms reports.</p>
+</div>
+<div class="paragraph">
+<p>There are the following reports: Today, This Week, This Month and All Time. These reports show the first 50 terms and statistics about the period.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="turing-console-sn-search-page">7.3.2. Search Page</h4>
+<div class="sect4">
+<h5 id="turing-sn-search-page-html">HTML</h5>
+<div class="paragraph">
+<p>In <code>Turing ES Console</code> &gt; <code>Semantic Navigation</code> &gt; <code>&lt;SITE_NAME&gt;</code> &gt; <code>Multi languages</code> &gt; click in  <code>Open Search</code> button of some language.</p>
+</div>
+<div class="paragraph">
+<p>It will open a Search Page that uses the pattern:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>GET http://localhost:2700/sn/&lt;SITE_NAME&gt;</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="container py-3" style="font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-4 col-md">
+                <img class="mb-2" src="/static_files/img/viglet_logo_sm.png" alt="" style="width:30px; height:30px">
+                <span style="font-size: larger;font-weight: bolder;margin-left: 3px;">Viglet.</span>
+                <small class="d-block mb-3 text-muted">© 2017 – 2025</small>
+            </div>
+            <div class="col-4 col-md">
+                <h5>Documentation</h5>
+                <ul class="list-unstyled text-small">
+
+                     
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/shio/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            CMS
+        </div>
+        <div>
+            <span>Sh</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Shio CMS</span>
+                        </a></li>
+                    
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/turing/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            ES
+        </div>
+        <div>
+            <span>Tu</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Turing ES</span>
+                        </a></li>
+                    
+                </ul>
+            </div>
+
+
+            <div class="col-4 col-md">
+                <h5>Resources</h5>
+                <ul class="list-unstyled text-small" style="margin-bottom: 5px !important;">
+                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                            href="https://docs.viglet.com">Documentation</a></li>
+                    </li>
+                    <li>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
+                                <a title="GitHub" href="https://www.viglet.com" target="_blank"><i
+                                        class="bi bi-github" style="color:#6c757d;font-size: 25px;"
+                                        aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+<script>
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+</html>

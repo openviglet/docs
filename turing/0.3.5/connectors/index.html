@@ -1,0 +1,2359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Viglet Turing ES: Connectors</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="Viglet Turing ES: Connectors">
+  <meta property="og:site_name" content="Viglet">
+  <meta property="og:url" content="https://docs.viglet.com/turing/0.3.5/connectors/">
+  <meta property="og:image" content="https://docs.viglet.com/static_files/img/banner.jpg" />
+  <meta property="og:description" content="">
+  <meta name="twitter:image:src" content="https://docs.viglet.com/static_files/img/banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@VigletTweet">
+  <meta name="twitter:creator" content="@VigletTweet">
+  <meta name="twitter:title" content="Viglet Turing ES: Connectors">
+  <meta name="twitter:description" content=""><link rel="shortcut icon" type="image/x-icon" href="/static_files/img/favicon.ico">
+<link rel="stylesheet" href="/static_files/css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="/static_files/css/viglet.css">
+<link rel="stylesheet" href="/static_files/site.css">
+<script src="/static_files/setup.js"></script>
+<script defer src="/static_files/site.js"></script></head><body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style><header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img style="margin: 5px; margin-top:10px; padding: 0px; width: 110px; height: 30px" alt="Viglet" src="/static_files/img/viglet_logo_header.png"><span style="font-size: x-large;
+                color: orangered;">Docs</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" style="padding-top: 4px;">
+            </ul>
+            <div id="switch-theme">
+                <input type="checkbox" id="switch-theme-checkbox" />
+                <label for="switch-theme-checkbox">Dark Theme</label>
+            </div>
+            <a href="https://www.viglet.com/turing/" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            style="color:#ffc63a">Go to Turing ES Website</a></div>
+    </div>
+</header><header class="p-3 border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                        aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                            <li class="breadcrumb-item"><a href="/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
+                            </li><li class="breadcrumb-item" aria-current="page"><a href="/turing/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Turing ES</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Connectors
+                            </li></ol>
+                    </nav>
+                </div><div class="col-2" style="text-align: right;color: indianred;"><a style="text-align: center;color: indianred;" href="/turing/turing-connectors-0.3.5.pdf" target="_blank">Download PDF</a>
+                </div></div>
+        </div>
+    </header>
+    <div>
+    <a href="https://github.com/openviglet/turing" target="_blank" aria-label="GitHub repository" title="GitHub repository"
+  style="position: absolute;top: 0px;right: 0px"><svg width="77" height="77" viewBox="0 0 250 250" aria-hidden="true"
+    fill="royalblue">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+    <path
+      d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+      fill="white" class="octo-arm" style="transform-origin: 130px 106px;"></path>
+    <path
+      d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+      fill="white" class="octo-body"></path>
+  </svg></a><button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top" style="display: block;
+background-image: url(/static_files/svg/up.svg);
+background-repeat: no-repeat;
+height: 30px;background-position: center;">
+
+    </button>
+
+    <div id="tocbar-container" class="container" role="navigation">
+        <div id="tocbar" class="contained" role="navigation">
+            <button id="toggle-toc"></button>
+        </div>
+    </div>
+    <div id="main-container" class="container">
+        <div id="main" class="contained">
+            <div id="doc" class="doc">
+                <div id="header">
+                    <div id="toc" class="toc2">
+                        <div id="toctitle">Table of Contents</div>
+                        <ul class="sectlevel1">
+<li><a href="#_preface">Preface</a></li>
+<li><a href="#nutch">1. Apache Nutch</a>
+<ul class="sectlevel2">
+<li><a href="#nutch-installation">1.1. Installation</a></li>
+<li><a href="#nutch-configuration">1.2. Configuration</a>
+<ul class="sectlevel3">
+<li><a href="#nutch-configuration-112">1.2.1. Nutch 1.12</a>
+<ul class="sectlevel4">
+<li><a href="#nutch-configuration-112-turing-xml">turing.xml File</a></li>
+<li><a href="#nutch-configuration-112-timestamp-field">Field with Timestamp</a></li>
+<li><a href="#nutch-configuration-112-source-app-field">Source App Name</a></li>
+<li><a href="#nutch-configuration-112-fixed-fields">Fixed Fields</a></li>
+<li><a href="#nutch-configuration-112-parameters">Parameters</a></li>
+<li><a href="#nutch-configuration-112-precedence-sn-site">Precedence of Semantic Navigation Site</a></li>
+</ul>
+</li>
+<li><a href="#nutch-configuration-118">1.2.2. Nutch 1.18</a>
+<ul class="sectlevel4">
+<li><a href="#nutch-configuration-118-parameters">Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#nutch-index-website">1.3. Index a Website</a>
+<ul class="sectlevel3">
+<li><a href="#nutch-index-website-nutch-command-line">1.3.1. Nutch Command Line</a></li>
+<li><a href="#nutch-index-website-nutch-provider-for-wem">1.3.2. Nutch Provider for WEM</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#database">2. Database</a>
+<ul class="sectlevel2">
+<li><a href="#database-installation">2.1. Installation</a></li>
+<li><a href="#database-run">2.2. Run</a>
+<ul class="sectlevel3">
+<li><a href="#database-run-parameters">2.2.1. Parameters</a></li>
+<li><a href="#database-run-example">2.2.2. Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#file-system">3. File System</a>
+<ul class="sectlevel2">
+<li><a href="#file-system-installation">3.1. Installation</a></li>
+<li><a href="#file-system-run">3.2. Run</a>
+<ul class="sectlevel3">
+<li><a href="#file-system-example">3.2.1. Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#wem">4. OpenText WEM Listener</a>
+<ul class="sectlevel2">
+<li><a href="#wem-installation">4.1. Installation</a>
+<ul class="sectlevel3">
+<li><a href="#wem-download">4.1.1. Download</a></li>
+<li><a href="#wem-classpath">4.1.2. Classpath</a></li>
+<li><a href="#wem-deploy">4.1.3. WEM Deploy</a></li>
+<li><a href="#wem-resource">4.1.4. Resource</a></li>
+<li><a href="#wem-events">4.1.5. Events</a></li>
+<li><a href="#wem-command-line">4.1.6. Command Line</a></li>
+</ul>
+</li>
+<li><a href="#wem-configuration-mapping">4.2. Mapping</a></li>
+<li><a href="#wem-xml-elements">4.3. CTD-Turing-Mappings.xml Elements</a>
+<ul class="sectlevel3">
+<li><a href="#wem-xml-elements-common-index-attrs">4.3.1. common-index-attrs</a></li>
+<li><a href="#wem-xml-elements-mapping-definition">4.3.2. mappingDefinition</a></li>
+</ul>
+</li>
+<li><a href="#wem-xml-extensions">4.4. Extensions</a></li>
+<li><a href="#wem-spotlight">4.5. Spotlight</a></li>
+<li><a href="#wem-valid-to-index">4.6. Define if content will be indexed</a></li>
+</ul>
+</li>
+<li><a href="#wordpress">5. Wordpress</a>
+<ul class="sectlevel2">
+<li><a href="#wordpress-installation">5.1. Installation</a></li>
+</ul>
+</li>
+</ul>
+                    </div>
+                </div>
+                <div id="content">
+                    <div class="sect1">
+<h2 id="_preface">Preface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are several connectors to allow you to index content in Viglet Turing ES.</p>
+</div>
+<div class="paragraph">
+<p>SE</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="nutch">1. Apache Nutch</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Plugin for Apache Nutch to index content using crawler.</p>
+</div>
+<div class="sect2">
+<h3 id="nutch-installation">1.1. Installation</h3>
+<div class="paragraph">
+<p>Turing support Apache Nutch 1.12 and 1.8 only, so go to <a href="https://viglet.com/turing/download/" class="bare">https://viglet.com/turing/download/</a> and click on "Integration &gt; Apache Nutch" link to download the turing-nutch-<code>&lt;NUTCH_RELEASE&gt;</code>-bin.zip.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Extract turing-nutch-<code>&lt;NUTCH_RELEASE&gt;</code>-bin.zip file into /appl/viglet/turing/nutch.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">mkdir</span> <span class="nt">-p</span> /appl/viglet/turing/nutch
+unzip turing-nutch.zip <span class="nt">-d</span> /appl/viglet/turing/nutch</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Download and install Apache Nutch 1.12 or 1.18 binary into <a href="http://nutch.apache.org" class="bare">http://nutch.apache.org</a> &gt; Downloads &gt; apache-nutch-<code>&lt;NUTCH_RELEASE&gt;</code>-bin.tar.gz.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">mkdir</span> <span class="nt">-p</span> /appl/apache/
+<span class="nb">cp </span>apache-nutch-&lt;NUTCH_RELEASE&gt;-bin.tar.gz /appl/apache
+<span class="nb">cd</span> /appl/apache
+<span class="nb">tar</span> <span class="nt">-xvzf</span> apache-nutch-&lt;NUTCH_RELEASE&gt;-bin.tar.gz
+<span class="nb">ln</span> <span class="nt">-s</span> apache-nutch-&lt;NUTCH_RELEASE&gt;-bin nutch</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy the Turing Plugin to Apache Nutch.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cp</span> <span class="nt">-R</span> /appl/viglet/turing/nutch/indexer-viglet-turing /appl/apache/nutch/plugins
+<span class="nb">cp</span> <span class="nt">-f</span> /appl/viglet/turing/nutch/conf/<span class="k">*</span> /appl/apache/nutch/conf/</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nutch-configuration">1.2. Configuration</h3>
+<div class="sect3">
+<h4 id="nutch-configuration-112">1.2.1. Nutch 1.12</h4>
+<div class="paragraph">
+<p>This step is only for Apache Nutch 1.12. Edit the /appl/apache/nutch/conf/nutch-site.xml, add or modify the following properties:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>solr.server.url<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>http://127.0.0.1:2700/Sample<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Turing URL + "/" + Turing Semantic Navigation Site.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.url<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>http://127.0.0.1:2700<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Defines the Turing URL into which data should be indexed using the
+      indexer-turing plugin.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.site<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>Sample<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Defines the Turing Semantic Navigation Site.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.auth<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Whether to enable HTTP basic authentication for communicating with Turing. Use the username and password properties to configure your credentials.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.username<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>admin<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      The username of Turing server.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.password<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>admin<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      The password of Turing server.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.timestamp.field<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>modification_date<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Field used to store the timestamp of indexing. The default value is "tstamp".
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.field.type<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>Page<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Type of Content. The default value is "Page".
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.field.source_appS<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>Nutch<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Name of Source Application. The default value is "Nutch".
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="c">&lt;!--
+&lt;property&gt;
+  &lt;name&gt;turing.field.hello&lt;/name&gt;
+  &lt;value&gt;foo&lt;/value&gt;
+  &lt;description&gt;
+      This a test.
+  &lt;/description&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;turing.field.world&lt;/name&gt;
+  &lt;value&gt;bar&lt;/value&gt;
+  &lt;description&gt;
+      This is another test.
+  &lt;/description&gt;
+&lt;/property&gt;
+--&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to add metatag values, make sure parse-metatags is set in plugin.includes and add the following parameters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>metatags.names<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>*<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span> Names of the metatags to extract, separated by ','.
+  Use '*' to extract all metatags. Prefixes the names with 'metatag.'
+  in the parse-metadata. For instance to index description and keywords,
+  you need to activate the plugin index-metadata and set the value of the
+  parameter 'index.parse.md' to 'metatag.description,metatag.keywords'.
+<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+
+
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>index.parse.md<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>metatag.description,metatag.keywords,metatag.language<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>
+  Comma-separated list of keys to be taken from the parse metadata to generate fields.
+  Can be used e.g. for 'description' or 'keywords' provided that these values are generated
+  by a parser (see parse-metatags plugin)
+  <span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>http.content.limit<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>6553600<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;/property&gt;</span></code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="nutch-configuration-112-turing-xml">turing.xml File</h5>
+<div class="paragraph">
+<p>The plugin uses /appl/apache/nutch/conf/turing-mapping.xml to perform the actions:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Rename the fields using, for example: <code>&lt;field source =" content "dest =" text "/&gt;</code> where the <code>source</code> attribute is the original field name and the ` dest` attribute is the new attribute name.</p>
+</li>
+<li>
+<p>Dynamically add the semantic navigation site name, based on the page URL, for example: <code>&lt;site url="https://viglet.com" snSite="Sample"/&gt;</code>, where the <code>url</code> attribute is the URL prefix and the <code>snSite</code> attribute is the semantic navigation site name that was configured in the Turing console.</p>
+</li>
+<li>
+<p>Defines the attribute which is the unique key that will be used when indexing in Turing semantic navigation, for example: <code>&lt;uniqueKey&gt;id&lt;/uniqueKey&gt;</code>, where the value into <code>uniqueKey</code> tag is the attribute.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;mapping&gt;</span>
+  <span class="nt">&lt;fields&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"content"</span> <span class="na">dest=</span><span class="s">"text"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"title"</span> <span class="na">dest=</span><span class="s">"title"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"host"</span> <span class="na">dest=</span><span class="s">"host"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"segment"</span> <span class="na">dest=</span><span class="s">"segment"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"boost"</span> <span class="na">dest=</span><span class="s">"boost"</span> <span class="na">remove=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"digest"</span> <span class="na">dest=</span><span class="s">"digest"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"tstamp"</span> <span class="na">dest=</span><span class="s">"tstamp"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"metatag.description"</span> <span class="na">dest=</span><span class="s">"description"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;/fields&gt;</span>
+  <span class="nt">&lt;sites&gt;</span>
+    <span class="nt">&lt;site</span> <span class="na">url=</span><span class="s">"https://viglet.com"</span> <span class="na">snSite=</span><span class="s">"Sample"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/sites&gt;</span>
+  <span class="nt">&lt;uniqueKey&gt;</span>id<span class="nt">&lt;/uniqueKey&gt;</span>
+<span class="nt">&lt;/mapping&gt;</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="nutch-configuration-112-timestamp-field">Field with Timestamp</h5>
+<div class="paragraph">
+<p>Can specify what is the field will be used to store the timestamp of indexing. The default value is <code>tstamp</code>. So modify the value of <code>turing.timestamp.field</code> property into nutch-site.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.timestamp.field<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>modification_date<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Field used to store the timestamp of indexing. The default value is "tstamp".
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="nutch-configuration-112-source-app-field">Source App Name</h5>
+<div class="paragraph">
+<p>Turing ES Semantic Navigation Site allows to index content from many sources, so can identify where the content was indexed, can specify the name of the source changing the <code>turing.field.source_apps</code> into nutch-site.xml file. The default value is <code>Nutch</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.field.source_apps<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>Nutch<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      Name of Source Application. The default value is "Nutch".
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="nutch-configuration-112-fixed-fields">Fixed Fields</h5>
+<div class="paragraph">
+<p>To create new fixed field during indexing, add new properties with prefix <code>turing.field</code> + <code>name of new custom field</code> into nutch-site.xml file, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.field.hello<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>foo<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      This a test.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>turing.field.world<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>bar<span class="nt">&lt;/value&gt;</span>
+  <span class="nt">&lt;description&gt;</span>
+      This is another test.
+  <span class="nt">&lt;/description&gt;</span>
+<span class="nt">&lt;/property&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Need add these fields to Solr schema.xml file and create them in Semantic Navigation Site &gt; Fields
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect4">
+<h5 id="nutch-configuration-112-parameters">Parameters</h5>
+<div class="paragraph">
+<p>Modify the following parameters:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. nutch-site.xml parameters</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">solr.server.url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing URL + "/" + Turing Semantic Navigation Site.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the fully qualified URL of Turing ES into which data should be indexed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://localhost:2700" class="bare">http://localhost:2700</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing Semantic Navigation Site Name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sample</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.weight.field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field&#8217;s name where the weight of the documents will be written. If it is empty no field will be used.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.auth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to enable HTTP basic authentication for communicating with Turing ES. Use the <code>username</code> and <code>password</code> properties to configure your credentials.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The username of Turing ES server.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password of Turing ES server.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.timestamp.field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field used to store the timestamp of indexing.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tstamp</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.field.<code>FIELD_NAME</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Modify or create a custom field during indexing.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="nutch-configuration-112-precedence-sn-site">Precedence of Semantic Navigation Site</h5>
+<div class="paragraph">
+<p>You can change the Semantic Navigation Site in the following ways:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Change using <code>solr.server.url</code> where is Turing URL + "/" + Turing Semantic Navigation Site, via <code>nutch-site.xml</code> or as a command line parameter. This setting is useful when using Nutch Provider in WEM where WEM uses solr.server.url to pass information about Solr to Nutch. In the case of the Turing plugin in Nutch, it reuses this configuration to know which Turing server and which site to use.</p>
+</li>
+<li>
+<p>Change using <code>turing.site</code>, via <code>nutch-site.xml</code> or as a command line parameter. If using <code>turing.force.config=true</code> as parameter. This setting will override <code>solr.server.url</code>.</p>
+</li>
+<li>
+<p>Adding in the <code>turing.xml</code> file, for example: <code>&lt;site url="https://viglet.com" snSite="Sample"/&gt;</code>. If you have this setting, it will overwrite the Semantic Navigation Site of <code>solr.server.url</code> and <code>turing.site</code>.</p>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="nutch-configuration-118">1.2.2. Nutch 1.18</h4>
+<div class="paragraph">
+<p>This step is only for Apache Nutch 1.18. Edit the /appl/apache/nutch/conf/index-writers.xml</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;writers</span> <span class="na">xmlns=</span><span class="s">"http://lucene.apache.org/nutch"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xsi:schemaLocation=</span><span class="s">"http://lucene.apache.org/nutch index-writers.xsd"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;writer</span> <span class="na">id=</span><span class="s">"indexer_viglet_turing_1"</span>
+		<span class="na">class=</span><span class="s">"com.viglet.turing.nutch.indexwriter.TurNutchIndexWriter"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;parameters&gt;</span>
+			<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"url"</span> <span class="na">value=</span><span class="s">"http://localhost:2700"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"site"</span> <span class="na">value=</span><span class="s">"Sample"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"commitSize"</span> <span class="na">value=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"weight.field"</span> <span class="na">value=</span><span class="s">""</span><span class="nt">/&gt;</span>
+			<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"auth"</span> <span class="na">value=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"username"</span> <span class="na">value=</span><span class="s">"admin"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;param</span> <span class="na">name=</span><span class="s">"password"</span> <span class="na">value=</span><span class="s">"admin"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/parameters&gt;</span>
+		<span class="nt">&lt;mapping&gt;</span>
+			<span class="nt">&lt;copy&gt;</span>
+				<span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"content"</span> <span class="na">dest=</span><span class="s">"text"</span><span class="nt">/&gt;</span>
+				<span class="c">&lt;!-- &lt;field source="title" dest="title,search"/&gt; --&gt;</span>
+			<span class="nt">&lt;/copy&gt;</span>
+			<span class="nt">&lt;rename&gt;</span>
+				<span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"metatag.description"</span> <span class="na">dest=</span><span class="s">"description"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"metatag.keywords"</span> <span class="na">dest=</span><span class="s">"keywords"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"metatag.charset"</span> <span class="na">dest=</span><span class="s">"charset"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;/rename&gt;</span>
+			<span class="nt">&lt;remove&gt;</span>
+				<span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"segment"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;field</span> <span class="na">source=</span><span class="s">"boost"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;/remove&gt;</span>
+		<span class="nt">&lt;/mapping&gt;</span>
+	<span class="nt">&lt;/writer&gt;</span>
+<span class="nt">&lt;/writers&gt;</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="sect4">
+<h5 id="nutch-configuration-118-parameters">Parameters</h5>
+<div class="paragraph">
+<p>Modify the following parameters:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. index-writers.xml parameters</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the fully qualified URL of Turing ES into which data should be indexed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://localhost:2700" class="bare">http://localhost:2700</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing Semantic Navigation Site Name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sample</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">weight.field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field&#8217;s name where the weight of the documents will be written. If it is empty no field will be used.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">commitSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the number of documents to send to Turing ES in a single update batch. Decrease when handling very large documents to prevent Nutch from running out of memory.</p>
+<p class="tableblock"><strong>Note</strong>: It does not explicitly trigger a server side commit.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1000</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">auth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to enable HTTP basic authentication for communicating with Turing ES. Use the <code>username</code> and <code>password</code> properties to configure your credentials.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The username of Turing ES server.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password of Turing ES server.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nutch-index-website">1.3. Index a Website</h3>
+<div class="sect3">
+<h4 id="nutch-index-website-nutch-command-line">1.3.1. Nutch Command Line</h4>
+<div class="paragraph">
+<p>There are many ways to index a website using Apache Nutch. Learn more at <a href="https://cwiki.apache.org/confluence/display/nutch/NutchTutorial" class="bare">https://cwiki.apache.org/confluence/display/nutch/NutchTutorial</a>.</p>
+</div>
+<div class="paragraph">
+<p>For example, a simple way to index <a href="https://viglet.com" class="bare">https://viglet.com</a>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Nutch expects some seed URLs from where to start the crawling.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> /appl/apache/nutch/
+<span class="nb">mkdir </span>urls
+<span class="nb">echo</span> <span class="s2">"https://viglet.com"</span> <span class="o">&gt;</span> urls/seed.txt</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+You can also limit crawling to a certain hostname etc. by setting a regular expression in <code>/appl/apache/nutch/runtime/local/config/regex-filter.txt</code>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Index the content with Turing ES</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="c"># 1.12</span>
+<span class="nb">cd</span> /appl/apache/nutch/
+bin/crawl <span class="nt">-i</span> urls/ crawl-output/ 5
+
+<span class="c"># 1.18</span>
+<span class="nb">cd</span> /appl/apache/nutch/
+bin/crawl <span class="nt">-i</span> <span class="nt">-s</span> urls/ crawl-output/ 5</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>or with parameter, for instance:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="c"># 1.12 (Alternative 1)</span>
+<span class="nb">cd</span> /appl/apache/nutch/
+bin/crawl <span class="nt">-D</span> turing.force.config<span class="o">=</span><span class="nb">true</span> <span class="nt">-D</span> turing.site<span class="o">=</span><span class="s2">"Sample"</span> <span class="nt">-Dturing</span>.locale<span class="o">=</span><span class="s2">"en_US"</span> <span class="nt">-i</span> urls/ crawl-output/ 5
+
+<span class="c"># 1.12 (Alternative 2)</span>
+<span class="nb">cd</span> /appl/apache/nutch/
+bin/crawl <span class="nt">-D</span> solr.server.url<span class="o">=</span><span class="s2">"http://localhost:2700/Sample"</span> <span class="nt">-i</span> urls/ crawl-output/ 5
+
+<span class="c"># 1.18</span>
+<span class="nb">cd</span> /appl/apache/nutch/
+bin/crawl <span class="nt">-D</span> turing.site<span class="o">=</span><span class="s2">"Sample"</span> <span class="nt">-i</span> <span class="nt">-s</span> urls/ crawl-output/ 5</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. crawl Parameters</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Example</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D solr.server.url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D solr.server.url="http://localhost:2700/Sample"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing URL + "/" + Turing Semantic Navigation Site.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.force.config</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.force.config=true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use turing.url and turing.site instead of solr.sever.url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.url="localhost:2700"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines the fully qualified URL of Turing ES into which data should be indexed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.url="Sample"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing Semantic Navigation Site Name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.auth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.auth=false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to enable HTTP basic authentication for communicating with Turing ES. Use the <code>username</code> and <code>password</code> properties to configure your credentials.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.username="admin"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The username of Turing ES server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-D turing.password="admin"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password of Turing ES server.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="nutch-index-website-nutch-provider-for-wem">1.3.2. Nutch Provider for WEM</h4>
+<div class="paragraph">
+<p>Web Experience Management, version 16.2 includes an example of a Page Searchable Provider using Apache Nutch, the installation and configuration is described at <a href="http://webapp.opentext.com/piroot/wcmgt/v160200/wcmgt-aci/en/html/jsframe.htm?nutch-provider-config" class="bare">http://webapp.opentext.com/piroot/wcmgt/v160200/wcmgt-aci/en/html/jsframe.htm?nutch-provider-config</a></p>
+</div>
+<div class="paragraph">
+<p>You can use the same Nutch Provider for InfoFusion (<code>com.vignette.as.server.pluggable.service.pagesearch.nutch.NutchProvider</code>), but using the Nutch with Turing Plugin.
+In Nutch Provider Configuration at WEM Configuration Console, change the variables below:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SOLR_URL: Fill with Turing URL, for example, <a href="http://localhost:2700" class="bare">http://localhost:2700</a>, instead of Solr URL;</p>
+</li>
+<li>
+<p>NUTCH_CONFIGURATION: In the XML file, put the name Turing Semantic Navigation Site in the <code>core</code> attribute, for example:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;nutch-config</span>
+		<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+		<span class="na">xmlns=</span><span class="s">"http://www.vignette.com/xmlschemas/nutch-config"</span>
+		<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.vignette.com/xmlschemas/nutch-config nutch-config.xsd"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;default</span> <span class="na">crawlId=</span><span class="s">"WEM_default"</span> <span class="na">core=</span><span class="s">"Sample"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;configuration</span> <span class="na">crawlId=</span><span class="s">"WEM_en"</span> <span class="na">core=</span><span class="s">"Sample_EN"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;locale</span> <span class="na">name=</span><span class="s">"en"</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;locale</span> <span class="na">name=</span><span class="s">"en_US"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;/configuration&gt;</span>
+	<span class="nt">&lt;configuration</span> <span class="na">crawlId=</span><span class="s">"WEM_es"</span> <span class="na">core=</span><span class="s">"Sample_ES"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;locale</span> <span class="na">name=</span><span class="s">"es"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;/configuration&gt;</span>
+	<span class="nt">&lt;configuration</span> <span class="na">crawlId=</span><span class="s">"WEM_de"</span> <span class="na">core=</span><span class="s">"Sample_DE"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;locale</span> <span class="na">name=</span><span class="s">"de"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;/configuration&gt;</span>
+	<span class="nt">&lt;configuration</span> <span class="na">crawlId=</span><span class="s">"WEM_fr"</span> <span class="na">core=</span><span class="s">"Sample_FR"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;locale</span> <span class="na">name=</span><span class="s">"fr"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;/configuration&gt;</span>
+	<span class="nt">&lt;configuration</span> <span class="na">crawlId=</span><span class="s">"WEM_it"</span> <span class="na">core=</span><span class="s">"Sample_IT"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;locale</span> <span class="na">name=</span><span class="s">"it"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;/configuration&gt;</span>
+<span class="nt">&lt;/nutch-config&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+If you are using the Turing ES Semantic Navigation Site&#8217;s multilingual functionality, you can repeat the Site name in the <code>core</code> for each <code>locale</code> of this setting.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+In Nutch 1.12, if there are many sites with different semantic navigation sites, use the turing-mapping.xml file to create association between the URL definitions and the semantic navigation site, for example: &lt;site url = "https:// viglet.com" snSite = "Sample" /&gt;
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="database">2. Database</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Command line that uses the same concept as sqoop (<a href="https://sqoop.apache.org/" class="bare">https://sqoop.apache.org/</a>), to create complex queries and map attributes to index based on the result.</p>
+</div>
+<div class="sect2">
+<h3 id="database-installation">2.1. Installation</h3>
+<div class="paragraph">
+<p>Go to <a href="https://viglet.com/turing/download/" class="bare">https://viglet.com/turing/download/</a> and click on "Integration &gt; Database Connector" link to download it.</p>
+</div>
+<div class="paragraph">
+<p>Copy the turing-jdbc.jar file to /appl/viglet/turing/jdbc</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">mkdir</span> <span class="nt">-p</span> /appl/viglet/turing/jdbc
+<span class="nb">cp </span>turing-jdbc.jar.jar /appl/viglet/turing/jdbc</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="database-run">2.2. Run</h3>
+<div class="paragraph">
+<p>To run Turing JDBC Connector executable JAR file, just execute the following line:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ </span>java <span class="nt">-jar</span> /appl/viglet/turing/jdbc/turing-jdbc.jar &lt;PARAMETERS&gt;</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="database-run-parameters">2.2.1. Parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. Turing JDBC parameters</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--connect, -c</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify JDBC connect string</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--driver, -d</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manually specify JDBC driver class to use</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--query, -q</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Import the results of statement</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specify the Semantic Navigation Site</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--chunk, -z</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of items to be sent to the queue</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class-name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Customized Class to modified rows</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--deindex-before-importing</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Deindex before importing</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--encoding</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UTF-8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Encoding Source</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--file-content-field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that shows Content of File</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--file-path-field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field with File Path</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--file-size-field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Field that shows Size of File in bytes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--help</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Print usage instructions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--include-type-in-id, -i</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Include Content Type name in Id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--max-content-size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum size that content can be indexed (megabytes)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--multi-valued-field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Multi Valued Fields</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--password, -p</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set authentication password</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--remove-html-tags-field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Remove HTML Tags into content of field</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--server, -s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://localhost:2700" class="bare">http://localhost:2700</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Viglet Turing Server</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--show-output, -o</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show Output</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--type, -t</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CONTENT_TYPE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set Content Type name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--username, -u</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set authentication username</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="database-run-example">2.2.2. Example</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">java <span class="nt">-jar</span> ./turing-jdbc.jar <span class="nt">--deindex-before-importing</span> <span class="nb">true</span> <span class="se">\</span>
+<span class="nt">--include-type-in-id</span> <span class="nb">true</span> <span class="nt">-z</span> 1 <span class="se">\</span>
+<span class="nt">--file-path-field</span> filePath <span class="nt">--file-content-field</span> text <span class="se">\</span>
+<span class="nt">--file-size-field</span> fileSize <span class="nt">-t</span> Document <span class="se">\</span>
+<span class="nt">--multi-valued-separator</span> <span class="s2">";"</span> <span class="nt">--multi-valued-field</span> field1,field2 <span class="se">\</span>
+<span class="nt">--class-name</span> com.viglet.turing.tool.ext.TurJDBCCustomSample <span class="se">\</span>
+<span class="nt">-d</span> com.mysql.jdbc.Driver <span class="nt">-c</span> jdbc:mysql://localhost/sampleDB  <span class="se">\</span>
+<span class="nt">-q</span> <span class="s2">"select * from sampleTable"</span> <span class="nt">-u</span> sampleUser <span class="nt">-p</span> samplePassword</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="file-system">3. File System</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Command line to index files, extracting text from files such as Word, Excel, PDF, including images, through OCR.</p>
+</div>
+<div class="sect2">
+<h3 id="file-system-installation">3.1. Installation</h3>
+<div class="paragraph">
+<p>Go to <a href="https://viglet.com/turing/download/" class="bare">https://viglet.com/turing/download/</a> and click on "Integration &gt; FileSystem Connector" link to download it.</p>
+</div>
+<div class="paragraph">
+<p>Copy the turing-filesystem.jar file to /appl/viglet/turing/fs</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">mkdir</span> <span class="nt">-p</span> /appl/viglet/turing/fs
+<span class="nb">cp </span>turing-filesystem.jar /appl/viglet/turing/fs</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="file-system-run">3.2. Run</h3>
+<div class="paragraph">
+<p>To run Turing FileSystem Connector executable JAR file, just execute the following line:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ </span>java <span class="nt">-jar</span> /appl/viglet/turing/fs/turing-filesystem.jar &lt;PARAMETERS&gt;</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="file-system-example">3.2.1. Example</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ </span>java <span class="nt">-jar</span> build/libs/turing-filesystem.jar <span class="nt">--server</span> http://localhost:2700 <span class="nt">--nlp</span> b2b4a1ff-3ea3-4cec-aa95-f54d0f5f3ff8 <span class="nt">--source-dir</span> /appl/myfiles <span class="nt">--output-dir</span> /appl/results</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="wem">4. OpenText WEM Listener</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenText WEM Listener to publish content to Viglet Turing</p>
+</div>
+<div class="sect2">
+<h3 id="wem-installation">4.1. Installation</h3>
+<div class="sect3">
+<h4 id="wem-download">4.1.1. Download</h4>
+<div class="paragraph">
+<p>Go to <a href="https://viglet.com/turing/download/" class="bare">https://viglet.com/turing/download/</a> and click on "Integration &gt; WEM Listener" link to download it.</p>
+</div>
+<div class="paragraph">
+<p>Extract the turing-wem.zip file to /appl/viglet/turing/wem</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">mkdir</span> <span class="nt">-p</span> /appl/viglet/turing/wem
+unzip turing-wem.zip <span class="nt">-d</span> /appl/viglet/turing/wem</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="wem-classpath">4.1.2. Classpath</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Copy the  turing-wem-all.jar to WEM and CDS Library directory, for example:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cp</span> /appl/viglet/turing/wem/turing-wem-all.jar /appl/ot/WEM/Content/&lt;VERSION&gt;/lib/</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Edit the <code>cda.classpath</code> file of Management and Delivery Stages, for examples:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">/appl/otwork/WEM/inst-vgninst/cfgagent/vcm-vgninst/cdsvcs/stage-mgmt/cds-mgmt/cda-mgmt/conf/cda.classpath
+/appl/otwork/WEM/inst-vgninst/cfgagent/vcm-vgninst/cdsvcs/stage-Live/cds-Live/cda-Live/conf/cda.classpath</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>These cda.classpath files contain the following lines:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="properties"><span class="py">CLASSPATH.6</span><span class="p">=</span><span class="se">\#</span><span class="s">INSTALL_DIR</span><span class="se">\#</span><span class="s">/lib/jaxws</span>
+<span class="py">CLASSPATH.5</span><span class="p">=</span><span class="se">\#</span><span class="s">INSTALL_DIR</span><span class="se">\#</span><span class="s">/lib</span>
+<span class="py">CLASSPATH.4</span><span class="p">=</span><span class="se">\#</span><span class="s">INSTALL_DIR</span><span class="se">\#</span><span class="s">/lib/appsvcsda/jsp-api.jar</span>
+<span class="py">CLASSPATH.3</span><span class="p">=</span><span class="se">\#</span><span class="s">INSTALL_DIR</span><span class="se">\#</span><span class="s">/lib/appsvcsda/vgn-appsvcs-dadataobject.jar</span>
+<span class="py">CLASSPATH.2</span><span class="p">=</span><span class="se">\#</span><span class="s">INSTALL_DIR</span><span class="se">\#</span><span class="s">/lib/jax-qname.jar</span>
+<span class="py">CLASSPATH.1</span><span class="p">=</span><span class="se">\#</span><span class="s">INSTALL_DIR</span><span class="se">\#</span><span class="s">/jdbc</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add the following line in each cda.classpath</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="properties"><span class="py">CLASSPATH.7</span><span class="p">=</span><span class="se">\#</span><span class="s">INSTALL_DIR</span><span class="se">\#</span><span class="s">/lib/turing-wem-all.jar</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="wem-deploy">4.1.3. WEM Deploy</h4>
+<div class="paragraph">
+<p>Add the turing-wem-all.jar into WEM using configp:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ ./configp
+============================================================
+
+Configuration Program Main Menu
+
+-----------------------------------------
+   1.  Connect to WEM Server
+   2.  Create a Disconnected Configuration Agent
+   3.  Remove a Disconnected Configuration Agent
+   4.  Repair Management Server
+
+   q.  Quit
+
+   &gt; 1
+============================================================
+Connect to WEM Server: WEM Server Connection Information
+
+
+WEM Server host: wemserver
+WEM Server port: 27110
+WEM Server administrator: vgnadmin
+WEM Server administrative password:
+
+*****************************************
+ You have entered the following:
+
+  WEM Server host = wemserver
+  WEM Server port = 27110
+  WEM Server administrator = vgnadmin
+  WEM Server administrative password = ********
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel )?[y]:
+Connecting...
+Connected to t3://wemserver:27110
+============================================================
+
+Managing Configuration Services
+-----------------------------------------
+   1.  Manage a Product Instance
+   2.  Create a Configuration Agent
+   3.  Remove a Configuration Agent
+   4.  Register a Configuration Agent
+   5.  Manage Applications
+   6.  List Configuration Settings
+
+   b.  Back
+   q.  Quit
+
+   &gt; 5
+============================================================
+Manage Applications: Manage Application
+
+
+  To register or unregister Extension Modules, select
+  Register Product Extensions. To modify an existing
+  deployed application, select Update Runtime Services.
+
+Select type of application update
+---------------------------------
+   1.  Register Product Extensions
+   2.  Update Runtime Services
+
+   b.  Back
+   c.  Cancel
+
+   &gt; 1
+
+*****************************************
+ You have entered the following:
+
+  Select type of application update = Register Product Extensions
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]:
+============================================================
+Manage Applications: Deployment Types
+
+
+  You can choose to deploy an extension which exists
+  within the VCM ear container or a standalone application
+  outside of the VCM ear container.
+
+Do you want to deploy an extension or standalone application?
+--------------------------------------------------
+   1.  Extension
+   2.  Standalone Application
+
+   b.  Back
+   c.  Cancel
+
+   &gt; 1
+
+*****************************************
+ You have entered the following:
+
+  Do you want to deploy an extension or standalone application? = Extension
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]:
+============================================================
+Manage Applications: Deployment Actions
+
+
+Register Extension Type
+-----------------------
+   1.  JAR Extension Module
+   2.  WAR Extension Module
+   3.  Multiple Extension Modules - can include both JAR and WAR files
+
+   b.  Back
+   c.  Cancel
+
+   &gt; 1
+Deployment Action
+-----------------
+   1.  Deploy Extension
+   2.  Undeploy Extension
+
+   b.  Back
+   c.  Cancel
+
+   &gt; 1
+
+*****************************************
+ You have entered the following:
+
+  Register Extension Type = jarext (JAR Extension Module)
+  Deployment Action = Deploy Extension
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]:
+============================================================
+Manage Applications: Extension JAR Path
+
+
+  Enter the path to the archive file containing the
+  extension. This file is registered with the repository
+  and deployed to the application server.
+
+  Important!! Deployment of an extension could take
+  up to 15 mins.
+
+JAR Path (example: C:\vign_extn.jar): /appl/viglet/turing/wem/turing-wem-all.jar
+
+*****************************************
+ You have entered the following:
+
+  JAR Path (example: C:\vign_extn.jar) = /appl/viglet/turing/wem/turing-wem-all.jar
+
+
+Is this correct ( (y)es, (n)o, (b)ack, (c)ancel, (u)ndo )?[y]: y
+============================================================
+Manage Applications: Confirm Configuration
+
+
+  Are you ready to perform this action?
+
+
+
+Continue? ( (y)es, (n)o, (b)ack, (c)ancel )? [y]: y
+
+Confirm Configuration:
+
+  All the information has been collected. Would you
+  like to commit the configuration? (y/n) [y]: y
+
+Step 1 of 3: Validating Input ...
+Step 2 of 3: Check Configuration Status ...
+Step 3 of 3: Updating Application ...
+
+Success:
+
+The configuration wizard completed successfully.</pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="wem-resource">4.1.4. Resource</h4>
+<div class="paragraph">
+<p>Access the Configuration Console (<a href="http://wem_host:wem_port/configconsole" class="bare">http://wem_host:wem_port/configconsole</a>) and add the VigletTuring Generic Resource in each Delivery Stage that will index to Turing Semantic Navigation.</p>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Click on right-button on <code>Configuration Console &gt; Content &gt; Delivery Services &gt; Content Delivery Stage - Live &gt; Resources</code>, select Add Resource</p>
+</li>
+<li>
+<p>In Resource Type, select "Generic Resource" and click Next</p>
+</li>
+<li>
+<p>In Resource Name, type: <code>VigletTuring</code> and click Next</p>
+</li>
+<li>
+<p>In Generic Resource Type, select "Other(Any stage-specific resource subtype information)" and click Next</p>
+</li>
+<li>
+<p>In Resource Subtype, type: <code>Properties</code> and click Next</p>
+</li>
+<li>
+<p>In Resource Information &gt; Non-Encrypted Data type: <code>fill later</code> and Encrypted Data leaves blank and click Next</p>
+</li>
+<li>
+<p>In Confirm Configuration click Finish.</p>
+</li>
+<li>
+<p>Edit "Configuration Console &gt; Content &gt; Delivery Services &gt; Content Delivery Stage - Production &gt; Resources &gt; Resource Type - Generic &gt; Resource - VigletTuring &gt; Generic Resource &gt; DATA" and replace "fill later" for:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="properties"><span class="py">turing.url</span><span class="p">=</span><span class="s">http://localhost:2700</span>
+<span class="py">turing.mappingsxml</span><span class="p">=</span><span class="s">/appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml</span>
+<span class="py">turing.login</span><span class="p">=</span><span class="s">admin</span>
+<span class="py">turing.password</span><span class="p">=</span><span class="s">admin</span>
+<span class="py">turing.provider.name</span><span class="p">=</span><span class="s">"WEM"</span>
+
+<span class="py">dps.config.association.priority</span><span class="p">=</span><span class="s">SampleSite</span>
+<span class="py">dps.config.filesource.path</span><span class="p">=</span><span class="s">/opentext/otwork/WEM/inst-vgninst/file_source</span>
+
+<span class="py">dps.site.default.urlprefix</span><span class="p">=</span><span class="s">http://mywemsite.example.com</span>
+<span class="py">dps.site.default.contextname</span><span class="p">=</span><span class="s">sites</span>
+<span class="py">dps.site.default.sn.site</span><span class="p">=</span><span class="s">Sample</span>
+<span class="py">dps.site.default.sn.locale</span><span class="p">=</span><span class="s">en_US</span>
+<span class="py">dps.site.default.en.sn.site</span><span class="p">=</span><span class="s">SampleEN</span>
+
+<span class="py">dps.site.Intranet.urlprefix</span><span class="p">=</span><span class="s">http://intranet.example.com</span>
+<span class="py">dps.site.Intranet.contextname</span><span class="p">=</span><span class="s">sites</span>
+<span class="py">dps.site.Intranet.sn.site</span><span class="p">=</span><span class="s">Intra</span>
+<span class="py">dps.site.Intranet.sn.locale</span><span class="p">=</span><span class="s">en_US</span>
+<span class="py">dps.site.Intranet.it_IT.sn.locale</span><span class="p">=</span><span class="s">it</span>
+<span class="py">dps.site.Intranet.es.sn.site</span><span class="p">=</span><span class="s">IntraES</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>Where</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. VigletTuring Generic Resource Properties</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.url</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing URL.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.mappingsxml</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">XML File.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.login</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing Login.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing Password.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turing.provider.name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provider Identifier that will be send to Turing during the indexing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.config.association.priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the content is associated with more than one site, you can define which site will be chosen to avoid conflict.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.config.filesource.path</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used when processing a file using <code>com.viglet.turing.wem.ext.TurStaticFile</code>, in order to locate the file in the file sytem.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.default.urlprefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prefix will be used to create URL of content in Search.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.default.contextname</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Context Name of DPS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.default.sn.site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of site on Turing Semantic Navigation, that will be used to index the WEM Content.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.default.sn.locale</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the content has no locale attribute, you can specify a default Semantic Navigation Site that will be indexed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.default.&lt;locale&gt;.sn.site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the content has locale attribute, you can specify a different Semantic Navigation Site that will be indexed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.&lt;site&gt;.urlprefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prefix will be used to create URL of content in Search for specific site.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.&lt;site&gt;.contextname</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Context Name of DPS for specific site.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.&lt;site&gt;.sn.site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of site on Turing Semantic Navigation for specific site, that will be used to index the WEM Content.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.&lt;site&gt;.sn.locale</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the content for specific site has no locale attribute, you can specify a default Semantic Navigation Site that will be indexed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.&lt;site&gt;.&lt;locale&gt;.sn.locale</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the content of a specific site has a locale attribute, you can change the current locale to a new one that will be indexed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dps.site.&lt;site&gt;.&lt;locale&gt;.sn.site</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If the content for specific site has locale attribute, you can specify a different Semantic Navigation Site that will be indexed.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Repeat this procedure in other Management and Delivery Stages that will use Turing Semantic Navigation
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+The Listener uses URL Scheme from Site to generate Content URL.
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="wem-events">4.1.5. Events</h4>
+<div class="paragraph">
+<p>Access the Configuration Console (<a href="http://wem_host:wem_port/configconsole" class="bare">http://wem_host:wem_port/configconsole</a>) and add the EventListener in each Delivery Stage that will index to Turing Semantic Navigation.</p>
+</div>
+<div class="paragraph">
+<p>Configure the Event listeners.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Register the required listeners to the events as specified below:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Configuration Console &gt; Content &gt; Delivery Services &gt; Content Delivery Stage - Live &gt; Content Delivery Services - Live &gt; Application Services &gt; Events &gt; Deployment.ManagedObjectCreate</code></p>
+<div class="literalblock">
+<div class="content">
+<pre>com.viglet.turing.wem.listener.DeploymentEventListener</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>Configuration Console &gt; Content &gt; Delivery Services &gt; Content Delivery Stage - Live &gt; Content Delivery Services - Live &gt; Application Services &gt; Events &gt; Deployment.ManagedObjectUpdate</code></p>
+<div class="literalblock">
+<div class="content">
+<pre>com.viglet.turing.wem.listener.DeploymentEventListener</pre>
+</div>
+</div>
+</li>
+<li>
+<p><code>Configuration Console &gt; Content &gt; Delivery Services &gt; Content Delivery Stage - Live &gt; Content Delivery Services - Live &gt; Application Services &gt; Events &gt; PrePersistence.Delete</code></p>
+<div class="literalblock">
+<div class="content">
+<pre>com.viglet.turing.wem.listener.PrePersistenceEventListener</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Be sure to copy any existing listeners from the current run value and append the new listener to    the end of the list during registration. If needed, see section 6 of the Management Console Extensibility SDK guide for more information on registering event listeners.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Commit the configuration changes and restart the DA</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="wem-command-line">4.1.6. Command Line</h4>
+<div class="paragraph">
+<p>Copy <code>/appl/viglet/turing/wem/command-line/&lt;WEM_VERSION&gt;/turing-wem</code> to <code>&lt;WEM_DIR&gt;/bin</code>, it works a lot like <code>vgncontentindex</code> command line.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Alternative Parameter</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--all</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Index all instances of all content types and object types.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--content-type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-c</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The XML name of the content type or object type whose instances are to be indexed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--debug</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Change the log level to debug</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--guids</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-g</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path to a file containing the GUID(s) of content instances or static files to be indexed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--help</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Print usage instructions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-h</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The host on which Content Management server is installed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--page-size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-z</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The page size. After processing a page the processed count is written to an offset file. This helps the indexer to resume from that page even after failure.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-p</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password for the user name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--siteName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-s</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sample</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WEM site name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-u</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A username to log in to the Content Management Server.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--working-dir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-w</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The working directory where the vgncfg.properties file is located.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+The ~/OpenText/turing-wem.log is always created during command line execution.
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="wem-configuration-mapping">4.2. Mapping</h3>
+<div class="paragraph">
+<p>Create a /appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml file with the following lines:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;mappingDefinitions&gt;</span>
+    <span class="nt">&lt;common-index-attrs&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.TurCTDName"</span> <span class="na">mandatory=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>type<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.TurWEMPublicationDate"</span> <span class="na">mandatory=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>publication_date<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.TurWEMModificationDate"</span> <span class="na">mandatory=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>modification_date<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.TurSiteName"</span> <span class="na">mandatory=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>site<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.HTML2Text"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>text<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.HTML2Text"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>abstract<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.DPSUrl"</span> <span class="na">mandatory=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>url<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+    <span class="nt">&lt;/common-index-attrs&gt;</span>
+    <span class="nt">&lt;mappingDefinition</span> <span class="na">contentType=</span><span class="s">"INNOVATE_PRESS_RELEASE"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;index-attrs&gt;</span>
+            <span class="nt">&lt;srcAttr</span> <span class="na">xmlName=</span><span class="s">"title"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;tag&gt;</span>title<span class="nt">&lt;/tag&gt;</span>
+            <span class="nt">&lt;/srcAttr&gt;</span>
+            <span class="nt">&lt;srcAttr</span> <span class="na">xmlName=</span><span class="s">"teaser"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;tag&gt;</span>abstract<span class="nt">&lt;/tag&gt;</span>
+            <span class="nt">&lt;/srcAttr&gt;</span>
+            <span class="nt">&lt;srcAttr</span> <span class="na">xmlName=</span><span class="s">"body"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;tag&gt;</span>text<span class="nt">&lt;/tag&gt;</span>
+            <span class="nt">&lt;/srcAttr&gt;</span>
+            <span class="nt">&lt;srcAttr</span> <span class="na">textValue=</span><span class="s">"foo bar"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;tag&gt;</span>text<span class="nt">&lt;/tag&gt;</span>
+            <span class="nt">&lt;/srcAttr&gt;</span>
+            <span class="nt">&lt;srcAttr</span> <span class="na">xmlName=</span><span class="s">"image"</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.TurStaticFile"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;tag&gt;</span>text<span class="nt">&lt;/tag&gt;</span>
+            <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;/index-attrs&gt;</span>
+    <span class="nt">&lt;/mappingDefinition&gt;</span>
+<span class="nt">&lt;/mappingDefinitions&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+There should be a srcAttr element for each content type field to be indexed by Turing ES.  The xmlName attribute should contain the XML Name of the relevant field.
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="wem-xml-elements">4.3. CTD-Turing-Mappings.xml Elements</h3>
+<div class="paragraph">
+<p>The following sections describe the delements defined in the CTD-Turing-Mappings.xml file under the root element <code>&lt;mappingDefinitions&gt;</code>:</p>
+</div>
+<div class="sect3">
+<h4 id="wem-xml-elements-common-index-attrs">4.3.1. common-index-attrs</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. srcAttr (common-index-attrs) Element Definition</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">srcAttr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of tags (turing fields) that can be used by CTDs in mappingDefinition.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. srcAttr (common-index-attrs) Attributes</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Required/ Optional</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mandatory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"false"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If "true", it means the tag will always be inserted in all CTDS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classname</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom class to process the field value. Implicitly define this custom class to process the field value className in mappingDefinition srcAttr when the same tag is used.</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="wem-xml-elements-mapping-definition">4.3.2. mappingDefinition</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. mappingDefinition Element Definition</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CTD Mapping.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. mappingDefinition Attribute</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Required/ Optional</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contentType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Type XML Name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">validToIndex</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Class that implements IValidToIndex and returns boolean if index the current Content Instance.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. index-attrs Element Definition</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">index-attrs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Content Type Field</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. srcAttr (mappingDefinition) Element Definitiion</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">srcAttr</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Type Field to be indexed by Turing ES.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. srcAttr (mappingDefinition) Attributes</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Required/ Optional</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">xmlName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required (if className or textValue is missing)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Type Field XML Name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">relation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required (if xmlName is missing)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Type Relation XML Name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">uniqueValues</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"false"</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A List return unique values.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">valueType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If "html" then convert HTML to Text.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classname</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required (if xmlName or textValue is missing)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom class to process the field value.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">textValue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required (if xmlName or classname is missing)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">returns a text for the tag (Turing field)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 13. tag Element Definition</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Element Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tag</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Turing ES Semantic Navigation Field</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="wem-xml-extensions">4.4. Extensions</h3>
+<div class="paragraph">
+<p>There are ready-made extensions to be used when indexing WEM content through the Turing Listener.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 14. Extensions</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Plugin</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurCategory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Taxonomy Classifications from Content Instance</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurChannelDescription</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Channel Description.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurChannelPageName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of Channel Page.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurChannelPageUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">URL of Channel Page.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurCTDName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Content Type Name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurDeindexParentChannel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Desindex Parent Channel</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurDPSUrl</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DPS URL based on URL Scheme.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurHTML2Text</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Convert HTML to Text.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurParentChannel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parent Channel of Content Instance.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurSiteName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Site name associated.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurSpotlightExtraFields</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JSON with info about Spotlight Content Instance (internal)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurStaticFile</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Get WEM ID from defined attribute and convert to <a href="file://path_of_file" class="bare">file://path_of_file</a>, using the <code>dps.config.filesource.path</code> properties of <code>VigletTuring Resource</code>. This extension modifies the listener workflow, as it adds the files of this content instance to the zip file along with export.json and sends it to the Turing ES, which will process these files and add the content in the attributes of export.json, before its indexing.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurStaticFileSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Static File Size</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurWEMPublicationDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Publication Date of Content Instance, if not exist use Modification Date.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurWEMModificationDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Modification Date of Content Instance.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurSpotlightExtraFields</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Extract attributes of Spotlight Content Instance.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">com.viglet.turing.wem.ext.TurChannelPath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Channel Path.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="wem-spotlight">4.5. Spotlight</h3>
+<div class="paragraph">
+<p>The Turing ES Semantic Navigation Site allows you to create spotlights that will be highlighted in the search, based on the registered terms.
+There are two types of Spotlight:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Managed - Manipulated on the Turing ES console.</p>
+</li>
+<li>
+<p>Unmanaged - Created externally and not manipulated in the Turing ES console.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In this case, it is possible to create Unmanaged Spotlights using WEM, creating a CTD and whenever handled Content Instances of this CTD, the WEM Listener will send this Content and the Turing ES will treat this content with a different flow, which will allow creating new Unmanaged Spotlight.
+For this, you need to import the Spotlight CTD into WEM using the following command line, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">$ </span>./vgnimport <span class="nt">-h</span> localhost:27110 <span class="nt">-u</span> vgnadmin <span class="nt">-p</span> vgnadmin <span class="nt">-f</span> /appl/viglet/turing/wem/imports/turing-ctd.zip <span class="nt">-l</span> /appl/viglet/turing/wem/imports/turing-ctd.log</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In /appl/viglet/turing/wem/conf/CTD-Turing-Mappings.xml file you need to add the following lines:</p>
+</div>
+<div class="listingblock">
+<div class="title">Mapping Definition XML File</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;mappingDefinition</span> <span class="na">contentType=</span><span class="s">"TUR_SPOTLIGHT"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;index-attrs&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">xmlName=</span><span class="s">"NAME-TUR-SPOTLIGHT"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>name<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">xmlName=</span><span class="s">"TERMS-TUR-SPOTLIGHT"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>terms<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+        <span class="nt">&lt;srcAttr</span> <span class="na">relation=</span><span class="s">"WEMSYS-TUR-SPOTLIGHT-CONTENT"</span> <span class="na">className=</span><span class="s">"com.viglet.turing.wem.ext.TurSpotlightExtraFields"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tag&gt;</span>content<span class="nt">&lt;/tag&gt;</span>
+        <span class="nt">&lt;/srcAttr&gt;</span>
+    <span class="nt">&lt;/index-attrs&gt;</span>
+<span class="nt">&lt;/mappingDefinition&gt;</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+Need to configure Turing Listener in WEM as described in this documentation.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="wem-valid-to-index">4.6. Define if content will be indexed</h3>
+<div class="paragraph">
+<p>It is possible to define whether the content instance will be indexed or not, so it is necessary to add the custom class in the validToIndex attribute.</p>
+</div>
+<div class="listingblock">
+<div class="title">Sample into Mapping Definition XML File using validToIndex attribute.</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;mappingDefinition</span> <span class="na">contentType=</span><span class="s">"CTD_Sample"</span> <span class="na">validToIndex=</span><span class="s">"sample.SampleValidToIndex"</span><span class="nt">&gt;</span>
+...
+<span class="nt">&lt;/mappingDefinition&gt;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Sample Class file to validate the Content Instance.</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="java"><span class="kn">package</span> <span class="nn">sample</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.viglet.turing.wem.config.IHandlerConfiguration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.viglet.turing.wem.index.IValidToIndex</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.vignette.as.client.common.ContentInstanceWhereClause</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.vignette.as.client.common.WhereClause</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.vignette.as.client.javabean.ContentInstance</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.vignette.util.StringQueryOp</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SampleValidToIndex</span> <span class="kd">implements</span> <span class="nc">IValidToIndex</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="nf">SampleValidToIndex</span><span class="o">()</span> <span class="o">{</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="nc">ContentInstance</span> <span class="n">ci</span><span class="o">,</span> <span class="nc">IHandlerConfiguration</span> <span class="n">config</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="s">"Y"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">ci</span><span class="o">.</span><span class="na">getStringValue</span><span class="o">(</span><span class="s">"INDEX-ATTRIBUTE"</span><span class="o">));</span>
+	<span class="o">}</span>
+
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">whereToValid</span><span class="o">(</span><span class="nc">WhereClause</span> <span class="n">clause</span><span class="o">,</span> <span class="nc">IHandlerConfiguration</span> <span class="n">config</span><span class="o">)</span>
+			<span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">clause</span> <span class="k">instanceof</span> <span class="nc">ContentInstanceWhereClause</span><span class="o">)</span> <span class="o">{</span>
+			<span class="nc">ContentInstanceWhereClause</span> <span class="n">ciclause</span> <span class="o">=</span> <span class="o">(</span><span class="nc">ContentInstanceWhereClause</span><span class="o">)</span> <span class="n">clause</span><span class="o">;</span>
+			<span class="n">ciclause</span><span class="o">.</span><span class="na">checkAttribute</span><span class="o">(</span><span class="s">"INDEX-ATTRIBUTE"</span><span class="o">,</span> <span class="nc">StringQueryOp</span><span class="o">.</span><span class="na">EQUAL</span><span class="o">,</span> <span class="s">"Y"</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+
+<span class="o">}</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="wordpress">5. Wordpress</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Wordpress plugin that allows you to index posts.</p>
+</div>
+<div class="sect2">
+<h3 id="wordpress-installation">5.1. Installation</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Upload the <code>turing4wp</code> folder to the <code>/wp-content/plugins/</code> directory</p>
+</li>
+<li>
+<p>Activate the plugin through the 'Plugins' menu in WordPress</p>
+</li>
+<li>
+<p>Configure the plugin with the hostname, port, and URI path to your Solr installation.</p>
+</li>
+<li>
+<p>Load all your posts and/or pages via the "Load All Posts" button in the settings page.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="container py-3" style="font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-4 col-md">
+                <img class="mb-2" src="/static_files/img/viglet_logo_sm.png" alt="" style="width:30px; height:30px">
+                <span style="font-size: larger;font-weight: bolder;margin-left: 3px;">Viglet.</span>
+                <small class="d-block mb-3 text-muted">© 2017 – 2025</small>
+            </div>
+            <div class="col-4 col-md">
+                <h5>Documentation</h5>
+                <ul class="list-unstyled text-small">
+
+                     
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/shio/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            CMS
+        </div>
+        <div>
+            <span>Sh</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Shio CMS</span>
+                        </a></li>
+                    
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/turing/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            ES
+        </div>
+        <div>
+            <span>Tu</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Turing ES</span>
+                        </a></li>
+                    
+                </ul>
+            </div>
+
+
+            <div class="col-4 col-md">
+                <h5>Resources</h5>
+                <ul class="list-unstyled text-small" style="margin-bottom: 5px !important;">
+                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                            href="https://docs.viglet.com">Documentation</a></li>
+                    </li>
+                    <li>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
+                                <a title="GitHub" href="https://www.viglet.com" target="_blank"><i
+                                        class="bi bi-github" style="color:#6c757d;font-size: 25px;"
+                                        aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+<script>
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+</html>

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Viglet Shio CMS: Installation Guide</title>
+  <meta name="description" content="">
+  <meta property="og:title" content="Viglet Shio CMS: Installation Guide">
+  <meta property="og:site_name" content="Viglet">
+  <meta property="og:url" content="https://docs.viglet.com/shio/installation-guide/">
+  <meta property="og:image" content="https://docs.viglet.com/static_files/img/banner.jpg" />
+  <meta property="og:description" content="">
+  <meta name="twitter:image:src" content="https://docs.viglet.com/static_files/img/banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@VigletTweet">
+  <meta name="twitter:creator" content="@VigletTweet">
+  <meta name="twitter:title" content="Viglet Shio CMS: Installation Guide">
+  <meta name="twitter:description" content=""><link rel="shortcut icon" type="image/x-icon" href="/static_files/img/favicon.ico">
+<link rel="stylesheet" href="/static_files/css/styles.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="/static_files/css/viglet.css">
+<link rel="stylesheet" href="/static_files/site.css">
+<script src="/static_files/setup.js"></script>
+<script defer src="/static_files/site.js"></script></head><body class="book toc2 toc-left">
+    <style>
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+        }
+    </style><header class="p-3 bg-dark text-white">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                <img style="margin: 5px; margin-top:10px; padding: 0px; width: 110px; height: 30px" alt="Viglet" src="/static_files/img/viglet_logo_header.png"><span style="font-size: x-large;
+                color: orangered;">Docs</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0" style="padding-top: 4px;">
+            </ul>
+            <div id="switch-theme">
+                <input type="checkbox" id="switch-theme-checkbox" />
+                <label for="switch-theme-checkbox">Dark Theme</label>
+            </div>
+            <a href="https://www.viglet.com/shio/" data-toggle="tooltip" title="Learn more at viglet.com" class="nav-link px-2"
+            style="color:#ffc63a">Go to Shio CMS Website</a></div>
+    </div>
+</header><header class="p-3 border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-10">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                        aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-size: 18px;margin: 0px;padding-left: 20px">
+                            <li class="breadcrumb-item"><a href="/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Documentation</a>
+                            </li><li class="breadcrumb-item" aria-current="page"><a href="/shio/"
+                                    style="text-decoration: none; color: var(--asciidoctor-heading-font-color);">Shio CMS</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Installation Guide
+                            </li></ol>
+                    </nav>
+                </div><div class="col-2" style="text-align: right;color: indianred;"><a style="text-align: center;color: indianred;" href="/shio/shio-installation-guide.pdf" target="_blank">Download PDF</a>
+                </div></div>
+        </div>
+    </header>
+    <div>
+    <a href="https://github.com/ShioCMS/shio" target="_blank" aria-label="GitHub repository" title="GitHub repository"
+  style="position: absolute;top: 0px;right: 0px"><svg width="77" height="77" viewBox="0 0 250 250" aria-hidden="true"
+    fill="tomato">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+    <path
+      d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+      fill="white" class="octo-arm" style="transform-origin: 130px 106px;"></path>
+    <path
+      d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+      fill="white" class="octo-body"></path>
+  </svg></a><button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top" style="display: block;
+background-image: url(/static_files/svg/up.svg);
+background-repeat: no-repeat;
+height: 30px;background-position: center;">
+
+    </button>
+
+    <div id="tocbar-container" class="container" role="navigation">
+        <div id="tocbar" class="contained" role="navigation">
+            <button id="toggle-toc"></button>
+        </div>
+    </div>
+    <div id="main-container" class="container">
+        <div id="main" class="contained">
+            <div id="doc" class="doc">
+                <div id="header">
+                    <div id="toc" class="toc2">
+                        <div id="toctitle">Table of Contents</div>
+                        <ul class="sectlevel1">
+<li><a href="#_preface">Preface</a></li>
+<li><a href="#installing-java">1. Installing Java</a></li>
+<li><a href="#requirements">2. Shio CMS Requirements</a>
+<ul class="sectlevel2">
+<li><a href="#hardware-requirements">2.1. Hardware Requirements</a></li>
+</ul>
+</li>
+<li><a href="#configuring-databases">3. Installing and Configuring Databases</a>
+<ul class="sectlevel2">
+<li><a href="#configuring-databases-table-requirements">3.1. Shio CMS Database Table Requirements</a>
+<ul class="sectlevel3">
+<li><a href="#configuring-databases-oracle-requirements">3.1.1. Oracle Database Requirements</a></li>
+<li><a href="#configuring-databases-msql-requirements">3.1.2. Microsoft SQL Server Database Requirements</a>
+<ul class="sectlevel4">
+<li><a href="#configuring-databases-msql-database-schemas">Configuring the SQL Server Database and Schemas</a></li>
+</ul>
+</li>
+<li><a href="#configuring-databases-postgresql-requirements">3.1.3. PostgreSQL Database Requirements</a>
+<ul class="sectlevel4">
+<li><a href="#configuring-databases-postgresql-database">Installing and configuring the PostgreSQL Database</a></li>
+<li><a href="#configuring-databases-postgresql-configuring-user-database-schemas">Configuring the Shio user, database, and schemas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#installing-shio">4. Installing Shio CMS</a>
+<ul class="sectlevel2">
+<li><a href="#installing-shio-download">4.1. Shio CMS Download</a></li>
+<li><a href="#installing-shio-database">4.2. Database</a>
+<ul class="sectlevel3">
+<li><a href="#installing-shio-database-mysql">4.2.1. MySQL</a></li>
+<li><a href="#installing-shio-database-oracle">4.2.2. Oracle Database</a></li>
+<li><a href="#installing-shio-database-postgresql">4.2.3. PostgreSQL</a></li>
+</ul>
+</li>
+<li><a href="#installing-shio-database-encrypting-password">4.3. Encrypting the Database Password</a></li>
+<li><a href="#installing-shio-service-linux">4.4. Creating Shio CMS Service on Linux</a>
+<ul class="sectlevel3">
+<li><a href="#installing-shio-service-linux-rh-centos">4.4.1. Red Hat and CentOS</a></li>
+</ul>
+</li>
+<li><a href="#installing-shio-accessing-console">4.5. Accessing the Shio Console</a></li>
+</ul>
+</li>
+</ul>
+                    </div>
+                </div>
+                <div id="content">
+                    <div class="sect1">
+<h2 id="_preface">Preface</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Viglet Shio CMS (<a href="https://viglet.com/shio" class="bare">https://viglet.com/shio</a>) is an open source solution (<a href="https://github.com/ShioCMS" class="bare">https://github.com/ShioCMS</a>), which allows model content, use graphQL and create site using javascript with native cache and search.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="installing-java">1. Installing Java</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Shio CMS requires Java.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Shio CMS only supports Java 17.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>During installation, Shio CMS reads the ​​JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>On Windows:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Set the JAVA_HOME system variable to point to the JAVA location.</p>
+</li>
+<li>
+<p>Attach the PATH system variable with %JAVA_HOME%/bin.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>On Unix:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Create an environment variable called JAVA_HOME.</p>
+</li>
+<li>
+<p>Provide the JAVA bin path in the PATH variable.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="requirements">2. Shio CMS Requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The information below describes the resource modes available to run Shio CMS.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Use a screen resolution of at least 1024 x 768 for optimum clarity.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This section describes the minimum and suggested features for systems on which you can configure Shio CMS.</p>
+</div>
+<div class="sect2">
+<h3 id="hardware-requirements">2.1. Hardware Requirements</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 66.6666%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Minimum</th>
+<th class="tableblock halign-left valign-top">Recommended</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Single 1.5 GHz processor
+1 GB available memory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dual 2 GHz processors with Hyper-Threading enabled
+2 GB available memory</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>In addition, the following is required:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>1GB of disk space for software.</p>
+</li>
+<li>
+<p>A compatible version of a database.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-databases">3. Installing and Configuring Databases</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Shio CMS supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Shio CMS. The following sections describe these requirements.</p>
+</div>
+<div class="sect2">
+<h3 id="configuring-databases-table-requirements">3.1. Shio CMS Database Table Requirements</h3>
+<div class="paragraph">
+<p>Shio CMS uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.</p>
+</div>
+<div class="sect3">
+<h4 id="configuring-databases-oracle-requirements">3.1.1. Oracle Database Requirements</h4>
+<div class="paragraph">
+<p>This section describes configuration requirements for an existing database.</p>
+</div>
+<div class="paragraph">
+<p>To set up an Oracle database:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install and configure a single database instance for use by Shio CMS.</p>
+</li>
+<li>
+<p>Create a database schema to contain the Shio CMS system tables.</p>
+</li>
+<li>
+<p>Configure the Shio CMS admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuring-databases-msql-requirements">3.1.2. Microsoft SQL Server Database Requirements</h4>
+<div class="paragraph">
+<p>This section discusses the steps required to configure Microsoft SQL Server for your Shio CMS databases.</p>
+</div>
+<div class="paragraph">
+<p>Creating the Shio CMS Database before you begin, be sure to refer to the following guides:</p>
+</div>
+<div class="paragraph">
+<p>The following procedure describes how to create and configure a Microsoft SQL Server database for use by Shio CMS.</p>
+</div>
+<div class="paragraph">
+<p>When creating the Shio CMS database, use the following options:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>You must install the Database Engine feature and Management Tools are recommended. All other features are optional.</p>
+</li>
+<li>
+<p>Set the Collation configuration variable to SQL_Latin1_General_CP1_CS_AS or Latin1_General / Case-sensitive / Accent-Sensitive.</p>
+</li>
+<li>
+<p>Set authentication mode to mixed mode.</p>
+</li>
+<li>
+<p>Shio CMS system user cannot be sa.</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="configuring-databases-msql-database-schemas">Configuring the SQL Server Database and Schemas</h5>
+<div class="paragraph">
+<p>This section discusses the steps required to create and configure a SQL Server database for use by Shio CMS.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The database and usernames provided are examples only.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To create the SQL Server database:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select Databases &gt; New Database.</p>
+</li>
+<li>
+<p>Enter the database name (eg shio) and the size of the data and log files according to the environment.</p>
+</li>
+<li>
+<p>Go to the Options page and set the following values:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Collation = Latin1_General_CS_AS or SQL_Latin1_General_CP1_CS_AS</p>
+</li>
+<li>
+<p>Miscellaneous &gt; Allow Snapshot Isolation = True</p>
+</li>
+<li>
+<p>Miscellaneous &gt; Is Read Committed Snapshot On = True</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="n">USE</span> <span class="n">master</span>
+<span class="k">GO</span>
+<span class="k">ALTER</span> <span class="k">DATABASE</span> <span class="n">shio</span>
+<span class="k">SET</span> <span class="n">SINGLE_USER</span>
+<span class="k">WITH</span> <span class="k">ROLLBACK</span> <span class="k">IMMEDIATE</span>
+<span class="k">GO</span>
+<span class="k">ALTER</span> <span class="k">DATABASE</span> <span class="n">shio</span>
+<span class="k">SET</span> <span class="n">ALLOW_SNAPSHOT_ISOLATION</span> <span class="k">ON</span>
+<span class="k">GO</span>
+<span class="k">ALTER</span> <span class="k">DATABASE</span> <span class="n">shio</span>
+<span class="k">SET</span> <span class="n">READ_COMMITTED_SNAPSHOT</span> <span class="k">ON</span>
+<span class="k">GO</span>
+<span class="k">ALTER</span> <span class="k">DATABASE</span> <span class="n">shio</span>
+<span class="k">SET</span> <span class="n">MULTI_USER</span>
+<span class="k">GO</span></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Under Security &gt; Logins, select New Login and set the following attributes:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Enter the Login name (for example, shio)</p>
+</li>
+<li>
+<p>Deselect the Enforce Password Expiration option.</p>
+</li>
+<li>
+<p>Set the Default database.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>On the User Mapping page, set the following attributes for the shio database:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Default user = shio</p>
+</li>
+<li>
+<p>Default schema = shio</p>
+</li>
+<li>
+<p>With the shio database is selected, select the option for db_owner</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Click OK.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuring-databases-postgresql-requirements">3.1.3. PostgreSQL Database Requirements</h4>
+<div class="paragraph">
+<p>This section discusses the steps required to configure PostgreSQL for your Shio CMS databases:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Installing and configuring the PostgreSQL Database</p>
+</li>
+<li>
+<p>Configuring the Shio CMS user, database, and schema</p>
+</li>
+<li>
+<p>Installing and configuring the PostgreSQL Database</p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="configuring-databases-postgresql-database">Installing and configuring the PostgreSQL Database</h5>
+<div class="paragraph">
+<p>This section describes the steps required to install and configure a PostgreSQL database for your Shio CMS environment. You will also need to configure the Shio user, database and schemas.</p>
+</div>
+<div class="paragraph">
+<p>To install the PostgreSQL database:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the following URL and follow the instructions provided for your supported version of PostgreSQL: <a href="https://www.postgresql.org/docs/manuals/" class="bare">https://www.postgresql.org/docs/manuals/</a></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>To configure the PostgreSQL instance:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Open the postgresql.conf file (located in &lt;PostgreSQL_installDir&gt;\&lt;version&gt;\data\) and set the following parameters:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="ini"><span class="py">max_connections</span> <span class="p">=</span> <span class="s">10</span>
+<span class="py">max_prepared_transactions</span> <span class="p">=</span> <span class="s">10</span>
+<span class="py">shared_buffers</span> <span class="p">=</span> <span class="s">512MB</span>
+<span class="py">autovacuum</span> <span class="p">=</span> <span class="s">off</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+The autovacuum daemon is used to reclaim memory/storage space the database is no longer using. You must re-enable this utility after you have finished installing and configuring Shio CMS.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+Configuration values will vary for higher transaction environments and numbers of users.
+max_prepared_transactions should be at least as large as max_connections so that every session can have a prepared transaction pending.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="configuring-databases-postgresql-configuring-user-database-schemas">Configuring the Shio user, database, and schemas</h5>
+<div class="paragraph">
+<p>This section discusses the steps required to configure the users, database and schemas for your Shio CMS environment.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+You must be a PostgreSQL super-user or have createuser privileges to create Shio users. To create and configure the Shio CMS database, you must be a super-user or have create privileges.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+When you create a database table in PostgreSQL, the field name must be lowercase.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To configure the Shio CMS user:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a user as the owner of the Shio CMS database:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">USER</span> <span class="n">shio</span> <span class="n">PASSWORD</span> <span class="o">&lt;</span><span class="n">password</span><span class="o">&gt;</span> <span class="k">with</span> <span class="k">createuser</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a Shio CMS database:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">shio_db</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">DATABASE</span> <span class="n">shio_db</span> <span class="k">OWNER</span> <span class="k">TO</span> <span class="n">shio</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create and access the Shio CMS user and schema:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Log in to the shio (database) using the shio account. For example, on the operating system command prompt:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash"><span class="nv">$psql</span> <span class="nt">-U</span> shio <span class="nt">-d</span> shio_db</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create the Shio schema and grant ownership to the Shio user:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">shio</span><span class="p">;</span>
+<span class="k">ALTER</span> <span class="k">SCHEMA</span> <span class="n">shio</span> <span class="k">OWNER</span> <span class="k">TO</span> <span class="n">shio</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Set the PostgreSQL search_path variable to the user to allow direct access to the respective schemas:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="k">ALTER</span> <span class="k">USER</span> <span class="n">shio</span> <span class="k">SET</span> <span class="n">SEARCH_PATH</span> <span class="o">=</span> <span class="n">shio</span><span class="p">;</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="installing-shio">4. Installing Shio CMS</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="installing-shio-download">4.1. Shio CMS Download</h3>
+<div class="paragraph">
+<p>Go to <a href="https://viglet.org/shio/download/" class="bare">https://viglet.org/shio/download/</a> and click on "Download Shio CMS" button to download the viglet-shio.jar executable.</p>
+</div>
+<div class="paragraph">
+<p>Copy the viglet-shio.jar to /appl/viglet/shio/server</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">mkdir</span> <span class="nt">-p</span> /appl/viglet/shio/server
+<span class="nb">cp </span>viglet-shio.jar /appl/viglet/shio/server
+<span class="nb">chmod </span>770 /appl/viglet/shio/server/viglet-shio.jar</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="installing-shio-database">4.2. Database</h3>
+<div class="paragraph">
+<p>By default, Shio uses H2 as its embedded database, but if you prefer another database you can follow the procedure below, creating <code>/appl/viglet/shio/server/viglet-shio.conf</code> file with following lines:</p>
+</div>
+<div class="sect3">
+<h4 id="installing-shio-database-mysql">4.2.1. MySQL</h4>
+<div class="paragraph">
+<p>Below is an example of how to configure Shio for MySQL.</p>
+</div>
+<div class="listingblock">
+<div class="title">viglet-shio.conf for MySQL</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s2">"-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:mariadb://localhost:3306/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=org.mariadb.jdbc.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect"</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="installing-shio-database-oracle">4.2.2. Oracle Database</h4>
+<div class="paragraph">
+<p>Below is an example of how to configure Shio for Oracle Database.</p>
+</div>
+<div class="listingblock">
+<div class="title">viglet-shio.conf for Oracle Database</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s2">"-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:oracle:thin:@localhost:1521/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=oracle.jdbc.OracleDriver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect"</span></code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect3">
+<h4 id="installing-shio-database-postgresql">4.2.3. PostgreSQL</h4>
+<div class="paragraph">
+<p>Below is an example of how to configure Shio for PostgreSQL.</p>
+</div>
+<div class="listingblock">
+<div class="title">viglet-shio.conf for PostgreSQL</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nv">JAVA_OPTS</span><span class="o">=</span><span class="s2">"-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:postgresql://localhost:5432/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=org.postgresql.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect"</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="installing-shio-database-encrypting-password">4.3. Encrypting the Database Password</h3>
+<div class="paragraph">
+<p>For more security, it is possible to encrypt the Database password in viglet-shio.conf following the procedure below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cd</span> /appl/viglet/shio/utils/scripts
+./turGenerateDBPassword.sh /appl/viglet/shio/server
+Password:
+Retype Password:
+
+Thanks, the password was successfully generated <span class="k">in</span> /appl/viglet/shio/server/db-encrypted.properties
+
+<span class="nb">cat</span> /appl/viglet/shio/server/db-encrypted.properties
+clqp6QxceJQIp6lnaiKelQc9DvdNKNxg</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Copy the content of /appl/viglet/shio/server/db-encrypted.properties and replace the  <code>-Dspring.datasource.password=&lt;PLAIN_TEXT_PASSWORD&gt;</code> value of <code>/appl/viglet/shio/server/viglet-shio.conf</code> file  with <code>-Dspring.datasource.password=ENC(&lt;ENCRYPTED_PASSWORD&gt;)</code>.</p>
+</div>
+<div class="paragraph">
+<p>For example: <code>-Dspring.datasource.password=ENC(clqp6QxceJQIp6lnaiKelQc9DvdNKNxg)</code></p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="installing-shio-service-linux">4.4. Creating Shio CMS Service on Linux</h3>
+<div class="sect3">
+<h4 id="installing-shio-service-linux-rh-centos">4.4.1. Red Hat and CentOS</h4>
+<div class="paragraph">
+<p>As root, create a <code>/etc/systemd/system/shio.service</code> file with the following lines:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[Unit]
+Description=Viglet Shio CMS
+After=syslog.target
+
+[Service]
+User=viglet
+ExecStart=/appl/viglet/shio/server/viglet-shio.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This way, you can interact with the Shio CMS service:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">./systemctl start shio.service
+./systemctl stop shio.service
+./systemctl restart shio.service
+./systemctl status shio.service</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="installing-shio-accessing-console">4.5. Accessing the Shio Console</h3>
+<div class="paragraph">
+<p>Shio provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following default URL: <a href="http://localhost:2710/content" class="bare">http://localhost:2710/content</a>.</p>
+</div>
+<div class="paragraph">
+<p>By default the login/password are: admin/admin</p>
+</div>
+</div>
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="container py-3" style="font-family: 'ProximaNovaLight', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+            <div class="col-4 col-md">
+                <img class="mb-2" src="/static_files/img/viglet_logo_sm.png" alt="" style="width:30px; height:30px">
+                <span style="font-size: larger;font-weight: bolder;margin-left: 3px;">Viglet.</span>
+                <small class="d-block mb-3 text-muted">© 2017 – 2025</small>
+            </div>
+            <div class="col-4 col-md">
+                <h5>Documentation</h5>
+                <ul class="list-unstyled text-small">
+
+                     
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/shio/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            CMS
+        </div>
+        <div>
+            <span>Sh</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Shio CMS</span>
+                        </a></li>
+                    
+                    <li class="mb-1" style="margin-bottom: 10px !important;"><a
+                            class="link-secondary text-decoration-none" href="/docs/turing/"><div
+    style="letter-spacing: 0;line-height: 1.42857143;margin-bottom: 0;color: #6c757d;text-transform: none;display: inline-block;text-align: left;">
+    <div
+        style="background: white;width: 30px;height: 30px;color: #6c757d;padding-left: 4px;font-size: 13px;font-weight: bolder;border-width: 1px;border-style: solid;-moz-border-radius: 52px;border-radius: 4px;/* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */">
+        <div style="font-size: 5px;margin-top: 2px;margin-right: 4px;font-weight: lighter;text-align: right;">
+            ES
+        </div>
+        <div>
+            <span>Tu</span>
+        </div>
+    </div>
+</div><span style="margin-left: 5px;">Turing ES</span>
+                        </a></li>
+                    
+                </ul>
+            </div>
+
+
+            <div class="col-4 col-md">
+                <h5>Resources</h5>
+                <ul class="list-unstyled text-small" style="margin-bottom: 5px !important;">
+                    <li class="mb-1"><a class="link-secondary text-decoration-none"
+                            href="https://docs.viglet.com">Documentation</a></li>
+                    </li>
+                    <li>
+                        <div class="row" style="margin:0px">
+                            <div class="col-lg-1 col-md-1 col-sm-1 hidden-xs" style="width:40px;padding: 0px;">
+                                <a title="GitHub" href="https://www.viglet.com" target="_blank"><i
+                                        class="bi bi-github" style="color:#6c757d;font-size: 25px;"
+                                        aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+<script>
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+</html>
