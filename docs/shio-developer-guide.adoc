@@ -13,7 +13,7 @@ ifdef::backend-pdf[:toc: left]
 :page-breadcrumb-title: Developer Guide
 :page-permalink: /shio/developer-guide/
 :imagesdir: ../../
-:page-pdf: /docs/shio/shio-developer-guide.pdf
+:page-pdf: /shio/shio-developer-guide.pdf
 :page-product: shio
 
 :numbered:

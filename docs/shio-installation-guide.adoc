@@ -14,7 +14,7 @@ ifdef::backend-pdf[:toc: left]
 :page-breadcrumb-title: Installation Guide
 :page-permalink: /shio/installation-guide/
 :imagesdir: ../../
-:page-pdf: /docs/shio/shio-installation-guide.pdf
+:page-pdf: /shio/shio-installation-guide.pdf
 :page-product: shio
 
 include::_adoc_includes/shio/installation/preface.adoc[]

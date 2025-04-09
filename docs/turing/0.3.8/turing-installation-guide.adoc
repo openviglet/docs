@@ -14,7 +14,7 @@ ifdef::backend-pdf[:toc: left]
 :page-breadcrumb-title: Installation Guide
 :page-permalink: /turing/0.3.8/installation-guide/
 :imagesdir: ../
-:page-pdf: /docs/turing/turing-installation-guide-0.3.8.pdf
+:page-pdf: /turing/turing-installation-guide-0.3.8.pdf
 :page-product: turing
 
 include::_adoc_includes/turing/0.3.8/installation/preface.adoc[]

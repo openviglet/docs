@@ -14,7 +14,7 @@ ifdef::backend-pdf[:toc: left]
 :page-breadcrumb-title: Developer Guide
 :page-permalink: /turing/0.3.9/developer-guide/
 :imagesdir: ../../../
-:page-pdf: /docs/turing/turing-developer-guide-0.3.9.pdf
+:page-pdf: /turing/turing-developer-guide-0.3.9.pdf
 :page-product: turing
 
 [preface]

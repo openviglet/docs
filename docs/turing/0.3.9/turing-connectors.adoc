@@ -14,7 +14,7 @@ ifdef::backend-pdf[:toc: left]
 :page-breadcrumb-title: Connectors
 :page-permalink: /turing/0.3.9/connectors/
 :imagesdir: ../
-:page-pdf: /docs/turing/turing-connectors-0.3.9.pdf
+:page-pdf: /turing/turing-connectors-0.3.9.pdf
 :page-product: turing
 
 [preface]

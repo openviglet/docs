@@ -3,7 +3,7 @@ API headers include the mandatory information you send along with the request UR
 [%header,cols=3*] 
 |===
 | Key | Value | Description
-| Key | api-key	| API key helps authenticate the application with the server. For generating API key, refer to link:/docs/turing/0.3.7/developer-guide/#_generate-an-api-key[Generate an API Key]
+| Key | api-key	| API key helps authenticate the application with the server. For generating API key, refer to link:/turing/0.3.7/developer-guide/#_generate-an-api-key[Generate an API Key]
 | Content-Type | application/json | Content-Type is a representation header that determines the type of data (media/resource) present in the request body
 | Accept | application/json | Determines the acceptable response type from the server
 |===

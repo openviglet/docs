@@ -14,7 +14,7 @@ ifdef::backend-pdf[:toc: left]
 :page-breadcrumb-title: Administration Guide
 :page-permalink: /turing/0.3.9/administration-guide/
 :imagesdir: ../../../
-:page-pdf: /docs/turing/turing-administration-guide-0.3.9.pdf
+:page-pdf: /turing/turing-administration-guide-0.3.9.pdf
 :page-product: turing
 
 [preface]
