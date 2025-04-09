@@ -3,13 +3,13 @@
     <div class="col-lg-2 col-md-6 col-sm-6 col-xs-6 col-centered hidden-xs hidden-sm;" style="width: 205px;float: left;">
 
         {%- if solution.service-url -%}
-        <a target="_blank" href="/docs{{ solution.service-url }}">
+        <a target="_blank" href="{{ solution.service-url }}">
             <div style="text-align: center;margin-bottom: 20px">
                 <img src="{{ solution.logo }}" style="width: 180px;">
             </div>
         </a>
         {%- else -%}
-        <a href="/docs{{ solution.permalink }}">
+        <a href="{{ solution.permalink }}">
             {%- include solution-home-logo.html -%}
         </a>
         {%- endif -%}
@@ -17,10 +17,10 @@
     </div>
     <div class="col-lg-10 col-md-6  col-sm-6 col-xs-6 col-centered" style="width: calc(100% - 215px);"> 
         <h2> {%- if solution.service-url -%}
-            <a href="/docs{{ solution.service-url }}" target="_blank" style="color:#444;text-decoration: none;font-weight: bolder;">{{
+            <a href="{{ solution.service-url }}" target="_blank" style="color:#444;text-decoration: none;font-weight: bolder;">{{
                 solution.short-name }}</a>
             {%- else -%}
-            <a href="/docs{{ solution.permalink }}" style="color:#444;text-decoration: none;font-weight: bolder;">{{
+            <a href="{{ solution.permalink }}" style="color:#444;text-decoration: none;font-weight: bolder;">{{
                 solution.short-name }}</a>
                 {%- endif -%}
             </h2>
