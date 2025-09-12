@@ -17,9 +17,102 @@ ifdef::backend-pdf[:toc: left]
 :page-pdf: /turing/turing-installation-guide-0.3.10.pdf
 :page-product: turing
 
-include::_adoc_includes/turing/0.3.9/installation/preface.adoc[]
+[preface]
+== Preface
+
+Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openviglet), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+
+This installation guide provides step-by-step instructions for setting up Turing ES in different environments, from simple standalone installations to enterprise-grade deployments.
+
+== Installation Options
+
+Choose the installation method that best fits your needs:
+
+[.lead]
+**🚀 Quick Start (Recommended for Testing)**
+Get Turing ES running in minutes with the embedded database and search engine. Perfect for evaluation, development, and small deployments.
+
+**🏢 Production Setup**
+Configure Turing ES with external databases and clustering for enterprise environments.
+
+**🐳 Docker Deployment** 
+Use containerized deployment for cloud and DevOps environments.
 
 :numbered:
+
+[[quick-start]]
+== Quick Start Installation
+
+This section gets you up and running with Turing ES in just a few minutes using the embedded H2 database and Solr search engine. Perfect for testing, development, and small deployments.
+
+=== Prerequisites
+
+Before starting, ensure you have:
+
+* *Java 21* - Download from https://www.oracle.com/java/technologies/downloads/[Oracle] or https://adoptium.net/[Eclipse Temurin]
+* *4GB RAM minimum* (8GB recommended)
+* *10GB free disk space*
+* *Administrative privileges* on your system
+
+=== Step 1: Verify Java Installation
+
+Open your terminal or command prompt and verify Java 21 is installed:
+
+[source,bash]
+----
+java -version
+----
+
+You should see output similar to:
+----
+java version "21.0.1" 2023-10-17
+Java(TM) SE Runtime Environment (build 21.0.1+12-LTS-29)
+----
+
+If Java 21 is not installed, download and install it from the links above.
+
+WARNING: Turing ES requires Java 21. Earlier versions are not supported.
+
+=== Step 2: Download Turing ES
+
+1. Visit the https://github.com/openviglet/turing/releases/latest[latest release page]
+2. Download `viglet-turing.jar` (approximately 271 MB)
+3. Save it to your preferred directory (e.g., `/opt/turing` or `C:\turing`)
+
+=== Step 3: Start Turing ES
+
+Navigate to the directory where you saved the JAR file and run:
+
+[source,bash]
+----
+java -jar viglet-turing.jar
+----
+
+The first startup takes 2-3 minutes as Turing ES initializes the embedded database and search engine.
+
+TIP: To run with more memory: `java -Xmx4g -jar viglet-turing.jar`
+
+=== Step 4: Access the Admin Console
+
+Once started (you'll see "Started TurApplication"), open your browser to:
+
+**http://localhost:2700**
+
+Use these default credentials:
+* *Username:* `admin`
+* *Password:* `admin`
+
+IMPORTANT: Change the default password in production environments!
+
+=== Step 5: Create Your First Site
+
+1. Click *"Sites"* → *"Add Site"*
+2. Enter a name like "My First Site"
+3. Click *"Save"*
+
+Congratulations! Turing ES is now running. Continue reading for production setup options.
+
+---
 
 [[installing-java]]
 == Installing Java

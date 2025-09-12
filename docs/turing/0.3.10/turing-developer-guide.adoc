@@ -18,40 +18,736 @@ ifdef::backend-pdf[:toc: left]
 :page-product: turing
 
 [preface]
-== Preface
+== Welcome, Developer! 👩‍💻
 
-Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openviglet), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Ready to integrate Turing ES into your applications or contribute to its development? This guide provides everything you need to get started with Turing ES APIs, SDKs, and development environment setup.
+
+**What you'll learn:**
+
+* 🚀 **Quick API Integration** - Get up and running with REST APIs
+* 📡 **Search & Index APIs** - Build powerful search experiences  
+* 🔧 **Development Setup** - Contribute to Turing ES development
+* 💡 **Code Examples** - Real-world integration patterns
+* 🛠️ **SDKs & Libraries** - Available tools and frameworks
+
+**Popular Integration Patterns:**
+
+* Add semantic search to websites and applications
+* Build intelligent chatbots and virtual assistants
+* Create content discovery and navigation systems
+* Integrate with existing CMS and e-commerce platforms
+
+TIP: Need to get Turing ES running first? Check the link:getting-started/[Getting Started Guide].
 
 :numbered:
 
-== More Documentation
+== API Quick Start
 
-Technical documentation on Turing ES is available at https://docs.viglet.com/turing.
+Let's get you making API calls to Turing ES in minutes.
 
-== Open Source Development
+=== Base URL Structure
 
-You can collaborate with Turing, participating in its development. Below are the steps to create your Turing environment.
+All Turing ES APIs follow this pattern:
 
-=== Development Structure
+----
+http://localhost:2700/api/{service}/{site-id}/{endpoint}
+----
 
-==== Frameworks
-Turing ES was developed using Spring Boot (https://spring.io/projects/spring-boot) for its backend.
+Where:
+* `{service}` - Service type (`sn` for Semantic Navigation, `se` for Search Engine)
+* `{site-id}` - Your site identifier (e.g., "my-first-site")  
+* `{endpoint}` - Specific API endpoint
 
-The UI is currently using AngularJS (https://angularjs.org), but a new UI is being developed using Angular 12 (https://angular.io) with Primer CSS (https://primer.style/css).
+=== Authentication
 
-In addition to Java, you also need to have Git (https://git-scm.com/downloads) and NodeJS (https://nodejs.org/en/download/) installed.
+Most read operations don't require authentication, but administrative operations do:
 
-==== Databases
-By default it uses the H2 database (https://www.h2database.com), but can be changed to other databases using Spring Boot properties. It comes bundled with OpenNLP (https://opennlp.apache.org/) in the same JVM.
+[source,bash]
+----
+curl -X POST http://localhost:2700/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin"}'
+----
 
-==== Programming Language and Deploy
-It uses Java 21 (https://adoptium.net/temurin/releases/?package=jdk&version=21) and its deployment is done with Maven and works on Unix and Windows.
+=== Your First Search
 
-==== Docker
-To use Semantic Navigation and Chatbot you must have a Solr (https://solr.apache.org) service available. If you prefer to work with all the services Turing depends on, you can use docker-compose (https://docs.docker.com/compose/install) to start these services, we use the Docker Desktop (https://www.docker.com/products/docker-desktop) installed on computer.
+Try this simple search request:
 
-==== IDE
-You can use Spring Tools 4 for Eclipse (https://spring.io/tools) or Eclipse (https://www.eclipse.org/downloads/) or Visual Studio Code (https://code.visualstudio.com/) or IntelliJ (https://www.jetbrains.com/pt-br/idea/) as IDEs.
+[source,bash]
+----
+curl "http://localhost:2700/api/sn/my-first-site/search?q=welcome"
+----
+
+Response:
+[source,json]
+----
+{
+  "results": {
+    "numFound": 1,
+    "start": 0,
+    "docs": [
+      {
+        "title": "Welcome to Turing ES",
+        "content": "This is my first document...",
+        "url": "https://example.com/welcome",
+        "score": 0.95
+      }
+    ]
+  },
+  "facets": {},
+  "queryInfo": {
+    "query": "welcome",
+    "responseTime": 23
+  }
+}
+----
+
+=== Index Content
+
+Add content to your search index:
+
+[source,bash]
+----
+curl -X POST http://localhost:2700/api/sn/my-first-site/import \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Getting Started with APIs",
+    "content": "Learn how to integrate Turing ES APIs into your applications.",
+    "url": "https://example.com/api-guide",
+    "date": "2024-12-25T10:00:00Z",
+    "category": ["documentation", "api"]
+  }'
+----
+
+== Common API Endpoints
+
+=== Search APIs
+
+**Basic Search**
+----
+GET /api/sn/{site}/search?q={query}
+----
+
+**Advanced Search with Filters**  
+----
+GET /api/sn/{site}/search?q={query}&fq=category:api&rows=20&start=0
+----
+
+**Autocomplete Suggestions**
+----  
+GET /api/sn/{site}/ac?q={partial-query}
+----
+
+**Search by Date Range**
+----
+GET /api/sn/{site}/search?q={query}&fq=date:[2024-01-01T00:00:00Z TO 2024-12-31T23:59:59Z]
+----
+
+=== Content Management APIs
+
+**Import Single Document**
+----
+POST /api/sn/{site}/import
+Content-Type: application/json
+----
+
+**Bulk Import**
+----
+POST /api/sn/{site}/import/bulk
+Content-Type: application/json
+----
+
+**Delete Document**
+----
+DELETE /api/sn/{site}/document/{id}
+----
+
+=== NLP APIs
+
+**Spell Check**
+----
+GET /api/nlp/spellcheck?q={text}&locale=en
+----
+
+**Language Detection**
+----  
+POST /api/nlp/detect-language
+Content-Type: application/json
+{"text": "Hello, this is a sample text"}
+----
+
+== SDK Examples
+
+=== JavaScript/Node.js
+
+[source,javascript]
+----
+// Install: npm install axios
+
+const axios = require('axios');
+
+class TuringClient {
+  constructor(baseUrl = 'http://localhost:2700', siteId) {
+    this.baseUrl = baseUrl;
+    this.siteId = siteId;
+  }
+
+  async search(query, options = {}) {
+    const params = new URLSearchParams({
+      q: query,
+      ...options
+    });
+    
+    const response = await axios.get(
+      `${this.baseUrl}/api/sn/${this.siteId}/search?${params}`
+    );
+    
+    return response.data;
+  }
+
+  async addDocument(doc) {
+    return axios.post(
+      `${this.baseUrl}/api/sn/${this.siteId}/import`,
+      doc
+    );
+  }
+}
+
+// Usage
+const client = new TuringClient('http://localhost:2700', 'my-site');
+
+// Search
+const results = await client.search('artificial intelligence');
+console.log(`Found ${results.results.numFound} results`);
+
+// Add document
+await client.addDocument({
+  title: 'AI in Modern Applications',
+  content: 'Artificial Intelligence is transforming...',
+  url: 'https://example.com/ai-guide'
+});
+----
+
+=== Python
+
+[source,python]
+----
+# Install: pip install requests
+
+import requests
+import json
+
+class TuringClient:
+    def __init__(self, base_url='http://localhost:2700', site_id=None):
+        self.base_url = base_url
+        self.site_id = site_id
+        
+    def search(self, query, **kwargs):
+        params = {'q': query, **kwargs}
+        url = f"{self.base_url}/api/sn/{self.site_id}/search"
+        
+        response = requests.get(url, params=params)
+        return response.json()
+        
+    def add_document(self, doc):
+        url = f"{self.base_url}/api/sn/{self.site_id}/import"
+        
+        response = requests.post(url, json=doc)
+        return response.json()
+
+# Usage
+client = TuringClient(site_id='my-site')
+
+# Search
+results = client.search('machine learning', rows=10)
+print(f"Found {results['results']['numFound']} results")
+
+# Add document
+client.add_document({
+    'title': 'Introduction to ML',
+    'content': 'Machine learning is a subset of AI...',
+    'url': 'https://example.com/ml-intro'
+})
+----
+
+=== Java
+
+[source,java]
+----
+// Add dependency: OkHttp or similar HTTP client
+
+import okhttp3.*;
+import com.google.gson.Gson;
+
+public class TuringClient {
+    private final OkHttpClient client = new OkHttpClient();
+    private final String baseUrl;
+    private final String siteId;
+    private final Gson gson = new Gson();
+    
+    public TuringClient(String baseUrl, String siteId) {
+        this.baseUrl = baseUrl;
+        this.siteId = siteId;
+    }
+    
+    public SearchResponse search(String query) throws IOException {
+        String url = String.format("%s/api/sn/%s/search?q=%s", 
+                                   baseUrl, siteId, query);
+                                   
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+            
+        try (Response response = client.newCall(request).execute()) {
+            return gson.fromJson(response.body().string(), 
+                               SearchResponse.class);
+        }
+    }
+    
+    public void addDocument(Document doc) throws IOException {
+        String url = String.format("%s/api/sn/%s/import", baseUrl, siteId);
+        
+        RequestBody body = RequestBody.create(
+            gson.toJson(doc), 
+            MediaType.get("application/json")
+        );
+        
+        Request request = new Request.Builder()
+            .url(url)
+            .post(body)
+            .build();
+            
+        client.newCall(request).execute();
+    }
+}
+
+// Usage
+TuringClient client = new TuringClient("http://localhost:2700", "my-site");
+
+SearchResponse results = client.search("deep learning");
+System.out.println("Found " + results.getResults().getNumFound() + " results");
+----
+
+== Integration Patterns
+
+=== Website Search
+
+Add intelligent search to your website:
+
+[source,html]
+----
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Search</title>
+</head>
+<body>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search for anything...">
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const resultsDiv = document.getElementById('results');
+        
+        searchInput.addEventListener('input', async (e) => {
+            const query = e.target.value;
+            if (query.length < 2) return;
+            
+            const response = await fetch(
+                `http://localhost:2700/api/sn/my-site/search?q=${encodeURIComponent(query)}`
+            );
+            const data = await response.json();
+            
+            resultsDiv.innerHTML = data.results.docs.map(doc => `
+                <div class="result">
+                    <h3><a href="${doc.url}">${doc.title}</a></h3>
+                    <p>${doc.content.substring(0, 200)}...</p>
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>
+----
+
+=== React Component
+
+[source,jsx]
+----
+import React, { useState, useEffect } from 'react';
+
+const TuringSearch = ({ siteId = 'my-site' }) => {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const search = async () => {
+      if (query.length < 2) {
+        setResults([]);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `http://localhost:2700/api/sn/${siteId}/search?q=${encodeURIComponent(query)}`
+        );
+        const data = await response.json();
+        setResults(data.results.docs);
+      } catch (error) {
+        console.error('Search failed:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const timeoutId = setTimeout(search, 300); // Debounce
+    return () => clearTimeout(timeoutId);
+  }, [query, siteId]);
+
+  return (
+    <div className="turing-search">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
+        className="search-input"
+      />
+      
+      {loading && <div className="loading">Searching...</div>}
+      
+      <div className="results">
+        {results.map((doc, index) => (
+          <div key={index} className="result">
+            <h3><a href={doc.url}>{doc.title}</a></h3>
+            <p>{doc.content?.substring(0, 200)}...</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default TuringSearch;
+----
+
+:numbered:
+
+== Contributing to Turing ES Development
+
+Want to contribute to Turing ES? Here's how to set up your development environment.
+
+=== Development Environment Setup
+
+==== Prerequisites
+
+* *Java 21* - https://adoptium.net/temurin/releases/?package=jdk&version=21[Eclipse Temurin] (recommended)
+* *Node.js 16+* - https://nodejs.org/en/download/[Download Node.js]
+* *Git* - https://git-scm.com/downloads[Download Git]
+* *IDE* - IntelliJ IDEA, VS Code, or Eclipse
+
+==== Technology Stack
+
+**Backend:**
+* Spring Boot 3.x (REST APIs and web services)
+* JPA/Hibernate (data persistence)
+* Apache Solr (search engine)
+* H2/PostgreSQL/Oracle/SQL Server (database options)
+
+**Frontend:**
+* AngularJS (legacy UI - being migrated)
+* Angular 12+ (new UI in development)
+* Primer CSS (GitHub's design system)
+
+**Build & Deploy:**
+* Maven (dependency management and builds)
+* Docker & Docker Compose (containerization)
+* GitHub Actions (CI/CD)
+
+=== Quick Development Setup
+
+==== 1. Clone the Repository
+
+[source,bash]
+----
+git clone https://github.com/openviglet/turing.git
+cd turing
+----
+
+==== 2. Build the Project
+
+[source,bash]
+----
+# Build everything
+mvn clean install
+
+# Or build specific modules
+mvn clean install -pl turing-app
+----
+
+==== 3. Run in Development Mode
+
+**Option A: Full Development Mode (with UI hot reload)**
+[source,bash]
+----
+mvn spring-boot:run -pl turing-app
+----
+
+**Option B: API-only Mode (faster startup)**
+[source,bash]
+----
+mvn spring-boot:run -pl turing-app -Dspring-boot.run.profiles=dev-api
+----
+
+**Option C: With External Services (using Docker)**
+[source,bash]
+----
+# Start dependencies
+docker-compose up -d
+
+# Run the application
+mvn spring-boot:run -pl turing-app -Dspring-boot.run.profiles=external
+----
+
+=== Development Workflow
+
+==== Making Changes
+
+1. **Create a feature branch:**
+[source,bash]
+----
+git checkout -b feature/my-awesome-feature
+----
+
+2. **Make your changes** in the appropriate modules:
+   * `turing-app/` - Main application
+   * `turing-nlp/` - NLP integrations
+   * `turing-commons/` - Shared utilities
+
+3. **Test your changes:**
+[source,bash]
+----
+# Run unit tests
+mvn test
+
+# Run integration tests
+mvn integration-test
+
+# Run specific test class
+mvn test -Dtest=MyTestClass
+----
+
+4. **Submit a pull request** with:
+   * Clear description of changes
+   * Tests for new functionality
+   * Documentation updates if needed
+
+=== Project Structure
+
+----
+turing/
+├── turing-app/              # Main Spring Boot application
+│   ├── src/main/java/       # Java source code
+│   ├── src/main/resources/  # Configuration and static files
+│   └── src/main/angular/    # Angular frontend (new UI)
+├── turing-nlp/              # NLP provider integrations
+├── turing-commons/          # Shared utilities and models
+├── turing-connectors/       # Data source connectors
+└── docker-compose.yml       # Development dependencies
+----
+
+=== Debugging
+
+==== IDE Debugging
+
+**IntelliJ IDEA:**
+1. Open the project root in IntelliJ
+2. Create a Spring Boot run configuration for `turing-app`
+3. Set breakpoints and run in debug mode
+
+**VS Code:**
+1. Install Java Extension Pack
+2. Use the built-in Spring Boot debugging support
+3. Create `.vscode/launch.json` configuration
+
+==== Remote Debugging
+
+[source,bash]
+----
+mvn spring-boot:run -pl turing-app -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
+----
+
+Then connect your IDE debugger to `localhost:5005`.
+
+=== Testing
+
+==== Unit Tests
+[source,bash]
+----
+# Run all unit tests
+mvn test
+
+# Run tests for specific module
+mvn test -pl turing-app
+
+# Run with coverage report
+mvn test jacoco:report
+----
+
+==== Integration Tests
+[source,bash]
+----
+# Run integration tests
+mvn integration-test
+
+# Run with test containers (requires Docker)
+mvn integration-test -Dspring.profiles.active=testcontainers
+----
+
+==== API Testing
+[source,bash]
+----
+# Start the application
+mvn spring-boot:run -pl turing-app
+
+# Test endpoints (in another terminal)
+curl http://localhost:2700/api/sn/sample/search?q=test
+----
+
+=== Database Development
+
+==== H2 Console (Development)
+When running with H2 database, access the console at:
+http://localhost:2700/h2-console
+
+**Connection details:**
+* JDBC URL: `jdbc:h2:mem:testdb`
+* Username: `sa`
+* Password: _(empty)_
+
+==== Using PostgreSQL for Development
+
+1. Start PostgreSQL with Docker:
+[source,bash]
+----
+docker run --name turing-postgres -e POSTGRES_DB=turing -e POSTGRES_USER=turing -e POSTGRES_PASSWORD=turing -p 5432:5432 -d postgres:13
+----
+
+2. Run with PostgreSQL profile:
+[source,bash]
+----
+mvn spring-boot:run -pl turing-app -Dspring-boot.run.profiles=postgresql
+----
+
+=== Frontend Development
+
+==== Legacy AngularJS UI
+
+The current production UI is built with AngularJS. To work on it:
+
+[source,bash]
+----
+cd turing-app/src/main/resources/public
+
+# Install dependencies (first time only)
+npm install
+
+# Watch for changes (optional)
+npm run watch
+----
+
+==== New Angular UI (In Development)
+
+The new UI is being built with Angular 12+:
+
+[source,bash]
+----
+cd turing-app/src/main/angular
+
+# Install dependencies
+npm install
+
+# Start development server
+ng serve
+
+# Build for production
+ng build
+----
+
+=== Docker Development
+
+==== Full Docker Setup
+
+[source,bash]
+----
+# Build the Docker image
+docker build -t viglet/turing .
+
+# Run with Docker Compose (includes Solr, PostgreSQL)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f turing
+----
+
+==== Development with External Services
+
+Use Docker only for dependencies:
+
+[source,bash]
+----
+# Start only external services
+docker-compose up -d solr postgres
+
+# Run Turing ES locally
+mvn spring-boot:run -pl turing-app -Dspring-boot.run.profiles=external
+----
+
+=== Contribution Guidelines
+
+==== Code Style
+
+* Follow Java coding conventions
+* Use meaningful variable and method names
+* Add JavaDoc for public APIs
+* Write unit tests for new functionality
+
+==== Pull Request Process
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes with tests
+4. Update documentation if needed
+5. Submit a pull request with clear description
+
+==== Reporting Issues
+
+Before reporting bugs or requesting features:
+
+1. Check existing issues on GitHub
+2. Provide detailed reproduction steps
+3. Include system information and logs
+4. Use issue templates when available
+
+=== Getting Help
+
+**Community Support:**
+* GitHub Discussions: https://github.com/openviglet/turing/discussions
+* Issues: https://github.com/openviglet/turing/issues
+
+**Documentation:**
+* API Reference: link:../api-reference/[API Documentation]
+* Architecture Guide: link:../architecture/[Architecture Overview]
+
+**Contact:**
+* Email: opensource@viglet.com
+* Twitter: @VigletTuring
+
+:numbered:
 
 === Download
 

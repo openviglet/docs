@@ -1,0 +1,811 @@
+= Viglet Turing ES: Troubleshooting Guide
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Turing
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.10
+:revdate: 25-12-2024
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Troubleshooting Guide
+:page-permalink: /turing/0.3.10/troubleshooting/
+:imagesdir: ../../../
+:page-pdf: /turing/turing-troubleshooting-0.3.10.pdf
+:page-product: turing
+
+[preface]
+== Troubleshooting Turing ES
+
+Having issues with Turing ES? This guide helps you diagnose and resolve common problems quickly. From installation issues to performance problems, we've got you covered.
+
+**Quick Help:**
+* 🚀 **Installation Issues** - Can't get Turing ES started?  
+* 🔍 **Search Problems** - Not finding the results you expect?
+* ⚡ **Performance Issues** - Running slowly or timing out?
+* 🔌 **Integration Problems** - APIs not working as expected?
+* 🗄️ **Database Issues** - Connection or data problems?
+
+TIP: Most issues can be resolved by checking the logs. Look for error messages in the console output or log files.
+
+:numbered:
+
+== Getting Help with Logs
+
+=== Viewing Console Logs
+
+When running Turing ES from the command line, logs appear in your terminal:
+
+[source,bash]
+----
+java -jar viglet-turing.jar
+----
+
+Look for ERROR, WARN, or FATAL messages that indicate problems.
+
+=== Log Files
+
+Turing ES creates log files in the `logs/` directory:
+
+* `turing.log` - Main application logs
+* `turing-error.log` - Error-specific logs  
+* `access.log` - HTTP request logs
+
+=== Increasing Log Detail
+
+For debugging, enable debug logging:
+
+[source,bash]
+----
+java -jar viglet-turing.jar --logging.level.com.viglet.turing=DEBUG
+----
+
+Or add to `application.properties`:
+[source,properties]
+----
+logging.level.com.viglet.turing=DEBUG
+logging.level.org.springframework=INFO
+----
+
+== Installation & Startup Issues
+
+=== Java Version Problems
+
+**Problem:** "Unsupported Java version" or startup fails
+
+**Symptoms:**
+* Application won't start
+* Error mentioning Java version compatibility
+* ClassNotFoundException errors
+
+**Solutions:**
+
+1. **Verify Java 21 is installed:**
+[source,bash]
+----
+java -version
+# Should show version 21.x.x
+----
+
+2. **Check JAVA_HOME environment variable:**
+[source,bash]
+----
+echo $JAVA_HOME
+# Should point to Java 21 installation
+----
+
+3. **Install Java 21 if needed:**
+* Download from https://adoptium.net/[Eclipse Temurin]
+* Update PATH and JAVA_HOME variables
+* Restart terminal/command prompt
+
+**Windows JAVA_HOME setup:**
+[source,cmd]
+----
+set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21.0.1.12-hotspot
+set PATH=%JAVA_HOME%\bin;%PATH%
+----
+
+**Linux/macOS JAVA_HOME setup:**
+[source,bash]
+----
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+export PATH=$JAVA_HOME/bin:$PATH
+----
+
+=== Port Already in Use
+
+**Problem:** "Port 2700 already in use" or "Address already in use"
+
+**Symptoms:**
+* Application starts but immediately exits
+* Error message about port binding
+* Cannot access http://localhost:2700
+
+**Solutions:**
+
+1. **Find what's using the port:**
+[source,bash]
+----
+# Windows
+netstat -ano | findstr :2700
+
+# Linux/macOS  
+lsof -i :2700
+----
+
+2. **Kill the conflicting process:**
+[source,bash]
+----
+# Windows (replace PID with actual process ID)
+taskkill /PID 1234 /F
+
+# Linux/macOS
+kill -9 PID
+----
+
+3. **Use a different port:**
+[source,bash]
+----
+java -jar viglet-turing.jar --server.port=8080
+----
+
+4. **Access on new port:**
+http://localhost:8080
+
+=== Out of Memory Errors
+
+**Problem:** OutOfMemoryError, GC overhead limit, or slow startup
+
+**Symptoms:**
+* Application crashes with memory errors
+* Very slow performance
+* Frequent garbage collection messages
+
+**Solutions:**
+
+1. **Increase heap size:**
+[source,bash]
+----
+# For 4GB heap
+java -Xmx4g -Xms2g -jar viglet-turing.jar
+
+# For 8GB heap  
+java -Xmx8g -Xms4g -jar viglet-turing.jar
+----
+
+2. **Check available system memory:**
+[source,bash]
+----
+# Linux
+free -h
+
+# macOS
+vm_stat
+
+# Windows
+wmic OS get TotalVisibleMemorySize /value
+----
+
+3. **Optimize garbage collection:**
+[source,bash]
+----
+java -Xmx4g -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -jar viglet-turing.jar
+----
+
+=== Permission Errors
+
+**Problem:** File permission or access denied errors
+
+**Symptoms:**
+* Cannot create database files
+* Cannot write to logs directory
+* Configuration files not readable
+
+**Solutions:**
+
+1. **Run from writable directory:**
+[source,bash]
+----
+mkdir /home/user/turing
+cd /home/user/turing
+java -jar viglet-turing.jar
+----
+
+2. **Fix file permissions (Linux/macOS):**
+[source,bash]
+----
+chmod 755 viglet-turing.jar
+chown user:user viglet-turing.jar
+----
+
+3. **Run as administrator (Windows):**
+* Right-click Command Prompt
+* Select "Run as administrator"
+
+== Database Connection Issues
+
+=== H2 Database Problems
+
+**Problem:** Cannot connect to embedded H2 database
+
+**Symptoms:**
+* "Database may be already in use" error
+* Cannot access H2 console
+* Data not persisting between restarts
+
+**Solutions:**
+
+1. **Check for multiple instances:**
+[source,bash]
+----
+# Look for other java processes running Turing
+ps aux | grep turing
+----
+
+2. **Clean database files:**
+[source,bash]
+----
+# Stop Turing ES first, then remove H2 files
+rm -f *.db *.trace.db *.lock.db
+----
+
+3. **Use different database path:**
+[source,bash]
+----
+java -jar viglet-turing.jar --spring.datasource.url="jdbc:h2:file:./data/turing"
+----
+
+=== External Database Connection
+
+**Problem:** Cannot connect to PostgreSQL/MySQL/Oracle
+
+**Symptoms:**
+* Connection timeout errors
+* Authentication failures
+* SSL connection errors
+
+**Solutions:**
+
+1. **Verify database server is running:**
+[source,bash]
+----
+# Test connectivity
+telnet db-server 5432  # PostgreSQL
+telnet db-server 3306  # MySQL
+----
+
+2. **Check connection configuration:**
+[source,properties]
+----
+# In application.properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/turing
+spring.datasource.username=turing
+spring.datasource.password=your-password
+
+# Test connection
+spring.datasource.hikari.connection-test-query=SELECT 1
+----
+
+3. **Verify database and user exist:**
+[source,sql]
+----
+-- PostgreSQL
+\l                    -- List databases
+\du                   -- List users
+GRANT ALL ON DATABASE turing TO turing;
+
+-- MySQL
+SHOW DATABASES;
+SELECT User FROM mysql.user;
+GRANT ALL PRIVILEGES ON turing.* TO 'turing'@'%';
+----
+
+4. **Check firewall and network:**
+[source,bash]
+----
+# Test network connectivity
+ping db-server
+nmap -p 5432 db-server
+----
+
+== Search & Indexing Issues
+
+=== No Search Results
+
+**Problem:** Searches return no results despite having content
+
+**Symptoms:**
+* All searches return 0 results
+* Recently added content not appearing
+* Previously working searches now fail
+
+**Solutions:**
+
+1. **Check if content is indexed:**
+* Go to Admin Console → Content → Browse
+* Verify documents are listed
+* Check document count in site statistics
+
+2. **Verify site configuration:**
+[source,bash]
+----
+# Check API with correct site ID
+curl "http://localhost:2700/api/sn/YOUR-SITE-ID/search?q=test"
+----
+
+3. **Check Solr index status:**
+* Go to Admin Console → System → Search Engine
+* Verify Solr connection
+* Check index statistics
+
+4. **Reindex all content:**
+* Go to Admin Console → Content → Reindex
+* Or use API:
+[source,bash]
+----
+curl -X POST "http://localhost:2700/api/sn/YOUR-SITE/reindex"
+----
+
+=== Search Results Not Relevant
+
+**Problem:** Search returns irrelevant or poorly ranked results
+
+**Solutions:**
+
+1. **Check field boosting:**
+* Go to Site Configuration → Search Settings
+* Increase boost for title and important fields
+* Example: title^3.0 content^1.0 tags^2.0
+
+2. **Configure NLP providers:**
+* Ensure NLP providers are active
+* Check semantic processing is working
+* Test with simple, then complex queries
+
+3. **Review targeting rules:**
+* Create rules for specific query patterns
+* Promote important content for key terms
+
+=== Content Not Indexing
+
+**Problem:** New content not appearing in search results
+
+**Symptoms:**
+* Upload succeeds but content not searchable
+* API import returns success but no results
+* Some file types not being processed
+
+**Solutions:**
+
+1. **Check file format support:**
+* Verify file type is supported (PDF, Word, HTML, etc.)
+* Check file size limits
+* Ensure file is not corrupted
+
+2. **Monitor indexing queue:**
+* Go to Admin Console → System → Indexing Status
+* Check for failed indexing jobs
+* Look for error messages in logs
+
+3. **Verify NLP processing:**
+[source,bash]
+----
+# Check NLP provider status
+curl "http://localhost:2700/api/nlp/providers"
+
+# Test NLP directly
+curl -X POST "http://localhost:2700/api/nlp/analyze" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "test content", "provider": "opennlp"}'
+----
+
+4. **Manual content refresh:**
+[source,bash]
+----
+# Force refresh of specific document
+curl -X PUT "http://localhost:2700/api/sn/YOUR-SITE/document/DOC-ID/refresh"
+----
+
+== Performance Issues
+
+=== Slow Search Response
+
+**Problem:** Search queries take too long to return results
+
+**Symptoms:**
+* Search timeouts (>30 seconds)
+* High CPU usage during searches
+* Users complaining about slow interface
+
+**Solutions:**
+
+1. **Optimize search queries:**
+[source,bash]
+----
+# Use pagination to limit results
+curl "http://localhost:2700/api/sn/site/search?q=test&rows=20&start=0"
+
+# Add filters to narrow results  
+curl "http://localhost:2700/api/sn/site/search?q=test&fq=category:news"
+----
+
+2. **Check system resources:**
+[source,bash]
+----
+# Monitor CPU and memory
+top         # Linux/macOS
+htop        # Better alternative
+taskmgr     # Windows
+----
+
+3. **Optimize Solr configuration:**
+* Increase Solr cache sizes
+* Configure proper warming queries
+* Use appropriate request handlers
+
+4. **Database optimization:**
+[source,sql]
+----
+-- Add indexes for frequently queried fields
+CREATE INDEX idx_content_date ON content(date_created);
+CREATE INDEX idx_content_site ON content(site_id);
+
+-- Analyze query performance
+EXPLAIN ANALYZE SELECT * FROM content WHERE site_id = 'my-site';
+----
+
+=== High Memory Usage
+
+**Problem:** Turing ES consuming too much memory
+
+**Solutions:**
+
+1. **Optimize JVM settings:**
+[source,bash]
+----
+java -Xmx4g -Xms2g \
+  -XX:+UseG1GC \
+  -XX:MaxGCPauseMillis=200 \
+  -XX:+UseStringDeduplication \
+  -jar viglet-turing.jar
+----
+
+2. **Monitor memory usage:**
+[source,bash]
+----
+# Add JVM monitoring
+java -XX:+PrintGCDetails -XX:+PrintGCTimeStamps \
+  -Xloggc:gc.log -jar viglet-turing.jar
+----
+
+3. **Configure connection pooling:**
+[source,properties]
+----
+# Limit database connections
+spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5
+
+# Configure cache sizes
+spring.cache.caffeine.spec=maximumSize=10000,expireAfterWrite=1h
+----
+
+=== Disk Space Issues
+
+**Problem:** Running out of disk space
+
+**Solutions:**
+
+1. **Check disk usage:**
+[source,bash]
+----
+# Check available space
+df -h      # Linux/macOS
+dir C:\    # Windows
+
+# Find large files
+du -h --max-depth=1 | sort -hr
+----
+
+2. **Clean up log files:**
+[source,bash]
+----
+# Archive old logs
+gzip logs/*.log
+
+# Configure log rotation
+logging.file.max-size=100MB
+logging.file.max-history=30
+----
+
+3. **Optimize search index:**
+[source,bash]
+----
+# Optimize Solr index
+curl "http://localhost:8983/solr/YOUR-CORE/update?optimize=true"
+
+# Remove unused fields from index
+# Configure in schema.xml or managed schema
+----
+
+== API & Integration Issues
+
+=== API Authentication Failures
+
+**Problem:** Getting 401 Unauthorized errors
+
+**Solutions:**
+
+1. **Check authentication endpoint:**
+[source,bash]
+----
+curl -X POST http://localhost:2700/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin"}'
+----
+
+2. **Verify token usage:**
+[source,bash]
+----
+# Get token from login response
+TOKEN="your-jwt-token-here"
+
+# Use in API calls
+curl -H "Authorization: Bearer $TOKEN" \
+  "http://localhost:2700/api/admin/sites"
+----
+
+3. **Check token expiration:**
+* Tokens expire after a set time (default 24 hours)
+* Implement token refresh in your application
+* Handle 401 errors by re-authenticating
+
+=== CORS Issues
+
+**Problem:** Cross-origin requests blocked in web browsers
+
+**Symptoms:**
+* API works with cURL but fails in JavaScript
+* Browser console shows CORS errors
+* Preflight OPTIONS requests failing
+
+**Solutions:**
+
+1. **Configure CORS in application.properties:**
+[source,properties]
+----
+# Allow all origins (development only)
+turing.cors.allowed-origins=*
+
+# Production: specify domains
+turing.cors.allowed-origins=https://mysite.com,https://app.mysite.com
+turing.cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
+turing.cors.allowed-headers=*
+----
+
+2. **Use server-side proxy:**
+[source,javascript]
+----
+// Instead of direct API calls, proxy through your server
+fetch('/api/proxy/search?q=test')  // Your server proxies to Turing ES
+  .then(response => response.json())
+----
+
+3. **Configure reverse proxy (production):**
+[source,nginx]
+----
+# nginx configuration
+location /api/ {
+    proxy_pass http://localhost:2700/api/;
+    add_header Access-Control-Allow-Origin *;
+    add_header Access-Control-Allow-Methods "GET, POST, OPTIONS";
+}
+----
+
+=== JSON Parsing Errors
+
+**Problem:** API responses not parsing correctly
+
+**Solutions:**
+
+1. **Check response content-type:**
+[source,bash]
+----
+curl -I "http://localhost:2700/api/sn/site/search?q=test"
+# Should return: Content-Type: application/json
+----
+
+2. **Validate JSON structure:**
+[source,bash]
+----
+curl "http://localhost:2700/api/sn/site/search?q=test" | jq .
+# jq will highlight JSON syntax errors
+----
+
+3. **Handle encoding issues:**
+[source,javascript]
+----
+// Ensure proper encoding in requests
+fetch('/api/sn/site/search?q=' + encodeURIComponent(query))
+----
+
+== NLP & AI Issues
+
+=== NLP Provider Not Working
+
+**Problem:** Natural Language Processing not functioning
+
+**Solutions:**
+
+1. **Check provider status:**
+* Go to Admin Console → NLP → Providers  
+* Verify enabled providers show as "Active"
+* Test individual providers
+
+2. **OpenNLP (built-in) issues:**
+[source,bash]
+----
+# Check OpenNLP models are loaded
+curl "http://localhost:2700/api/nlp/providers/opennlp/status"
+----
+
+3. **External NLP service issues:**
+[source,bash]
+----
+# Test spaCy service
+curl "http://localhost:2800/process" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "test sentence"}'
+
+# Test CoreNLP service  
+curl "http://localhost:9000/?properties={\"annotators\":\"tokenize,ssplit,pos\"}" \
+  -d "This is a test sentence."
+----
+
+4. **Configuration problems:**
+[source,properties]
+----
+# Check NLP provider URLs in application.properties
+turing.nlp.spacy.url=http://localhost:2800
+turing.nlp.corenlp.url=http://localhost:9000
+turing.nlp.opentext.url=http://localhost:40000
+----
+
+== Production Environment Issues
+
+=== SSL/HTTPS Configuration
+
+**Problem:** Setting up secure connections
+
+**Solutions:**
+
+1. **Configure SSL certificate:**
+[source,properties]
+----
+# In application.properties
+server.port=8443
+server.ssl.key-store=keystore.jks
+server.ssl.key-store-password=yourpassword
+server.ssl.key-store-type=JKS
+----
+
+2. **Generate self-signed certificate (testing only):**
+[source,bash]
+----
+keytool -genkeypair -alias turing \
+  -keyalg RSA -keysize 2048 \
+  -storetype JKS -keystore keystore.jks \
+  -validity 365
+----
+
+3. **Use reverse proxy (recommended):**
+[source,nginx]
+----
+# nginx HTTPS proxy
+server {
+    listen 443 ssl;
+    server_name turing.example.com;
+    
+    ssl_certificate /path/to/certificate.pem;
+    ssl_certificate_key /path/to/private-key.pem;
+    
+    location / {
+        proxy_pass http://localhost:2700;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+}
+----
+
+=== Load Balancer Configuration
+
+**Problem:** Setting up high availability
+
+**Solutions:**
+
+1. **Session affinity:**
+[source,properties]
+----
+# Enable sticky sessions
+server.servlet.session.cookie.name=TURING-SESSION
+server.servlet.session.timeout=30m
+----
+
+2. **Health check endpoint:**
+[source,bash]
+----
+# Configure load balancer to check
+curl "http://localhost:2700/actuator/health"
+----
+
+3. **Shared database configuration:**
+[source,properties]
+----
+# All instances use same database
+spring.datasource.url=jdbc:postgresql://db-cluster:5432/turing
+spring.jpa.hibernate.ddl-auto=validate
+----
+
+== Getting Additional Help
+
+=== Collecting Diagnostic Information
+
+When asking for help, collect this information:
+
+1. **System information:**
+[source,bash]
+----
+# Java version
+java -version
+
+# System info
+uname -a  # Linux/macOS
+systeminfo  # Windows
+
+# Available memory
+free -h  # Linux
+vm_stat  # macOS
+----
+
+2. **Turing ES version:**
+[source,bash]
+----
+java -jar viglet-turing.jar --version
+----
+
+3. **Configuration files:**
+* application.properties
+* Any custom configuration files
+* Environment variables
+
+4. **Log files:**
+* Console output during error
+* turing.log file contents
+* Database logs if relevant
+
+5. **Network configuration:**
+[source,bash]
+----
+# Check listening ports
+netstat -an | grep LISTEN
+----
+
+=== Where to Get Help
+
+**Community Support:**
+* https://github.com/openviglet/turing/discussions[GitHub Discussions]
+* https://github.com/openviglet/turing/issues[Bug Reports]
+
+**Professional Support:**
+* Email: opensource@viglet.com
+* Enterprise support contracts available
+
+**Documentation:**
+* link:getting-started/[Getting Started Guide]
+* link:faq/[Frequently Asked Questions]
+* link:developer-guide/[Developer Guide]
+
+Remember: The community is here to help! Don't hesitate to ask questions and share your solutions with others. 🚀

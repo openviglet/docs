@@ -18,11 +18,47 @@ ifdef::backend-pdf[:toc: left]
 :page-product: turing
 
 [preface]
-= Preface
+== Welcome to Turing ES Administration
 
-Viglet Turing ES (https://viglet.com/turing) is an open source solution (https://github.com/openviglet), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+This guide helps you configure, manage, and optimize your Viglet Turing ES installation. Whether you're a system administrator setting up your first search site or managing an enterprise deployment, this guide provides the knowledge you need.
+
+**What you'll learn:**
+
+* 🏗️ **Architecture Overview** - Understand how Turing ES components work together
+* 🔧 **Configuration** - Set up NLP providers, data sources, and search settings
+* 👥 **User Management** - Control access and permissions
+* 📊 **Monitoring & Performance** - Keep your system running smoothly
+* 🔒 **Security** - Implement best practices for production environments
+
+**Who should use this guide:**
+
+* System Administrators
+* DevOps Engineers  
+* IT Managers
+* Anyone responsible for maintaining Turing ES
+
+TIP: New to Turing ES? Start with the link:getting-started/[Getting Started Guide] first.
 
 :numbered:
+
+== Understanding Turing ES
+
+Before diving into administration tasks, let's understand what you're working with.
+
+**Viglet Turing ES** is an intelligent search and navigation platform that combines:
+
+* **Search Engine** (Apache Solr) - Handles indexing and search operations
+* **NLP Processing** - Extracts meaning and context from content
+* **Web Interface** - Provides user-friendly administration and search
+* **REST APIs** - Enables integration with other systems
+
+=== How It All Works Together
+
+1. **Content Ingestion** → Content is imported from various sources (files, databases, APIs)
+2. **NLP Processing** → Natural language processors analyze and enrich the content
+3. **Indexing** → Processed content is stored in the search engine (Solr)
+4. **Search & Discovery** → Users find content through web interface or APIs
+5. **Continuous Learning** → The system improves based on user interactions
 
 == Architecture
 

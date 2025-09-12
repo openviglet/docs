@@ -1,0 +1,734 @@
+= Viglet Turing ES: Best Practices Guide
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Turing
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.10
+:revdate: 25-12-2024
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Best Practices
+:page-permalink: /turing/0.3.10/best-practices/
+:imagesdir: ../../../
+:page-pdf: /turing/turing-best-practices-0.3.10.pdf
+:page-product: turing
+
+[preface]
+== Best Practices for Turing ES
+
+This guide shares proven strategies and recommendations for getting the most out of your Turing ES implementation. From initial setup to production optimization, these practices will help you build a robust, efficient, and user-friendly search experience.
+
+**What you'll learn:**
+
+* 🏗️ **Setup & Configuration** - Start with a solid foundation
+* 📊 **Content Strategy** - Organize and structure your data effectively  
+* ⚡ **Performance Optimization** - Keep your system running fast
+* 🔒 **Security & Compliance** - Protect your data and users
+* 📈 **Monitoring & Maintenance** - Ensure long-term success
+* 👥 **User Experience** - Create search experiences users love
+
+:numbered:
+
+== Planning Your Implementation
+
+=== Content Analysis
+
+Before implementing Turing ES, understand your content landscape:
+
+**Content Audit Checklist:**
+* ✅ **Volume**: How much content will you index? (documents, pages, records)
+* ✅ **Types**: What formats? (PDFs, web pages, databases, images)
+* ✅ **Languages**: Multi-language content requirements?
+* ✅ **Growth Rate**: How quickly does content volume increase?
+* ✅ **Update Frequency**: How often does content change?
+* ✅ **Access Patterns**: Which content is accessed most frequently?
+
+**Example Content Matrix:**
+[cols="2,1,2,2"]
+|===
+|Content Type |Volume |Update Frequency |Priority
+
+|Product Catalog
+|50,000 items
+|Daily
+|High
+
+|Documentation  
+|1,000 pages
+|Weekly
+|High
+
+|News Articles
+|10,000 articles
+|Daily
+|Medium
+
+|Support Tickets
+|100,000 records
+|Hourly
+|Low
+|===
+
+=== Architecture Planning
+
+**Small to Medium Deployments (< 1M documents):**
+* Single Turing ES instance
+* PostgreSQL database
+* Embedded Solr
+* 8GB RAM, 4 CPU cores
+
+**Large Deployments (1M+ documents):**
+* Multiple Turing ES instances with load balancer
+* PostgreSQL cluster or Oracle RAC
+* SolrCloud cluster (3+ nodes)
+* 16GB+ RAM per instance
+
+**High Availability Setup:**
+* 3+ Turing ES instances across different availability zones
+* Database replication/clustering
+* Distributed search index
+* Health monitoring and auto-failover
+
+=== Capacity Planning
+
+**Storage Requirements:**
+* Index size is typically 20-30% of source content size
+* Database storage for metadata: ~1KB per document
+* Log storage: Plan for 1-2GB per month per instance
+
+**Performance Benchmarks:**
+* Target search response time: < 200ms for 95% of queries
+* Indexing throughput: 100-1000 documents per minute (depends on content complexity)
+* Concurrent users: 50-500 per instance (depending on query complexity)
+
+== Content Strategy Best Practices
+
+=== Document Structure
+
+**Optimize Content for Search:**
+
+1. **Clear Titles**: Use descriptive, keyword-rich titles
+   * ✅ Good: "Turing ES Installation Guide for Windows"
+   * ❌ Poor: "Setup Instructions"
+
+2. **Structured Metadata**: Include consistent metadata fields
+   * Author, creation date, categories, tags
+   * Custom fields for domain-specific information
+
+3. **Content Hierarchy**: Organize with clear sections and headings
+   * Use proper heading structures (H1, H2, H3)
+   * Include table of contents for long documents
+
+**Example Document Structure:**
+[source,json]
+----
+{
+  "title": "Customer Onboarding Process",
+  "content": "Detailed process description...",
+  "summary": "Brief overview of the onboarding steps",
+  "category": ["processes", "customer-service"],
+  "tags": ["onboarding", "workflow", "customer"],
+  "author": "Jane Smith",
+  "department": "Customer Success",
+  "date_created": "2024-12-25T10:00:00Z",
+  "date_updated": "2024-12-25T15:30:00Z",
+  "security_level": "internal",
+  "language": "en",
+  "content_type": "process-document"
+}
+----
+
+=== Content Tagging Strategy
+
+**Implement Consistent Taxonomy:**
+
+1. **Hierarchical Categories**:
+   * Level 1: Broad topics (Products, Services, Support)
+   * Level 2: Specific areas (Product A, Installation, Troubleshooting)
+   * Level 3: Detailed topics (Feature X, Windows Install, Error Codes)
+
+2. **Tagging Guidelines**:
+   * Use lowercase, hyphenated tags: "customer-service", "api-documentation"
+   * Limit to 5-10 tags per document
+   * Create tag glossary for consistency
+
+3. **Metadata Standards**:
+   * Date formats: ISO 8601 (2024-12-25T10:00:00Z)
+   * Author format: "FirstName LastName"
+   * Categories: Use predefined vocabulary
+
+=== Multi-Language Content
+
+**Best Practices for Internationalization:**
+
+1. **Language Detection**: Enable automatic language detection
+2. **Locale-Specific Fields**: Configure language-specific analyzers
+3. **Translation Strategy**: 
+   * Maintain separate documents per language
+   * Link related translations with common ID
+
+[source,json]
+----
+{
+  "title_en": "User Guide",
+  "title_es": "Guía del Usuario", 
+  "title_pt": "Guia do Usuário",
+  "content_en": "English content...",
+  "content_es": "Contenido en español...",
+  "content_pt": "Conteúdo em português...",
+  "language": "en",
+  "translation_group": "user-guide-v1"
+}
+----
+
+== Search Configuration Best Practices
+
+=== Field Boosting Strategy
+
+**Configure Relevance Scoring:**
+
+1. **Title Boost**: 3.0x - Titles are most important for relevance
+2. **Summary/Description**: 2.0x - Brief descriptions carry weight
+3. **Tags/Categories**: 2.5x - Metadata helps with precision
+4. **Content Body**: 1.0x - Base relevance score
+5. **Author/Source**: 1.5x - May be relevant for expert content
+
+**Example Configuration:**
+[source,json]
+----
+{
+  "field_boosts": {
+    "title": 3.0,
+    "summary": 2.0,
+    "tags": 2.5,
+    "content": 1.0,
+    "author": 1.5,
+    "category": 2.0
+  }
+}
+----
+
+=== Search Interface Design
+
+**Create Intuitive Search Experiences:**
+
+1. **Search Box Placement**: 
+   * Prominent position (top of page)
+   * Adequate size (minimum 400px wide)
+   * Placeholder text with examples
+
+2. **Auto-Complete Configuration**:
+   * Show 5-8 suggestions
+   * Include popular searches
+   * Mix of query completions and direct results
+
+3. **Faceted Search**:
+   * Start with 3-5 most useful facets
+   * Use clear, user-friendly labels
+   * Show result counts per facet value
+
+4. **Results Display**:
+   * Title (linked to full content)
+   * Snippet with search term highlighting
+   * Metadata (date, author, category)
+   * Relevance indicators
+
+**Search Interface Example:**
+[source,html]
+----
+<div class="search-interface">
+  <input type="search" 
+         placeholder="Search for documentation, products, or help..."
+         class="search-input">
+  
+  <div class="search-filters">
+    <h4>Filter by:</h4>
+    <div class="facet">
+      <h5>Content Type</h5>
+      <label><input type="checkbox"> Documentation (1,234)</label>
+      <label><input type="checkbox"> FAQ (456)</label>
+      <label><input type="checkbox"> Tutorials (789)</label>
+    </div>
+  </div>
+  
+  <div class="search-results">
+    <div class="result">
+      <h3><a href="/doc/123">Installation Guide</a></h3>
+      <p>Step-by-step instructions for installing <strong>Turing ES</strong>...</p>
+      <div class="metadata">
+        <span class="date">Dec 25, 2024</span> • 
+        <span class="category">Documentation</span>
+      </div>
+    </div>
+  </div>
+</div>
+----
+
+=== Query Understanding
+
+**Enhance Search Intelligence:**
+
+1. **Synonyms Configuration**:
+   * Business-specific terminology
+   * Common abbreviations and acronyms
+   * Alternative spellings and variations
+
+2. **Stop Words Management**:
+   * Remove domain-specific noise words
+   * Keep important business terms
+   * Language-specific considerations
+
+3. **Query Expansion**:
+   * Add related terms automatically
+   * Use thesaurus for term enrichment
+   * Implement "did you mean?" suggestions
+
+**Synonym Examples:**
+[source,text]
+----
+# Technology synonyms
+api,rest api,web service,endpoint
+login,signin,authentication,auth
+config,configuration,settings,setup
+
+# Business synonyms  
+customer,client,user
+purchase,buy,order
+support,help,assistance
+----
+
+== Performance Optimization
+
+=== Indexing Performance
+
+**Optimize Content Processing:**
+
+1. **Batch Processing**:
+   * Index documents in batches of 100-1000
+   * Use bulk import APIs when possible
+   * Schedule large imports during off-peak hours
+
+2. **Content Optimization**:
+   * Limit document size (< 10MB per document)
+   * Extract text efficiently from binary formats
+   * Remove unnecessary whitespace and formatting
+
+3. **NLP Configuration**:
+   * Choose appropriate NLP providers for your content
+   * Balance processing quality vs. speed
+   * Consider caching NLP results for similar content
+
+**Batch Import Example:**
+[source,bash]
+----
+# Good: Batch import
+curl -X POST http://localhost:2700/api/sn/site/import/bulk \
+  -H "Content-Type: application/json" \
+  -d '[
+    {"title": "Doc 1", "content": "..."},
+    {"title": "Doc 2", "content": "..."},
+    {"title": "Doc 3", "content": "..."}
+  ]'
+
+# Avoid: Individual imports in loop
+for doc in docs:
+    curl -X POST .../import -d single_doc
+----
+
+=== Search Performance
+
+**Optimize Query Response Times:**
+
+1. **Query Optimization**:
+   * Use specific field searches when possible
+   * Implement query result caching
+   * Limit result set sizes with pagination
+
+2. **Index Optimization**:
+   * Regular index optimization (weekly)
+   * Remove unused fields from index
+   * Configure appropriate field types
+
+3. **Caching Strategy**:
+   * Cache popular searches
+   * Use CDN for static search interface assets
+   * Implement browser caching for results
+
+**Performance Monitoring:**
+[source,bash]
+----
+# Monitor search response times
+curl -w "@curl-format.txt" "http://localhost:2700/api/sn/site/search?q=test"
+
+# curl-format.txt contents:
+     time_namelookup:  %{time_namelookup}\n
+        time_connect:  %{time_connect}\n
+     time_appconnect:  %{time_appconnect}\n
+    time_pretransfer:  %{time_pretransfer}\n
+       time_redirect:  %{time_redirect}\n
+  time_starttransfer:  %{time_starttransfer}\n
+                     ----------\n
+          time_total:  %{time_total}\n
+----
+
+=== System Resource Management
+
+**Optimize Hardware Usage:**
+
+1. **Memory Management**:
+   * Allocate 50-70% of system RAM to Java heap
+   * Leave sufficient memory for OS and other processes
+   * Monitor garbage collection frequency
+
+2. **CPU Optimization**:
+   * Use appropriate number of processing threads
+   * Balance between concurrent users and processing power
+   * Consider CPU-intensive NLP processing
+
+3. **Storage Optimization**:
+   * Use SSD storage for search index
+   * Implement log rotation
+   * Archive old content appropriately
+
+**JVM Tuning Example:**
+[source,bash]
+----
+# Production JVM settings
+java -Xmx8g -Xms4g \
+  -XX:+UseG1GC \
+  -XX:MaxGCPauseMillis=200 \
+  -XX:+UseStringDeduplication \
+  -XX:+UnlockExperimentalVMOptions \
+  -XX:G1NewSizePercent=20 \
+  -XX:G1MaxNewSizePercent=30 \
+  -jar viglet-turing.jar
+----
+
+== Security & Compliance
+
+=== Access Control
+
+**Implement Proper Security:**
+
+1. **Authentication Strategy**:
+   * Change default passwords immediately
+   * Use strong password policies
+   * Implement multi-factor authentication for admin accounts
+
+2. **Authorization Model**:
+   * Role-based access control (RBAC)
+   * Principle of least privilege
+   * Regular access reviews
+
+3. **API Security**:
+   * Use HTTPS in production
+   * Implement rate limiting
+   * Validate all input parameters
+
+**Security Configuration Example:**
+[source,properties]
+----
+# Strong password requirements
+turing.security.password.min-length=12
+turing.security.password.require-special-chars=true
+turing.security.password.require-numbers=true
+
+# Session security
+server.servlet.session.cookie.secure=true
+server.servlet.session.cookie.http-only=true
+server.servlet.session.timeout=30m
+
+# API rate limiting
+turing.api.rate-limit.requests-per-minute=100
+turing.api.rate-limit.burst-capacity=20
+----
+
+=== Data Protection
+
+**Protect Sensitive Information:**
+
+1. **Content Classification**:
+   * Identify sensitive content types
+   * Implement content-level security
+   * Use encryption for sensitive data
+
+2. **Privacy Compliance**:
+   * GDPR compliance for EU users
+   * Data retention policies
+   * Right to deletion implementation
+
+3. **Audit Logging**:
+   * Log all administrative actions
+   * Track content access patterns
+   * Implement log retention policies
+
+**Data Classification Example:**
+[source,json]
+----
+{
+  "title": "Employee Handbook",
+  "content": "...",
+  "security_classification": "internal",
+  "access_groups": ["employees", "hr"],
+  "retention_period": "7years",
+  "contains_pii": false,
+  "geographic_restrictions": ["EU", "US"]
+}
+----
+
+=== Backup & Recovery
+
+**Implement Comprehensive Backup Strategy:**
+
+1. **Database Backups**:
+   * Daily automated backups
+   * Test restore procedures monthly
+   * Off-site backup storage
+
+2. **Search Index Backups**:
+   * Index snapshots before major updates
+   * Replication to secondary sites
+   * Quick restore capabilities
+
+3. **Configuration Backups**:
+   * Version control for configuration files
+   * Document all customizations
+   * Export/import procedures for site configurations
+
+**Backup Script Example:**
+[source,bash]
+----
+#!/bin/bash
+# Daily backup script
+
+DATE=$(date +%Y%m%d)
+BACKUP_DIR="/backups/turing-$DATE"
+
+# Create backup directory
+mkdir -p $BACKUP_DIR
+
+# Database backup
+pg_dump -h localhost -U turing turing > $BACKUP_DIR/database.sql
+
+# Solr index backup
+curl "http://localhost:8983/solr/turing/replication?command=backup&location=$BACKUP_DIR"
+
+# Configuration backup
+cp -r /opt/turing/config $BACKUP_DIR/
+
+# Compress backup
+tar -czf $BACKUP_DIR.tar.gz $BACKUP_DIR
+rm -rf $BACKUP_DIR
+
+echo "Backup completed: $BACKUP_DIR.tar.gz"
+----
+
+== Monitoring & Maintenance
+
+=== Health Monitoring
+
+**Implement Comprehensive Monitoring:**
+
+1. **System Metrics**:
+   * CPU, memory, disk usage
+   * Network connectivity
+   * JVM heap and garbage collection
+
+2. **Application Metrics**:
+   * Search response times
+   * Indexing throughput
+   * Error rates and types
+
+3. **Business Metrics**:
+   * Search volume and patterns
+   * Content usage statistics
+   * User satisfaction indicators
+
+**Monitoring Setup Example:**
+[source,yaml]
+----
+# Prometheus monitoring configuration
+version: '3'
+services:
+  turing:
+    image: viglet/turing
+    ports:
+      - "2700:2700"
+    environment:
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,metrics,prometheus
+    
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+----
+
+=== Regular Maintenance
+
+**Establish Maintenance Routines:**
+
+1. **Daily Tasks**:
+   * Monitor system health dashboards
+   * Check error logs for anomalies
+   * Verify backup completion
+
+2. **Weekly Tasks**:
+   * Review search analytics
+   * Optimize search index
+   * Update content that's changed
+
+3. **Monthly Tasks**:
+   * Security patch updates
+   * Performance trend analysis
+   * Capacity planning review
+
+4. **Quarterly Tasks**:
+   * Disaster recovery testing
+   * Security audit and access review
+   * Content strategy evaluation
+
+**Maintenance Checklist:**
+[cols="2,1,3"]
+|===
+|Task |Frequency |Notes
+
+|System Health Check
+|Daily
+|CPU, memory, disk space, error logs
+
+|Index Optimization
+|Weekly  
+|Improve search performance
+
+|Security Updates
+|Monthly
+|OS, Java, application patches
+
+|Backup Testing
+|Monthly
+|Verify restore procedures work
+
+|Performance Review
+|Monthly
+|Response times, throughput analysis
+
+|Disaster Recovery Test
+|Quarterly
+|Full failover testing
+
+|Content Audit
+|Quarterly
+|Remove outdated, add missing content
+|===
+
+=== Analytics & Insights
+
+**Leverage Search Data for Improvement:**
+
+1. **Query Analysis**:
+   * Most popular search terms
+   * Zero-result queries (improve content)
+   * Query refinement patterns
+
+2. **Content Performance**:
+   * Most/least accessed content
+   * Content freshness analysis
+   * User engagement metrics
+
+3. **User Behavior**:
+   * Search session patterns
+   * Click-through rates
+   * Time spent with results
+
+**Analytics Dashboard Metrics:**
+* **Search Volume**: Queries per day/hour
+* **Performance**: Average response time, 95th percentile
+* **Success Rate**: Queries returning results vs. zero results
+* **Content Health**: Freshness, coverage, quality scores
+* **User Satisfaction**: Click-through rates, session duration
+
+== User Experience Best Practices
+
+=== Search Interface Design
+
+**Create Intuitive Experiences:**
+
+1. **Progressive Disclosure**:
+   * Start with simple search
+   * Reveal advanced options as needed
+   * Don't overwhelm new users
+
+2. **Responsive Design**:
+   * Mobile-first approach
+   * Touch-friendly interface elements
+   * Consistent experience across devices
+
+3. **Accessibility**:
+   * Keyboard navigation support
+   * Screen reader compatibility
+   * High contrast options
+
+=== Content Discovery
+
+**Help Users Find What They Need:**
+
+1. **Faceted Navigation**:
+   * Clear category hierarchies
+   * Visual indicators of filter states
+   * Easy filter removal
+
+2. **Related Content**:
+   * "More like this" suggestions
+   * Popular content recommendations
+   * Trending topics
+
+3. **Search Guidance**:
+   * Search tips and examples
+   * Query suggestion improvements
+   * Clear error messages and recovery paths
+
+=== Performance Expectations
+
+**Meet User Performance Standards:**
+
+1. **Response Time Targets**:
+   * Search results: < 200ms
+   * Auto-complete: < 100ms
+   * Content loading: < 1 second
+
+2. **Progressive Loading**:
+   * Show search interface immediately
+   * Load results as they become available
+   * Provide loading indicators
+
+3. **Offline Capabilities**:
+   * Cache recent searches
+   * Provide basic functionality without connectivity
+   * Clear messaging about offline state
+
+== Conclusion
+
+Implementing these best practices will help you create a robust, efficient, and user-friendly search experience with Turing ES. Remember:
+
+* **Start Simple**: Begin with basic functionality and improve iteratively
+* **Monitor Continuously**: Use metrics to guide improvements
+* **Think Like Users**: Design from the user's perspective
+* **Plan for Growth**: Build scalable solutions from the start
+* **Stay Secure**: Implement security best practices from day one
+
+Success with Turing ES comes from understanding your users' needs, organizing content effectively, and continuously optimizing based on real usage patterns. The effort invested in following these practices will pay dividends in user satisfaction and system reliability.
+
+For additional guidance, consult the link:faq/[FAQ], link:troubleshooting/[Troubleshooting Guide], or reach out to the https://github.com/openviglet/turing/discussions[community] for support.
+
+Happy searching! 🚀

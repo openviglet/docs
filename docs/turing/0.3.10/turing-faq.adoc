@@ -1,0 +1,585 @@
+= Viglet Turing ES: Frequently Asked Questions
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Turing
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.10
+:revdate: 25-12-2024
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: FAQ
+:page-permalink: /turing/0.3.10/faq/
+:imagesdir: ../../../
+:page-pdf: /turing/turing-faq-0.3.10.pdf
+:page-product: turing
+
+[preface]
+== Frequently Asked Questions
+
+Got questions about Turing ES? You're in the right place! This FAQ covers the most common questions about installation, configuration, usage, and troubleshooting.
+
+Can't find your answer here? Check our https://github.com/openviglet/turing/discussions[Community Discussions] or https://github.com/openviglet/turing/issues[GitHub Issues].
+
+:numbered:
+
+== General Questions
+
+=== What is Turing ES?
+
+**Viglet Turing ES** is an open-source semantic search and navigation platform. It combines artificial intelligence (AI) and natural language processing (NLP) to create intelligent search experiences that understand user intent rather than just matching keywords.
+
+**Key features:**
+* Semantic search that understands context and meaning
+* AI-powered chatbots and virtual assistants  
+* Multiple NLP provider support (OpenNLP, spaCy, CoreNLP, OpenText)
+* Built on Apache Solr for enterprise-grade performance
+* RESTful APIs for easy integration
+
+=== How is Turing ES different from traditional search engines?
+
+Traditional search engines match keywords literally. Turing ES understands the *meaning* behind queries:
+
+**Traditional Search:**
+Query: "apple fruit nutrition"
+Results: Might return articles about Apple Inc. computers mixed with fruit content
+
+**Turing ES Semantic Search:**  
+Query: "apple fruit nutrition"
+Results: Prioritizes nutritional information about apple fruits, understanding the context
+
+=== Is Turing ES free to use?
+
+Yes! Turing ES is completely free and open source under the Apache 2.0 license. You can:
+* Use it commercially without restrictions
+* Modify the source code for your needs
+* Distribute your modifications
+* Get support from the community
+
+=== What's the difference between Turing ES and Elasticsearch?
+
+Both are search platforms, but they serve different purposes:
+
+**Elasticsearch:**
+* General-purpose search and analytics engine
+* Requires separate NLP/AI components
+* Focus on speed and scale
+* More technical setup required
+
+**Turing ES:**
+* Semantic search and navigation platform
+* Built-in AI/NLP capabilities
+* Focus on understanding user intent
+* User-friendly administration interface
+
+== Installation & Setup
+
+=== What are the system requirements?
+
+**Minimum Requirements:**
+* Java 21 (JDK or JRE)
+* 4 GB RAM
+* 10 GB disk space
+* Windows 10+, macOS 10.14+, or Linux
+
+**Recommended for Production:**
+* 8+ GB RAM
+* 4+ CPU cores
+* 50+ GB disk space (depending on content volume)
+* Load balancer for high availability
+
+=== Can I use Java 17 or Java 11?
+
+No, Turing ES requires Java 21 specifically. Earlier versions are not supported due to dependencies on Java 21 features and Spring Boot 3.x requirements.
+
+To check your Java version:
+----
+java -version
+----
+
+Download Java 21 from:
+* https://adoptium.net/[Eclipse Temurin] (free)
+* https://www.oracle.com/java/technologies/downloads/[Oracle JDK]
+
+=== How do I change the default port (2700)?
+
+You can change the port when starting Turing ES:
+
+----
+java -jar viglet-turing.jar --server.port=8080
+----
+
+Or set it permanently in `application.properties`:
+----
+server.port=8080
+----
+
+=== Can I use an external database?
+
+Yes! While Turing ES uses H2 database by default, you can configure it to use:
+
+* PostgreSQL (recommended for production)
+* Oracle Database
+* Microsoft SQL Server
+* MySQL/MariaDB
+
+Configure in `application.properties`:
+----
+spring.datasource.url=jdbc:postgresql://localhost:5432/turing
+spring.datasource.username=turing
+spring.datasource.password=your-password
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+----
+
+=== How do I run Turing ES in production?
+
+For production deployments:
+
+1. **Use external database** (PostgreSQL recommended)
+2. **Configure proper memory settings:**
+   ----
+   java -Xmx8g -Xms4g -jar viglet-turing.jar
+   ----
+3. **Set up SSL/HTTPS** with reverse proxy (nginx, Apache)
+4. **Configure clustering** for high availability
+5. **Set up monitoring** and log management
+6. **Change default passwords**
+7. **Configure backups** for database and search index
+
+== Configuration & Usage
+
+=== How do I create a new search site?
+
+1. Log into the admin console (http://localhost:2700)
+2. Go to **Sites** > **Add Site**
+3. Fill in the details:
+   * Name: Friendly name for your site
+   * Description: Brief description
+   * Default Locale: Primary language
+4. Click **Save**
+
+Your site will get a unique identifier (e.g., "my-site") used in API calls.
+
+=== How do I index content?
+
+There are several ways to add content to Turing ES:
+
+**Web Interface:**
+1. Go to **Content** > **Import**
+2. Upload files (PDF, Word, HTML, text)
+3. Content is automatically processed and indexed
+
+**REST API:**
+----
+curl -X POST http://localhost:2700/api/sn/my-site/import \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Document Title",
+    "content": "Document content here...",
+    "url": "https://example.com/doc1"
+  }'
+----
+
+**Connectors:**
+* File system connector
+* Database connector  
+* Web crawler
+* SharePoint connector
+* And more...
+
+=== What file formats does Turing ES support?
+
+Turing ES can process many document formats:
+
+**Supported formats:**
+* PDF documents
+* Microsoft Word (.docx, .doc)
+* PowerPoint presentations  
+* Excel spreadsheets
+* HTML web pages
+* Plain text files
+* XML documents
+* JSON data
+* CSV files
+
+**Through connectors:**
+* Database records
+* Web pages (via crawler)
+* SharePoint documents
+* File system content
+
+=== How do I configure NLP providers?
+
+Turing ES supports multiple NLP providers for content analysis:
+
+1. Go to **NLP** > **Providers**
+2. Click **Add Provider**
+3. Choose from available options:
+   * **OpenNLP** (included, no setup required)
+   * **spaCy** (requires separate spaCy service)
+   * **Stanford CoreNLP** (requires CoreNLP server)
+   * **OpenText Content Analytics** (commercial)
+
+4. Configure endpoint URLs and API keys as needed
+5. Enable the provider for your sites
+
+=== Can I customize search rankings?
+
+Yes! Turing ES provides several ways to influence search results:
+
+**Boost Fields:**
+Increase relevance of specific fields (title, content, tags)
+
+**Targeting Rules:**
+Create rules that promote specific content for certain queries
+
+**Custom Scoring:**
+Implement custom relevance algorithms
+
+**Facet Configuration:**
+Set up filters and categories for refined search
+
+Configure these in **Sites** > **Your Site** > **Search Configuration**.
+
+== API & Integration
+
+=== How do I integrate Turing ES with my website?
+
+The easiest way is using the REST API:
+
+**Basic search integration:**
+----
+// JavaScript example
+fetch(`http://localhost:2700/api/sn/my-site/search?q=${query}`)
+  .then(response => response.json())
+  .then(data => {
+    // Display search results
+    data.results.docs.forEach(doc => {
+      console.log(doc.title, doc.content);
+    });
+  });
+----
+
+**Available APIs:**
+* Search API - Perform searches
+* Autocomplete API - Search suggestions
+* Import API - Add/update content  
+* NLP APIs - Language processing
+* Administration APIs - Site management
+
+=== Is there an SDK or client library?
+
+While there's no official SDK yet, the REST APIs are straightforward to use with any HTTP client:
+
+**Popular HTTP clients:**
+* **JavaScript:** fetch(), axios, jQuery
+* **Python:** requests, httpx
+* **Java:** OkHttp, Apache HttpClient  
+* **PHP:** Guzzle, cURL
+* **C#:** HttpClient
+* **Go:** net/http
+
+We provide code examples in the link:developer-guide/[Developer Guide].
+
+=== Can I use Turing ES with mobile apps?
+
+Absolutely! The REST APIs work great with mobile applications:
+
+**iOS:** Use URLSession or Alamofire
+**Android:** Use Retrofit or OkHttp  
+**React Native:** Use fetch() or axios
+**Flutter:** Use http package
+
+The JSON responses are mobile-friendly and efficient.
+
+=== How do I handle authentication in API calls?
+
+For read-only operations (search), authentication is usually not required.
+
+For administrative operations:
+
+1. **Get authentication token:**
+----
+curl -X POST http://localhost:2700/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username": "admin", "password": "admin"}'
+----
+
+2. **Use token in subsequent requests:**
+----
+curl -X POST http://localhost:2700/api/sn/my-site/import \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{"title": "New Document", ...}'
+----
+
+== Troubleshooting
+
+=== Turing ES won't start - port already in use
+
+**Error:** "Port 2700 already in use"
+
+**Solutions:**
+1. **Use different port:**
+   ----
+   java -jar viglet-turing.jar --server.port=8080
+   ----
+
+2. **Find what's using port 2700:**
+   ----
+   # Windows
+   netstat -ano | findstr :2700
+   
+   # Linux/Mac
+   lsof -i :2700
+   ----
+
+3. **Kill the process** or choose a different port
+
+=== Out of memory errors
+
+**Error:** "OutOfMemoryError" or "GC overhead limit exceeded"
+
+**Solutions:**
+1. **Increase heap size:**
+   ----
+   java -Xmx4g -jar viglet-turing.jar
+   ----
+
+2. **For large content volumes:**
+   ----
+   java -Xmx8g -Xms4g -jar viglet-turing.jar
+   ----
+
+3. **Check available system memory:**
+   ----
+   # Linux/Mac
+   free -h
+   
+   # Windows  
+   wmic OS get TotalVisibleMemorySize /value
+   ----
+
+=== Search returns no results
+
+**Possible causes:**
+
+1. **No content indexed yet**
+   - Check **Content** > **Browse** in admin console
+   - Verify content was successfully imported
+
+2. **Wrong site ID in API calls**
+   - Check site identifier in **Sites** section
+   - Use exact site ID in API URLs
+
+3. **Content not committed to search index**
+   - Content indexing may take a few seconds
+   - Check **System** > **Indexing Status**
+
+4. **NLP processing failed**
+   - Check **Logs** for NLP errors
+   - Verify NLP providers are configured and running
+
+=== Cannot connect to database
+
+**Error:** Database connection failures
+
+**Solutions:**
+
+1. **For H2 (default):** Usually resolves automatically on restart
+
+2. **For external databases:**
+   - Verify database server is running
+   - Check connection settings in `application.properties`
+   - Ensure database and user exist
+   - Test connectivity: `telnet db-host 5432`
+
+3. **Check firewall settings** and network connectivity
+
+=== NLP provider not working
+
+**Issues with NLP processing:**
+
+1. **OpenNLP (built-in):** Should work automatically
+2. **spaCy:** Ensure spaCy service is running on specified port
+3. **CoreNLP:** Check CoreNLP server status and endpoint URL
+4. **OpenText:** Verify license and service availability
+
+**Debugging steps:**
+1. Check **NLP** > **Providers** status
+2. View logs for NLP errors
+3. Test NLP endpoint directly
+4. Disable and re-enable provider
+
+=== Performance is slow
+
+**Common performance issues:**
+
+**Large result sets:**
+- Use pagination (`rows=20&start=0`)
+- Add filters to narrow results (`fq=category:news`)
+
+**Complex queries:**
+- Optimize search queries
+- Use field-specific searches when possible
+- Configure proper field boosting
+
+**Hardware limitations:**
+- Monitor CPU and memory usage
+- Consider scaling horizontally
+- Optimize database queries
+- Add more RAM or CPU cores
+
+**Search index optimization:**
+- Regular index optimization
+- Remove unused fields
+- Configure proper caching
+
+== Advanced Topics
+
+=== Can I customize the user interface?
+
+Yes, you can customize the Turing ES interface:
+
+**Built-in customization:**
+* Themes and branding in admin console
+* Custom CSS and JavaScript
+* Logo and color scheme changes
+
+**Full customization:**
+* Build custom search interface using APIs
+* Integrate search into existing applications
+* Create mobile apps with search functionality
+
+The new Angular-based UI (in development) will provide more customization options.
+
+=== How do I backup and restore Turing ES?
+
+**Database backup:**
+* H2: Copy the database files from the data directory
+* PostgreSQL: Use `pg_dump` utility
+* Other databases: Use vendor-specific backup tools
+
+**Search index backup:**
+* Solr index files are in the Solr data directory
+* Use Solr backup/restore APIs
+* Consider replication for high availability
+
+**Configuration backup:**
+* Export site configurations via admin interface
+* Backup `application.properties` and custom configurations
+
+**Full restore process:**
+1. Restore database from backup
+2. Restore Solr index
+3. Apply configuration files
+4. Restart Turing ES
+
+=== How do I scale Turing ES for high traffic?
+
+**Horizontal scaling:**
+* Load balancer in front of multiple Turing ES instances
+* Shared database for all instances
+* Distributed Solr cluster (SolrCloud)
+
+**Vertical scaling:**
+* Increase RAM and CPU cores
+* SSD storage for better I/O performance
+* Optimize JVM settings
+
+**Caching strategies:**
+* Redis for session and query caching
+* CDN for static assets
+* Database query optimization
+
+**Monitoring:**
+* Application performance monitoring (APM)
+* Database performance metrics
+* Search response times
+* System resource utilization
+
+== Getting Help
+
+=== Where can I get support?
+
+**Free Community Support:**
+* https://github.com/openviglet/turing/discussions[GitHub Discussions] - Ask questions and share ideas
+* https://github.com/openviglet/turing/issues[GitHub Issues] - Report bugs and request features
+* Documentation - Comprehensive guides and tutorials
+
+**Professional Support:**
+* Email: opensource@viglet.com
+* Custom development and consulting services
+* Enterprise support agreements
+
+**Social Media:**
+* Twitter: @VigletTuring
+* Facebook: facebook.com/viglet
+* YouTube: Viglet channel with tutorials
+
+=== How do I report a bug?
+
+When reporting bugs, please include:
+
+1. **Turing ES version** (`java -jar viglet-turing.jar --version`)
+2. **Java version** (`java -version`)
+3. **Operating system** (Windows 10, Ubuntu 20.04, etc.)
+4. **Steps to reproduce** the issue
+5. **Expected vs actual behavior**
+6. **Error logs** (check console output and log files)
+7. **Configuration details** (if relevant)
+
+Submit bug reports at: https://github.com/openviglet/turing/issues
+
+=== How can I contribute to Turing ES?
+
+We welcome all kinds of contributions:
+
+**Code contributions:**
+* Bug fixes and improvements
+* New features and enhancements
+* Performance optimizations
+* Documentation improvements
+
+**Non-code contributions:**
+* Testing and bug reports
+* Documentation writing and translation
+* Community support and discussions
+* Tutorials and examples
+
+**Getting started:**
+1. Fork the repository
+2. Read the link:developer-guide/[Developer Guide]
+3. Join GitHub discussions
+4. Submit pull requests
+
+=== Is there professional training available?
+
+While formal training programs are not currently available, we provide:
+
+**Free learning resources:**
+* Comprehensive documentation
+* Video tutorials on YouTube
+* Code examples and demos
+* Community workshops (occasional)
+
+**Custom training:**
+* On-site training for enterprise customers
+* Custom workshops for development teams
+* Consulting services for complex implementations
+
+Contact opensource@viglet.com for professional training inquiries.
+
+== Still Have Questions?
+
+If you can't find the answer to your question here:
+
+1. **Search the documentation** - Use the search function on this site
+2. **Check GitHub Discussions** - Someone may have asked the same question
+3. **Join the community** - Ask questions and help others
+4. **Contact us directly** - opensource@viglet.com
+
+We're here to help make your Turing ES experience successful! 🚀

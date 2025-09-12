@@ -1,0 +1,300 @@
+= Viglet Turing ES: Getting Started Guide
+Viglet Team <opensource@viglet.com>
+:page-layout: documentation
+:organization: Viglet Turing
+ifdef::backend-pdf[:toc: left]
+:toclevels: 5
+:toc-title: Table of Content
+:doctype: book
+:revnumber: 0.3.10
+:revdate: 25-12-2024
+:source-highlighter: rouge
+:pdf-theme: viglet
+:pdf-themesdir: {docdir}/../themes/
+:page-breadcrumb-title: Getting Started Guide
+:page-permalink: /turing/0.3.10/getting-started/
+:imagesdir: ../../../
+:page-pdf: /turing/turing-getting-started-0.3.10.pdf
+:page-product: turing
+
+[preface]
+== Welcome to Turing ES!
+
+Congratulations on choosing Viglet Turing ES! This guide will help you get up and running quickly with your new semantic search and AI-powered navigation system.
+
+*What you'll accomplish:*
+
+* ✅ Understand what Turing ES can do for you
+* ✅ Install and configure Turing ES
+* ✅ Create your first search site
+* ✅ Index some sample content
+* ✅ Experience the power of semantic search
+
+*Time required:* Approximately 30-45 minutes
+
+:numbered:
+
+== What is Turing ES?
+
+Viglet Turing ES is an intelligent search and navigation platform that goes beyond traditional keyword matching. It understands the meaning and context of your content, making it easier for users to find exactly what they're looking for.
+
+=== Key Features
+
+**🔍 Semantic Search**
+Unlike traditional search engines that only match keywords, Turing ES understands the meaning behind queries. For example, searching for "apple fruit" will prioritize fruit-related content over technology articles about Apple Inc.
+
+**🤖 AI-Powered Navigation**
+Built-in Natural Language Processing (NLP) capabilities help organize and categorize content automatically. Choose from multiple NLP providers like OpenNLP, spaCy, CoreNLP, or OpenText Content Analytics.
+
+**💬 Chatbot Integration**
+Create intelligent chatbots that can answer questions based on your content, providing instant support to your users.
+
+**⚡ Enterprise Ready**
+Built on Apache Solr, Turing ES can handle large volumes of content with fast response times and high availability.
+
+=== Common Use Cases
+
+* *Corporate Intranets*: Help employees find policies, procedures, and resources quickly
+* *E-commerce Sites*: Improve product discovery with intelligent search
+* *Documentation Sites*: Enable users to find answers using natural language
+* *Content Portals*: Organize and navigate large content repositories
+* *Knowledge Bases*: Power intelligent customer support systems
+
+== Before You Begin
+
+=== System Requirements
+
+Make sure your system meets these minimum requirements:
+
+.Hardware Requirements
+[%header,cols="1,2,2"]
+|===
+|Component |Minimum |Recommended
+|RAM |4 GB |8 GB or more
+|CPU |2 cores |4 cores or more
+|Storage |10 GB free space |20 GB or more
+|===
+
+.Software Requirements
+[%header,cols="1,2"]
+|===
+|Software |Requirement
+|Java |Java 21 (JDK or JRE)
+|Operating System |Windows 10+, macOS 10.14+, or Linux
+|Web Browser |Chrome, Firefox, Safari, or Edge (latest versions)
+|===
+
+=== What You'll Need
+
+Before starting, gather these items:
+
+* ✅ Administrative access to your system
+* ✅ Java 21 installed (we'll verify this)
+* ✅ Sample content to index (optional - we provide examples)
+* ✅ About 30-45 minutes of time
+
+== Step 1: Verify Java Installation
+
+Turing ES requires Java 21. Let's check if you have it installed:
+
+=== Windows Users
+
+1. Open Command Prompt (press `Win + R`, type `cmd`, press Enter)
+2. Type the following command and press Enter:
++
+----
+java -version
+----
++
+3. You should see output similar to:
++
+----
+java version "21.0.1" 2023-10-17
+Java(TM) SE Runtime Environment (build 21.0.1+12-LTS-29)
+Java HotSpot(TM) 64-Bit Server VM (build 21.0.1+12-LTS-29, mixed mode)
+----
+
+=== macOS/Linux Users
+
+1. Open Terminal
+2. Type the following command and press Enter:
++
+----
+java -version
+----
++
+3. You should see similar output as above
+
+=== If Java 21 is Not Installed
+
+If you don't have Java 21, download it from:
+
+* https://www.oracle.com/java/technologies/downloads/[Oracle JDK 21] (Recommended)
+* https://adoptium.net/[Eclipse Temurin JDK 21] (Free alternative)
+
+IMPORTANT: Make sure to set the `JAVA_HOME` environment variable to point to your Java installation directory.
+
+== Step 2: Download Turing ES
+
+1. Visit the https://github.com/openviglet/turing/releases/latest[latest release page]
+2. Download the `viglet-turing.jar` file (approximately 271 MB)
+3. Save it to a directory where you want to run Turing ES (e.g., `/opt/turing` on Linux/Mac or `C:\turing` on Windows)
+
+TIP: Choose a directory with a short path and no spaces for easier command-line usage.
+
+== Step 3: Start Turing ES
+
+Now let's start your Turing ES server:
+
+=== First Startup
+
+1. Open your command prompt or terminal
+2. Navigate to the directory where you saved the JAR file
+3. Run the following command:
++
+----
+java -jar viglet-turing.jar
+----
++
+4. Wait for the startup to complete (you'll see "Started TurApplication")
+5. Open your web browser and go to: http://localhost:2700
+
+The first startup will take a few minutes as Turing ES initializes the database and search engine.
+
+=== Login to the Admin Console
+
+1. In your browser, go to http://localhost:2700
+2. Use these default credentials:
+   * *Username:* `admin`
+   * *Password:* `admin`
+
+CAUTION: Remember to change the default password in production environments!
+
+== Step 4: Create Your First Site
+
+Once logged in, let's create your first search site:
+
+=== Create a New Site
+
+1. Click on *"Sites"* in the navigation menu
+2. Click *"Add Site"*
+3. Fill in the basic information:
+   * *Name:* `My First Site`
+   * *Description:* `A sample site to test Turing ES`
+   * *Default Locale:* Select your preferred language
+
+4. Click *"Save"*
+
+=== Configure Site Settings
+
+Your new site will have a unique identifier (like `my-first-site`). This will be used in API calls and URLs.
+
+== Step 5: Index Sample Content
+
+Let's add some content to see Turing ES in action:
+
+=== Using the Web Interface
+
+1. Navigate to *"Content"* > *"Import"*
+2. You can upload documents in various formats:
+   * PDF files
+   * Word documents
+   * HTML files
+   * Plain text files
+
+=== Using the API (Optional)
+
+For developers, you can also use the REST API to index content:
+
+----
+curl -X POST http://localhost:2700/api/sn/my-first-site/import \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Welcome to Turing ES",
+    "content": "This is my first document in Turing ES. It demonstrates semantic search capabilities.",
+    "url": "https://example.com/welcome",
+    "date": "2024-12-25"
+  }'
+----
+
+== Step 6: Test Your Search
+
+Now let's see Turing ES in action:
+
+=== Web Search Interface
+
+1. Go to http://localhost:2700/sites/my-first-site
+2. Try searching for terms related to your indexed content
+3. Notice how Turing ES provides:
+   * Relevant results even with partial matches
+   * Highlighted search terms
+   * Suggested queries
+
+=== API Search
+
+You can also test the search API directly:
+
+----
+curl "http://localhost:2700/api/sn/my-first-site/search?q=welcome"
+----
+
+This returns JSON results that you can integrate into your applications.
+
+== What's Next?
+
+Congratulations! You now have Turing ES up and running. Here are some next steps:
+
+=== Immediate Next Steps
+
+* 📖 Read the link:administration-guide/[Administration Guide] to learn about configuration options
+* 🔧 Explore the link:developer-guide/[Developer Guide] for API integration examples
+* 🔌 Check out link:connectors/[Connectors] to import content from various sources
+
+=== Advanced Configuration
+
+* Configure NLP providers for enhanced semantic understanding
+* Set up user authentication and authorization
+* Configure clustering for high availability
+* Implement custom search rankings and rules
+
+=== Get Help
+
+* 💬 Join our https://github.com/openviglet/turing/discussions[Community Discussions]
+* 🐛 Report issues on https://github.com/openviglet/turing/issues[GitHub Issues]
+* 📧 Contact the team: opensource@viglet.com
+
+== Troubleshooting
+
+=== Common Issues
+
+**"Port 2700 already in use"**
+Another application is using port 2700. You can start Turing ES on a different port:
+----
+java -jar viglet-turing.jar --server.port=8080
+----
+
+**"Java version not supported"**
+Make sure you're using Java 21. Check your Java version with `java -version`.
+
+**"Out of memory errors"**
+Increase JVM heap size:
+----
+java -Xmx4g -jar viglet-turing.jar
+----
+
+**"Cannot connect to search engine"**
+Turing ES includes an embedded Solr instance. If you see connection errors, wait a few minutes for full startup or check the logs for errors.
+
+== Summary
+
+You've successfully:
+
+* ✅ Installed and started Turing ES
+* ✅ Created your first search site
+* ✅ Indexed sample content
+* ✅ Performed your first searches
+* ✅ Learned about next steps
+
+Turing ES is now ready for you to explore its full potential. Whether you're building a corporate intranet, e-commerce site, or knowledge base, you have the foundation for intelligent search and navigation.
+
+Welcome to the world of semantic search! 🎉
