@@ -1,5 +1,0 @@
-[%header,cols=4*] 
-|===
-| Attribute | Required / Optional | Description | Example
-| siteName | Required | Site Name | Sample
-|===
