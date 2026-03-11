@@ -3,10 +3,14 @@
 @import "tailwindcss/theme" layer(theme);
 @import "tailwindcss/utilities" layer(utilities);
 
+/* ── Docusaurus uses data-theme="dark", map it for Tailwind v4 dark: variant ── */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /* ── Tailwind v4 Theme ── */
 @theme {
   --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
 
+  /* Brand palette */
   --color-brand: #C2410C;
   --color-brand-dark: #9A3412;
   --color-brand-light: #EA580C;
@@ -15,17 +19,55 @@
   --color-brand-mid: #FFEDD5;
   --color-brand-border: #FED7AA;
 
+  /* Product colors */
   --color-product-turing: #4169E1;
   --color-product-shio: #FF6347;
   --color-product-shio-text: #C73E00;
   --color-product-dumont: #006400;
 
+  /* shadcn/ui semantic tokens */
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0f172a;
+  --color-primary: #C2410C;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #0f172a;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-accent: #FFF7ED;
+  --color-accent-foreground: #C2410C;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #C2410C;
+
+  /* Shadows */
   --shadow-soft: 0 4px 20px -2px rgba(194, 65, 12, 0.10);
   --shadow-hover: 0 10px 25px -5px rgba(194, 65, 12, 0.15);
   --shadow-btn: 0 4px 14px 0 rgba(194, 65, 12, 0.30);
   --shadow-card: 0 4px 20px -2px rgba(194, 65, 12, 0.08);
 
+  /* Radius */
   --radius-default: 0.625rem;
+
+  /* Animations for shadcn */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
 }
 
 /* ── Docusaurus CSS Variables ── */
@@ -63,6 +105,27 @@
   --ifm-background-color: #0f172a;
   --ifm-background-surface-color: #1e293b;
   --docusaurus-highlighted-code-line-bg: rgba(249, 115, 22, 0.15);
+
+  /* shadcn dark overrides */
+  --color-background: #0f172a;
+  --color-foreground: #f1f5f9;
+  --color-card: #1e293b;
+  --color-card-foreground: #f1f5f9;
+  --color-popover: #1e293b;
+  --color-popover-foreground: #f1f5f9;
+  --color-primary: #F97316;
+  --color-primary-foreground: #0f172a;
+  --color-secondary: #1e293b;
+  --color-secondary-foreground: #f1f5f9;
+  --color-muted: #1e293b;
+  --color-muted-foreground: #94a3b8;
+  --color-accent: rgba(249, 115, 22, 0.1);
+  --color-accent-foreground: #F97316;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #334155;
+  --color-input: #334155;
+  --color-ring: #F97316;
 }
 
 /* ── Custom Navbar (layout) ── */

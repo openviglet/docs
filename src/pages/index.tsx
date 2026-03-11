@@ -3,6 +3,9 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import VigletLogo from "@site/src/components/VigletLogo";
+import { Button } from "@site/src/components/ui/button";
+import { Badge } from "@site/src/components/ui/badge";
+import { Card, CardContent, CardFooter } from "@site/src/components/ui/card";
 
 interface Product {
   id: string;
@@ -46,7 +49,7 @@ const products: Product[] = [
       "Content Management System with GraphQL, Javascript sites, native cache and search.",
     link: "/shio",
     release: "0.3.7",
-    github: "https://github.com/ShioCMS",
+    github: "https://github.com/openviglet/shio",
     color: "#FF6347",
   },
   {
@@ -56,7 +59,7 @@ const products: Product[] = [
       "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
     link: "/dumont",
     release: "0.1.0",
-    github: "https://github.com/openviglet",
+    github: "https://github.com/openviglet/dumont",
     color: "#006400",
   },
 ];
@@ -106,152 +109,61 @@ const community: CommunityLink[] = [
 
 function HeroSection(): JSX.Element {
   return (
-    <section
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        padding: "6rem 1.5rem 5rem",
-        background: "white",
-      }}
-    >
+    <section className="relative overflow-hidden bg-white py-24 px-6 dark:bg-background">
       {/* Decorative blobs */}
       <div
+        className="absolute pointer-events-none"
         style={{
-          position: "absolute",
           top: "-20%",
           right: "-10%",
           width: "40%",
           height: "80%",
-          background:
-            "radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)",
-          pointerEvents: "none",
+          background: "radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)",
         }}
       />
       <div
+        className="absolute pointer-events-none"
         style={{
-          position: "absolute",
           bottom: "-10%",
           left: "-5%",
           width: "30%",
           height: "60%",
-          background:
-            "radial-gradient(circle, rgba(194,65,12,0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
+          background: "radial-gradient(circle, rgba(194,65,12,0.06) 0%, transparent 70%)",
         }}
       />
 
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          textAlign: "center",
-          position: "relative",
-        }}
-      >
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.375rem",
-            padding: "0.375rem 1rem",
-            borderRadius: "9999px",
-            border: "1px solid #FED7AA",
-            background: "#FFF7ED",
-            fontSize: "0.8125rem",
-            fontWeight: 600,
-            color: "#C2410C",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              background: "#C2410C",
-            }}
-          />
+      <div className="relative max-w-7xl mx-auto text-center">
+        <Badge variant="default" className="mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand" />
           Open Source
-        </div>
+        </Badge>
 
         <h1
-          style={{
-            fontSize: "clamp(2.5rem, 5vw, 4rem)",
-            fontWeight: 800,
-            color: "#0f172a",
-            letterSpacing: "-0.025em",
-            lineHeight: 1.1,
-            marginBottom: "1rem",
-          }}
+          className="font-extrabold text-foreground tracking-tight leading-tight mb-4"
+          style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
         >
           Documentation for{" "}
           <span className="gradient-text">Viglet</span>{" "}
           Products
         </h1>
 
-        <p
-          style={{
-            fontSize: "1.125rem",
-            color: "#64748b",
-            maxWidth: 560,
-            margin: "0 auto 2.5rem",
-            lineHeight: 1.6,
-          }}
-        >
+        <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed">
           Explore guides, API references, and tutorials for Turing ES,
           Shio CMS, and Dumont DEP.
         </p>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <Link
-            to="/turing"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "0.625rem 1.75rem",
-              borderRadius: "9999px",
-              background: "linear-gradient(to bottom right, #C2410C, #EA580C)",
-              color: "white",
-              fontWeight: 600,
-              fontSize: "0.9375rem",
-              boxShadow: "0 4px 14px 0 rgba(194,65,12,0.30)",
-              textDecoration: "none",
-              transition: "all 0.2s",
-            }}
-          >
-            Get Started
-          </Link>
-          <a
-            href="https://github.com/openviglet"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              padding: "0.625rem 1.75rem",
-              borderRadius: "9999px",
-              border: "1px solid #e2e8f0",
-              background: "white",
-              color: "#475569",
-              fontWeight: 600,
-              fontSize: "0.9375rem",
-              textDecoration: "none",
-              transition: "all 0.2s",
-            }}
-          >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-            </svg>
-            GitHub
-          </a>
+        <div className="flex gap-3 justify-center flex-wrap">
+          <Button asChild>
+            <Link to="/turing">Get Started</Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <a href="https://github.com/openviglet" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              GitHub
+            </a>
+          </Button>
         </div>
       </div>
     </section>
@@ -260,61 +172,20 @@ function HeroSection(): JSX.Element {
 
 function TrustBar(): JSX.Element {
   return (
-    <section
-      style={{
-        borderTop: "1px solid #e2e8f0",
-        borderBottom: "1px solid #e2e8f0",
-        background: "white",
-        padding: "0 1.5rem",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-        }}
-      >
+    <section className="border-y border-border bg-white dark:bg-background px-6">
+      <div className="max-w-7xl mx-auto flex justify-center flex-wrap">
         {stats.map((s, i) => (
           <div
             key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-              padding: "1.25rem 2rem",
-              borderRight: i < stats.length - 1 ? "1px solid #e2e8f0" : "none",
-            }}
+            className="flex items-center gap-3 py-5 px-8"
+            style={{ borderRight: i < stats.length - 1 ? "1px solid var(--color-border)" : "none" }}
           >
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: "0.75rem",
-                background: "#FFF7ED",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "1.125rem",
-              }}
-            >
+            <div className="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-lg">
               {s.icon}
             </div>
             <div>
-              <div
-                style={{
-                  fontWeight: 700,
-                  color: "#0f172a",
-                  fontSize: "0.9375rem",
-                }}
-              >
-                {s.value}
-              </div>
-              <div style={{ fontSize: "0.75rem", color: "#64748b" }}>
-                {s.label}
-              </div>
+              <div className="font-bold text-foreground text-[0.9375rem]">{s.value}</div>
+              <div className="text-xs text-muted-foreground">{s.label}</div>
             </div>
           </div>
         ))}
@@ -325,165 +196,58 @@ function TrustBar(): JSX.Element {
 
 function ProductsSection(): JSX.Element {
   return (
-    <section style={{ background: "#f8fafc", padding: "5rem 1.5rem" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.375rem",
-              padding: "0.375rem 1rem",
-              borderRadius: "9999px",
-              border: "1px solid #e2e8f0",
-              background: "white",
-              fontSize: "0.8125rem",
-              fontWeight: 600,
-              color: "#C2410C",
-              marginBottom: "1rem",
-            }}
-          >
-            Products
-          </div>
+    <section className="bg-secondary py-20 px-6 dark:bg-background">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <Badge variant="outline" className="mb-4 text-brand">Products</Badge>
           <h2
-            style={{
-              fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
-              fontWeight: 800,
-              color: "#0f172a",
-              letterSpacing: "-0.025em",
-              marginBottom: "0.75rem",
-            }}
+            className="font-extrabold text-foreground tracking-tight mb-3"
+            style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)" }}
           >
             Explore Our Documentation
           </h2>
-          <p
-            style={{
-              color: "#64748b",
-              fontSize: "1.0625rem",
-              maxWidth: 540,
-              margin: "0 auto",
-            }}
-          >
+          <p className="text-muted-foreground text-base max-w-lg mx-auto">
             Comprehensive guides and references for each Viglet product.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "1.5rem",
-          }}
-        >
+        <div className="grid gap-6" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))" }}>
           {products.map((p) => (
-            <div
+            <Card
               key={p.id}
-              style={{
-                background: "white",
-                borderRadius: "1rem",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 4px 20px -2px rgba(194,65,12,0.08)",
-                padding: "2rem",
-                transition: "all 0.3s",
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
-                e.currentTarget.style.boxShadow =
-                  "0 10px 25px -5px rgba(194,65,12,0.15)";
-                e.currentTarget.style.transform = "translateY(-4px)";
-              }}
-              onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
-                e.currentTarget.style.boxShadow =
-                  "0 4px 20px -2px rgba(194,65,12,0.08)";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
+              className="cursor-pointer hover:shadow-hover hover:-translate-y-1 p-0"
               onClick={() => (window.location.href = p.link)}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "1rem",
-                  marginBottom: "1.25rem",
-                }}
-              >
-                <VigletLogo product={p.id} size={56} />
-                <div>
-                  <h3
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 700,
-                      color: "#0f172a",
-                      margin: 0,
-                    }}
-                  >
-                    {p.title}
-                  </h3>
-                  <span
-                    style={{
-                      fontSize: "0.75rem",
-                      color: "#64748b",
-                      fontWeight: 500,
-                    }}
-                  >
-                    v{p.release}
-                  </span>
+              <CardContent className="pt-8">
+                <div className="flex items-center gap-4 mb-5">
+                  <VigletLogo product={p.id} size={56} />
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground m-0">{p.title}</h3>
+                    <span className="text-xs text-muted-foreground font-medium">v{p.release}</span>
+                  </div>
                 </div>
-              </div>
-
-              <p
-                style={{
-                  color: "#64748b",
-                  fontSize: "0.9375rem",
-                  lineHeight: 1.6,
-                  marginBottom: "1.5rem",
-                }}
-              >
-                {p.description}
-              </p>
-
-              <div style={{ display: "flex", gap: "0.625rem" }}>
-                <Link
-                  to={p.link}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    padding: "0.5rem 1.25rem",
-                    borderRadius: "9999px",
-                    background:
-                      "linear-gradient(to bottom right, #C2410C, #EA580C)",
-                    color: "white",
-                    fontWeight: 600,
-                    fontSize: "0.8125rem",
-                    textDecoration: "none",
-                    boxShadow: "0 4px 14px 0 rgba(194,65,12,0.30)",
-                  }}
-                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                >
-                  Documentation
-                </Link>
-                <a
-                  href={p.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    padding: "0.5rem 1.25rem",
-                    borderRadius: "9999px",
-                    border: "1px solid #e2e8f0",
-                    background: "white",
-                    color: "#475569",
-                    fontWeight: 600,
-                    fontSize: "0.8125rem",
-                    textDecoration: "none",
-                  }}
-                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                >
-                  GitHub
-                </a>
-              </div>
-            </div>
+                <p className="text-muted-foreground text-[0.9375rem] leading-relaxed mb-0">
+                  {p.description}
+                </p>
+              </CardContent>
+              <CardFooter className="gap-2.5 pb-8">
+                <Button size="sm" asChild>
+                  <Link to={p.link} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                    Documentation
+                  </Link>
+                </Button>
+                <Button variant="outline" size="sm" asChild>
+                  <a
+                    href={p.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                  >
+                    GitHub
+                  </a>
+                </Button>
+              </CardFooter>
+            </Card>
           ))}
         </div>
       </div>
@@ -493,57 +257,24 @@ function ProductsSection(): JSX.Element {
 
 function CommunitySection(): JSX.Element {
   return (
-    <section style={{ background: "white", padding: "5rem 1.5rem" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "0.375rem",
-              padding: "0.375rem 1rem",
-              borderRadius: "9999px",
-              border: "1px solid #e2e8f0",
-              background: "white",
-              fontSize: "0.8125rem",
-              fontWeight: 600,
-              color: "#C2410C",
-              marginBottom: "1rem",
-            }}
-          >
-            Community
-          </div>
+    <section className="bg-white py-20 px-6 dark:bg-background">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <Badge variant="outline" className="mb-4 text-brand">Community</Badge>
           <h2
-            style={{
-              fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
-              fontWeight: 800,
-              color: "#0f172a",
-              letterSpacing: "-0.025em",
-              marginBottom: "0.75rem",
-            }}
+            className="font-extrabold text-foreground tracking-tight mb-3"
+            style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)" }}
           >
             Join the Community
           </h2>
-          <p
-            style={{
-              color: "#64748b",
-              fontSize: "1.0625rem",
-              maxWidth: 540,
-              margin: "0 auto",
-            }}
-          >
+          <p className="text-muted-foreground text-base max-w-lg mx-auto">
             Connect with other developers and stay up to date.
           </p>
         </div>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "1.5rem",
-            maxWidth: 960,
-            margin: "0 auto",
-          }}
+          className="grid gap-6 max-w-3xl mx-auto"
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
         >
           {community.map((c) => (
             <a
@@ -551,58 +282,20 @@ function CommunitySection(): JSX.Element {
               href={c.href}
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                background: "white",
-                borderRadius: "1rem",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 4px 20px -2px rgba(194,65,12,0.08)",
-                padding: "1.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                textDecoration: "none",
-                transition: "all 0.3s",
-              }}
-              onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.currentTarget.style.boxShadow =
-                  "0 10px 25px -5px rgba(194,65,12,0.15)";
-                e.currentTarget.style.transform = "translateY(-2px)";
-              }}
-              onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.currentTarget.style.boxShadow =
-                  "0 4px 20px -2px rgba(194,65,12,0.08)";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
+              className="no-underline"
             >
-              <div
-                style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: "0.75rem",
-                  background: c.iconBg,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                {c.icon}
-              </div>
-              <div>
+              <Card className="flex flex-row items-center gap-4 p-6 hover:shadow-hover hover:-translate-y-0.5 cursor-pointer">
                 <div
-                  style={{
-                    fontWeight: 700,
-                    color: "#0f172a",
-                    fontSize: "1rem",
-                    marginBottom: "0.125rem",
-                  }}
+                  className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: c.iconBg }}
                 >
-                  {c.title}
+                  {c.icon}
                 </div>
-                <div style={{ color: "#64748b", fontSize: "0.8125rem" }}>
-                  {c.description}
+                <div>
+                  <div className="font-bold text-foreground text-base mb-0.5">{c.title}</div>
+                  <div className="text-muted-foreground text-[0.8125rem]">{c.description}</div>
                 </div>
-              </div>
+              </Card>
             </a>
           ))}
         </div>
