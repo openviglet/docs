@@ -12,7 +12,6 @@ const sidebars: SidebarsConfig = {
       items: [
         "installation-guide",
         "administration-guide",
-        "connectors",
         "developer-guide",
         "release-notes",
         {

@@ -9,7 +9,20 @@ const sidebars: SidebarsConfig = {
         type: "doc",
         id: "index",
       },
-      items: ["getting-started", "architecture", "developer-guide"],
+      items: [
+        "getting-started",
+        "architecture",
+        {
+          type: "category",
+          label: "Connectors",
+          items: [
+            "connectors/asset",
+            "connectors/aem",
+            "connectors/database",
+            "connectors/wordpress",
+          ],
+        }
+      ],
     },
   ],
 };
