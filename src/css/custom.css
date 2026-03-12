@@ -499,6 +499,12 @@ a {
   color: #F97316;
 }
 
+.nav-external-icon {
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
 /* ── Mobile responsive ── */
 @media (max-width: 768px) {
   .nav-products,
