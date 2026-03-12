@@ -69,6 +69,23 @@
   to { height: 0; }
 }
 
+/* ── VigletLogo glow animation ── */
+@keyframes vg-glow {
+  0%,  100% { text-shadow: 0 0 8px snow, 0 -25px 50px tomato,  -25px 25px 50px yellow, 25px 25px 50px tomato; }
+  33%        { text-shadow: 0 0 8px snow, 0 -25px 50px cyan,    -25px 25px 50px tomato, 25px 25px 50px cyan;   }
+  66%        { text-shadow: 0 0 8px snow, 0 -25px 50px yellow,  -25px 25px 50px cyan,   25px 25px 50px yellow; }
+}
+
+.vg-logo-glow {
+  animation: vg-glow 2s ease-in-out both infinite;
+  display: inline-block;
+}
+
+/* ── Global: remove underline from all links ── */
+a {
+  text-decoration: none !important;
+}
+
 /* ── Docusaurus CSS Variables ── */
 :root {
   --ifm-color-primary: #C2410C;

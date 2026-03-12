@@ -1,76 +1,146 @@
 import React from "react";
 
-interface ProductConfig {
-  color: string;
-  acronym: string;
-  section: string;
-  border: string;
-}
-
-const productConfig: Record<string, ProductConfig> = {
-  turing: { color: "#4169E1", acronym: "Tu", section: "ES", border: "#FFDEAD" },
-  shio: { color: "#FF6347", acronym: "Sh", section: "CMS", border: "#FFDEAD" },
-  dumont: { color: "#006400", acronym: "Du", section: "DEP", border: "#FFDEAD" },
-  vecchio: { color: "#6c757d", acronym: "Ve", section: "Auth", border: "#FFDEAD" },
+export const PRODUCT_COLORS: Record<string, string> = {
+  dumont: "#006400",
+  shio: "#FF6347",
+  turing: "#4169E1",
 };
+
+const PRODUCT_META: Record<string, { acronym: string; section: string }> = {
+  dumont: { acronym: "Du", section: "DEP" },
+  shio: { acronym: "Sh", section: "CMS" },
+  turing: { acronym: "Tu", section: "ES" },
+};
+
+const TEXT_COLOR = "#FFDEAD";
 
 interface VigletLogoProps {
   product: string;
   size?: number;
+  glow?: boolean;
+  className?: string;
 }
 
-export default function VigletLogo({ product, size = 80 }: VigletLogoProps): React.ReactElement {
-  const config = productConfig[product] ?? productConfig.turing;
-  const isBadge = size < 56;
-  const fontSize = isBadge ? size * 0.45 : size * 0.38;
-  const sectionSize = size * 0.16;
-  const shadowSize = Math.max(1, size * 0.04);
-
+function GlowAcronym({ acronym, duration = 2 }: { acronym: string; duration?: number }) {
   return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        backgroundColor: config.color,
-        borderRadius: size * 0.15,
-        border: `${Math.max(2, size * 0.035)}px solid ${config.border}`,
-        position: "relative",
-        display: "flex",
-        alignItems: isBadge ? "center" : "flex-end",
-        justifyContent: isBadge ? "center" : "flex-start",
-        padding: isBadge ? 0 : size * 0.1,
-        boxShadow: `0 ${shadowSize}px ${shadowSize * 2.5}px rgba(0,0,0,0.22), 0 ${shadowSize * 0.5}px ${shadowSize * 1.5}px rgba(0,0,0,0.19)`,
-        overflow: "hidden",
-        flexShrink: 0,
-      }}
-    >
-      {!isBadge && (
+    <>
+      {acronym.split("").map((char, i) => (
+        <span
+          key={i}
+          className="vg-logo-glow"
+          style={{ animationDelay: `${-((i + 1) * (duration / acronym.length)).toFixed(4)}s` }}
+        >
+          {char}
+        </span>
+      ))}
+    </>
+  );
+}
+
+export default function VigletLogo({ product, size = 48, glow = true, className }: VigletLogoProps): React.ReactElement | null {
+  const meta = PRODUCT_META[product];
+  const color = PRODUCT_COLORS[product] ?? "#555555";
+  if (!meta) return null;
+
+  const r = (ratio: number) => Math.round(size * ratio);
+  const borderRadius = Math.max(6, r(0.107));
+  const borderWidth = Math.max(1, r(0.029));
+  const shadow = `0 ${r(0.014)}px ${r(0.029)}px rgba(0,0,0,0.22), 0 ${r(0.021)}px ${r(0.071)}px rgba(0,0,0,0.19)`;
+
+  const isSmall = size < 56;
+
+  if (isSmall) {
+    const padLeft = Math.max(4, r(0.09));
+    const smallOffsetY = r(0.25);
+    return (
+      <div
+        className={className}
+        aria-label={meta.acronym}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          width: size,
+          height: size,
+          flexShrink: 0,
+          backgroundColor: color,
+          color: TEXT_COLOR,
+          paddingLeft: padLeft,
+          borderRadius,
+          borderWidth,
+          borderStyle: "solid",
+          borderColor: TEXT_COLOR,
+          boxShadow: shadow,
+          boxSizing: "border-box",
+          overflow: "hidden",
+          userSelect: "none",
+        }}
+      >
         <span
           style={{
-            position: "absolute",
-            top: size * 0.08,
-            right: size * 0.1,
-            fontSize: sectionSize,
-            fontWeight: 300,
-            color: "rgba(255,255,255,0.85)",
-            letterSpacing: "0.05em",
+            fontSize: Math.max(10, r(0.46)),
+            fontWeight: 900,
+            lineHeight: 1,
+            marginTop: smallOffsetY,
             fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
           }}
         >
-          {config.section}
+          {glow ? <GlowAcronym acronym={meta.acronym} /> : meta.acronym}
         </span>
-      )}
-      <span
+      </div>
+    );
+  }
+
+  const pad = r(0.089);
+  return (
+    <div
+      className={className}
+      aria-label={`${meta.acronym} ${meta.section}`}
+      style={{
+        display: "inline-flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        width: size,
+        height: size,
+        flexShrink: 0,
+        backgroundColor: color,
+        color: TEXT_COLOR,
+        padding: `${pad}px`,
+        borderRadius,
+        borderWidth,
+        borderStyle: "solid",
+        borderColor: TEXT_COLOR,
+        boxShadow: shadow,
+        boxSizing: "border-box",
+        overflow: "hidden",
+        userSelect: "none",
+      }}
+    >
+      <div
         style={{
-          fontSize,
-          fontWeight: 900,
-          color: "white",
+          fontSize: Math.max(6, r(0.125)),
+          fontWeight: 300,
+          textAlign: "right",
           lineHeight: 1,
+          opacity: 0.85,
+          letterSpacing: "0.04em",
+          alignSelf: "flex-end",
           fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
         }}
       >
-        {config.acronym}
-      </span>
+        {meta.section}
+      </div>
+      <div
+        style={{
+          fontSize: r(0.46),
+          fontWeight: 900,
+          lineHeight: 1,
+          alignSelf: "flex-start",
+          fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+        }}
+      >
+        {glow ? <GlowAcronym acronym={meta.acronym} /> : meta.acronym}
+      </div>
     </div>
   );
 }

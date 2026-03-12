@@ -50,14 +50,13 @@ const products: FooterLink[] = [
 ];
 
 const resources: FooterLink[] = [
-  { label: "Getting Started", href: "/turing" },
-  { label: "API Reference", href: "https://turing.viglet.com/latest/javadoc/" },
-  { label: "Release Notes", href: "/turing/release-notes" },
+  { label: "GitHub", href: "https://github.com/openviglet" },
+  { label: "Reddit", href: "https://www.reddit.com/r/TuringES/" },
 ];
 
 const company: FooterLink[] = [
   { label: "Website", href: "https://viglet.com" },
-  { label: "GitHub", href: "https://github.com/openviglet" },
+  
   { label: "LinkedIn", href: "https://www.linkedin.com/company/viglet.com" },
 ];
 

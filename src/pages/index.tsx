@@ -273,8 +273,8 @@ function CommunitySection(): JSX.Element {
         </div>
 
         <div
-          className="grid gap-6 max-w-3xl mx-auto"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
+          className="grid gap-6"
+          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
         >
           {community.map((c) => (
             <a
