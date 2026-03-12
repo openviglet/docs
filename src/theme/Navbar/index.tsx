@@ -36,9 +36,9 @@ interface VersionsResult {
 }
 
 export const PRODUCTS: Product[] = [
-  { id: "turing", label: "Turing ES", path: "/turing", dot: "#4169E1", pluginId: "turing", github: "https://github.com/openviglet/turing", release: "2026.1" },
-  { id: "shio", label: "Shio CMS", path: "/shio", dot: "#FF6347", pluginId: "shio", github: "https://github.com/openviglet/shio", release: "0.3.7" },
   { id: "dumont", label: "Dumont DEP", path: "/dumont", dot: "#006400", pluginId: "dumont", github: "https://github.com/openviglet/dumont" },
+  { id: "shio", label: "Shio CMS", path: "/shio", dot: "#FF6347", pluginId: "shio", github: "https://github.com/openviglet/shio", release: "0.3.7" },
+  { id: "turing", label: "Turing ES", path: "/turing", dot: "#4169E1", pluginId: "turing", github: "https://github.com/openviglet/turing", release: "2026.1" },
 ];
 
 function useScrolled(): boolean {

@@ -33,14 +33,14 @@ interface CommunityLink {
 
 const products: Product[] = [
   {
-    id: "turing",
-    title: "Turing ES",
+    id: "dumont",
+    title: "Dumont DEP",
     description:
-      "Semantic Navigation, Chatbot and NLP. Choose from several NLPs to enrich data, all indexed in Solr.",
-    link: "/turing",
-    release: "2026.1",
-    github: "https://github.com/openviglet/turing",
-    color: "#4169E1",
+      "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
+    link: "/dumont",
+    release: "0.1.0",
+    github: "https://github.com/openviglet/dumont",
+    color: "#006400",
   },
   {
     id: "shio",
@@ -53,14 +53,14 @@ const products: Product[] = [
     color: "#FF6347",
   },
   {
-    id: "dumont",
-    title: "Dumont DEP",
+    id: "turing",
+    title: "Turing ES",
     description:
-      "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
-    link: "/dumont",
-    release: "0.1.0",
-    github: "https://github.com/openviglet/dumont",
-    color: "#006400",
+      "Semantic Navigation, Chatbot and NLP. Choose from several NLPs to enrich data, all indexed in Solr.",
+    link: "/turing",
+    release: "2026.1",
+    github: "https://github.com/openviglet/turing",
+    color: "#4169E1",
   },
 ];
 
@@ -109,7 +109,7 @@ const community: CommunityLink[] = [
 
 function HeroSection(): JSX.Element {
   return (
-    <section className="relative overflow-hidden bg-white py-24 px-6 dark:bg-background">
+    <section className="home-section relative overflow-hidden bg-white py-24 px-6 dark:bg-background">
       {/* Decorative blobs */}
       <div
         className="absolute pointer-events-none"
@@ -132,7 +132,7 @@ function HeroSection(): JSX.Element {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto text-center">
+      <div className="home-section-inner relative">
         <Badge variant="default" className="mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-brand" />
           Open Source
@@ -172,8 +172,8 @@ function HeroSection(): JSX.Element {
 
 function TrustBar(): JSX.Element {
   return (
-    <section className="border-y border-border bg-white dark:bg-background px-6">
-      <div className="max-w-7xl mx-auto flex justify-center flex-wrap">
+    <section className="home-section border-y border-border bg-white dark:bg-background px-6">
+      <div className="home-section-inner flex justify-center flex-wrap">
         {stats.map((s, i) => (
           <div
             key={i}
@@ -196,8 +196,8 @@ function TrustBar(): JSX.Element {
 
 function ProductsSection(): JSX.Element {
   return (
-    <section className="bg-secondary py-20 px-6 dark:bg-background">
-      <div className="max-w-7xl mx-auto">
+    <section className="home-section bg-secondary py-20 px-6 dark:bg-background">
+      <div className="home-section-inner">
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 text-brand">Products</Badge>
           <h2
@@ -257,8 +257,8 @@ function ProductsSection(): JSX.Element {
 
 function CommunitySection(): JSX.Element {
   return (
-    <section className="bg-white py-20 px-6 dark:bg-background">
-      <div className="max-w-7xl mx-auto">
+    <section className="home-section bg-white py-20 px-6 dark:bg-background">
+      <div className="home-section-inner">
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 text-brand">Community</Badge>
           <h2
