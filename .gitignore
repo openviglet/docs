@@ -6,3 +6,7 @@ vendor
 *.pdf
 !presentation.pdf
 /.idea/
+/.docusaurus
+/build
+/node_modules
+/.claude
