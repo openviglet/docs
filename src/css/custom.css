@@ -907,6 +907,142 @@ article h2 {
   -webkit-text-fill-color: transparent;
 }
 
+/* ── Hero background ── */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.4;
+}
+
+.hero-orb--1 {
+  top: -15%;
+  right: -8%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.15), transparent 70%);
+  animation: hero-float-1 8s ease-in-out infinite;
+}
+
+.hero-orb--2 {
+  bottom: -20%;
+  left: -5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(194, 65, 12, 0.1), transparent 70%);
+  animation: hero-float-2 10s ease-in-out infinite;
+}
+
+[data-theme="dark"] .hero-orb--1 {
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.3), transparent 70%);
+}
+
+[data-theme="dark"] .hero-orb--2 {
+  background: radial-gradient(circle, rgba(194, 65, 12, 0.2), transparent 70%);
+}
+
+@keyframes hero-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-30px, 20px) scale(1.05); }
+}
+
+@keyframes hero-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(25px, -15px) scale(1.08); }
+}
+
+/* Subtle dot grid */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+[data-theme="dark"] .hero-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Floating chemical formulas */
+.hero-formula {
+  position: absolute;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-weight: 700;
+  color: #C2410C;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  will-change: transform;
+}
+
+[data-theme="dark"] .hero-formula {
+  color: #F97316;
+}
+
+/* Molecular bond structures */
+.hero-bond {
+  position: absolute;
+  will-change: transform;
+}
+
+.hero-bond-line {
+  stroke: #C2410C;
+  opacity: 0.6;
+}
+
+.hero-bond-node {
+  fill: #C2410C;
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .hero-bond-line {
+  stroke: #F97316;
+  opacity: 0.5;
+}
+
+[data-theme="dark"] .hero-bond-node {
+  fill: #F97316;
+  opacity: 0.6;
+}
+
+.hero-drift-a {
+  animation: hero-drift-a ease-in-out infinite;
+}
+
+.hero-drift-b {
+  animation: hero-drift-b ease-in-out infinite;
+}
+
+@keyframes hero-drift-a {
+  0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+  25%  { transform: translate(30px, -20px) scale(1.15) rotate(3deg); }
+  50%  { transform: translate(-10px, -40px) scale(0.85) rotate(-2deg); }
+  75%  { transform: translate(-30px, -15px) scale(1.1) rotate(2deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+@keyframes hero-drift-b {
+  0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+  25%  { transform: translate(-25px, 15px) scale(0.9) rotate(-3deg); }
+  50%  { transform: translate(15px, 35px) scale(1.2) rotate(2deg); }
+  75%  { transform: translate(25px, 10px) scale(0.85) rotate(-1deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+/* Fade-in-up for hero content */
+.hero-fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hero-fade-up 0.6s ease-out forwards;
+}
+
+@keyframes hero-fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ── Scroll detection script hook ── */
 html {
   scroll-behavior: smooth;

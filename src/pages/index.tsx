@@ -107,52 +107,138 @@ const community: CommunityLink[] = [
   },
 ];
 
+const FORMULAS = [
+  "H\u2082O", "CO\u2082", "NaCl", "C\u2086H\u2081\u2082O\u2086", "O\u2082",
+  "NH\u2083", "CH\u2084", "H\u2082SO\u2084", "Fe\u2082O\u2083", "CaCO\u2083",
+  "C\u2082H\u2085OH", "HCl", "NaOH", "KMnO\u2084", "N\u2082",
+  "SiO\u2082", "Al\u2082O\u2083", "MgO", "ZnSO\u2084", "Cu",
+];
+
+const FORMULA_ITEMS = FORMULAS.map((f, i) => ({
+  text: f,
+  top: `${5 + ((i * 37) % 85)}%`,
+  left: `${2 + ((i * 53) % 92)}%`,
+  size: 0.85 + (i % 4) * 0.3,
+  duration: 14 + (i % 7) * 4,
+  delay: (i % 5) * -3,
+  drift: i % 2 === 0 ? "hero-drift-a" : "hero-drift-b",
+  opacity: 0.25 + (i % 3) * 0.1,
+}));
+
+/* Molecular bond structures rendered as SVG */
+interface Bond {
+  top: string;
+  left: string;
+  size: number;
+  duration: number;
+  delay: number;
+  drift: string;
+  opacity: number;
+  path: string;
+}
+
+const BONDS: Bond[] = [
+  { top: "12%", left: "8%",  size: 80,  duration: 18, delay: -2, drift: "hero-drift-b", opacity: 0.35,
+    path: "M10,40 L40,20 L70,40 M40,20 L40,5 M40,20 L25,8 M40,20 L55,8" },
+  { top: "25%", left: "75%", size: 100, duration: 22, delay: -5, drift: "hero-drift-a", opacity: 0.3,
+    path: "M20,50 L50,30 L80,50 M50,30 L50,10 M20,50 L20,70 M80,50 L80,70 M50,30 L35,15 M50,30 L65,15" },
+  { top: "60%", left: "85%", size: 70,  duration: 16, delay: -1, drift: "hero-drift-b", opacity: 0.32,
+    path: "M15,35 L35,15 L55,35 L35,55 Z M35,15 L35,5 M55,35 L65,35" },
+  { top: "70%", left: "15%", size: 90,  duration: 20, delay: -4, drift: "hero-drift-a", opacity: 0.3,
+    path: "M10,45 L45,25 L80,45 M45,25 L45,5 M10,45 L10,65 M80,45 L80,65" },
+  { top: "8%",  left: "45%", size: 60,  duration: 15, delay: -3, drift: "hero-drift-b", opacity: 0.28,
+    path: "M10,30 L30,10 L50,30 M30,10 L30,0 M10,30 L0,40 M50,30 L60,40" },
+  { top: "45%", left: "5%",  size: 75,  duration: 19, delay: -6, drift: "hero-drift-a", opacity: 0.3,
+    path: "M20,40 L40,20 L60,40 M40,20 L40,5 M20,40 L5,50 M60,40 L75,50 M40,5 L30,0 M40,5 L50,0" },
+  { top: "80%", left: "55%", size: 85,  duration: 21, delay: -2, drift: "hero-drift-b", opacity: 0.28,
+    path: "M15,45 L42,20 L70,45 M42,20 L42,5 M15,45 L30,60 M70,45 L55,60" },
+  { top: "35%", left: "92%", size: 65,  duration: 17, delay: -5, drift: "hero-drift-a", opacity: 0.10,
+    path: "M10,35 L32,15 L55,35 M32,15 L32,3 M10,35 L10,50" },
+];
+
+function FloatingFormulas(): JSX.Element {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      {/* Ambient glow */}
+      <div className="hero-orb hero-orb--1" />
+      <div className="hero-orb hero-orb--2" />
+      {/* Dot grid */}
+      <div className="hero-grid" />
+      {/* Molecular bonds */}
+      {BONDS.map((b, i) => (
+        <svg
+          key={`bond-${i}`}
+          className={`hero-bond ${b.drift}`}
+          width={b.size}
+          height={b.size}
+          viewBox={`0 0 ${b.size} ${b.size}`}
+          style={{
+            top: b.top,
+            left: b.left,
+            animationDuration: `${b.duration}s`,
+            animationDelay: `${b.delay}s`,
+            opacity: b.opacity,
+          }}
+        >
+          <path d={b.path} fill="none" className="hero-bond-line" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Atom nodes at path endpoints */}
+          {b.path.match(/[ML]\s*(\d+),(\d+)/g)?.map((m, j) => {
+            const coords = m.match(/(\d+),(\d+)/);
+            if (!coords) return null;
+            return <circle key={j} cx={coords[1]} cy={coords[2]} r="3" className="hero-bond-node" />;
+          })}
+        </svg>
+      ))}
+      {/* Formulas */}
+      {FORMULA_ITEMS.map((item, i) => (
+        <span
+          key={`f-${i}`}
+          className={`hero-formula ${item.drift}`}
+          style={{
+            top: item.top,
+            left: item.left,
+            fontSize: `${item.size}rem`,
+            animationDuration: `${item.duration}s`,
+            animationDelay: `${item.delay}s`,
+            opacity: item.opacity,
+          }}
+        >
+          {item.text}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function HeroSection(): JSX.Element {
   return (
-    <section className="home-section relative overflow-hidden bg-white py-24 px-6 dark:bg-background">
-      {/* Decorative blobs */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "-20%",
-          right: "-10%",
-          width: "40%",
-          height: "80%",
-          background: "radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          bottom: "-10%",
-          left: "-5%",
-          width: "30%",
-          height: "60%",
-          background: "radial-gradient(circle, rgba(194,65,12,0.06) 0%, transparent 70%)",
-        }}
-      />
+    <section className="home-section relative overflow-hidden bg-white dark:bg-slate-950 py-28 px-6">
+      <FloatingFormulas />
 
-      <div className="home-section-inner relative">
-        <Badge variant="default" className="mb-6">
+      <div className="home-section-inner relative z-10">
+        <Badge variant="default" className="mb-6 hero-fade-in">
           <span className="w-1.5 h-1.5 rounded-full bg-brand" />
           Open Source
         </Badge>
 
         <h1
-          className="font-extrabold text-foreground tracking-tight leading-tight mb-4"
-          style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
+          className="hero-fade-in font-extrabold text-foreground tracking-tight leading-tight mb-4"
+          style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", animationDelay: "0.1s" }}
         >
           Documentation for{" "}
           <span className="gradient-text">Viglet</span>{" "}
           Products
         </h1>
 
-        <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed">
+        <p
+          className="hero-fade-in text-lg text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed"
+          style={{ animationDelay: "0.2s" }}
+        >
           Explore guides, API references, and tutorials for Turing ES,
           Shio CMS, and Dumont DEP.
         </p>
 
-        <div className="flex gap-3 justify-center flex-wrap">
+        <div className="hero-fade-in flex gap-3 justify-center flex-wrap" style={{ animationDelay: "0.3s" }}>
           <Button asChild>
             <Link to="/#products">Get Started</Link>
           </Button>
