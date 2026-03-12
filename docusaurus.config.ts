@@ -16,6 +16,7 @@ const config: Config = {
   trailingSlash: false,
 
   onBrokenLinks: "warn",
+  onBrokenAnchors: "warn",
 
   markdown: {
     hooks: {

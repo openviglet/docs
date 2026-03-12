@@ -20,7 +20,7 @@ const badgeVariants = cva(
         dumont:
           "border border-green-200 bg-green-50 text-product-dumont px-3 py-1 text-xs dark:bg-green-950/30 dark:border-green-800",
         version:
-          "border border-brand-border bg-brand-bg text-brand px-2 py-0.5 text-[0.6875rem] font-semibold",
+          "border border-brand-border bg-brand-bg text-brand px-2.5 py-0.5 text-xs font-bold tracking-tight dark:bg-orange-950/20 dark:border-orange-800/40 dark:text-orange-400",
         latest:
           "bg-green-50 text-green-600 px-1.5 py-0.5 text-[0.625rem] font-semibold uppercase tracking-wide dark:bg-green-950/30 dark:text-green-400",
       },

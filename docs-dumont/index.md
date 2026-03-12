@@ -9,7 +9,7 @@ slug: /
 
 **Viglet Dumont DEP** is an open source Data Exchange Platform that enables seamless data integration, transformation, and orchestration across systems.
 
-- **Current Release:** 0.1.0
+- **Current Release:** 2026.1
 - **GitHub:** [https://github.com/openviglet](https://github.com/openviglet)
 
 ## Documentation

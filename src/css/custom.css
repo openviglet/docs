@@ -907,6 +907,15 @@ article h2 {
   -webkit-text-fill-color: transparent;
 }
 
+/* ── Product card ── */
+.product-card-title {
+  margin: 16px 0 6px !important;
+}
+
+.product-card-desc {
+  margin: 16px 0 0 !important;
+}
+
 /* ── Scroll detection script hook ── */
 html {
   scroll-behavior: smooth;

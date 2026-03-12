@@ -38,7 +38,7 @@ const products: Product[] = [
     description:
       "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
     link: "/dumont",
-    release: "0.1.0",
+    release: "2026.1",
     github: "https://github.com/openviglet/dumont",
     color: "#006400",
   },
@@ -154,7 +154,7 @@ function HeroSection(): JSX.Element {
 
         <div className="flex gap-3 justify-center flex-wrap">
           <Button asChild>
-            <Link to="/turing">Get Started</Link>
+            <Link to="/#products">Get Started</Link>
           </Button>
           <Button variant="outline" asChild>
             <a href="https://github.com/openviglet" target="_blank" rel="noopener noreferrer">
@@ -196,7 +196,7 @@ function TrustBar(): JSX.Element {
 
 function ProductsSection(): JSX.Element {
   return (
-    <section className="home-section bg-secondary py-20 px-6 dark:bg-background">
+    <section id="products" className="home-section bg-secondary py-20 px-6 dark:bg-background">
       <div className="home-section-inner">
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4 text-brand">Products</Badge>
@@ -215,22 +215,18 @@ function ProductsSection(): JSX.Element {
           {products.map((p) => (
             <Card
               key={p.id}
-              className="cursor-pointer hover:shadow-hover hover:-translate-y-1 p-0"
+              className="cursor-pointer hover:shadow-hover hover:-translate-y-1 p-0 text-center"
               onClick={() => (window.location.href = p.link)}
             >
-              <CardContent className="pt-8">
-                <div className="flex items-center gap-4 mb-5">
-                  <VigletLogo product={p.id} size={56} />
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground m-0">{p.title}</h3>
-                    <span className="text-xs text-muted-foreground font-medium">v{p.release}</span>
-                  </div>
-                </div>
-                <p className="text-muted-foreground text-[0.9375rem] leading-relaxed mb-0">
+              <CardContent className="flex flex-col items-center pt-8">
+                <VigletLogo product={p.id} size={56} />
+                <h3 className="product-card-title text-xl font-bold text-foreground leading-tight">{p.title}</h3>
+                <Badge variant="version">v{p.release}</Badge>
+                <p className="product-card-desc text-muted-foreground text-[0.9375rem] leading-relaxed">
                   {p.description}
                 </p>
               </CardContent>
-              <CardFooter className="gap-2.5 pb-8">
+              <CardFooter className="justify-center gap-2.5 pb-8">
                 <Button size="sm" asChild>
                   <Link to={p.link} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                     Documentation
