@@ -220,9 +220,9 @@ function ProductsSection(): JSX.Element {
             >
               <CardContent className="flex flex-col items-center pt-8">
                 <VigletLogo product={p.id} size={56} />
-                <h3 className="product-card-title text-xl font-bold text-foreground leading-tight">{p.title}</h3>
+                <h3 className="text-xl font-bold text-foreground leading-tight mt-4 mb-1.5">{p.title}</h3>
                 <Badge variant="version">v{p.release}</Badge>
-                <p className="product-card-desc text-muted-foreground text-[0.9375rem] leading-relaxed">
+                <p className="text-muted-foreground text-[0.9375rem] leading-relaxed mt-4 mb-0">
                   {p.description}
                 </p>
               </CardContent>
