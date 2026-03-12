@@ -1,0 +1,19 @@
+{
+  "turingSidebar": [
+    {
+      "type": "category",
+      "label": "Turing ES",
+      "link": {
+        "type": "doc",
+        "id": "index"
+      },
+      "items": [
+        "installation-guide",
+        "administration-guide",
+        "connectors",
+        "developer-guide",
+        "release-notes"
+      ]
+    }
+  ]
+}

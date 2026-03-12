@@ -1,12 +1,19 @@
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-vendor
+# Dependencies
+node_modules
+
+# Build output
+build
+.docusaurus
+
+# IDE
+/.idea/
+/.vscode/
+/.claude
+
+# PDF generation
 *.pdf
 !presentation.pdf
-/.idea/
-/.docusaurus
-/build
-/node_modules
-/.claude
+
+# Misc
+.DS_Store
+*.log
