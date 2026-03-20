@@ -38,6 +38,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         "developer-guide",
+        "rest-api",
         {
           type: "category",
           label: "Extending Connectors",
