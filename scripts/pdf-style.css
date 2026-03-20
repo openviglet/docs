@@ -6,6 +6,9 @@
 
 /* ── Reset Docusaurus chrome ─────────────────────────── */
 .navbar,
+.navbar--fixed-top,
+.nav-root,
+nav.nav-root,
 .footer,
 footer,
 .pagination-nav,

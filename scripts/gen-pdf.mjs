@@ -105,8 +105,25 @@ async function generateDocs() {
     // Inject our PDF stylesheet
     await page.addStyleTag({ content: cssContent });
 
-    // Small delay for styles to apply
-    await new Promise((r) => setTimeout(r, 300));
+    // Remove chrome elements from the DOM entirely
+    await page.evaluate(() => {
+      const selectors = [
+        '.navbar', '.nav-root', 'nav.navbar',
+        'footer', '.footer',
+        '.pagination-nav',
+        '.theme-doc-sidebar-container',
+        '.theme-doc-breadcrumbs',
+        '.theme-doc-toc-mobile',
+        '.theme-doc-toc-desktop',
+        '.theme-doc-footer',
+        '.theme-doc-version-banner',
+        '.theme-doc-version-badge',
+        '.col--3',
+      ];
+      for (const sel of selectors) {
+        document.querySelectorAll(sel).forEach((el) => el.remove());
+      }
+    });
 
     // Print this page to PDF
     const pdfBuf = await page.pdf({
