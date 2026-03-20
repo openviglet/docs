@@ -498,4 +498,3 @@ server:
 
 ---
 
-*Previous: [Installation Guide](./installation-guide.md) | Next: [Administration Guide](./administration-guide.md)*

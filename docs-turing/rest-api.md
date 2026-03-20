@@ -550,4 +550,3 @@ Both endpoints return a `TurFileAttributes` JSON object containing the extracted
 
 ---
 
-*Previous: [Developer Guide](./developer-guide.md) | Next: [Authentication](./security-authentication.md)*

@@ -64,4 +64,3 @@ See [Security & Keycloak](./security-keycloak.md) for the full 6-step production
 
 ---
 
-*Previous: [REST API Reference](./rest-api.md) | Next: [Security & Keycloak](./security-keycloak.md)*

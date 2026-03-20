@@ -91,4 +91,3 @@ This loop continues until the LLM determines it has enough context to respond, u
 
 ---
 
-*Previous: [MCP Servers](./mcp-servers.md) | Next: [Chat](./chat.md)*

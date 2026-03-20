@@ -496,4 +496,3 @@ docker exec -it turing-nginx /bin/bash
 
 ---
 
-*Previous: [Architecture Overview](./architecture-overview.md) | Next: [Configuration Reference](./configuration-reference.md)*

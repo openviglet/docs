@@ -419,4 +419,3 @@ Check the open [GitHub Issues](https://github.com/openviglet/turing/issues) for 
 
 ---
 
-*Previous: [Token Usage](./token-usage.md) | Next: [REST API Reference](./rest-api.md)*

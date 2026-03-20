@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 4
 title: Architecture Overview
 description: System architecture of Viglet Dumont DEP — components, data flows, internal modules, and technology stack.
 ---
@@ -115,4 +115,3 @@ Dumont DEP + PostgreSQL
 
 ---
 
-*Previous: [Core Concepts](./getting-started/core-concepts.md) | Next: [Installation Guide](./installation-guide.md)*

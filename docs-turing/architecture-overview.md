@@ -201,4 +201,3 @@ Multiple Turing ES instances run behind Apache HTTP Server configured as a rever
 
 ---
 
-*Previous: [Core Concepts](./getting-started/core-concepts.md) | Next: [Installation Guide](./installation-guide.md)*

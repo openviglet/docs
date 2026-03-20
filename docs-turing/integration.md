@@ -166,4 +166,3 @@ Built-in SSRF protection validates the endpoint before forwarding. Requests to p
 
 ---
 
-*Previous: [Semantic Navigation](./semantic-navigation.md) | Next: [AEM Connector](./integration-aem.md)*

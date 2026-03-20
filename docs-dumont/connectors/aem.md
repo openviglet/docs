@@ -151,4 +151,9 @@ Create a custom implementation by extending these interfaces and packaging them 
 
 ---
 
-*Previous: [FileSystem Connector](./filesystem.md) | Next: [WordPress Connector](./wordpress.md)*
+:::tip Customizing the AEM Connector
+Need custom attribute extractors, delta date logic, or content processors? See [Extending the AEM Connector](../extending-aem.md) for the full extension system, configuration JSON reference, and step-by-step guide.
+:::
+
+---
+

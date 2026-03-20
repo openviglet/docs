@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 3
 title: Configuration Reference
 description: Complete reference for all Dumont DEP application.yaml properties — server, database, queue, connectors, and indexing plugins.
 ---
@@ -181,4 +181,3 @@ server:
 
 ---
 
-*Previous: [Installation Guide](./installation-guide.md) | Next: [Connectors Overview](./connectors/overview.md)*

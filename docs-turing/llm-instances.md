@@ -170,4 +170,3 @@ Cache entries are invalidated automatically on create, update, or delete.
 
 ---
 
-*Previous: [What is RAG?](./rag.md) | Next: [Embedding Stores & Models](./embedding-stores.md)*

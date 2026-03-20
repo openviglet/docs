@@ -217,4 +217,3 @@ npm install @viglet/turing-sdk
 
 ---
 
-*Previous: [Introduction](./intro.md) | Next: [Architecture Overview](../architecture-overview.md)*

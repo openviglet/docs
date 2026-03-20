@@ -154,4 +154,15 @@ Every connector needs at least these pieces of information:
 
 ---
 
-*Next: [Web Crawler](./web-crawler.md)*
+## How Each Connector Is Configured
+
+| Connector | Configuration Method | Where |
+|---|---|---|
+| **Web Crawler** | Turing ES Admin Console | [Turing ES → Integration](https://docs.viglet.com/turing/integration) |
+| **AEM** | JSON file + Turing ES Admin Console | `export/` directory + [Turing ES → Integration](https://docs.viglet.com/turing/integration-aem) |
+| **Database** | CLI parameters | Command-line — see [Database Connector](./database.md) |
+| **FileSystem** | CLI parameters | Command-line — see [FileSystem Connector](./filesystem.md) |
+| **WordPress** | WordPress Admin UI | WordPress → Settings → Viglet Dumont |
+
+---
+

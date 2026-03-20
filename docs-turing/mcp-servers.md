@@ -111,4 +111,3 @@ Once configured, MCP servers appear in the **MCP Servers** multi-select field of
 
 ---
 
-*Previous: [Tool Calling](./tool-calling.md) | Next: [AI Agents](./ai-agents.md)*

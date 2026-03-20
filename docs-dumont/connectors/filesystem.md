@@ -125,4 +125,3 @@ The transformed path becomes the document's **URL** field in the search index, a
 
 ---
 
-*Previous: [Database Connector](./database.md) | Next: [AEM Connector](./aem.md)*

@@ -152,4 +152,3 @@ For the full API surface, start the application and visit the Swagger UI.
 
 ---
 
-*Previous: [Indexing Plugins](./indexing-plugins.md) | Next: [Extending the AEM Connector](./extending-aem.md)*

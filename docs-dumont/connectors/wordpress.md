@@ -14,6 +14,10 @@ Unlike the AEM and Web Crawler connectors (which are Java JARs loaded via `-Dloa
 
 ---
 
+Unlike the AEM and Web Crawler connectors, the WordPress plugin is **not part of the Dumont connector application** — it runs entirely inside WordPress and sends content directly to Turing ES via HTTP. No `dumont-connector.jar` is needed.
+
+---
+
 ## How It Works
 
 ```mermaid
@@ -154,4 +158,3 @@ viglet-turing-for-wordpress/
 
 ---
 
-*Previous: [AEM Connector](./aem.md) | Next: [Indexing Plugins](../indexing-plugins.md)*

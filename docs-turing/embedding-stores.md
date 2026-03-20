@@ -121,4 +121,3 @@ Individual Semantic Navigation Sites can override both settings in their **Gener
 
 ---
 
-*Previous: [LLM Instances](./llm-instances.md) | Next: [Assets](./assets.md)*

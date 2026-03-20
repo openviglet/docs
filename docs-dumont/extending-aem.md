@@ -360,4 +360,3 @@ Extension classes are loaded via `DumCustomClassCache` using `Class.forName()`. 
 
 ---
 
-*Previous: [Developer Guide](./developer-guide.md) | Next: [Extending the Database Connector](./extending-database.md)*

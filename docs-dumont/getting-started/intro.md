@@ -116,4 +116,3 @@ Not sure where to start? Here is a suggested path depending on what you want to 
 
 ---
 
-*Next: [Core Concepts](./core-concepts.md)*

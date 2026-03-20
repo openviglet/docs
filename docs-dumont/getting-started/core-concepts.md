@@ -161,4 +161,3 @@ Every document's journey through the pipeline is tracked with a status code:
 
 ---
 
-*Previous: [Introduction](./intro.md) | Next: [Architecture](../architecture.md)*

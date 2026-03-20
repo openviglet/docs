@@ -169,4 +169,3 @@ See [MCP Servers](./mcp-servers.md) for configuration details.
 
 ---
 
-*Previous: [Assets](./assets.md) | Next: [MCP Servers](./mcp-servers.md)*

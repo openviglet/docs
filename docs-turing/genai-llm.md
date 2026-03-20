@@ -108,4 +108,3 @@ See [AI Agents](./ai-agents.md) for configuration, composition examples, and the
 
 ---
 
-*Previous: [AEM Connector](./integration-aem.md) | Next: [What is RAG?](./rag.md)*

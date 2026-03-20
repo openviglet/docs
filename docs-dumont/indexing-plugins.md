@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 5
 title: Indexing Plugins
 description: Configure where Dumont DEP delivers content — Turing ES (default), Apache Solr, or Elasticsearch.
 ---
@@ -49,8 +49,8 @@ turing:
 4. Turing ES validates each document against the target SN Site configuration
 5. Documents are queued internally in Turing ES for Solr indexing
 
-:::warning API Key required
-The Turing plugin cannot deliver content without a valid API Key. Create one in **Turing ES → Administration → API Tokens** before starting Dumont DEP.
+:::warning API Token required
+The Turing plugin cannot deliver content without a valid API Token. Create one in **Turing ES → Administration → API Tokens** before starting Dumont DEP.
 :::
 
 ---
@@ -219,4 +219,3 @@ Only one plugin is active per deployment. All connectors share the same output t
 
 ---
 
-*Previous: [WordPress Connector](./connectors/wordpress.md) | Next: [Developer Guide](./developer-guide.md)*

@@ -454,4 +454,3 @@ Before going to production, verify the following:
 
 ---
 
-*Previous: [Authentication](./security-authentication.md)*

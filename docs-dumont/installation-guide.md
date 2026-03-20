@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 title: Installation Guide
 description: Install and configure Viglet Dumont DEP — connector JAR, connector plugins, classpath configuration, and service setup.
 ---
@@ -190,8 +190,8 @@ turing:
 
 Create an API Token in **Turing ES → Administration → API Tokens** and use it as the `apiKey` value.
 
-:::warning API Key Required
-Dumont DEP cannot send content to Turing ES without a valid API Key. Create one in the Turing ES admin console before starting Dumont DEP.
+:::warning API Token Required
+Dumont DEP cannot send content to Turing ES without a valid API Token. Create one in the Turing ES admin console before starting Dumont DEP.
 :::
 
 ---
@@ -391,4 +391,3 @@ A complete production deployment with two connectors:
 
 ---
 
-*Previous: [Architecture](./architecture.md) | Next: [Configuration Reference](./configuration-reference.md)*

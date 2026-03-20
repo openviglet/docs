@@ -255,4 +255,3 @@ For deep technical content — Targeting Rules Solr query mechanics, Spotlight i
 
 ---
 
-*Previous: [Configuration Reference](./configuration-reference.md) | Next: [Search Engine](./search-engine.md)*

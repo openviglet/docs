@@ -825,4 +825,3 @@ The full search response schema — including `pagination`, `queryContext`, `res
 
 ---
 
-*Previous: [Search Engine](./search-engine.md) | Next: [Integration](./integration.md)*

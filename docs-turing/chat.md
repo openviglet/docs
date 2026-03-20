@@ -215,4 +215,3 @@ The chat features are accessible programmatically via the REST API. See [REST AP
 
 ---
 
-*Previous: [AI Agents](./ai-agents.md) | Next: [Token Usage](./token-usage.md)*

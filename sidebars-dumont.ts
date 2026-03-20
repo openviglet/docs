@@ -18,9 +18,10 @@ const sidebars: SidebarsConfig = {
             "getting-started/core-concepts",
           ],
         },
-        "architecture",
         "installation-guide",
         "configuration-reference",
+        "architecture",
+        "indexing-plugins",
         {
           type: "category",
           label: "Connectors",
@@ -36,7 +37,6 @@ const sidebars: SidebarsConfig = {
             "connectors/wordpress",
           ],
         },
-        "indexing-plugins",
         "developer-guide",
         {
           type: "category",

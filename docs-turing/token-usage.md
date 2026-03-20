@@ -121,4 +121,3 @@ Token usage data is also available via the REST API. See [REST API Reference →
 
 ---
 
-*Previous: [Chat](./chat.md) | Next: [Developer Guide](./developer-guide.md)*

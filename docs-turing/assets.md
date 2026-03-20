@@ -283,4 +283,3 @@ All endpoints are under `/api/asset` and require authentication.
 
 ---
 
-*Previous: [Embedding Stores & Models](./embedding-stores.md) | Next: [Tool Calling](./tool-calling.md)*

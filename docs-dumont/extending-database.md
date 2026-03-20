@@ -223,4 +223,3 @@ java -cp dumont-db-indexer.jar:target/my-db-extensions-1.0.0.jar \
 
 ---
 
-*Previous: [Extending the AEM Connector](./extending-aem.md)*

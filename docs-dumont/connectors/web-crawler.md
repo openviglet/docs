@@ -142,4 +142,3 @@ If no locale extension is configured, the default locale from the source configu
 
 ---
 
-*Previous: [Connectors Overview](./overview.md) | Next: [Database Connector](./database.md)*

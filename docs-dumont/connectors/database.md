@@ -130,4 +130,9 @@ This will:
 
 ---
 
-*Previous: [Web Crawler](./web-crawler.md) | Next: [FileSystem Connector](./filesystem.md)*
+:::tip Customizing the Database Connector
+Need to transform or enrich rows during import? See [Extending the Database Connector](../extending-database.md) for the `DumDbExtCustomImpl` interface and step-by-step guide.
+:::
+
+---
+
