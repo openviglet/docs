@@ -67,7 +67,6 @@ set TURING_ADMIN_PASSWORD=your_password
 export TURING_ADMIN_PASSWORD=your_password
 ```
 
-![Login Page](/img/screenshots/turing-login.png)
 
 ### Search Engine
 
@@ -75,7 +74,6 @@ export TURING_ADMIN_PASSWORD=your_password
 
 Search Engine is used by Turing to store and retrieve data of Semantic Navigation Sites.
 
-![Search Engine Page](/img/screenshots/turing-se.png)
 
 It is possible create or edit a Search Engine with following attributes:
 
@@ -92,7 +90,6 @@ It is possible create or edit a Search Engine with following attributes:
 
 #### Configuration
 
-![Semantic Navigation Page](/img/screenshots/turing-sn.png)
 
 ##### Settings Tab
 

@@ -217,29 +217,10 @@ You can access the Turing API documentation and test it directly using Swagger a
 
 ### Generate an API Key
 
-#### Step 1
-
-Sign in Turing Administration Console ([http://localhost:2700](http://localhost:2700)).
-
-![Sign in](/img/screenshots/turing-login.png)
-
-#### Step 2
-
-Access API Token Section.
-
-![API Token Section](/img/turing/0.3.9/api-token-menu.png)
-
-#### Step 3
-
-Create a new API Token with Title and Description.
-
-![New API Token](/img/turing/0.3.9/api-token-new.png)
-
-#### Step 4
-
-Will be create a new random API Token.
-
-![API Token was generated](/img/turing/0.3.9/api-token-hash.png)
+1. Sign in to the Turing ES Administration Console at `http://localhost:2700`.
+2. Navigate to **Administration → API Tokens**.
+3. Click **New** and fill in a Title and Description.
+4. A random API token will be generated and displayed. Copy it immediately — it will not be shown again.
 
 ### Semantic Navigation
 
