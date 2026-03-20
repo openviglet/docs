@@ -376,4 +376,4 @@ Documents indexed before GenAI was enabled do not have embeddings. A full re-ind
 
 ---
 
-*Previous: [SN Concepts — Targeting Rules, Spotlights, Merge Providers](./sn-concepts.md) | Next: [Security & Keycloak](./security-keycloak.md)*
+*Previous: [SN Concepts — Targeting Rules, Spotlights, Merge Providers](./sn-concepts.md) | Next: [Token Usage](./token-usage.md)*

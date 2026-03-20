@@ -23,11 +23,18 @@ const sidebars: SidebarsConfig = {
         "developer-guide",
         {
           type: "category",
+          label: "Generative AI",
+          items: [
+            "genai-llm",
+            "token-usage",
+          ],
+        },
+        {
+          type: "category",
           label: "Technical Reference",
           items: [
             "architecture-overview",
             "sn-concepts",
-            "genai-llm",
             "security-keycloak",
           ],
         },
