@@ -30,13 +30,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Chromium for Mermaid pre-rendering
+        run: npx puppeteer browsers install chrome
+
+      - name: Pre-render Mermaid diagrams to SVG
+        run: npm run diagrams
+
       - name: Build Docusaurus
-        run: npm run build
+        run: npx docusaurus build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build
+
+          
 
   deploy:
     environment:
