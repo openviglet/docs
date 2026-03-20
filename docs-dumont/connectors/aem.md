@@ -1,152 +1,249 @@
 ---
 sidebar_position: 5
 title: AEM Connector
-description: Index content from Adobe Experience Manager — author/publish instances, delta tracking, content fragments, locale mapping, and custom extensions.
+description: Index content from Adobe Experience Manager — event-driven indexing, infinity.json traversal, tag facets, model.json attributes, and custom extensions.
 ---
 
 # AEM Connector
 
-The AEM Connector indexes content from Adobe Experience Manager (AEM) author and publish instances. It supports content fragments, delta (incremental) indexing, locale mapping, and a flexible extension system for custom content processing.
+The AEM Connector indexes content from Adobe Experience Manager (AEM) author and publish instances. It consists of two components: an **AEM server-side bundle** (OSGi event listeners installed inside AEM) and a **connector plugin** (Java JAR loaded into `dumont-connector.jar`).
 
 ---
 
 ## How It Works
 
+The AEM connector receives indexing requests, then accesses AEM to traverse the content tree, fetch page data, extract tags as facets, and optionally call `.model.json` for custom attributes.
+
 ```mermaid
-graph TD
-    AEM["AEM Instance\n(Author / Publish)"] --> CONN["Connect via HTTP"]
-    CONN --> ROOT["Start at Root Path\n(/content/mysite)"]
-    ROOT --> TRAVERSE["Traverse Content Tree"]
-    TRAVERSE --> NODE["Read Node"]
-    NODE --> TYPE{"Content Type\nMatches?"}
-    TYPE -->|Yes| EXT["Apply Extensions\n(custom processing)"]
-    TYPE -->|No| SKIP["Skip"]
-    EXT --> ITEM["Create Job Item"]
-    ITEM --> PIPE["Submit to Pipeline"]
-    PIPE --> MORE{More nodes?}
-    MORE -->|Yes| TRAVERSE
-    MORE -->|No| DONE["Finish & Flush"]
+sequenceDiagram
+    participant AEM as AEM Instance
+    participant EVT as AEM Event Listener<br/>(OSGi Bundle)
+    participant API as Dumont Connector<br/>(AEM Plugin)
+    participant SE as Turing ES
+
+    Note over AEM,EVT: Option 1: Automatic (Event-Driven)
+    AEM->>EVT: Page published / modified / deleted
+    EVT->>API: POST /api/v2/aem/index/{source}<br/>{paths, event}
+
+    Note over API: Option 2: Manual (Postman / curl)
+    Note over API: Option 3: Turing ES Admin Console<br/>(Integration → Indexing Manager)
+
+    API->>AEM: GET {path}.infinity.json
+    AEM-->>API: Full JCR node tree (JSON)
+    API->>AEM: GET {path}/jcr:content.tags.json
+    AEM-->>API: Tags → converted to facets
+    API->>AEM: GET {path}.model.json (optional)
+    AEM-->>API: Sling Model attributes
+    API->>API: Traverse child nodes recursively
+    API->>SE: Index documents (via pipeline)
 ```
 
----
+### Three Ways to Trigger Indexing
 
-## Key Features
-
-| Feature | Description |
-|---|---|
-| **Author & Publish** | Index from both AEM environments independently, with separate SN Site targets |
-| **Delta tracking** | Incremental indexing — only process content changed since the last run |
-| **Content type filtering** | Process only specific JCR node types (e.g., `cq:Page`) with optional sub-type filtering |
-| **Locale mapping** | Map AEM repository paths to locales (e.g., `/content/mysite/en` → `en_US`) |
-| **Root path scoping** | Restrict indexing to a specific subtree of the content repository |
-| **Custom extensions** | Pluggable interfaces for content processing, delta dates, and locale resolution |
-| **URL prefix mapping** | Configure different URL prefixes for author and publish content |
+| Method | How | When to use |
+|---|---|---|
+| **AEM Event Listeners** | Install the `aem-server` OSGi bundle inside AEM — it automatically sends indexing requests when content is published, modified, or deleted | Production — real-time content sync |
+| **Manual API Call** | Send a POST request to `/api/v2/aem/index/{source}` with a JSON payload containing paths and event type | Development, testing, one-off re-indexing |
+| **Turing ES Admin Console** | Use **Enterprise Search → Integration → Indexing Manager** to select paths and trigger indexing/deindexing/publishing operations | Operations — selective re-indexing via UI |
 
 ---
 
-## Source Configuration
+## The Indexing Flow (Step by Step)
 
-Each AEM source defines:
+When the connector receives an indexing request (from any of the three triggers), it processes each path as follows:
 
-| Field | Description |
-|---|---|
-| **Name** | Source identifier |
-| **Endpoint** | AEM instance URL (e.g., `http://localhost:4502`) |
-| **Username / Password** | AEM credentials for authentication |
-| **Root Path** | Starting path in the content repository (e.g., `/content/wknd`) |
-| **Content Type** | JCR node type to index (e.g., `cq:Page`) |
-| **Sub Type** | Optional sub-type filter |
+### 1. Fetch the Content Node
 
----
+The connector calls AEM's `infinity.json` endpoint to get the full JCR node tree:
 
-## Author / Publish Configuration
+```
+GET http://localhost:4502/content/wknd/us/en/my-page.infinity.json
+```
 
-| Field | Description |
-|---|---|
-| **Author** | Enable indexing from the AEM author environment |
-| **Publish** | Enable indexing from the AEM publish environment |
-| **SN Site (Author)** | Semantic Navigation Site for author content |
-| **SN Site (Publish)** | Semantic Navigation Site for publish content |
-| **URL Prefix (Author)** | URL prefix for author documents |
-| **URL Prefix (Publish)** | URL prefix for publish documents |
+This returns the complete node hierarchy as JSON — all properties, child nodes, and metadata. The connector filters out internal nodes (prefixed with `jcr:`, `rep:`, `cq:`).
 
----
+### 2. Extract Tags as Facets
 
-## Delta Tracking
+For each page, the connector fetches tags:
 
-Delta tracking enables **incremental indexing** — only content modified since the last run is processed.
+```
+GET http://localhost:4502/content/wknd/us/en/my-page/jcr:content.tags.json
+```
 
-| Field | Description |
-|---|---|
-| **Once Pattern** | Pattern to identify content that should only be indexed once |
-| **Delta Class** | Java class responsible for detecting changed content since the last run |
+Tags are **automatically converted to facets** in the search index — no manual configuration needed. Each tag becomes a filterable value in the Turing ES facet panel.
 
-The delta mechanism compares the current content against the last indexed timestamp, processing only nodes that have been created, modified, or deleted since then.
+### 3. Fetch Model JSON (Optional — Requires Configuration)
+
+The connector does **not** call `.model.json` by default. To enable it, you must configure a `DumAemExtContentInterface` implementation in the `models` section of the export JSON:
+
+```json
+"models": [
+  {
+    "type": "cq:Page",
+    "className": "com.viglet.dumont.connector.aem.sample.ext.DumAemExtSampleModelJson",
+    "targetAttrs": [ ... ]
+  }
+]
+```
+
+When this is configured, the extension class fetches the Sling Model exporter:
+
+```
+GET http://localhost:4502/content/wknd/us/en/my-page.model.json
+```
+
+This returns structured content from AEM's Sling Models — useful for extracting custom attributes like content fragment paths, component data, or experience fragment references. See [Extending the AEM Connector](../extending-aem.md) for how to implement `DumAemExtContentInterface` and the full JSON configuration reference.
+
+### 4. Traverse the Content Tree
+
+Starting from the configured **root path** (e.g., `/content/wknd`), the connector recursively traverses all child nodes that match the configured **content type** (e.g., `cq:Page`). Each matching node goes through steps 1–3 above.
+
+### 5. Map Attributes and Index
+
+For each page, the connector:
+- Applies **attribute mappings** from the configuration (global attributes + model-specific source→target mappings)
+- Runs **custom extension classes** (if configured via `className`)
+- Creates a **Job Item** for both author and publish environments (if enabled)
+- Sends the Job Item through the Dumont DEP pipeline to Turing ES
 
 ---
 
 <div className="page-break" />
 
-## Locale Mapping
+## AEM Server-Side Bundle (Event Listeners)
 
-Maps content paths to language/country codes:
+The `aem-server` module is an **OSGi bundle installed inside AEM**. It provides event listeners that automatically notify the Dumont connector when content changes.
+
+### Events Captured
+
+| Event Listener | AEM Event | Dumont Action |
+|---|---|---|
+| `DumAemPageEventHandler` | Page created / modified | `INDEXING` |
+| `DumAemPageReplicationEventHandler` | Page activated (published) | `PUBLISHING` |
+| `DumAemPageReplicationEventHandler` | Page deactivated (unpublished) | `UNPUBLISHING` |
+| `DumAemResourceEventHandler` | DAM asset created / modified | `INDEXING` |
+
+### OSGi Configuration
+
+The event listeners are configured in AEM via **OSGi Configuration** (AEM → Web Console → Configuration):
+
+| Setting | Description |
+|---|---|
+| **Enabled** | Toggle to enable/disable automatic indexing |
+| **Host** | Dumont connector URL (e.g., `http://dumont-server:30130`) |
+| **Config Name** | Source name configured in the Dumont connector |
+
+### HTTP Payload
+
+When an event fires, the bundle sends:
+
+```
+POST http://dumont-server:30130/api/v2/aem/index/{configName}
+Content-Type: application/json
+
+{
+  "paths": ["/content/wknd/us/en/my-page"],
+  "event": "INDEXING"
+}
+```
+
+Event types: `INDEXING`, `DEINDEXING`, `PUBLISHING`, `UNPUBLISHING`.
+
+---
+
+## Manual API Triggering
+
+You can trigger indexing manually via HTTP (Postman, curl, etc.):
+
+### Index Specific Paths
+
+```bash
+curl -X POST http://localhost:30130/api/v2/aem/index/WKND \
+  -H "Content-Type: application/json" \
+  -d '{
+    "paths": ["/content/wknd/us/en/about"],
+    "event": "INDEXING",
+    "recursive": true
+  }'
+```
+
+### Deindex Specific Paths
+
+```bash
+curl -X POST http://localhost:30130/api/v2/aem/index/WKND \
+  -H "Content-Type: application/json" \
+  -d '{
+    "paths": ["/content/wknd/us/en/old-page"],
+    "event": "DEINDEXING"
+  }'
+```
+
+### Request Body Fields
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `paths` | string[] | *(required)* | AEM content paths to process |
+| `event` | string | `INDEXING` | `INDEXING`, `DEINDEXING`, `PUBLISHING`, or `UNPUBLISHING` |
+| `recursive` | boolean | `false` | Traverse child nodes recursively |
+| `attribute` | string | `ID` | `ID` (path-based) or `URL` (URL-based) |
+
+---
+
+<div className="page-break" />
+
+## Source Configuration
+
+Each AEM source defines the connection and indexing behavior:
 
 | Field | Description |
 |---|---|
-| **Default Locale** | Locale used when no path-specific match is found |
-| **Locale Class** | Java class for custom locale resolution logic |
-| **Locale → Path** | Dynamic mapping of locale codes to repository paths |
+| **Name** | Source identifier (used in the API path) |
+| **Endpoint** | AEM instance URL (e.g., `http://localhost:4502`) |
+| **Username / Password** | AEM authentication credentials |
+| **Root Path** | Content tree root to crawl (e.g., `/content/wknd`) |
+| **Content Type** | JCR node type to index (e.g., `cq:Page`) |
 
-**Example:**
+## Author / Publish
 
-| Locale | Path |
+| Field | Description |
 |---|---|
-| `en_US` | `/content/wknd/us/en` |
-| `pt_BR` | `/content/wknd/br/pt-br` |
-| `es_ES` | `/content/wknd/es/es` |
+| **Author** | Enable indexing from AEM author |
+| **Publish** | Enable indexing from AEM publish |
+| **SN Site (Author)** | Turing ES site for author content |
+| **SN Site (Publish)** | Turing ES site for publish content |
+| **URL Prefix (Author)** | Public URL prefix for author documents |
+| **URL Prefix (Publish)** | Public URL prefix for publish documents |
 
----
+## Delta Tracking
 
-## Extension System
-
-The AEM Connector provides extension points for custom content processing:
-
-| Interface | Purpose |
+| Field | Description |
 |---|---|
-| `DumAemExtContentInterface` | Custom content field extraction and transformation |
-| `DumAemExtDeltaDateInterface` | Custom delta date resolution for change detection |
+| **Once Pattern** | Regex — matching paths are indexed only once |
+| **Delta Class** | Class implementing `DumAemExtDeltaDateInterface` |
 
-Create a custom implementation by extending these interfaces and packaging them as a plugin. See the `aem-plugin-sample` module in the Dumont repository for a working example.
-
-### Module Structure
-
-| Module | Description |
-|---|---|
-| `aem-plugin` | Core AEM connector with extension interfaces |
-| `aem-server` | AEM server-side integration |
-| `aem-plugin-sample` | Example custom implementation showing how to extend the connector |
-| `aem-commons` | Shared utilities for AEM connectors |
-
----
-
-## Example: Indexing WKND Site
+## Locale Mapping
 
 ```json
-{
-  "name": "WKND",
-  "endpoint": "http://localhost:4502",
-  "username": "admin",
-  "password": "admin",
-  "rootPath": "/content/wknd",
-  "contentType": "cq:Page",
-  "authorSNSite": "wknd-author",
-  "publishSNSite": "wknd-publish",
-  "defaultLocale": "en_US",
-  "locales": {
-    "en_US": "/content/wknd/us/en",
-    "pt_BR": "/content/wknd/br/pt-br"
-  }
-}
+"localePaths": [
+  { "locale": "en_US", "path": "/content/wknd/us/en" },
+  { "locale": "es",    "path": "/content/wknd/es/es" }
+]
+```
+
+## Concurrency
+
+The connector supports two execution modes:
+
+| Mode | When | Behavior |
+|---|---|---|
+| **Exclusive** | Full crawl (`indexAll`) | Only one full crawl per source at a time |
+| **Standalone** | Specific paths (event-driven / manual) | Multiple concurrent updates allowed |
+
+Reactive (parallel) processing can be enabled for large sites:
+
+```properties
+dumont.reactive.indexing=true
+dumont.reactive.parallelism=10
 ```
 
 ---
@@ -155,5 +252,4 @@ Create a custom implementation by extending these interfaces and packaging them 
 Need custom attribute extractors, delta date logic, or content processors? See [Extending the AEM Connector](../extending-aem.md) for the full extension system, configuration JSON reference, and step-by-step guide.
 :::
 
----
-
+For managing AEM indexing via the Turing ES admin console — including monitoring, indexing stats, and the Indexing Manager — see the [Turing ES Integration documentation](https://docs.viglet.com/turing/integration) and [AEM Connector documentation](https://docs.viglet.com/turing/integration-aem).
