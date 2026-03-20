@@ -193,42 +193,11 @@ curl -X POST http://localhost:30130/api/v2/aem/index/WKND \
 
 ## Source Configuration
 
-Each AEM source defines the connection and indexing behavior:
+Each AEM source defines connection details (endpoint, credentials), content scope (root path, content type), author/publish environments with separate SN Sites and URL prefixes, locale mappings, and delta tracking for incremental indexing.
 
-| Field | Description |
-|---|---|
-| **Name** | Source identifier (used in the API path) |
-| **Endpoint** | AEM instance URL (e.g., `http://localhost:4502`) |
-| **Username / Password** | AEM authentication credentials |
-| **Root Path** | Content tree root to crawl (e.g., `/content/wknd`) |
-| **Content Type** | JCR node type to index (e.g., `cq:Page`) |
+For the full configuration reference — including all source fields, author/publish settings, delta tracking, locales, indexing rules, and the Indexing Manager — see [AEM Connector in Turing ES](/turing/integration-aem).
 
-## Author / Publish
-
-| Field | Description |
-|---|---|
-| **Author** | Enable indexing from AEM author |
-| **Publish** | Enable indexing from AEM publish |
-| **SN Site (Author)** | Turing ES site for author content |
-| **SN Site (Publish)** | Turing ES site for publish content |
-| **URL Prefix (Author)** | Public URL prefix for author documents |
-| **URL Prefix (Publish)** | Public URL prefix for publish documents |
-
-## Delta Tracking
-
-| Field | Description |
-|---|---|
-| **Once Pattern** | Regex — matching paths are indexed only once |
-| **Delta Class** | Class implementing `DumAemExtDeltaDateInterface` |
-
-## Locale Mapping
-
-```json
-"localePaths": [
-  { "locale": "en_US", "path": "/content/wknd/us/en" },
-  { "locale": "es",    "path": "/content/wknd/es/es" }
-]
-```
+For the JSON configuration file used by custom extensions (attributes, models, locale paths), see [Extending the AEM Connector](../extending-aem.md#aem-configuration-json).
 
 ## Concurrency
 
@@ -252,4 +221,4 @@ dumont.reactive.parallelism=10
 Need custom attribute extractors, delta date logic, or content processors? See [Extending the AEM Connector](../extending-aem.md) for the full extension system, configuration JSON reference, and step-by-step guide.
 :::
 
-For managing AEM indexing via the Turing ES admin console — including monitoring, indexing stats, and the Indexing Manager — see the [Turing ES Integration documentation](https://docs.viglet.com/turing/integration) and [AEM Connector documentation](https://docs.viglet.com/turing/integration-aem).
+For managing AEM indexing via the Turing ES admin console — including monitoring, indexing stats, and the Indexing Manager — see the [Turing ES Integration documentation](/turing/integration) and [AEM Connector documentation](/turing/integration-aem).

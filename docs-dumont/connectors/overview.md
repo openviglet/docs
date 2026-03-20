@@ -134,9 +134,9 @@ Once connected, the Turing ES console provides a graphical interface for:
 - Viewing indexing statistics and status
 - Running double-check consistency validation
 
-For full details on the Integration UI — including monitoring, indexing stats, and double-check — see the [Turing ES Integration documentation](https://docs.viglet.com/turing/integration).
+For full details on the Integration UI — including monitoring, indexing stats, and double-check — see the [Turing ES Integration documentation](/turing/integration).
 
-For AEM-specific configuration (sources, content types, author/publish, delta tracking, locales, indexing rules) see [Turing ES AEM Connector documentation](https://docs.viglet.com/turing/integration-aem).
+For AEM-specific configuration (sources, content types, author/publish, delta tracking, locales, indexing rules) see [Turing ES AEM Connector documentation](/turing/integration-aem).
 
 ---
 
@@ -158,8 +158,8 @@ Every connector needs at least these pieces of information:
 
 | Connector | Configuration Method | Where |
 |---|---|---|
-| **Web Crawler** | Turing ES Admin Console | [Turing ES → Integration](https://docs.viglet.com/turing/integration) |
-| **AEM** | JSON file + Turing ES Admin Console | `export/` directory + [Turing ES → Integration](https://docs.viglet.com/turing/integration-aem) |
+| **Web Crawler** | Turing ES Admin Console | [Turing ES → Integration](/turing/integration) |
+| **AEM** | JSON file + Turing ES Admin Console | `export/` directory + [Turing ES → Integration](/turing/integration-aem) |
 | **Database** | CLI parameters | Command-line — see [Database Connector](./database.md) |
 | **FileSystem** | CLI parameters | Command-line — see [FileSystem Connector](./filesystem.md) |
 | **WordPress** | WordPress Admin UI | WordPress → Settings → Viglet Dumont |

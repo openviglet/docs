@@ -215,7 +215,9 @@ Only one plugin is active per deployment. All connectors share the same output t
 |---|---|
 | [Configuration Reference](./configuration-reference.md) | All application.yaml properties |
 | [Architecture](./architecture.md) | Where indexing plugins fit in the pipeline |
-| [Turing ES — REST API](https://docs.viglet.com/turing/rest-api) | Turing ES indexing API reference |
+| [Turing ES — REST API](/turing/rest-api) | Turing ES indexing API reference |
+| [Turing ES — Semantic Navigation](/turing/semantic-navigation) | SN Sites, facets, spotlights, and search configuration |
+| [Turing ES — RAG](/turing/rag) | Retrieval-Augmented Generation and vector embeddings |
 
 ---
 

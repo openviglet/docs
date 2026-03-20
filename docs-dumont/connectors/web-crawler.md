@@ -138,7 +138,7 @@ If no locale extension is configured, the default locale from the source configu
 |---|---|
 | [Connectors Overview](./overview.md) | All available connectors |
 | [Core Concepts](../getting-started/core-concepts.md) | Pipeline, strategies, and change detection |
-| [Turing ES — Integration](https://docs.viglet.com/turing/integration) | How Turing ES receives content from connectors |
+| [Turing ES — Integration](/turing/integration) | How Turing ES receives content from connectors |
 
 ---
 

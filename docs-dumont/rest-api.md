@@ -386,4 +386,4 @@ Returns an empty AEM source model for reference.
 |---|---|
 | [AEM Connector](./connectors/aem.md) | AEM indexing flow, event listeners, and manual triggering |
 | [Connectors Overview](./connectors/overview.md) | All connectors and how they're managed |
-| [Turing ES — Integration](https://docs.viglet.com/turing/integration) | Turing ES admin console for managing connectors |
+| [Turing ES — Integration](/turing/integration) | Turing ES admin console for managing connectors |

@@ -201,3 +201,15 @@ Multiple Turing ES instances run behind Apache HTTP Server configured as a rever
 
 ---
 
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Installation Guide](./installation-guide.md) | Setup with Docker, JAR, or build from source |
+| [Configuration Reference](./configuration-reference.md) | All application.yaml properties |
+| [Integration](./integration.md) | Manage content connectors in the admin console |
+| [Dumont DEP — Architecture](/dumont/architecture) | Connector-side architecture — pipeline engine, message queue, and indexing plugins |
+| [Dumont DEP — Connectors](/dumont/connectors/overview) | Available connectors and deployment types |
+
+---
+

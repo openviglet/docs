@@ -8,6 +8,10 @@ description: AEM-specific configuration for Turing ES integrations — sources, 
 
 This page covers the configuration sections that are specific to the **Adobe Experience Manager (AEM)** connector. For general integration management — creating instances, monitoring, statistics, and system information — see [Integration](./integration.md).
 
+:::info Dumont DEP — AEM Connector
+For the connector-side documentation — how the AEM plugin extracts content (infinity.json, tags, model.json), event listener setup, and custom extensions — see the [Dumont DEP AEM Connector](/dumont/connectors/aem) documentation.
+:::
+
 ---
 
 ## Sources
@@ -119,9 +123,11 @@ Each operation step allows you to:
 |---|---|
 | [Integration](./integration.md) | General integration management — instances, monitoring, statistics, and system information |
 | [Semantic Navigation](./semantic-navigation.md) | Configure the SN Sites that receive indexed content |
-| [Semantic Navigation](./semantic-navigation.md) | Merge Providers, Targeting Rules, and indexing pipeline internals |
 | [Architecture Overview](./architecture-overview.md) | End-to-end indexing flow from connector to Solr |
 | [REST API Reference](./rest-api.md) | API endpoints for programmatic indexing |
+| [Dumont DEP — AEM Connector](/dumont/connectors/aem) | How the AEM connector works — infinity.json traversal, event listeners, API triggering |
+| [Dumont DEP — AEM Event Listener](/dumont/aem-event-listener) | Install the OSGi event listener bundle inside AEM for real-time indexing |
+| [Dumont DEP — Extending AEM](/dumont/extending-aem) | Custom attribute extractors, content processors, and configuration JSON reference |
 
 ---
 

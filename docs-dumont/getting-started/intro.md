@@ -6,7 +6,7 @@ description: Viglet Dumont DEP is an open-source data extraction platform that c
 
 # What is Dumont DEP?
 
-**Viglet Dumont DEP** is an open-source data extraction platform. It connects your content — wherever it lives — to [Viglet Turing ES](https://docs.viglet.com/turing) for indexing and search.
+**Viglet Dumont DEP** is an open-source data extraction platform. It connects your content — wherever it lives — to [Viglet Turing ES](/turing) for indexing and search.
 
 Think of Dumont DEP as the bridge between your content sources and the search engine. It crawls websites, queries databases, scans file systems, reads AEM repositories, and pulls from WordPress — then delivers every document to Turing ES through a reliable, asynchronous pipeline.
 

@@ -138,3 +138,4 @@ Dumont DEP + PostgreSQL
 | [Connectors Overview](./connectors/overview.md) | All connectors and deployment types |
 | [Indexing Plugins](./indexing-plugins.md) | Turing ES, Solr, Elasticsearch output targets |
 | [Installation Guide](./installation-guide.md) | Setup with `-Dloader.path` and systemd |
+| [Turing ES — Architecture](/turing/architecture-overview) | Search-side architecture — indexing reception, search flow, and deployment topologies |

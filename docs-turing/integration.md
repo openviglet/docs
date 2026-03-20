@@ -160,9 +160,10 @@ Built-in SSRF protection validates the endpoint before forwarding. Requests to p
 |---|---|
 | [AEM Connector](./integration-aem.md) | AEM-specific configuration — sources, content types, environments, indexing rules, and the indexing manager |
 | [Semantic Navigation](./semantic-navigation.md) | Configure the SN Sites that receive indexed content |
-| [Semantic Navigation](./semantic-navigation.md) | Merge Providers, Targeting Rules, and indexing pipeline internals |
 | [Architecture Overview](./architecture-overview.md) | End-to-end indexing flow from connector to Solr |
 | [REST API Reference](./rest-api.md) | API endpoints for programmatic indexing |
+| [Dumont DEP — Connectors](/dumont/connectors/overview) | Available connectors (Web Crawler, AEM, Database, FileSystem, WordPress) and how to deploy them |
+| [Dumont DEP — REST API](/dumont/rest-api) | Connector-side API for triggering indexing, monitoring, and source management |
 
 ---
 
