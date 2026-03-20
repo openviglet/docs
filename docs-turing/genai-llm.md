@@ -106,6 +106,40 @@ A purpose-built, cloud-native vector database designed for high-scale similarity
 
 ---
 
+## Embedding Models
+
+An **Embedding Model** is the model responsible for converting text into a numerical vector representation (an embedding). These vectors capture the semantic meaning of the text, enabling similarity search — finding documents that are conceptually related to a query, even when they share no common keywords.
+
+Turing ES uses embedding models in two places:
+
+- **At indexing time:** when a document is indexed on a GenAI-enabled SN Site, or when a file is uploaded to the Knowledge Base, the text is passed through the embedding model to produce a vector that is stored in the Embedding Store.
+- **At query time:** when a user sends a RAG chat request or an AI Agent calls a search tool, the query text is also passed through the same embedding model to produce a vector, which is then compared against the stored vectors to find the most relevant documents.
+
+### Configuration
+
+The default embedding model is set globally in **Administration → Settings → Default Embedding Model**. Individual SN Sites can override this default in their **Generative AI** tab.
+
+Turing ES uses embedding models provided via Spring AI. The available models depend on the LLM provider configured:
+
+| Provider | Example embedding models |
+|---|---|
+| **OpenAI** | `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002` |
+| **Azure OpenAI** | Deployment name of an embedding model in your Azure resource |
+| **Google Gemini** | `text-embedding-004`, `embedding-001` |
+| **Ollama (local)** | `nomic-embed-text`, `mxbai-embed-large`, `all-minilm` |
+
+### Choosing an embedding model
+
+The embedding model determines the **dimensionality** of the stored vectors (e.g., 384, 768, or 1536 dimensions) and the **quality of semantic similarity**. A larger model generally produces higher-quality embeddings at the cost of more storage and slower indexing.
+
+For most deployments, a mid-sized model such as `text-embedding-3-small` (OpenAI) or `nomic-embed-text` (Ollama) provides a good balance between quality and performance.
+
+:::warning Embedding model and store must be consistent
+The embedding model must remain the same across indexing and query time. If you change the model after documents have already been indexed, the stored vectors and the query vectors will have different dimensions or different semantic spaces, causing incorrect or empty similarity results. A full re-indexing is required whenever the embedding model changes.
+:::
+
+---
+
 ## RAG Architecture
 
 Retrieval-Augmented Generation (RAG) is the mechanism by which Turing ES provides the LLM with relevant context before generating a response. Rather than relying on the LLM's training data alone, RAG retrieves the most semantically relevant documents from an indexed corpus and injects them into the prompt.
