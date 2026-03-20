@@ -23,6 +23,13 @@ const sidebars: SidebarsConfig = {
         "developer-guide",
         {
           type: "category",
+          label: "Management",
+          items: [
+            "assets",
+          ],
+        },
+        {
+          type: "category",
           label: "Generative AI",
           items: [
             "genai-llm",

@@ -171,15 +171,20 @@ sequenceDiagram
 
 Turing ES retrieves the **top 10** most similar document chunks by default, using a similarity **threshold of 0.7**. Documents with a similarity score below the threshold are excluded from the context, preventing low-relevance content from polluting the prompt.
 
-### Knowledge Base (MinIO)
+### Knowledge Base (Assets)
 
-The Knowledge Base is a collection of files stored in MinIO and indexed as vector embeddings. Administrators manage files through a folder-based UI in the Turing ES admin console — creating folders, uploading documents, and organizing content in a way similar to a file system.
+The Knowledge Base is built from files managed in the **Assets** section (`/console/asset`), a file manager backed by MinIO. Administrators can create folders, upload documents, and browse content via a dual-panel interface. Files are indexed as vector embeddings and can be queried semantically by AI Agents.
 
-When a file is uploaded, the indexing pipeline:
-1. Extracts text content (including OCR for images and PDFs)
-2. Splits the content into chunks
-3. Generates a vector embedding for each chunk using the configured embedding model
-4. Stores the chunks and embeddings in the active embedding store
+Full documentation — including the UI layout, file preview, batch training, automatic indexing on upload/delete, and MinIO configuration — is available on the dedicated [Assets](./assets.md) page.
+
+**Indexing pipeline (per file):**
+
+1. Download file from MinIO
+2. Extract plain text via **Apache Tika** (supports PDF, DOCX, XLSX, PPTX, HTML, TXT, images with OCR)
+3. Truncate to **100,000 characters**
+4. Split into **chunks of 1,024 characters**
+5. Generate embeddings using the configured embedding model
+6. Store chunks in the active embedding store with source metadata
 
 The Knowledge Base is queried by AI Agents using the **RAG / Knowledge Base** tool callings:
 

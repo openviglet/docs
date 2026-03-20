@@ -30,7 +30,7 @@ A brief overview of each administration section:
 | **LLM Instances** | Administration → LLM Instances | Configure connections to Anthropic Claude, OpenAI, Azure OpenAI, Gemini, and Ollama |
 | **MCP Servers** | Administration → MCP Servers | Register external MCP servers (HTTP or stdio) to extend agent tool calling |
 | **AI Agents** | Administration → AI Agents | Compose agents from an LLM Instance + selected tools + MCP Servers |
-| **Knowledge Base** | Administration → Knowledge Base | Upload and organize files in MinIO; files are indexed as vector embeddings for RAG |
+| **Knowledge Base** | Management → Assets | Upload and organize files in MinIO; files are indexed as vector embeddings and queried by AI Agents. See [Assets](./assets.md) |
 
 ---
 
