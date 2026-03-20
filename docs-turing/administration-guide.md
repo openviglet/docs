@@ -239,21 +239,9 @@ A searchable table of all JVM properties and environment variables active at run
 
 ### Search Engine
 
-#### Configuration
+The Search Engine section manages connections to the search backend (Apache Solr, Elasticsearch, or Lucene) and the cores (collections) that each Semantic Navigation Site locale maps to.
 
-Search Engine is used by Turing to store and retrieve data of Semantic Navigation Sites.
-
-
-It is possible create or edit a Search Engine with following attributes:
-
-| Attribute | Description |
-|-----------|-------------|
-| Name | Name of Search Engine |
-| Description | Description of Search Engine |
-| Vendor | Select the Vendor of Search Engine. For now it only supports Solr |
-| Host | Host name where the Search Engine service is installed |
-| Port | Port of Search Engine Service |
-| Enabled | If the Search Engine is enabled |
+For full documentation — instance creation, core management, system monitoring, the plugin architecture, and protections — see **[Search Engine](./search-engine.md)**.
 
 ### Semantic Navigation
 

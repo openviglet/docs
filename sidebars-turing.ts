@@ -24,6 +24,13 @@ const sidebars: SidebarsConfig = {
         "developer-guide",
         {
           type: "category",
+          label: "Enterprise Search",
+          items: [
+            "search-engine",
+          ],
+        },
+        {
+          type: "category",
           label: "Management",
           items: [
             "assets",

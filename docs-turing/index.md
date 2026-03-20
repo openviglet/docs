@@ -34,6 +34,14 @@ slug: /
 
 ---
 
+## Enterprise Search
+
+| Guide | Description |
+|---|---|
+| [Search Engine](/turing/search-engine) | Manage search backend instances (Solr, Elasticsearch, Lucene), cores, and system monitoring |
+
+---
+
 ## Management
 
 | Guide | Description |
