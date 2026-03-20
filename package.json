@@ -5,6 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
+    "diagrams": "mmdc -p puppeteer-config.json -w 900 -H 600 -b transparent -i diagrams/turing-architecture.mmd       -o static/img/diagrams/turing-architecture.svg       && mmdc -p puppeteer-config.json -w 900 -H 600 -b transparent -i diagrams/turing-indexing-flow.mmd      -o static/img/diagrams/turing-indexing-flow.svg      && mmdc -p puppeteer-config.json -w 900 -H 600 -b transparent -i diagrams/turing-search-flow.mmd       -o static/img/diagrams/turing-search-flow.svg       && mmdc -p puppeteer-config.json -w 900 -H 600 -b transparent -i diagrams/turing-targeting-rules-flow.mmd -o static/img/diagrams/turing-targeting-rules-flow.svg && mmdc -p puppeteer-config.json -w 900 -H 600 -b transparent -i diagrams/turing-agent-flow.mmd         -o static/img/diagrams/turing-agent-flow.svg         && mmdc -p puppeteer-config.json -w 900 -H 600 -b transparent -i diagrams/turing-rag-flow.mmd            -o static/img/diagrams/turing-rag-flow.svg            && mmdc -p puppeteer-config.json -w 900 -H 600 -b transparent -i diagrams/turing-chat-layout.mmd        -o static/img/diagrams/turing-chat-layout.svg",
+    "prebuild": "npm run diagrams",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -16,6 +18,8 @@
   "dependencies": {
     "@docusaurus/core": "^3.7.0",
     "@docusaurus/preset-classic": "^3.7.0",
+    "@docusaurus/theme-mermaid": "^3.7.0",
+    "@easyops-cn/docusaurus-search-local": "^0.55.1",
     "@mdx-js/react": "^3.0.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -37,6 +41,7 @@
     "@docusaurus/module-type-aliases": "^3.7.0",
     "@docusaurus/tsconfig": "^3.9.2",
     "@docusaurus/types": "^3.7.0",
+    "@mermaid-js/mermaid-cli": "^11.12.0",
     "typescript": "^5.9.3"
   },
   "browserslist": {

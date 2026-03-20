@@ -1,0 +1,19 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+sequenceDiagram
+    participant User
+    participant Chat as Chat / AI Agent
+    participant LLM as LLM Instance
+    participant Emb as Embedding Store
+    participant RAGTool as RAG Tool Calling
+    participant SN as Semantic Navigation
+
+    User->>Chat: Question or request
+    Chat->>LLM: Send message with context
+    LLM->>RAGTool: Call search_knowledge_base(query)
+    RAGTool->>Emb: Vector similarity search<br/>(top-10, threshold 0.7)
+    Emb-->>RAGTool: Relevant document chunks
+    RAGTool-->>LLM: Retrieved context
+    LLM->>SN: Call search_site(site, query) [optional]
+    SN-->>LLM: Search results
+    LLM-->>Chat: Generated response grounded in retrieved content
+    Chat-->>User: Final response

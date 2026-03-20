@@ -1,0 +1,32 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+sequenceDiagram
+    participant Dumont as Viglet Dumont DEP<br/>(Connector)
+    participant API as Turing ES REST API
+    participant Artemis as Apache Artemis Queue
+    participant Pipeline as Indexing Pipeline
+    participant SNSite as SN Site Configuration
+    participant Merge as Merge Provider Engine
+    participant Solr as Apache Solr
+    participant DB as Database
+    participant Emb as Embedding Store<br/>(Chroma / PgVector / Milvus)
+
+    Dumont->>API: POST document to SN Site
+    API->>SNSite: Load site configuration<br/>(fields, facets, search behavior, spotlights)
+    SNSite-->>API: Site config
+    API->>Artemis: Enqueue indexing job (async)
+    Artemis->>Pipeline: Deliver job
+
+    Pipeline->>Merge: Check Merge Provider rules<br/>for this site and document
+    alt Merge rule matched
+        Merge->>Solr: Fetch existing document by join key
+        Solr-->>Merge: Existing document fields
+        Merge-->>Pipeline: Merged document<br/>(overwrite configured fields)
+    else No merge rule
+        Merge-->>Pipeline: Document unchanged
+    end
+
+    Pipeline->>Solr: Index document with mapped fields and facets
+    alt Document matches a Spotlight
+        Pipeline->>DB: Persist spotlight content<br/>(title, description, URL, position)
+    end
+    Pipeline->>Emb: Store vector embedding<br/>(if GenAI enabled for this site)

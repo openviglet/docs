@@ -4,6 +4,8 @@ import { useLocation } from "@docusaurus/router";
 import useGlobalData from "@docusaurus/useGlobalData";
 import { useColorMode } from "@docusaurus/theme-common";
 import ColorModeToggle from "@theme/ColorModeToggle";
+// @ts-ignore
+import SearchBar from "@theme/SearchBar";
 import { Button } from "@site/src/components/ui/button";
 import { Badge } from "@site/src/components/ui/badge";
 import VigletLogo from "@site/src/components/VigletLogo";
@@ -150,6 +152,11 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   return (
     <div className="nav-mobile-dropdown">
       <div className="nav-mobile-dropdown-inner">
+        {activeProduct && (
+          <div className="nav-mobile-search">
+            <SearchBar />
+          </div>
+        )}
         {PRODUCTS.map((p) => {
           const isActive = activeProduct?.id === p.id;
           return (
@@ -209,8 +216,13 @@ export default function Navbar(): JSX.Element {
             ))}
           </div>
 
-          {/* Desktop right: CTA + color toggle */}
+          {/* Desktop right: search (docs pages only) + color toggle + CTA */}
           <div className="nav-right">
+            {activeProduct && (
+              <div className="nav-search">
+                <SearchBar />
+              </div>
+            )}
             <ColorModeToggle value={colorMode} onChange={setColorMode} />
             <Button variant="default" size="sm" asChild>
               <a href="https://viglet.com" target="_blank" rel="noopener noreferrer">

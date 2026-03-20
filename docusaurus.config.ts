@@ -19,10 +19,31 @@ const config: Config = {
   onBrokenAnchors: "warn",
 
   markdown: {
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: "warn",
     },
   },
+
+  themes: [
+    "@docusaurus/theme-mermaid",
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      {
+        hashed: true,
+        language: ["en", "pt"],
+        docsRouteBasePath: ["turing", "shio", "dumont"],
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: false,
+        searchResultLimits: 8,
+        searchResultContextMaxLength: 50,
+        explicitSearchResultPath: true,
+        searchBarShortcutHint: true,
+      },
+    ],
+  ],
 
   i18n: {
     defaultLocale: "en",

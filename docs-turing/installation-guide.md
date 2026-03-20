@@ -6,7 +6,7 @@ description: Viglet Turing ES Installation Guide
 
 # Viglet Turing ES: Installation Guide
 
-Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
 
 ## Installing Java
 
@@ -214,136 +214,20 @@ unzip turing-utils.zip -d /appl/viglet/turing/utils
 
 ## Keycloak
 
-### Database
-
-Create the database for Keycloak using MariaDB/MySQL:
-
-```sql
-CREATE DATABASE keycloak;
-CREATE USER 'keycloak'@'localhost' IDENTIFIED BY 'keycloak';
-GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-### Keystore
-
-Generate the keystore file:
-
-```shell
-keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 \
-  -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" \
-  -keystore conf/server.keystore
-```
-
-### Configuration
-
-Create the Keycloak configuration file (`keycloak.conf`):
-
-```ini
-db=mariadb
-db-username=keycloak
-db-password=keycloak
-db-url=jdbc:mariadb://localhost:3306/keycloak
-http-relative-path=/kc
-```
-
-Build Keycloak:
-
-```shell
-./kc.sh build --http-relative-path=/kc
-```
-
-### Linux Service
-
-Create a systemd service for Keycloak:
-
-```ini
-[Unit]
-Description=Keycloak
-After=syslog.target network.target
-
-[Service]
-User=viglet
-EnvironmentFile=/appl/viglet/keycloak/env
-ExecStart=/appl/viglet/keycloak/bin/kc.sh start
-
-[Install]
-WantedBy=multi-user.target
-```
+For production deployments that require SSO, Keycloak integrates with Turing ES via OAuth2 / OpenID Connect. Full setup instructions — including database creation, keystore generation, Keycloak configuration, realm and client setup, JVM properties, and Apache reverse proxy configuration — are covered in the [Security & Keycloak](./security-keycloak.md) guide.
 
 ## Solr Configuration
 
-You need to configure Solr to be able to store Semantic Navigation and ChatBot data.
+You need to configure Solr to be able to store Semantic Navigation data.
 
-### OOTB
-
-With Solr running, go to Turing Utils and create the new cores that will be used by Turing ES.
-
-1. Install the cores into solr:
+With Solr running, go to Turing Utils and create the Solr collection that will be used by Turing ES:
 
 ```shell
 cd <SOLR_DIR>/bin
-## For Semantic Navigation
 ./solr create_collection -c turing -n turing -d /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>
-## For ChatBot
-./solr create_collection -c converse -n converse -d /appl/viglet/turing/utils/solr/<VERSION>/converse/<LANGUAGE>
 ```
 
-2. Start Solr Service
-
-### OpenText InfoFusion
-
-1. Create the cores into Solr:
-
-```shell
-cd <SOLR_DIR>/bin
-## For Semantic Navigation
-mkdir <SOLR_DIR>/server/solr/turing
-cp -Rf /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>/. <SOLR_DIR>/server/solr/turing/
-## For ChatBot
-mkdir <SOLR_DIR>/server/solr/converse
-cp -Rf /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>/. <SOLR_DIR>/server/solr/converse/
-```
-
-2. If the core name of Semantic Navigation Site will be different, you need modify the `core.properties` file and change the `name` and `collection` attributes:
-
-```shell
-cd <SOLR_DIR>/bin
-mkdir <SOLR_DIR>/server/solr/sample
-cp /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>/. <SOLR_DIR>/server/solr/sample/
-chown otif:otif <SOLR_DIR>/server/solr/sample
-
-## Modify the name and collection fields
-sed -i 's/turing/sample/g' <SOLR_DIR>/server/solr/sample/core.properties
-```
-
-3. Edit the `<IF_API>/bin/otif.sh` and add the new cores to sync with Zookeeper:
-
-```shell
-# Push Solr configurations in ZooKeeper
-pushSolrConfigs() {
-    ...
-    cd "$BASE_DIR"
-    # For Semantic Navigation
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "<IF_SOLR>/server/solr/turing/conf" -confname turing
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "<IF_SOLR>/server/solr/<OTHER_CORE>/conf" -confname <OTHER_CORE>
-    # For ChatBot
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "<IF_SOLR>/server/solr/converse/conf" -confname converse
-    # Default InfoFusion cores (Do not modify)
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "$BASE_DIR/../etc/solr/otif/en/conf" -confname otif_en
-    ...
-    cd "$CURRENT_DIR"
-}
-```
-
-4. With Zookeeper running, execute:
-
-```shell
-cd <IF_API>/bin
-./otif.sh push-solr-configs
-```
-
-5. Restart the Solr.
+Start the Solr service after the collection is created.
 
 ## Installing Turing ES
 
@@ -432,26 +316,20 @@ This way, you can interact with the Turing ES service:
 
 ### Starting Turing ES
 
-When Turing ES is started for the first time, it will do the initial setup and start downloading the OpenNLP models.
+When Turing ES is started for the first time, it will perform initial setup.
 
 ```
 $ ./viglet-turing.jar
   _____            _                 _    ___
  |_   _|_  _  _ _ (_) _ _   __ _    /_\  |_ _|
    | | | || || '_|| || ' \ / _` |  / _ \  | |
-   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|  (v0.3.6-d9fc453)
+   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|
                            |___/
 
-:: Copyright (C) 2016-2022, Viglet Team <opensource@viglet.com>
+:: Copyright (C) 2016-2025, Viglet Team <opensource@viglet.com>
 
-:: Built with Spring Boot :: 2.7.6
-
-Starting TuringAI v0.3.6-d9fc453 using Java 17.0.1 ...
+Starting Turing ES using Java 21 ...
 First Time Configuration ...
-[ OK ] en-ner-date.bin model
-[ OK ] en-ner-person.bin model
-[ OK ] en-ner-location.bin model
-...
 Configuration finished.
 ```
 
@@ -459,7 +337,7 @@ Configuration finished.
 
 Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing ES. The default port is **2700**.
 
-By default the login/password are: **admin/admin**
+The default username is **admin**. The password is set via the `TURING_ADMIN_PASSWORD` environment variable before first startup — see the [Administration Guide](./administration-guide.md#login) for details.
 
 ## Appendix A: Installation Modes
 
@@ -467,91 +345,69 @@ By default the login/password are: **admin/admin**
 
 #### Simple
 
-Turing ES will be installed only using OpenNLP and H2 database embedded in Turing ES itself.
+Minimal setup using an embedded H2 database. Suitable for local development and evaluation only — not for production.
 
 **Prerequisites:**
 1. Linux server
-2. Java 14
-3. 50Gb HDD
-4. 2 Gb of RAM
+2. Java 21
+3. 50 GB HDD
+4. 2 GB RAM
 
-**Target Audience:** Development and testing environment. Because it requires fewer components and lower memory usage.
+**Target Audience:** Development and testing environments.
 
 #### Docker Compose
 
-Turing ES and its dependencies will be installed using Docker Compose script, including the following services:
+Turing ES and its dependencies installed via Docker Compose, including:
 
-- MariaDB - to store Turing ES system tables
-- Solr - Used by Turing ES's Semantic Navigation and Chatbot
-- Nginx - WebServer for Turing ES to use port 80
+- MariaDB — Turing ES system tables
+- Solr — Semantic Navigation search backend
+- Nginx — reverse proxy on port 80
 - Turing ES
 
 **Prerequisites:**
-1. Linux server
-2. Docker and Docker Compose installed
-3. 50Gb HDD
-4. 4Gb of RAM
+1. Linux server with Docker and Docker Compose installed
+2. 50 GB HDD
+3. 4 GB RAM
 
-**Target Audience:** Customers who need more complex environments, but avoid the installation and configuration of each product. It can be used in QA or Production environment.
+**Target Audience:** Teams that want a complete environment without manual service installation. Suitable for QA and production.
 
 #### Kubernetes
 
-Turing ES and its dependencies will be installed using Kubernetes scripts, including the following services:
+Turing ES and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
 
-- MariaDB - to store Turing ES system tables
-- Solr - Used by Turing ES's Semantic Navigation and Chatbot
-- Nginx - WebServer for Turing ES to use port 80
+- MariaDB — Turing ES system tables
+- Solr — Semantic Navigation search backend
+- Nginx — reverse proxy
 - Turing ES
 
 **Prerequisites:**
-1. Linux Server with Kubernetes installed or Cloud that supports Kubernetes
-2. 100Gb of Storage
-3. 4Gb RAM
+1. Linux server with Kubernetes, or a cloud Kubernetes service (GKE, EKS, AKS)
+2. 100 GB storage
+3. 4 GB RAM
 
-**Target Audience:** Customers who want to use cloud solutions like Google, AWS, Oracle, etc. It can be used in the production environment in a scalable way.
+**Target Audience:** Cloud deployments requiring horizontal scaling and infrastructure-as-code.
 
-#### Manual Installation of Services
+#### Manual Installation
 
-The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
+Each service installed individually following this guide:
 
-- MariaDB - to store Turing ES system tables
-- Solr - Used by Turing ES's Semantic Navigation and Chatbot
-- Apache - WebServer for Turing ES to use port 80
+- MariaDB — Turing ES system tables
+- Solr + Zookeeper — Semantic Navigation search backend
+- Apache HTTP Server — reverse proxy (required for Keycloak integration)
 - Turing ES
 
 **Prerequisites:**
-1. One Linux server or up to 4 Linux servers to install services
-2. 50 - 100Gb of Storage for each server
-3. Minimum 2Gb RAM for each Server
+1. One to four Linux servers
+2. 50–100 GB storage per server
+3. Minimum 2 GB RAM per server
 
 ### Connectors
 
-Turing ES has several connectors to allow you to index the contents in Semantic Navigation:
-
-- Apache Nutch (Crawler)
-- Wordpress
-- OpenText WEM Listener
-- FileSystem
-- Database
+Content ingestion is handled by **Viglet Dumont DEP**, a separate application. Available connectors include WebCrawler (Apache Nutch), Database, FileSystem, AEM/WEM, and WordPress. Refer to the [Dumont DEP documentation](/dumont) for connector setup.
 
 **Prerequisites:**
-1. New linux server or existing server with content or files that will be indexed.
-2. 50Gb of Storage for each server.
-
-### NLP
-
-The customer can choose the NLP that will be used by Turing ES:
-
-- Apache OpenNLP (Embedded)
-- SpaCy NLP
-- Stanford CoreNLP
-- OpenText Content Analytics
-- Polyglot
-
-**Prerequisites:**
-1. Linux server
-2. 50Gb of Storage for each server
-3. Minimum 2 Gb of RAM
+1. A server with access to the content sources to be indexed
+2. 50 GB storage
 
 ## Appendix B: Docker Compose
 

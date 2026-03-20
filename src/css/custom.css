@@ -186,6 +186,70 @@ a {
   margin-left: auto;
 }
 
+/* ── Search bar in navbar ── */
+.nav-search {
+  display: flex;
+  align-items: center;
+}
+
+.nav-search .searchBar_node_modules-\@easyops-cn-docusaurus-search-local-dist-client-client-theme-SearchBar-index-module,
+.nav-search [class*="searchBar_"] {
+  margin: 0;
+}
+
+/* Compact search input styling */
+.nav-search input[type="search"],
+.nav-search .aa-Input,
+.nav-search [class*="searchInput"] {
+  font-size: 0.875rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  width: 200px;
+  transition: width 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-search input[type="search"]:focus,
+.nav-search .aa-Input:focus,
+.nav-search [class*="searchInput"]:focus {
+  width: 260px;
+  border-color: var(--ifm-color-primary);
+  outline: none;
+}
+
+[data-theme="dark"] .nav-search input[type="search"],
+[data-theme="dark"] .nav-search .aa-Input {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+/* Mobile search */
+.nav-mobile-search {
+  padding: 0.5rem 0.25rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  margin-bottom: 0.25rem;
+}
+
+.nav-mobile-search input[type="search"],
+.nav-mobile-search [class*="searchInput"] {
+  width: 100%;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+}
+
+[data-theme="dark"] .nav-mobile-search input[type="search"] {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
 /* ── Logo ── */
 .nav-logo {
   display: flex;
@@ -1238,4 +1302,21 @@ article h2 {
 /* ── Scroll detection script hook ── */
 html {
   scroll-behavior: smooth;
+}
+
+/* ── Pre-rendered diagram images ─────────────────────────────────────────── */
+
+/* All pre-rendered SVG diagrams: fill the content column, centered */
+.markdown img[src*="/img/diagrams/"] {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: 8px;
+}
+
+/* Dark mode: invert neutral SVGs so text/lines stay readable */
+[data-theme="dark"] .markdown img[src*="/img/diagrams/"] {
+  filter: invert(1) hue-rotate(180deg);
 }
