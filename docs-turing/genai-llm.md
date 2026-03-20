@@ -315,7 +315,7 @@ MCP Servers are configured in **Administration → MCP Servers**.
 
 ## AI Agents
 
-An **AI Agent** is the central composition object in Turing ES's GenAI system. It combines a specific LLM Instance, a selected set of Tool Callings, and a set of MCP Servers into a single, named, deployable assistant. Each AI Agent has its own personality, capability set, and visual identity, and appears as a **separate tab in the Chat interface** for users to interact with.
+An **AI Agent** is the central composition object in Turing ES's GenAI system. It combines a specific LLM Instance, a selected set of Tool Callings, and a set of MCP Servers into a single, named, deployable assistant. Each AI Agent has its own personality, capability set, and visual identity, and appears as a **separate tab in the Chat interface** for users to interact with. See the [Chat](./chat.md) page for the full interface documentation.
 
 AI Agents are configured in **Administration → AI Agents**.
 
