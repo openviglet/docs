@@ -10,42 +10,58 @@ description: System architecture of Viglet Dumont DEP — components, data flows
 
 Viglet Dumont DEP is a modular data extraction platform that runs connectors independently and delivers indexed documents to a search engine via an asynchronous message queue. It is designed as a companion application to Viglet Turing ES, but can also deliver content directly to Apache Solr or Elasticsearch.
 
-This document describes the system's components, internal modules, and the core data flow from content source to search engine.
+---
+
+## System Overview
+
+The system has three layers: content sources on the left, the Dumont DEP pipeline in the center, and search engines on the right.
+
+![Dumont DEP — High-Level Architecture](/img/diagrams/dumont-architecture.svg)
+
+Each numbered block is detailed in its own diagram below.
 
 ---
 
-## High-Level Component Diagram
+## ① Connectors — How Content Enters the Pipeline
 
-![Dumont DEP — High-Level Architecture](/img/diagrams/dumont-architecture.svg)
+Connectors extract content and feed it into the pipeline. They come in three forms: Java plugins, standalone CLI tools, and the WordPress PHP plugin.
+
+![Dumont DEP — Connector Types](/img/diagrams/dumont-connectors.svg)
+
+| Type | Connectors | How they connect |
+|---|---|---|
+| **Java Plugins** | Web Crawler, AEM | Loaded into `dumont-connector.jar` via `-Dloader.path` — one plugin per JVM |
+| **Standalone CLI** | Database, FileSystem | Separate JARs that connect to a running Dumont DEP instance via REST API |
+| **PHP Plugin** | WordPress | Installed inside WordPress — sends content directly to Turing ES, bypasses Dumont |
+
+For details on each connector, see [Connectors Overview](./connectors/overview.md).
 
 ---
 
 <div className="page-break" />
 
-## Internal Module Structure
+## ② Pipeline Engine — How Content Is Processed
 
-The Dumont DEP application is organized into cohesive modules, each with a well-defined responsibility.
+Once a connector produces a Job Item, it passes through a multi-stage pipeline before reaching the search engine.
 
-| Module | Package | Responsibility |
+![Dumont DEP — Pipeline Detail](/img/diagrams/dumont-pipeline-detail.svg)
+
+| Stage | Component | What it does |
 |---|---|---|
-| **Connector Core** | `connector` | Plugin interface, session management, and REST API controllers |
-| **Processing Strategies** | `connector/strategy` | Priority-based chain that evaluates each Job Item — index, re-index, de-index, ignore, or skip |
-| **Batch Processor** | `connector/batch` | Thread-safe buffer that groups Job Items into configurable batches before queue delivery |
-| **Message Queue** | `connector/queue` | JMS listener on Apache Artemis that consumes batches and delegates to indexing plugins |
-| **Indexing Plugins** | `connector/indexing` | Output adapters for Turing ES (default), Apache Solr, and Elasticsearch |
-| **Web Crawler** | `web-crawler` | Recursive website crawling with JSoup, URL filtering, authentication, and locale detection |
-| **Database** | `db` | JDBC-based extraction with SQL queries, batch chunking, and multi-database support |
-| **FileSystem** | `filesystem` | Directory traversal with Apache Tika text extraction, OCR, and metadata mapping |
-| **AEM** | `aem` | Adobe Experience Manager connector with delta tracking, content fragments, and custom extensions |
-| **WordPress** | `wordpress` | WordPress REST API integration for posts, pages, and custom content types |
-| **Commons** | `commons` | Shared models, interfaces, and utility classes used across all modules |
-| **Persistence** | `spring` | JPA entities, repositories, and Spring configuration for the indexing database |
+| **①** | **Job Item** | A single document with fields, an action (INDEX / DELETE), and a locale |
+| **②** | **Processing Strategies** | Priority chain: deindex (P10) → ignore rules (P20) → index new (P30) → reindex changed (P40) → skip unchanged (P50) |
+| **③** | **Batch Processor + Queue** | Groups items into batches of 50, sends to Apache Artemis persistent queue |
+| **④** | **Indexing Plugin** | Delivers to Turing ES (default), Apache Solr, or Elasticsearch |
+
+The **Indexing DB** stores checksums and status for every processed document — enabling incremental indexing on subsequent runs.
+
+For the conceptual explanation of each stage, see [Core Concepts — The Processing Pipeline](./getting-started/core-concepts.md#the-processing-pipeline).
 
 ---
 
-## Data Flow — Indexing
+## ③ Data Flow — Indexing Sequence
 
-Content ingestion follows a linear pipeline from source to search engine:
+The complete sequence from content source to search engine:
 
 ![Dumont DEP — Indexing Flow](/img/diagrams/dumont-indexing-flow.svg)
 
@@ -53,22 +69,38 @@ Content ingestion follows a linear pipeline from source to search engine:
 
 <div className="page-break" />
 
+## Internal Module Structure
+
+| Module | Package | Responsibility |
+|---|---|---|
+| **Connector Core** | `connector` | Plugin interface, session management, and REST API controllers |
+| **Processing Strategies** | `connector/strategy` | Priority-based chain — index, re-index, de-index, ignore, or skip |
+| **Batch Processor** | `connector/batch` | Thread-safe buffer that groups Job Items before queue delivery |
+| **Message Queue** | `connector/queue` | JMS listener on Apache Artemis — delegates to indexing plugins |
+| **Indexing Plugins** | `connector/indexing` | Output adapters: Turing ES, Apache Solr, Elasticsearch |
+| **Web Crawler** | `web-crawler` | JSoup, URL filtering, authentication, locale detection |
+| **Database** | `db` | JDBC queries, batch chunking, multi-database support |
+| **FileSystem** | `filesystem` | Apache Tika text extraction, OCR, metadata mapping |
+| **AEM** | `aem` | infinity.json, tags, model.json, delta tracking, custom extensions |
+| **WordPress** | `wordpress` | PHP plugin — event-driven indexing inside WordPress |
+| **Commons** | `commons` | Shared models, interfaces, utilities |
+| **AEM Commons** | `aem-commons` | AEM extension interfaces (published to Maven Central) |
+| **DB Commons** | `db-commons` | DB extension interface (published to Maven Central) |
+
+---
+
 ## Technology Stack
 
 | Layer | Technology | Notes |
 |---|---|---|
 | **Runtime** | Java 21 | Minimum supported version |
-| **Framework** | Spring Boot 4.0.3 | Application container with JMS, caching, async, and scheduling support |
-| **Message Broker** | Apache Artemis | Embedded JMS broker with persistent queues |
-| **Database** | H2 (dev) / PostgreSQL (prod) | Tracks indexing state, checksums, and configuration |
-| **HTML Parsing** | JSoup 1.22.1 | Web Crawler — HTML content extraction |
-| **Text Extraction** | Apache Tika 3.2.3 | FileSystem — PDF, DOCX, XLSX, PPTX, images (OCR) |
-| **Search Clients** | Turing Java SDK 2026.1.17, SolrJ 10.0.0, ES Client 9.3.2 | Output adapters for each search engine |
-| **CLI Parsing** | JCommander 1.82 | Command-line argument parsing for standalone importers |
-| **Object Mapping** | MapStruct 1.6.3 | Compile-time DTO mapping |
-| **Build System** | Apache Maven | Multi-module project |
-| **Containerization** | Docker / Docker Compose | Available in the repository |
-| **License** | Apache License 2.0 | Fully open-source |
+| **Framework** | Spring Boot 4.0.3 | JMS, caching, async, scheduling |
+| **Message Broker** | Apache Artemis | Embedded, persistent queues |
+| **Database** | H2 (dev) / PostgreSQL (prod) | Indexing state, checksums, config |
+| **HTML Parsing** | JSoup 1.22.1 | Web Crawler |
+| **Text Extraction** | Apache Tika 3.2.3 | FileSystem — PDF, DOCX, images (OCR) |
+| **Search Clients** | Turing Java SDK, SolrJ 10.0.0, ES Client 9.3.2 | One active per deployment |
+| **Build** | Apache Maven | Multi-module project |
 
 ---
 
@@ -76,16 +108,12 @@ Content ingestion follows a linear pipeline from source to search engine:
 
 ### Development
 
-Minimal setup using the embedded H2 database and embedded Artemis broker. No external dependencies.
-
 ```
 Dumont DEP (H2 embedded + Artemis embedded)
     → Turing ES (http://localhost:2700)
 ```
 
-### Simple Production
-
-Dumont DEP connects to an external PostgreSQL database for durable indexing state and delivers content to Turing ES.
+### Production
 
 ```
 Dumont DEP + PostgreSQL
@@ -93,8 +121,6 @@ Dumont DEP + PostgreSQL
 ```
 
 ### Direct Indexing (without Turing ES)
-
-For deployments that don't use Turing ES, Dumont DEP can deliver content directly to Apache Solr or Elasticsearch via the Solr or Elasticsearch indexing plugins.
 
 ```
 Dumont DEP + PostgreSQL
@@ -109,9 +135,6 @@ Dumont DEP + PostgreSQL
 | Page | Description |
 |---|---|
 | [Core Concepts](./getting-started/core-concepts.md) | Pipeline stages, strategies, and change detection |
-| [Installation Guide](./installation-guide.md) | Set up Dumont DEP |
-| [Indexing Plugins](./indexing-plugins.md) | Configure Turing ES, Solr, or Elasticsearch as output targets |
-| [Configuration Reference](./configuration-reference.md) | All application.yaml properties |
-
----
-
+| [Connectors Overview](./connectors/overview.md) | All connectors and deployment types |
+| [Indexing Plugins](./indexing-plugins.md) | Turing ES, Solr, Elasticsearch output targets |
+| [Installation Guide](./installation-guide.md) | Setup with `-Dloader.path` and systemd |

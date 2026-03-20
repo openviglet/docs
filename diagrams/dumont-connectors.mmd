@@ -1,0 +1,21 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+graph TB
+    subgraph Plugins["Java Plugins (loaded via -Dloader.path)"]
+        WC["Web Crawler Plugin\nweb-crawler-plugin.jar\n\nJSoup · URL filtering\nRandom user agents\nLocale detection"]
+        AEM["AEM Plugin\naem-plugin.jar\n\ninfinity.json · tags.json\nmodel.json · Delta tracking\nOSGi event listeners"]
+    end
+
+    subgraph Standalone["Standalone CLI Tools"]
+        DB["Database Connector\ndumont-db-indexer.jar\n\nJDBC · SQL queries\nMulti-database\nCustom class extensions"]
+        FS["FileSystem Connector\ndumont-filesystem-indexer.jar\n\nApache Tika · OCR\nDirectory traversal\nPath prefix replacement"]
+    end
+
+    subgraph External["External (Not Java)"]
+        WP["WordPress Plugin\nPHP plugin inside WordPress\n\nEvent-driven\nDirect HTTP to Turing ES"]
+    end
+
+    PIPELINE["→ Pipeline Engine"]
+
+    Plugins --> PIPELINE
+    Standalone -->|"REST API"| PIPELINE
+    WP -->|"HTTP POST"| TUR["→ Turing ES"]

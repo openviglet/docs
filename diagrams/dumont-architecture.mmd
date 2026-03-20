@@ -1,35 +1,15 @@
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
 graph LR
-    subgraph Sources["Content Sources"]
-        WEB["Web / URLs"]
-        DB["JDBC Databases"]
-        FS["File Systems"]
-        AEM["AEM Instances"]
-        WP["WordPress"]
+    subgraph Sources["① Content Sources"]
+        WEB["🌐 Websites"]
+        AEM["📦 AEM"]
+        DB["🗄️ Databases"]
+        FS["📁 Files"]
+        WP["📝 WordPress"]
     end
 
-    subgraph Dumont["Dumont DEP Application"]
-        CON["Connectors"]
-        STR["Processing\nStrategies"]
-        BAT["Batch\nProcessor"]
-        QUE["Apache Artemis\n(Embedded Queue)"]
-        PLG["Indexing Plugin"]
-    end
+    PIPELINE["② Dumont DEP\nPipeline Engine"]
+    TARGETS["③ Search Engines"]
 
-    subgraph Targets["Search Engines"]
-        TUR["Turing ES"]
-        SOLR["Apache Solr"]
-        ES["Elasticsearch"]
-    end
-
-    subgraph Storage["Storage"]
-        H2["H2 / PostgreSQL\n(Indexing Database)"]
-    end
-
-    Sources --> CON
-    CON --> STR
-    STR --> BAT
-    BAT --> QUE
-    QUE --> PLG
-    PLG --> Targets
-    STR <--> H2
+    Sources --> PIPELINE
+    PIPELINE --> TARGETS

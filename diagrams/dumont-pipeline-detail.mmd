@@ -1,0 +1,28 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+graph TB
+    JI["Job Item\n(fields + action + locale)"]
+
+    subgraph Strategies["Processing Strategies"]
+        S1["P10: Deindex"]
+        S2["P20: Ignore Rules"]
+        S3["P30: Index"]
+        S4["P40: Reindex"]
+        S5["P50: Unchanged"]
+        S1 --> S2 --> S3 --> S4 --> S5
+    end
+
+    BAT["Batch Processor\n(50 items/batch)"]
+    QUE["Apache Artemis\n(Persistent Queue)"]
+    DB[("Indexing DB\nChecksums + Status")]
+
+    subgraph Output["Indexing Plugin"]
+        TUR["Turing ES"]
+        SOLR["Apache Solr"]
+        ES["Elasticsearch"]
+    end
+
+    JI --> Strategies
+    Strategies <-.-> DB
+    Strategies --> BAT
+    BAT --> QUE
+    QUE --> Output
