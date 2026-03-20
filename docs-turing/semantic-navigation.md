@@ -286,40 +286,11 @@ Saving is blocked if either variable is missing from the template.
 
 ---
 
-## Search REST API
-
-The primary way to query a Semantic Navigation Site is via the REST API:
-
-```bash
-GET /api/sn/{siteName}/search?q={query}&_setlocale={locale}
-```
-
-Authenticate with the `Key` header:
-
-```bash
-curl "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
-  -H "Key: <YOUR_API_TOKEN>"
-```
-
-Key query parameters:
-
-| Parameter | Description |
-|---|---|
-| `q` | Search query string |
-| `_setlocale` | Locale to search (e.g., `en_US`, `pt_BR`) |
-| `fq[]` | Filter query — apply a facet filter (e.g., `fq[]=type:news`) |
-| `sort` | Sort field and direction (e.g., `date desc`) |
-| `p` | Page number (1-based) |
-| `rows` | Override number of results per page |
-
-The response is a self-describing JSON object. For the full response schema — including the `facet`, `secondaryFacet`, `pagination`, `spotlight`, and `didYouMean` sections — see [Semantic Navigation Concepts → Search Response Structure](./sn-concepts.md#search-response-structure).
-
----
-
 ## Related Pages
 
 | Page | Description |
 |---|---|
+| [REST API Reference](./rest-api.md) | Search, autocomplete, spell check, and all other API endpoints |
 | [Semantic Navigation Concepts](./sn-concepts.md) | Targeting Rules, Spotlights, Merge Providers, facet operators, and the search response structure |
 | [Search Engine](./search-engine.md) | Manage the Solr/Elasticsearch/Lucene backends that SN Sites connect to |
 | [Assets](./assets.md) | Knowledge Base files for RAG — requires an embedding-capable LLM Instance |
