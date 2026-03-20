@@ -6,17 +6,24 @@ description: Authentication modes, OAuth2/OIDC setup with Keycloak, Apache rever
 
 # Security & Keycloak
 
-Turing ES supports two authentication modes that can be selected at startup. **HTTP Basic** is the default and requires no external dependencies — it is suitable for development and internal deployments where SSO integration is not needed. **Keycloak OAuth2 / OpenID Connect** is the recommended mode for production environments, enabling integration with corporate identity providers, single sign-on, and centralized user management.
+Turing ES supports two authentication modes. **Native authentication** is the default and requires no external dependencies — the admin console uses a Java session (form login) and REST API calls authenticate via an **API Key** passed in the `Key` request header. **Keycloak OAuth2 / OpenID Connect** is the recommended mode for production environments, enabling SSO integration with corporate identity providers and centralized user management.
 
 ---
 
 ## Authentication Modes
 
-### HTTP Basic (default)
+### Native Authentication (default)
 
-When Keycloak is not enabled, Turing ES uses HTTP Basic authentication. Users authenticate with a username and password managed locally within Turing ES. The admin console and all protected API endpoints require a valid session.
+When Keycloak is not enabled, Turing ES uses its own user store for authentication:
 
-This mode requires no external configuration beyond the application itself. It is not suitable for environments that require SSO, token-based access, or external user directories.
+- **Admin Console** — users log in via a form and receive a **Java HTTP session**. Sessions are maintained server-side and expire after inactivity.
+- **REST API** — all API requests must include an **API Key** in the `Key` request header. Tokens are created in **Administration → API Tokens** and are not tied to any session.
+
+```
+Key: <YOUR_API_TOKEN>
+```
+
+This mode requires no external configuration beyond the application itself. It is not suitable for environments that require SSO or external user directories.
 
 ### Keycloak OAuth2 / OpenID Connect
 
@@ -266,7 +273,7 @@ java $JAVA_OPTS -jar viglet-turing.jar
 
 | Property | Description |
 |---|---|
-| `turing.keycloak` | Set to `true` to enable Keycloak authentication. Default: `false` (HTTP Basic) |
+| `turing.keycloak` | Set to `true` to enable Keycloak authentication. Default: `false` (native session + API Key) |
 | `spring.security.oauth2.client.registration.keycloak.client-id` | Client ID registered in the Keycloak realm |
 | `spring.security.oauth2.client.registration.keycloak.client-secret` | Client secret from the Keycloak Credentials tab |
 | `spring.security.oauth2.client.registration.keycloak.scope` | OAuth2 scopes to request. Minimum: `openid` |

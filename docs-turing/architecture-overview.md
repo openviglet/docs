@@ -82,7 +82,7 @@ The Turing ES application is organized into cohesive modules, each with a well-d
 | **AI Agent** | `agent` | Conversational AI agents: composition of LLM Instance, Tool Callings, and MCP Servers |
 | **OCR** | `ocr` | Text extraction from PDFs, Word documents, and images |
 | **Persistence** | `persistence` | JPA entities, repositories, and DTOs for all domain objects |
-| **Security** | `spring/security` | Keycloak OAuth2 and HTTP Basic authentication |
+| **Security** | `spring/security` | Native session-based auth (admin console) + API Key (`Key` header) for REST API; optional Keycloak OAuth2 / OIDC for production SSO |
 | **API Layer** | `api` | REST controllers and GraphQL resolvers exposed to clients |
 | **Admin Console** | React (`turing-react`) | Browser-based UI: administration, SN Site configuration, [Assets](./assets.md) file manager (MinIO), [Chat](./chat.md) interface, and [Token Usage](./token-usage.md) dashboard |
 
