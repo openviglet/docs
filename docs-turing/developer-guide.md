@@ -30,7 +30,7 @@ Understanding the stack helps you navigate the codebase and decide where to plug
 ```mermaid
 graph TD
     A[Your IDE] -->|mvn spring-boot:run| B[Turing ES Backend\nSpring Boot / Java 21]
-    A -->|npm start| C[React Admin Console\nlocalhost:3000]
+    A -->|npm run dev| C[React Admin Console\nlocalhost:5173]
     B --> D[Apache Solr\nlocalhost:8983]
     B --> E[Apache Artemis\nMessage Queue]
     C -->|REST API| B
@@ -198,14 +198,14 @@ Turing ES maintains high code quality standards. You can check the project healt
 
 ## REST API
 
-Turing ES exposes a rich REST API for integrating search and AI capabilities into any application. All endpoints use **JSON** and authenticate via **Bearer API tokens**.
+Turing ES exposes a rich REST API for integrating search and AI capabilities into any application. All endpoints use **JSON** and authenticate via an **API token** passed as a custom request header.
 
 ### Authentication
 
-All API requests require an `Authorization` header with a Bearer token:
+All API requests require a `Key` header containing the API token:
 
 ```
-Authorization: Bearer <YOUR_API_TOKEN>
+Key: <YOUR_API_TOKEN>
 ```
 
 **Generating an API Token:**
@@ -251,7 +251,7 @@ The core search endpoint. Returns results, facets, spotlights, and pagination.
 
 ```bash
 curl -X GET "http://localhost:2700/api/sn/Sample/search?q=enterprise+search&p=1&_setlocale=en_US&rows=10" \
-  -H "Authorization: Bearer <API_TOKEN>" \
+  -H "Key: <API_TOKEN>" \
   -H "Accept: application/json"
 ```
 
@@ -304,7 +304,7 @@ Returns the most recent search terms for a given user — useful for personalise
 
 ```bash
 curl -X POST "http://localhost:2700/api/sn/Sample/search/latest?q=cloud&rows=5&_setlocale=en_US" \
-  -H "Authorization: Bearer <API_TOKEN>" \
+  -H "Key: <API_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{ "userId": "user123" }'
 ```
