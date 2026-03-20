@@ -141,17 +141,13 @@ For a full explanation of how merge providers work, the indexing order requireme
 
 ---
 
-### Targeting Rules Tab
+### Targeting Rules
 
-Targeting Rules apply personalised filters to search results based on user profile attributes. When targeting is active, results are filtered to show only documents tagged with attributes that match the current user's profile — while documents with no targeting attributes are always included.
+Targeting Rules have **no admin UI configuration screen**. They are applied entirely at search time — the client sends the user's profile attributes in the body of the `POST /api/sn/{siteName}/search` request, and the Turing ES search pipeline converts them into Solr filter queries on the fly.
 
-| Attribute | Description |
-|---|---|
-| **Attribute** | The field name in the Solr document (must be indexed and populated at indexing time) |
-| **Value** | The value to match against the user profile |
-| **Method** | How to combine multiple rules: `AND` (all must match) or `OR` (any match is sufficient) |
+The targeting attributes (e.g., `department`, `country`, `role`, `access_group`) must be indexed on documents at indexing time via the Dumont DEP connector, and the corresponding fields must be present in the SN Site's **Fields** configuration so they are part of the Solr schema.
 
-For the full technical explanation — how AND/OR methods translate to Solr filter queries, the fallback clause, and connector requirements — see [Semantic Navigation Concepts → Targeting Rules](./sn-concepts.md#targeting-rules).
+For the complete reference — the three rule types (`targetingRules`, `targetingRulesWithConditionAND`, `targetingRulesWithConditionOR`), the Solr query generation mechanics, the fallback clause, practical examples, and metrics — see **[Semantic Navigation Concepts → Targeting Rules](./sn-concepts.md#targeting-rules)**.
 
 ---
 

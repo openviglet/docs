@@ -243,75 +243,197 @@ GET /api/sn/{siteName}/search?q=annual+report&_setlocale=pt_BR
 
 ### What they are
 
-Targeting Rules restrict which search results are shown to a user based on profile attributes passed along with the search request. They allow you to build personalized search experiences where different users see different content from the same index without maintaining separate Solr cores.
+Targeting Rules are a search-time personalization mechanism that filters results based on user profile attributes — group, role, segment, country, department, or any indexed field. They allow different users to see different content from the same Solr index without maintaining separate cores or running multiple queries.
 
-Common use cases include:
+**There is no admin UI for Targeting Rules.** Rules are passed by the client in the body of the search request and applied dynamically at query time. The Solr schema only needs to have the targeting attributes indexed on the documents.
 
-- Showing internal HR documents only to employees in a specific country
-- Displaying product documentation only for the user's subscription tier
-- Segmenting content by business unit, role, or department
+Common use cases:
 
-### How they work
+- Corporate portal: show HR documents only to employees in the HR department
+- E-commerce: show promotions for the user's country and loyalty segment
+- Intranet: restrict confidential documents to users with the correct access group
+- SaaS platform: filter documentation by the user's subscription tier
 
-When a search request arrives, the client can pass a set of profile attributes as query parameters. These attributes are key-value pairs representing properties of the current user — for example, `audience=employee`, `region=br`, or `tier=premium`.
+### How the pipeline works
 
-The Targeting Rules engine translates those attribute-value pairs into additional Solr filter queries that are appended to the main query. The filter queries narrow the result set to documents that are relevant to the user's profile.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API as TurSNSearchProcess
+    participant Builder as TurSolrQueryBuilder
+    participant Rules as TurSNTargetingRules
+    participant Solr
 
-There are two methods for combining rules: **AND** and **OR**.
+    Client->>API: POST /api/sn/{siteName}/search\n{ targetingRules / targetingRulesWithConditionAND / OR }
+    API->>Builder: Format values (add quotes if needed)
+    Builder->>Rules: Build filter query from rule type
+    Rules-->>Builder: Solr fq clause (AND or OR logic)
+    Builder->>Solr: Main query + fq (targeting filter)
+    Solr-->>Client: Filtered results
+    API->>API: Record applied rules in sn_site_metric_access_trs
+```
 
-### AND Method
+### Three rule types
 
-The AND method requires that the user matches all defined attribute criteria simultaneously. For each attribute, Turing ES builds a clause that accepts any of the configured values for that attribute — or accepts documents that do not have that attribute at all (so content that was not tagged with a targeting attribute is always visible).
+Targeting Rules are sent in the POST request body. The three types differ in how values are combined across attributes:
 
-For an attribute `audience` with values `employee` and `manager`, the generated Solr clause is:
+#### 1. `targetingRules` — simple list
+
+A flat array of `attribute:value` strings. Values for the **same attribute** are combined with **OR**; different attributes are combined with **AND**.
+
+```json
+{
+  "q": "benefits",
+  "targetingRules": ["department:HR", "department:Finance", "clearance:confidential"]
+}
+```
+
+Result: documents where `(department=HR OR department=Finance)` AND `(clearance=confidential OR no clearance)`.
+
+#### 2. `targetingRulesWithConditionAND` — explicit AND
+
+A map of `attribute → list of values`. Every attribute group must be satisfied simultaneously — AND between groups, OR within each group.
+
+```json
+{
+  "q": "promotions",
+  "targetingRulesWithConditionAND": {
+    "country": ["BR"],
+    "language": ["pt"]
+  }
+}
+```
+
+Result: documents matching `country=BR` **AND** `language=pt` (or documents with no restrictions on either attribute).
+
+#### 3. `targetingRulesWithConditionOR` — explicit OR
+
+A map of `attribute → list of values`. Any condition is sufficient — OR across all groups.
+
+```json
+{
+  "q": "discount",
+  "targetingRulesWithConditionOR": {
+    "segment": ["premium", "gold"],
+    "loyalty": ["active"]
+  }
+}
+```
+
+Result: documents matching any of the conditions — `segment=premium`, `segment=gold`, or `loyalty=active`. More permissive than AND.
+
+### Solr filter query generation
+
+`TurSolrQueryBuilder` converts the rule type into Solr `fq` clauses via `TurSNTargetingRules`.
+
+**AND logic** (each attribute group becomes a clause, all clauses joined with AND):
 
 ```
-(audience:employee OR audience:manager OR (*:* NOT audience:*))
-```
-
-When multiple attributes are defined, all clauses are combined with AND:
-
-```
-(audience:employee OR audience:manager OR (*:* NOT audience:*))
+(group:admin OR group:user OR (*:* NOT group:*))
 AND
-(region:br OR (*:* NOT region:*))
+(role:editor OR (*:* NOT role:*))
 ```
 
-This means: *show documents that match the user's audience AND the user's region — but always show documents that have no audience or region restriction at all.*
+Each clause includes `(*:* NOT attribute:*)` — documents that are not tagged with the attribute are always included (the fallback clause). This ensures untagged, unrestricted content is always visible regardless of the active rules.
 
-### OR Method
-
-The OR method is more inclusive. It accepts documents that match any of the defined attribute-value pairs. Documents that have none of the defined attributes are also included via a fallback clause.
-
-For attributes `audience:employee` and `region:br`, the generated Solr clause is:
+**OR logic** (all attribute-value pairs flattened, joined with OR):
 
 ```
-(audience:employee OR region:br)
+(attr1:val1 OR attr2:val2)
 OR
-(*:* NOT audience:* AND NOT region:*)
+(*:* NOT attr1:* AND NOT attr2:*)
 ```
 
-This means: *show documents that match the user's audience OR the user's region — and always show untagged documents.*
-
-### Choosing between AND and OR
-
-Use **AND** when all profile dimensions must match at the same time — for example, a user must be both an `employee` and in `region:br` to see a specific document. Use **OR** when any match is sufficient — for example, content tagged for either `region:br` or `tier:premium` should appear for users with either attribute.
+Documents that have none of the targeting attributes are also included.
 
 ### The fallback clause
 
-Both methods include a fallback clause (`*:* NOT attribute:*`) that ensures documents which were never tagged with a targeting attribute are always included in results. This prevents untagged content from becoming invisible when targeting rules are active.
+Both AND and OR methods include `(*:* NOT attribute:*)` to ensure documents that were never tagged with a targeting attribute are always returned. This means:
 
-### Configuring Targeting Rules
+- Adding targeting rules to a search request does **not** hide untagged content
+- Only documents explicitly tagged with a **conflicting** attribute value are filtered out
+- Documents with no targeting attributes are always visible
 
-Targeting Rules are configured per SN Site, under the **Targeting Rules** tab in the site configuration. Each rule defines:
+### Practical examples
 
-| Field | Description |
-|---|---|
-| **Attribute** | The field name in the Solr document (must be indexed) |
-| **Value** | The value to match for this rule |
-| **Method** | AND or OR |
+#### Example 1 — Corporate portal with department-scoped content
 
-The attribute field must exist in the Solr schema and must be populated during indexing by the Dumont DEP connector.
+```json
+POST /api/sn/portal/search
+{
+  "q": "benefits",
+  "targetingRules": ["department:HR", "department:Finance"]
+}
+```
+
+Returns documents tagged for HR or Finance departments, plus all untagged public documents. A Marketing employee does not see HR-restricted content.
+
+#### Example 2 — E-commerce: country and language (AND)
+
+```json
+{
+  "q": "promotions",
+  "targetingRulesWithConditionAND": {
+    "country": ["BR"],
+    "language": ["pt"]
+  }
+}
+```
+
+Solr `fq`: `(country:BR OR (*:* NOT country:*)) AND (language:pt OR (*:* NOT language:*))`
+
+Returns only documents for Brazil **and** in Portuguese, plus documents with no country or language restriction. A document tagged `country:US` is filtered out.
+
+#### Example 3 — Internal system with role and group (AND)
+
+```json
+{
+  "q": "reports",
+  "targetingRulesWithConditionAND": {
+    "role": ["admin", "manager"],
+    "group": ["sales"]
+  }
+}
+```
+
+Solr `fq`: `(role:admin OR role:manager OR (*:* NOT role:*)) AND (group:sales OR (*:* NOT group:*))`
+
+Documents visible to admins or managers (or no role restriction), and within the sales group (or no group restriction).
+
+#### Example 4 — Promotional content by segment (OR)
+
+```json
+{
+  "q": "discount",
+  "targetingRulesWithConditionOR": {
+    "segment": ["premium", "gold"],
+    "loyalty": ["active"]
+  }
+}
+```
+
+Returns documents matching any condition — premium, gold, or active loyalty. More permissive than AND; used when any segment match is sufficient.
+
+#### Example 5 — Intranet with access group control
+
+```json
+{
+  "q": "security policy",
+  "targetingRules": ["access_group:it", "access_group:security", "clearance:confidential"]
+}
+```
+
+Returns documents accessible to IT or Security groups, AND with clearance=confidential (or no clearance). Documents tagged `access_group:directors` remain hidden.
+
+### Indexing requirements
+
+The targeting attributes must be **indexed fields** in the Solr schema and **populated at indexing time** by the Dumont DEP connector. Add the desired targeting fields to the SN Site's Fields configuration so they are included in the schema.
+
+If a document is indexed without a targeting attribute (the field is absent or empty), it is treated as unrestricted and always visible — the fallback clause ensures this.
+
+### Metrics
+
+Every search request with targeting rules is recorded in `sn_site_metric_access_trs`, allowing analytics on which rule combinations were applied, how often, and how they affect result volume.
 
 ---
 

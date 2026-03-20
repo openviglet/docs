@@ -46,7 +46,7 @@ GET  http://localhost:2700/api/sn/{siteName}/search
 POST http://localhost:2700/api/sn/{siteName}/search
 ```
 
-**Query Parameters:**
+**Query Parameters (GET):**
 
 | Parameter | Required | Description |
 |---|---|---|
@@ -56,17 +56,64 @@ POST http://localhost:2700/api/sn/{siteName}/search
 | `rows` | | Results per page (overrides site default) |
 | `sort` | | Sort field and direction (e.g., `date desc`) |
 | `fq[]` | | Filter query — apply a facet filter (e.g., `fq[]=type:news`) |
-| `tr[]` | | Targeting rules — user profile attributes (e.g., `tr[]=region:br`) |
 | `group` | | Group results by a field value |
 
-**Example:**
+**Example (GET):**
 
 ```bash
-curl -X GET "http://localhost:2700/api/sn/Sample/search?q=enterprise+search&p=1&_setlocale=en_US&rows=10" \
+curl "http://localhost:2700/api/sn/Sample/search?q=enterprise+search&p=1&_setlocale=en_US&rows=10" \
   -H "Accept: application/json"
 ```
 
 The response is a self-describing JSON object. For the full response schema — including `facet`, `secondaryFacet`, `spotlight`, `pagination`, and `didYouMean` sections — see [Semantic Navigation Concepts → Search Response Structure](./sn-concepts.md#search-response-structure).
+
+#### Targeting Rules
+
+Targeting Rules personalize results by filtering documents based on user profile attributes (group, role, country, segment, etc.). They are sent in the **POST body** as JSON. Three types are supported:
+
+**`targetingRules` — flat list, AND between attributes, OR within the same attribute:**
+
+```bash
+curl -X POST "http://localhost:2700/api/sn/Sample/search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "benefits",
+    "_setlocale": "en_US",
+    "targetingRules": ["department:HR", "department:Finance", "clearance:confidential"]
+  }'
+```
+
+**`targetingRulesWithConditionAND` — map, all attributes must match (AND between groups):**
+
+```bash
+curl -X POST "http://localhost:2700/api/sn/Sample/search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "promotions",
+    "_setlocale": "en_US",
+    "targetingRulesWithConditionAND": {
+      "country": ["BR"],
+      "language": ["pt"]
+    }
+  }'
+```
+
+**`targetingRulesWithConditionOR` — map, any attribute is sufficient (OR across all groups):**
+
+```bash
+curl -X POST "http://localhost:2700/api/sn/Sample/search" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "q": "discount",
+    "_setlocale": "en_US",
+    "targetingRulesWithConditionOR": {
+      "segment": ["premium", "gold"],
+      "loyalty": ["active"]
+    }
+  }'
+```
+
+Documents that have none of the targeted attributes are always included (fallback clause). See [Semantic Navigation Concepts → Targeting Rules](./sn-concepts.md#targeting-rules) for the full reference including Solr query generation and practical examples.
 
 ---
 
