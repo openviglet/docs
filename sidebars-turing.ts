@@ -63,7 +63,6 @@ const sidebars: SidebarsConfig = {
             "sn-concepts",
           ],
         },
-        "release-notes",
         {
           type: "link",
           label: "Javadoc",
