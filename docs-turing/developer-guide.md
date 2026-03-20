@@ -22,7 +22,7 @@ Understanding the stack helps you navigate the codebase and decide where to plug
 | **Search Engine** | Apache Solr (primary) · Elasticsearch · Lucene |
 | **Message Queue** | Apache Artemis |
 | **Database** | H2 (dev) · PostgreSQL / MySQL (prod) |
-| **Frontend** | React · TypeScript · Primer CSS |
+| **Frontend** | React · TypeScript · shadcn/ui · Vite |
 | **AI / GenAI** | Spring AI · ChromaDB · PgVector · Milvus |
 | **Build** | Maven (backend) · npm (frontend) |
 | **CI/CD** | GitHub Actions |
@@ -107,10 +107,10 @@ Then launch the React app:
 ```shell
 cd turing/turing-ui
 npm install
-npm start
+npm run dev
 ```
 
-The React dev server starts at **`http://localhost:3000`** with hot-reload enabled.
+The Vite dev server starts at **`http://localhost:5173`** with hot-reload enabled.
 
 ### Production Build
 
@@ -129,7 +129,7 @@ The resulting JAR in `turing-app/target/` bundles both the backend and the compi
 | Service | URL | Notes |
 |---|---|---|
 | Admin Console | `http://localhost:2700` | Backend-served |
-| React Dev Server | `http://localhost:3000` | Hot-reload |
+| React Dev Server | `http://localhost:5173` | Vite hot-reload |
 | SN Search Sample | `http://localhost:2700/sn/Sample` | |
 | Swagger UI | `http://localhost:2700/swagger-ui.html` | Interactive API docs |
 | OpenAPI Spec | `http://localhost:2700/v3/api-docs` | JSON spec |
