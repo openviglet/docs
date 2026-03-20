@@ -172,15 +172,17 @@ function buildTocHtml(entries, tocStartPage) {
   const rows = entries.map((e) => {
     const pg = currentPage;
     currentPage += e.pageCount;
+    const href = `${PROD_URL}${e.path}`;
     return `
       <tr>
         <td style="padding:7px 0;border-bottom:1px solid #f1f5f9;">
-          <span style="font-weight:600;color:#1e293b;font-size:10.5pt;">${e.title}</span>
+          <a href="${href}" style="text-decoration:none;color:inherit;display:block;">
+            <span style="font-weight:600;color:#1e293b;font-size:10.5pt;">${e.title}</span>
+          </a>
         </td>
         <td style="padding:7px 0;border-bottom:1px solid #f1f5f9;text-align:right;
-                    font-family:'JetBrains Mono',monospace;font-size:9pt;color:#94a3b8;
-                    white-space:nowrap;width:40px;">
-          ${pg}
+                    font-family:'JetBrains Mono',monospace;font-size:9pt;white-space:nowrap;width:40px;">
+          <a href="${href}" style="text-decoration:none;color:#94a3b8;">${pg}</a>
         </td>
       </tr>`;
   });
