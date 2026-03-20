@@ -67,7 +67,10 @@ async function generateCover() {
 
   const faviconB64 = readFileSync(FAVICON).toString('base64');
   const faviconDataUri = `data:image/png;base64,${faviconB64}`;
-  const html = readFileSync(COVER_HTML, 'utf-8').replaceAll('FAVICON_DATA_URI', faviconDataUri);
+  const generatedDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const html = readFileSync(COVER_HTML, 'utf-8')
+    .replaceAll('FAVICON_DATA_URI', faviconDataUri)
+    .replaceAll('GENERATED_DATE', generatedDate);
 
   await page.setContent(html, { waitUntil: 'networkidle0' });
   await page.evaluateHandle('document.fonts.ready');
