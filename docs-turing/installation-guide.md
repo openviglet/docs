@@ -441,7 +441,7 @@ Each service installed individually following this guide:
 
 ### Connectors
 
-Content ingestion is handled by **Viglet Dumont DEP**, a separate application. Available connectors include WebCrawler (Apache Nutch), Database, FileSystem, AEM/WEM, and WordPress. Refer to the [Dumont DEP documentation](/dumont) for connector setup.
+Content ingestion is handled by **Viglet Dumont DEP**, a separate application. Available connectors include WebCrawler (Apache Nutch), Database, FileSystem, AEM, and WordPress. Refer to the [Dumont DEP documentation](/dumont) for connector setup.
 
 **Prerequisites:**
 1. A server with access to the content sources to be indexed

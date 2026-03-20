@@ -34,6 +34,7 @@ const sidebars: SidebarsConfig = {
             "connectors/database",
             "connectors/filesystem",
             "connectors/aem",
+            "aem-event-listener",
             "connectors/wordpress",
           ],
         },

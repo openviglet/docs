@@ -47,7 +47,7 @@ graph LR
     WEB["🌐 Websites"]
     DB["🗄️ Databases"]
     FS["📁 File Systems"]
-    AEM["📦 AEM / WEM"]
+    AEM["📦 AEM"]
     WP["📝 WordPress"]
 
     DUM["Dumont DEP\n(Connectors + Pipeline)"]
