@@ -129,19 +129,7 @@ See the `aem-plugin-sample` module for a working example.
 
 Strategies are evaluated in priority order for each Job Item:
 
-```mermaid
-graph TD
-    ITEM["Job Item"] --> S1["Priority 10: DeindexStrategy"]
-    S1 -->|"DELETE action"| DEL["De-index from search engine"]
-    S1 -->|"Not DELETE"| S2["Priority 20: IgnoreIndexingRuleStrategy"]
-    S2 -->|"Matches rule"| IGN["Skip (ignored)"]
-    S2 -->|"No match"| S3["Priority 30: IndexStrategy"]
-    S3 -->|"New document"| IDX["Index"]
-    S3 -->|"Exists"| S4["Priority 40: ReindexStrategy"]
-    S4 -->|"Checksum changed"| REIDX["Re-index"]
-    S4 -->|"Same checksum"| S5["Priority 50: UnchangedStrategy"]
-    S5 --> SKIP["Skip (unchanged)"]
-```
+![Dumont DEP — Processing Strategy Flow](/img/diagrams/dumont-strategy-flow.svg)
 
 To add a custom strategy, implement the strategy interface and assign a priority between the existing ones.
 

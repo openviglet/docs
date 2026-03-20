@@ -115,6 +115,31 @@ These tools can be scheduled via cron jobs or CI/CD pipelines.
 
 ---
 
+## Managing Connectors via the Turing ES Console
+
+The AEM and Web Crawler connector plugins can be managed through the **Turing ES Admin Console**. To connect a running `dumont-connector.jar` instance to the Turing ES UI:
+
+1. Open the Turing ES Admin Console
+2. Navigate to **Enterprise Search → Integration**
+3. Click **New** to create a new integration instance
+4. Set the **Integration Type** (AEM or Web Crawler)
+5. Set the **Endpoint** to the URL of your Dumont DEP connector instance (e.g., `http://localhost:30130`)
+6. Enable the integration
+
+Once connected, the Turing ES console provides a graphical interface for:
+
+- Configuring sources, content types, and field mappings
+- Triggering full indexing and re-indexing operations
+- Monitoring indexing progress in real time
+- Viewing indexing statistics and status
+- Running double-check consistency validation
+
+For full details on the Integration UI — including monitoring, indexing stats, and double-check — see the [Turing ES Integration documentation](https://docs.viglet.com/turing/integration).
+
+For AEM-specific configuration (sources, content types, author/publish, delta tracking, locales, indexing rules) see [Turing ES AEM Connector documentation](https://docs.viglet.com/turing/integration-aem).
+
+---
+
 ## Common Configuration Pattern
 
 Every connector needs at least these pieces of information:

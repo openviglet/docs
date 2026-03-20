@@ -16,42 +16,7 @@ This document describes the system's components, internal modules, and the core 
 
 ## High-Level Component Diagram
 
-```mermaid
-graph LR
-    subgraph Sources["Content Sources"]
-        WEB["Web / URLs"]
-        DB["JDBC Databases"]
-        FS["File Systems"]
-        AEM["AEM Instances"]
-        WP["WordPress"]
-    end
-
-    subgraph Dumont["Dumont DEP Application"]
-        CON["Connectors"]
-        STR["Processing Strategies"]
-        BAT["Batch Processor"]
-        QUE["Apache Artemis\n(Embedded Queue)"]
-        PLG["Indexing Plugin"]
-    end
-
-    subgraph Targets["Search Engines"]
-        TUR["Turing ES"]
-        SOLR["Apache Solr"]
-        ES["Elasticsearch"]
-    end
-
-    subgraph Storage["Storage"]
-        H2["H2 / PostgreSQL\n(Indexing Database)"]
-    end
-
-    Sources --> CON
-    CON --> STR
-    STR --> BAT
-    BAT --> QUE
-    QUE --> PLG
-    PLG --> Targets
-    STR <--> H2
-```
+![Dumont DEP — High-Level Architecture](/img/diagrams/dumont-architecture.svg)
 
 ---
 
@@ -82,42 +47,7 @@ The Dumont DEP application is organized into cohesive modules, each with a well-
 
 Content ingestion follows a linear pipeline from source to search engine:
 
-```mermaid
-sequenceDiagram
-    participant S as Content Source
-    participant C as Connector
-    participant ST as Strategies
-    participant DB as Indexing DB
-    participant B as Batch Processor
-    participant Q as Artemis Queue
-    participant P as Indexing Plugin
-    participant SE as Search Engine
-
-    S->>C: Read content
-    C->>ST: Job Item (document)
-    ST->>DB: Check existing checksum
-    DB-->>ST: Previous checksum (or none)
-
-    alt New document
-        ST->>B: INDEX action
-    else Changed document
-        ST->>B: REINDEX action
-    else Unchanged
-        ST-->>C: Skip (no action)
-    else Matches ignore rule
-        ST-->>C: Skip (ignored)
-    end
-
-    B->>B: Buffer item (batch size = 50)
-
-    alt Batch full or extraction complete
-        B->>Q: Send batch to queue
-    end
-
-    Q->>P: Consume batch
-    P->>SE: Deliver documents
-    P->>DB: Update status → INDEXED
-```
+![Dumont DEP — Indexing Flow](/img/diagrams/dumont-indexing-flow.svg)
 
 ---
 

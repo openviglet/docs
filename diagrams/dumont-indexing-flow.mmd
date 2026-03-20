@@ -1,0 +1,35 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+sequenceDiagram
+    participant S as Content Source
+    participant C as Connector
+    participant ST as Strategies
+    participant DB as Indexing DB
+    participant B as Batch Processor
+    participant Q as Artemis Queue
+    participant P as Indexing Plugin
+    participant SE as Search Engine
+
+    S->>C: Read content
+    C->>ST: Job Item (document)
+    ST->>DB: Check existing checksum
+    DB-->>ST: Previous checksum (or none)
+
+    alt New document
+        ST->>B: INDEX action
+    else Changed document
+        ST->>B: REINDEX action
+    else Unchanged
+        ST-->>C: Skip (no action)
+    else Matches ignore rule
+        ST-->>C: Skip (ignored)
+    end
+
+    B->>B: Buffer item (batch size = 50)
+
+    alt Batch full or extraction complete
+        B->>Q: Send batch to queue
+    end
+
+    Q->>P: Consume batch
+    P->>SE: Deliver documents
+    P->>DB: Update status → INDEXED

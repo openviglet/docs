@@ -51,24 +51,7 @@ Job Items are the universal data format inside Dumont DEP. Every connector produ
 
 When a connector extracts a document, it does not send it directly to the search engine. Instead, the document passes through a multi-stage pipeline designed for reliability, efficiency, and flexibility.
 
-```mermaid
-graph TB
-    SRC["Content Source"]
-    CON["Connector\n(Web Crawler, DB, FS, AEM, WP)"]
-    STR["Processing Strategies\n(priority-ordered)"]
-    BAT["Batch Processor\n(groups into batches of 50)"]
-    QUE["Apache Artemis\nMessage Queue"]
-    PLG["Indexing Plugin\n(Turing / Solr / Elasticsearch)"]
-    SE["Search Engine"]
-
-    SRC --> CON
-    CON -->|"Job Item"| STR
-    STR -->|"accepted"| BAT
-    STR -.->|"ignored / unchanged"| SKIP["Skipped"]
-    BAT -->|"batch full"| QUE
-    QUE --> PLG
-    PLG --> SE
-```
+![Dumont DEP — Processing Pipeline](/img/diagrams/dumont-pipeline.svg)
 
 ### Stage 1 — Extraction
 
