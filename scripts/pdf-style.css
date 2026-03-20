@@ -315,3 +315,24 @@ h1, h2, h3 {
 pre, table, .admonition, blockquote {
   page-break-inside: avoid;
 }
+
+/* Manual page break — use <div className="page-break" /> in MDX */
+.page-break {
+  page-break-before: always;
+  break-before: page;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Force next element to start on a new page */
+.page-break-before {
+  page-break-before: always;
+  break-before: page;
+}
+
+/* Force page break after this element */
+.page-break-after {
+  page-break-after: always;
+  break-after: page;
+}
