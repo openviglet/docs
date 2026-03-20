@@ -215,6 +215,8 @@ Key: <YOUR_API_TOKEN>
 3. Click **New** and fill in a title and description.
 4. Copy the generated token immediately — it will not be shown again.
 
+For full details on managing users, groups, roles, and tokens, see the [Administration Guide — API Tokens](./administration-guide.md#api-tokens).
+
 ### OpenAPI & Swagger
 
 Explore and test every endpoint interactively:

@@ -68,6 +68,175 @@ export TURING_ADMIN_PASSWORD=your_password
 ```
 
 
+---
+
+### Administration
+
+The **Administration** section is accessed via the main sidebar and lives at `/admin-settings`. It manages users, access control, API credentials, global configuration, and system diagnostics.
+
+:::info Keycloak mode
+When Keycloak is enabled (`turing.keycloak=true`), the **Users**, **Groups**, and **Roles** subsections are hidden — identity and access management is fully delegated to Keycloak. See [Security & Keycloak](./security-keycloak.md).
+:::
+
+---
+
+#### Users
+
+Lists all local user accounts in the system.
+
+**Form fields:**
+
+| Field | Description |
+|---|---|
+| Avatar | Profile picture |
+| Username | Unique login identifier |
+| First Name / Last Name | Display name |
+| Email | User's email address |
+| Password | Account password |
+
+**Tabs:**
+
+| Tab | Description |
+|---|---|
+| **Groups** | Add or remove the user from groups |
+| **Roles** | Displays roles inherited from the user's groups (read-only) |
+
+---
+
+#### Groups
+
+Organises users into groups for role-based access control.
+
+**Form fields:**
+
+| Field | Description |
+|---|---|
+| Name | Group name |
+| Description | Purpose or scope of the group |
+
+**Tabs:**
+
+| Tab | Description |
+|---|---|
+| **Users** | Add or remove members of this group |
+| **Roles** | Assign or remove roles granted to this group |
+
+---
+
+#### Roles
+
+Defines permissions that can be assigned to groups.
+
+| Field | Description |
+|---|---|
+| Name | Role identifier |
+| Description | What this role permits |
+
+---
+
+#### API Tokens
+
+Manages API tokens used to authenticate REST API requests. Every token is passed in the `Key` request header.
+
+**Form fields:**
+
+| Field | Description |
+|---|---|
+| Title | A human-readable name for the token |
+| Description | Purpose or owner of this token |
+
+:::info
+The token value is generated automatically on creation and displayed once with a copy button. It cannot be retrieved again — store it securely.
+:::
+
+**Using the token in API requests:**
+
+```bash
+curl -X GET "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
+  -H "Key: <YOUR_API_TOKEN>"
+```
+
+---
+
+#### Global Settings
+
+The central configuration panel for defaults and external service integrations. Divided into four sections:
+
+##### General
+
+| Field | Description |
+|---|---|
+| Decimal Separator | Choose between period (`.`) and comma (`,`) for numeric display |
+| Python Path | Absolute path to the Python executable (required for Python-based processing) |
+
+##### LLM Settings
+
+| Field | Description |
+|---|---|
+| Default LLM Instance | The LLM used when no site-level instance is configured |
+| Response Cache | Enable caching of LLM responses to reduce latency and cost |
+| Cache Duration | How long cached responses are retained |
+| Regenerate Cache | Button to manually invalidate and rebuild the response cache |
+
+:::warning
+Caching LLM responses improves performance but may return stale answers if the underlying content changes frequently. Tune the duration to match your content update cadence.
+:::
+
+##### RAG Settings
+
+| Field | Description |
+|---|---|
+| Enable RAG Globally | Master switch for Retrieval-Augmented Generation across all sites |
+| Default Embedding Model | The model used to vectorize documents at indexing time and queries at search time |
+| Default Embedding Store | The vector store for persisting embeddings (ChromaDB, PgVector, or Milvus) |
+
+:::warning
+Changing the Default Embedding Model invalidates all existing embeddings. All indexed content must be re-indexed after changing this setting.
+:::
+
+:::note
+The RAG Settings section is only visible if an embedding store is configured and available. If MinIO is not configured, the Knowledge Base and related RAG options will not appear.
+:::
+
+##### Email Settings
+
+Used by Turing ES to send notifications and test email connectivity.
+
+| Field | Description |
+|---|---|
+| Provider | Email service provider (e.g., Brevo) |
+| API Key | API key for the email provider |
+| Sender Email | The `From` email address |
+| Sender Name | The display name shown to recipients |
+| Recipient Email | Default destination for test emails |
+| Send Test Email | Button to send a test message and verify configuration |
+
+---
+
+#### System Information
+
+A diagnostic panel to monitor the health of the Turing ES instance. Divided into two tabs:
+
+##### Overview Tab
+
+| Item | Description |
+|---|---|
+| Application Version | Current Turing ES build version |
+| Java Version | JVM version in use |
+| Operating System | OS name and version |
+| Database Status | Connection status of the primary database |
+| RAM Usage | Current and total system memory |
+| JVM Heap | Used and available JVM heap space |
+| Disk Usage | Available storage on the host volume |
+| MongoDB Status | Connected / disconnected (shown only if MongoDB is enabled) |
+| MinIO Status | Connected / disconnected (shown only if MinIO is enabled) |
+
+##### System Variables Tab
+
+A searchable table of all JVM properties and environment variables active at runtime. Useful for verifying configuration at deployment.
+
+---
+
 ### Search Engine
 
 #### Configuration
