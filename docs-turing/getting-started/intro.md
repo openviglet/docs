@@ -59,6 +59,9 @@ These are the main building blocks you will work with in Turing ES. You do not n
 | **Merge Providers** | Rules that combine documents from two different connectors into one enriched result. | [Semantic Navigation](../sn-concepts.md) |
 | **RAG** | Retrieval-Augmented Generation — finding relevant documents and using them to ground an LLM's response. | [GenAI & LLM](../genai-llm.md) |
 | **AI Agent** | A named assistant that combines an LLM with a set of tools and knowledge sources. | [GenAI & LLM](../genai-llm.md) |
+| **Assets** | A file manager backed by MinIO where you upload documents to feed the Knowledge Base — files are automatically indexed as vector embeddings. | [Assets](../assets.md) |
+| **Chat** | The conversational AI interface — three tabs for direct LLM chat, Semantic Navigation search, and each configured AI Agent. | [Chat](../chat.md) |
+| **Token Usage** | A dashboard showing LLM token consumption by model, day, and month — useful for monitoring AI costs. | [Token Usage](../token-usage.md) |
 
 ---
 
@@ -77,6 +80,15 @@ Not sure where to start? Here is a suggested path depending on what you want to 
 
 **I want to add generative AI to my search**
 → Read [GenAI & LLM Configuration](../genai-llm.md).
+
+**I want to use the AI chat interface**
+→ Go to [Chat](../chat.md) for direct LLM, Semantic Navigation, and AI Agent tabs.
+
+**I want to upload documents to the Knowledge Base**
+→ Go to [Assets](../assets.md) to manage files and train the RAG index.
+
+**I want to monitor LLM usage and costs**
+→ Go to [Token Usage](../token-usage.md).
 
 **I want to secure Turing ES with SSO**
 → Go directly to [Security & Keycloak](../security-keycloak.md).

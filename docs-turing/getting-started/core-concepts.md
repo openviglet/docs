@@ -128,6 +128,8 @@ This is called **Retrieval-Augmented Generation (RAG)**. The LLM does not make t
 
 Beyond SN Sites, Turing ES provides a **Knowledge Base** — a file and folder interface in the admin console (backed by MinIO) where you can upload documents directly. These files are also indexed as vector embeddings and become available to AI Agents as a searchable knowledge source, independent of any connector or SN Site.
 
+The Knowledge Base is managed through the **[Assets](../assets.md)** page: drag-and-drop upload, folder navigation, inline preview, and batch AI training with real-time progress. Uploaded files are indexed automatically on upload and unindexed on deletion.
+
 ### AI Agents
 
 An **AI Agent** is a named assistant that you compose from three ingredients:
@@ -136,9 +138,9 @@ An **AI Agent** is a named assistant that you compose from three ingredients:
 - A set of **tools** it can call (search your SN Sites, query the Knowledge Base, browse the web, run Python code, get financial data, and more)
 - Optionally, one or more **MCP Servers** — external services that provide additional tools via the Model Context Protocol
 
-Each AI Agent appears as its own tab in the Turing ES chat interface. You can have a "Research Assistant" that combines SN Site search with web browsing, a "Data Analyst" that can run Python code and query your knowledge base, and a "Support Agent" that only sees your product documentation — all on the same platform.
+Each AI Agent appears as its own tab in the **[Chat](../chat.md)** interface. You can have a "Research Assistant" that combines SN Site search with web browsing, a "Data Analyst" that can run Python code and query your knowledge base, and a "Support Agent" that only sees your product documentation — all on the same platform.
 
-See [GenAI & LLM Configuration](../genai-llm.md) for how to set all of this up.
+See [GenAI & LLM Configuration](../genai-llm.md) for how to configure agents, tools, and MCP Servers.
 
 ---
 
@@ -201,6 +203,9 @@ npm install @viglet/turing-sdk
 | Understand the full system architecture | [Architecture Overview](../architecture-overview.md) |
 | Configure Spotlights, Targeting Rules, or Merge Providers | [Semantic Navigation Concepts](../sn-concepts.md) |
 | Set up GenAI, RAG, or AI Agents | [GenAI & LLM Configuration](../genai-llm.md) |
+| Use the AI chat interface | [Chat](../chat.md) |
+| Upload documents to the Knowledge Base | [Assets](../assets.md) |
+| Monitor LLM token consumption | [Token Usage](../token-usage.md) |
 | Secure Turing ES with Keycloak | [Security & Keycloak](../security-keycloak.md) |
 | Install Turing ES | [Installation Guide](../installation-guide.md) |
 
