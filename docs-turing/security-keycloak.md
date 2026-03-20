@@ -1,3 +1,9 @@
+---
+sidebar_position: 4
+title: Security & Keycloak
+description: Authentication modes, OAuth2/OIDC setup with Keycloak, Apache reverse proxy configuration, and production security checklist.
+---
+
 # Security & Keycloak
 
 Turing ES supports two authentication modes that can be selected at startup. **HTTP Basic** is the default and requires no external dependencies — it is suitable for development and internal deployments where SSO integration is not needed. **Keycloak OAuth2 / OpenID Connect** is the recommended mode for production environments, enabling integration with corporate identity providers, single sign-on, and centralized user management.
@@ -77,6 +83,10 @@ GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'%' WITH GRANT OPTION;
 ```
 
 Tested with MariaDB and MySQL. When using MariaDB, the JDBC connection URL should include `allowPublicKeyRetrieval=true&useSSL=false` if SSL is not configured between the application and the database server.
+
+:::tip Use strong, unique passwords
+Replace all placeholder passwords (`<turing-db-password>`, `<keycloak-db-password>`) with strong, randomly generated values. Never reuse passwords between services.
+:::
 
 ---
 

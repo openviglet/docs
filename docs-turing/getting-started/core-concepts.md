@@ -203,3 +203,7 @@ npm install @viglet/turing-sdk
 | Set up GenAI, RAG, or AI Agents | [GenAI & LLM Configuration](../genai-llm.md) |
 | Secure Turing ES with Keycloak | [Security & Keycloak](../security-keycloak.md) |
 | Install Turing ES | [Installation Guide](../installation-guide.md) |
+
+---
+
+*Previous: [What is Turing ES?](./intro.md) | Next: [Installation Guide](../installation-guide.md)*

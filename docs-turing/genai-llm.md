@@ -1,3 +1,9 @@
+---
+sidebar_position: 3
+title: Generative AI & LLM Configuration
+description: LLM providers, embedding stores, RAG architecture, Tool Callings, MCP Servers, and AI Agents in Turing ES.
+---
+
 # Generative AI & LLM Configuration
 
 Turing ES integrates Generative AI throughout the platform via **Spring AI**, providing a unified abstraction layer over multiple LLM providers and embedding backends. The GenAI capabilities are organized around four connected concepts: **LLM Instances**, **Tool Callings**, **MCP Servers**, and **AI Agents** — which together define how the system reasons, retrieves, and responds.
@@ -19,7 +25,9 @@ Before configuring individual LLM instances, AI Agents, or RAG sources, a set of
 | **Python Path** | Absolute path to the Python executable used by the Code Interpreter tool calling |
 | **Email Settings** | SMTP configuration for system notifications |
 
-The embedding store and embedding model must be consistent across indexing and query time. Changing the default embedding model after documents have been indexed will cause embedding mismatches — a full re-indexing is required when the model changes.
+:::warning Changing the embedding model requires full re-indexing
+The embedding store and embedding model must be consistent across indexing and query time. Changing the default embedding model after documents have been indexed will cause embedding dimension mismatches and incorrect similarity results. A full re-indexing of all content is required whenever the embedding model changes.
+:::
 
 ---
 
@@ -318,16 +326,19 @@ This loop (think → call tools → observe results → think again) continues u
 
 ## Enabling GenAI for a Semantic Navigation Site
 
-To activate RAG-based search and result summaries for a Semantic Navigation Site:
+To activate RAG-based chat and semantic search for a Semantic Navigation Site, navigate to **Semantic Navigation → [Site Name] → Generative AI tab** in the admin console. The tab provides:
 
-1. Navigate to **Semantic Navigation → [Site Name] → Settings**
-2. Under the **GenAI** tab, enable **Generative AI**
-3. Select the **LLM Instance** to use for this site (defaults to the platform default if not specified)
-4. Select the **Embedding Store** (defaults to the platform default)
-5. Select the **Embedding Model** (defaults to the platform default)
-6. Save the site configuration
+- A **RAG Activation** toggle to enable or disable GenAI chat for the site
+- **LLM Instance**, **Embedding Store**, and **Embedding Model** selectors (fall back to global defaults in Administration → Settings if not set)
+- A **System Prompt** editor with `{{question}}` and `{{information}}` template variables
 
-Once enabled, the indexing pipeline will generate embeddings for all subsequently indexed documents. A full re-indexing may be required to embed documents that were indexed before GenAI was enabled. The admin console's GenAI view for the site will show summaries generated from search results using RAG.
+See [Generative AI Tab](./administration-guide.md#generative-ai-tab) in the Administration Guide for the full field reference.
+
+Once enabled, the indexing pipeline will generate embeddings for all subsequently indexed documents.
+
+:::info Re-indexing existing content
+Documents indexed before GenAI was enabled do not have embeddings. A full re-indexing of the site is required to make existing content available for RAG queries and similarity search.
+:::
 
 ---
 

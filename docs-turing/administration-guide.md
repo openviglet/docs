@@ -16,25 +16,36 @@ It can read PDFs and Documents and convert to plain text and also it uses OCR to
 
 ## Semantic Navigation
 
-### Connectors
+Semantic Navigation Sites are the central configuration objects in Turing ES. Each site defines what content is indexed, how it is searched, how results are presented, and whether GenAI is enabled. For a conceptual overview, see [Core Concepts](./getting-started/core-concepts.md). For advanced configuration — Targeting Rules, Spotlights, Merge Providers, Facets, and the search response structure — see [Semantic Navigation Concepts](./sn-concepts.md).
 
-Content is delivered to Turing ES by **Viglet Dumont DEP**, a separate application that manages connectors independently. Dumont DEP sends documents to Turing ES via the REST API. Available connectors include WebCrawler (Apache Nutch), Database, FileSystem, AEM/WEM, and WordPress. Refer to the [Dumont DEP documentation](/dumont) for connector configuration.
+## Generative AI Administration
 
-### Facets
+The GenAI system is configured across several administration sections. For full configuration details — LLM providers, embedding stores, RAG architecture, Tool Callings, MCP Servers, and AI Agents — see [Generative AI & LLM Configuration](./genai-llm.md).
 
-Define attributes that will be used as filters for your navigation, consolidating the total content in your display.
+A brief overview of each administration section:
 
-### Secondary Facets
+| Section | Path | Purpose |
+|---|---|---|
+| **Settings** | Administration → Settings | Global defaults: LLM instance, embedding store, embedding model, Python path, email |
+| **LLM Instances** | Administration → LLM Instances | Configure connections to Anthropic Claude, OpenAI, Azure OpenAI, Gemini, and Ollama |
+| **MCP Servers** | Administration → MCP Servers | Register external MCP servers (HTTP or stdio) to extend agent tool calling |
+| **AI Agents** | Administration → AI Agents | Compose agents from an LLM Instance + selected tools + MCP Servers |
+| **Knowledge Base** | Administration → Knowledge Base | Upload and organize files in MinIO; files are indexed as vector embeddings for RAG |
 
-Secondary Facets are facets promoted to a separate section of the search response, intended for a different UI treatment — for example, rendering a content type filter as tabs instead of a traditional sidebar filter. A field is promoted to a secondary facet by enabling the **Secondary Facet** option in its field configuration. Secondary Facets appear under the `secondaryFacet` key in the search response, independently of the regular `facet` section.
+---
 
-### Targeting Rules
+## Integration
 
-Through attributes defined in the contents, it is possible to use them to restrict their display based on the user's profile.
+Turing ES exposes its capabilities through four integration options:
 
-### SDK Java
+| Method | Description |
+|---|---|
+| **REST API** | Primary method. All search, indexing, and administration operations are available as HTTP endpoints. |
+| **GraphQL** | `POST /graphql` — for clients that prefer a graph-based query model |
+| **Java SDK** | Available on [Maven Central](https://central.sonatype.com/artifact/com.viglet.turing/turing-java-sdk) (`com.viglet.turing:turing-java-sdk`) |
+| **JavaScript / TypeScript SDK** | Available on npm: `npm install @viglet/turing-sdk` |
 
-Java API ([https://github.com/openviglet/turing-java-sdk](https://github.com/openviglet/turing-java-sdk)) facilitates the use and access to Viglet Turing ES, without the need for consumer search content with complex queries.
+---
 
 ## Turing ES Console
 
@@ -62,7 +73,7 @@ export TURING_ADMIN_PASSWORD=your_password
 
 #### Configuration
 
-Search Engine is used by Turing to store and retrieve data of Converse (Chatbot) and Semantic Navigation Sites.
+Search Engine is used by Turing to store and retrieve data of Semantic Navigation Sites.
 
 ![Search Engine Page](/img/screenshots/turing-se.png)
 

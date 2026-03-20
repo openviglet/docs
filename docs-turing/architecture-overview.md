@@ -1,8 +1,14 @@
+---
+sidebar_position: 1
+title: Architecture Overview
+description: High-level architecture, component diagram, indexing and search flows, and deployment topologies for Viglet Turing ES.
+---
+
 # Turing ES — Architecture Overview
 
 ## Introduction
 
-Viglet Turing ES is an open-source enterprise search platform that combines semantic navigation, generative AI, tool calling, and conversational chatbots. It allows organizations to index content from multiple sources, apply Retrieval-Augmented Generation (RAG) over that content, and expose rich search experiences through REST and GraphQL APIs.
+Viglet Turing ES is an open-source enterprise search platform that combines semantic navigation, generative AI, tool calling, and AI Agents. It allows organizations to index content from multiple sources, apply Retrieval-Augmented Generation (RAG) over that content, and expose rich search experiences through REST and GraphQL APIs.
 
 Content ingestion is handled by **Viglet Dumont DEP**, a separate project that runs connectors independently and delivers indexed documents to Turing ES via an asynchronous message queue.
 
@@ -73,7 +79,7 @@ The Turing ES application is organized into cohesive modules, each with a well-d
 | **LLM Providers** | `genai/provider/llm` | Pluggable integrations: Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Gemini (OpenAI-compatible API), Ollama |
 | **Indexing Pipeline** | `indexer` | Receives messages from Dumont DEP via Artemis, applies Merge Providers, writes to Solr and embedding stores |
 | **Message Queue** | `artemis` | Asynchronous communication between Dumont DEP connectors and the indexing pipeline |
-| **Chatbot / Agent** | `agent` | Conversational AI with intent, entity, and training management |
+| **AI Agent** | `agent` | Conversational AI agents: composition of LLM Instance, Tool Callings, and MCP Servers |
 | **OCR** | `ocr` | Text extraction from PDFs, Word documents, and images |
 | **Persistence** | `persistence` | JPA entities, repositories, and DTOs for all domain objects |
 | **Security** | `spring/security` | Keycloak OAuth2 and HTTP Basic authentication |
@@ -295,4 +301,4 @@ Multiple Turing ES instances run behind Apache HTTP Server configured as a rever
 
 ---
 
-*Next: [SN Concepts — Targeting Rules, Spotlights, Merge Providers](./sn-concepts.md)*
+*Previous: [Core Concepts](./getting-started/core-concepts.md) | Next: [Semantic Navigation Concepts](./sn-concepts.md)*

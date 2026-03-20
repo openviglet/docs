@@ -80,3 +80,7 @@ Not sure where to start? Here is a suggested path depending on what you want to 
 
 **I want to secure Turing ES with SSO**
 → Go directly to [Security & Keycloak](../security-keycloak.md).
+
+---
+
+*Next: [Core Concepts](./core-concepts.md)*

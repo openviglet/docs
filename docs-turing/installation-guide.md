@@ -6,7 +6,7 @@ description: Viglet Turing ES Installation Guide
 
 # Viglet Turing ES: Installation Guide
 
-Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
 
 ## Installing Java
 
@@ -377,26 +377,20 @@ This way, you can interact with the Turing ES service:
 
 ### Starting Turing ES
 
-When Turing ES is started for the first time, it will do the initial setup and start downloading the OpenNLP models.
+When Turing ES is started for the first time, it will perform initial setup.
 
 ```
 $ ./viglet-turing.jar
   _____            _                 _    ___
  |_   _|_  _  _ _ (_) _ _   __ _    /_\  |_ _|
    | | | || || '_|| || ' \ / _` |  / _ \  | |
-   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|  (v0.3.6-d9fc453)
+   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|
                            |___/
 
-:: Copyright (C) 2016-2022, Viglet Team <opensource@viglet.com>
+:: Copyright (C) 2016-2025, Viglet Team <opensource@viglet.com>
 
-:: Built with Spring Boot :: 2.7.6
-
-Starting TuringAI v0.3.6-d9fc453 using Java 17.0.1 ...
+Starting Turing ES using Java 21 ...
 First Time Configuration ...
-[ OK ] en-ner-date.bin model
-[ OK ] en-ner-person.bin model
-[ OK ] en-ner-location.bin model
-...
 Configuration finished.
 ```
 
@@ -404,7 +398,7 @@ Configuration finished.
 
 Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing ES. The default port is **2700**.
 
-By default the login/password are: **admin/admin**
+The default username is **admin**. The password is set via the `TURING_ADMIN_PASSWORD` environment variable before first startup — see the [Administration Guide](./administration-guide.md#login) for details.
 
 ## Appendix A: Installation Modes
 
@@ -412,91 +406,69 @@ By default the login/password are: **admin/admin**
 
 #### Simple
 
-Turing ES will be installed only using OpenNLP and H2 database embedded in Turing ES itself.
+Minimal setup using an embedded H2 database. Suitable for local development and evaluation only — not for production.
 
 **Prerequisites:**
 1. Linux server
-2. Java 14
-3. 50Gb HDD
-4. 2 Gb of RAM
+2. Java 21
+3. 50 GB HDD
+4. 2 GB RAM
 
-**Target Audience:** Development and testing environment. Because it requires fewer components and lower memory usage.
+**Target Audience:** Development and testing environments.
 
 #### Docker Compose
 
-Turing ES and its dependencies will be installed using Docker Compose script, including the following services:
+Turing ES and its dependencies installed via Docker Compose, including:
 
-- MariaDB - to store Turing ES system tables
-- Solr - Used by Turing ES's Semantic Navigation and Chatbot
-- Nginx - WebServer for Turing ES to use port 80
+- MariaDB — Turing ES system tables
+- Solr — Semantic Navigation search backend
+- Nginx — reverse proxy on port 80
 - Turing ES
 
 **Prerequisites:**
-1. Linux server
-2. Docker and Docker Compose installed
-3. 50Gb HDD
-4. 4Gb of RAM
+1. Linux server with Docker and Docker Compose installed
+2. 50 GB HDD
+3. 4 GB RAM
 
-**Target Audience:** Customers who need more complex environments, but avoid the installation and configuration of each product. It can be used in QA or Production environment.
+**Target Audience:** Teams that want a complete environment without manual service installation. Suitable for QA and production.
 
 #### Kubernetes
 
-Turing ES and its dependencies will be installed using Kubernetes scripts, including the following services:
+Turing ES and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
 
-- MariaDB - to store Turing ES system tables
-- Solr - Used by Turing ES's Semantic Navigation and Chatbot
-- Nginx - WebServer for Turing ES to use port 80
+- MariaDB — Turing ES system tables
+- Solr — Semantic Navigation search backend
+- Nginx — reverse proxy
 - Turing ES
 
 **Prerequisites:**
-1. Linux Server with Kubernetes installed or Cloud that supports Kubernetes
-2. 100Gb of Storage
-3. 4Gb RAM
+1. Linux server with Kubernetes, or a cloud Kubernetes service (GKE, EKS, AKS)
+2. 100 GB storage
+3. 4 GB RAM
 
-**Target Audience:** Customers who want to use cloud solutions like Google, AWS, Oracle, etc. It can be used in the production environment in a scalable way.
+**Target Audience:** Cloud deployments requiring horizontal scaling and infrastructure-as-code.
 
-#### Manual Installation of Services
+#### Manual Installation
 
-The services will be installed individually on the servers following the Installation Guide procedure, which will include the following services:
+Each service installed individually following this guide:
 
-- MariaDB - to store Turing ES system tables
-- Solr - Used by Turing ES's Semantic Navigation and Chatbot
-- Apache - WebServer for Turing ES to use port 80
+- MariaDB — Turing ES system tables
+- Solr + Zookeeper — Semantic Navigation search backend
+- Apache HTTP Server — reverse proxy (required for Keycloak integration)
 - Turing ES
 
 **Prerequisites:**
-1. One Linux server or up to 4 Linux servers to install services
-2. 50 - 100Gb of Storage for each server
-3. Minimum 2Gb RAM for each Server
+1. One to four Linux servers
+2. 50–100 GB storage per server
+3. Minimum 2 GB RAM per server
 
 ### Connectors
 
-Turing ES has several connectors to allow you to index the contents in Semantic Navigation:
-
-- Apache Nutch (Crawler)
-- Wordpress
-- OpenText WEM Listener
-- FileSystem
-- Database
+Content ingestion is handled by **Viglet Dumont DEP**, a separate application. Available connectors include WebCrawler (Apache Nutch), Database, FileSystem, AEM/WEM, and WordPress. Refer to the [Dumont DEP documentation](/dumont) for connector setup.
 
 **Prerequisites:**
-1. New linux server or existing server with content or files that will be indexed.
-2. 50Gb of Storage for each server.
-
-### NLP
-
-The customer can choose the NLP that will be used by Turing ES:
-
-- Apache OpenNLP (Embedded)
-- SpaCy NLP
-- Stanford CoreNLP
-- OpenText Content Analytics
-- Polyglot
-
-**Prerequisites:**
-1. Linux server
-2. 50Gb of Storage for each server
-3. Minimum 2 Gb of RAM
+1. A server with access to the content sources to be indexed
+2. 50 GB storage
 
 ## Appendix B: Docker Compose
 

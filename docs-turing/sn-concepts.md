@@ -1,3 +1,9 @@
+---
+sidebar_position: 2
+title: Semantic Navigation Concepts
+description: SN Site configuration, Targeting Rules, Spotlights, Merge Providers, Facets, and the self-describing search response structure.
+---
+
 # Semantic Navigation Concepts
 
 This document describes the Semantic Navigation (SN) module in Turing ES: how SN Sites are configured, and the three advanced features — **Targeting Rules**, **Spotlights**, and **Merge Providers** — that control how content is personalized, curated, and unified from multiple sources.
@@ -30,7 +36,11 @@ The Behavior tab defines how search works for this site. All settings are stored
 | **Wildcard No Results** | Automatically appends a wildcard (`*`) to the query when the original search returns no results, broadening the match |
 | **Wildcard Always** | Always appends a wildcard to every search term, regardless of result count |
 
-Use **Wildcard No Results** to recover gracefully from zero-result queries. Use **Wildcard Always** with caution — it increases recall but can reduce relevance precision.
+Use **Wildcard No Results** to recover gracefully from zero-result queries.
+
+:::caution Wildcard Always reduces precision
+**Wildcard Always** appends `*` to every query term regardless of result count. This increases recall — more documents match — but significantly reduces relevance precision. Avoid using it in sites where ranking quality matters. Prefer **Wildcard No Results** as a safer fallback.
+:::
 
 ### Facets
 
@@ -454,7 +464,9 @@ Each **Merge Provider Field** entry defines which fields are overwritten:
 
 ### Important considerations
 
-**Connector order matters:** The merge is triggered when the source connector's document arrives and a matching destination document already exists. If the destination connector indexes after the source, no merge will occur until the source re-indexes. Plan your connector schedules so the destination connector runs first.
+:::warning Connector indexing order matters
+The merge is triggered when the **source** connector's document arrives and a matching **destination** document already exists in the index. If the destination connector runs after the source, no merge will occur until the source re-indexes. Always schedule the **destination connector first** so the document is already in Solr when the source arrives.
+:::
 
 **Join key uniqueness:** The field used as the join key must uniquely identify a document within its connector's output. If multiple documents share the same join key value, the merge behavior is undefined.
 
