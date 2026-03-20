@@ -2,21 +2,21 @@
 /**
  * Turing ES Documentation — PDF Generator
  *
- * Uses a single Puppeteer browser instance to:
- *   1. Render the branded cover (HTML → PDF)
- *   2. Crawl every documentation page following "next" links, printing each to PDF
- *   3. Merge everything into a single PDF with pdf-lib
- *   4. Rewrite internal links as in-PDF GoTo hyperlinks
+ * Pipeline:
+ *   1. Render branded cover (HTML → PDF)
+ *   2. Crawl doc pages, collect titles & print each to PDF
+ *   3. Generate a Table of Contents page from collected titles
+ *   4. Merge: cover + TOC + docs
+ *   5. Rewrite internal links as in-PDF GoTo hyperlinks
+ *   6. Stamp page numbers (skipping cover + TOC)
  *
- * Prerequisites:
- *   - Docusaurus serve running on localhost:3000
- *   - npm dependencies installed (puppeteer, pdf-lib)
+ * Prerequisites: Docusaurus serve on localhost:3000, puppeteer, pdf-lib
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { PDFDocument, PDFName, PDFDict, PDFString, PDFHexString, PDFArray } from 'pdf-lib';
+import { PDFDocument, PDFName, PDFDict, PDFString, PDFHexString, PDFArray, StandardFonts, rgb } from 'pdf-lib';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = dirname(__filename);
@@ -44,9 +44,8 @@ const FOOTER_HTML = [
   'font-size:7px;display:flex;justify-content:space-between;align-items:center;',
   'border-top:0.5px solid #e2e8f0;padding-top:3px;margin-top:4px;">',
   '<span style="color:#94a3b8;">viglet.com</span>',
-  '<span style="color:#64748b;">',
-  '<span class="pageNumber"></span> / <span class="totalPages"></span>',
-  '</span></div>',
+  '<span style="color:#64748b;">&nbsp;</span>',
+  '</div>',
 ].join('');
 
 let browser;
@@ -63,25 +62,17 @@ async function launchBrowser() {
    Stage 1 — Cover (HTML → PDF)
    ────────────────────────────────────────────────────── */
 async function generateCover() {
-  console.log('  [1/4]  Rendering cover pages …');
-
+  console.log('  [1/6]  Rendering cover pages …');
   const page = await browser.newPage();
 
-  // Embed favicon as base64 data URI in the cover HTML
   const faviconB64 = readFileSync(FAVICON).toString('base64');
   const faviconDataUri = `data:image/png;base64,${faviconB64}`;
-  const html = readFileSync(COVER_HTML, 'utf-8')
-    .replaceAll('FAVICON_DATA_URI', faviconDataUri);
+  const html = readFileSync(COVER_HTML, 'utf-8').replaceAll('FAVICON_DATA_URI', faviconDataUri);
 
   await page.setContent(html, { waitUntil: 'networkidle0' });
   await page.evaluateHandle('document.fonts.ready');
 
-  const pdfBuffer = await page.pdf({
-    format: 'A4',
-    printBackground: true,
-    preferCSSPageSize: false,
-  });
-
+  const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true, preferCSSPageSize: false });
   await page.close();
   console.log('         Cover rendered ✓');
   return pdfBuffer;
@@ -89,41 +80,43 @@ async function generateCover() {
 
 /* ──────────────────────────────────────────────────────
    Stage 2 — Crawl doc pages & print each to PDF
-   Returns { buffers: Buffer[], pageMap: Map<string, number> }
-   pageMap maps URL path → starting page index in merged PDF
+   Returns { buffers, entries } where each entry has
+   { path, title, pageCount }
    ────────────────────────────────────────────────────── */
-async function generateDocs(coverPageCount) {
-  console.log('  [2/4]  Generating documentation pages …');
+async function crawlDocs() {
+  console.log('  [2/6]  Crawling documentation pages …');
 
   const cssContent = readFileSync(STYLE_CSS, 'utf-8');
   const page = await browser.newPage();
   const buffers = [];
-  const pageMap = new Map();   // path → page index in final PDF
+  const entries = [];
   let url = `${BASE_URL}${ENTRY_PATH}`;
   const visited = new Set();
-  let cumulativePages = coverPageCount;
 
   while (url) {
     const normalized = url.replace(/\/+$/, '');
     if (visited.has(normalized)) break;
     visited.add(normalized);
 
-    const docNum = visited.size;
     const path = normalized.replace(BASE_URL, '');
-    process.stdout.write(`         [${docNum}] ${path} … `);
+    process.stdout.write(`         [${visited.size}] ${path} … `);
 
     await page.goto(url, { waitUntil: 'networkidle0', timeout: 30_000 });
 
-    // Capture next URL BEFORE modifying the DOM
-    const nextUrl = await page.evaluate(() => {
+    // Capture next URL and page title BEFORE modifying the DOM
+    const { nextUrl, title } = await page.evaluate(() => {
       const next = document.querySelector('a.pagination-nav__link--next');
-      return next?.href ?? null;
+      const h1 = document.querySelector('article h1, article h2, header h1');
+      return {
+        nextUrl: next?.href ?? null,
+        title: h1?.textContent?.trim() ?? document.title.replace(/ \|.*$/, '').trim(),
+      };
     });
 
-    // Inject our PDF stylesheet
+    // Inject stylesheet
     await page.addStyleTag({ content: cssContent });
 
-    // Remove chrome elements from the DOM
+    // Remove chrome elements
     await page.evaluate(() => {
       const remove = [
         '.navbar', '.nav-root', 'nav.navbar',
@@ -143,10 +136,7 @@ async function generateDocs(coverPageCount) {
       }
     });
 
-    // Record page mapping BEFORE printing
-    pageMap.set(path, cumulativePages);
-
-    // Print this page to PDF
+    // Print page
     const pdfBuf = await page.pdf({
       format: 'A4',
       printBackground: true,
@@ -156,27 +146,118 @@ async function generateDocs(coverPageCount) {
       margin: { top: '25mm', bottom: '20mm', left: '15mm', right: '15mm' },
     });
 
-    // Count how many PDF pages this doc produced
     const tmpDoc = await PDFDocument.load(pdfBuf);
     const pageCount = tmpDoc.getPageCount();
-    cumulativePages += pageCount;
 
     buffers.push(pdfBuf);
+    entries.push({ path, title, pageCount });
     console.log(`✓  (${pageCount}p)`);
 
     url = nextUrl;
   }
 
   await page.close();
-  console.log(`         ${buffers.length} sections generated ✓`);
-  return { buffers, pageMap };
+  console.log(`         ${entries.length} sections crawled ✓`);
+  return { buffers, entries };
 }
 
 /* ──────────────────────────────────────────────────────
-   Stage 3 — Merge all PDFs (pdf-lib)
+   Stage 3 — Generate Table of Contents HTML → PDF
    ────────────────────────────────────────────────────── */
-async function mergePDFs(coverBuf, docBuffers) {
-  console.log('  [3/4]  Merging PDFs …');
+function buildTocHtml(entries, tocStartPage) {
+  let currentPage = tocStartPage;
+
+  // Compute the page number each entry starts on
+  // (relative to content start, which is after cover + TOC)
+  const rows = entries.map((e) => {
+    const pg = currentPage;
+    currentPage += e.pageCount;
+    return `
+      <tr>
+        <td style="padding:7px 0;border-bottom:1px solid #f1f5f9;">
+          <span style="font-weight:600;color:#1e293b;font-size:10.5pt;">${e.title}</span>
+        </td>
+        <td style="padding:7px 0;border-bottom:1px solid #f1f5f9;text-align:right;
+                    font-family:'JetBrains Mono',monospace;font-size:9pt;color:#94a3b8;
+                    white-space:nowrap;width:40px;">
+          ${pg}
+        </td>
+      </tr>`;
+  });
+
+  return `<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 210mm; min-height: 297mm;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: #0f172a; padding: 30mm 25mm 25mm 25mm;
+  }
+
+  .toc-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 8mm;
+  }
+  .toc-bar {
+    width: 5px; height: 28px; border-radius: 3px;
+    background: linear-gradient(180deg, #C2410C, #F97316);
+  }
+  .toc-title {
+    font-size: 22pt; font-weight: 800; color: #0f172a;
+    letter-spacing: -0.02em;
+  }
+  .toc-divider {
+    height: 2px; margin-bottom: 6mm;
+    background: linear-gradient(90deg, #C2410C 0%, #FED7AA 50%, transparent 100%);
+    border-radius: 1px;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+</style>
+</head><body>
+  <div class="toc-header">
+    <div class="toc-bar"></div>
+    <div class="toc-title">Table of Contents</div>
+  </div>
+  <div class="toc-divider"></div>
+  <table>${rows.join('')}</table>
+</body></html>`;
+}
+
+async function generateToc(entries, firstDocPage) {
+  console.log('  [3/6]  Generating Table of Contents …');
+
+  const page = await browser.newPage();
+  const html = buildTocHtml(entries, firstDocPage);
+
+  await page.setContent(html, { waitUntil: 'networkidle0' });
+  await page.evaluateHandle('document.fonts.ready');
+
+  const pdfBuf = await page.pdf({
+    format: 'A4',
+    printBackground: true,
+    margin: { top: '20mm', bottom: '20mm', left: '15mm', right: '15mm' },
+  });
+
+  await page.close();
+
+  const tocDoc = await PDFDocument.load(pdfBuf);
+  const tocPageCount = tocDoc.getPageCount();
+  console.log(`         TOC rendered (${tocPageCount}p) ✓`);
+  return { pdfBuf, tocPageCount };
+}
+
+/* ──────────────────────────────────────────────────────
+   Stage 4 — Merge: cover + TOC + docs
+   Also builds the final pageMap.
+   ────────────────────────────────────────────────────── */
+async function mergePDFs(coverBuf, tocBuf, docBuffers, entries, coverPageCount, tocPageCount) {
+  console.log('  [4/6]  Merging PDFs …');
 
   const merged = await PDFDocument.create();
 
@@ -185,11 +266,22 @@ async function mergePDFs(coverBuf, docBuffers) {
   const coverPages = await merged.copyPages(coverDoc, coverDoc.getPageIndices());
   coverPages.forEach((p) => merged.addPage(p));
 
-  // Documentation pages
-  for (const buf of docBuffers) {
-    const doc   = await PDFDocument.load(buf);
+  // TOC pages
+  const tocDoc   = await PDFDocument.load(tocBuf);
+  const tocPages = await merged.copyPages(tocDoc, tocDoc.getPageIndices());
+  tocPages.forEach((p) => merged.addPage(p));
+
+  // Documentation pages — build pageMap as we go
+  const pageMap = new Map();
+  let cumulative = coverPageCount + tocPageCount;
+
+  for (let i = 0; i < docBuffers.length; i++) {
+    pageMap.set(entries[i].path, cumulative);
+
+    const doc   = await PDFDocument.load(docBuffers[i]);
     const pages = await merged.copyPages(doc, doc.getPageIndices());
     pages.forEach((p) => merged.addPage(p));
+    cumulative += entries[i].pageCount;
   }
 
   // Metadata
@@ -200,14 +292,13 @@ async function mergePDFs(coverBuf, docBuffers) {
   merged.setProducer('pdf-lib + Puppeteer');
   merged.setCreationDate(new Date());
 
-  return merged;
+  return { merged, pageMap };
 }
 
 /* ──────────────────────────────────────────────────────
-   Stage 4 — Rewrite internal links as in-PDF GoTo
+   Stage 5 — Rewrite internal links as in-PDF GoTo
    ────────────────────────────────────────────────────── */
 
-/** Build lookup table: URL path → page index in merged PDF */
 function buildPathLookup(pageMap) {
   const lookup = new Map();
   for (const [path, pageIdx] of pageMap) {
@@ -220,7 +311,6 @@ function buildPathLookup(pageMap) {
   return lookup;
 }
 
-/** Extract URI string from a PDF annotation's action dict, or null */
 function extractAnnotUri(annot, context) {
   const aRef = annot.get(PDFName.of('A'));
   if (!aRef) return null;
@@ -238,7 +328,6 @@ function extractAnnotUri(annot, context) {
   return null;
 }
 
-/** Resolve a URI to an internal doc path, or null */
 function resolveInternalPath(uri) {
   let path = null;
   if (uri.startsWith(BASE_URL))  path = uri.slice(BASE_URL.length);
@@ -249,7 +338,7 @@ function resolveInternalPath(uri) {
 }
 
 async function rewriteInternalLinks(merged, pageMap) {
-  console.log('  [4/4]  Rewriting internal links …');
+  console.log('  [5/6]  Rewriting internal links …');
 
   const context = merged.context;
   const pathToPage = buildPathLookup(pageMap);
@@ -275,7 +364,6 @@ async function rewriteInternalLinks(merged, pageMap) {
       const targetIdx = pathToPage.get(pathOnly);
       if (targetIdx === undefined) continue;
 
-      // Rewrite URI action → GoTo action
       const targetRef = merged.getPage(targetIdx).ref;
       result.aDict.set(PDFName.of('S'), PDFName.of('GoTo'));
       result.aDict.delete(PDFName.of('URI'));
@@ -285,6 +373,35 @@ async function rewriteInternalLinks(merged, pageMap) {
   }
 
   console.log(`         ${rewritten} links rewritten as in-PDF navigation ✓`);
+}
+
+/* ──────────────────────────────────────────────────────
+   Stage 6 — Stamp page numbers (skip cover + TOC)
+   ────────────────────────────────────────────────────── */
+async function stampPageNumbers(merged, skipPages) {
+  console.log('  [6/6]  Stamping page numbers …');
+
+  const font = await merged.embedFont(StandardFonts.Helvetica);
+  const fontSize = 8;
+  const totalDocPages = merged.getPageCount() - skipPages;
+
+  for (let i = skipPages; i < merged.getPageCount(); i++) {
+    const page = merged.getPage(i);
+    const { width } = page.getSize();
+    const docPageNum = i - skipPages + 1;
+    const text = `${docPageNum} / ${totalDocPages}`;
+    const textWidth = font.widthOfTextAtSize(text, fontSize);
+
+    page.drawText(text, {
+      x: width - 15 * 2.835 - textWidth,
+      y: 12 * 2.835,
+      size: fontSize,
+      font,
+      color: rgb(0.39, 0.45, 0.51),
+    });
+  }
+
+  console.log(`         ${totalDocPages} pages numbered ✓`);
 }
 
 /* ──────────────────────────────────────────────────────
@@ -304,16 +421,37 @@ async function main() {
   const coverDoc = await PDFDocument.load(coverBuf);
   const coverPageCount = coverDoc.getPageCount();
 
-  // Stage 2 — Crawl & print docs
-  const { buffers, pageMap } = await generateDocs(coverPageCount);
+  // Stage 2 — Crawl all doc pages (collect titles + buffers)
+  const { buffers, entries } = await crawlDocs();
 
-  // Stage 3 — Merge
-  const merged = await mergePDFs(coverBuf, buffers);
+  // Stage 3 — Generate TOC
+  // We need to know where doc pages start to show correct page numbers.
+  // TOC page count is unknown yet, so we do a two-pass: render TOC first
+  // with an estimate, check its page count, re-render if it changed.
+  let tocPageCount = 1; // initial estimate
+  let tocBuf;
 
-  // Stage 4 — Rewrite internal links
+  for (let pass = 0; pass < 3; pass++) {
+    const firstDocPage = coverPageCount + tocPageCount + 1; // 1-based for display
+    const result = await generateToc(entries, firstDocPage - (coverPageCount + tocPageCount));
+    tocBuf = result.pdfBuf;
+    if (result.tocPageCount === tocPageCount) break;
+    tocPageCount = result.tocPageCount;
+  }
+
+  // Stage 4 — Merge: cover + TOC + docs
+  const { merged, pageMap } = await mergePDFs(
+    coverBuf, tocBuf, buffers, entries, coverPageCount, tocPageCount,
+  );
+
+  // Stage 5 — Rewrite internal links
   await rewriteInternalLinks(merged, pageMap);
 
-  // Save final PDF
+  // Stage 6 — Page numbers (skip cover + TOC)
+  const skipPages = coverPageCount + tocPageCount;
+  await stampPageNumbers(merged, skipPages);
+
+  // Save
   const mergedBytes = await merged.save();
   writeFileSync(OUTPUT_PDF, mergedBytes);
 

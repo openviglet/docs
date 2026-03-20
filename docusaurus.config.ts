@@ -40,7 +40,7 @@ const config: Config = {
         searchResultLimits: 8,
         searchResultContextMaxLength: 50,
         explicitSearchResultPath: true,
-        searchBarShortcutHint: true,
+        searchBarShortcutHint: false,
       },
     ],
   ],
