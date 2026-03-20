@@ -202,22 +202,16 @@
     gap: 4mm;
   }
 
-  .product-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 2px;
-    display: inline-block;
+  .brand-logo {
+    width: 24px;
+    height: 24px;
   }
-  .dot-turing  { background: #4169E1; }
-  .dot-shio    { background: #FF6347; }
-  .dot-dumont  { background: #006400; }
 
   .brand-name {
     font-size: 11pt;
     font-weight: 700;
-    color: #64748b;
+    color: #94a3b8;
     letter-spacing: 0.08em;
-    margin-left: 2mm;
   }
   .brand-url {
     font-size: 9pt;
@@ -421,14 +415,9 @@
     align-items: center;
     gap: 3mm;
   }
-  .inner-brand-squares {
-    display: flex;
-    gap: 1.5px;
-  }
-  .inner-brand-sq {
-    width: 8px;
-    height: 8px;
-    border-radius: 1.5px;
+  .inner-brand-logo {
+    width: 28px;
+    height: 28px;
   }
   .inner-brand-text {
     font-size: 12pt;
@@ -657,10 +646,8 @@
 
   <!-- Bottom branding -->
   <div class="bottom-brand">
-    <span class="product-dot dot-dumont"></span>
-    <span class="product-dot dot-shio"></span>
-    <span class="product-dot dot-turing"></span>
-    <span class="brand-name">VIGLET</span>
+    <img class="brand-logo" src="FAVICON_DATA_URI" alt="Viglet" />
+    <span class="brand-name">viglet</span>
     <span class="brand-url">viglet.com</span>
   </div>
 </div>
@@ -738,11 +725,7 @@
   <!-- Bottom -->
   <div class="inner-bottom">
     <div class="inner-brand">
-      <div class="inner-brand-squares">
-        <div class="inner-brand-sq" style="background:#006400;"></div>
-        <div class="inner-brand-sq" style="background:#FF6347;"></div>
-        <div class="inner-brand-sq" style="background:#4169E1;"></div>
-      </div>
+      <img class="inner-brand-logo" src="FAVICON_DATA_URI" alt="Viglet" />
       <span class="inner-brand-text">viglet</span>
     </div>
     <span class="inner-url">docs.viglet.com</span>
