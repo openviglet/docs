@@ -214,62 +214,7 @@ unzip turing-utils.zip -d /appl/viglet/turing/utils
 
 ## Keycloak
 
-### Database
-
-Create the database for Keycloak using MariaDB/MySQL:
-
-```sql
-CREATE DATABASE keycloak;
-CREATE USER 'keycloak'@'localhost' IDENTIFIED BY 'keycloak';
-GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-### Keystore
-
-Generate the keystore file:
-
-```shell
-keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 \
-  -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" \
-  -keystore conf/server.keystore
-```
-
-### Configuration
-
-Create the Keycloak configuration file (`keycloak.conf`):
-
-```ini
-db=mariadb
-db-username=keycloak
-db-password=keycloak
-db-url=jdbc:mariadb://localhost:3306/keycloak
-http-relative-path=/kc
-```
-
-Build Keycloak:
-
-```shell
-./kc.sh build --http-relative-path=/kc
-```
-
-### Linux Service
-
-Create a systemd service for Keycloak:
-
-```ini
-[Unit]
-Description=Keycloak
-After=syslog.target network.target
-
-[Service]
-User=viglet
-EnvironmentFile=/appl/viglet/keycloak/env
-ExecStart=/appl/viglet/keycloak/bin/kc.sh start
-
-[Install]
-WantedBy=multi-user.target
-```
+For production deployments that require SSO, Keycloak integrates with Turing ES via OAuth2 / OpenID Connect. Full setup instructions — including database creation, keystore generation, Keycloak configuration, realm and client setup, JVM properties, and Apache reverse proxy configuration — are covered in the [Security & Keycloak](./security-keycloak.md) guide.
 
 ## Solr Configuration
 

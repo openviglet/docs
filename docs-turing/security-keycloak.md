@@ -113,6 +113,32 @@ Start Keycloak in production mode:
 
 Keycloak will be available at `https://localhost:8443/kc/`.
 
+### Running Keycloak as a Linux service
+
+Create a systemd unit file at `/etc/systemd/system/keycloak.service`:
+
+```ini
+[Unit]
+Description=Keycloak
+After=syslog.target network.target
+
+[Service]
+User=viglet
+EnvironmentFile=/appl/viglet/keycloak/env
+ExecStart=/appl/viglet/keycloak/bin/kc.sh start --optimized --hostname-strict=false --https-key-store-password=<keystore-password>
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start the service:
+
+```bash
+systemctl daemon-reload
+systemctl enable keycloak
+systemctl start keycloak
+```
+
 ---
 
 ## Step 3 — Keycloak Realm and Client Configuration
