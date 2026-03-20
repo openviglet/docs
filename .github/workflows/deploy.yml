@@ -43,13 +43,20 @@ jobs:
         run: npx docusaurus serve --no-open &
 
       - name: Wait for server to be ready
-        run: npx wait-on http://localhost:3000/turing/getting-started/intro --timeout 60000
+        run: |
+          npx wait-on http://localhost:3000/turing/getting-started/intro --timeout 60000
+          npx wait-on http://localhost:3000/dumont/getting-started/intro --timeout 60000
 
-      - name: Generate Turing documentation PDF
+      - name: Generate Turing ES documentation PDF
         run: npm run gen-pdf
 
-      - name: Copy PDF into build folder
-        run: cp turing-es-2026.1-documentation.pdf build/
+      - name: Generate Dumont DEP documentation PDF
+        run: npm run gen-pdf-dumont
+
+      - name: Copy PDFs into build folder
+        run: |
+          cp turing-es-2026.1-documentation.pdf build/
+          cp dumont-dep-2026.1-documentation.pdf build/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

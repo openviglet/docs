@@ -1,0 +1,227 @@
+---
+sidebar_position: 1
+title: Dumont DEP
+description: Viglet Dumont DEP — Data Extraction Platform for connecting content sources to search engines
+slug: /
+---
+
+import Link from '@docusaurus/Link';
+
+export const VERSION = "2026.1";
+export const PDF_FILENAME = `dumont-dep-${VERSION}-documentation.pdf`;
+
+export const BRAND       = "#16A34A";
+export const BRAND_DARK  = "#22C55E";
+export const BRAND_BG    = "color-mix(in srgb, #16A34A 8%, var(--color-background, #fff))";
+export const BRAND_BORDER = "color-mix(in srgb, #16A34A 25%, var(--color-border, #e2e8f0))";
+
+export const Pill = ({ children }) => (
+  <span style={{
+    display: "inline-flex", alignItems: "center", gap: "6px",
+    background: BRAND_BG, color: BRAND,
+    border: `1px solid ${BRAND_BORDER}`,
+    borderRadius: "999px", padding: "2px 12px",
+    fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.02em",
+  }}>
+    {children}
+  </span>
+);
+
+export const FeatureCard = ({ icon, title, children }) => (
+  <div style={{
+    background: "var(--color-card)", border: "1px solid var(--color-border)",
+    borderRadius: "12px", padding: "1.25rem 1.5rem",
+    display: "flex", flexDirection: "column", gap: "6px",
+  }}>
+    <div style={{ fontSize: "1.75rem", lineHeight: 1 }}>{icon}</div>
+    <div style={{ fontWeight: 700, fontSize: "0.9375rem", color: "var(--color-foreground)" }}>{title}</div>
+    <div style={{ fontSize: "0.875rem", color: "var(--color-muted-foreground)", lineHeight: 1.6 }}>{children}</div>
+  </div>
+);
+
+export const NavCard = ({ icon, title, description, href }) => (
+  <Link to={href} style={{ textDecoration: "none" }}>
+    <div style={{
+      background: "var(--color-card)", border: "1px solid var(--color-border)",
+      borderRadius: "10px", padding: "1rem 1.25rem",
+      display: "flex", gap: "12px", alignItems: "flex-start",
+      transition: "box-shadow 0.15s, transform 0.15s",
+      cursor: "pointer",
+    }}
+    onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)"; }}
+    onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
+    >
+      <div style={{
+        width: "36px", height: "36px", borderRadius: "8px", flexShrink: 0,
+        background: BRAND_BG, display: "flex", alignItems: "center",
+        justifyContent: "center", fontSize: "1.1rem",
+      }}>{icon}</div>
+      <div>
+        <div style={{ fontWeight: 600, fontSize: "0.9rem", color: "var(--color-foreground)", marginBottom: "2px" }}>{title}</div>
+        <div style={{ fontSize: "0.8125rem", color: "var(--color-muted-foreground)", lineHeight: 1.5 }}>{description}</div>
+      </div>
+    </div>
+  </Link>
+);
+
+export const SectionLabel = ({ children }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: "10px", margin: "2.5rem 0 1rem" }}>
+    <div style={{ height: "1px", flex: 1, background: "var(--color-border)" }} />
+    <span style={{
+      fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em",
+      textTransform: "uppercase", color: "var(--color-muted-foreground)", whiteSpace: "nowrap",
+    }}>{children}</span>
+    <div style={{ height: "1px", flex: 1, background: "var(--color-border)" }} />
+  </div>
+);
+
+{/* ── Header ──────────────────────────────────────────────────────────────── */}
+
+<div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "1rem", flexWrap: "wrap" }}>
+  <Pill>v{VERSION}</Pill>
+  <Pill>Open Source</Pill>
+  <Pill>Apache 2.0</Pill>
+</div>
+
+# Viglet Dumont DEP
+
+**Viglet Dumont DEP** is an open-source data extraction platform. It connects your content — websites, databases, file systems, AEM, and WordPress — to **Viglet Turing ES** and other search engines through a reliable, asynchronous processing pipeline.
+
+{/* ── PDF Download Banner ─────────────────────────────────────────────────── */}
+
+<div style={{
+  display: "flex", alignItems: "center", justifyContent: "space-between",
+  flexWrap: "wrap", gap: "12px",
+  background: BRAND_BG,
+  border: `1px solid ${BRAND_BORDER}`,
+  borderLeft: `4px solid ${BRAND}`,
+  borderRadius: "10px", padding: "1rem 1.25rem",
+  margin: "1.75rem 0",
+}}>
+  <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
+    <div style={{
+      width: "38px", height: "38px", borderRadius: "8px", flexShrink: 0,
+      background: BRAND, display: "flex", alignItems: "center",
+      justifyContent: "center", fontSize: "1.2rem",
+    }}>📄</div>
+    <div style={{ minWidth: 0 }}>
+      <div style={{ fontWeight: 700, fontSize: "0.875rem", color: "var(--color-foreground)" }}>
+        Complete Documentation — v{VERSION}
+      </div>
+      <div style={{ fontSize: "0.8rem", color: "var(--color-muted-foreground)", marginTop: "2px" }}>
+        All guides, connectors reference and configuration in a single portable PDF
+      </div>
+    </div>
+  </div>
+  <a
+    href={`/${PDF_FILENAME}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: "inline-flex", alignItems: "center", gap: "5px",
+      background: BRAND, color: "#fff",
+      borderRadius: "7px", padding: "6px 14px",
+      fontWeight: 600, fontSize: "0.8rem", textDecoration: "none",
+      whiteSpace: "nowrap", transition: "opacity 0.15s",
+      flexShrink: 0,
+    }}
+    onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+    onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+  >
+    ⬇ Download PDF
+  </a>
+</div>
+
+{/* ── Feature highlights ──────────────────────────────────────────────────── */}
+
+<SectionLabel>Key Capabilities</SectionLabel>
+
+<div style={{
+  display: "grid", gap: "12px",
+  gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+  marginBottom: "0.5rem",
+}}>
+  <FeatureCard icon="🌐" title="Web Crawler">
+    Recursively crawl websites with URL filtering, authentication, locale detection and incremental change detection.
+  </FeatureCard>
+  <FeatureCard icon="🗄️" title="Database Connector">
+    Run any SQL query against Oracle, PostgreSQL, MariaDB or MySQL and index each row as a searchable document.
+  </FeatureCard>
+  <FeatureCard icon="📁" title="FileSystem Connector">
+    Walk directory trees and extract text from PDFs, Word, Excel, PowerPoint and images (OCR) via Apache Tika.
+  </FeatureCard>
+  <FeatureCard icon="📦" title="AEM Connector">
+    Index AEM author and publish content with delta tracking, locale mapping and custom extension points.
+  </FeatureCard>
+  <FeatureCard icon="📝" title="WordPress Connector">
+    Pull posts, pages and custom content types from WordPress installations into any search engine.
+  </FeatureCard>
+  <FeatureCard icon="🔌" title="Multi-Target Indexing">
+    Deliver content to Turing ES (default), Apache Solr or Elasticsearch via pluggable indexing adapters.
+  </FeatureCard>
+</div>
+
+{/* ── Quick Start ─────────────────────────────────────────────────────────── */}
+
+<SectionLabel>Quick Start</SectionLabel>
+
+<div style={{
+  display: "grid", gap: "10px",
+  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+  marginBottom: "0.5rem",
+}}>
+  {[
+    { step: "01", title: "Install", desc: "Docker, standalone JAR or build from source", href: "/dumont/installation-guide" },
+    { step: "02", title: "Configure", desc: "application.yaml, Turing ES connection and queue", href: "/dumont/configuration-reference" },
+    { step: "03", title: "Understand", desc: "Connectors, pipeline, strategies and job items", href: "/dumont/getting-started/core-concepts" },
+    { step: "04", title: "Connect", desc: "Choose a connector and start indexing content", href: "/dumont/connectors/overview" },
+  ].map(({ step, title, desc, href }) => (
+    <Link key={step} to={href} style={{ textDecoration: "none" }}>
+      <div style={{
+        background: "var(--color-card)", border: "1px solid var(--color-border)",
+        borderRadius: "10px", padding: "1rem 1.25rem",
+        transition: "box-shadow 0.15s, transform 0.15s",
+      }}
+      onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)"; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
+      >
+        <div style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.1em", color: BRAND, marginBottom: "6px" }}>
+          STEP {step}
+        </div>
+        <div style={{ fontWeight: 700, fontSize: "0.9375rem", color: "var(--color-foreground)", marginBottom: "4px" }}>{title}</div>
+        <div style={{ fontSize: "0.8125rem", color: "var(--color-muted-foreground)", lineHeight: 1.5 }}>{desc}</div>
+      </div>
+    </Link>
+  ))}
+</div>
+
+{/* ── Connectors ─────────────────────────────────────────────────────────── */}
+
+<SectionLabel>Connectors</SectionLabel>
+
+<div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+  <NavCard icon="🌐" title="Web Crawler" description="Recursive crawling with URL filtering, auth, user agents and locale detection" href="/dumont/connectors/web-crawler" />
+  <NavCard icon="🗄️" title="Database Connector" description="JDBC queries against Oracle, PostgreSQL, MariaDB, MySQL — CLI and integrated modes" href="/dumont/connectors/database" />
+  <NavCard icon="📁" title="FileSystem Connector" description="Directory traversal with Apache Tika text extraction, OCR and metadata mapping" href="/dumont/connectors/filesystem" />
+  <NavCard icon="📦" title="AEM Connector" description="Author/publish instances, delta tracking, locale mapping and custom extensions" href="/dumont/connectors/aem" />
+  <NavCard icon="📝" title="WordPress Connector" description="Posts, pages and custom content types from WordPress installations" href="/dumont/connectors/wordpress" />
+</div>
+
+{/* ── Architecture & Pipeline ────────────────────────────────────────────── */}
+
+<SectionLabel>Architecture & Pipeline</SectionLabel>
+
+<div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+  <NavCard icon="🏗️" title="Architecture Overview" description="Component diagram, data flow, module structure, tech stack and deployment topologies" href="/dumont/architecture" />
+  <NavCard icon="🧩" title="Core Concepts" description="Connectors, job items, processing strategies, change detection and indexing status" href="/dumont/getting-started/core-concepts" />
+  <NavCard icon="🔌" title="Indexing Plugins" description="Deliver content to Turing ES, Apache Solr or Elasticsearch via pluggable adapters" href="/dumont/indexing-plugins" />
+</div>
+
+{/* ── Technical Reference ────────────────────────────────────────────────── */}
+
+<SectionLabel>Technical Reference</SectionLabel>
+
+<div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+  <NavCard icon="📋" title="Configuration Reference" description="Complete application.yaml property reference — server, database, queue, plugins" href="/dumont/configuration-reference" />
+  <NavCard icon="🛠️" title="Developer Guide" description="Build from source, project structure, extension points and contribution guide" href="/dumont/developer-guide" />
+</div>

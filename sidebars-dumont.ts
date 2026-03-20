@@ -10,18 +10,34 @@ const sidebars: SidebarsConfig = {
         id: "index",
       },
       items: [
-        "getting-started",
+        {
+          type: "category",
+          label: "Getting Started",
+          items: [
+            "getting-started/intro",
+            "getting-started/core-concepts",
+          ],
+        },
         "architecture",
+        "installation-guide",
+        "configuration-reference",
         {
           type: "category",
           label: "Connectors",
+          link: {
+            type: "doc",
+            id: "connectors/overview",
+          },
           items: [
-            "connectors/asset",
-            "connectors/aem",
+            "connectors/web-crawler",
             "connectors/database",
+            "connectors/filesystem",
+            "connectors/aem",
             "connectors/wordpress",
           ],
-        }
+        },
+        "indexing-plugins",
+        "developer-guide",
       ],
     },
   ],
