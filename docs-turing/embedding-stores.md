@@ -85,7 +85,7 @@ The available embedding models depend on the configured LLM provider:
 | **Google Gemini** | `text-embedding-004`, `embedding-001` |
 | **Ollama (local)** | `nomic-embed-text`, `mxbai-embed-large`, `all-minilm` |
 
-Not all LLM providers support embedding models — for example, Anthropic and standalone Gemini do not include an embedding API. See [LLM Instances](./llm-instances.md#capabilities-matrix) for the full capability matrix.
+Not all LLM providers support embedding models — for example, Anthropic and standalone Gemini do not include an embedding API. See [LLM Instances — Capabilities by Vendor](./llm-instances.md#capabilities-by-vendor) for the full capability matrix.
 
 ### Choosing a model
 

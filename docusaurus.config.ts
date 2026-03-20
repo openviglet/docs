@@ -25,7 +25,25 @@ const config: Config = {
     },
   },
 
-  themes: ["@docusaurus/theme-mermaid"],
+  themes: [
+    "@docusaurus/theme-mermaid",
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      {
+        hashed: true,
+        language: ["en", "pt"],
+        docsRouteBasePath: ["turing", "shio", "dumont"],
+        indexDocs: true,
+        indexBlog: false,
+        indexPages: false,
+        searchResultLimits: 8,
+        searchResultContextMaxLength: 50,
+        explicitSearchResultPath: true,
+        searchBarShortcutHint: true,
+      },
+    ],
+  ],
 
   i18n: {
     defaultLocale: "en",
@@ -134,7 +152,12 @@ const config: Config = {
         width: 28,
         height: 28,
       },
-      items: [],
+      items: [
+        {
+          type: "search",
+          position: "right",
+        },
+      ],
     },
     footer: {
       style: "dark",
