@@ -1,0 +1,230 @@
+/*
+ * Turing ES Documentation — PDF Content Stylesheet
+ * Injected into every documentation page during PDF generation.
+ * Matches the Viglet design system: Plus Jakarta Sans, brand orange, navy.
+ */
+
+/* ── Reset Docusaurus chrome ─────────────────────────── */
+.navbar,
+.footer,
+.pagination-nav,
+.theme-doc-breadcrumbs,
+.theme-doc-toc-mobile,
+.theme-doc-toc-desktop,
+.theme-doc-sidebar-container,
+.theme-doc-version-banner,
+.theme-doc-version-badge,
+nav[aria-label="Breadcrumbs"],
+.col--3 {
+  display: none !important;
+}
+
+/* Force full-width content */
+.col--9,
+main .container .row .col {
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+main .container {
+  max-width: 100% !important;
+  padding: 0 !important;
+}
+
+/* ── Typography ──────────────────────────────────────── */
+body {
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  color: #0f172a;
+  line-height: 1.65;
+  font-size: 10.5pt;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── Headings ────────────────────────────────────────── */
+h1 {
+  font-size: 22pt;
+  font-weight: 800;
+  color: #C2410C;
+  letter-spacing: -0.02em;
+  border-bottom: 2px solid #FED7AA;
+  padding-bottom: 6px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 16pt;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.01em;
+  margin-top: 28px;
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+h3 {
+  font-size: 13pt;
+  font-weight: 600;
+  color: #334155;
+  margin-top: 22px;
+  margin-bottom: 8px;
+}
+
+h4 {
+  font-size: 11pt;
+  font-weight: 600;
+  color: #475569;
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
+
+/* ── Paragraphs ──────────────────────────────────────── */
+p {
+  margin-bottom: 10px;
+  orphans: 3;
+  widows: 3;
+}
+
+/* ── Links ───────────────────────────────────────────── */
+a {
+  color: #C2410C;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* ── Lists ───────────────────────────────────────────── */
+ul, ol {
+  margin-bottom: 12px;
+  padding-left: 22px;
+}
+li {
+  margin-bottom: 4px;
+}
+li::marker {
+  color: #C2410C;
+}
+
+/* ── Inline code ─────────────────────────────────────── */
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  background: #FFF7ED;
+  color: #9A3412;
+  padding: 1.5px 5px;
+  border-radius: 4px;
+  font-size: 0.88em;
+  border: 1px solid #FED7AA;
+}
+
+/* ── Code blocks ─────────────────────────────────────── */
+pre {
+  background: #0f172a !important;
+  border-radius: 8px;
+  padding: 14px 16px !important;
+  margin: 14px 0 !important;
+  overflow-x: auto;
+  border: 1px solid #1e293b;
+  page-break-inside: avoid;
+}
+pre code {
+  background: none !important;
+  color: #e2e8f0 !important;
+  padding: 0;
+  border: none;
+  font-size: 9pt;
+  line-height: 1.55;
+}
+
+/* ── Tables ──────────────────────────────────────────── */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 14px 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+thead {
+  background: #FFF7ED;
+}
+th {
+  color: #C2410C;
+  font-weight: 700;
+  text-align: left;
+  font-size: 9pt;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+td, th {
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  vertical-align: top;
+}
+tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+/* ── Blockquotes ─────────────────────────────────────── */
+blockquote {
+  border-left: 4px solid #C2410C;
+  padding: 10px 16px;
+  margin: 14px 0;
+  background: #FFF7ED;
+  border-radius: 0 6px 6px 0;
+  color: #475569;
+}
+blockquote p {
+  margin-bottom: 0;
+}
+
+/* ── Images ──────────────────────────────────────────── */
+img {
+  max-width: 100%;
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
+/* ── Admonitions (Docusaurus alerts) ─────────────────── */
+.admonition,
+.alert {
+  border-radius: 8px;
+  margin: 14px 0;
+  padding: 12px 16px;
+  page-break-inside: avoid;
+}
+
+/* ── Horizontal rules ────────────────────────────────── */
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, #C2410C, #FED7AA, transparent);
+  margin: 24px 0;
+}
+
+/* ── Details / Summary ───────────────────────────────── */
+details {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 10px 0;
+}
+summary {
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+/* ── Tabs (Docusaurus) ───────────────────────────────── */
+.tabs-container {
+  margin: 14px 0;
+}
+
+/* ── Page break helpers ──────────────────────────────── */
+h1, h2, h3 {
+  page-break-after: avoid;
+}
+pre, table, .admonition, blockquote {
+  page-break-inside: avoid;
+}
