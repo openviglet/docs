@@ -152,12 +152,7 @@ const config: Config = {
         width: 28,
         height: 28,
       },
-      items: [
-        {
-          type: "search",
-          position: "right",
-        },
-      ],
+      items: [],
     },
     footer: {
       style: "dark",
