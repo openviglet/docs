@@ -38,6 +38,14 @@ const sidebars: SidebarsConfig = {
         },
         "indexing-plugins",
         "developer-guide",
+        {
+          type: "category",
+          label: "Extending Connectors",
+          items: [
+            "extending-aem",
+            "extending-database",
+          ],
+        },
       ],
     },
   ],

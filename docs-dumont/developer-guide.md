@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: Developer Guide
-description: Build Dumont DEP from source, understand the module structure, and contribute to the project.
+description: Build Dumont DEP from source, understand the project structure, extension points, and how to contribute.
 ---
 
 # Developer Guide
 
-Whether you're building a custom connector, contributing to the project, or integrating Dumont DEP into your CI/CD pipeline, this guide has everything you need.
+Whether you're building custom extensions, contributing to the project, or integrating Dumont DEP into your CI/CD pipeline, this guide has everything you need.
 
 Dumont DEP is fully open-source at [github.com/openviglet/dumont](https://github.com/openviglet/dumont). All contributions are welcome.
 
@@ -36,22 +36,13 @@ Dumont DEP is fully open-source at [github.com/openviglet/dumont](https://github
 - Git
 - Turing ES running at `http://localhost:2700` (for end-to-end testing)
 
-### Clone the Repository
+### Clone, Build, and Run
 
 ```bash
 git clone https://github.com/openviglet/dumont.git
 cd dumont
-```
-
-### Build
-
-```bash
 mvn clean install
-```
 
-### Run
-
-```bash
 cd connector/connector-app
 mvn spring-boot:run
 ```
@@ -67,28 +58,41 @@ The application starts at `http://localhost:30130`.
 ```
 dumont/
 ├── commons/                    # Shared interfaces, models, utilities
+├── aem-commons/                # AEM extension interfaces (published to Maven Central)
 ├── spring/                     # Spring Boot configuration and JPA persistence
 ├── connector/
-│   └── connector-app/          # Main application — strategies, batch, queue, plugins, API
+│   └── connector-app/          # Main pipeline — strategies, batch, queue, indexing plugins, API
 ├── web-crawler/
 │   └── wc-plugin/              # Web Crawler connector plugin
 ├── db/
-│   └── db-app/                 # Database connector (integrated + standalone CLI)
+│   ├── db-commons/             # DB extension interface (published to Maven Central)
+│   ├── db-app/                 # Database connector (standalone CLI)
+│   └── db-sample/              # Example custom DB extension
 ├── filesystem/
-│   └── fs-connector/           # FileSystem connector (integrated + standalone CLI)
+│   └── fs-connector/           # FileSystem connector (standalone CLI)
 ├── aem/
-│   ├── aem-plugin/             # AEM connector core + extension interfaces
+│   ├── aem-plugin/             # AEM connector plugin (loaded via -Dloader.path)
 │   ├── aem-server/             # AEM server-side integration
-│   ├── aem-plugin-sample/      # Example custom AEM extension
-│   └── aem-commons/            # Shared AEM utilities
-└── wordpress/                  # WordPress connector plugin
+│   └── aem-plugin-sample/      # Example custom AEM extensions (WKND site)
+└── wordpress/                  # WordPress PHP plugin
 ```
 
 ---
 
-## Key Extension Points
+## Extension Points
 
-### Creating a Custom Connector
+Dumont DEP provides extension points at multiple levels:
+
+### Connector-Level Extensions
+
+| Extension | Guide | Maven Artifact |
+|---|---|---|
+| **AEM extensions** — custom attribute extractors, content processors, delta date logic | [Extending the AEM Connector](./extending-aem.md) | `com.viglet.dumont:aem-commons:2026.1.19` |
+| **Database extensions** — custom row transformations during SQL import | [Extending the Database Connector](./extending-database.md) | `com.viglet.dumont:db-commons:2026.1.19` |
+
+### Platform-Level Extensions
+
+#### Creating a Custom Connector
 
 Implement the `DumConnectorPlugin` interface:
 
@@ -101,7 +105,7 @@ public interface DumConnectorPlugin {
 }
 ```
 
-### Creating a Custom Indexing Plugin
+#### Creating a Custom Indexing Plugin
 
 Implement the `DumIndexingPlugin` interface:
 
@@ -112,16 +116,7 @@ public interface DumIndexingPlugin {
 }
 ```
 
-Register your plugin as a Spring `@Component` and set `dumont.indexing.provider` to your plugin's provider name.
-
-### AEM Custom Extensions
-
-| Interface | Purpose |
-|---|---|
-| `DumAemExtContentInterface` | Custom field extraction from AEM content nodes |
-| `DumAemExtDeltaDateInterface` | Custom delta date logic for incremental indexing |
-
-See the `aem-plugin-sample` module for a working example.
+Register your plugin as a Spring `@Component` with `@ConditionalOnProperty(name = "dumont.indexing.provider", havingValue = "your-provider")`.
 
 ---
 
@@ -137,31 +132,14 @@ To add a custom strategy, implement the strategy interface and assign a priority
 
 ## REST API
 
-### Health Check
+| Endpoint | Description |
+|---|---|
+| `GET /api/v2/connector/status` | Health check |
+| `POST /api/v2/connector/indexing/` | Submit indexing jobs |
+| `GET /api/v2/connector/monitoring/index/{source}` | Monitor indexing progress |
+| `GET /api/v2/connector/validate/{source}` | Validate a content source |
 
-```
-GET /api/v2/connector/status
-```
-
-### Submit Indexing Jobs
-
-```
-POST /api/v2/connector/indexing/
-```
-
-### Monitor Indexing
-
-```
-GET /api/v2/connector/monitoring/index/{source}
-```
-
-### Validate Source
-
-```
-GET /api/v2/connector/validate/{source}
-```
-
-For the full API surface, start the application and visit the Swagger UI or use the OpenAPI spec.
+For the full API surface, start the application and visit the Swagger UI.
 
 ---
 
@@ -174,4 +152,4 @@ For the full API surface, start the application and visit the Swagger UI or use 
 
 ---
 
-*Previous: [Indexing Plugins](./indexing-plugins.md)*
+*Previous: [Indexing Plugins](./indexing-plugins.md) | Next: [Extending the AEM Connector](./extending-aem.md)*

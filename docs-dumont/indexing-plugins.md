@@ -123,6 +123,75 @@ Authentication is optional — leave `username` and `password` empty for unauthe
 
 ---
 
+<div className="page-break" />
+
+## Why Use Turing ES Instead of Solr or Elasticsearch Directly?
+
+The Solr and Elasticsearch plugins deliver raw documents to the search engine — your application is responsible for everything else: building queries, rendering facets, managing spotlights, handling locales, and building the search UI.
+
+**Turing ES adds an entire enterprise search platform on top of the search engine.** Here's what you get by choosing the Turing plugin over direct Solr or Elasticsearch indexing:
+
+### Search Experience Layer
+
+| Capability | With Turing ES | Direct Solr / Elasticsearch |
+|---|---|---|
+| **Faceted navigation** | Configured per site — facet types, sort, AND/OR operators, secondary facets, custom facets with ranges | Build manually with query params |
+| **Spotlights** | Curated results pinned to search terms, injected at configured positions | Not available — build from scratch |
+| **Targeting Rules** | Filter results by user profile (department, role, country) at query time | Not available |
+| **Merge Providers** | Combine documents from two connectors into one enriched result using a join key | Not available |
+| **Spell check** | Built-in with auto-correction mode | Configure Solr/ES suggester manually |
+| **Autocomplete** | Ready-to-use endpoint | Configure Solr/ES suggester manually |
+| **More Like This** | One toggle per site | Configure MLT handler manually |
+| **Result ranking** | Boost rules with conditions and weights via admin UI | Write boost queries manually |
+| **Highlighting** | Configurable HTML tags per site | Configure highlight params manually |
+| **Self-describing JSON** | Response includes pre-built links for pagination, facet filters, locale switching — the front-end is a pure rendering layer | Build all query logic client-side |
+
+### Generative AI & RAG
+
+| Capability | With Turing ES | Direct Solr / Elasticsearch |
+|---|---|---|
+| **RAG (Retrieval-Augmented Generation)** | Documents are automatically embedded as vectors during indexing — users ask questions in natural language and get grounded answers | Not available |
+| **AI Agents** | Compose assistants that combine LLM + search + web browsing + code execution + MCP tools | Not available |
+| **Chat interface** | Built-in UI with direct LLM, Semantic Navigation, and AI Agent tabs | Not available |
+| **Knowledge Base** | Upload files to MinIO — automatically indexed as vector embeddings for RAG | Not available |
+| **LLM providers** | Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Ollama — configured via admin UI | Not available |
+| **Tool calling** | 27 native tools across 7 categories available to AI Agents | Not available |
+| **Token usage monitoring** | Dashboard showing LLM consumption by model, day, and month | Not available |
+
+### Administration & Operations
+
+| Capability | With Turing ES | Direct Solr / Elasticsearch |
+|---|---|---|
+| **Admin console** | Browser-based React UI for all configuration | Solr Admin UI (limited) / Kibana (separate) |
+| **Multi-site** | Multiple SN Sites on one instance, each with independent fields, facets, and AI settings | Manage collections/indices manually |
+| **Multi-language** | Locale-aware indexing and search with per-locale Solr cores | Configure manually per core/index |
+| **Connector management** | Integration page with monitoring, stats, double-check, and indexing manager | Not available |
+| **Search metrics** | Top search terms by day/week/month/all-time per site | Not available out of the box |
+| **Application logs** | MongoDB-backed log viewer in the admin console | External log tools required |
+| **Security (SSO)** | Keycloak OAuth2/OIDC with SAML, LDAP, social login, and MFA | Configure separately per product |
+
+### Integration
+
+| Capability | With Turing ES | Direct Solr / Elasticsearch |
+|---|---|---|
+| **REST API** | Self-describing search response with pre-built navigation links | Raw query/response |
+| **GraphQL** | Built-in endpoint | Not available |
+| **Java SDK** | Official typed client on Maven Central | Use SolrJ / ES Client directly |
+| **JavaScript SDK** | Official `@viglet/turing-sdk` on npm | No official SDK |
+
+### When to Use Direct Solr or Elasticsearch
+
+The Solr and Elasticsearch plugins are appropriate when:
+
+- You already have a search infrastructure and only need Dumont DEP as a **data extraction tool**
+- You have your own search UI and query layer built on top of Solr/Elasticsearch
+- You don't need the GenAI, faceted navigation, or admin console features
+- You're integrating with a third-party system that requires direct Solr/Elasticsearch access
+
+For all other cases — especially when building a new search experience — **Turing ES is the recommended target** because it provides a complete, ready-to-use enterprise search platform with GenAI capabilities on top of the same Apache Solr engine.
+
+---
+
 ## Switching Plugins
 
 Change the active plugin by setting `dumont.indexing.provider`:
