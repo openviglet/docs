@@ -1,59 +1,16 @@
 ---
 sidebar_position: 4
 title: Security & Keycloak
-description: Authentication modes, OAuth2/OIDC setup with Keycloak, Apache reverse proxy configuration, and production security checklist.
+description: Full production setup for Keycloak OAuth2/OIDC with Turing ES — database, Keycloak install, realm config, SSL, JVM properties, and Apache reverse proxy.
 ---
 
 # Security & Keycloak
 
-Turing ES supports two authentication modes. **Native authentication** is the default and requires no external dependencies — the admin console uses a Java session (form login) and REST API calls authenticate via an **API Key** passed in the `Key` request header. **Keycloak OAuth2 / OpenID Connect** is the recommended mode for production environments, enabling SSO integration with corporate identity providers and centralized user management.
+This page covers the full **Keycloak OAuth2 / OpenID Connect** production setup for Turing ES, enabling SSO integration with corporate identity providers and centralized user management.
 
----
+For day-to-day authentication — native session-based login and REST API Key usage — see **[Authentication](./security-authentication.md)**.
 
-## Authentication Modes
-
-### Native Authentication (default)
-
-When Keycloak is not enabled, Turing ES uses its own user store for authentication:
-
-- **Admin Console** — users log in via a form and receive a **Java HTTP session**. Sessions are maintained server-side and expire after inactivity.
-- **REST API** — all API requests must include an **API Key** in the `Key` request header. Tokens are created in **Administration → API Tokens** and are not tied to any session.
-
-```
-Key: <YOUR_API_TOKEN>
-```
-
-This mode requires no external configuration beyond the application itself. It is not suitable for environments that require SSO or external user directories.
-
-### Keycloak OAuth2 / OpenID Connect
-
-When `turing.keycloak=true` is set in the JVM properties, Turing ES delegates all authentication to Keycloak using the Authorization Code flow (OAuth2) and validates access tokens as JWTs (OpenID Connect).
-
-Keycloak can be deployed exclusively for Turing ES or shared with other applications in the same organization. In both cases, Turing ES is registered as a **client** within a Keycloak **realm**.
-
----
-
-## Public and Protected Endpoints
-
-Regardless of the authentication mode, certain endpoints are always publicly accessible — no authentication is required to call them. This allows client applications to perform searches, chat interactions, and autocomplete queries without managing user sessions.
-
-**Always public (no authentication required):**
-
-| Endpoint pattern | Purpose |
-|---|---|
-| `GET /api/sn/*/search` | Semantic Navigation search |
-| `GET /api/sn/*/chat` | GenAI chat on an SN site |
-| `GET /api/sn/*/ac` | Autocomplete |
-| `POST /api/genai/chat` | Direct GenAI chat |
-| `POST /api/ocr/**` | OCR text extraction |
-| `POST /api/v2/integration/**` | External system integration endpoints |
-| `GET /api/v2/guest/**` | Guest access endpoints |
-| `POST /graphql` | GraphQL queries |
-| `GET /api/login` | Login endpoint |
-
-**Always protected (authentication required):**
-
-All other endpoints — including the full administration API, user management, site configuration, and AI Agent management — require a valid authenticated session.
+When `turing.keycloak=true` is set in the JVM properties, Turing ES delegates all authentication to Keycloak using the Authorization Code flow (OAuth2) and validates access tokens as JWTs (OpenID Connect). Keycloak can be dedicated to Turing ES or shared with other applications — in both cases, Turing ES registers as a **client** within a Keycloak **realm**.
 
 ---
 
@@ -407,4 +364,17 @@ Before going to production, verify the following:
 
 ---
 
-*Previous: [GenAI & LLM Configuration](./genai-llm.md)*
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Authentication](./security-authentication.md) | Native session + API Key authentication (default mode) |
+| [REST API Reference](./rest-api.md) | API endpoints and authentication examples |
+| [Configuration Reference](./configuration-reference.md) | JVM properties and `application.yaml` settings |
+| [Installation Guide](./installation-guide.md) | Initial Turing ES installation and database setup |
+
+---
+
+*Previous: [Authentication](./security-authentication.md) | Next: [Semantic Navigation Concepts](./sn-concepts.md)*

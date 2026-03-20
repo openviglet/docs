@@ -9,7 +9,7 @@ description: Use the Turing ES Chat interface to interact with LLMs, AI Agents, 
 The **Chat** interface is the primary way users interact with the AI capabilities of Turing ES. It is organized into three tabs: a direct **LLM chat**, a **Semantic Navigation** chat for searching indexed sites, and dynamic **AI Agent** tabs — one per configured and enabled agent.
 
 :::info LLM required
-The Chat interface is only available when at least one LLM Instance is configured and enabled. See [Generative AI & LLM Configuration — LLM Providers](./genai-llm.md#llm-providers) to set one up.
+The Chat interface is only available when at least one LLM Instance is configured and enabled. See [LLM Instances](./llm-instances.md) to set one up.
 :::
 
 ---
@@ -125,7 +125,7 @@ Each **AI Agent** configured and enabled in **Administration → AI Agents** app
 | **Native Tools** | A selection from the 27 native tool callings (code interpreter, search, weather, finance, etc.) |
 | **MCP Servers** | External tool servers connected specifically to this agent |
 
-For full configuration details — composing agents, tool selection, and MCP Server registration — see [Generative AI & LLM Configuration — AI Agents](./genai-llm.md#ai-agents).
+For full configuration details — composing agents, tool selection, and MCP Server registration — see [AI Agents](./ai-agents.md).
 
 ---
 
@@ -235,4 +235,4 @@ curl -X POST "http://localhost:2700/api/v2/llm/agent/my-agent/chat" \
 
 ---
 
-*Previous: [Token Usage](./token-usage.md) | Next: [Architecture Overview](./architecture-overview.md)*
+*Previous: [AI Agents](./ai-agents.md) | Next: [Token Usage](./token-usage.md)*

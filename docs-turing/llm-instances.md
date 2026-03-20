@@ -170,4 +170,4 @@ Cache entries are invalidated automatically on create, update, or delete.
 
 ---
 
-*Previous: [Generative AI & LLM Configuration](./genai-llm.md) | Next: [Chat](./chat.md)*
+*Previous: [Generative AI & LLM Configuration](./genai-llm.md) | Next: [Embedding Stores & Models](./embedding-stores.md)*

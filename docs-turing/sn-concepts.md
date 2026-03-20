@@ -470,4 +470,4 @@ The merge is triggered when the **source** connector's document arrives and a ma
 
 ---
 
-*Previous: [Semantic Navigation](./semantic-navigation.md) | Next: [Security & Keycloak](./security-keycloak.md)*
+*Previous: [Security & Keycloak](./security-keycloak.md)*

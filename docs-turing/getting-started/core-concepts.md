@@ -140,7 +140,7 @@ An **AI Agent** is a named assistant that you compose from three ingredients:
 
 Each AI Agent appears as its own tab in the **[Chat](../chat.md)** interface. You can have a "Research Assistant" that combines SN Site search with web browsing, a "Data Analyst" that can run Python code and query your knowledge base, and a "Support Agent" that only sees your product documentation — all on the same platform.
 
-See [GenAI & LLM Configuration](../genai-llm.md) for how to configure agents, tools, and MCP Servers.
+See [AI Agents](../ai-agents.md) for configuration, [Tool Calling](../tool-calling.md) for the full tool reference, and [MCP Servers](../mcp-servers.md) for connecting external tools.
 
 ---
 
@@ -202,10 +202,12 @@ npm install @viglet/turing-sdk
 |---|---|
 | Understand the full system architecture | [Architecture Overview](../architecture-overview.md) |
 | Configure Spotlights, Targeting Rules, or Merge Providers | [Semantic Navigation Concepts](../sn-concepts.md) |
-| Set up GenAI, RAG, or AI Agents | [GenAI & LLM Configuration](../genai-llm.md) |
+| Set up GenAI and RAG | [GenAI & LLM Configuration](../genai-llm.md) |
+| Configure AI Agents and tools | [AI Agents](../ai-agents.md), [Tool Calling](../tool-calling.md) |
 | Use the AI chat interface | [Chat](../chat.md) |
 | Upload documents to the Knowledge Base | [Assets](../assets.md) |
 | Monitor LLM token consumption | [Token Usage](../token-usage.md) |
+| Authenticate via API Key | [Authentication](../security-authentication.md) |
 | Secure Turing ES with Keycloak | [Security & Keycloak](../security-keycloak.md) |
 | Install Turing ES | [Installation Guide](../installation-guide.md) |
 

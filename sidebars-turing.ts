@@ -22,6 +22,7 @@ const sidebars: SidebarsConfig = {
         "configuration-reference",
         "administration-guide",
         "developer-guide",
+        "rest-api",
         {
           type: "category",
           label: "Enterprise Search",
@@ -43,6 +44,10 @@ const sidebars: SidebarsConfig = {
           items: [
             "genai-llm",
             "llm-instances",
+            "embedding-stores",
+            "tool-calling",
+            "mcp-servers",
+            "ai-agents",
             "chat",
             "token-usage",
           ],
@@ -52,8 +57,9 @@ const sidebars: SidebarsConfig = {
           label: "Technical Reference",
           items: [
             "architecture-overview",
-            "sn-concepts",
+            "security-authentication",
             "security-keycloak",
+            "sn-concepts",
           ],
         },
         "release-notes",

@@ -30,7 +30,8 @@ slug: /
 | Guide | Description |
 |---|---|
 | [Administration Guide](/turing/administration-guide) | Console reference: users, roles, API tokens, search engine, SN Sites, global settings |
-| [Developer Guide](/turing/developer-guide) | REST API, SDKs, tech stack, and contribution guide |
+| [Developer Guide](/turing/developer-guide) | Tech stack, dev environment, Java SDK, and contribution guide |
+| [REST API Reference](/turing/rest-api) | Search, autocomplete, spell check, GenAI chat, and token usage endpoints |
 
 ---
 
@@ -55,8 +56,12 @@ slug: /
 
 | Guide | Description |
 |---|---|
-| [Generative AI & LLM Configuration](/turing/genai-llm) | LLM providers, RAG, embedding models, Tool Callings, MCP Servers, AI Agents |
-| [LLM Instances](/turing/llm-instances) | Configure Language Model instances — vendors, models, API keys, capabilities |
+| [Generative AI & LLM Configuration](/turing/genai-llm) | Overview: RAG architecture, embedding pipeline, and GenAI concepts |
+| [LLM Instances](/turing/llm-instances) | Configure LLM provider connections — vendors, models, API keys, capabilities |
+| [Embedding Stores & Models](/turing/embedding-stores) | Vector database backends (ChromaDB, PgVector, Milvus) and embedding model selection |
+| [Tool Calling](/turing/tool-calling) | 27 native tools available to AI Agents across 7 categories |
+| [MCP Servers](/turing/mcp-servers) | Extend agents with external tools via the Model Context Protocol |
+| [AI Agents](/turing/ai-agents) | Compose and deploy purpose-built AI assistants |
 | [Chat](/turing/chat) | Chat interface — direct LLM, Semantic Navigation, and AI Agent tabs |
 | [Token Usage](/turing/token-usage) | Monitor and analyse LLM token consumption by model and day |
 
@@ -67,8 +72,9 @@ slug: /
 | Guide | Description |
 |---|---|
 | [Architecture Overview](/turing/architecture-overview) | Component diagram, indexing and search flows, deployment topologies |
-| [Semantic Navigation Concepts](/turing/sn-concepts) | Targeting Rules, Spotlights, Merge Providers, Facets, search response |
-| [Security & Keycloak](/turing/security-keycloak) | OAuth2/OIDC setup, Apache reverse proxy, security checklist |
+| [Authentication](/turing/security-authentication) | Native session login and REST API Key authentication |
+| [Security & Keycloak](/turing/security-keycloak) | Full OAuth2/OIDC production setup — Keycloak, Apache reverse proxy, SSL |
+| [Semantic Navigation Concepts](/turing/sn-concepts) | Targeting Rules, Spotlights, Merge Providers, Facets, search response structure |
 
 ---
 

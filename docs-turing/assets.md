@@ -181,7 +181,7 @@ Once files are indexed, AI Agents can query the knowledge base via four built-in
 | `list_knowledge_base_files` | Lists all indexed files, with optional keyword filter |
 | `get_file_from_knowledge_base` | Retrieves the full indexed content of a specific file |
 
-For details on configuring AI Agents and tool callings, see [Generative AI & LLM Configuration — AI Agents](./genai-llm.md#ai-agents).
+For details on configuring AI Agents and tool callings, see [AI Agents](./ai-agents.md) and [Tool Calling](./tool-calling.md).
 
 ---
 

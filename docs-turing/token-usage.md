@@ -132,4 +132,4 @@ curl "http://localhost:2700/api/v2/llm/token-usage?month=2025-01" \
 
 ---
 
-*Previous: [Generative AI & LLM Configuration](./genai-llm.md)*
+*Previous: [Chat](./chat.md)*
