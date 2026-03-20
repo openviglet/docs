@@ -1,111 +1,118 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 title: Developer Guide
-description: Viglet Turing ES Developer Guide
+description: Build with and contribute to Viglet Turing ES — setup, APIs, SDKs, and more.
 ---
 
-# Viglet Turing ES: Developer Guide
+# Developer Guide
 
-Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Whether you're **building a search experience** on top of Turing ES or **contributing to the project itself**, this guide has everything you need to get up and running quickly.
 
-## More Documentation
+Turing ES is a fully open-source enterprise search platform with semantic navigation and GenAI capabilities. The source code lives at [github.com/openviglet/turing](https://github.com/openviglet/turing) and all contributions are welcome.
 
-Technical documentation on Turing ES is available at [https://docs.viglet.com/turing](https://docs.viglet.com/docs/turing).
+---
 
-## Open Source Development
+## Tech Stack
 
-You can collaborate with Turing, participating in its development. Below are the steps to create your Turing environment.
+Understanding the stack helps you navigate the codebase and decide where to plug in.
 
-### Development Structure
+| Layer | Technology |
+|---|---|
+| **Backend** | Java 21 · Spring Boot · Spring AI |
+| **Search Engine** | Apache Solr (primary) · Elasticsearch · Lucene |
+| **Message Queue** | Apache Artemis |
+| **Database** | H2 (dev) · PostgreSQL / MySQL (prod) |
+| **Frontend** | React · TypeScript · Primer CSS |
+| **AI / GenAI** | Spring AI · ChromaDB · PgVector · Milvus |
+| **Build** | Maven (backend) · npm (frontend) |
+| **CI/CD** | GitHub Actions |
 
-#### Frameworks
+```mermaid
+graph TD
+    A[Your IDE] -->|mvn spring-boot:run| B[Turing ES Backend\nSpring Boot / Java 21]
+    A -->|npm start| C[React Admin Console\nlocalhost:3000]
+    B --> D[Apache Solr\nlocalhost:8983]
+    B --> E[Apache Artemis\nMessage Queue]
+    C -->|REST API| B
+```
 
-Turing ES was developed using [Spring Boot](https://spring.io/projects/spring-boot) for its backend.
+---
 
-The UI is currently using [AngularJS](https://angularjs.org), but a new UI is being developed using [Angular 12](https://angular.io) with [Primer CSS](https://primer.style/css).
+## Setting Up Your Dev Environment
 
-In addition to Java, you also need to have [Git](https://git-scm.com/downloads) and [NodeJS](https://nodejs.org/en/download/) installed.
+### Prerequisites
 
-#### Databases
+Before you begin, make sure you have these installed:
 
-By default it uses the [H2 database](https://www.h2database.com), but can be changed to other databases using Spring Boot properties. It comes bundled with [OpenNLP](https://opennlp.apache.org/) in the same JVM.
+- [Java 21](https://adoptium.net/temurin/releases/?package=jdk&version=21) (Temurin recommended)
+- [Maven 3.9+](https://maven.apache.org/download.cgi)
+- [Node.js 20+](https://nodejs.org/en/download/) and npm
+- [Git](https://git-scm.com/downloads)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) (for running Solr, Artemis, and other services locally)
 
-#### Programming Language and Deploy
-
-It uses [Java 21](https://adoptium.net/temurin/releases/?package=jdk&version=21) and its deployment is done with Maven and works on Unix and Windows.
-
-#### Docker
-
-To use Semantic Navigation and Chatbot you must have a [Solr](https://solr.apache.org) service available. If you prefer to work with all the services Turing depends on, you can use [docker-compose](https://docs.docker.com/compose/install) to start these services, we use the [Docker Desktop](https://www.docker.com/products/docker-desktop) installed on computer.
-
-#### IDE
-
-You can use [Spring Tools 4 for Eclipse](https://spring.io/tools) or [Eclipse](https://www.eclipse.org/downloads/) or [Visual Studio Code](https://code.visualstudio.com/) or [IntelliJ](https://www.jetbrains.com/pt-br/idea/) as IDEs.
-
-### Download
-
-Use the git command line to download the repository to your computer.
-
-#### Turing Server and Connectors
+### Clone the Repository
 
 ```shell
 git clone https://github.com/openviglet/turing.git
+cd turing
 ```
 
-### Run during Development
+### Start Services with Docker Compose
 
-To run Turing ES, execute the following lines:
+Turing ES depends on Apache Solr and Apache Artemis. The easiest way to run them locally is with Docker Compose:
 
-#### Turing Server
+```shell
+docker-compose up -d
+```
 
-##### Development
+This starts:
+- **Apache Solr** at `http://localhost:8983`
+- **Apache Artemis** (message broker)
 
-###### With UI
+:::tip
+Wait for Solr to be fully ready before starting the backend. You can check at `http://localhost:8983/solr/#/`.
+:::
+
+---
+
+## Running Turing ES
+
+### Backend (Spring Boot)
+
+Run the full backend including the bundled React console:
 
 ```shell
 cd turing
 mvn spring-boot:run -pl turing-app
 ```
 
-###### Without update UI
+Or skip the npm build step if you haven't changed the frontend:
 
 ```shell
-cd turing
 mvn spring-boot:run -pl turing-app -Dskip.npm
 ```
 
-##### New Turing UI
+The backend starts at **`http://localhost:2700`**.
 
-Start the Turing Server using dev-ui profile:
+### Frontend — React Admin Console
+
+For active frontend development, run the React dev server separately. First start the backend in headless mode:
 
 ```shell
-cd turing
 mvn spring-boot:run -pl turing-app -Dskip.npm -Dspring-boot.run.profiles=dev-ui
 ```
 
-And start one of the components of turing-ui:
+Then launch the React app:
 
 ```shell
 cd turing/turing-ui
-
-## Console
-ng serve console
-
-## Search
-ng serve sn
-
-## Chatbot
-ng serve converse
-
-## Welcome
-ng serve welcome
+npm install
+npm start
 ```
 
-:::important
-You need to start the Turing Server and Solr first.
-:::
+The React dev server starts at **`http://localhost:3000`** with hot-reload enabled.
 
-##### Build
+### Production Build
 
 ```shell
 cd turing
@@ -113,9 +120,32 @@ mvn clean install
 mvn package -pl turing-app
 ```
 
-#### Java SDK
+The resulting JAR in `turing-app/target/` bundles both the backend and the compiled React assets.
 
-##### Development
+---
+
+## Development URLs
+
+| Service | URL | Notes |
+|---|---|---|
+| Admin Console | `http://localhost:2700` | Backend-served |
+| React Dev Server | `http://localhost:3000` | Hot-reload |
+| SN Search Sample | `http://localhost:2700/sn/Sample` | |
+| Swagger UI | `http://localhost:2700/swagger-ui.html` | Interactive API docs |
+| OpenAPI Spec | `http://localhost:2700/v3/api-docs` | JSON spec |
+| Solr | `http://localhost:8983` | Docker Compose |
+
+:::info Default credentials
+On first startup, set the admin password via the environment variable `TURING_ADMIN_PASSWORD`. See the [Installation Guide](./installation-guide.md) for details.
+:::
+
+---
+
+## Java SDK
+
+The Turing Java SDK lets you integrate semantic search into any JVM application.
+
+### Run the Sample
 
 ```shell
 cd turing-java-sdk
@@ -123,258 +153,224 @@ mvn package
 java -cp build/libs/turing-java-sdk-all.jar com.viglet.turing.client.sn.sample.TurSNClientSample
 ```
 
-:::important
-You need to start the Turing Server and Solr first.
-:::
+### Add to Your Project via JitPack
 
-##### Build
+Add to your `pom.xml`:
+
+```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
+<dependency>
+  <groupId>com.github.openviglet</groupId>
+  <artifactId>turing-java-sdk</artifactId>
+  <version>LATEST</version>
+</dependency>
+```
+
+Full artifact info at [jitpack.io/#openviglet/turing-java-sdk](https://jitpack.io/#openviglet/turing-java-sdk).
+
+### Build the SDK
 
 ```shell
 cd turing-java-sdk
 mvn package
 ```
 
-Or use jitpack in your project at [https://jitpack.io/#openviglet/turing-java-sdk](https://jitpack.io/#openviglet/turing-java-sdk)
+---
 
-#### WEM Listener
+## Code Quality
 
-```shell
-cd turing
-mvn package -pl turing-wem
-```
+Turing ES maintains high code quality standards. You can check the project health at any time:
 
-For development, copy the `turing-wem/build/libs/turing-wem-all.jar` into `WEM_DIR/libs` and test the listener using turing-wem command line.
+| Tool | Link |
+|---|---|
+| SonarCloud | [sonarcloud.io/organizations/viglet-turing](https://sonarcloud.io/organizations/viglet-turing/projects) |
+| GitHub Actions | [openviglet/turing/actions](https://github.com/openviglet/turing/actions) |
+| GitHub Security | [openviglet/turing/security](https://github.com/openviglet/turing/security/code-scanning) |
+| Codecov | [app.codecov.io/gh/openviglet/turing](https://app.codecov.io/gh/openviglet/turing) |
 
-#### Database Connector
-
-```shell
-cd turing
-mvn package -pl turing-db
-```
-
-#### Filesystem Connector
-
-```shell
-cd turing
-mvn package -pl turing-filesystem
-```
-
-#### Nutch
-
-##### Nutch 1.20
-
-```shell
-cd turing/
-mvn package -pl turing-nutch1_20
-```
-
-### URLs
-
-#### Turing Server
-
-- Administration Console: [http://localhost:2700](http://localhost:2700) (admin/admin)
-- Semantic Navigation Sample: [http://localhost:2700/sn/Sample](http://localhost:2700/sn/Sample)
-
-#### New Turing UI
-
-- Welcome: [http://localhost:4200/welcome](http://localhost:4200/welcome)
-- Console: [http://localhost:4200/console](http://localhost:4200/console)
-- Search Page: [http://localhost:4200/sn/template?_setsite=Sample&_setlocale=en_US](http://localhost:4200/sn/template?_setsite=Sample&_setlocale=en_US)
-- Converse: [http://localhost:4200/converse](http://localhost:4200/converse)
-
-#### Docker Compose
-
-- Administration Console: [http://localhost](http://localhost) (admin/admin)
-- Semantic Navigation Sample: [http://localhost/sn/Sample](http://localhost/sn/Sample)
-- Solr: [http://localhost:8983](http://localhost:8983)
-
-### Code Quality
-
-You can check the quality of Turing Code at:
-
-- [SonarCloud](https://sonarcloud.io/organizations/viglet-turing/projects)
-- [Github Actions](https://github.com/openviglet/turing/actions)
-- [Github Security](https://github.com/openviglet/turing/security/code-scanning)
-- [Codecov](https://app.codecov.io/gh/openviglet/turing)
+---
 
 ## REST API
 
-### API Overview
+Turing ES exposes a rich REST API for integrating search and AI capabilities into any application. All endpoints use **JSON** and authenticate via **Bearer API tokens**.
 
-Turing ES offers a variety of robust, convenient, and simple RESTful Web service APIs to integrate data from Turing to any external system. Through Turing's API, your developers can create Web applications to interact directly with data that resides in Turing. Among the available features include RESTful APIs using JSON format, authentication via API Key invoking the existing user-level governance and security model built into Turing as well as a developer to manage access to API documentation and API keys. We have APIs to deliver search and cognitive features.
+### Authentication
 
-### OpenAPI 3.0
+All API requests require an `Authorization` header with a Bearer token:
 
-The OpenAPI Specification (OAS) defines a standard, language-agnostic interface to HTTP APIs which allows both humans and computers to discover and understand the capabilities of the service without access to source code, documentation, or through network traffic inspection.
+```
+Authorization: Bearer <YOUR_API_TOKEN>
+```
 
-Turing OpenAPI 3.0 is available at [http://localhost:2700/v3/api-docs](http://localhost:2700/v3/api-docs).
+**Generating an API Token:**
 
-### Swagger
-
-Swagger allows you to describe the structure of your APIs so that machines can read them.
-
-You can access the Turing API documentation and test it directly using Swagger at [http://localhost:2700/swagger-ui.html](http://localhost:2700/swagger-ui.html).
-
-### Generate an API Key
-
-1. Sign in to the Turing ES Administration Console at `http://localhost:2700`.
+1. Sign in to the Administration Console at `http://localhost:2700`.
 2. Navigate to **Administration → API Tokens**.
-3. Click **New** and fill in a Title and Description.
-4. A random API token will be generated and displayed. Copy it immediately — it will not be shown again.
+3. Click **New** and fill in a title and description.
+4. Copy the generated token immediately — it will not be shown again.
 
-### Semantic Navigation
+### OpenAPI & Swagger
 
-#### Search
+Explore and test every endpoint interactively:
+
+- **Swagger UI:** `http://localhost:2700/swagger-ui.html`
+- **OpenAPI 3.0 spec:** `http://localhost:2700/v3/api-docs`
+
+---
+
+## Semantic Navigation API
+
+### Search
 
 ```
-GET|POST http://localhost:2700/api/sn/{{siteName}}/search
+GET | POST http://localhost:2700/api/sn/{siteName}/search
 ```
+
+The core search endpoint. Returns results, facets, spotlights, and pagination.
 
 **Query Parameters:**
 
 | Parameter | Required | Description |
-|-----------|----------|-------------|
-| `q` | Yes | Search query |
-| `p` | No | Page number (default: 1) |
-| `rows` | No | Number of results per page |
-| `_setlocale` | Yes | Locale (e.g., `en_US`) |
-| `sort` | No | Sort field and order |
-| `fq[]` | No | Filter query |
-| `tr[]` | No | Targeting rules |
-| `group` | No | Group by field |
+|---|---|---|
+| `q` | ✅ | Search query |
+| `p` | | Page number (default: `1`) |
+| `rows` | | Results per page |
+| `_setlocale` | ✅ | Locale (e.g., `en_US`) |
+| `sort` | | Sort field and direction |
+| `fq[]` | | Filter queries |
+| `tr[]` | | Targeting rules |
+| `group` | | Group results by field |
 
 **Example:**
 
 ```bash
-curl -X GET "http://localhost:2700/api/sn/Sample/search?q=foo&p=1&_setlocale=en_US&rows=10" \
-  -H "accept: application/json" \
-  -H "content-type: application/json" \
-  -H "authorization: Bearer <API_KEY>"
+curl -X GET "http://localhost:2700/api/sn/Sample/search?q=enterprise+search&p=1&_setlocale=en_US&rows=10" \
+  -H "Authorization: Bearer <API_TOKEN>" \
+  -H "Accept: application/json"
 ```
 
-#### Latest Searches
+---
+
+### Auto Complete
 
 ```
-POST http://localhost:2700/api/sn/{{siteName}}/search/latest
+GET http://localhost:2700/api/sn/{siteName}/ac
 ```
 
-Returns last terms searched by user.
-
-**Parameters:**
+Returns suggestions for the given prefix — perfect for search-as-you-type UIs.
 
 | Parameter | Required | Description |
-|-----------|----------|-------------|
-| `q` | Yes | Search query |
-| `rows` | No | Number of results (default: 5) |
-| `_setlocale` | Yes | Locale |
-| `userId` | Yes | User ID (request body) |
+|---|---|---|
+| `q` | ✅ | Prefix to complete |
+| `rows` | | Max suggestions |
+| `_setlocale` | ✅ | Locale |
 
 **Example:**
 
 ```bash
-curl -X POST "http://localhost:2700/api/sn/Sample/search/latest?q=foo&rows=5&_setlocale=en_US" \
-  -H "accept: application/json" \
-  -H "content-type: application/json" \
+curl "http://localhost:2700/api/sn/Sample/ac?q=enter&_setlocale=en_US"
+```
+
+**Response:**
+
+```json
+["enterprise", "enterprise search", "enterprise AI", "entries"]
+```
+
+---
+
+### Latest Searches
+
+```
+POST http://localhost:2700/api/sn/{siteName}/search/latest
+```
+
+Returns the most recent search terms for a given user — useful for personalised search history UIs.
+
+| Parameter | Location | Description |
+|---|---|---|
+| `q` | Query | Current query |
+| `rows` | Query | Max results (default: `5`) |
+| `_setlocale` | Query | Locale |
+| `userId` | Body (JSON) | User identifier |
+
+**Example:**
+
+```bash
+curl -X POST "http://localhost:2700/api/sn/Sample/search/latest?q=cloud&rows=5&_setlocale=en_US" \
+  -H "Authorization: Bearer <API_TOKEN>" \
+  -H "Content-Type: application/json" \
   -d '{ "userId": "user123" }'
 ```
 
 **Response:**
 
 ```json
-["foo", "bar"]
+["cloud computing", "cloud storage", "cloud security"]
 ```
 
-#### Search Locales
+---
+
+### Search Locales
 
 ```
-GET http://localhost:2700/api/sn/{{siteName}}/search/locales
+GET http://localhost:2700/api/sn/{siteName}/search/locales
 ```
 
-Lists all locales available on the semantic navigation site.
+Lists all configured locales for a Semantic Navigation site.
 
-**Response Example:**
+**Response:**
 
 ```json
 [
-  {
-    "locale": "en_US",
-    "link": "/api/sn/Sample/search?_setlocale=en_US"
-  },
-  {
-    "locale": "pt_BR",
-    "link": "/api/sn/Sample/search?_setlocale=pt_BR"
-  }
+  { "locale": "en_US", "link": "/api/sn/Sample/search?_setlocale=en_US" },
+  { "locale": "pt_BR", "link": "/api/sn/Sample/search?_setlocale=pt_BR" }
 ]
 ```
 
-#### Auto Complete
+---
+
+### Spell Check
 
 ```
-GET http://localhost:2700/api/sn/{{siteName}}/ac
+GET http://localhost:2700/api/sn/{siteName}/{locale}/spell-check
 ```
 
-Returns term array starting with query value.
+Corrects a query against the site's indexed vocabulary.
 
 | Parameter | Required | Description |
-|-----------|----------|-------------|
-| `q` | Yes | Search query |
-| `rows` | No | Number of results |
-| `_setlocale` | Yes | Locale |
+|---|---|---|
+| `q` | ✅ | Text to check |
 
 **Example:**
 
 ```bash
-curl -X GET "http://localhost:2700/api/sn/Sample/ac?q=dis&_setlocale=en_US"
+curl "http://localhost:2700/api/sn/Sample/en_US/spell-check?q=entirprise"
 ```
 
-**Response:**
+---
 
-```json
-["disc", "discovery", "disco", "disney"]
-```
+## Contributing
 
-#### Spell Check
+We'd love your help making Turing ES better. Here's how to get involved:
 
-```
-GET http://localhost:2700/api/sn/{{siteName}}/{{locale}}/spell-check
-```
+1. **Fork** the [openviglet/turing](https://github.com/openviglet/turing) repository.
+2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
+3. **Commit your changes** with clear, descriptive messages.
+4. **Open a Pull Request** — describe what you changed and why.
 
-Corrects text based on semantic navigation site search database.
+For larger contributions, open an issue first to discuss the approach before writing code.
 
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `q` | Yes | Text to check |
-| `rows` | No | Number of results |
-| `_setlocale` | Yes | Locale |
+:::tip
+Check the open [GitHub Issues](https://github.com/openviglet/turing/issues) for good first issues tagged with `good first issue` or `help wanted`.
+:::
 
-**Example:**
+---
 
-```bash
-curl -X GET "http://localhost:2700/api/sn/Sample/en_US/spell-check?q=fuu&_setlocale=en_US"
-```
-
-### Cognitive
-
-#### Spell Checker
-
-```
-GET http://localhost:2700/api/cognitive/spell-checker/{{locale}}
-```
-
-Corrects text based on given language (not site-specific).
-
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `text` | Yes | Text to check |
-
-**Example:**
-
-```bash
-curl -X GET "http://localhost:2700/api/cognitive/spell-checker/en_US?text=urange"
-```
-
-**Response:**
-
-```json
-["range", "orange", "grange", "Grange", "Orange", "u range"]
-```
+*Previous: [Security & Keycloak](./security-keycloak.md) | Next: [Administration Guide](./administration-guide.md)*
