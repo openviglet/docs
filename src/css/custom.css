@@ -1303,3 +1303,20 @@ article h2 {
 html {
   scroll-behavior: smooth;
 }
+
+/* ── Pre-rendered diagram images ─────────────────────────────────────────── */
+
+/* All pre-rendered SVG diagrams: fill the content column, centered */
+.markdown img[src*="/img/diagrams/"] {
+  display: block;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: 8px;
+}
+
+/* Dark mode: invert neutral SVGs so text/lines stay readable */
+[data-theme="dark"] .markdown img[src*="/img/diagrams/"] {
+  filter: invert(1) hue-rotate(180deg);
+}

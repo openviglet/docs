@@ -256,22 +256,7 @@ Common use cases:
 
 ### How the pipeline works
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant API as TurSNSearchProcess
-    participant Builder as TurSolrQueryBuilder
-    participant Rules as TurSNTargetingRules
-    participant Solr
-
-    Client->>API: POST /api/sn/{siteName}/search\n{ targetingRules / targetingRulesWithConditionAND / OR }
-    API->>Builder: Format values (add quotes if needed)
-    Builder->>Rules: Build filter query from rule type
-    Rules-->>Builder: Solr fq clause (AND or OR logic)
-    Builder->>Solr: Main query + fq (targeting filter)
-    Solr-->>Client: Filtered results
-    API->>API: Record applied rules in sn_site_metric_access_trs
-```
+![Targeting Rules Pipeline](/img/diagrams/turing-targeting-rules-flow.svg)
 
 ### Three rule types
 

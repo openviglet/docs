@@ -26,7 +26,7 @@ Clicking a site opens its configuration, organized into tabs. Each tab covers a 
 
 ---
 
-### Settings Tab
+### Settings
 
 General identity and search engine binding for the site.
 
@@ -39,7 +39,7 @@ General identity and search engine binding for the site.
 
 ---
 
-### Multi Languages Tab
+### Multi Languages
 
 Defines which locales are active for this site and maps each locale to a search engine core (collection).
 
@@ -58,7 +58,7 @@ GET http://localhost:2700/sn/<SITE_NAME>
 
 ---
 
-### Behavior Tab
+### Behavior
 
 Controls how the search engine processes queries and assembles results for this site.
 
@@ -84,7 +84,7 @@ For the full behavior model — wildcard options, facet operators (AND/OR), seco
 
 ---
 
-### Fields Tab
+### Fields
 
 Lists all fields configured for this site. Each field defines how a document attribute is indexed, searched, and presented.
 
@@ -124,7 +124,7 @@ A secondary facet is a regular facet that is additionally returned in a separate
 
 ---
 
-### Merge Providers Tab
+### Merge Providers
 
 Merge Providers enable Turing ES to detect when two connectors have indexed the same real-world document and merge their fields into a single enriched Solr document.
 
@@ -151,7 +151,7 @@ For the complete reference — the three rule types (`targetingRules`, `targetin
 
 ---
 
-### Spotlights Tab
+### Spotlights
 
 Spotlights are curated results pinned to specific search terms. When a user's query matches a spotlight term, configured documents are injected into the result list at defined positions, before the organic results.
 
@@ -183,7 +183,7 @@ For the detailed matching algorithm, injection mechanics, and the term cache, se
 
 ---
 
-### Top Search Terms Tab
+### Top Search Terms
 
 Displays reports of the most frequently searched terms for this site. Turing ES records every search query and aggregates statistics across four time windows:
 
@@ -198,7 +198,7 @@ Each report shows the term and its search count for the selected period. Use thi
 
 ---
 
-### Result Ranking Tab
+### Result Ranking
 
 Configures boost expressions that influence search relevance. Each ranking expression boosts documents matching a set of conditions by a configured weight. Expressions are converted into Solr boost queries in the format `(condition)^weight` and applied at query time.
 
@@ -231,7 +231,7 @@ A slider from **0** to **10** that sets the boost intensity. Higher weight cause
 
 ---
 
-### AI Insights Tab
+### AI Insights
 
 The AI Insights tab displays an AI-generated natural language summary of this SN Site — aggregating information about its configuration, fields, behavior settings, and indexed content. The summary is generated on demand and gives administrators a quick overview of what the site is configured to do, without having to navigate through all the tabs.
 
@@ -239,7 +239,7 @@ Click **Generate** to trigger the summary. The response streams in progressively
 
 ---
 
-### Generative AI Tab
+### Generative AI
 
 Configures the RAG (Retrieval-Augmented Generation) system for this site, enabling conversational AI responses grounded in the indexed documents. The tab is divided into four sections.
 

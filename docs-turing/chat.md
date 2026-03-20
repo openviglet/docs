@@ -6,7 +6,7 @@ description: Use the Turing ES Chat interface to interact with LLMs, AI Agents, 
 
 # Chat
 
-The **Chat** interface is the primary way users interact with the AI capabilities of Turing ES. It is organized into three tabs: a direct **LLM chat**, a **Semantic Navigation** chat for searching indexed sites, and dynamic **AI Agent** tabs — one per configured and enabled agent.
+The **Chat** interface is the primary way users interact with the AI capabilities of Turing ES. It is organized into three sections: a direct **LLM chat**, a **Semantic Navigation** chat for searching indexed sites, and dynamic **AI Agent** views — one per configured and enabled agent.
 
 :::info LLM required
 The Chat interface is only available when at least one LLM Instance is configured and enabled. See [LLM Instances](./llm-instances.md) to set one up.
@@ -16,29 +16,13 @@ The Chat interface is only available when at least one LLM Instance is configure
 
 ## Layout
 
-```mermaid
-graph TD
-    A[Header] --> B[Tab navigation — Chat · Semantic Nav · AI Agents]
-    A --> C[LLM model selector]
-    A --> D[New Chat button]
-    A --> E[Dark mode toggle]
-    A --> F[Session history button]
-    G[Message area] --> H[User messages with avatar]
-    G --> I[Assistant messages with avatar + copy button]
-    G --> J[Rich content — Markdown, code, D2 diagrams, HTML sandbox]
-    K[Input area] --> L[Multiline textarea]
-    K --> M[File drag-and-drop]
-    K --> N[Send button — Enter to submit]
-    O[Context Bar] --> P[Token counter]
-    O --> Q[Context window % bar]
-    O --> R[Compact button]
-```
+![Chat Interface — Layout Overview](/img/diagrams/turing-chat-layout.svg)
 
 **Header controls:**
 
 | Control | Description |
 |---|---|
-| **Tab navigation** | Switch between Chat, Semantic Navigation, and AI Agent tabs |
+| **Tab navigation** | Switch between Chat, Semantic Navigation, and AI Agent views |
 | **LLM model selector** | Choose which configured LLM instance to use for the session |
 | **New Chat** | Start a fresh session (saves the current one to history automatically) |
 | **Dark mode toggle** | Switch between light and dark themes — code highlighting adapts accordingly |
@@ -54,7 +38,7 @@ graph TD
 
 ---
 
-## Tab 1 — Chat (Direct LLM)
+## Chat (Direct LLM)
 
 A general-purpose chat with the selected LLM. This tab provides the most direct access to the underlying model, with a set of optional tools the user can enable per conversation.
 
@@ -75,7 +59,7 @@ Responses are streamed in real time using **Server-Sent Events (SSE)**, so conte
 
 ### Available Tools
 
-The following tools can be enabled for the Chat tab. The LLM invokes them autonomously during a conversation when it determines they are needed:
+The following tools can be enabled for the Chat section. The LLM invokes them autonomously during a conversation when it determines they are needed:
 
 | Tool | Description |
 |---|---|
@@ -89,13 +73,13 @@ The following tools can be enabled for the Chat tab. The LLM invokes them autono
 
 ---
 
-## Tab 2 — Semantic Navigation
+## Semantic Navigation
 
-A chat interface backed by the indexed content of **Semantic Navigation Sites**. Instead of querying the LLM's parametric knowledge, this tab sends the user's question through site-specific search tools.
+A chat interface backed by the indexed content of **Semantic Navigation Sites**. Instead of querying the LLM's parametric knowledge, this section sends the user's question through site-specific search tools.
 
-The system prompt for this tab includes locale instructions and available facets for each configured site.
+The system prompt includes locale instructions and available facets for each configured site.
 
-**Tools available in this tab:**
+**Tools available:**
 
 | Tool | Description |
 |---|---|
@@ -112,9 +96,9 @@ Use this tab when you want answers grounded exclusively in your indexed enterpri
 
 ---
 
-## Tab 3 — AI Agents (Dynamic Tabs)
+## AI Agents
 
-Each **AI Agent** configured and enabled in **Administration → AI Agents** appears as its own tab in the Chat interface. Agents are completely independent from each other — each has its own LLM, system prompt, tool set, and visual identity.
+Each **AI Agent** configured and enabled in **Administration → AI Agents** appears as its own view in the Chat interface. Agents are completely independent from each other — each has its own LLM, system prompt, tool set, and visual identity.
 
 | Per-agent setting | Description |
 |---|---|

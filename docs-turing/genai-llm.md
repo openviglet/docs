@@ -64,26 +64,7 @@ Retrieval-Augmented Generation (RAG) grounds LLM responses in indexed content. R
 
 Turing ES supports two RAG sources:
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Chat as Chat / AI Agent
-    participant LLM as LLM Instance
-    participant Emb as Embedding Store
-    participant RAGTool as RAG Tool Calling
-    participant SN as Semantic Navigation
-
-    User->>Chat: Question or request
-    Chat->>LLM: Send message with context
-    LLM->>RAGTool: Call search_knowledge_base(query)
-    RAGTool->>Emb: Vector similarity search\n(top-10, threshold 0.7)
-    Emb-->>RAGTool: Relevant document chunks
-    RAGTool-->>LLM: Retrieved context
-    LLM->>SN: Call search_site(site, query) [optional]
-    SN-->>LLM: Search results
-    LLM-->>Chat: Generated response grounded in retrieved content
-    Chat-->>User: Final response
-```
+![RAG — Retrieval-Augmented Generation Flow](/img/diagrams/turing-rag-flow.svg)
 
 By default, Turing ES retrieves the **top 10** most similar chunks with a similarity **threshold of 0.7**. Documents below the threshold are excluded from the context.
 
@@ -95,7 +76,7 @@ Full documentation is available on the [Assets](./assets.md) page.
 
 ### RAG for Semantic Navigation Sites
 
-When GenAI is enabled for an SN Site, indexed documents are also embedded and stored in the vector store alongside their Solr representation. This allows AI Agents and the SN Site chat to retrieve relevant content via semantic similarity. Configure this in the site's **Generative AI** tab — see [Semantic Navigation → Generative AI Tab](./semantic-navigation.md#generative-ai-tab).
+When GenAI is enabled for an SN Site, indexed documents are also embedded and stored in the vector store alongside their Solr representation. This allows AI Agents and the SN Site chat to retrieve relevant content via semantic similarity. Configure this in the site's **Generative AI** section — see [Semantic Navigation → Generative AI](./semantic-navigation.md#generative-ai).
 
 :::info Re-indexing existing content
 Documents indexed before GenAI was enabled do not have embeddings. A full re-indexing of the site is required to make existing content available for RAG queries.

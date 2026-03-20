@@ -94,9 +94,9 @@ Lists all local user accounts in the system.
 | Email | User's email address |
 | Password | Account password |
 
-**Tabs:**
+**Sections:**
 
-| Tab | Description |
+| Section | Description |
 |---|---|
 | **Groups** | Add or remove the user from groups |
 | **Roles** | Displays roles inherited from the user's groups (read-only) |
@@ -114,9 +114,9 @@ Organises users into groups for role-based access control.
 | Name | Group name |
 | Description | Purpose or scope of the group |
 
-**Tabs:**
+**Sections:**
 
-| Tab | Description |
+| Section | Description |
 |---|---|
 | **Users** | Add or remove members of this group |
 | **Roles** | Assign or remove roles granted to this group |
@@ -215,9 +215,9 @@ Used by Turing ES to send notifications and test email connectivity.
 
 #### System Information
 
-A diagnostic panel to monitor the health of the Turing ES instance. Divided into two tabs:
+A diagnostic panel to monitor the health of the Turing ES instance. Divided into two sections:
 
-##### Overview Tab
+##### Overview
 
 | Item | Description |
 |---|---|
@@ -231,7 +231,7 @@ A diagnostic panel to monitor the health of the Turing ES instance. Divided into
 | MongoDB Status | Connected / disconnected (shown only if MongoDB is enabled) |
 | MinIO Status | Connected / disconnected (shown only if MinIO is enabled) |
 
-##### System Variables Tab
+##### System Variables
 
 A searchable table of all JVM properties and environment variables active at runtime. Useful for verifying configuration at deployment.
 

@@ -29,6 +29,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "search-engine",
             "semantic-navigation",
+            "integration",
           ],
         },
         {

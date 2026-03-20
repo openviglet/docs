@@ -1,0 +1,17 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+sequenceDiagram
+    participant User
+    participant Turing as Turing ES
+    participant LLM as LLM Instance
+    participant Tool as Tool / MCP Server
+
+    User->>Turing: Send message
+    Turing->>LLM: User message + system prompt + tool definitions
+    loop Reasoning chain
+        LLM->>Turing: Request tool call (tool name + arguments)
+        Turing->>Tool: Execute tool
+        Tool-->>Turing: Tool result
+        Turing->>LLM: Tool result
+    end
+    LLM-->>Turing: Final response
+    Turing-->>User: Streamed response (SSE)

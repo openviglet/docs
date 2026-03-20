@@ -1,0 +1,44 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+graph TB
+    subgraph DumontDEP ["Viglet Dumont DEP (External)"]
+        CON["Connectors\nWebCrawler · Database · FileSystem\nAEM/WEM · WordPress"]
+    end
+
+    subgraph TuringApp ["Turing ES Application"]
+        API[REST & GraphQL API]
+        Q[Apache Artemis\nMessage Queue]
+        IDX[Indexing Pipeline\n+ Merge Provider]
+        SN[Semantic Navigation\nSearch Engine]
+        GENAI[GenAI / RAG Engine\n+ Tool Calling + AI Agents]
+        ADMIN[Admin Console]
+    end
+
+    subgraph Backends ["Backends & Storage"]
+        SOLR[Apache Solr + Zookeeper]
+        EMB[Embedding Stores\nChromaDB · PgVector · Milvus]
+        DB[(Database\nMariaDB / MySQL / PostgreSQL)]
+        MONGO[MongoDB\nApplication Logs]
+        MINIO[MinIO\nAsset Store]
+    end
+
+    LLM["LLM Providers\nClaude · OpenAI · Azure OpenAI\nGemini · Ollama"]
+    KC[Keycloak\nOAuth2 / OIDC]
+    CLIENTS["Clients\nJS SDK · Java SDK · Custom Apps"]
+
+    CON -->|POST via REST API| API
+    API -->|Enqueue indexing job| Q
+    Q --> IDX
+    IDX --> SOLR
+    IDX --> EMB
+    IDX --> DB
+    MINIO -->|RAG assets| IDX
+    SN --> SOLR
+    GENAI --> EMB
+    GENAI --> LLM
+    API --> SN
+    API --> GENAI
+    ADMIN --> API
+    ADMIN -->|File/folder UI| MINIO
+    IDX -.->|Application logs| MONGO
+    KC -->|OAuth2 / OIDC| API
+    CLIENTS --> API

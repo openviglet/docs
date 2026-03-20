@@ -18,51 +18,7 @@ This document describes the system's components, internal modules, and the two c
 
 ## High-Level Component Diagram
 
-```mermaid
-graph TB
-    subgraph DumontDEP ["Viglet Dumont DEP (External)"]
-        CON["Connectors\nWebCrawler · Database · FileSystem\nAEM/WEM · WordPress"]
-    end
-
-    subgraph TuringApp ["Turing ES Application"]
-        API[REST & GraphQL API]
-        Q[Apache Artemis\nMessage Queue]
-        IDX[Indexing Pipeline\n+ Merge Provider]
-        SN[Semantic Navigation\nSearch Engine]
-        GENAI[GenAI / RAG Engine\n+ Tool Calling + AI Agents]
-        ADMIN[Admin Console]
-    end
-
-    subgraph Backends ["Backends & Storage"]
-        SOLR[Apache Solr + Zookeeper]
-        EMB[Embedding Stores\nChromaDB · PgVector · Milvus]
-        DB[(Database\nMariaDB / MySQL / PostgreSQL)]
-        MONGO[MongoDB\nApplication Logs]
-        MINIO[MinIO\nAsset Store]
-    end
-
-    LLM["LLM Providers\nClaude · OpenAI · Azure OpenAI\nGemini · Ollama"]
-    KC[Keycloak\nOAuth2 / OIDC]
-    CLIENTS["Clients\nJS SDK · Java SDK · Custom Apps"]
-
-    CON -->|POST via REST API| API
-    API -->|Enqueue indexing job| Q
-    Q --> IDX
-    IDX --> SOLR
-    IDX --> EMB
-    IDX --> DB
-    MINIO -->|RAG assets| IDX
-    SN --> SOLR
-    GENAI --> EMB
-    GENAI --> LLM
-    API --> SN
-    API --> GENAI
-    ADMIN --> API
-    ADMIN -->|File/folder UI| MINIO
-    IDX -.->|Application logs| MONGO
-    KC -->|OAuth2 / OIDC| API
-    CLIENTS --> API
-```
+![Turing ES — High-Level Architecture](/img/diagrams/turing-architecture.svg)
 
 ---
 
@@ -94,39 +50,7 @@ Content ingestion is handled externally by **Viglet Dumont DEP**. Each connector
 
 The **Semantic Navigation Site** is the central configuration artifact that drives the entire indexing behavior: it defines which Solr instance to use, which fields the documents carry, how those fields are mapped and used (title, text, URL, date, image, facets, etc.), how search will behave, and which spotlights are configured. The indexing pipeline reads this configuration to know exactly what to do with each incoming document.
 
-```mermaid
-sequenceDiagram
-    participant Dumont as Viglet Dumont DEP\n(Connector)
-    participant API as Turing ES REST API
-    participant Artemis as Apache Artemis Queue
-    participant Pipeline as Indexing Pipeline
-    participant SNSite as SN Site Configuration
-    participant Merge as Merge Provider Engine
-    participant Solr as Apache Solr
-    participant DB as Database
-    participant Emb as Embedding Store\n(Chroma / PgVector / Milvus)
-
-    Dumont->>API: POST document to SN Site
-    API->>SNSite: Load site configuration\n(fields, facets, search behavior, spotlights)
-    SNSite-->>API: Site config
-    API->>Artemis: Enqueue indexing job (async)
-    Artemis->>Pipeline: Deliver job
-
-    Pipeline->>Merge: Check Merge Provider rules\nfor this site and document
-    alt Merge rule matched
-        Merge->>Solr: Fetch existing document by join key
-        Solr-->>Merge: Existing document fields
-        Merge-->>Pipeline: Merged document\n(overwrite configured fields)
-    else No merge rule
-        Merge-->>Pipeline: Document unchanged
-    end
-
-    Pipeline->>Solr: Index document with mapped fields and facets
-    alt Document matches a Spotlight
-        Pipeline->>DB: Persist spotlight content\n(title, description, URL, position)
-    end
-    Pipeline->>Emb: Store vector embedding\n(if GenAI enabled for this site)
-```
+![Turing ES — Indexing Flow](/img/diagrams/turing-indexing-flow.svg)
 
 ### Key indexing concepts
 
@@ -152,39 +76,7 @@ sequenceDiagram
 
 The search flow is synchronous and request-driven. Every request goes through a structured pipeline inside `TurSNSearchProcess` before a response is returned to the client.
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant API as REST API
-    participant SNProcess as TurSNSearchProcess
-    participant Plugin as Search Engine Plugin
-    participant Solr as Apache Solr
-    participant Spotlight as Spotlight Engine
-    participant TR as Targeting Rules Engine
-    participant Metrics as Metrics Logger
-
-    Client->>API: GET /api/sn/{siteName}/search?q=...&profile attributes
-    API->>SNProcess: search(context)
-
-    SNProcess->>SNProcess: Validate site configuration
-    SNProcess->>TR: Translate profile attributes\ninto Solr filter queries
-    TR-->>SNProcess: Additional filter queries
-
-    SNProcess->>Plugin: Select plugin (Solr / ES / Lucene)
-    Plugin->>Solr: Execute query\n+ facets + targeting filter queries
-    Solr-->>Plugin: Filtered result set + facet counts
-    Plugin-->>SNProcess: Structured results
-
-    SNProcess->>SNProcess: Enrich facets\nMap fields\nApply highlighting
-
-    SNProcess->>Spotlight: Check for spotlight term match
-    Spotlight-->>SNProcess: Inject curated documents\nat configured positions in response
-
-    SNProcess->>Metrics: Log query + result count (async)
-
-    SNProcess-->>API: Assembled response\n(results + facets + spotlights + locales + spellCheck + similar)
-    API-->>Client: JSON response
-```
+![Turing ES — Search Flow](/img/diagrams/turing-search-flow.svg)
 
 ### Key search concepts
 

@@ -34,7 +34,7 @@ Content does not flow into Turing ES on its own. It needs connectors.
 **Viglet Dumont DEP** is a separate application that manages connectors — the components responsible for extracting content from its original source and sending it to Turing ES. Dumont DEP and Turing ES are separate projects that work together: Dumont handles *getting* content, Turing handles *indexing and searching* it.
 
 ```mermaid
-graph LR
+graph TB
     SRC["Content Sources\nCMS · Database · Files · Web"]
     DEP["Viglet Dumont DEP\nConnectors"]
     TES["Turing ES\nREST API"]

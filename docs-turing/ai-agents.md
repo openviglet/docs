@@ -67,24 +67,7 @@ A local agent for internal IT queries — runs fully on-premise using a local LL
 
 When a user sends a message to an AI Agent, the following loop runs:
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Turing as Turing ES
-    participant LLM as LLM Instance
-    participant Tool as Tool / MCP Server
-
-    User->>Turing: Send message
-    Turing->>LLM: User message + system prompt + tool definitions
-    loop Reasoning chain
-        LLM->>Turing: Request tool call (tool name + arguments)
-        Turing->>Tool: Execute tool
-        Tool-->>Turing: Tool result
-        Turing->>LLM: Tool result
-    end
-    LLM-->>Turing: Final response
-    Turing-->>User: Streamed response (SSE)
-```
+![AI Agent — Execution Flow](/img/diagrams/turing-agent-flow.svg)
 
 1. Turing ES sends the user message to the LLM along with a system prompt describing the agent and the definitions of all enabled tools.
 2. The LLM decides which tools (if any) to call, based on the message content and tool descriptions.
