@@ -458,6 +458,8 @@ Provider options are passed as a JSON object in the **Provider Options** field w
 
 ---
 
+<div className="page-break" />
+
 ## Common Production Overrides
 
 A minimal production override file (`application-production.yaml`) covering the most important changes:
