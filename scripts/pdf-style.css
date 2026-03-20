@@ -7,7 +7,10 @@
 /* ── Reset Docusaurus chrome ─────────────────────────── */
 .navbar,
 .footer,
+footer,
 .pagination-nav,
+nav.pagination-nav,
+.pagination-nav__link,
 .theme-doc-breadcrumbs,
 .theme-doc-toc-mobile,
 .theme-doc-toc-desktop,
@@ -15,7 +18,10 @@
 .theme-doc-version-banner,
 .theme-doc-version-badge,
 nav[aria-label="Breadcrumbs"],
-.col--3 {
+.col--3,
+.theme-doc-footer,
+.theme-doc-footer-edit-meta-row,
+a[class*="editThisPage"] {
   display: none !important;
 }
 
@@ -121,22 +127,55 @@ code {
 
 /* ── Code blocks ─────────────────────────────────────── */
 pre {
-  background: #0f172a !important;
+  background: #f8fafc !important;
   border-radius: 8px;
   padding: 14px 16px !important;
   margin: 14px 0 !important;
   overflow-x: auto;
-  border: 1px solid #1e293b;
+  border: 1px solid #e2e8f0;
   page-break-inside: avoid;
 }
 pre code {
   background: none !important;
-  color: #e2e8f0 !important;
+  color: #1e293b !important;
   padding: 0;
   border: none;
   font-size: 9pt;
   line-height: 1.55;
 }
+
+/* Force all Prism syntax tokens to readable colors on light background */
+pre .token.comment,
+pre .token.prolog,
+pre .token.doctype,
+pre .token.cdata          { color: #94a3b8 !important; }
+pre .token.punctuation    { color: #475569 !important; }
+pre .token.property,
+pre .token.tag,
+pre .token.constant,
+pre .token.symbol,
+pre .token.deleted        { color: #C2410C !important; }
+pre .token.boolean,
+pre .token.number         { color: #0369a1 !important; }
+pre .token.selector,
+pre .token.attr-name,
+pre .token.string,
+pre .token.char,
+pre .token.builtin,
+pre .token.inserted       { color: #166534 !important; }
+pre .token.operator,
+pre .token.entity,
+pre .token.url            { color: #475569 !important; }
+pre .token.atrule,
+pre .token.attr-value,
+pre .token.keyword        { color: #7c3aed !important; }
+pre .token.function,
+pre .token.class-name     { color: #b45309 !important; }
+pre .token.regex,
+pre .token.important,
+pre .token.variable       { color: #C2410C !important; }
+pre .token.plain          { color: #1e293b !important; }
+pre span[class*="token"]  { color: #1e293b; }
 
 /* ── Tables ──────────────────────────────────────────── */
 table {
