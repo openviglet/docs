@@ -21,6 +21,7 @@ slug: /
 | [What is Turing ES?](/turing/getting-started/intro) | Platform overview and key capabilities |
 | [Core Concepts](/turing/getting-started/core-concepts) | SN Sites, connectors, search, GenAI — the mental model |
 | [Installation Guide](/turing/installation-guide) | How to install and configure Turing ES |
+| [Configuration Reference](/turing/configuration-reference) | Complete `application.yaml` property reference |
 
 ---
 

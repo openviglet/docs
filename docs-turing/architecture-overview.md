@@ -219,7 +219,7 @@ sequenceDiagram
 | **Tool Calling** | 27 native tools across 7 categories + MCP (external servers) | Semantic Nav (15), RAG/KB (4), Web Crawler (2), Finance (2), Weather (1), Image Search (1), DateTime (1), Code Interpreter (1); MCP via HTTP or stdio |
 | **Identity Management** | Keycloak | OAuth2 / OpenID Connect; optional for deployments without SSO |
 | **Load Balancer** | Apache HTTP Server | Optional; required for high-availability cluster deployments |
-| **Connector System** | Viglet Dumont DEP | Separate application; feeds Turing ES via Artemis |
+| **Connector System** | Viglet Dumont DEP | Separate application; sends documents to Turing ES via REST API, which queues them internally to Artemis |
 | **Build System** | Apache Maven | Multi-module project |
 | **Frontend** | React + TypeScript + shadcn/ui + Vite | Admin console (`turing-react`) — includes SN configuration, [Assets](./assets.md) manager, [Chat](./chat.md) interface, [Token Usage](./token-usage.md) dashboard |
 | **Containerization** | Docker / Docker Compose | Available in `containers/` directory |

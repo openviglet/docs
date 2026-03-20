@@ -19,6 +19,7 @@ const sidebars: SidebarsConfig = {
           ],
         },
         "installation-guide",
+        "configuration-reference",
         "administration-guide",
         "developer-guide",
         {

@@ -48,7 +48,7 @@ Before you begin, make sure you have these installed:
 - [Maven 3.9+](https://maven.apache.org/download.cgi)
 - [Node.js 20+](https://nodejs.org/en/download/) and npm
 - [Git](https://git-scm.com/downloads)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) (for running Solr, Artemis, and other services locally)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) (for running Solr and other external services locally)
 
 ### Clone the Repository
 
@@ -59,7 +59,7 @@ cd turing
 
 ### Start Services with Docker Compose
 
-Turing ES depends on Apache Solr and Apache Artemis. The easiest way to run them locally is with Docker Compose:
+Apache Solr is the only external service required to run Turing ES. Apache Artemis runs **embedded** inside the application and requires no separate installation. The easiest way to start Solr locally is with Docker Compose:
 
 ```shell
 docker-compose up -d
@@ -67,7 +67,6 @@ docker-compose up -d
 
 This starts:
 - **Apache Solr** at `http://localhost:8983`
-- **Apache Artemis** (message broker)
 
 :::tip
 Wait for Solr to be fully ready before starting the backend. You can check at `http://localhost:8983/solr/#/`.
