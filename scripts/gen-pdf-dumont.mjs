@@ -33,8 +33,8 @@ const ENTRY_PATH = '/dumont/getting-started/intro';
 const HEADER_HTML = [
   '<div style="width:100%;padding:0 15mm;font-family:system-ui,sans-serif;',
   'font-size:8px;display:flex;justify-content:space-between;align-items:center;',
-  'border-bottom:0.5px solid #BBF7D0;padding-bottom:3px;margin-bottom:4px;">',
-  '<span style="color:#166534;font-weight:700;letter-spacing:0.08em;">DUMONT DEP</span>',
+  'border-bottom:0.5px solid #FED7AA;padding-bottom:3px;margin-bottom:4px;">',
+  '<span style="color:#C2410C;font-weight:700;letter-spacing:0.08em;">DUMONT DEP</span>',
   '<span style="color:#94a3b8;">Documentation</span>',
   '</div>',
 ].join('');
@@ -197,7 +197,7 @@ function buildTocHtml(entries, tocStartPage) {
   }
   .toc-bar {
     width: 5px; height: 28px; border-radius: 3px;
-    background: linear-gradient(180deg, #166534, #22C55E);
+    background: linear-gradient(180deg, #C2410C, #F97316);
   }
   .toc-title {
     font-size: 22pt; font-weight: 800; color: #0f172a;
@@ -205,7 +205,7 @@ function buildTocHtml(entries, tocStartPage) {
   }
   .toc-divider {
     height: 2px; margin-bottom: 6mm;
-    background: linear-gradient(90deg, #166534 0%, #BBF7D0 50%, transparent 100%);
+    background: linear-gradient(90deg, #C2410C 0%, #FED7AA 50%, transparent 100%);
     border-radius: 1px;
   }
 

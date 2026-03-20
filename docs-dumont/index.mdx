@@ -10,16 +10,11 @@ import Link from '@docusaurus/Link';
 export const VERSION = "2026.1";
 export const PDF_FILENAME = `dumont-dep-${VERSION}-documentation.pdf`;
 
-export const BRAND       = "#16A34A";
-export const BRAND_DARK  = "#22C55E";
-export const BRAND_BG    = "color-mix(in srgb, #16A34A 8%, var(--color-background, #fff))";
-export const BRAND_BORDER = "color-mix(in srgb, #16A34A 25%, var(--color-border, #e2e8f0))";
-
-export const Pill = ({ children }) => (
+export const Pill = ({ children, color = "var(--color-brand)" }) => (
   <span style={{
     display: "inline-flex", alignItems: "center", gap: "6px",
-    background: BRAND_BG, color: BRAND,
-    border: `1px solid ${BRAND_BORDER}`,
+    background: "var(--color-brand-bg)", color: color,
+    border: "1px solid var(--color-brand-border)",
     borderRadius: "999px", padding: "2px 12px",
     fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.02em",
   }}>
@@ -53,7 +48,7 @@ export const NavCard = ({ icon, title, description, href }) => (
     >
       <div style={{
         width: "36px", height: "36px", borderRadius: "8px", flexShrink: 0,
-        background: BRAND_BG, display: "flex", alignItems: "center",
+        background: "var(--color-brand-bg)", display: "flex", alignItems: "center",
         justifyContent: "center", fontSize: "1.1rem",
       }}>{icon}</div>
       <div>
@@ -92,16 +87,16 @@ export const SectionLabel = ({ children }) => (
 <div style={{
   display: "flex", alignItems: "center", justifyContent: "space-between",
   flexWrap: "wrap", gap: "12px",
-  background: BRAND_BG,
-  border: `1px solid ${BRAND_BORDER}`,
-  borderLeft: `4px solid ${BRAND}`,
+  background: "var(--color-accent, var(--color-brand-bg))",
+  border: "1px solid var(--color-brand-border)",
+  borderLeft: "4px solid var(--color-brand)",
   borderRadius: "10px", padding: "1rem 1.25rem",
   margin: "1.75rem 0",
 }}>
   <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
     <div style={{
       width: "38px", height: "38px", borderRadius: "8px", flexShrink: 0,
-      background: BRAND, display: "flex", alignItems: "center",
+      background: "var(--color-brand)", display: "flex", alignItems: "center",
       justifyContent: "center", fontSize: "1.2rem",
     }}>📄</div>
     <div style={{ minWidth: 0 }}>
@@ -119,7 +114,7 @@ export const SectionLabel = ({ children }) => (
     rel="noopener noreferrer"
     style={{
       display: "inline-flex", alignItems: "center", gap: "5px",
-      background: BRAND, color: "#fff",
+      background: "var(--color-brand)", color: "#fff",
       borderRadius: "7px", padding: "6px 14px",
       fontWeight: 600, fontSize: "0.8rem", textDecoration: "none",
       whiteSpace: "nowrap", transition: "opacity 0.15s",
@@ -185,7 +180,7 @@ export const SectionLabel = ({ children }) => (
       onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)"; }}
       onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
       >
-        <div style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.1em", color: BRAND, marginBottom: "6px" }}>
+        <div style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.1em", color: "var(--color-brand)", marginBottom: "6px" }}>
           STEP {step}
         </div>
         <div style={{ fontWeight: 700, fontSize: "0.9375rem", color: "var(--color-foreground)", marginBottom: "4px" }}>{title}</div>
