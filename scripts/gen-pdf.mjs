@@ -107,7 +107,6 @@ function generateDocs() {
   execFileSync('npx', args, {
     cwd: ROOT,
     stdio: 'inherit',
-    shell: true,
     timeout: 300_000, // 5 min max
   });
 
