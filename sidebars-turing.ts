@@ -10,9 +10,27 @@ const sidebars: SidebarsConfig = {
         id: "index",
       },
       items: [
+        {
+          type: "category",
+          label: "Getting Started",
+          items: [
+            "getting-started/intro",
+            "getting-started/core-concepts",
+          ],
+        },
         "installation-guide",
         "administration-guide",
         "developer-guide",
+        {
+          type: "category",
+          label: "Technical Reference",
+          items: [
+            "architecture-overview",
+            "sn-concepts",
+            "genai-llm",
+            "security-keycloak",
+          ],
+        },
         "release-notes",
         {
           type: "link",

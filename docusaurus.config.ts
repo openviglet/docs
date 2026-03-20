@@ -19,10 +19,13 @@ const config: Config = {
   onBrokenAnchors: "warn",
 
   markdown: {
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: "warn",
     },
   },
+
+  themes: ["@docusaurus/theme-mermaid"],
 
   i18n: {
     defaultLocale: "en",
