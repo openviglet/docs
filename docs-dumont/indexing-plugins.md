@@ -201,7 +201,8 @@ Change the active plugin by setting `dumont.indexing.provider`:
 java -Ddumont.indexing.provider=solr -jar viglet-dumont.jar
 
 # Via environment variable
-DUMONT_INDEXING_PROVIDER=elasticsearch java -jar viglet-dumont.jar
+DUMONT_INDEXING_PROVIDER=elasticsearch 
+java -jar viglet-dumont.jar
 ```
 
 Only one plugin is active per deployment. All connectors share the same output target.
