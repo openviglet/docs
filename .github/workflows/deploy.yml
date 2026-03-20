@@ -39,12 +39,23 @@ jobs:
       - name: Build Docusaurus
         run: npx docusaurus build
 
+      - name: Serve site for PDF generation
+        run: npx docusaurus serve --no-open &
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:3000/turing/getting-started/intro --timeout 60000
+
+      - name: Generate Turing documentation PDF
+        run: npm run gen-pdf
+
+      - name: Copy PDF into build folder
+        run: cp turing-documentation.pdf build/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build
 
-          
 
   deploy:
     environment:
