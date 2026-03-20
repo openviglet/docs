@@ -113,6 +113,8 @@ For full configuration details — composing agents, tool selection, and MCP Ser
 
 ---
 
+<div className="page-break" />
+
 ## Rich Content Rendering
 
 Chat responses are rendered with full media-type awareness:
@@ -149,6 +151,8 @@ Chat sessions are stored locally in the browser's **IndexedDB** — they are not
 Sessions are saved automatically after each complete response.
 
 ---
+
+<div className="page-break" />
 
 ## Context Window Management
 

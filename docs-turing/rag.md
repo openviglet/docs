@@ -73,6 +73,8 @@ sequenceDiagram
 
 ---
 
+<div className="page-break" />
+
 ## The Three Components
 
 ### LLM (Large Language Model)
@@ -135,6 +137,8 @@ Stored vectors:
 ```
 
 ---
+
+<div className="page-break" />
 
 ## RAG in Turing ES
 

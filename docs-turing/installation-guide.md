@@ -229,6 +229,8 @@ cd <SOLR_DIR>/bin
 
 Start the Solr service after the collection is created.
 
+<div className="page-break" />
+
 ## Installing Turing ES
 
 ### Turing ES Download
@@ -281,6 +283,8 @@ JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:oracle:thin:@localhost:152
 ```shell
 JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:postgresql://localhost:5432/turing -Dspring.datasource.username=turing -Dspring.datasource.password=turing -Dspring.datasource.driver-class-name=org.postgresql.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect"
 ```
+
+<div className="page-break" />
 
 ### Creating Turing ES Service on Linux
 
@@ -346,6 +350,8 @@ Configuration finished.
 Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing ES. The default port is **2700**.
 
 The default username is **admin**. The password is set via the `TURING_ADMIN_PASSWORD` environment variable before first startup — see the [Administration Guide](./administration-guide.md#login) for details.
+
+<div className="page-break" />
 
 ## Appendix A: Installation Modes
 

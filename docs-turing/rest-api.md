@@ -61,6 +61,8 @@ Explore and test every endpoint interactively:
 
 ---
 
+<div className="page-break" />
+
 ## Semantic Navigation API
 
 ### Search
@@ -315,6 +317,8 @@ curl "http://localhost:2700/api/sn/Sample/en_US/spell-check?q=entirprise"
 
 ---
 
+<div className="page-break" />
+
 ## GenAI API
 
 :::note Streaming responses
@@ -376,6 +380,8 @@ Authentication required. See [Token Usage](./token-usage.md) for details.
 
 ---
 
+<div className="page-break" />
+
 ## Integration API
 
 The Integration API provides a **reverse-proxy** endpoint that forwards requests to a configured external integration instance (e.g., an AEM connector or Web Crawler). All HTTP methods are supported. The proxy validates the target host and path to prevent SSRF attacks.
@@ -412,6 +418,8 @@ Manage integration instances. Authentication required.
 | `GET` | `/api/integration/vendor` | List available integration vendors |
 
 ---
+
+<div className="page-break" />
 
 ## Administration API
 
@@ -458,6 +466,8 @@ curl "http://localhost:2700/api/sn" \
 | `DELETE` | `/api/sn/{snSiteId}/spotlight/{id}` | Delete a spotlight |
 
 ---
+
+<div className="page-break" />
 
 ## GraphQL API
 

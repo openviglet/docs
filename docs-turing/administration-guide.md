@@ -47,6 +47,8 @@ Turing ES exposes its capabilities through four integration options:
 
 ---
 
+<div className="page-break" />
+
 ## Turing ES Console
 
 Turing ES has many components: Search Engine, Semantic Navigation, and Generative AI.

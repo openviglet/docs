@@ -307,19 +307,46 @@ Each item in a Custom Facet is defined by an operator (`TurSNSiteCustomFacetOper
 
 Once a Custom Facet is saved, Turing ES generates the facet items automatically on every search request. Each item appears in the `widget.facet` (or `widget.secondaryFacet`) section of the response with its pre-built filter link, exactly like a regular facet value. The front-end renders it without any special handling — Custom Facets are indistinguishable from regular facets in the response structure.
 
-**Example: Date period facet**
+**Example: Price range facet**
 
-A field `publish_date` (date type) configured as a Custom Facet with three items:
+A field `price` (numeric type) configured as a Custom Facet with four items:
 
-| Label | Rule | Value |
-|---|---|---|
-| Last 7 days | Greater than | `NOW-7DAYS` |
-| Last 30 days | Greater than | `NOW-30DAYS` |
-| Last year | Greater than | `NOW-1YEAR` |
+| Label | Operator | rangeStart | rangeEnd |
+|---|---|---|---|
+| Under $50 | `LESS_THAN` | — | 50 |
+| $50 – $200 | `BETWEEN` | 50 | 200 |
+| $200 – $500 | `BETWEEN` | 200 | 500 |
+| Over $500 | `GREATER_THAN` | 500 | — |
 
-The search response returns these three items as a facet named "Publication Period", each with a pre-built link to filter results by that time window.
+The search response returns these four items as a facet, each with a pre-built filter link — exactly like regular facet values.
+
+**Example: Score threshold facet**
+
+A field `relevance_score` configured as a Custom Facet:
+
+| Label | Operator | rangeStart | rangeEnd |
+|---|---|---|---|
+| High relevance | `GREATER_THAN` | 80 | — |
+| Medium relevance | `BETWEEN` | 50 | 80 |
+| Low relevance | `LESS_THAN` | — | 50 |
+
+**Example: Date range facet**
+
+For date fields, use `rangeStartDate` and `rangeEndDate` (Instant values) instead of the numeric fields:
+
+| Label | Operator | rangeStartDate | rangeEndDate |
+|---|---|---|---|
+| This year | `GREATER_THAN` | `2026-01-01T00:00:00Z` | — |
+| Last year | `BETWEEN` | `2025-01-01T00:00:00Z` | `2025-12-31T23:59:59Z` |
+| Older | `LESS_THAN` | — | `2025-01-01T00:00:00Z` |
+
+:::note Custom Facets use explicit values, not Solr expressions
+Custom Facet items use concrete `BigDecimal` values (for numeric fields) or `Instant` timestamps (for date fields). Solr query expressions like `NOW-7DAYS` are not supported — use absolute values instead.
+:::
 
 ---
+
+<div className="page-break" />
 
 ### Merge Providers
 
@@ -400,6 +427,8 @@ The merge is triggered when the **source** connector's document arrives and a ma
 **Merge scope:** Merge Providers are site-scoped. The same connector can participate in different merge configurations across different SN Sites.
 
 ---
+
+<div className="page-break" />
 
 ### Targeting Rules
 
@@ -598,6 +627,8 @@ Every search request with targeting rules is recorded in `sn_site_metric_access_
 
 ---
 
+<div className="page-break" />
+
 ### Spotlights
 
 Spotlights are curated search results that are pinned to specific search terms. When a user's query matches a spotlight term, configured documents are injected into the result list at defined positions, before the organic (ranked) results at those positions.
@@ -687,6 +718,8 @@ Each report shows the term and its search count for the selected period. Use thi
 
 ---
 
+<div className="page-break" />
+
 ### Result Ranking
 
 Configures boost expressions that influence search relevance. Each ranking expression boosts documents matching a set of conditions by a configured weight. Expressions are converted into Solr boost queries in the format `(condition)^weight` and applied at query time.
@@ -727,6 +760,8 @@ The AI Insights tab displays an AI-generated natural language summary of this SN
 Click **Generate** to trigger the summary. The response streams in progressively as it is generated.
 
 ---
+
+<div className="page-break" />
 
 ### Generative AI
 

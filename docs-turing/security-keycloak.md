@@ -85,6 +85,8 @@ sequenceDiagram
 
 ---
 
+<div className="page-break" />
+
 ## Full Production Setup: Turing + Keycloak + Apache HTTP
 
 The recommended production topology runs Keycloak and Turing ES on the same host, with Apache HTTP Server as the HTTPS reverse proxy in front. All three services are reachable through a single public hostname and port (443), with Apache routing by path prefix.
@@ -186,6 +188,8 @@ systemctl start keycloak
 
 ---
 
+<div className="page-break" />
+
 ## Step 3 — Keycloak Realm and Client Configuration
 
 After starting Keycloak, open the admin console and perform the following setup:
@@ -263,6 +267,8 @@ The default truststore password is `changeit`.
 
 ---
 
+<div className="page-break" />
+
 ## Step 5 — Turing ES JVM Configuration
 
 All Turing ES configuration is passed via JVM system properties at startup. Set `JAVA_OPTS` before launching the JAR:
@@ -317,6 +323,8 @@ java $JAVA_OPTS -jar viglet-turing.jar
 | `turing.url` | Public base URL of Turing ES (used for OAuth2 redirect URI construction and post-logout redirect) |
 
 ---
+
+<div className="page-break" />
 
 ## Step 6 — Apache HTTP Server as Reverse Proxy
 

@@ -175,6 +175,8 @@ mvn package
 
 ---
 
+<div className="page-break" />
+
 ## Database Migrations with Liquibase
 
 Turing ES uses **[Liquibase](https://www.liquibase.org/)** (v5.0.2) for database schema management. All schema changes — tables, columns, indexes, foreign keys — are tracked as versioned changelogs and applied automatically on startup. This ensures every environment (dev, staging, production) runs the exact same schema, regardless of the database platform.
@@ -318,6 +320,8 @@ Turing ES maintains high code quality standards. You can check the project healt
 | Codecov | [app.codecov.io/gh/openviglet/turing](https://app.codecov.io/gh/openviglet/turing) |
 
 ---
+
+<div className="page-break" />
 
 ## Search Engine Plugin Architecture
 
