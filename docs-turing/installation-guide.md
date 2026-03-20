@@ -218,77 +218,16 @@ For production deployments that require SSO, Keycloak integrates with Turing ES 
 
 ## Solr Configuration
 
-You need to configure Solr to be able to store Semantic Navigation and ChatBot data.
+You need to configure Solr to be able to store Semantic Navigation data.
 
-### OOTB
-
-With Solr running, go to Turing Utils and create the new cores that will be used by Turing ES.
-
-1. Install the cores into solr:
+With Solr running, go to Turing Utils and create the Solr collection that will be used by Turing ES:
 
 ```shell
 cd <SOLR_DIR>/bin
-## For Semantic Navigation
 ./solr create_collection -c turing -n turing -d /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>
-## For ChatBot
-./solr create_collection -c converse -n converse -d /appl/viglet/turing/utils/solr/<VERSION>/converse/<LANGUAGE>
 ```
 
-2. Start Solr Service
-
-### OpenText InfoFusion
-
-1. Create the cores into Solr:
-
-```shell
-cd <SOLR_DIR>/bin
-## For Semantic Navigation
-mkdir <SOLR_DIR>/server/solr/turing
-cp -Rf /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>/. <SOLR_DIR>/server/solr/turing/
-## For ChatBot
-mkdir <SOLR_DIR>/server/solr/converse
-cp -Rf /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>/. <SOLR_DIR>/server/solr/converse/
-```
-
-2. If the core name of Semantic Navigation Site will be different, you need modify the `core.properties` file and change the `name` and `collection` attributes:
-
-```shell
-cd <SOLR_DIR>/bin
-mkdir <SOLR_DIR>/server/solr/sample
-cp /appl/viglet/turing/utils/solr/<VERSION>/turing/<LANGUAGE>/. <SOLR_DIR>/server/solr/sample/
-chown otif:otif <SOLR_DIR>/server/solr/sample
-
-## Modify the name and collection fields
-sed -i 's/turing/sample/g' <SOLR_DIR>/server/solr/sample/core.properties
-```
-
-3. Edit the `<IF_API>/bin/otif.sh` and add the new cores to sync with Zookeeper:
-
-```shell
-# Push Solr configurations in ZooKeeper
-pushSolrConfigs() {
-    ...
-    cd "$BASE_DIR"
-    # For Semantic Navigation
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "<IF_SOLR>/server/solr/turing/conf" -confname turing
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "<IF_SOLR>/server/solr/<OTHER_CORE>/conf" -confname <OTHER_CORE>
-    # For ChatBot
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "<IF_SOLR>/server/solr/converse/conf" -confname converse
-    # Default InfoFusion cores (Do not modify)
-    ./zk.sh -cmd upconfig -zkhost "$SOLR_ZK_ENSEMBLE" -confdir "$BASE_DIR/../etc/solr/otif/en/conf" -confname otif_en
-    ...
-    cd "$CURRENT_DIR"
-}
-```
-
-4. With Zookeeper running, execute:
-
-```shell
-cd <IF_API>/bin
-./otif.sh push-solr-configs
-```
-
-5. Restart the Solr.
+Start the Solr service after the collection is created.
 
 ## Installing Turing ES
 
