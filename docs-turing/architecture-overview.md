@@ -62,7 +62,7 @@ The **Semantic Navigation Site** is the central configuration artifact that driv
 
 **Viglet Dumont DEP:** The connector system that feeds Turing ES. It runs as a separate application and manages its own connector lifecycle (schedules, credentials, field mappings). Connectors currently available in Dumont DEP include WebCrawler (Nutch-based), Database, FileSystem, AEM/WEM, and WordPress. Refer to the Dumont DEP documentation for connector configuration.
 
-**Merge Providers:** When two Dumont DEP connectors independently index different representations of the same real-world document — for example, AEM indexing structured metadata from `model.json` and WebCrawler indexing the rendered HTML of the same page — the Merge Provider identifies them as the same document using a configured join key and merges their fields before writing to Solr. See [SN Concepts](./sn-concepts.md) for a detailed explanation.
+**Merge Providers:** When two Dumont DEP connectors independently index different representations of the same real-world document — for example, AEM indexing structured metadata from `model.json` and WebCrawler indexing the rendered HTML of the same page — the Merge Provider identifies them as the same document using a configured join key and merges their fields before writing to Solr. See [Semantic Navigation](./semantic-navigation.md) for a detailed explanation.
 
 **Embedding stores:** If Generative AI is enabled for a Semantic Navigation site, a vector embedding is generated for each indexed document and written to the configured embedding store. Turing ES supports three embedding backends via Spring AI: **ChromaDB**, **PgVector** (PostgreSQL extension), and **Milvus**. Only one is active per deployment. The default embedding store and embedding model are defined globally in **Administration → Settings**.
 
@@ -84,9 +84,9 @@ The search flow is synchronous and request-driven. Every request goes through a 
 
 **Plugin abstraction:** The orchestrator does not query the search backend directly. An intermediate plugin layer translates the abstract search context into backend-specific queries, supporting **Apache Solr**, **Elasticsearch**, and **Lucene** as backends. Solr is the recommended production backend as it provides the most complete feature set, including full support for facets, spotlights, targeting rules, highlighting, and autocomplete. Elasticsearch and Lucene are available as alternatives with a reduced feature set.
 
-**Spotlight injection:** After retrieving organic results, the system checks whether any configured Spotlights match the current query. Matching Spotlights insert curated documents at specific positions in the result list. See [SN Concepts](./sn-concepts.md) for details.
+**Spotlight injection:** After retrieving organic results, the system checks whether any configured Spotlights match the current query. Matching Spotlights insert curated documents at specific positions in the result list. See [Semantic Navigation](./semantic-navigation.md) for details.
 
-**Targeting Rules:** Results are filtered based on the requesting user's profile attributes, passed in the request context. Targeting Rules translate those attributes into additional Solr filter queries. See [SN Concepts](./sn-concepts.md) for details.
+**Targeting Rules:** Results are filtered based on the requesting user's profile attributes, passed in the request context. Targeting Rules translate those attributes into additional Solr filter queries. See [Semantic Navigation](./semantic-navigation.md) for details.
 
 **Field mapping and highlighting:** Before returning results, each document's fields are remapped to a canonical set of display fields configured per site (title, description, text, date, image, URL). Highlighting wraps matched terms with configurable HTML tags (default: `<mark>`).
 
@@ -193,4 +193,4 @@ Multiple Turing ES instances run behind Apache HTTP Server configured as a rever
 
 ---
 
-*Previous: [Core Concepts](./getting-started/core-concepts.md) | Next: [Semantic Navigation Concepts](./sn-concepts.md)*
+*Previous: [Core Concepts](./getting-started/core-concepts.md) | Next: [Semantic Navigation](./semantic-navigation.md)*

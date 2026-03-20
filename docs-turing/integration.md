@@ -6,7 +6,7 @@ description: Manage content connectors that import and index content from extern
 
 # Integration
 
-The **Integration** page (`/admin/integration/instance`) manages connectors that import and index content from external sources — such as AEM or web crawlers — into the Turing ES search engine. It is accessible from the **Enterprise Search** section of the sidebar.
+The **Integration** page (`/admin/integration/instance`) manages connectors that import and index content from external sources — such as AEM, web crawlers, or other content repositories — into the Turing ES search engine. It is accessible from the **Enterprise Search** section of the sidebar.
 
 Each **Integration instance** represents a configured connection to a content connector application. The connector runs as a separate process (for example, Viglet Dumont DEP) and communicates with Turing ES via REST. Turing ES acts as a proxy: the API path `/api/v2/integration/{integrationId}/**` forwards requests to the configured connector endpoint, with built-in SSRF protection.
 
@@ -41,116 +41,13 @@ The creation and edit form is divided into two sections.
 
 ## Integration Detail — Sections
 
-After an integration is created, its detail page provides navigation to seven sections.
+After an integration is created, its detail page provides navigation to several sections. The sections below are common to all connector types. For AEM-specific configuration (Sources, Content Types, Author/Publish environments, Delta Tracking, Locales, Indexing Rules, and the Indexing Manager), see [AEM Connector](./integration-aem.md).
 
 ---
 
 ### Settings
 
 The Settings section contains the same form fields as the creation form (General Information and Connection Details), allowing you to edit the integration name, description, endpoint, type, and enabled state.
-
----
-
-### Sources
-
-Sources define the content origins that this integration reads from. Each integration can have multiple sources, and each source is configured independently.
-
-#### General
-
-| Field | Description |
-|---|---|
-| Name | Source identifier |
-| Endpoint | URL of the content source within the connector |
-| Username / Password | Credentials for authenticated access |
-
-#### Root Path
-
-Defines the root content path within the source (for example, the root node in an AEM repository from which content is traversed).
-
-#### Content Types
-
-| Field | Description |
-|---|---|
-| Content Type | Primary content type to be indexed (for example, `cq:Page`) |
-| Sub Type | Optional sub-type filter within the content type |
-
-#### Delta Tracking
-
-Controls how incremental indexing is handled.
-
-| Field | Description |
-|---|---|
-| Once Pattern | Pattern used to identify content that should only be indexed once |
-| Delta Class | Java class responsible for detecting changed content since the last run |
-
-#### Author / Publish
-
-Configures which AEM environments are indexed and how they map to Turing ES sites.
-
-| Field | Description |
-|---|---|
-| Author | Enable indexing from the AEM author environment |
-| Publish | Enable indexing from the AEM publish environment |
-| SN Site (Author) | Semantic Navigation Site that receives author content |
-| SN Site (Publish) | Semantic Navigation Site that receives publish content |
-| URL Prefix (Author) | URL prefix prepended to document paths in the author index |
-| URL Prefix (Publish) | URL prefix prepended to document paths in the publish index |
-
-#### Locales
-
-Maps content language codes to repository paths.
-
-| Field | Description |
-|---|---|
-| Default Locale | Locale used when no language-specific path is matched |
-| Locale Class | Java class responsible for resolving document locale |
-| Locale → Path | Dynamic list mapping each locale code (for example, `en_US`) to its root path in the repository |
-
-#### Source Actions
-
-Each source has two action buttons:
-
-- **Index All** — triggers a full indexing run for all content in this source
-- **Reindex All** — forces a full reindexation, replacing all previously indexed content
-
----
-
-### Indexing Rules
-
-Indexing Rules allow you to filter content during indexing — for example, to exclude error pages or draft content before it reaches the search index.
-
-**Form fields:**
-
-| Field | Description |
-|---|---|
-| Name | Rule identifier (required) |
-| Description | Purpose of this rule |
-| Source | The source this rule applies to |
-| Attribute | Document field to evaluate (for example, `template`) |
-| Rule Type | How the rule is applied — currently supports **IGNORE** (skip documents that match) |
-| Values | Dynamic list of values that trigger the rule (add or remove entries) |
-
-**Example:** A rule with `Attribute = template`, `Rule Type = IGNORE`, and `Values = [error-page]` will prevent any document with `template:error-page` from being indexed.
-
----
-
-### Indexing Manager
-
-The Indexing Manager provides a stepper form for targeting specific documents for manual operations. Four operation types are available:
-
-| Operation | Description | Colour |
-|---|---|---|
-| **INDEXING** | Index specific content | Blue |
-| **DEINDEXING** | Remove specific content from the index | Red |
-| **PUBLISHING** | Publish content | Green |
-| **UNPUBLISHING** | Unpublish content | Orange |
-
-Each operation step allows you to:
-
-- Select the **Source** to operate on
-- Choose the **attribute** to identify documents: **ID** or **URL**
-- Enter one or more specific values (IDs or URLs)
-- Expand **Advanced Settings** to toggle **Recursive** mode, which traverses child content in hierarchical repositories
 
 ---
 
@@ -261,11 +158,12 @@ Built-in SSRF protection validates the endpoint before forwarding. Requests to p
 
 | Page | Description |
 |---|---|
+| [AEM Connector](./integration-aem.md) | AEM-specific configuration — sources, content types, environments, indexing rules, and the indexing manager |
 | [Semantic Navigation](./semantic-navigation.md) | Configure the SN Sites that receive indexed content |
-| [SN Concepts](./sn-concepts.md) | Merge Providers, Targeting Rules, and indexing pipeline internals |
+| [Semantic Navigation](./semantic-navigation.md) | Merge Providers, Targeting Rules, and indexing pipeline internals |
 | [Architecture Overview](./architecture-overview.md) | End-to-end indexing flow from connector to Solr |
 | [REST API Reference](./rest-api.md) | API endpoints for programmatic indexing |
 
 ---
 
-*Previous: [Semantic Navigation](./semantic-navigation.md) | Next: [Assets](./assets.md)*
+*Previous: [Semantic Navigation](./semantic-navigation.md) | Next: [AEM Connector](./integration-aem.md)*

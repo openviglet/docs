@@ -34,6 +34,16 @@ These tools allow the LLM to interact with any Semantic Navigation Site as a str
 | `lookup_facet_value` | Searches a term across all facets to find exact values |
 | `discover_facet_values` | Splits a phrase into words and searches across all facets |
 
+**Prompt examples:**
+
+- *"Search for documents about authentication in the Sample site"* → triggers `search_site`
+- *"What fields can I filter by on the Sample site?"* → triggers `get_site_fields`, then `get_valid_filter_values`
+- *"Show me the full content of document ID abc-123"* → triggers `get_document_details`
+- *"Find documents similar to the article about Solr configuration"* → triggers `find_similar_documents`
+- *"How many documents do we have per content type?"* → triggers `get_aggregated_stats` or `get_facet_summary`
+- *"What articles were updated in the last 7 days about security?"* → triggers `search_recent_updates` or `search_by_date_range`
+- *"Compare the features of Product A and Product B"* → triggers `search_site` then `compare_items`
+
 ---
 
 ## RAG / Knowledge Base — 4 tools
@@ -47,6 +57,12 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 | `list_knowledge_base_files` | Lists all indexed files, with optional keyword filter |
 | `get_file_from_knowledge_base` | Retrieves the full indexed content of a specific file |
 
+**Prompt examples:**
+
+- *"What does our internal documentation say about deployment procedures?"* → triggers `search_knowledge_base`
+- *"How many files are indexed in the knowledge base?"* → triggers `knowledge_base_stats`
+- *"Show me the full content of the file onboarding-guide.pdf"* → triggers `list_knowledge_base_files` then `get_file_from_knowledge_base`
+
 ---
 
 ## Web Crawler — 2 tools
@@ -55,6 +71,11 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 |---|---|
 | `fetch_webpage` | Fetches a web page by URL and returns its content as plain text |
 | `extract_links` | Extracts all links from a web page, with optional keyword filter |
+
+**Prompt examples:**
+
+- *"What does the Apache Solr documentation say about faceted search?"* → triggers `fetch_webpage`
+- *"List all links on our company blog homepage"* → triggers `extract_links`
 
 ---
 
@@ -65,6 +86,11 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 | `get_stock_quote` | Current price and market data for a stock ticker symbol |
 | `search_ticker` | Looks up a ticker symbol by company name or keyword |
 
+**Prompt examples:**
+
+- *"What is the current stock price of Apple?"* → triggers `search_ticker` then `get_stock_quote`
+- *"Show me the market data for MSFT"* → triggers `get_stock_quote`
+
 ---
 
 ## Weather — 1 tool
@@ -72,6 +98,10 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 | Tool | Description |
 |---|---|
 | `get_weather` | Current weather and forecast for a city (1–7 day range) |
+
+**Prompt examples:**
+
+- *"What's the weather forecast for São Paulo this week?"* → triggers `get_weather`
 
 ---
 
@@ -81,6 +111,10 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 |---|---|
 | `search_images` | Searches the web for images and returns URLs and descriptions |
 
+**Prompt examples:**
+
+- *"Find images of enterprise search architecture diagrams"* → triggers `search_images`
+
 ---
 
 ## DateTime — 1 tool
@@ -88,6 +122,10 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 | Tool | Description |
 |---|---|
 | `get_current_time` | Returns the current date and time for a given IANA timezone |
+
+**Prompt examples:**
+
+- *"What time is it right now in Tokyo?"* → triggers `get_current_time`
 
 ---
 
@@ -104,6 +142,11 @@ The Code Interpreter runs Python in an isolated sandbox directory with a **30-se
 - Automatic `print()` wrapping for bare expressions
 
 The Python executable path is configured in **Administration → Settings → Python Path**.
+
+**Prompt examples:**
+
+- *"Calculate the compound interest on $10,000 at 5% for 10 years"* → triggers `execute_python`
+- *"Generate a bar chart showing monthly sales: Jan=100, Feb=150, Mar=120"* → triggers `execute_python` with matplotlib
 
 ---
 

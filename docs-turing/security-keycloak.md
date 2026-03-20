@@ -10,7 +10,78 @@ This page covers the full **Keycloak OAuth2 / OpenID Connect** production setup 
 
 For day-to-day authentication — native session-based login and REST API Key usage — see **[Authentication](./security-authentication.md)**.
 
+---
+
+## Why Use Keycloak with Turing ES?
+
+The primary reason to integrate Keycloak is to connect Turing ES to your organization's **existing Single Sign-On (SSO) infrastructure**. Instead of managing a separate set of credentials just for Turing ES, users sign in with the same corporate identity they already use for email, cloud tools, and internal applications — no additional password, no extra login step.
+
+Keycloak acts as an **identity broker** between Turing ES and your identity provider. Turing ES never sees or stores user passwords — it receives a signed JWT token from Keycloak confirming who the user is and what roles they have.
+
+### Supported Identity Providers
+
+Because Keycloak supports the **SAML 2.0**, **OAuth 2.0**, and **OpenID Connect** standards, it can federate identity from virtually any enterprise identity provider:
+
+| Identity Provider | Protocol | Use Case |
+|---|---|---|
+| **Microsoft Entra ID** (Azure AD) | SAML 2.0 / OIDC | Microsoft 365, Azure, corporate Windows environments |
+| **Google Workspace** | OIDC | Organizations on Google Workspace / Gmail |
+| **Okta** | SAML 2.0 / OIDC | Multi-cloud enterprises, workforce identity |
+| **Auth0** | OIDC | Developer-focused platforms, B2C applications |
+| **Ping Identity** | SAML 2.0 / OIDC | Large enterprises, government, regulated industries |
+| **OneLogin** | SAML 2.0 / OIDC | HR-integrated identity management |
+| **ADFS** (Active Directory Federation Services) | SAML 2.0 | On-premise Windows Server / Active Directory |
+| **LDAP / Active Directory** | LDAP | Direct directory sync without SAML — Keycloak federates LDAP users natively |
+| **GitHub / GitLab** | OAuth 2.0 | Developer-focused organizations |
+| **Any SAML 2.0 IdP** | SAML 2.0 | Shibboleth, SimpleSAMLphp, custom SAML providers |
+| **Any OIDC provider** | OIDC | Any standards-compliant OpenID Connect provider |
+
+### What This Enables
+
+**Single Sign-On (SSO):** Users click "Sign in" on Turing ES, are redirected to their corporate login (e.g., Microsoft 365 login page), authenticate once, and are immediately signed in to Turing ES. If they're already signed in to another corporate application, they skip the login form entirely — the SSO session is shared.
+
+**Single Sign-Out:** Logging out of Turing ES triggers a Keycloak OIDC logout that propagates to the corporate IdP. The user is signed out of Turing ES and optionally out of all applications sharing the same SSO session.
+
+**Centralized User Management:** User accounts, groups, and roles are managed in Keycloak (or synchronized from the corporate directory). No need to create or maintain users in Turing ES manually — Keycloak provides the identity, roles, and group memberships via JWT claims.
+
+**Multi-Factor Authentication (MFA):** Keycloak supports TOTP (Google Authenticator, Microsoft Authenticator), WebAuthn/FIDO2 (hardware security keys, biometrics), SMS OTP, and email verification. MFA policies are configured in Keycloak and enforced transparently — Turing ES requires no changes.
+
+**Role-Based Access Control (RBAC):** Keycloak roles and realm roles are mapped to Turing ES permissions. Define roles like `turing-admin`, `turing-editor`, `turing-viewer` in Keycloak, assign them to users or groups, and Turing ES enforces access accordingly.
+
+**Social Login:** For public-facing or partner-facing deployments, Keycloak can enable login via Google, GitHub, Facebook, Apple, Twitter, and other social providers alongside or instead of corporate identity.
+
+**User Federation:** Keycloak can synchronize users from **LDAP** or **Active Directory** without requiring SAML. Users are imported (or federated on-demand) from the directory, with password validation delegated to the directory server. This is the simplest path for organizations running on-premise AD without ADFS.
+
+**Token-Based API Access:** When Keycloak is enabled, REST API clients can authenticate using **OAuth2 access tokens** in addition to API Keys. Obtain a token via Keycloak's token endpoint and pass it as a Bearer token — useful for service-to-service integrations where API Keys are not appropriate.
+
+**Audit and Compliance:** Keycloak logs all authentication events — successful logins, failed attempts, token refreshes, logouts. These events can be exported to SIEM systems for compliance and security monitoring.
+
+### Architecture
+
 When `turing.keycloak=true` is set in the JVM properties, Turing ES delegates all authentication to Keycloak using the Authorization Code flow (OAuth2) and validates access tokens as JWTs (OpenID Connect). Keycloak can be dedicated to Turing ES or shared with other applications — in both cases, Turing ES registers as a **client** within a Keycloak **realm**.
+
+```mermaid
+sequenceDiagram
+    participant User as User / Browser
+    participant Apache as Apache HTTPS Proxy
+    participant Turing as Turing ES
+    participant KC as Keycloak
+    participant IdP as Corporate IdP<br/>(Azure AD, Google, etc.)
+
+    User->>Apache: Access Turing ES
+    Apache->>Turing: Proxy request
+    Turing-->>User: Redirect to Keycloak login
+    User->>KC: Keycloak login page
+    KC-->>User: Redirect to Corporate IdP
+    User->>IdP: Authenticate (SSO / MFA)
+    IdP-->>User: SAML / OIDC response
+    User->>KC: Return with IdP token
+    KC-->>User: Issue JWT + redirect to Turing
+    User->>Turing: Access with JWT
+    Turing->>KC: Validate JWT
+    KC-->>Turing: Token valid + user roles
+    Turing-->>User: Authenticated session
+```
 
 ---
 
@@ -364,8 +435,6 @@ Before going to production, verify the following:
 
 ---
 
----
-
 ## Related Pages
 
 | Page | Description |
@@ -377,4 +446,4 @@ Before going to production, verify the following:
 
 ---
 
-*Previous: [Authentication](./security-authentication.md) | Next: [Semantic Navigation Concepts](./sn-concepts.md)*
+*Previous: [Authentication](./security-authentication.md) | Next: [Semantic Navigation](./semantic-navigation.md)*

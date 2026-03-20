@@ -38,7 +38,7 @@ graph TB
     SRC["Content Sources\nCMS · Database · Files · Web"]
     DEP["Viglet Dumont DEP\nConnectors"]
     TES["Turing ES\nREST API"]
-    IDX["Index\n(Solr)"]
+    IDX["Index\n(Search Engine)"]
 
     SRC --> DEP
     DEP -->|"HTTP POST"| TES
@@ -52,13 +52,13 @@ Each connector in Dumont DEP:
 2. Extracts documents according to its configuration (which pages to crawl, which SQL query to run, which folder to scan)
 3. Sends each document to the Turing ES REST API, targeting a specific SN Site
 
-Turing ES receives the document, validates it against the SN Site configuration, and creates an indexing job. The job processes the document and writes it to Solr — making it immediately searchable.
+Turing ES receives the document, validates it against the SN Site configuration, and creates an indexing job. The job processes the document and writes it to the configured search engine (Apache Solr, Elasticsearch, or Apache Lucene) — making it immediately searchable. Apache Solr is the primary and default backend, but Turing ES also supports Elasticsearch and Lucene as alternative search engine backends.
 
 ### What happens when two connectors index the same content
 
 Sometimes the same real-world document exists in two systems with complementary information. For example, your CMS has structured metadata (author, tags, content type) while your web crawler has the full rendered text of the same page. Neither connector alone gives you a complete document.
 
-**Merge Providers** solve this by instructing Turing ES to detect when two connectors have indexed the same document — using a shared field as a join key — and merge them into one enriched result. See [Semantic Navigation Concepts](../sn-concepts.md#merge-providers) to learn how to configure this.
+**Merge Providers** solve this by instructing Turing ES to detect when two connectors have indexed the same document — using a shared field as a join key — and merge them into one enriched result. See [Semantic Navigation](../semantic-navigation.md#merge-providers) to learn how to configure this.
 
 ---
 
@@ -70,11 +70,11 @@ When a user searches on an SN Site, this is what happens — in simple terms:
 sequenceDiagram
     participant U as User
     participant API as Turing ES API
-    participant S as Solr
+    participant S as Search Engine
     participant SP as Spotlight Engine
 
     U->>API: Query + user profile attributes
-    API->>API: Targeting Rules →\nbuild Solr filter queries
+    API->>API: Targeting Rules →\nbuild filter queries
     API->>S: Query + filters + facets
     S-->>API: Filtered results + facet counts
     API->>API: Map fields + highlighting
@@ -84,9 +84,9 @@ sequenceDiagram
 ```
 
 1. The query arrives at the Turing ES API along with the user's profile attributes (if Targeting Rules are configured)
-2. **Targeting Rules** run first — they translate the user's profile attributes into additional Solr filter queries, so only content relevant to that user is retrieved
-3. Turing ES executes the Solr query with those filters, facet counts, and result ranking applied together
-4. Results come back from Solr already filtered; Turing ES maps fields and applies highlighting
+2. **Targeting Rules** run first — they translate the user's profile attributes into additional filter queries (e.g., Solr `fq` parameters when using the default Solr backend), so only content relevant to that user is retrieved
+3. Turing ES executes the search engine query with those filters, facet counts, and result ranking applied together
+4. Results come back from the search engine already filtered; Turing ES maps fields and applies highlighting
 5. **Spotlights** are checked last — if the query matches a spotlight term, curated documents are injected at their configured positions in the response
 6. The final response — results, facets, spotlights, locales, spell check, and similar documents — goes back to the client
 
@@ -100,13 +100,13 @@ Facets are configured per SN Site, at the field level. Any indexed field can bec
 
 A Spotlight is a curated result pinned to a specific search term. When someone searches for "benefits", you can ensure your HR benefits page always appears at the top — regardless of how it ranks organically.
 
-Spotlights are configured per SN Site and managed through the admin console. See [Spotlights](../sn-concepts.md#spotlights) for details.
+Spotlights are configured per SN Site and managed through the admin console. See [Spotlights](../semantic-navigation.md#spotlights) for details.
 
 ### Targeting Rules
 
 Targeting Rules let you show different results to different users from the same index. A document tagged as `audience: internal` only appears for users whose profile includes that attribute. Users without a matching profile always see untagged content.
 
-See [Targeting Rules](../sn-concepts.md#targeting-rules) for a full explanation.
+See [Targeting Rules](../semantic-navigation.md#targeting-rules) for a full explanation.
 
 ---
 
@@ -201,7 +201,7 @@ npm install @viglet/turing-sdk
 | I want to... | Go to |
 |---|---|
 | Understand the full system architecture | [Architecture Overview](../architecture-overview.md) |
-| Configure Spotlights, Targeting Rules, or Merge Providers | [Semantic Navigation Concepts](../sn-concepts.md) |
+| Configure Spotlights, Targeting Rules, or Merge Providers | [Semantic Navigation](../semantic-navigation.md) |
 | Set up GenAI and RAG | [GenAI & LLM Configuration](../genai-llm.md) |
 | Configure AI Agents and tools | [AI Agents](../ai-agents.md), [Tool Calling](../tool-calling.md) |
 | Use the AI chat interface | [Chat](../chat.md) |

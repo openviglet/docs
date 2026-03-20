@@ -32,9 +32,9 @@ The Chat interface is only available when at least one LLM Instance is configure
 
 | Indicator | Behaviour |
 |---|---|
-| **Token counter** | Running estimate of tokens used in the current context (~4 chars per token) |
-| **% bar** | Visual fill showing context window usage; turns **yellow above 60%** and **red above 80%** |
-| **Compact button** | Summarises the conversation to free up context space |
+| **Token counter** | Shows `current/max` tokens (e.g., `2.5k/128k`) — estimated at ~4 chars per token |
+| **Progress bar** | Visual fill showing context usage; **blue** (normal), **yellow** (60%+), **red** (80%+) |
+| **Compact button** | Summarises the conversation via the LLM to free up context space |
 
 ---
 
@@ -152,21 +152,43 @@ Sessions are saved automatically after each complete response.
 
 ## Context Window Management
 
-A visual indicator shows how much of the model's context window is currently in use.
+A context bar at the bottom of the chat input area shows token usage in real time.
 
 ```
-Context usage: ████████░░░░░░░░░░░░  42%
+2.5k / 128k  ████████░░░░░░░░░░░░
 ```
 
-| Feature | Description |
-|---|---|
-| **Token estimation** | ~4 characters per token (fast client-side estimate) |
-| **Context window size** | Obtained from the LLM provider's response metadata or the LLM Instance configuration |
-| **Bar colour** | Green → Yellow at 60% → Red at 80% |
-| **Compact button** | Summarises the current conversation using the LLM to free up context space while preserving the key information |
+The bar displays the **token count** (e.g., `2.5k/128k`) alongside a progress bar. Tokens are estimated client-side at **~4 characters per token** (`Math.ceil(text.length / 4)`), counting the full message history.
+
+### Context window size
+
+The context window size is resolved with a three-tier fallback:
+
+1. **Backend API** (highest priority) — calls `GET /v2/llm/{llmInstanceId}/chat/context-info` and caches the result
+2. **LLM Instance configuration** — the `contextWindow` property set on the instance
+3. **Default** — 128,000 tokens if neither of the above is available
+
+### Progress bar colours
+
+| Usage | Colour | Meaning |
+|---|---|---|
+| Below 60% | **Blue** | Normal — plenty of context remaining |
+| 60% – 79% | **Yellow** | Warning — consider compacting soon |
+| 80%+ | **Red** | Critical — compact before the limit is reached |
+
+### Compact
+
+The **Compact** button (lightning bolt icon) is available when the conversation has at least **4 messages** and the model is not generating a response. Compacting:
+
+1. Sends the full conversation history to the same LLM with a summarisation prompt
+2. The LLM generates a concise summary preserving key facts, decisions, and context
+3. The entire conversation is replaced with a single `**[Context compacted]**` block followed by the summary
+4. The conversation continues from the compacted state with significantly reduced token usage
+
+Compacting is available in all three chat modes: direct LLM, Semantic Navigation, and AI Agents.
 
 :::tip When to compact
-When the context bar turns red (above 80%), click **Compact** before the limit is reached. Compacting summarises the full history into a concise context block and continues the conversation from there, freeing up significant space without losing the thread.
+When the bar turns **yellow** (60%+), consider compacting proactively. Don't wait until it turns **red** (80%+) — at that point the model may start losing context from earlier messages. The tooltip on the Compact button shows how much context remains (e.g., "58% of context remaining").
 :::
 
 ---
@@ -183,39 +205,9 @@ When the context bar turns red (above 80%), click **Compact** before the limit i
 
 ---
 
-## API — Chat Endpoints
+## API Endpoints
 
-The chat features are also accessible programmatically for integration into custom applications.
-
-### LLM Direct Chat
-
-```
-GET /api/sn/{siteName}/chat?q={question}
-```
-
-Sends a question to the RAG pipeline for a Semantic Navigation Site.
-
-**Example:**
-
-```bash
-curl "http://localhost:2700/api/sn/Sample/chat?q=What+are+the+main+features?" \
-  -H "Key: <YOUR_API_TOKEN>"
-```
-
-### AI Agent Chat
-
-```
-POST /api/v2/llm/agent/{agentId}/chat
-```
-
-Sends a message to a specific AI Agent.
-
-```bash
-curl -X POST "http://localhost:2700/api/v2/llm/agent/my-agent/chat" \
-  -H "Key: <YOUR_API_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{ "message": "Summarise the latest quarterly report" }'
-```
+The chat features are accessible programmatically via the REST API. See [REST API Reference → GenAI API](./rest-api.md#genai-api) for endpoint details and examples.
 
 ---
 

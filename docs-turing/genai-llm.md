@@ -108,4 +108,4 @@ See [AI Agents](./ai-agents.md) for configuration, composition examples, and the
 
 ---
 
-*Previous: [Semantic Navigation Concepts](./sn-concepts.md) | Next: [LLM Instances](./llm-instances.md)*
+*Previous: [Semantic Navigation](./semantic-navigation.md) | Next: [LLM Instances](./llm-instances.md)*

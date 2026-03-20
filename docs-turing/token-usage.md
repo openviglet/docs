@@ -115,20 +115,7 @@ Responses where all token counts are zero are **not recorded**. This filters out
 
 ## API Endpoint
 
-Token usage data is also available via the REST API:
-
-```
-GET /api/v2/llm/token-usage?month=YYYY-MM
-```
-
-Returns both the monthly summary (aggregated by model) and the daily breakdown for the requested month.
-
-**Example:**
-
-```bash
-curl "http://localhost:2700/api/v2/llm/token-usage?month=2025-01" \
-  -H "Key: <YOUR_API_TOKEN>"
-```
+Token usage data is also available via the REST API. See [REST API Reference → Token Usage API](./rest-api.md#token-usage-api) for endpoint details and examples.
 
 ---
 

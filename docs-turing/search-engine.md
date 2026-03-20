@@ -111,59 +111,9 @@ Live monitoring panel for the connected backend:
 
 ## Plugin Architecture
 
-Turing ES uses a **plugin architecture** to support multiple search backends with a unified interface. The active plugin is resolved at runtime based on the vendor configured per instance.
+Turing ES uses a plugin architecture to support multiple search backends behind a unified `TurSearchEnginePlugin` interface. The active plugin is resolved at runtime based on the vendor configured per instance. If a vendor is unrecognised, the factory falls back to Solr.
 
-```mermaid
-graph TD
-    FACTORY["TurSearchEnginePluginFactory\n(resolves by vendor, fallback → Solr)"]
-    SOLR["TurSolrSearchEnginePlugin"]
-    ES["TurElasticsearchSearchEnginePlugin"]
-    LUCENE["TurLuceneSearchEnginePlugin"]
-
-    FACTORY --> SOLR
-    FACTORY --> ES
-    FACTORY --> LUCENE
-```
-
-The `TurSearchEnginePlugin` interface defines all backend operations in four categories:
-
-**Search**
-
-| Method | Description |
-|---|---|
-| `retrieveSearchResults()` | Execute a full-text query and return results with facets |
-| `retrieveFacetResults()` | Return facet counts for a query |
-
-**Index management**
-
-| Method | Description |
-|---|---|
-| `createIndex()` | Create a new core / index |
-| `deleteIndex()` | Delete a core / index |
-| `clearIndex()` | Remove all documents from a core without deleting it |
-| `listIndexes()` | List all cores / indices on the backend |
-
-**Schema management**
-
-| Method | Description |
-|---|---|
-| `addOrUpdateField()` | Add or update a field definition in the schema |
-| `deleteField()` | Remove a field from the schema |
-| `fieldExists()` | Check whether a field exists in the schema |
-
-**Documents & monitoring**
-
-| Method | Description |
-|---|---|
-| `indexDocument()` | Index a single document |
-| `deIndex()` | Remove a document from the index |
-| `commit()` | Flush pending writes (for backends that require explicit commits) |
-| `getDocumentTotal()` | Return the total number of indexed documents |
-| `getSystemInfo()` | Return backend version, OS, JVM, and memory information |
-
-:::info Fallback behaviour
-If a vendor is unrecognised or unavailable, `TurSearchEnginePluginFactory` falls back to the **Solr** plugin. Apache Solr is the primary supported backend with the most complete feature set.
-:::
+For the full interface reference — all methods across search, index management, schema management, and document operations — and instructions on implementing a new backend, see [Developer Guide → Search Engine Plugin Architecture](./developer-guide.md#search-engine-plugin-architecture).
 
 ---
 
@@ -183,7 +133,7 @@ Repository-level **caching** is enabled for search engine instances to avoid rep
 | Page | Description |
 |---|---|
 | [Administration Guide](./administration-guide.md) | Full console reference |
-| [Semantic Navigation Concepts](./sn-concepts.md) | How SN Sites use cores and search engines |
+| [Semantic Navigation](./semantic-navigation.md) | How SN Sites use cores and search engines |
 | [Architecture Overview](./architecture-overview.md) | Solr, Elasticsearch, and Lucene in the system architecture |
 | [Configuration Reference](./configuration-reference.md#solr) | Solr and Elasticsearch timeout settings in `application.yaml` |
 

@@ -30,6 +30,7 @@ const sidebars: SidebarsConfig = {
             "search-engine",
             "semantic-navigation",
             "integration",
+            "integration-aem",
           ],
         },
         {
@@ -44,6 +45,7 @@ const sidebars: SidebarsConfig = {
           label: "Generative AI",
           items: [
             "genai-llm",
+            "rag",
             "llm-instances",
             "embedding-stores",
             "tool-calling",
@@ -60,7 +62,6 @@ const sidebars: SidebarsConfig = {
             "architecture-overview",
             "security-authentication",
             "security-keycloak",
-            "sn-concepts",
           ],
         },
         {

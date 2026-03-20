@@ -22,6 +22,32 @@ Key: <YOUR_API_TOKEN>
 
 Create tokens in **Administration → API Tokens**. See [Authentication](./security-authentication.md) for step-by-step instructions.
 
+**Example — authenticated API call:**
+
+```bash
+curl "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
+  -H "Key: <YOUR_API_TOKEN>" \
+  -H "Accept: application/json"
+```
+
+### Public Endpoints (no authentication required)
+
+Certain endpoints are publicly accessible, allowing client applications to perform searches and chat without managing sessions:
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/sn/*/search` | Semantic Navigation search |
+| `GET /api/sn/*/chat` | GenAI chat on an SN Site |
+| `GET /api/sn/*/ac` | Autocomplete |
+| `POST /api/genai/chat` | Direct GenAI chat |
+| `POST /api/ocr/**` | OCR text extraction |
+| `POST /api/v2/integration/**` | External integration endpoints |
+| `GET /api/v2/guest/**` | Guest access endpoints |
+| `POST /graphql` | GraphQL queries |
+| `GET /api/login` | Login endpoint |
+
+All other endpoints require authentication — including the full administration API, user management, site configuration, and AI Agent management.
+
 ---
 
 ## OpenAPI & Swagger
@@ -65,55 +91,128 @@ curl "http://localhost:2700/api/sn/Sample/search?q=enterprise+search&p=1&_setloc
   -H "Accept: application/json"
 ```
 
-The response is a self-describing JSON object. For the full response schema — including `facet`, `secondaryFacet`, `spotlight`, `pagination`, and `didYouMean` sections — see [Semantic Navigation Concepts → Search Response Structure](./sn-concepts.md#search-response-structure).
+#### Search Response Structure
 
-#### Targeting Rules
+The search response is a **self-describing navigational JSON**: every link a user might follow — apply a filter, remove a filter, paginate, filter by metadata — is pre-built and ready to use. The front-end does not need to construct query strings or manage filter state.
 
-Targeting Rules personalize results by filtering documents based on user profile attributes (group, role, country, segment, etc.). They are sent in the **POST body** as JSON. Three types are supported:
+```json
+{
+  "pagination": [
+    { "type": "CURRENT", "text": "1", "href": "...", "page": 1 },
+    { "type": "NEXT",    "text": "Next", "href": "...", "page": 2 }
+  ],
+  "queryContext": {
+    "count": 42,
+    "index": "Sample",
+    "limit": 10,
+    "offset": 0,
+    "page": 1,
+    "pageCount": 5,
+    "pageEnd": 10,
+    "pageStart": 1,
+    "responseTime": 23,
+    "query": { ... },
+    "defaultFields": { ... },
+    "facetType": "AND",
+    "facetItemType": "AND"
+  },
+  "results": {
+    "document": [
+      {
+        "source": "TURING",
+        "elevate": false,
+        "fields": { "title": "...", "url": "...", ... },
+        "metadata": [
+          { "name": "type", "values": [ { "label": "article", "link": "..." } ] }
+        ]
+      }
+    ]
+  },
+  "widget": {
+    "facet": [ ... ],
+    "secondaryFacet": [ ... ],
+    "facetToRemove": { ... },
+    "similar": [ ... ],
+    "spellCheck": { ... },
+    "spotlights": [ ... ],
+    "locales": [ ... ],
+    "cleanUpFacets": "...",
+    "selectedFilterQueries": [ ... ]
+  },
+  "groups": [ ... ]
+}
+```
 
-**`targetingRules` — flat list, AND between attributes, OR within the same attribute:**
+**Top-level sections:**
+
+| Section | Description |
+|---|---|
+| **pagination** | Pre-built page links (`FIRST`, `PREVIOUS`, `CURRENT`, `NEXT`, `LAST`) — the front-end follows them directly |
+| **queryContext** | Result count, page info, response time, active facet operators, and default field mappings |
+| **results.document** | Array of matched documents. Each contains `fields` (all indexed values), `metadata` (facet values with pre-built filter links), `source`, and `elevate` flag |
+| **widget.facet** | Primary facet groups with counts and pre-built filter/clear links per value. Enabled by `Facet = true` |
+| **widget.secondaryFacet** | Separate facet groups for fields promoted to Secondary Facet — independent from `facet`, for different UI treatment (e.g., tabs) |
+| **widget.similar** | More Like This results. Enabled by `MLT = true` |
+| **widget.spellCheck** | Spelling correction with `original`, `corrected` text, and `usingCorrectedText` flag. Enabled by `Spell Check = true` |
+| **widget.spotlights** | Curated documents injected at configured positions when the query matches a spotlight term |
+| **widget.locales** | All configured locales with pre-built links — use as valid values for `_setlocale` |
+| **widget.cleanUpFacets** | Pre-built link to clear all active facet filters |
+| **groups** | Grouped results when the `group` parameter is used |
+
+**Self-describing navigation** operates at three levels:
+
+1. **Facet navigation** — Each facet value carries pre-built links for applying, removing, or clearing filters
+2. **Document metadata navigation** — Each result's metadata values carry filter links (e.g., click a `type:article` tag to filter all articles)
+3. **Pagination** — Next/previous/specific page links are included; no offset calculation needed
+
+A Turing ES search UI can be built as a **pure rendering layer** — render results, facets, tags, pagination, and locale switchers directly from the response. Adding a new facet to the SN Site configuration propagates automatically, with no client code changes.
+
+**Locale selection:**
+
+```
+GET /api/sn/{siteName}/search?q=annual+report&_setlocale=pt_BR
+```
+
+#### POST Body Parameters
+
+The POST endpoint accepts the same query parameters plus additional fields in the JSON body:
+
+| Field | Type | Description |
+|---|---|---|
+| `userId` | `string` | User identifier (for metrics and latest searches) |
+| `query` | `string` | Search query (alternative to `q` query param) |
+| `locale` | `string` | Locale code (alternative to `_setlocale` query param) |
+| `page` | `integer` | Page number |
+| `rows` | `integer` | Results per page |
+| `sort` | `string` | Sort field and direction |
+| `group` | `string` | Group results by field |
+| `fq` | `string[]` | Filter queries |
+| `fqAnd` | `string[]` | AND filter queries |
+| `fqOr` | `string[]` | OR filter queries |
+| `fqOperator` | `string` | Filter query operator between facets |
+| `fqItemOperator` | `string` | Filter query operator within facet values |
+| `fieldList` | `string[]` | Restrict which fields are returned |
+| `disableAutoComplete` | `boolean` | Disable autocomplete suggestions (default: `false`) |
+| `populateMetrics` | `boolean` | Enable search metrics recording (default: `true`) |
+| `targetingRules` | `string[]` | Targeting rules — see [Targeting Rules](./semantic-navigation.md#targeting-rules) |
+| `targetingRulesWithCondition` | `map` | Targeting rules with conditions |
+| `targetingRulesWithConditionAND` | `map` | Targeting rules with AND conditions |
+| `targetingRulesWithConditionOR` | `map` | Targeting rules with OR conditions |
+
+**Example (POST with targeting rules):**
 
 ```bash
 curl -X POST "http://localhost:2700/api/sn/Sample/search" \
   -H "Content-Type: application/json" \
   -d '{
-    "q": "benefits",
-    "_setlocale": "en_US",
-    "targetingRules": ["department:HR", "department:Finance", "clearance:confidential"]
+    "query": "benefits",
+    "locale": "en_US",
+    "rows": 10,
+    "targetingRules": ["department:HR", "department:Finance"]
   }'
 ```
 
-**`targetingRulesWithConditionAND` — map, all attributes must match (AND between groups):**
-
-```bash
-curl -X POST "http://localhost:2700/api/sn/Sample/search" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "q": "promotions",
-    "_setlocale": "en_US",
-    "targetingRulesWithConditionAND": {
-      "country": ["BR"],
-      "language": ["pt"]
-    }
-  }'
-```
-
-**`targetingRulesWithConditionOR` — map, any attribute is sufficient (OR across all groups):**
-
-```bash
-curl -X POST "http://localhost:2700/api/sn/Sample/search" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "q": "discount",
-    "_setlocale": "en_US",
-    "targetingRulesWithConditionOR": {
-      "segment": ["premium", "gold"],
-      "loyalty": ["active"]
-    }
-  }'
-```
-
-Documents that have none of the targeted attributes are always included (fallback clause). See [Semantic Navigation Concepts → Targeting Rules](./sn-concepts.md#targeting-rules) for the full reference including Solr query generation and practical examples.
+For the full Targeting Rules reference — rule types, Solr query generation, fallback clause, and practical examples — see [Semantic Navigation → Targeting Rules](./semantic-navigation.md#targeting-rules).
 
 ---
 
@@ -218,6 +317,10 @@ curl "http://localhost:2700/api/sn/Sample/en_US/spell-check?q=entirprise"
 
 ## GenAI API
 
+:::note Streaming responses
+Both chat endpoints return **Server-Sent Events (SSE)** streams — content is delivered progressively as the model generates it. Clients should consume the response as an event stream rather than waiting for a single JSON payload.
+:::
+
 ### RAG Chat (SN Site)
 
 Sends a question to the GenAI engine of a Semantic Navigation Site. Returns a streaming SSE response grounded in the site's indexed content.
@@ -226,12 +329,28 @@ Sends a question to the GenAI engine of a Semantic Navigation Site. Returns a st
 GET http://localhost:2700/api/sn/{siteName}/chat?q={question}
 ```
 
+**Example:**
+
+```bash
+curl "http://localhost:2700/api/sn/Sample/chat?q=What+are+the+main+features?" \
+  -H "Key: <YOUR_API_TOKEN>"
+```
+
 ### AI Agent Chat
 
 Sends a message to a specific AI Agent. Returns a streaming SSE response.
 
 ```
 POST http://localhost:2700/api/v2/llm/agent/{agentId}/chat
+```
+
+**Example:**
+
+```bash
+curl -X POST "http://localhost:2700/api/v2/llm/agent/my-agent/chat" \
+  -H "Key: <YOUR_API_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{ "message": "Summarise the latest quarterly report" }'
 ```
 
 See [Chat](./chat.md) for the full chat interface documentation.
@@ -246,6 +365,13 @@ Returns token consumption statistics for a given month.
 GET http://localhost:2700/api/v2/llm/token-usage?month=YYYY-MM
 ```
 
+**Example:**
+
+```bash
+curl "http://localhost:2700/api/v2/llm/token-usage?month=2025-01" \
+  -H "Key: <YOUR_API_TOKEN>"
+```
+
 Authentication required. See [Token Usage](./token-usage.md) for details.
 
 ---
@@ -256,7 +382,6 @@ Authentication required. See [Token Usage](./token-usage.md) for details.
 |---|---|
 | [Authentication](./security-authentication.md) | How to create and use API Tokens |
 | [Semantic Navigation](./semantic-navigation.md) | SN Site configuration and the search response structure |
-| [Semantic Navigation Concepts](./sn-concepts.md) | Search response JSON schema |
 | [Chat](./chat.md) | Front-end chat interface and GenAI API |
 | [Token Usage](./token-usage.md) | Token consumption reporting |
 

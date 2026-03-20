@@ -54,9 +54,9 @@ These are the main building blocks you will work with in Turing ES. You do not n
 | **Semantic Navigation Site** | The central configuration object. Defines what content is indexed, how it is searched, and how results are presented. | [Core Concepts](./core-concepts.md) |
 | **Connector** | A component in Dumont DEP that extracts content from a source and sends it to Turing ES. | [Core Concepts](./core-concepts.md) |
 | **Facets** | Filterable attributes shown alongside search results (e.g., category, date, author). | [Core Concepts](./core-concepts.md) |
-| **Spotlight** | Curated results pinned to specific search terms. | [Semantic Navigation](../sn-concepts.md) |
-| **Targeting Rules** | Rules that show different results to different users based on their profile. | [Semantic Navigation](../sn-concepts.md) |
-| **Merge Providers** | Rules that combine documents from two different connectors into one enriched result. | [Semantic Navigation](../sn-concepts.md) |
+| **Spotlight** | Curated results pinned to specific search terms. | [Semantic Navigation](../semantic-navigation.md) |
+| **Targeting Rules** | Rules that show different results to different users based on their profile. | [Semantic Navigation](../semantic-navigation.md) |
+| **Merge Providers** | Rules that combine documents from two different connectors into one enriched result. | [Semantic Navigation](../semantic-navigation.md) |
 | **RAG** | Retrieval-Augmented Generation — finding relevant documents and using them to ground an LLM's response. | [GenAI & LLM](../genai-llm.md) |
 | **AI Agent** | A named assistant that combines an LLM with a set of tools and knowledge sources. | [GenAI & LLM](../genai-llm.md) |
 | **Assets** | A file manager backed by MinIO where you upload documents to feed the Knowledge Base — files are automatically indexed as vector embeddings. | [Assets](../assets.md) |
@@ -76,7 +76,7 @@ Not sure where to start? Here is a suggested path depending on what you want to 
 → Go to the [Installation Guide](../installation-guide.md).
 
 **I want to configure search for my content**
-→ Start with [Core Concepts](./core-concepts.md) then go to [Semantic Navigation](../sn-concepts.md).
+→ Start with [Core Concepts](./core-concepts.md) then go to [Semantic Navigation](../semantic-navigation.md).
 
 **I want to add generative AI to my search**
 → Read [GenAI & LLM Configuration](../genai-llm.md).

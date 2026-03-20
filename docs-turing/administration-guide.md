@@ -16,7 +16,7 @@ It can read PDFs and Documents and convert to plain text and also it uses OCR to
 
 ## Semantic Navigation
 
-Semantic Navigation Sites are the central configuration objects in Turing ES. Each site defines what content is indexed, how it is searched, how results are presented, and whether GenAI is enabled. For a conceptual overview, see [Core Concepts](./getting-started/core-concepts.md). For advanced configuration — Targeting Rules, Spotlights, Merge Providers, Facets, and the search response structure — see [Semantic Navigation Concepts](./sn-concepts.md).
+Semantic Navigation Sites are the central configuration objects in Turing ES. Each site defines what content is indexed, how it is searched, how results are presented, and whether GenAI is enabled. For a conceptual overview, see [Core Concepts](./getting-started/core-concepts.md). For advanced configuration — Targeting Rules, Spotlights, Merge Providers, Facets, and the search response structure — see [Semantic Navigation](./semantic-navigation.md).
 
 ## Generative AI Administration
 
@@ -249,4 +249,4 @@ The **Semantic Navigation** section manages SN Sites — the central configurati
 
 For full documentation of all SN Site configuration tabs (Settings, Multi Languages, Behavior, Fields, Merge Providers, Targeting Rules, Spotlights, Top Search Terms, Result Ranking, AI Insights, and Generative AI) and the search REST API, see **[Semantic Navigation](./semantic-navigation.md)**.
 
-For deep technical content — Targeting Rules Solr query mechanics, Spotlight injection, Merge Provider field overwrite rules, facet operators, and the self-describing search response structure — see **[Semantic Navigation Concepts](./sn-concepts.md)**.
+For deep technical content — Targeting Rules Solr query mechanics, Spotlight injection, Merge Provider field overwrite rules, facet operators, and the self-describing search response structure — see **[Semantic Navigation](./semantic-navigation.md)**.

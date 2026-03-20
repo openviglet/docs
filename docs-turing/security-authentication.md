@@ -24,13 +24,7 @@ Users, groups, and roles are managed in **Administration → Users**, **Groups**
 
 ### REST API — API Key
 
-All REST API requests authenticate via an **API Key** passed in the `Key` request header:
-
-```
-Key: <YOUR_API_TOKEN>
-```
-
-API Tokens are not tied to user sessions. They are created and managed in **Administration → API Tokens** and remain valid until explicitly deleted.
+All REST API requests authenticate via an **API Key** passed in the `Key` request header. API Tokens are not tied to user sessions — they are created in **Administration → API Tokens** and remain valid until explicitly deleted.
 
 **Creating an API Token:**
 
@@ -39,37 +33,11 @@ API Tokens are not tied to user sessions. They are created and managed in **Admi
 3. Click **New**, fill in a name and description.
 4. Copy the generated token immediately — it will not be shown again.
 
-**Example — authenticated API call:**
-
-```bash
-curl "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
-  -H "Key: <YOUR_API_TOKEN>" \
-  -H "Accept: application/json"
-```
+For the full endpoint reference, authentication examples, and the list of public endpoints that require no authentication, see [REST API Reference → Authentication](./rest-api.md#authentication).
 
 :::tip Tokens are encrypted at rest
 API Token values are encrypted in the database using `TurSecretCryptoService`. The encryption key is set via `turing.ai.crypto.key` in `application.yaml`. Change this key in production — see [Configuration Reference](./configuration-reference.md).
 :::
-
----
-
-## Public Endpoints (no authentication required)
-
-Certain endpoints are always publicly accessible regardless of authentication mode, allowing client applications to perform searches and chat interactions without managing sessions:
-
-| Endpoint | Purpose |
-|---|---|
-| `GET /api/sn/*/search` | Semantic Navigation search |
-| `GET /api/sn/*/chat` | GenAI chat on an SN Site |
-| `GET /api/sn/*/ac` | Autocomplete |
-| `POST /api/genai/chat` | Direct GenAI chat |
-| `POST /api/ocr/**` | OCR text extraction |
-| `POST /api/v2/integration/**` | External integration endpoints |
-| `GET /api/v2/guest/**` | Guest access endpoints |
-| `POST /graphql` | GraphQL queries |
-| `GET /api/login` | Login endpoint |
-
-All other endpoints require authentication. This includes the full administration API, user management, site configuration, and AI Agent management.
 
 ---
 

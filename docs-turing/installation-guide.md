@@ -233,14 +233,13 @@ Start the Solr service after the collection is created.
 
 ### Turing ES Download
 
-Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Download Turing ES" button to download the `viglet-turing.jar` executable.
+Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Download Turing ES" button to download `viglet-turing.jar`.
 
 Copy the `viglet-turing.jar` to `/appl/viglet/turing/server`:
 
 ```shell
 mkdir -p /appl/viglet/turing/server
 cp viglet-turing.jar /appl/viglet/turing/server
-chmod 770 /appl/viglet/turing/server/viglet-turing.jar
 ```
 
 ### Database
@@ -265,53 +264,43 @@ JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:oracle:thin:@localhost:152
 JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:postgresql://localhost:5432/turing -Dspring.datasource.username=turing -Dspring.datasource.password=turing -Dspring.datasource.driver-class-name=org.postgresql.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect"
 ```
 
-### Encrypting the Database Password
-
-For more security, it is possible to encrypt the Database password in `viglet-turing.conf`:
-
-```shell
-cd /appl/viglet/turing/utils/scripts
-./turGenerateDBPassword.sh /appl/viglet/turing/server
-Password:
-Retype Password:
-
-Thanks, the password was successfully generated in /appl/viglet/turing/server/db-encrypted.properties
-
-cat /appl/viglet/turing/server/db-encrypted.properties
-clqp6QxceJQIp6lnaiKelQc9DvdNKNxg
-```
-
-Copy the content and replace `-Dspring.datasource.password=<PLAIN_TEXT_PASSWORD>` with `-Dspring.datasource.password=ENC(<ENCRYPTED_PASSWORD>)`.
-
-For example: `-Dspring.datasource.password=ENC(clqp6QxceJQIp6lnaiKelQc9DvdNKNxg)`
-
 ### Creating Turing ES Service on Linux
-
-#### Red Hat and CentOS
 
 As root, create a `/etc/systemd/system/turing.service` file with the following lines:
 
 ```ini
 [Unit]
 Description=Viglet Turing ES
-After=syslog.target
+After=syslog.target network.target
 
 [Service]
 User=viglet
-ExecStart=/appl/viglet/turing/server/viglet-turing.jar
+EnvironmentFile=/appl/viglet/turing/server/viglet-turing.conf
+ExecStart=/usr/bin/java $JAVA_OPTS -jar /appl/viglet/turing/server/viglet-turing.jar
 SuccessExitStatus=143
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-This way, you can interact with the Turing ES service:
+:::note Spring Boot 4
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-turing.jar`). You must launch Turing ES using `java -jar` explicitly.
+:::
+
+Enable and start the service:
 
 ```shell
-./systemctl start turing.service
-./systemctl stop turing.service
-./systemctl restart turing.service
-./systemctl status turing.service
+systemctl daemon-reload
+systemctl enable turing.service
+systemctl start turing.service
+```
+
+Other useful commands:
+
+```shell
+systemctl stop turing.service
+systemctl restart turing.service
+systemctl status turing.service
 ```
 
 ### Starting Turing ES
@@ -319,16 +308,17 @@ This way, you can interact with the Turing ES service:
 When Turing ES is started for the first time, it will perform initial setup.
 
 ```
-$ ./viglet-turing.jar
-  _____            _                 _    ___
- |_   _|_  _  _ _ (_) _ _   __ _    /_\  |_ _|
-   | | | || || '_|| || ' \ / _` |  / _ \  | |
-   |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|
+$ java -jar viglet-turing.jar
+  _____            _               ___  ___
+ |_   _|_  _  _ _ (_) _ _   __ _  | __|/ __|
+   | | | || || '_|| || ' \ / _` | | _| \__ \
+   |_|  \_,_||_|  |_||_||_|\__, | |___||___/ 2026.1.17
                            |___/
 
-:: Copyright (C) 2016-2025, Viglet Team <opensource@viglet.com>
+:: Copyright (C) 2016-2026 Viglet Turing Enterprise Search
 
-Starting Turing ES using Java 21 ...
+:: Built with Spring Boot :: 3.5.0
+
 First Time Configuration ...
 Configuration finished.
 ```
