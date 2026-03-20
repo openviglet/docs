@@ -49,7 +49,7 @@ jobs:
         run: npm run gen-pdf
 
       - name: Copy PDF into build folder
-        run: cp turing-documentation.pdf build/
+        run: cp turing-es-2026.1-documentation.pdf build/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

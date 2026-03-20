@@ -12,7 +12,7 @@
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
-    "gen-pdf": "mr-pdf --initialDocURLs=\"http://localhost:3000/turing/getting-started/intro\" --contentSelector=\"article\" --paginationSelector=\"a.pagination-nav__link--next\" --pdfOptions=\"{\\\"format\\\":\\\"A4\\\",\\\"margin\\\":{\\\"top\\\":\\\"20mm\\\",\\\"bottom\\\":\\\"20mm\\\",\\\"left\\\":\\\"15mm\\\",\\\"right\\\":\\\"15mm\\\"}}\" --outputFileName=\"turing-documentation.pdf\"",
+    "gen-pdf": "mr-pdf --initialDocURLs=\"http://localhost:3000/turing/getting-started/intro\" --contentSelector=\"article\" --paginationSelector=\"a.pagination-nav__link--next\" --pdfOptions=\"{\\\"format\\\":\\\"A4\\\",\\\"margin\\\":{\\\"top\\\":\\\"20mm\\\",\\\"bottom\\\":\\\"20mm\\\",\\\"left\\\":\\\"15mm\\\",\\\"right\\\":\\\"15mm\\\"}}\" --outputFileName=\"turing-es-2026.1-documentation.pdf\"",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids"
   },
