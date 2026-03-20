@@ -172,17 +172,15 @@ function buildTocHtml(entries, tocStartPage) {
   const rows = entries.map((e) => {
     const pg = currentPage;
     currentPage += e.pageCount;
-    const href = `${PROD_URL}${e.path}`;
     return `
       <tr>
         <td style="padding:7px 0;border-bottom:1px solid #f1f5f9;">
-          <a href="${href}" style="text-decoration:none;color:inherit;display:block;">
-            <span style="font-weight:600;color:#1e293b;font-size:10.5pt;">${e.title}</span>
-          </a>
+          <span style="font-weight:600;color:#1e293b;font-size:10.5pt;">${e.title}</span>
         </td>
         <td style="padding:7px 0;border-bottom:1px solid #f1f5f9;text-align:right;
-                    font-family:'JetBrains Mono',monospace;font-size:9pt;white-space:nowrap;width:40px;">
-          <a href="${href}" style="text-decoration:none;color:#94a3b8;">${pg}</a>
+                    font-family:'JetBrains Mono',monospace;font-size:9pt;color:#94a3b8;
+                    white-space:nowrap;width:40px;">
+          ${pg}
         </td>
       </tr>`;
   });
@@ -252,6 +250,71 @@ async function generateToc(entries, firstDocPage) {
   const tocPageCount = tocDoc.getPageCount();
   console.log(`         TOC rendered (${tocPageCount}p) ✓`);
   return { pdfBuf, tocPageCount };
+}
+
+/* ──────────────────────────────────────────────────────
+   Add clickable GoTo links on TOC pages via pdf-lib.
+   Calculates row positions from the known HTML layout:
+     body padding: 30mm top, 25mm sides
+     PDF margins:  20mm top/bottom, 15mm sides
+     Title+divider: ~66pt, each row: ~22pt
+   ────────────────────────────────────────────────────── */
+function addTocGoToLinks(merged, entries, coverPageCount, tocPageCount, pageMap) {
+  const context = merged.context;
+  const PAGE_H  = 841.89;  // A4 height in pt
+  const LEFT    = 30;       // generous left edge
+  const RIGHT   = 565;      // generous right edge
+  const ROW_H   = 22;       // approximate row height in pt
+
+  // First TOC page: title+divider take ~66pt from top of text area
+  // Text area top = PAGE_H - pdfMarginTop(20mm=56.7) - bodyPadTop(30mm=85) ≈ 700pt
+  const FIRST_PAGE_START = PAGE_H - 56.7 - 85 - 66;  // ≈ 634pt
+  const NEXT_PAGE_START  = PAGE_H - 56.7 - 85;         // ≈ 700pt (no title)
+  const PAGE_BOTTOM      = 56.7 + 71;                   // ≈ 128pt
+
+  let y = FIRST_PAGE_START;
+  let tocPageIdx = 0;
+
+  for (const entry of entries) {
+    // Move to next TOC page if we've run out of space
+    if (y - ROW_H < PAGE_BOTTOM && tocPageIdx + 1 < tocPageCount) {
+      tocPageIdx++;
+      y = NEXT_PAGE_START;
+    }
+
+    const targetDocPageIdx = pageMap.get(entry.path);
+    if (targetDocPageIdx === undefined) { y -= ROW_H; continue; }
+
+    const tocPdfPageIdx = coverPageCount + tocPageIdx;
+    const page = merged.getPage(tocPdfPageIdx);
+    const targetRef = merged.getPage(targetDocPageIdx).ref;
+
+    // Create GoTo action
+    const action = context.obj({
+      S: PDFName.of('GoTo'),
+      D: [targetRef, PDFName.of('Fit')],
+    });
+
+    // Create link annotation covering the row
+    const annot = context.register(context.obj({
+      Type: PDFName.of('Annot'),
+      Subtype: PDFName.of('Link'),
+      Rect: [LEFT, y - ROW_H, RIGHT, y],
+      Border: [0, 0, 0],
+      A: action,
+    }));
+
+    // Append to page's Annots array
+    const existingAnnots = page.node.get(PDFName.of('Annots'));
+    if (existingAnnots) {
+      const arr = context.lookup(existingAnnots);
+      if (arr instanceof PDFArray) arr.push(annot);
+    } else {
+      page.node.set(PDFName.of('Annots'), context.obj([annot]));
+    }
+
+    y -= ROW_H;
+  }
 }
 
 /* ──────────────────────────────────────────────────────
@@ -446,7 +509,10 @@ async function main() {
     coverBuf, tocBuf, buffers, entries, coverPageCount, tocPageCount,
   );
 
-  // Stage 5 — Rewrite internal links
+  // Stage 4b — Add clickable GoTo links on TOC pages
+  addTocGoToLinks(merged, entries, coverPageCount, tocPageCount, pageMap);
+
+  // Stage 5 — Rewrite internal links in doc pages
   await rewriteInternalLinks(merged, pageMap);
 
   // Stage 6 — Page numbers (skip cover + TOC)
