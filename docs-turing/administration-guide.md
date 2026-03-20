@@ -42,7 +42,19 @@ Turing ES has many components: Search Engine, Semantic Navigation, and Generativ
 
 ### Login
 
-When access the Turing ES, appear a login page. For default the login/password is `admin`/`admin`.
+When accessing Turing ES, a login page is displayed. The default username is `admin`. The password is defined at first startup via the `TURING_ADMIN_PASSWORD` environment variable — if not set, Turing ES will not create the admin account with a default password.
+
+Set the environment variable before starting Turing ES for the first time:
+
+**Windows**
+```bat
+set TURING_ADMIN_PASSWORD=your_password
+```
+
+**Linux / macOS**
+```bash
+export TURING_ADMIN_PASSWORD=your_password
+```
 
 ![Login Page](/img/screenshots/turing-login.png)
 
