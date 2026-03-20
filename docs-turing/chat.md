@@ -83,7 +83,7 @@ The system prompt includes locale instructions and available facets for each con
 
 | Tool | Description |
 |---|---|
-| `list_sites` | Lists all available Semantic Navigation sites and their locales |
+| `list_sites` | Lists all available SN Sites and their locales |
 | `get_site_fields` | Returns available fields and facets for a specific site |
 | `get_valid_filter_values` | Returns valid values for a filter or facet field |
 | `search_site` | Performs a semantic search within a site and returns results |
@@ -106,7 +106,7 @@ Each **AI Agent** configured and enabled in **Administration → AI Agents** app
 | **Avatar** | Image shown in the chat alongside agent messages |
 | **System Prompt** | The agent's persona, purpose, and behavioural instructions |
 | **LLM Instance** | The specific language model powering this agent (must be valid and enabled) |
-| **Native Tools** | A selection from the 27 native tool callings (code interpreter, search, weather, finance, etc.) |
+| **Native Tools** | A selection from the 27 native tools (code interpreter, search, weather, finance, etc.) |
 | **MCP Servers** | External tool servers connected specifically to this agent |
 
 For full configuration details — composing agents, tool selection, and MCP Server registration — see [AI Agents](./ai-agents.md).

@@ -6,6 +6,8 @@ description: Manage files and train the RAG knowledge base with Viglet Turing ES
 
 # Assets
 
+Assets is the file manager that feeds the RAG Knowledge Base in Turing ES. Content managers and administrators use it to upload documents (PDFs, Word files, spreadsheets, and more) that are automatically indexed as vector embeddings and made available to AI Agents for semantic search. It is the bridge between your files and the Knowledge Base — everything uploaded here becomes part of what the AI can reference when answering questions.
+
 The **Assets** section (`/console/asset`) is a file manager with built-in RAG training capabilities. It is available in the **Management** section of the sidebar and is only visible when **MinIO is enabled**.
 
 Assets serves as the Knowledge Base for AI Agents — every file uploaded here can be indexed as vector embeddings and queried by the LLM via tool calling. For the conceptual overview of how this fits into the GenAI architecture, see [Generative AI & LLM Configuration](./genai-llm.md).
@@ -46,7 +48,7 @@ The file listing displays the following columns:
 
 ### Upload Files
 
-Files are uploaded to the **current folder** via drag-and-drop or a file picker. Multiple files can be selected in one operation. Uploads are sent to:
+Files are uploaded to the **current folder** via a file picker dialog (click **Upload Files**). Multiple files can be selected in one operation. Uploads are sent to:
 
 ```
 POST /api/asset
@@ -65,6 +67,28 @@ Each file has a dedicated download button that preserves the original filename.
 ### Delete
 
 Files and folders can be deleted via an inline button. A **toast notification** confirms completion. When a file is deleted, its **embeddings are automatically removed from the vector store**.
+
+:::note No rename
+Renaming files or folders is not currently supported. To rename a file, download it, delete the original, and re-upload with the new name.
+:::
+
+---
+
+## Supported File Formats for Training
+
+Apache Tika is the text-extraction engine used during AI Training. It supports a broad range of document types:
+
+| Category | Formats |
+|---|---|
+| **Documents** | PDF, DOCX, DOC, ODT, RTF, EPUB |
+| **Spreadsheets** | XLSX, XLS, ODS, CSV |
+| **Presentations** | PPTX, PPT, ODP |
+| **Web / Markup** | HTML, XHTML, XML |
+| **Plain text** | TXT, LOG, Markdown |
+| **Email** | EML, MSG, MBOX |
+| **Images (with OCR)** | PNG, JPEG, TIFF, BMP, GIF (requires Tesseract) |
+
+Files that Tika cannot extract text from (e.g. binary executables, ZIP archives without textual content) are **silently skipped** during training with no error counted.
 
 ---
 
@@ -168,11 +192,15 @@ Each chunk stored in the vector store carries the following metadata:
 
 This metadata is used by AI Agents when returning search results, so the LLM can cite the source file and provide context about where the information came from.
 
+### Text Extraction Limits
+
+There is **no hard file size limit** for uploads — MinIO accepts files of any size. However, during AI Training the extracted text is **truncated to 100,000 characters** before chunking. For very large documents this means only the first portion of the content is indexed. The truncation limit is defined by `TurRagUtils.MAX_TEXT_LENGTH`.
+
 ---
 
 ## How AI Agents Use the Knowledge Base
 
-Once files are indexed, AI Agents can query the knowledge base via four built-in tool callings:
+Once files are indexed, AI Agents can query the knowledge base via four built-in tools:
 
 | Tool | Description |
 |---|---|
@@ -181,7 +209,7 @@ Once files are indexed, AI Agents can query the knowledge base via four built-in
 | `list_knowledge_base_files` | Lists all indexed files, with optional keyword filter |
 | `get_file_from_knowledge_base` | Retrieves the full indexed content of a specific file |
 
-For details on configuring AI Agents and tool callings, see [AI Agents](./ai-agents.md) and [Tool Calling](./tool-calling.md).
+For details on configuring AI Agents and tools, see [AI Agents](./ai-agents.md) and [Tool Calling](./tool-calling.md).
 
 ---
 
@@ -221,4 +249,34 @@ The MinIO web console is available at `http://localhost:9001` when running local
 
 ---
 
-*Previous: [Administration Guide](./administration-guide.md) | Next: [Generative AI & LLM Configuration](./genai-llm.md)*
+## REST API Reference
+
+All endpoints are under `/api/asset` and require authentication.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/asset?prefix=` | List files and folders in a prefix (folder) |
+| `POST` | `/api/asset` | Upload one or more files (multipart/form-data) |
+| `GET` | `/api/asset/download?objectName=` | Download a file (Content-Disposition: attachment) |
+| `GET` | `/api/asset/preview?objectName=` | Preview a file inline (Content-Disposition: inline) |
+| `GET` | `/api/asset/metadata?objectName=` | Retrieve file metadata (size, type, date) |
+| `POST` | `/api/asset/folder?path=` | Create a new folder |
+| `DELETE` | `/api/asset?objectName=` | Delete a file or folder |
+| `POST` | `/api/asset/train` | Start batch AI Training |
+| `GET` | `/api/asset/train/status` | Poll current training status |
+| `GET` | `/api/asset/train/records?objectNames=` | Get training timestamps for specific files |
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Embedding Stores & Models](./embedding-stores.md) | Configure vector database backends and embedding models used by AI Training |
+| [Tool Calling](./tool-calling.md) | All 27 native tools, including the four Knowledge Base tools |
+| [AI Agents](./ai-agents.md) | Compose agents that query the Knowledge Base via tool calling |
+| [Generative AI & LLM Configuration](./genai-llm.md) | Platform-wide GenAI settings and RAG architecture overview |
+
+---
+
+*Previous: [Embedding Stores & Models](./embedding-stores.md) | Next: [Tool Calling](./tool-calling.md)*

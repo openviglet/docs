@@ -6,6 +6,8 @@ description: Connect AI Agents to external tools via the Model Context Protocol 
 
 # MCP Servers
 
+The **Model Context Protocol (MCP)** is an open standard that lets AI models call tools hosted on external servers — turning any API, database, or internal system into a capability that an AI Agent can use autonomously. If you are an administrator looking to extend your agents beyond the 27 built-in tools, MCP Servers let you connect to virtually any external service without writing custom code inside Turing ES.
+
 An **MCP Server** extends the capabilities of an AI Agent by connecting it to any external server that implements the **Model Context Protocol (MCP)**. This allows Turing ES agents to use tools defined completely outside the platform — a company-internal knowledge system, a proprietary data API, a database query interface, or any of the growing ecosystem of public MCP servers.
 
 MCP Servers are configured in **Administration → MCP Servers** and then selected per [AI Agent](./ai-agents.md).

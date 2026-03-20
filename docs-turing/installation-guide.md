@@ -233,6 +233,15 @@ Start the Solr service after the collection is created.
 
 ### Turing ES Download
 
+#### Option 1 — Docker (fastest)
+
+```bash
+docker pull openviglet/turing:2026.1
+docker run -p 2700:2700 openviglet/turing:2026.1
+```
+
+#### Option 2 — JAR download
+
 Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Download Turing ES" button to download `viglet-turing.jar`.
 
 Copy the `viglet-turing.jar` to `/appl/viglet/turing/server`:
@@ -240,6 +249,15 @@ Copy the `viglet-turing.jar` to `/appl/viglet/turing/server`:
 ```shell
 mkdir -p /appl/viglet/turing/server
 cp viglet-turing.jar /appl/viglet/turing/server
+```
+
+#### Option 3 — Build from source
+
+```bash
+git clone https://github.com/openviglet/turing.git
+cd turing
+mvn clean package -pl turing-app
+cp turing-app/target/viglet-turing.jar /appl/viglet/turing/server/
 ```
 
 ### Database
@@ -445,3 +463,7 @@ docker exec -it turing-mariadb /bin/bash
 ```shell
 docker exec -it turing-nginx /bin/bash
 ```
+
+---
+
+*Previous: [Architecture Overview](./architecture-overview.md) | Next: [Configuration Reference](./configuration-reference.md)*

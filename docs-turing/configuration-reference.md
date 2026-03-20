@@ -122,6 +122,8 @@ turing:
   url: http://localhost:2700
   open-browser: true
   jms.concurrency: 1-1
+  code-interpreter:
+    python-executable: ""
   solr:
     timeout: 30000
     cloud: false
@@ -294,6 +296,7 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 | `turing.multi-tenant` | `false` | Enable multi-tenant mode |
 | `turing.open-browser` | `true` | Automatically open the admin console in the browser on startup |
 | `turing.ai.crypto.key` | `sample-key-for-crypto` | Encryption key for stored AI provider credentials. **Change this in production.** |
+| `turing.code-interpreter.python-executable` | *(auto-detected)* | Absolute path to the Python 3 binary used by the Code Interpreter GenAI tool. When blank, Turing searches standard OS locations automatically. |
 
 :::warning Change the crypto key
 The `turing.ai.crypto.key` is used to encrypt LLM provider API keys stored in the database. Always set a strong, unique value in production.
@@ -413,6 +416,43 @@ spring:
 ```
 
 For full Keycloak setup instructions, see [Security & Keycloak](./security-keycloak.md).
+
+---
+
+### GenAI / LLM (Database Settings)
+
+LLM providers, models, and GenAI behavior are managed through the **Administration Console** and stored in the database — not in `application.yaml`. The following settings are available via **Settings > Global Settings** in the admin UI:
+
+| Setting | Default | Description |
+|---|---|---|
+| Default LLM | *(none)* | Global default LLM instance used when a Semantic Navigation site does not specify one |
+| LLM Cache Enabled | `false` | Cache LLM responses to reduce API calls for repeated queries |
+| LLM Cache TTL (ms) | `3600000` (1 hour) | How long cached LLM responses remain valid |
+| LLM Cache Regenerate | `false` | When `true`, regenerate cached responses in the background |
+| RAG Enabled | `false` | Enable Retrieval-Augmented Generation globally |
+| Default Embedding Model | *(none)* | Global default embedding model for vector operations |
+| Default Embedding Store | *(none)* | Global default embedding store instance |
+| Python Executable | *(auto-detected)* | Path to Python 3 for the Code Interpreter tool (also overridable via `turing.code-interpreter.python-executable` in YAML) |
+
+**Supported LLM providers:** OpenAI, Ollama, Anthropic (Claude), Google Gemini, Google Gemini (OpenAI-compatible), and Azure OpenAI.
+
+LLM instances are created under **GenAI > LLM** in the admin console, where you configure the provider, API key, base URL, and model name.
+
+---
+
+### Embedding Store (Database Settings)
+
+Embedding store instances are configured through the **Administration Console** under **GenAI > Embedding Store**. Each instance specifies a vendor, connection URL, credentials, and optional provider-specific options via a JSON field.
+
+**Supported vendors:**
+
+| Vendor | Plugin ID | Key Provider Options |
+|---|---|---|
+| **ChromaDB** | `chroma` | `baseUrl` (default `http://localhost:8000`), `collectionName`, `tenantName`, `databaseName`, `initializeSchema`, `keyToken`, `basicUsername`, `basicPassword` |
+| **Milvus** | `milvus` | `baseUrl`, `collectionName`, `databaseName`, `token`, `embeddingDimension`, `metricType`, `indexType`, `indexParameters`, `initializeSchema` |
+| **PGVector** | `pgvector` | JDBC URL (set as instance URL), `tableName` (default `vector_store`), `schemaName` (default `public`), `dimensions`, `distanceType`, `indexType`, `initializeSchema` |
+
+Provider options are passed as a JSON object in the **Provider Options** field when creating or editing an embedding store instance.
 
 ---
 

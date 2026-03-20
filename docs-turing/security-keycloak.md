@@ -446,4 +446,4 @@ Before going to production, verify the following:
 
 ---
 
-*Previous: [Authentication](./security-authentication.md) | Next: [Semantic Navigation](./semantic-navigation.md)*
+*Previous: [Authentication](./security-authentication.md)*

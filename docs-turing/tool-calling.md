@@ -165,8 +165,8 @@ See [MCP Servers](./mcp-servers.md) for configuration details.
 | [AI Agents](./ai-agents.md) | How to compose agents with the tools they need |
 | [MCP Servers](./mcp-servers.md) | Extend agents with external tools via MCP |
 | [Assets](./assets.md) | Knowledge Base files queried by RAG tools |
-| [Semantic Navigation](./semantic-navigation.md) | The search experience powering SN tool callings |
+| [Semantic Navigation](./semantic-navigation.md) | The search experience powering SN tools |
 
 ---
 
-*Previous: [Embedding Stores & Models](./embedding-stores.md) | Next: [MCP Servers](./mcp-servers.md)*
+*Previous: [Assets](./assets.md) | Next: [MCP Servers](./mcp-servers.md)*

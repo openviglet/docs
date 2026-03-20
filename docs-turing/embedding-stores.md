@@ -6,6 +6,8 @@ description: Vector database backends and embedding model configuration for RAG 
 
 # Embedding Stores & Models
 
+Embeddings are numerical representations of text that capture semantic meaning — they allow the system to find documents that are conceptually similar to a query, even when the exact words differ. An Embedding Store is the specialized database that persists and queries these vectors. Platform administrators and DevOps engineers configure these settings to enable RAG and semantic search across the platform.
+
 Turing ES uses **embedding vectors** to power semantic similarity search — the foundation of RAG-based chat and Knowledge Base querying. Two components must be configured: the **Embedding Store** (where vectors are persisted) and the **Embedding Model** (what generates the vectors).
 
 Both are set globally in **Administration → Settings** and can be overridden per Semantic Navigation Site in its **Generative AI** tab.
@@ -119,4 +121,4 @@ Individual Semantic Navigation Sites can override both settings in their **Gener
 
 ---
 
-*Previous: [LLM Instances](./llm-instances.md) | Next: [Tool Calling](./tool-calling.md)*
+*Previous: [LLM Instances](./llm-instances.md) | Next: [Assets](./assets.md)*

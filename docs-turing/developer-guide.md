@@ -415,4 +415,4 @@ Check the open [GitHub Issues](https://github.com/openviglet/turing/issues) for 
 
 ---
 
-*Previous: [Security & Keycloak](./security-keycloak.md) | Next: [REST API Reference](./rest-api.md)*
+*Previous: [Token Usage](./token-usage.md) | Next: [REST API Reference](./rest-api.md)*

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: AI Agents
-description: Configure, compose, and deploy AI Agents in Turing ES — combining LLM Instances, Tool Callings, and MCP Servers into purpose-built assistants.
+description: Configure, compose, and deploy AI Agents in Turing ES — combining LLM Instances, Tool Calling, and MCP Servers into purpose-built assistants.
 ---
 
 # AI Agents
 
-An **AI Agent** is the central composition object in Turing ES's GenAI system. It combines a specific [LLM Instance](./llm-instances.md), a selected set of [Tool Callings](./tool-calling.md), and a set of [MCP Servers](./mcp-servers.md) into a single, named, deployable assistant.
+An **AI Agent** is the central composition object in Turing ES's GenAI system. It combines a specific [LLM Instance](./llm-instances.md), a selected set of [tools](./tool-calling.md), and a set of [MCP Servers](./mcp-servers.md) into a single, named, deployable assistant.
 
 Each agent has its own personality, capability set, and visual identity. In the **Chat** interface, every configured agent appears as a separate tab — users choose which agent to interact with based on its name and description. See the [Chat](./chat.md) page for the full interface documentation.
 
@@ -22,7 +22,7 @@ AI Agents are configured in **Administration → AI Agents**.
 | **Avatar** | Image representing the agent in the chat UI |
 | **Description** | Brief explanation of the agent's purpose and specialization — shown below the name in the agent tab |
 | **LLM Instance** | The LLM provider and model this agent uses for inference. See [LLM Instances](./llm-instances.md) |
-| **Tool Callings** | Which of the 27 native tools are available to this agent. See [Tool Calling](./tool-calling.md) |
+| **Tools** | Which of the 27 native tools are available to this agent. See [Tool Calling](./tool-calling.md) |
 | **MCP Servers** | Which external MCP servers this agent can call. See [MCP Servers](./mcp-servers.md) |
 
 ---
@@ -38,7 +38,7 @@ An agent that helps users find and explore indexed content across the organizati
 | Field | Value |
 |---|---|
 | LLM Instance | Anthropic Claude Sonnet |
-| Tool Callings | `list_sites`, `search_site`, `get_document_details`, `find_similar_documents`, `search_by_date_range` |
+| Tools | `list_sites`, `search_site`, `get_document_details`, `find_similar_documents`, `search_by_date_range` |
 | MCP Servers | — |
 
 **Data Research Agent**
@@ -48,7 +48,7 @@ A multi-purpose agent that can browse the web, query financial data, and run dat
 | Field | Value |
 |---|---|
 | LLM Instance | OpenAI GPT-4o |
-| Tool Callings | `fetch_webpage`, `extract_links`, `get_stock_quote`, `get_weather`, `execute_python`, `search_knowledge_base` |
+| Tools | `fetch_webpage`, `extract_links`, `get_stock_quote`, `get_weather`, `execute_python`, `search_knowledge_base` |
 | MCP Servers | Internal data API (HTTP MCP) |
 
 **IT Operations Agent**
@@ -58,7 +58,7 @@ A local agent for internal IT queries — runs fully on-premise using a local LL
 | Field | Value |
 |---|---|
 | LLM Instance | Ollama (local Llama 3) |
-| Tool Callings | `execute_python`, `get_current_time`, `search_knowledge_base` |
+| Tools | `execute_python`, `get_current_time`, `search_knowledge_base` |
 | MCP Servers | Internal ticketing system (stdio MCP) |
 
 ---

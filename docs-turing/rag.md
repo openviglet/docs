@@ -222,4 +222,4 @@ Imagine a company with an internal knowledge base containing HR policies, produc
 
 ---
 
-*Previous: [Generative AI & LLM Configuration](./genai-llm.md) | Next: [LLM Instances](./llm-instances.md)*
+*Previous: [GenAI & LLM Configuration](./genai-llm.md) | Next: [LLM Instances](./llm-instances.md)*

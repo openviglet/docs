@@ -20,7 +20,7 @@ Semantic Navigation Sites are the central configuration objects in Turing ES. Ea
 
 ## Generative AI Administration
 
-The GenAI system is configured across several administration sections. For full configuration details — LLM providers, embedding stores, RAG architecture, Tool Callings, MCP Servers, and AI Agents — see [Generative AI & LLM Configuration](./genai-llm.md).
+The GenAI system is configured across several administration sections. For full configuration details — LLM providers, embedding stores, RAG architecture, Tool Calling, MCP Servers, and AI Agents — see [Generative AI & LLM Configuration](./genai-llm.md).
 
 A brief overview of each administration section:
 
@@ -250,3 +250,7 @@ The **Semantic Navigation** section manages SN Sites — the central configurati
 For full documentation of all SN Site configuration tabs (Settings, Multi Languages, Behavior, Fields, Merge Providers, Targeting Rules, Spotlights, Top Search Terms, Result Ranking, AI Insights, and Generative AI) and the search REST API, see **[Semantic Navigation](./semantic-navigation.md)**.
 
 For deep technical content — Targeting Rules Solr query mechanics, Spotlight injection, Merge Provider field overwrite rules, facet operators, and the self-describing search response structure — see **[Semantic Navigation](./semantic-navigation.md)**.
+
+---
+
+*Previous: [Configuration Reference](./configuration-reference.md) | Next: [Search Engine](./search-engine.md)*

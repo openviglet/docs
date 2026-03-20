@@ -16,13 +16,12 @@ const sidebars: SidebarsConfig = {
           items: [
             "getting-started/intro",
             "getting-started/core-concepts",
+            "architecture-overview",
           ],
         },
         "installation-guide",
         "configuration-reference",
         "administration-guide",
-        "developer-guide",
-        "rest-api",
         {
           type: "category",
           label: "Enterprise Search",
@@ -35,19 +34,13 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
-          label: "Management",
-          items: [
-            "assets",
-          ],
-        },
-        {
-          type: "category",
           label: "Generative AI",
           items: [
             "genai-llm",
             "rag",
             "llm-instances",
             "embedding-stores",
+            "assets",
             "tool-calling",
             "mcp-servers",
             "ai-agents",
@@ -55,11 +48,12 @@ const sidebars: SidebarsConfig = {
             "token-usage",
           ],
         },
+        "developer-guide",
+        "rest-api",
         {
           type: "category",
-          label: "Technical Reference",
+          label: "Security",
           items: [
-            "architecture-overview",
             "security-authentication",
             "security-keycloak",
           ],

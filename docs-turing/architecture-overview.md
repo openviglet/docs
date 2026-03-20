@@ -30,12 +30,12 @@ The Turing ES application is organized into cohesive modules, each with a well-d
 |---|---|---|
 | **Semantic Navigation** | `sn` | Core search orchestration: query processing, facets, spotlights, targeting rules, autocomplete |
 | **Search Engine Plugins** | `se` / `plugins/se` | Abstraction layer over Solr (recommended), Elasticsearch, and Lucene backends |
-| **GenAI / RAG** | `genai` | RAG over SN content and MinIO assets; SN site result summaries; LLM context building and invocation |
+| **GenAI / RAG** | `genai` | RAG over SN content and MinIO assets; SN Site result summaries; LLM context building and invocation |
 | **Tool Calling** | `genai/tool` | LLM-accessible tools: code interpreter (Python), semantic navigation, web crawler, RAG search, datetime, finance, weather, image search, MCP servers |
 | **LLM Providers** | `genai/provider/llm` | Pluggable integrations: Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Gemini (OpenAI-compatible API), Ollama |
 | **Indexing Pipeline** | `indexer` | Receives messages from Dumont DEP via Artemis, applies Merge Providers, writes to Solr and embedding stores |
 | **Message Queue** | `artemis` | Asynchronous communication between Dumont DEP connectors and the indexing pipeline |
-| **AI Agent** | `agent` | Conversational AI agents: composition of LLM Instance, Tool Callings, and MCP Servers |
+| **AI Agent** | `agent` | Conversational AI agents: composition of LLM Instance, Tool Calling, and MCP Servers |
 | **OCR** | `ocr` | Text extraction from PDFs, Word documents, and images |
 | **Persistence** | `persistence` | JPA entities, repositories, and DTOs for all domain objects |
 | **Security** | `spring/security` | Native session-based auth (admin console) + API Key (`Key` header) for REST API; optional Keycloak OAuth2 / OIDC for production SSO |
@@ -64,7 +64,7 @@ The **Semantic Navigation Site** is the central configuration artifact that driv
 
 **Merge Providers:** When two Dumont DEP connectors independently index different representations of the same real-world document — for example, AEM indexing structured metadata from `model.json` and WebCrawler indexing the rendered HTML of the same page — the Merge Provider identifies them as the same document using a configured join key and merges their fields before writing to Solr. See [Semantic Navigation](./semantic-navigation.md) for a detailed explanation.
 
-**Embedding stores:** If Generative AI is enabled for a Semantic Navigation site, a vector embedding is generated for each indexed document and written to the configured embedding store. Turing ES supports three embedding backends via Spring AI: **ChromaDB**, **PgVector** (PostgreSQL extension), and **Milvus**. Only one is active per deployment. The default embedding store and embedding model are defined globally in **Administration → Settings**.
+**Embedding stores:** If Generative AI is enabled for an SN Site, a vector embedding is generated for each indexed document and written to the configured embedding store. Turing ES supports three embedding backends via Spring AI: **ChromaDB**, **PgVector** (PostgreSQL extension), and **Milvus**. Only one is active per deployment. The default embedding store and embedding model are defined globally in **Administration → Settings**.
 
 **MinIO asset indexing:** Turing ES includes an **[Assets](./assets.md)** file manager in the admin console, backed by MinIO as the object storage layer. Files are uploaded via drag-and-drop, organized into folders, and automatically indexed as vector embeddings on upload (and unindexed on deletion). A batch "Train AI with Assets" operation processes all files using Apache Tika for text extraction, chunking at 1,024 characters, and storing embeddings in the active vector store.
 
@@ -193,4 +193,4 @@ Multiple Turing ES instances run behind Apache HTTP Server configured as a rever
 
 ---
 
-*Previous: [Core Concepts](./getting-started/core-concepts.md) | Next: [Semantic Navigation](./semantic-navigation.md)*
+*Previous: [Core Concepts](./getting-started/core-concepts.md) | Next: [Installation Guide](./installation-guide.md)*

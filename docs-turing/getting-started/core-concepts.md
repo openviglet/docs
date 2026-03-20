@@ -213,4 +213,4 @@ npm install @viglet/turing-sdk
 
 ---
 
-*Previous: [What is Turing ES?](./intro.md) | Next: [Installation Guide](../installation-guide.md)*
+*Previous: [Introduction](./intro.md) | Next: [Architecture Overview](../architecture-overview.md)*

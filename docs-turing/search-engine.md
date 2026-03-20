@@ -139,4 +139,4 @@ Repository-level **caching** is enabled for search engine instances to avoid rep
 
 ---
 
-*Previous: [Administration Guide](./administration-guide.md)*
+*Previous: [Administration Guide](./administration-guide.md) | Next: [Semantic Navigation](./semantic-navigation.md)*

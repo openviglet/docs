@@ -78,7 +78,7 @@ Fine-tune how the model generates responses. Defaults are appropriate for most u
 | Field | Description |
 |---|---|
 | **Enabled** | Toggle to activate or deactivate this instance. Disabled instances are not available for selection in agents or sites. |
-| **Tools Enabled** | Toggle to allow this instance to use function calling (tool callings such as web search, code interpreter, etc.) |
+| **Tools Enabled** | Toggle to allow this instance to use function calling (tools such as web search, code interpreter, etc.) |
 
 ---
 
@@ -170,4 +170,4 @@ Cache entries are invalidated automatically on create, update, or delete.
 
 ---
 
-*Previous: [Generative AI & LLM Configuration](./genai-llm.md) | Next: [Embedding Stores & Models](./embedding-stores.md)*
+*Previous: [What is RAG?](./rag.md) | Next: [Embedding Stores & Models](./embedding-stores.md)*

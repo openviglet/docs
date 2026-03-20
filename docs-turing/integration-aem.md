@@ -125,4 +125,4 @@ Each operation step allows you to:
 
 ---
 
-*Previous: [Integration](./integration.md) | Next: [Assets](./assets.md)*
+*Previous: [Integration](./integration.md) | Next: [GenAI & LLM Configuration](./genai-llm.md)*

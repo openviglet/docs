@@ -6,6 +6,8 @@ description: Monitor and analyse LLM token consumption in Viglet Turing ES.
 
 # Token Usage
 
+If you are an administrator responsible for monitoring AI spend, this page is for you. Token Usage helps you track how much each LLM model is costing your organization by showing consumption broken down by model, day, and month — so you can identify heavy usage patterns, set budgets, and avoid unexpected bills.
+
 The **Token Usage** page (`/token-usage`) gives administrators a clear view of how many tokens are being consumed by the LLM integrations — broken down by model, day, and month. This is the primary tool for tracking AI costs and identifying heavy usage patterns.
 
 :::info Availability
@@ -119,4 +121,4 @@ Token usage data is also available via the REST API. See [REST API Reference →
 
 ---
 
-*Previous: [Chat](./chat.md)*
+*Previous: [Chat](./chat.md) | Next: [Developer Guide](./developer-guide.md)*

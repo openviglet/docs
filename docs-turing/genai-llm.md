@@ -6,7 +6,7 @@ description: Overview of GenAI capabilities in Turing ES — LLM providers, RAG 
 
 # Generative AI & LLM Configuration
 
-Turing ES integrates Generative AI throughout the platform via **Spring AI**, providing a unified abstraction layer over multiple LLM providers and embedding backends. The GenAI capabilities are organized around four connected concepts: **LLM Instances**, **Tool Callings**, **MCP Servers**, and **AI Agents** — which together define how the system reasons, retrieves, and responds.
+Turing ES integrates Generative AI throughout the platform via **Spring AI**, providing a unified abstraction layer over multiple LLM providers and embedding backends. The GenAI capabilities are organized around four connected concepts: **LLM Instances**, **Tool Calling**, **MCP Servers**, and **AI Agents** — which together define how the system reasons, retrieves, and responds.
 
 **RAG (Retrieval-Augmented Generation)** is the primary pattern used to ground LLM responses in real content: both the **Knowledge Base** (files stored in MinIO) and **Semantic Navigation Sites** can serve as RAG sources.
 
@@ -102,10 +102,10 @@ See [MCP Servers](./mcp-servers.md) for transport types, configuration form, and
 
 ## AI Agents
 
-An **AI Agent** combines a specific LLM Instance, Tool Callings, and MCP Servers into a single deployable assistant. Each agent appears as a separate tab in the Chat interface and can be purpose-built for specific roles — enterprise search, data research, IT operations, and more.
+An **AI Agent** combines a specific LLM Instance, a set of tools, and MCP Servers into a single deployable assistant. Each agent appears as a separate tab in the Chat interface and can be purpose-built for specific roles — enterprise search, data research, IT operations, and more.
 
 See [AI Agents](./ai-agents.md) for configuration, composition examples, and the agent execution flow.
 
 ---
 
-*Previous: [Semantic Navigation](./semantic-navigation.md) | Next: [LLM Instances](./llm-instances.md)*
+*Previous: [AEM Connector](./integration-aem.md) | Next: [What is RAG?](./rag.md)*

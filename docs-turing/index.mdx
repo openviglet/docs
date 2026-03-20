@@ -202,18 +202,14 @@ export const SectionLabel = ({ children }) => (
   <NavCard icon="🔗" title="Integration" description="Connect AEM and web crawler sources with indexing rules and monitoring" href="/turing/integration" />
 </div>
 
-<SectionLabel>Management</SectionLabel>
-
-<div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
-  <NavCard icon="🗂️" title="Assets" description="File manager backed by MinIO — upload, organise and train the RAG knowledge base" href="/turing/assets" />
-</div>
-
 <SectionLabel>Generative AI</SectionLabel>
 
 <div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
   <NavCard icon="🧠" title="GenAI & LLM Configuration" description="RAG architecture, embedding pipeline and core GenAI concepts" href="/turing/genai-llm" />
+  <NavCard icon="📖" title="What is RAG?" description="How LLMs, embedding models and vector stores work together to ground AI in your content" href="/turing/rag" />
   <NavCard icon="⚡" title="LLM Instances" description="Configure provider connections — vendors, models, API keys and capabilities" href="/turing/llm-instances" />
   <NavCard icon="🗃️" title="Embedding Stores & Models" description="ChromaDB, PgVector and Milvus backends with embedding model selection" href="/turing/embedding-stores" />
+  <NavCard icon="🗂️" title="Assets (Knowledge Base)" description="File manager backed by MinIO — upload, organise and train the RAG knowledge base" href="/turing/assets" />
   <NavCard icon="🔧" title="Tool Calling" description="27 native tools across 7 categories available to AI Agents" href="/turing/tool-calling" />
   <NavCard icon="🌐" title="MCP Servers" description="Extend agents with external tools via the Model Context Protocol" href="/turing/mcp-servers" />
   <NavCard icon="🤖" title="AI Agents" description="Compose and deploy purpose-built AI assistants with custom tools and personas" href="/turing/ai-agents" />
@@ -227,7 +223,6 @@ export const SectionLabel = ({ children }) => (
   <NavCard icon="🏗️" title="Architecture Overview" description="Component diagram, indexing and search flows, deployment topologies" href="/turing/architecture-overview" />
   <NavCard icon="🔑" title="Authentication" description="Native session login and REST API Key authentication" href="/turing/security-authentication" />
   <NavCard icon="🛡️" title="Security & Keycloak" description="Full OAuth2/OIDC production setup with Keycloak, Apache proxy and SSL" href="/turing/security-keycloak" />
-  <NavCard icon="📚" title="Semantic Navigation" description="Targeting Rules, Spotlights, Merge Providers, Facets and search response structure" href="/turing/semantic-navigation" />
 </div>
 
 <SectionLabel>Other</SectionLabel>

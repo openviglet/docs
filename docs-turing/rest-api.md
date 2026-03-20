@@ -376,6 +376,159 @@ Authentication required. See [Token Usage](./token-usage.md) for details.
 
 ---
 
+## Integration API
+
+The Integration API provides a **reverse-proxy** endpoint that forwards requests to a configured external integration instance (e.g., an AEM connector or Web Crawler). All HTTP methods are supported. The proxy validates the target host and path to prevent SSRF attacks.
+
+### Proxy Endpoint
+
+```
+GET|POST|PUT|DELETE  http://localhost:2700/api/v2/integration/{integrationId}/**
+```
+
+The `{integrationId}` maps to an Integration Instance configured in Administration. The remainder of the path (`**`) is forwarded to the instance's endpoint URL.
+
+**Example:**
+
+```bash
+curl -X POST "http://localhost:2700/api/v2/integration/my-aem-instance/index" \
+  -H "Content-Type: application/json" \
+  -d '{ "url": "https://example.com/content/page.html" }'
+```
+
+This endpoint is **public** (no authentication required).
+
+### Integration Instance CRUD (Admin)
+
+Manage integration instances. Authentication required.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/integration` | List all integration instances |
+| `GET` | `/api/integration/{id}` | Get an integration instance |
+| `POST` | `/api/integration` | Create an integration instance |
+| `PUT` | `/api/integration/{id}` | Update an integration instance |
+| `DELETE` | `/api/integration/{id}` | Delete an integration instance |
+| `GET` | `/api/integration/vendor` | List available integration vendors |
+
+---
+
+## Administration API
+
+The following endpoints manage SN Sites, fields, and spotlights. All require authentication via the `Key` header. For full details, explore the Swagger UI at `http://localhost:2700/swagger-ui.html`.
+
+### SN Site Management
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/sn` | List all SN Sites |
+| `GET` | `/api/sn/{id}` | Get an SN Site |
+| `POST` | `/api/sn` | Create an SN Site |
+| `PUT` | `/api/sn/{id}` | Update an SN Site |
+| `DELETE` | `/api/sn/{id}` | Delete an SN Site (removes index cores) |
+| `GET` | `/api/sn/{id}/monitoring` | Site monitoring status (document count, queue size) |
+| `GET` | `/api/sn/{id}/export` | Export an SN Site configuration |
+| `GET` | `/api/sn/export` | Export all SN Site configurations |
+
+**Example — list sites:**
+
+```bash
+curl "http://localhost:2700/api/sn" \
+  -H "Key: <YOUR_API_TOKEN>"
+```
+
+### Field Management
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/sn/{snSiteId}/field` | List fields for a site |
+| `GET` | `/api/sn/{snSiteId}/field/{id}` | Get a field |
+| `POST` | `/api/sn/{snSiteId}/field` | Create a field |
+| `PUT` | `/api/sn/{snSiteId}/field/{id}` | Update a field |
+| `DELETE` | `/api/sn/{snSiteId}/field/{id}` | Delete a field |
+
+### Spotlight Management
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/sn/{snSiteId}/spotlight` | List spotlights for a site |
+| `GET` | `/api/sn/{snSiteId}/spotlight/{id}` | Get a spotlight |
+| `POST` | `/api/sn/{snSiteId}/spotlight` | Create a spotlight |
+| `PUT` | `/api/sn/{snSiteId}/spotlight/{id}` | Update a spotlight |
+| `DELETE` | `/api/sn/{snSiteId}/spotlight/{id}` | Delete a spotlight |
+
+---
+
+## GraphQL API
+
+Turing exposes a GraphQL endpoint that provides the same Semantic Navigation search capabilities as the REST search API but using GraphQL queries. The endpoint is **public** (no authentication required).
+
+```
+POST http://localhost:2700/graphql
+```
+
+### Available Queries
+
+| Query | Description |
+|---|---|
+| `siteNames` | Returns all configured SN Site names |
+| `siteSearch(siteName, searchParams, locale)` | Performs a search against an SN Site |
+
+The `SearchParamsInput` accepts: `q`, `rows`, `p`, `sort`, `group`, `fq`, `fqAnd`, `fqOr`, `fqOp`, `fqiOp`, `locale`, and `fl` (field list).
+
+**Example:**
+
+```bash
+curl -X POST "http://localhost:2700/graphql" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "query { siteSearch(siteName: SAMPLE, searchParams: { q: \"enterprise search\", rows: 10 }, locale: \"en_US\") { queryContext { count } results { document { fields { title url } } } } }"
+  }'
+```
+
+The response mirrors the REST search structure (pagination, queryContext, results, widget, groups) — see [Search Response Structure](#search-response-structure) above.
+
+---
+
+## OCR API
+
+Extracts text from documents via OCR. Two endpoints are available — one for file uploads and one for URLs. Both are **public** (no authentication required).
+
+### Extract Text from File
+
+```
+POST http://localhost:2700/api/ocr/file
+```
+
+Accepts a `multipart/form-data` request with a `file` parameter.
+
+**Example:**
+
+```bash
+curl -X POST "http://localhost:2700/api/ocr/file" \
+  -F "file=@/path/to/document.pdf"
+```
+
+### Extract Text from URL
+
+```
+POST http://localhost:2700/api/ocr/url
+```
+
+Accepts a JSON body with a `url` field pointing to a remote document.
+
+**Example:**
+
+```bash
+curl -X POST "http://localhost:2700/api/ocr/url" \
+  -H "Content-Type: application/json" \
+  -d '{ "url": "https://example.com/report.pdf" }'
+```
+
+Both endpoints return a `TurFileAttributes` JSON object containing the extracted text and file metadata.
+
+---
+
 ## Related Pages
 
 | Page | Description |
@@ -387,4 +540,4 @@ Authentication required. See [Token Usage](./token-usage.md) for details.
 
 ---
 
-*Previous: [Developer Guide](./developer-guide.md) | Next: [Architecture Overview](./architecture-overview.md)*
+*Previous: [Developer Guide](./developer-guide.md) | Next: [Authentication](./security-authentication.md)*
