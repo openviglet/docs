@@ -39,6 +39,7 @@ slug: /
 | Guide | Description |
 |---|---|
 | [Search Engine](/turing/search-engine) | Manage search backend instances (Solr, Elasticsearch, Lucene), cores, and system monitoring |
+| [Semantic Navigation](/turing/semantic-navigation) | Configure SN Sites: fields, facets, spotlights, targeting rules, result ranking, and GenAI |
 
 ---
 

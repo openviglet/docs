@@ -6,15 +6,9 @@ description: SN Site configuration, Targeting Rules, Spotlights, Merge Providers
 
 # Semantic Navigation Concepts
 
-This document describes the Semantic Navigation (SN) module in Turing ES: how SN Sites are configured, and the three advanced features — **Targeting Rules**, **Spotlights**, and **Merge Providers** — that control how content is personalized, curated, and unified from multiple sources.
+This document is the technical reference for the Semantic Navigation (SN) module in Turing ES. It covers the mechanics behind the three advanced features — **Targeting Rules**, **Spotlights**, and **Merge Providers** — the behavior and facet configuration model, and the self-describing search response structure.
 
----
-
-## Semantic Navigation Sites
-
-Every search experience in Turing ES is organized around a **Semantic Navigation Site** (SN Site). A site is the central configuration object that drives both indexing and search behavior. A single Turing ES instance can host multiple sites, each independently configured.
-
-An SN Site configuration is divided into several tabs in the admin console. The **Behavior** tab controls how the search engine processes queries and assembles results.
+For the admin console UI reference — all SN Site tabs and their fields — see **[Semantic Navigation](./semantic-navigation.md)**.
 
 ---
 
@@ -476,4 +470,4 @@ The merge is triggered when the **source** connector's document arrives and a ma
 
 ---
 
-*Previous: [Architecture Overview](./architecture-overview.md) | Next: [GenAI & LLM Configuration](./genai-llm.md)*
+*Previous: [Semantic Navigation](./semantic-navigation.md) | Next: [Security & Keycloak](./security-keycloak.md)*

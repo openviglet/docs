@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
           label: "Enterprise Search",
           items: [
             "search-engine",
+            "semantic-navigation",
           ],
         },
         {
