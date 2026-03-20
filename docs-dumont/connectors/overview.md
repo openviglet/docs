@@ -12,13 +12,13 @@ Connectors are the components that extract content from external sources and fee
 
 ## Available Connectors
 
-| Connector | Source Type | Extraction Method | Use Case |
+| Connector | Source Type | Deployment | Artifact |
 |---|---|---|---|
-| [**Web Crawler**](./web-crawler.md) | Websites | Recursive HTTP crawling with JSoup HTML parsing | Public websites, intranets, documentation sites |
-| [**Database**](./database.md) | JDBC databases | SQL query execution | Product catalogs, user directories, CMS databases |
-| [**FileSystem**](./filesystem.md) | Local/network directories | Directory traversal with Apache Tika | File servers, document repositories, shared drives |
-| [**AEM**](./aem.md) | Adobe Experience Manager | JCR content repository API | AEM author/publish content, content fragments |
-| [**WordPress**](./wordpress.md) | WordPress sites | WordPress REST API | Blogs, news sites, corporate WordPress installations |
+| [**Web Crawler**](./web-crawler.md) | Websites | **Java Plugin** — loaded via `-Dloader.path` | `web-crawler-plugin.jar` |
+| [**AEM**](./aem.md) | Adobe Experience Manager | **Java Plugin** — loaded via `-Dloader.path` | `aem-plugin.jar` |
+| [**Database**](./database.md) | JDBC databases | **Standalone Java CLI** — runs independently | `dumont-db-indexer.jar` |
+| [**FileSystem**](./filesystem.md) | Local/network directories | **Standalone Java CLI** — runs independently | `dumont-filesystem-indexer.jar` |
+| [**WordPress**](./wordpress.md) | WordPress sites | **PHP Plugin** — installed inside WordPress | `viglet-turing-for-wordpress/` |
 
 ---
 
@@ -59,21 +59,42 @@ All connectors implement the `DumConnectorPlugin` interface:
 
 ---
 
-## Standalone vs. Integrated Mode
+<div className="page-break" />
 
-Some connectors can run in two modes:
+## Connector Plugins vs. Standalone Tools
 
-### Integrated Mode (default)
+Dumont DEP connectors are distributed in two forms:
 
-The connector runs as a plugin inside the Dumont DEP application. It is triggered via the REST API or the admin console, and content flows through the full pipeline (strategies → batch → queue → indexing plugin).
+### Connector Plugins (AEM, Web Crawler)
 
-### Standalone Mode
-
-The **Database** and **FileSystem** connectors also ship as standalone command-line tools (`DumDbImportTool`, `DumFSImportTool`). These can be run independently — for example, from a cron job or a CI/CD pipeline — and connect to a running Dumont DEP instance via its REST API.
+The **AEM** and **Web Crawler** connectors are **plugin JARs** that run inside the `dumont-connector.jar` pipeline. They must be placed in a `libs/` directory and loaded via Spring Boot's `-Dloader.path`:
 
 ```bash
-# Standalone database import
-java -cp dumont-db.jar com.viglet.dumont.db.DumDbImportTool \
+# Directory layout
+dumont-connector.jar
+libs/
+  ├── aem-plugin.jar
+  └── web-crawler-plugin.jar
+
+# Launch with plugins on the classpath
+java -Dloader.path=libs -jar dumont-connector.jar
+```
+
+:::warning dumont-connector.jar alone does not crawl
+The connector JAR provides only the pipeline infrastructure (queue, strategies, indexing). Without a plugin JAR on the classpath, there is no data source to extract content from. You must add exactly **one** connector plugin via `-Dloader.path`.
+:::
+
+:::note One plugin per JVM instance
+Only **one connector plugin** can be loaded per JVM instance. To run multiple connectors (e.g., AEM and Web Crawler), start separate `dumont-connector.jar` instances — each with its own plugin and port.
+:::
+
+### Standalone CLI Tools (Database, FileSystem)
+
+The **Database** and **FileSystem** connectors are **standalone command-line tools** — separate JARs that run independently and connect to a running Dumont DEP instance via REST API:
+
+```bash
+# Database import (standalone JAR)
+java -cp dumont-db-indexer.jar com.viglet.dumont.connector.db.DumDbImportTool \
   --server http://localhost:30130 \
   --api-key <API_KEY> \
   --driver org.mariadb.jdbc.Driver \
@@ -81,7 +102,16 @@ java -cp dumont-db.jar com.viglet.dumont.db.DumDbImportTool \
   --query "SELECT id, name, description, price FROM products" \
   --site ProductCatalog \
   --locale en_US
+
+# FileSystem import (standalone JAR)
+java -cp dumont-filesystem-indexer.jar com.viglet.dumont.filesystem.DumFSImportTool \
+  --source-dir /mnt/shared/documents \
+  --server http://localhost:30130 \
+  --api-key <API_KEY> \
+  --site InternalDocs
 ```
+
+These tools can be scheduled via cron jobs or CI/CD pipelines.
 
 ---
 

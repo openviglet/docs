@@ -264,24 +264,45 @@ cp turing-app/target/viglet-turing.jar /appl/viglet/turing/server/
 
 ### Database
 
-By default, Turing uses H2 as its embedded database, but if you prefer another database you can follow the procedure below, creating `/appl/viglet/turing/server/viglet-turing.conf` file with following lines:
+By default, Turing uses H2 as its embedded database, but if you prefer another database you can create an external properties file and reference it at startup using `--spring.config.additional-location`.
+
+Create `/appl/viglet/turing/server/viglet-turing.properties`:
 
 #### MySQL
 
-```shell
-JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:mariadb://localhost:3306/turing -Dspring.datasource.username=turing -Dspring.datasource.password=turing -Dspring.datasource.driver-class-name=org.mariadb.jdbc.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect"
+```properties
+spring.datasource.url=jdbc:mariadb://localhost:3306/turing
+spring.datasource.username=turing
+spring.datasource.password=turing
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
 ```
 
 #### Oracle Database
 
-```shell
-JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:oracle:thin:@localhost:1521/turing -Dspring.datasource.username=turing -Dspring.datasource.password=turing -Dspring.datasource.driver-class-name=oracle.jdbc.OracleDriver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect"
+```properties
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521/turing
+spring.datasource.username=turing
+spring.datasource.password=turing
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
 ```
 
 #### PostgreSQL
 
-```shell
-JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:postgresql://localhost:5432/turing -Dspring.datasource.username=turing -Dspring.datasource.password=turing -Dspring.datasource.driver-class-name=org.postgresql.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect"
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/turing
+spring.datasource.username=turing
+spring.datasource.password=turing
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
+```
+
+Then start Turing ES referencing the properties file:
+
+```bash
+java -Xmx1g -Xms1g -jar viglet-turing.jar \
+  --spring.config.additional-location=file:/appl/viglet/turing/server/viglet-turing.properties
 ```
 
 <div className="page-break" />
@@ -293,12 +314,15 @@ As root, create a `/etc/systemd/system/turing.service` file with the following l
 ```ini
 [Unit]
 Description=Viglet Turing ES
-After=syslog.target network.target
+After=syslog.target
 
 [Service]
-User=viglet
-EnvironmentFile=/appl/viglet/turing/server/viglet-turing.conf
-ExecStart=/usr/bin/java $JAVA_OPTS -jar /appl/viglet/turing/server/viglet-turing.jar
+User=turing
+Group=turing
+WorkingDirectory=/appl/viglet/turing/server
+ExecStart=/appl/java/jdk21/bin/java -Xmx1g -Xms1g \
+  -jar /appl/viglet/turing/server/viglet-turing.jar \
+  --spring.config.additional-location=file:/appl/viglet/turing/server/viglet-turing.properties
 SuccessExitStatus=143
 
 [Install]
@@ -306,7 +330,7 @@ WantedBy=multi-user.target
 ```
 
 :::note Spring Boot 4
-Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-turing.jar`). You must launch Turing ES using `java -jar` explicitly.
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-turing.jar`). You must launch Turing ES using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported — use `--spring.config.additional-location` to load external properties instead.
 :::
 
 Enable and start the service:

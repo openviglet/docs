@@ -1,12 +1,30 @@
 ---
 sidebar_position: 3
 title: Installation Guide
-description: Install and configure Viglet Dumont DEP — Docker, JAR download, build from source, database setup, and service configuration.
+description: Install and configure Viglet Dumont DEP — connector JAR, connector plugins, classpath configuration, and service setup.
 ---
 
 # Viglet Dumont DEP: Installation Guide
 
-Viglet Dumont DEP is an open-source data extraction platform that connects content sources to search engines. All content is extracted by connectors and delivered through an asynchronous pipeline.
+Viglet Dumont DEP is an open-source data extraction platform that connects content sources to search engines. The connector application (`dumont-connector.jar`) provides the pipeline infrastructure — message queue, batch processing, strategies, and indexing plugins — while **connector plugins** (AEM, Web Crawler) provide the actual content extraction capabilities.
+
+:::warning The connector JAR alone does not crawl content
+`dumont-connector.jar` is the pipeline engine. To actually extract content from sources, you must add a **connector plugin JAR** (AEM or Web Crawler) to the classpath via `-Dloader.path`. Without a plugin, the connector has no data source to crawl.
+:::
+
+---
+
+## How It Works
+
+```
+dumont-connector.jar          ← Pipeline engine (queue, strategies, indexing)
+  └── libs/                    ← Plugin directory (added via -Dloader.path)
+       ├── aem-plugin.jar      ← AEM connector plugin
+       ├── web-crawler-plugin.jar  ← Web Crawler connector plugin
+       └── my-custom-plugin.jar    ← Your custom extensions (optional)
+```
+
+The connector JAR is built with Spring Boot's **ZIP layout** (PropertiesLauncher), which allows loading additional JARs from external directories at runtime. When you pass `-Dloader.path=libs`, Spring Boot scans the `libs/` directory and adds all JARs to the application classpath — making the connector plugins available to the pipeline.
 
 ---
 
@@ -43,13 +61,19 @@ docker pull openviglet/dumont:2026.1
 docker run -p 30130:30130 openviglet/dumont:2026.1
 ```
 
-### Option 2 — JAR download
+### Option 2 — Download JARs
 
-Download the latest `viglet-dumont.jar` from the [releases page](https://github.com/openviglet/dumont/releases) and copy it to your installation directory:
+Download `dumont-connector.jar` and the connector plugin JARs from the [releases page](https://github.com/openviglet/dumont/releases):
 
 ```bash
-mkdir -p /appl/viglet/dumont/server
-cp viglet-dumont.jar /appl/viglet/dumont/server
+mkdir -p /appl/viglet/dumont/server/libs
+
+# Main connector engine
+cp dumont-connector.jar /appl/viglet/dumont/server/
+
+# Connector plugins (choose one or both)
+cp aem-plugin.jar /appl/viglet/dumont/server/libs/
+cp web-crawler-plugin.jar /appl/viglet/dumont/server/libs/
 ```
 
 ### Option 3 — Build from source
@@ -57,13 +81,69 @@ cp viglet-dumont.jar /appl/viglet/dumont/server
 ```bash
 git clone https://github.com/openviglet/dumont.git
 cd dumont
-mvn clean package -pl connector/connector-app
-cp connector/connector-app/target/viglet-dumont.jar /appl/viglet/dumont/server/
+mvn clean install
+
+# Copy the connector engine
+cp connector/connector-app/target/dumont-connector.jar /appl/viglet/dumont/server/
+
+# Copy connector plugins
+mkdir -p /appl/viglet/dumont/server/libs
+cp aem/aem-plugin/target/aem-plugin.jar /appl/viglet/dumont/server/libs/
+cp web-crawler/wc-plugin/target/web-crawler-plugin.jar /appl/viglet/dumont/server/libs/
 ```
 
 ---
 
 <div className="page-break" />
+
+## Starting with a Connector Plugin
+
+The key to running Dumont DEP is the `-Dloader.path` JVM property. It tells Spring Boot's PropertiesLauncher where to find the connector plugin JARs.
+
+### With AEM Plugin
+
+```bash
+java -Dloader.path=libs \
+     -Dturing.url=http://localhost:2700 \
+     -Dturing.apiKey=<YOUR_TURING_API_KEY> \
+     -jar dumont-connector.jar
+```
+
+### With Web Crawler Plugin
+
+```bash
+java -Dloader.path=libs \
+     -Dturing.url=http://localhost:2700 \
+     -Dturing.apiKey=<YOUR_TURING_API_KEY> \
+     -jar dumont-connector.jar
+```
+
+:::note One connector plugin per JVM
+Currently, only **one connector plugin** can be active per JVM instance. To run both AEM and Web Crawler, start two separate instances of `dumont-connector.jar` — each with its own `libs/` directory containing the appropriate plugin, and each on a different port.
+:::
+
+### With Custom AEM Extensions
+
+If you have a custom AEM extension (like the `aem-plugin-sample`), add its JAR to the same `libs/` directory:
+
+```bash
+ls libs/
+aem-plugin.jar
+aem-plugin-sample.jar    # Your custom extensions
+
+java -Dloader.path=libs \
+     -Dturing.url=http://localhost:2700 \
+     -Dturing.apiKey=<YOUR_TURING_API_KEY> \
+     -jar dumont-connector.jar
+```
+
+The configuration JSON references extension classes by fully-qualified name (e.g., `com.viglet.dumont.connector.aem.sample.ext.DumAemExtSampleModelJson`). These classes are found on the classpath because the extension JAR is in the `libs/` directory.
+
+:::tip loader.path accepts directories or individual JARs
+You can point to a directory or a specific JAR: `-Dloader.path=libs` or `-Dloader.path=/path/to/aem-plugin.jar`
+:::
+
+---
 
 ## Database Configuration
 
@@ -83,14 +163,17 @@ CREATE DATABASE dumont_db;
 ALTER DATABASE dumont_db OWNER TO dumont;
 ```
 
-Configure in `viglet-dumont.conf`:
+Configure via JVM properties:
 
 ```bash
-JAVA_OPTS="-Xmx1g -Xms1g \
-  -Dspring.datasource.url=jdbc:postgresql://localhost:5432/dumont_db \
-  -Dspring.datasource.username=dumont \
-  -Dspring.datasource.password=<password> \
-  -Dspring.datasource.driver-class-name=org.postgresql.Driver"
+java -Dloader.path=libs \
+     -Dspring.datasource.url=jdbc:postgresql://localhost:5432/dumont_db \
+     -Dspring.datasource.username=dumont \
+     -Dspring.datasource.password=<password> \
+     -Dspring.datasource.driver-class-name=org.postgresql.Driver \
+     -Dturing.url=http://localhost:2700 \
+     -Dturing.apiKey=<YOUR_TURING_API_KEY> \
+     -jar dumont-connector.jar
 ```
 
 ---
@@ -113,29 +196,49 @@ Dumont DEP cannot send content to Turing ES without a valid API Key. Create one 
 
 ---
 
-## Starting Dumont DEP
-
-```bash
-$ java -jar viglet-dumont.jar
-```
-
-The application starts at `http://localhost:30130` by default.
-
----
+<div className="page-break" />
 
 ## Creating a Linux Service
 
-As root, create `/etc/systemd/system/dumont.service`:
+Each connector plugin runs as a separate service. Create a dedicated directory per connector with its own configuration.
+
+### Directory Layout (AEM example)
+
+```
+/appl/viglet/dumont/aem/
+├── dumont-connector.jar
+├── dumont-connector.properties    # Spring Boot external config
+└── libs/
+    └── aem-plugin.jar             # Connector plugin
+```
+
+### External Properties File
+
+Create `/appl/viglet/dumont/aem/dumont-connector.properties`:
+
+```properties
+turing.url=http://localhost:2700
+turing.apiKey=<YOUR_TURING_API_KEY>
+server.port=30130
+```
+
+### Systemd Service File
+
+As root, create `/etc/systemd/system/dumont-aem.service`:
 
 ```ini
 [Unit]
-Description=Viglet Dumont DEP
-After=syslog.target network.target
+Description=Viglet Dumont DEP (AEM)
+After=syslog.target
 
 [Service]
-User=viglet
-EnvironmentFile=/appl/viglet/dumont/server/viglet-dumont.conf
-ExecStart=/usr/bin/java $JAVA_OPTS -jar /appl/viglet/dumont/server/viglet-dumont.jar
+User=turing
+Group=turing
+WorkingDirectory=/appl/viglet/dumont/aem
+ExecStart=/appl/java/jdk21/bin/java -Xmx512m -Xms512m \
+  -Dloader.path=/appl/viglet/dumont/aem/libs/ \
+  -jar /appl/viglet/dumont/aem/dumont-connector.jar \
+  --spring.config.additional-location=file:/appl/viglet/dumont/aem/dumont-connector.properties
 SuccessExitStatus=143
 
 [Install]
@@ -146,9 +249,61 @@ Enable and start the service:
 
 ```bash
 systemctl daemon-reload
-systemctl enable dumont.service
-systemctl start dumont.service
+systemctl enable dumont-aem.service
+systemctl start dumont-aem.service
 ```
+
+### Running Multiple Connectors
+
+Since only one connector plugin is supported per JVM, run separate services for each connector — each with its own directory, config, and port:
+
+```
+/appl/viglet/dumont/
+├── aem/                           # AEM connector (port 30130)
+│   ├── dumont-connector.jar
+│   ├── dumont-connector.properties
+│   └── libs/
+│       └── aem-plugin.jar
+└── webcrawler/                    # Web Crawler connector (port 30131)
+    ├── dumont-connector.jar
+    ├── dumont-connector.properties
+    └── libs/
+        └── web-crawler-plugin.jar
+```
+
+Create a separate systemd service for each (e.g., `dumont-aem.service`, `dumont-webcrawler.service`), each pointing to its own `WorkingDirectory` and properties file with a different `server.port`.
+
+---
+
+## Standalone Connectors (Database & FileSystem)
+
+The **Database** and **FileSystem** connectors are **standalone CLI tools** — they do not run as plugins inside the connector application. Instead, they connect to a running Dumont DEP instance via its REST API.
+
+### Database Connector
+
+```bash
+java -cp dumont-db-indexer.jar com.viglet.dumont.connector.db.DumDbImportTool \
+  --server http://localhost:30130 \
+  --api-key <API_KEY> \
+  --driver org.mariadb.jdbc.Driver \
+  --connect "jdbc:mariadb://localhost:3306/products" \
+  --query "SELECT id, name, description FROM products" \
+  --site ProductCatalog \
+  --locale en_US
+```
+
+### FileSystem Connector
+
+```bash
+java -cp dumont-filesystem-indexer.jar com.viglet.dumont.filesystem.DumFSImportTool \
+  --source-dir /mnt/shared/documents \
+  --server http://localhost:30130 \
+  --api-key <API_KEY> \
+  --site InternalDocs \
+  --locale en_US
+```
+
+These tools run independently and can be scheduled via cron jobs or CI/CD pipelines.
 
 ---
 
@@ -198,6 +353,31 @@ curl http://localhost:30130/api/v2/connector/status
 ```
 
 A successful response confirms the service is up and ready to accept connector configurations.
+
+---
+
+## Directory Structure Summary
+
+A complete production deployment with two connectors:
+
+```
+/appl/viglet/dumont/
+├── aem/                                # AEM connector instance
+│   ├── dumont-connector.jar            # Pipeline engine
+│   ├── dumont-connector.properties     # Turing URL, API key, port
+│   ├── libs/
+│   │   └── aem-plugin.jar             # AEM connector plugin
+│   └── store/                          # Auto-created at runtime
+│       ├── db/                         # H2 indexing database
+│       ├── queue/                      # Artemis persistent queue
+│       └── logs/                       # Application logs
+└── webcrawler/                         # Web Crawler connector instance
+    ├── dumont-connector.jar
+    ├── dumont-connector.properties
+    ├── libs/
+    │   └── web-crawler-plugin.jar
+    └── store/
+```
 
 ---
 

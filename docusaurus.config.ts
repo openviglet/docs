@@ -133,6 +133,13 @@ const config: Config = {
         sidebarPath: "./sidebars-dumont.ts",
         editUrl:
           "https://github.com/vigletdocs/vigletdocs.github.io/tree/main/",
+        lastVersion: "current",
+        versions: {
+          current: {
+            label: "2026.1",
+            badge: false,
+          },
+        },
       },
     ],
   ],

@@ -143,6 +143,8 @@ This mechanism enables efficient **incremental indexing** — only changed conte
 
 ---
 
+<div className="page-break" />
+
 ## Indexing Status Values
 
 Every document's journey through the pipeline is tracked with a status code:

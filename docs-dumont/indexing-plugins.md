@@ -55,6 +55,8 @@ The Turing plugin cannot deliver content without a valid API Key. Create one in 
 
 ---
 
+<div className="page-break" />
+
 ## Apache Solr Plugin
 
 The Solr plugin delivers documents directly to an Apache Solr collection, bypassing Turing ES entirely. Use this when you want Dumont DEP as a pure data extraction tool without Turing ES features.
