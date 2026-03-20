@@ -113,16 +113,17 @@ export const SectionLabel = ({ children }) => (
     target="_blank"
     rel="noopener noreferrer"
     style={{
-      display: "inline-flex", alignItems: "center", gap: "7px",
+      display: "inline-flex", alignItems: "center", gap: "6px",
       background: "var(--color-brand)", color: "#fff",
-      borderRadius: "8px", padding: "9px 20px",
-      fontWeight: 600, fontSize: "0.875rem", textDecoration: "none",
+      borderRadius: "8px", padding: "8px 16px",
+      fontWeight: 600, fontSize: "0.8125rem", textDecoration: "none",
       whiteSpace: "nowrap", transition: "opacity 0.15s",
+      flexShrink: 0, alignSelf: "center",
     }}
     onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
     onMouseLeave={e => e.currentTarget.style.opacity = "1"}
   >
-    ⬇&nbsp; Download PDF
+    ⬇ Download PDF
   </a>
 </div>
 

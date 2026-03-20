@@ -85,7 +85,7 @@ const config: Config = {
           versions: {
             current: {
               label: "2026.1",
-              badge: true,
+              badge: false,
             },
           },
           onlyIncludeVersions: [
