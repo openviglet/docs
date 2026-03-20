@@ -39,9 +39,17 @@ main .container {
   padding: 0 !important;
 }
 
+/* ── Global overflow control ──────────────────────────── */
+article,
+article * {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
 /* ── Typography ──────────────────────────────────────── */
 body {
   font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  overflow-x: hidden;
   color: #0f172a;
   line-height: 1.65;
   font-size: 10.5pt;
@@ -134,7 +142,11 @@ pre {
   border-radius: 8px;
   padding: 14px 16px !important;
   margin: 14px 0 !important;
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  max-width: 100%;
+  box-sizing: border-box;
   border: 1px solid #e2e8f0;
   page-break-inside: avoid;
 }
@@ -144,6 +156,8 @@ pre code {
   padding: 0;
   border: none;
   font-size: 9pt;
+  white-space: pre-wrap;
+  word-break: break-all;
   line-height: 1.55;
 }
 
