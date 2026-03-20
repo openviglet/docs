@@ -47,6 +47,7 @@ slug: /
 | Guide | Description |
 |---|---|
 | [Generative AI & LLM Configuration](/turing/genai-llm) | LLM providers, RAG, embedding models, Tool Callings, MCP Servers, AI Agents |
+| [LLM Instances](/turing/llm-instances) | Configure Language Model instances — vendors, models, API keys, capabilities |
 | [Chat](/turing/chat) | Chat interface — direct LLM, Semantic Navigation, and AI Agent tabs |
 | [Token Usage](/turing/token-usage) | Monitor and analyse LLM token consumption by model and day |
 

@@ -33,58 +33,20 @@ The embedding store and embedding model must be consistent across indexing and q
 
 ## LLM Instances
 
-An **LLM Instance** is a configured connection to an LLM provider. Multiple instances can coexist, allowing different AI Agents to use different models or providers. Each instance is created in **Administration → LLM Instances**.
+An **LLM Instance** is a named, configured connection to an LLM provider. Multiple instances can coexist — different AI Agents, SN Sites, and the Chat interface can each use a different instance independently.
 
-Turing ES supports six provider types via Spring AI:
+Turing ES supports **six vendor types**: OLLAMA, OPENAI, ANTHROPIC, GEMINI, GEMINI_OPENAI, and AZURE_OPENAI. Each instance is created and managed in **Generative AI → Language Model** (`/admin/llm/instance`).
 
-### Anthropic Claude
+| Vendor | Default Model | Embedding | Tool Calling |
+|---|---|:---:|:---:|
+| **OLLAMA** | `mistral` | ✅ | ✅ |
+| **OPENAI** | `gpt-4o-mini` | ✅ | ✅ |
+| **ANTHROPIC** | `claude-sonnet-4-20250514` | ❌ | ✅ |
+| **GEMINI** | `gemini-2.0-flash` | ❌ | ✅ |
+| **GEMINI_OPENAI** | `gemini-2.0-flash` | ❌ | ✅ |
+| **AZURE_OPENAI** | `gpt-4o` | ✅ | ✅ |
 
-| Field | Description |
-|---|---|
-| **API Key** | Anthropic API key |
-| **Model** | Model identifier (e.g., `claude-opus-4-5`, `claude-sonnet-4-5`, `claude-haiku-4-5`) |
-
-### OpenAI
-
-| Field | Description |
-|---|---|
-| **API Key** | OpenAI API key |
-| **Model** | Model identifier (e.g., `gpt-4o`, `gpt-4o-mini`, `o1`) |
-
-### Azure OpenAI
-
-| Field | Description |
-|---|---|
-| **Endpoint** | Azure OpenAI resource endpoint URL |
-| **API Key** | Azure API key |
-| **Deployment Name** | Name of the deployed model in Azure |
-| **API Version** | Azure OpenAI API version string |
-
-### Google Gemini (Native)
-
-| Field | Description |
-|---|---|
-| **API Key** | Google AI Studio API key |
-| **Model** | Model identifier (e.g., `gemini-2.0-flash`, `gemini-2.0-pro`) |
-
-### Google Gemini (OpenAI-Compatible API)
-
-Google Gemini also exposes an OpenAI-compatible API endpoint. This provider type allows using Gemini models through the same protocol as OpenAI, which can simplify integration in environments already configured for OpenAI.
-
-| Field | Description |
-|---|---|
-| **API Key** | Google AI Studio API key |
-| **Base URL** | `https://generativelanguage.googleapis.com/v1beta/openai/` |
-| **Model** | Gemini model identifier |
-
-### Ollama (Local)
-
-Ollama enables running open-weight models locally, with no API key or external dependency. Suitable for air-gapped environments or for reducing inference costs.
-
-| Field | Description |
-|---|---|
-| **Base URL** | Ollama server URL (default: `http://localhost:11434`) |
-| **Model** | Model name as registered in Ollama (e.g., `llama3.2`, `mistral`, `phi4`) |
+For the full UI reference — form sections, provider-specific options, generation parameters, capability matrix, and API key security — see [LLM Instances](./llm-instances.md).
 
 ---
 

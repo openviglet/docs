@@ -34,6 +34,7 @@ const sidebars: SidebarsConfig = {
           label: "Generative AI",
           items: [
             "genai-llm",
+            "llm-instances",
             "chat",
             "token-usage",
           ],
