@@ -1,16 +1,46 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TB
-    A[Header] --> B[Tab navigation — Chat · Semantic Nav · AI Agents]
-    A --> C[LLM model selector]
-    A --> D[New Chat button]
-    A --> E[Dark mode toggle]
-    A --> F[Session history button]
-    G[Message area] --> H[User messages with avatar]
-    G --> I[Assistant messages with avatar + copy button]
-    G --> J[Rich content — Markdown, code, D2 diagrams, HTML sandbox]
-    K[Input area] --> L[Multiline textarea]
-    K --> M[File drag-and-drop]
-    K --> N[Send button — Enter to submit]
-    O[Context Bar] --> P[Token counter]
-    O --> Q[Context window % bar]
-    O --> R[Compact button]
+    subgraph Header [" Header "]
+        H1["🗂️ Tab Navigation\nChat · Semantic Nav · AI Agents"]
+        H2["🤖 LLM Model Selector"]
+        H3["➕ New Chat Button"]
+        H4["🌙 Dark Mode Toggle"]
+        H5["📋 Session History"]
+    end
+
+    subgraph MessageArea [" Message Area "]
+        M1["👤 User Messages\nWith avatar"]
+        M2["🤖 Assistant Messages\nWith avatar + copy button"]
+        M3["📝 Rich Content\nMarkdown · code · D2 diagrams · HTML sandbox"]
+    end
+
+    subgraph InputArea [" Input Area "]
+        I1["✏️ Multiline Textarea"]
+        I2["📎 File Drag-and-Drop"]
+        I3["🚀 Send Button\nEnter to submit"]
+    end
+
+    subgraph ContextBar [" Context Bar "]
+        C1["🔢 Token Counter\ne.g. 2.5k / 128k"]
+        C2["📊 Context Window Bar\nBlue → Yellow → Red"]
+        C3["⚡ Compact Button\nSummarise to free context"]
+    end
+
+    Header --> MessageArea
+    MessageArea --> InputArea
+    InputArea --> ContextBar
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+
+    class H1,H2,H3,H4,H5 blue
+    class M1,M2,M3 green
+    class I1,I2,I3 amber
+    class C1,C2,C3 purple
+
+    style Header fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style MessageArea fill:#50B86C20,stroke:#50B86C,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style InputArea fill:#E8A83820,stroke:#E8A838,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style ContextBar fill:#9B6EC520,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a,font-weight:700

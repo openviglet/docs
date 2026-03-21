@@ -27,14 +27,25 @@ Connectors are the components that extract content from external sources and fee
 Every connector follows the same lifecycle:
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TD
-    A["1. Connect to Source"] --> B["2. Discover Content"]
-    B --> C["3. Extract Fields"]
-    C --> D["4. Create Job Item"]
-    D --> E["5. Submit to Pipeline"]
-    E --> F{More content?}
+    A["🔌 1. Connect to Source"] --> B["🔍 2. Discover Content"]
+    B --> C["📋 3. Extract Fields"]
+    C --> D["📦 4. Create Job Item"]
+    D --> E["📨 5. Submit to Pipeline"]
+    E --> F{"More content?"}
     F -->|Yes| B
-    F -->|No| G["6. Finish & Flush"]
+    F -->|No| G["✅ 6. Finish & Flush"]
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class A blue
+    class B,C purple
+    class D,E amber
+    class F,G green
 ```
 
 1. **Connect** — Establish a connection to the content source (HTTP, JDBC, file handle, JCR session)

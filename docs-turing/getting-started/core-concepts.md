@@ -34,15 +34,26 @@ Content does not flow into Turing ES on its own. It needs connectors.
 **Viglet Dumont DEP** is a separate application that manages connectors — the components responsible for extracting content from its original source and sending it to Turing ES. Dumont DEP and Turing ES are separate projects that work together: Dumont handles *getting* content, Turing handles *indexing and searching* it.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TB
-    SRC["Content Sources\nCMS · Database · Files · Web"]
-    DEP["Viglet Dumont DEP\nConnectors"]
-    TES["Turing ES\nREST API"]
-    IDX["Index\n(Search Engine)"]
+    SRC["📡 Content Sources\nCMS · Database · Files · Web"]
+    DEP["🔌 Viglet Dumont DEP\nConnectors"]
+    TES["🌐 Turing ES\nREST API"]
+    IDX["🔎 Index\n(Search Engine)"]
 
     SRC --> DEP
     DEP -->|"HTTP POST"| TES
     TES --> IDX
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class SRC amber
+    class DEP purple
+    class TES blue
+    class IDX green
 ```
 
 ### How a connector works
@@ -69,6 +80,7 @@ Sometimes the same real-world document exists in two systems with complementary 
 When a user searches on an SN Site, this is what happens — in simple terms:
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant U as User
     participant API as Turing ES API
@@ -76,12 +88,12 @@ sequenceDiagram
     participant SP as Spotlight Engine
 
     U->>API: Query + user profile attributes
-    API->>API: Targeting Rules →\nbuild filter queries
+    API->>API: Targeting Rules →<br/>build filter queries
     API->>S: Query + filters + facets
     S-->>API: Filtered results + facet counts
     API->>API: Map fields + highlighting
     API->>SP: Check spotlight term match
-    SP-->>API: Inject curated results\ninto response
+    SP-->>API: Inject curated results<br/>into response
     API-->>U: Results · Facets · Spotlights · Locales
 ```
 

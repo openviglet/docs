@@ -83,6 +83,7 @@ Days with no LLM activity do not appear in the table. This breakdown helps spot 
 Turing ES records token usage automatically on every LLM call — no extra configuration is needed.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant User
     participant API as TurLLMChatAPI /<br/>TurAIAgentChatAPI

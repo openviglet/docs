@@ -20,27 +20,142 @@ This document describes the system's components, internal modules, and the two c
 
 ![Turing ES — High-Level Architecture](/img/diagrams/turing-architecture.svg)
 
+The architecture is organized into **four layers**: Clients & External Services at the top, an API gateway in the middle, Core Modules for business logic, and Backends & Storage at the bottom. Each layer is detailed below.
+
 ---
 
-## Internal Module Structure
+### Clients & External Services
 
-The Turing ES application is organized into cohesive modules, each with a well-defined responsibility.
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph LR
+    subgraph Clients [" 💻 Clients "]
+        CL1["🌐 JS SDK"]
+        CL2["☕ Java SDK"]
+        CL3["📱 Custom Apps"]
+    end
+
+    subgraph External [" 🔌 External Services "]
+        CON["📡 Dumont DEP\nWebCrawler · DB · FS\nAEM · WordPress"]
+        KC["🔑 Keycloak\nOAuth2 / OIDC"]
+        LLM["🧠 LLM Providers\nClaude · OpenAI\nAzure · Gemini · Ollama"]
+    end
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class CL1,CL2,CL3 blue
+    class CON,KC,LLM amber
+
+    style Clients fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style External fill:#E8A83820,stroke:#E8A838,stroke-width:2px,color:#1a1a1a,font-weight:700
+```
+
+| Component | Description |
+|---|---|
+| **JS SDK / Java SDK** | Typed clients for search and indexing — available on npm and Maven Central |
+| **Dumont DEP** | Separate application that runs connectors and sends documents to Turing ES via REST API |
+| **Keycloak** | Optional OAuth2 / OIDC provider for production SSO |
+| **LLM Providers** | Six supported vendors: Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Gemini (OpenAI-compatible), Ollama |
+
+---
+
+### API Layer
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph LR
+    subgraph API [" 🌐 API Layer "]
+        REST["📡 REST API\nSearch · Indexing · GenAI Chat\nToken Usage · Admin"]
+        GQL["📊 GraphQL API\nSearch queries"]
+        ADMIN["🛠️ Admin Console\nReact + TypeScript + shadcn/ui\nSN Config · Assets · Chat"]
+    end
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+
+    class REST,GQL,ADMIN blue
+
+    style API fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700
+```
+
+| Component | Package | Description |
+|---|---|---|
+| **REST API** | `api` | Controllers for search, indexing, GenAI chat, agents, token usage, and administration |
+| **GraphQL API** | `api` | Search query resolvers as an alternative to REST |
+| **Admin Console** | `turing-react` | SN Site configuration, [Assets](./assets.md) file manager (MinIO), [Chat](./chat.md) interface, [Token Usage](./token-usage.md) dashboard |
+| **Security** | `spring/security` | Session-based auth (console) + API Key header (REST) + optional Keycloak OAuth2/OIDC |
+
+---
+
+<div className="page-break" />
+
+### Core Modules
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    subgraph Core [" ⚙️ Core Modules "]
+        SN["🔍 Semantic Navigation\nQuery processing · Facets\nSpotlights · Targeting Rules\nAutocomplete · Highlighting"]
+        GENAI["🤖 GenAI / RAG Engine\nTool Calling (27 tools)\nAI Agents · MCP Servers\nEmbedding pipeline"]
+        IDX["📥 Indexing Pipeline\nArtemis queue consumer\nMerge Providers\nField mapping · Spotlights"]
+        SE["🔧 Search Engine Plugins\nSolr (recommended)\nElasticsearch · Lucene"]
+    end
+
+    SN --> SE
+    GENAI -.-> SN
+    IDX -.-> SE
+
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+
+    class SN,GENAI,IDX purple
+    class SE green
+
+    style Core fill:#9B6EC520,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a,font-weight:700
+```
 
 | Module | Package | Responsibility |
 |---|---|---|
 | **Semantic Navigation** | `sn` | Core search orchestration: query processing, facets, spotlights, targeting rules, autocomplete |
-| **Search Engine Plugins** | `se` / `plugins/se` | Abstraction layer over Solr (recommended), Elasticsearch, and Lucene backends |
-| **GenAI / RAG** | `genai` | RAG over SN content and MinIO assets; SN Site result summaries; LLM context building and invocation |
-| **Tool Calling** | `genai/tool` | LLM-accessible tools: code interpreter (Python), semantic navigation, web crawler, RAG search, datetime, finance, weather, image search, MCP servers |
-| **LLM Providers** | `genai/provider/llm` | Pluggable integrations: Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Gemini (OpenAI-compatible API), Ollama |
-| **Indexing Pipeline** | `indexer` | Receives messages from Dumont DEP via Artemis, applies Merge Providers, writes to Solr and embedding stores |
-| **Message Queue** | `artemis` | Asynchronous communication between Dumont DEP connectors and the indexing pipeline |
-| **AI Agent** | `agent` | Conversational AI agents: composition of LLM Instance, Tool Calling, and MCP Servers |
-| **OCR** | `ocr` | Text extraction from PDFs, Word documents, and images |
-| **Persistence** | `persistence` | JPA entities, repositories, and DTOs for all domain objects |
-| **Security** | `spring/security` | Native session-based auth (admin console) + API Key (`Key` header) for REST API; optional Keycloak OAuth2 / OIDC for production SSO |
-| **API Layer** | `api` | REST controllers and GraphQL resolvers exposed to clients |
-| **Admin Console** | React (`turing-react`) | Browser-based UI: administration, SN Site configuration, [Assets](./assets.md) file manager (MinIO), [Chat](./chat.md) interface, and [Token Usage](./token-usage.md) dashboard |
+| **Search Engine Plugins** | `se` / `plugins/se` | Abstraction layer over Solr (recommended), Elasticsearch, and Lucene |
+| **GenAI / RAG** | `genai` | RAG over SN content and MinIO assets; LLM context building and invocation |
+| **Tool Calling** | `genai/tool` | 27 native tools: SN search (15), RAG/KB (4), web crawler (2), finance (2), weather (1), image search (1), datetime (1), code interpreter (1); plus MCP servers |
+| **LLM Providers** | `genai/provider/llm` | Pluggable provider factory: Anthropic, OpenAI, Azure OpenAI, Gemini, Gemini-OpenAI, Ollama |
+| **AI Agents** | `agent` | Composition of LLM Instance + Tools + MCP Servers into deployable assistants |
+| **Indexing Pipeline** | `indexer` | Receives documents via Artemis, applies Merge Providers, writes to Solr and embedding stores |
+| **Message Queue** | `artemis` | Apache Artemis — async communication between Dumont DEP and the indexing pipeline |
+| **OCR** | `ocr` | Text extraction from PDFs, Word documents, and images via Apache Tika |
+| **Persistence** | `persistence` | JPA entities, repositories, DTOs, and MapStruct mappers for all domain objects |
+
+---
+
+### Backends & Storage
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph LR
+    subgraph Storage [" 💾 Backends & Storage "]
+        SOLR["🔎 Apache Solr\n+ Zookeeper\nPrimary search index"]
+        EMB["🧬 Embedding Stores\nChromaDB · PgVector\nMilvus"]
+        DB["🗄️ Database\nMariaDB / MySQL\nPostgreSQL · H2 (dev)"]
+        MINIO["📦 MinIO\nAsset / file storage"]
+        MONGO["📋 MongoDB\nApplication logs\n(optional)"]
+    end
+
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+
+    class SOLR,EMB,DB,MINIO,MONGO green
+
+    style Storage fill:#50B86C20,stroke:#50B86C,stroke-width:2px,color:#1a1a1a,font-weight:700
+```
+
+| Backend | Purpose | Notes |
+|---|---|---|
+| **Apache Solr** | Primary search index | SolrCloud mode with Zookeeper in production |
+| **Embedding Stores** | Vector storage for RAG | One active per deployment — [details](./embedding-stores.md) |
+| **Database** | Configuration, metadata, spotlights | H2 for dev; MariaDB/MySQL for production |
+| **MinIO** | Asset/file object storage | Managed via admin console [Assets](./assets.md) file manager |
+| **MongoDB** | Application log persistence | Optional — custom Logback appender, browsable in admin console |
 
 ---
 

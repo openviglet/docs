@@ -28,6 +28,7 @@ RAG eliminates these problems by giving the LLM access to your actual content at
 ## How RAG Works — Step by Step
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'loopTextColor': '#b07a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant User
     participant Turing as Turing ES
@@ -107,7 +108,7 @@ The Embedding Model is a specialized neural network that converts text into nume
 
 The embedding model is used **twice**: once during indexing (to embed document chunks) and once at query time (to embed the user's question). Both must use the **same model** — otherwise the vectors are incompatible and similarity search fails.
 
-In Turing ES, providers that support embedding include **OpenAI**, **Ollama**, and **Azure OpenAI**. See [Embedding Stores & Models](./embedding-stores.md) for model selection.
+In Turing ES, providers that support embedding include **OpenAI**, **Ollama**, and **Azure OpenAI**. See [Embedding Models](./embedding-models.md) for provider details and model selection.
 
 :::warning Same model for indexing and querying
 Changing the embedding model after documents have been indexed causes dimension mismatches and incorrect results. A full re-indexing is required after any model change.
@@ -145,21 +146,34 @@ Stored vectors:
 Turing ES supports two RAG sources that can be used independently or together:
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TD
-    subgraph "RAG Sources"
-        A[Knowledge Base<br/>Files in MinIO] -->|Apache Tika<br/>extracts text| B[Chunks]
-        C[SN Sites<br/>Indexed documents] -->|Connectors<br/>index content| D[Chunks]
+    subgraph Sources [" 📡 RAG Sources "]
+        A["📦 Knowledge Base\nFiles in MinIO"] -->|"Apache Tika\nextracts text"| B["📄 Chunks"]
+        C["🔍 SN Sites\nIndexed documents"] -->|"Connectors\nindex content"| D["📄 Chunks"]
     end
 
-    B -->|Embedding Model| E[Embedding Store<br/>ChromaDB / PgVector / Milvus]
-    D -->|Embedding Model| E
+    B -->|"🧬 Embedding Model"| E["💾 Embedding Store\nChromaDB / PgVector / Milvus"]
+    D -->|"🧬 Embedding Model"| E
 
-    F[User Question] -->|Embedding Model| G[Query Vector]
-    G -->|Similarity Search| E
-    E -->|Top 10 chunks<br/>similarity ≥ 0.7| H[Retrieved Context]
+    F["❓ User Question"] -->|"🧬 Embedding Model"| G["🔢 Query Vector"]
+    G -->|"Similarity Search"| E
+    E -->|"Top 10 chunks\nsimilarity ≥ 0.7"| H["📋 Retrieved Context"]
 
-    H --> I[LLM Prompt<br/>Question + Context]
-    I -->|LLM Instance| J[Generated Answer]
+    H --> I["📝 LLM Prompt\nQuestion + Context"]
+    I -->|"🧠 LLM Instance"| J["✅ Generated Answer"]
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class A,C blue
+    class B,D,E green
+    class F,G,H purple
+    class I,J amber
+
+    style Sources fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700
 ```
 
 ### Knowledge Base (Assets)
@@ -219,7 +233,8 @@ Imagine a company with an internal knowledge base containing HR policies, produc
 |---|---|
 | [Generative AI & LLM Configuration](./genai-llm.md) | Global GenAI settings and architecture overview |
 | [LLM Instances](./llm-instances.md) | Configure LLM providers |
-| [Embedding Stores & Models](./embedding-stores.md) | Vector database backends and embedding model selection |
+| [Embedding Stores](./embedding-stores.md) | Vector database backends (ChromaDB, PgVector, Milvus) |
+| [Embedding Models](./embedding-models.md) | Provider support and model selection guidance |
 | [Assets](./assets.md) | Knowledge Base file management |
 | [AI Agents](./ai-agents.md) | Compose agents with RAG tools |
 | [Tool Calling](./tool-calling.md) | RAG / Knowledge Base tools reference |

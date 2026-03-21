@@ -13,16 +13,27 @@ The FileSystem Connector walks a directory tree, extracts text and metadata from
 ## How It Works
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TD
-    DIR["Source Directory"] --> WALK["Walk Directory Tree\n(recursive visitor)"]
-    WALK --> FILE["Read File"]
-    FILE --> TIKA["Extract Text\n(Apache Tika)"]
-    TIKA --> META["Extract Metadata\n(size, date, extension)"]
-    META --> ITEM["Create Job Item"]
-    ITEM --> PIPE["Submit to Pipeline"]
-    PIPE --> MORE{More files?}
+    DIR["📁 Source Directory"] --> WALK["🔍 Walk Directory Tree\n(recursive visitor)"]
+    WALK --> FILE["📄 Read File"]
+    FILE --> TIKA["📋 Extract Text\n(Apache Tika)"]
+    TIKA --> META["🏷️ Extract Metadata\n(size, date, extension)"]
+    META --> ITEM["📦 Create Job Item"]
+    ITEM --> PIPE["📨 Submit to Pipeline"]
+    PIPE --> MORE{"More files?"}
     MORE -->|Yes| WALK
-    MORE -->|No| DONE["Finish & Flush"]
+    MORE -->|No| DONE["✅ Finish & Flush"]
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class DIR,WALK blue
+    class FILE,TIKA,META purple
+    class ITEM,PIPE amber
+    class MORE,DONE green
 ```
 
 1. Start at the configured **source directory**

@@ -54,7 +54,7 @@ For the full UI reference — form sections, provider-specific options, generati
 
 Turing ES delegates vector storage to one of three backends (ChromaDB, PgVector, Milvus) and uses an embedding model to generate and query vectors. The choice of backend and model affects both storage cost and similarity quality.
 
-See [Embedding Stores & Models](./embedding-stores.md) for backend comparison, model selection guidance, and configuration details.
+See [Embedding Stores](./embedding-stores.md) for backend comparison and [Embedding Models](./embedding-models.md) for provider support, model selection guidance, and configuration details.
 
 ---
 

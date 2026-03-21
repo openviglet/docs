@@ -40,6 +40,7 @@ const sidebars: SidebarsConfig = {
             "rag",
             "llm-instances",
             "embedding-stores",
+            "embedding-models",
             "assets",
             "tool-calling",
             "mcp-servers",

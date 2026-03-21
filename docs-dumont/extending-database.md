@@ -52,12 +52,21 @@ For each row in the SQL result set, the connector:
 5. Creates a Job Item and sends it to the pipeline
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph LR
-    SQL["SQL Query"] --> ROW["Read Row"]
-    ROW --> MAP["Map Columns → Attributes"]
-    MAP --> CUSTOM["Your Custom Class\n(DumDbExtCustomImpl)"]
-    CUSTOM --> ITEM["Create Job Item"]
-    ITEM --> PIPE["Pipeline"]
+    SQL["🗄️ SQL Query"] --> ROW["📄 Read Row"]
+    ROW --> MAP["📋 Map Columns → Attributes"]
+    MAP --> CUSTOM["⚙️ Your Custom Class\n(DumDbExtCustomImpl)"]
+    CUSTOM --> ITEM["📦 Create Job Item"]
+    ITEM --> PIPE["📨 Pipeline"]
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class SQL,ROW blue
+    class MAP,CUSTOM purple
+    class ITEM,PIPE amber
 ```
 
 ---

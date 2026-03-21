@@ -1,17 +1,28 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'signalColor': '#333', 'signalTextColor': '#333', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'loopTextColor': '#b07a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a'}}}%%
 sequenceDiagram
     participant User
     participant Turing as Turing ES
     participant LLM as LLM Instance
     participant Tool as Tool / MCP Server
 
-    User->>Turing: Send message
-    Turing->>LLM: User message + system prompt + tool definitions
-    loop Reasoning chain
-        LLM->>Turing: Request tool call (tool name + arguments)
-        Turing->>Tool: Execute tool
+    User->>Turing: Send message (text, files, follow-up)
+
+    Note over Turing: Build prompt:<br/>system prompt + tool definitions<br/>+ message history
+
+    Turing->>LLM: Prompt with tool calling options
+
+    rect rgba(254, 243, 199, 0.3)
+    loop Reasoning Chain
+        LLM->>Turing: Request tool call (name + arguments)
+        Turing->>Tool: Execute native tool or MCP server
         Tool-->>Turing: Tool result
-        Turing->>LLM: Tool result
+        Turing->>LLM: Tool result as context
+        Note over LLM: Analyse results —<br/>respond or call more tools
     end
+    end
+
     LLM-->>Turing: Final response
+
     Turing-->>User: Streamed response (SSE)
+
+    Note over User: Rendered as Markdown,<br/>code, D2, HTML, downloads

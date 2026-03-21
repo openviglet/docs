@@ -1,0 +1,43 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    subgraph Identity [" Identity "]
+        A1["🏷️ Name\nTab label in Chat UI"]
+        A2["🖼️ Avatar\nProfile image"]
+        A3["📝 Description\nPurpose summary"]
+        A4["✅ Enabled\nActive / inactive toggle"]
+    end
+
+    subgraph Brain [" Brain "]
+        B1["🧠 LLM Instances\nOpenAI · Anthropic · Ollama · Gemini · Azure"]
+        B2["💬 System Prompt\nPersona · behaviour · language rules"]
+    end
+
+    subgraph Capabilities [" Capabilities "]
+        C1["🔧 Native Tools — 27 built-in\nSearch · Finance · Weather · Code · Web · Images · DateTime"]
+        C2["🌐 MCP Servers — External\nHTTP / SSE or COMMAND / stdio transports"]
+    end
+
+    subgraph Output [" Output "]
+        D1["💻 Chat Tab\nOwn tab per agent"]
+        D2["⚡ SSE Streaming\nReal-time token output"]
+        D3["📄 Rich Content\nMarkdown · code · D2 · HTML"]
+    end
+
+    Identity --> Brain
+    Brain --> Capabilities
+    Capabilities --> Output
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class A1,A2,A3,A4 blue
+    class B1,B2 purple
+    class C1,C2 green
+    class D1,D2,D3 amber
+
+    style Identity fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style Brain fill:#9B6EC520,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style Capabilities fill:#50B86C20,stroke:#50B86C,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style Output fill:#E8A83820,stroke:#E8A838,stroke-width:2px,color:#1a1a1a,font-weight:700

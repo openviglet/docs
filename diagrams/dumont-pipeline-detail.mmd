@@ -1,8 +1,8 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TB
-    JI["Job Item\n(fields + action + locale)"]
+    JI["📄 Job Item\n(fields + action + locale)"]
 
-    subgraph Strategies["Processing Strategies"]
+    subgraph Strategies [" ⚙️ Processing Strategies "]
         S1["P10: Deindex"]
         S2["P20: Ignore Rules"]
         S3["P30: Index"]
@@ -11,14 +11,14 @@ graph TB
         S1 --> S2 --> S3 --> S4 --> S5
     end
 
-    BAT["Batch Processor\n(50 items/batch)"]
-    QUE["Apache Artemis\n(Persistent Queue)"]
-    DB[("Indexing DB\nChecksums + Status")]
+    BAT["📦 Batch Processor\n(50 items/batch)"]
+    QUE["📨 Apache Artemis\n(Persistent Queue)"]
+    DB[("🗄️ Indexing DB\nChecksums + Status")]
 
-    subgraph Output["Indexing Plugin"]
-        TUR["Turing ES"]
-        SOLR["Apache Solr"]
-        ES["Elasticsearch"]
+    subgraph Output [" 🔍 Indexing Plugin "]
+        TUR["🔎 Turing ES"]
+        SOLR["🔎 Apache Solr"]
+        ES["🔎 Elasticsearch"]
     end
 
     JI --> Strategies
@@ -26,3 +26,17 @@ graph TB
     Strategies --> BAT
     BAT --> QUE
     QUE --> Output
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class JI blue
+    class S1,S2,S3,S4,S5 purple
+    class BAT,QUE amber
+    class DB green
+    class TUR,SOLR,ES green
+
+    style Strategies fill:#9B6EC520,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style Output fill:#50B86C20,stroke:#50B86C,stroke-width:2px,color:#1a1a1a,font-weight:700

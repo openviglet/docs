@@ -1,4 +1,4 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'loopTextColor': '#b07a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant Dumont as Viglet Dumont DEP<br/>(Connector)
     participant API as Turing ES REST API
@@ -16,6 +16,8 @@ sequenceDiagram
     API->>Artemis: Enqueue indexing job (async)
     Artemis->>Pipeline: Deliver job
 
+    Note over Pipeline,Merge: Merge Provider check
+
     Pipeline->>Merge: Check Merge Provider rules<br/>for this site and document
     alt Merge rule matched
         Merge->>Solr: Fetch existing document by join key
@@ -24,6 +26,8 @@ sequenceDiagram
     else No merge rule
         Merge-->>Pipeline: Document unchanged
     end
+
+    Note over Pipeline,Emb: Index and embed
 
     Pipeline->>Solr: Index document with mapped fields and facets
     alt Document matches a Spotlight

@@ -32,13 +32,24 @@ Consume Turing ES from your application via **REST API**, **GraphQL**, the **Jav
 ## How it works at a glance
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph LR
-    A["Your Content\n(CMS, DB, files, web)"]
-    B["Viglet Dumont DEP\n(Connectors)"]
-    C["Turing ES\n(Index + Search + GenAI)"]
-    D["Your Users\n(Search UI, Chat, API)"]
+    A["📡 Your Content\n(CMS, DB, files, web)"]
+    B["🔌 Viglet Dumont DEP\n(Connectors)"]
+    C["🔍 Turing ES\n(Index + Search + GenAI)"]
+    D["👥 Your Users\n(Search UI, Chat, API)"]
 
     A --> B --> C --> D
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class A amber
+    class B purple
+    class C blue
+    class D green
 ```
 
 Content flows from its sources through Dumont DEP connectors into Turing ES, where it is indexed and made available to users through search interfaces, chat, and APIs.

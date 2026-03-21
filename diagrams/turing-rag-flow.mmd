@@ -1,4 +1,4 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'loopTextColor': '#b07a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant User
     participant Chat as Chat / AI Agent
@@ -9,11 +9,18 @@ sequenceDiagram
 
     User->>Chat: Question or request
     Chat->>LLM: Send message with context
+
+    Note over LLM,RAGTool: Knowledge Base retrieval
+
     LLM->>RAGTool: Call search_knowledge_base(query)
     RAGTool->>Emb: Vector similarity search<br/>(top-10, threshold 0.7)
     Emb-->>RAGTool: Relevant document chunks
     RAGTool-->>LLM: Retrieved context
-    LLM->>SN: Call search_site(site, query) [optional]
+
+    Note over LLM,SN: Optional site search
+
+    LLM->>SN: Call search_site(site, query)
     SN-->>LLM: Search results
+
     LLM-->>Chat: Generated response grounded in retrieved content
     Chat-->>User: Final response

@@ -1,4 +1,4 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'loopTextColor': '#b07a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant Client
     participant API as TurSNSearchProcess
@@ -7,9 +7,13 @@ sequenceDiagram
     participant Solr
 
     Client->>API: POST /api/sn/{siteName}/search<br/>{ targetingRules / targetingRulesWithConditionAND / OR }
+
+    Note over API,Rules: Build targeting filter
+
     API->>Builder: Format values (add quotes if needed)
     Builder->>Rules: Build filter query from rule type
     Rules-->>Builder: Solr fq clause (AND or OR logic)
     Builder->>Solr: Main query + fq (targeting filter)
     Solr-->>Client: Filtered results
-    API->>API: Record applied rules in sn_site_metric_access_trs
+
+    Note over API: Record applied rules<br/>in sn_site_metric_access_trs

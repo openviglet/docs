@@ -1,6 +1,6 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
-graph LR
-    subgraph Sources["① Content Sources"]
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    subgraph Sources [" 📡 Content Sources "]
         WEB["🌐 Websites"]
         AEM["📦 AEM"]
         DB["🗄️ Databases"]
@@ -8,8 +8,18 @@ graph LR
         WP["📝 WordPress"]
     end
 
-    PIPELINE["② Dumont DEP\nPipeline Engine"]
-    TARGETS["③ Search Engines"]
+    PIPELINE["⚙️ Dumont DEP\nPipeline Engine"]
+    TARGETS["🔍 Search Engines"]
 
     Sources --> PIPELINE
     PIPELINE --> TARGETS
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+
+    class WEB,AEM,DB,FS,WP blue
+    class PIPELINE purple
+    class TARGETS green
+
+    style Sources fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700

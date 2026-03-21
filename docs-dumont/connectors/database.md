@@ -13,16 +13,27 @@ The Database Connector extracts content from any JDBC-compatible database by exe
 ## How It Works
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TD
-    SQL["SQL Query"] --> JDBC["Execute via JDBC"]
-    JDBC --> RS["Result Set"]
-    RS --> ROW["Read Row"]
-    ROW --> MAP["Map Columns → Fields"]
-    MAP --> ITEM["Create Job Item"]
-    ITEM --> PIPE["Submit to Pipeline"]
-    PIPE --> MORE{More rows?}
+    SQL["🗄️ SQL Query"] --> JDBC["⚙️ Execute via JDBC"]
+    JDBC --> RS["📋 Result Set"]
+    RS --> ROW["📄 Read Row"]
+    ROW --> MAP["🔧 Map Columns → Fields"]
+    MAP --> ITEM["📦 Create Job Item"]
+    ITEM --> PIPE["📨 Submit to Pipeline"]
+    PIPE --> MORE{"More rows?"}
     MORE -->|Yes| ROW
-    MORE -->|No| DONE["Finish & Flush"]
+    MORE -->|No| DONE["✅ Finish & Flush"]
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class SQL,JDBC,RS blue
+    class ROW,MAP purple
+    class ITEM,PIPE amber
+    class MORE,DONE green
 ```
 
 1. Execute the configured **SQL query** against the database

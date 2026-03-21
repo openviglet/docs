@@ -1,13 +1,13 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TB
-    SRC["Content Source"]
-    CON["Connector\n(Web Crawler, DB, FS, AEM, WP)"]
-    STR["Processing Strategies\n(priority-ordered)"]
-    BAT["Batch Processor\n(groups into batches of 50)"]
-    QUE["Apache Artemis\nMessage Queue"]
-    PLG["Indexing Plugin\n(Turing / Solr / Elasticsearch)"]
-    SE["Search Engine"]
-    SKIP["Skipped"]
+    SRC["📡 Content Source"]
+    CON["🔌 Connector\n(Web Crawler, DB, FS, AEM, WP)"]
+    STR["⚙️ Processing Strategies\n(priority-ordered)"]
+    BAT["📦 Batch Processor\n(groups into batches of 50)"]
+    QUE["📨 Apache Artemis\nMessage Queue"]
+    PLG["🔧 Indexing Plugin\n(Turing / Solr / Elasticsearch)"]
+    SE["🔍 Search Engine"]
+    SKIP["⏭️ Skipped"]
 
     SRC --> CON
     CON -->|"Job Item"| STR
@@ -16,3 +16,14 @@ graph TB
     BAT -->|"batch full"| QUE
     QUE --> PLG
     PLG --> SE
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class SRC,CON blue
+    class STR,BAT purple
+    class QUE,PLG amber
+    class SE green
+    class SKIP purple

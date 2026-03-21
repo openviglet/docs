@@ -28,12 +28,23 @@ Understanding the stack helps you navigate the codebase and decide where to plug
 | **CI/CD** | GitHub Actions |
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TD
-    A[Your IDE] -->|mvn spring-boot:run| B[Turing ES Backend\nSpring Boot / Java 21]
-    A -->|npm run dev| C[React Admin Console\nlocalhost:5173]
-    B --> D[Apache Solr\nlocalhost:8983]
-    B --> E[Apache Artemis\nMessage Queue]
-    C -->|REST API| B
+    A["💻 Your IDE"] -->|"mvn spring-boot:run"| B["☕ Turing ES Backend\nSpring Boot / Java 21"]
+    A -->|"npm run dev"| C["⚛️ React Admin Console\nlocalhost:5173"]
+    B --> D["🔎 Apache Solr\nlocalhost:8983"]
+    B --> E["📨 Apache Artemis\nMessage Queue"]
+    C -->|"REST API"| B
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class A amber
+    class B,E purple
+    class C blue
+    class D green
 ```
 
 ---
@@ -328,15 +339,22 @@ Turing ES maintains high code quality standards. You can check the project healt
 Turing ES uses a **plugin architecture** to support multiple search backends behind a unified interface. This abstraction allows the same application code to work with Apache Solr, Elasticsearch, or Lucene — the active plugin is resolved at runtime based on the vendor configured per Search Engine instance.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TD
-    FACTORY["TurSearchEnginePluginFactory\n(resolves by vendor, fallback → Solr)"]
-    SOLR["TurSolrSearchEnginePlugin"]
-    ES["TurElasticsearchSearchEnginePlugin"]
-    LUCENE["TurLuceneSearchEnginePlugin"]
+    FACTORY["⚙️ TurSearchEnginePluginFactory\n(resolves by vendor, fallback → Solr)"]
+    SOLR["🔎 TurSolrSearchEnginePlugin"]
+    ES["🔎 TurElasticsearchSearchEnginePlugin"]
+    LUCENE["🔎 TurLuceneSearchEnginePlugin"]
 
     FACTORY --> SOLR
     FACTORY --> ES
     FACTORY --> LUCENE
+
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+
+    class FACTORY purple
+    class SOLR,ES,LUCENE green
 ```
 
 ### The `TurSearchEnginePlugin` interface

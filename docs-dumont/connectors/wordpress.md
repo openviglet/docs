@@ -21,13 +21,22 @@ Unlike the AEM and Web Crawler connectors, the WordPress plugin is **not part of
 ## How It Works
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph LR
-    WP["WordPress"]
-    PLG["Viglet Dumont\nPHP Plugin"]
-    TUR["Turing ES\n(Search Engine)"]
+    WP["📝 WordPress"]
+    PLG["🔌 Viglet Dumont\nPHP Plugin"]
+    TUR["🔍 Turing ES\n(Search Engine)"]
 
     WP -->|"publish / update / delete"| PLG
     PLG -->|"HTTP POST"| TUR
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+
+    class WP blue
+    class PLG purple
+    class TUR green
 ```
 
 The plugin integrates with WordPress hooks to automatically push content to the search index:

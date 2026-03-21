@@ -1,4 +1,4 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'loopTextColor': '#b07a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant Client
     participant API as REST API
@@ -12,14 +12,20 @@ sequenceDiagram
     Client->>API: GET /api/sn/{siteName}/search?q=...&profile attributes
     API->>SNProcess: search(context)
 
+    Note over SNProcess,TR: Apply targeting rules
+
     SNProcess->>SNProcess: Validate site configuration
     SNProcess->>TR: Translate profile attributes<br/>into Solr filter queries
     TR-->>SNProcess: Additional filter queries
+
+    Note over SNProcess,Solr: Execute search
 
     SNProcess->>Plugin: Select plugin (Solr / ES / Lucene)
     Plugin->>Solr: Execute query<br/>+ facets + targeting filter queries
     Solr-->>Plugin: Filtered result set + facet counts
     Plugin-->>SNProcess: Structured results
+
+    Note over SNProcess,Spotlight: Enrich response
 
     SNProcess->>SNProcess: Enrich facets<br/>Map fields<br/>Apply highlighting
 

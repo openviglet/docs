@@ -1,21 +1,35 @@
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TB
-    subgraph Plugins["Java Plugins (loaded via -Dloader.path)"]
-        WC["Web Crawler Plugin\nweb-crawler-plugin.jar\n\nJSoup · URL filtering\nRandom user agents\nLocale detection"]
-        AEM["AEM Plugin\naem-plugin.jar\n\ninfinity.json · tags.json\nmodel.json · Delta tracking\nOSGi event listeners"]
+    subgraph Plugins [" 🔌 Java Plugins (loaded via -Dloader.path) "]
+        WC["🌐 Web Crawler Plugin\nweb-crawler-plugin.jar\n\nJSoup · URL filtering\nRandom user agents\nLocale detection"]
+        AEM["📦 AEM Plugin\naem-plugin.jar\n\ninfinity.json · tags.json\nmodel.json · Delta tracking\nOSGi event listeners"]
     end
 
-    subgraph Standalone["Standalone CLI Tools"]
-        DB["Database Connector\ndumont-db-indexer.jar\n\nJDBC · SQL queries\nMulti-database\nCustom class extensions"]
-        FS["FileSystem Connector\ndumont-filesystem-indexer.jar\n\nApache Tika · OCR\nDirectory traversal\nPath prefix replacement"]
+    subgraph Standalone [" 💻 Standalone CLI Tools "]
+        DB["🗄️ Database Connector\ndumont-db-indexer.jar\n\nJDBC · SQL queries\nMulti-database\nCustom class extensions"]
+        FS["📁 FileSystem Connector\ndumont-filesystem-indexer.jar\n\nApache Tika · OCR\nDirectory traversal\nPath prefix replacement"]
     end
 
-    subgraph External["External (Not Java)"]
-        WP["WordPress Plugin\nPHP plugin inside WordPress\n\nEvent-driven\nDirect HTTP to Turing ES"]
+    subgraph External [" 🌍 External (Not Java) "]
+        WP["📝 WordPress Plugin\nPHP plugin inside WordPress\n\nEvent-driven\nDirect HTTP to Turing ES"]
     end
 
-    PIPELINE["→ Pipeline Engine"]
+    PIPELINE["⚙️ Pipeline Engine"]
 
     Plugins --> PIPELINE
     Standalone -->|"REST API"| PIPELINE
-    WP -->|"HTTP POST"| TUR["→ Turing ES"]
+    WP -->|"HTTP POST"| TUR["🔍 Turing ES"]
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class WC,AEM blue
+    class DB,FS green
+    class WP amber
+    class PIPELINE,TUR purple
+
+    style Plugins fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style Standalone fill:#50B86C20,stroke:#50B86C,stroke-width:2px,color:#1a1a1a,font-weight:700
+    style External fill:#E8A83820,stroke:#E8A838,stroke-width:2px,color:#1a1a1a,font-weight:700
