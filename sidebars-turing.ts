@@ -60,6 +60,7 @@ const sidebars: SidebarsConfig = {
         },
         "developer-guide",
         "rest-api",
+        "graphql",
         {
           type: "category",
           label: "Security",
