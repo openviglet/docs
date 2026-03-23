@@ -465,6 +465,39 @@ curl "http://localhost:2700/api/sn" \
 | `PUT` | `/api/sn/{snSiteId}/spotlight/{id}` | Update a spotlight |
 | `DELETE` | `/api/sn/{snSiteId}/spotlight/{id}` | Delete a spotlight |
 
+### Intent Management
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/intent` | List all intents |
+| `GET` | `/api/intent/enabled` | List enabled intents (sorted by display order) |
+| `GET` | `/api/intent/{id}` | Get an intent with its actions |
+| `POST` | `/api/intent` | Create an intent |
+| `PUT` | `/api/intent/{id}` | Update an intent |
+| `DELETE` | `/api/intent/{id}` | Delete an intent |
+
+For full details, see [Intent](./intent.md).
+
+### Import / Export
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/import` | Import SN Site configurations from a ZIP file |
+| `POST` | `/api/sn/import` | Import content (JSON job items) |
+| `POST` | `/api/sn/import/zip` | Import content from a ZIP with file attachments |
+
+For full details, see [Import & Export](./import-export.md).
+
+### Logging
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/logging` | Server logs (paginated, filterable) |
+| `GET` | `/api/logging/indexing` | Indexing pipeline logs |
+| `GET` | `/api/logging/aem` | AEM connector logs |
+
+For full details, see [Logging](./logging.md).
+
 ---
 
 <div className="page-break" />
@@ -477,16 +510,145 @@ Turing exposes a GraphQL endpoint that provides the same Semantic Navigation sea
 POST http://localhost:2700/graphql
 ```
 
+### Interactive Explorer (GraphiQL)
+
+An interactive GraphQL IDE is available at `/graphiql`. It provides schema introspection, auto-completion, and query validation — ideal for exploring the API and testing queries before integrating them into your application.
+
 ### Available Queries
 
 | Query | Description |
 |---|---|
-| `siteNames` | Returns all configured SN Site names |
+| `siteNames` | Returns all configured SN Site names as a string array |
 | `siteSearch(siteName, searchParams, locale)` | Performs a search against an SN Site |
 
-The `SearchParamsInput` accepts: `q`, `rows`, `p`, `sort`, `group`, `fq`, `fqAnd`, `fqOr`, `fqOp`, `fqiOp`, `locale`, and `fl` (field list).
+### Site Name Enum
 
-**Example:**
+Site names are exposed as a **dynamic GraphQL enum** (`TurSNSiteName`) generated from configured sites. Special characters are converted to underscores, and names starting with a number are prefixed with `SITE_`. For example, a site named "My Sample Site" becomes `MY_SAMPLE_SITE`.
+
+### SearchParamsInput
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `q` | `String` | `*` | Search query |
+| `rows` | `Int` | Site default | Results per page |
+| `p` | `Int` | `1` | Page number |
+| `sort` | `String` | `relevance` | Sort field |
+| `group` | `String` | | Group results by field |
+| `nfpr` | `Int` | `1` | Number of facets per row |
+| `fq` | `[String]` | | Filter queries |
+| `fqAnd` | `[String]` | | AND filter queries |
+| `fqOr` | `[String]` | | OR filter queries |
+| `fqOp` | `String` | `NONE` | Filter operator between facets (`AND`, `OR`, `NONE`) |
+| `fqiOp` | `String` | `NONE` | Filter operator within facet values |
+| `locale` | `String` | | Locale code (e.g., `en_US`) |
+| `fl` | `[String]` | | Field list — restrict which fields are returned |
+
+### Response Structure
+
+The response mirrors the REST search structure:
+
+| Field | Type | Description |
+|---|---|---|
+| `pagination` | `[SearchPagination]` | Page links with `text`, `href`, `page`, `current` |
+| `queryContext` | `SearchQueryContext` | Result count, page info, response time, default fields |
+| `results` | `SearchResults` | Document list with `numFound`, `start`, and `document` array |
+| `groups` | `[SearchGroup]` | Grouped results (when `group` parameter is used) |
+| `widget` | `SearchWidget` | Facets, spell check, spotlights, and locale information |
+
+Each document contains `fields` (static: `id`, `title`, `text`, `url`, `date`, `description`, `image` — plus any dynamic fields from the site configuration), `source`, and `metadata`.
+
+:::tip Dynamic fields
+The GraphQL schema is **dynamically extended** with custom fields from your SN Site configuration. If your site defines a field called `category`, it will appear as a queryable field in `SearchDocumentFields` alongside the standard fields.
+:::
+
+### Examples
+
+**Basic Search:**
+
+```graphql
+query BasicSearch {
+  siteSearch(
+    siteName: SAMPLE
+    searchParams: {
+      q: "technology"
+      rows: 10
+      p: 1
+      sort: "relevance"
+    }
+    locale: "en"
+  ) {
+    queryContext { count, page, pageCount, responseTime }
+    results {
+      numFound
+      document {
+        fields { title, text, url, date }
+        source
+      }
+    }
+    pagination { text, href, page, current }
+  }
+}
+```
+
+**Search with Filters:**
+
+```graphql
+query FilteredSearch {
+  siteSearch(
+    siteName: SAMPLE
+    searchParams: {
+      q: "annual report"
+      rows: 10
+      fq: ["type:article", "department:Finance"]
+      fqOp: "AND"
+    }
+    locale: "en_US"
+  ) {
+    queryContext { count }
+    results {
+      document {
+        fields { title, url }
+      }
+    }
+    widget {
+      facet { label, facetItems { label, count, link } }
+    }
+  }
+}
+```
+
+**Grouped Search:**
+
+```graphql
+query GroupedSearch {
+  siteSearch(
+    siteName: SAMPLE
+    searchParams: {
+      q: "*"
+      group: "category"
+      rows: 5
+    }
+    locale: "en_US"
+  ) {
+    groups {
+      name
+      count
+      results { document { fields { title, url } } }
+      pagination { text, page, current }
+    }
+  }
+}
+```
+
+**List Available Sites:**
+
+```graphql
+query ListSites {
+  siteNames
+}
+```
+
+**cURL Example:**
 
 ```bash
 curl -X POST "http://localhost:2700/graphql" \
@@ -496,7 +658,7 @@ curl -X POST "http://localhost:2700/graphql" \
   }'
 ```
 
-The response mirrors the REST search structure (pagination, queryContext, results, widget, groups) — see [Search Response Structure](#search-response-structure) above.
+For GraphQL configuration (endpoint path, GraphiQL, CORS), see [Configuration Reference → GraphQL](./configuration-reference.md#graphql).
 
 ---
 
@@ -546,6 +708,9 @@ Both endpoints return a `TurFileAttributes` JSON object containing the extracted
 | [Authentication](./security-authentication.md) | How to create and use API Tokens |
 | [Semantic Navigation](./semantic-navigation.md) | SN Site configuration and the search response structure |
 | [Chat](./chat.md) | Front-end chat interface and GenAI API |
+| [Intent](./intent.md) | Chat prompt suggestions API |
+| [Import & Export](./import-export.md) | Site configuration and content import |
+| [Logging](./logging.md) | Application and indexing log API |
 | [Token Usage](./token-usage.md) | Token consumption reporting |
 
 ---

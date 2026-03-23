@@ -21,7 +21,6 @@ const sidebars: SidebarsConfig = {
         },
         "installation-guide",
         "configuration-reference",
-        "administration-guide",
         {
           type: "category",
           label: "Enterprise Search",
@@ -30,6 +29,7 @@ const sidebars: SidebarsConfig = {
             "semantic-navigation",
             "integration",
             "integration-aem",
+            "import-export",
           ],
         },
         {
@@ -46,7 +46,16 @@ const sidebars: SidebarsConfig = {
             "mcp-servers",
             "ai-agents",
             "chat",
+            "intent",
             "token-usage",
+          ],
+        },
+        {
+          type: "category",
+          label: "Management",
+          items: [
+            "administration-guide",
+            "logging",
           ],
         },
         "developer-guide",

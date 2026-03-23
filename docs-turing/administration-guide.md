@@ -1,59 +1,20 @@
 ---
 sidebar_position: 2
 title: Administration Guide
-description: Viglet Turing ES Administration Guide
+description: Manage users, groups, roles, API tokens, global settings, and system diagnostics in Turing ES.
 ---
 
-# Viglet Turing ES: Administration Guide
+# Administration Guide
 
-Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
+The **Administration** section (`/admin-settings`) manages users, access control, API credentials, global configuration, and system diagnostics. It is accessible from the main sidebar.
 
-For an overview of the system architecture and component interactions, see [Architecture Overview](./architecture-overview.md).
-
-## Documents and OCR
-
-It can read PDFs and Documents and convert to plain text and also it uses OCR to detect text in images and images into documents.
-
-## Semantic Navigation
-
-Semantic Navigation Sites are the central configuration objects in Turing ES. Each site defines what content is indexed, how it is searched, how results are presented, and whether GenAI is enabled. For a conceptual overview, see [Core Concepts](./getting-started/core-concepts.md). For advanced configuration — Targeting Rules, Spotlights, Merge Providers, Facets, and the search response structure — see [Semantic Navigation](./semantic-navigation.md).
-
-## Generative AI Administration
-
-The GenAI system is configured across several administration sections. For full configuration details — LLM providers, embedding stores, RAG architecture, Tool Calling, MCP Servers, and AI Agents — see [Generative AI & LLM Configuration](./genai-llm.md).
-
-A brief overview of each administration section:
-
-| Section | Path | Purpose |
-|---|---|---|
-| **Settings** | Administration → Settings | Global defaults: LLM instance, embedding store, embedding model, Python path, email |
-| **LLM Instances** | Generative AI → Language Model | Configure connections to Anthropic Claude, OpenAI, Azure OpenAI, Gemini, and Ollama. See [LLM Instances](./llm-instances.md) |
-| **MCP Servers** | Administration → MCP Servers | Register external MCP servers (HTTP or stdio) to extend agent tool calling |
-| **AI Agents** | Administration → AI Agents | Compose agents from an LLM Instance + selected tools + MCP Servers |
-| **Knowledge Base** | Management → Assets | Upload and organize files in MinIO; files are indexed as vector embeddings and queried by AI Agents. See [Assets](./assets.md) |
+:::info Keycloak mode
+When Keycloak is enabled (`turing.keycloak=true`), the **Users**, **Groups**, and **Roles** subsections are hidden — identity and access management is fully delegated to Keycloak. See [Security & Keycloak](./security-keycloak.md).
+:::
 
 ---
 
-## Integration
-
-Turing ES exposes its capabilities through four integration options:
-
-| Method | Description |
-|---|---|
-| **REST API** | Primary method. All search, indexing, and administration operations are available as HTTP endpoints. |
-| **GraphQL** | `POST /graphql` — for clients that prefer a graph-based query model |
-| **Java SDK** | Available on [Maven Central](https://central.sonatype.com/artifact/com.viglet.turing/turing-java-sdk) (`com.viglet.turing:turing-java-sdk`) |
-| **JavaScript / TypeScript SDK** | Available on npm: `npm install @viglet/turing-sdk` |
-
----
-
-<div className="page-break" />
-
-## Turing ES Console
-
-Turing ES has many components: Search Engine, Semantic Navigation, and Generative AI.
-
-### Login
+## Login
 
 When accessing Turing ES, a login page is displayed. The default username is `admin`. The password is defined at first startup via the `TURING_ADMIN_PASSWORD` environment variable — if not set, Turing ES will not create the admin account with a default password.
 
@@ -69,128 +30,175 @@ set TURING_ADMIN_PASSWORD=your_password
 export TURING_ADMIN_PASSWORD=your_password
 ```
 
+---
+
+## Users
+
+The Users page (`/admin/users`) lists all local user accounts. Click a user to edit, or use the creation button to add a new account.
+
+**Account Information:**
+
+| Field | Description |
+|---|---|
+| Avatar | Profile picture using DiceBear — click to pick a style, or remove to use initials |
+| Username | Unique login identifier (read-only for existing users) |
+| First Name | User's first name (required) |
+| Last Name | User's last name (required) |
+
+**Contact:**
+
+| Field | Description |
+|---|---|
+| Email | User's email address (required) |
+
+**Groups & Roles** (tabbed view):
+
+| Tab | Description |
+|---|---|
+| **Groups** | Search and assign available groups. Remove the user from groups using the remove button. |
+| **Roles** | Read-only view of roles inherited from the user's assigned groups |
+
+**Security:**
+
+| Field | Description |
+|---|---|
+| Password | Required for new users. Leave blank when editing to keep the current password. |
 
 ---
 
-### Administration
+## Groups
 
-The **Administration** section is accessed via the main sidebar and lives at `/admin-settings`. It manages users, access control, API credentials, global configuration, and system diagnostics.
+The Groups page (`/admin/groups`) organises users into groups for role-based access control.
 
-:::info Keycloak mode
-When Keycloak is enabled (`turing.keycloak=true`), the **Users**, **Groups**, and **Roles** subsections are hidden — identity and access management is fully delegated to Keycloak. See [Security & Keycloak](./security-keycloak.md).
+**Group Details:**
+
+| Field | Description |
+|---|---|
+| Name | Unique group identifier (required) |
+| Description | Purpose or scope of this group |
+
+**Members & Roles** (tabbed view):
+
+| Tab | Description |
+|---|---|
+| **Users** | Search and add members. Remove users from the group using the remove button. |
+| **Roles** | Search and assign roles. Remove roles using the remove button. |
+
+---
+
+<div className="page-break" />
+
+## Roles
+
+The Roles page (`/admin/roles`) defines permissions that are assigned to groups.
+
+**Role Details:**
+
+| Field | Description |
+|---|---|
+| Name | Unique role identifier (required) |
+| Description | What this role permits |
+
+### Privilege Matrix
+
+Each role has a **privilege matrix** — an interactive table where you toggle individual permissions per resource category. The matrix is organized into two sections:
+
+**Generative AI:**
+
+| Category | Resources Covered |
+|---|---|
+| LLM | Language model instances |
+| EMBEDDING | Embedding model instances |
+| STORE | Embedding store instances |
+| AI_AGENT | AI Agent configurations |
+| INTENT | Intent categories and actions |
+
+**Enterprise Search:**
+
+| Category | Resources Covered |
+|---|---|
+| SE | Search engine instances and cores |
+| SN | Semantic Navigation sites and fields |
+
+**Actions per category:**
+
+| Action | Description |
+|---|---|
+| VIEW | Read access to the resource |
+| CREATE | Create new resources |
+| EDIT | Modify existing resources |
+| DELETE | Remove resources |
+| ALL | Bulk toggle — enables or disables all four actions at once |
+
+:::tip
+The `ROLE_ADMIN` role has full access to all resources regardless of the privilege matrix. The matrix applies to non-admin roles only.
 :::
 
 ---
 
-#### Users
+## API Tokens
 
-Lists all local user accounts in the system.
-
-**Form fields:**
-
-| Field | Description |
-|---|---|
-| Avatar | Profile picture |
-| Username | Unique login identifier |
-| First Name / Last Name | Display name |
-| Email | User's email address |
-| Password | Account password |
-
-**Sections:**
-
-| Section | Description |
-|---|---|
-| **Groups** | Add or remove the user from groups |
-| **Roles** | Displays roles inherited from the user's groups (read-only) |
-
----
-
-#### Groups
-
-Organises users into groups for role-based access control.
+The API Tokens page (`/admin/tokens`) manages tokens used to authenticate REST API requests. Every token is passed in the `Key` request header.
 
 **Form fields:**
 
 | Field | Description |
 |---|---|
-| Name | Group name |
-| Description | Purpose or scope of the group |
-
-**Sections:**
-
-| Section | Description |
-|---|---|
-| **Users** | Add or remove members of this group |
-| **Roles** | Assign or remove roles granted to this group |
-
----
-
-#### Roles
-
-Defines permissions that can be assigned to groups.
-
-| Field | Description |
-|---|---|
-| Name | Role identifier |
-| Description | What this role permits |
-
----
-
-#### API Tokens
-
-Manages API tokens used to authenticate REST API requests. Every token is passed in the `Key` request header.
-
-**Form fields:**
-
-| Field | Description |
-|---|---|
-| Title | A human-readable name for the token |
+| Title | A human-readable name for the token (required) |
 | Description | Purpose or owner of this token |
 
+**Token display** (existing tokens only):
+
+| Field | Description |
+|---|---|
+| API Token | Read-only, monospace display with copy-to-clipboard button |
+
 :::info
-The token value is generated automatically on creation and displayed once with a copy button. It cannot be retrieved again — store it securely.
+The token value is generated automatically on creation and displayed once. It cannot be retrieved again — store it securely.
 :::
 
 **Using the token in API requests:**
 
 ```bash
-curl -X GET "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
+curl "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
   -H "Key: <YOUR_API_TOKEN>"
 ```
 
 ---
 
-#### Global Settings
+<div className="page-break" />
 
-The central configuration panel for defaults and external service integrations. Divided into four sections:
+## Global Settings
 
-##### General
+The Global Settings page (`/admin/settings`) is the central configuration panel for defaults and external service integrations. Divided into four sections.
 
-| Field | Description |
-|---|---|
-| Decimal Separator | Choose between period (`.`) and comma (`,`) for numeric display |
-| Python Path | Absolute path to the Python executable (required for Python-based processing) |
-
-##### LLM Settings
+### General
 
 | Field | Description |
 |---|---|
-| Default LLM Instance | The LLM used when no site-level instance is configured |
-| Response Cache | Enable caching of LLM responses to reduce latency and cost |
-| Cache Duration | How long cached responses are retained |
-| Regenerate Cache | Button to manually invalidate and rebuild the response cache |
+| Decimal Separator | Choose between period (`.`) and comma (`,`) for numeric display. Preview shows formatted examples (e.g., `1,500.75` vs `1.500,75`). |
+| Python Executable | Absolute path to the Python 3 binary used by the Code Interpreter tool. When left blank, Turing searches standard OS locations automatically. |
+
+### LLM Settings
+
+| Field | Description |
+|---|---|
+| Default LLM Instance | Dropdown of enabled LLM instances — the default used when no site-level instance is configured. Select "None" to require explicit per-site assignment. |
+| LLM Cache | Toggle to enable caching of LLM responses |
+| Cache Duration | How long cached responses are retained (duration input with configurable time unit) — visible when cache is enabled |
+| Regenerate Cache | Toggle to force fresh LLM calls instead of serving cached responses — visible when cache is enabled |
 
 :::warning
 Caching LLM responses improves performance but may return stale answers if the underlying content changes frequently. Tune the duration to match your content update cadence.
 :::
 
-##### RAG Settings
+### RAG Settings
 
 | Field | Description |
 |---|---|
 | Enable RAG Globally | Master switch for Retrieval-Augmented Generation across all sites |
-| Default Embedding Model | The model used to vectorize documents at indexing time and queries at search time |
-| Default Embedding Store | The vector store for persisting embeddings (ChromaDB, PgVector, or Milvus) |
+| Default Embedding Model | Dropdown of enabled embedding models — required when RAG is enabled |
+| Default Embedding Store | Dropdown of enabled embedding stores (ChromaDB, PgVector, or Milvus) — required when RAG is enabled |
 
 :::warning
 Changing the Default Embedding Model invalidates all existing embeddings. All indexed content must be re-indexed after changing this setting.
@@ -200,58 +208,206 @@ Changing the Default Embedding Model invalidates all existing embeddings. All in
 The RAG Settings section is only visible if an embedding store is configured and available. If MinIO is not configured, the Knowledge Base and related RAG options will not appear.
 :::
 
-##### Email Settings
+### Email Settings
 
 Used by Turing ES to send notifications and test email connectivity.
 
 | Field | Description |
 |---|---|
-| Provider | Email service provider (e.g., Brevo) |
+| Provider | Email service provider (currently Brevo) |
 | API Key | API key for the email provider |
 | Sender Email | The `From` email address |
 | Sender Name | The display name shown to recipients |
-| Recipient Email | Default destination for test emails |
+| Recipient Email | Default destination for test and automated emails |
 | Send Test Email | Button to send a test message and verify configuration |
 
 ---
 
-#### System Information
+<div className="page-break" />
 
-A diagnostic panel to monitor the health of the Turing ES instance. Divided into two sections:
+## System Information
 
-##### Overview
+The System Information page (`/admin/system-info`) is a diagnostic panel to monitor the health of the Turing ES instance. It contains two tabs.
+
+### Overview
+
+**Application:**
 
 | Item | Description |
 |---|---|
-| Application Version | Current Turing ES build version |
+| Version | Current Turing ES build version |
 | Java Version | JVM version in use |
-| Operating System | OS name and version |
-| Database Status | Connection status of the primary database |
-| RAM Usage | Current and total system memory |
-| JVM Heap | Used and available JVM heap space |
-| Disk Usage | Available storage on the host volume |
-| MongoDB Status | Connected / disconnected (shown only if MongoDB is enabled) |
-| MinIO Status | Connected / disconnected (shown only if MinIO is enabled) |
+| Java Vendor | JVM vendor (e.g., Eclipse Adoptium) |
+| OS | Operating system name, version, and architecture |
 
-##### System Variables
+**Database:**
 
-A searchable table of all JVM properties and environment variables active at runtime. Useful for verifying configuration at deployment.
+| Item | Description |
+|---|---|
+| Status | UP (green) or DOWN (red) — connection health |
+| Product | Database product name (e.g., H2, MariaDB) |
+| Version | Database server version |
+| Driver | JDBC driver name and version |
+| URL | JDBC connection URL |
+
+**Physical Memory (RAM):**
+
+| Item | Description |
+|---|---|
+| RAM Usage | Percentage used with progress bar |
+| Total RAM | Total physical memory installed |
+| Free RAM | Available physical memory |
+| Used RAM | Memory currently in use |
+
+**Swap / Pagefile** (if available):
+
+| Item | Description |
+|---|---|
+| Swap Usage | Percentage used with progress bar |
+| Total Swap | Total swap space configured |
+| Free Swap | Available swap space |
+
+**Memory (JVM Heap):**
+
+| Item | Description |
+|---|---|
+| Heap Usage | Percentage used with progress bar |
+| Total Allocated | JVM heap currently allocated |
+| Free (Allocated) | Free space within the allocated heap |
+| Used Memory | Heap memory currently in use |
+| Max Heap | Maximum heap size configured |
+
+**Disk Space:**
+
+| Item | Description |
+|---|---|
+| Disk Usage | Percentage used with progress bar |
+| Total Space | Total disk capacity |
+| Available Space | Free disk space |
+| Used Space | Disk space currently in use |
+
+**MongoDB** (shown only when `turing.mongodb.enabled: true`):
+
+| Item | Description |
+|---|---|
+| Status | UP (green) or DOWN (red) |
+| Version | MongoDB server version |
+| Endpoint | Connection URI |
+
+**MinIO** (shown only when `turing.minio.enabled: true`):
+
+| Item | Description |
+|---|---|
+| Status | UP (green) or DOWN (red) |
+| Version | MinIO server version |
+| Endpoint | MinIO server URL |
+
+### System Variables
+
+A searchable table of all JVM system properties active at runtime. The search input filters properties by name or value in real time. A counter shows the number of visible entries out of the total.
+
+Useful for verifying configuration overrides, checking classpath entries, or confirming environment variable values at deployment.
 
 ---
 
-### Search Engine
+<div className="page-break" />
 
-The Search Engine section manages connections to the search backend (Apache Solr, Elasticsearch, or Lucene) and the cores (collections) that each Semantic Navigation Site locale maps to.
+## User Account
 
-For full documentation — instance creation, core management, system monitoring, the plugin architecture, and protections — see **[Search Engine](./search-engine.md)**.
+The User Account page (`/account`) allows the currently logged-in user to manage their own profile without requiring admin privileges.
 
-### Semantic Navigation
+**Profile fields:**
 
-The **Semantic Navigation** section manages SN Sites — the central configuration objects that drive every search experience in Turing ES. Each site defines its search engine binding, indexed fields, facets, AI settings, and targeting rules.
+| Field | Description |
+|---|---|
+| Avatar | DiceBear avatar picker — choose a style or remove to use initials |
+| First Name | User's first name |
+| Last Name | User's last name |
+| Email | User's email address |
+| Username | Read-only — cannot be changed |
 
-For full documentation of all SN Site configuration tabs (Settings, Multi Languages, Behavior, Fields, Merge Providers, Targeting Rules, Spotlights, Top Search Terms, Result Ranking, AI Insights, and Generative AI) and the search REST API, see **[Semantic Navigation](./semantic-navigation.md)**.
+**Change Password:**
 
-For deep technical content — Targeting Rules Solr query mechanics, Spotlight injection, Merge Provider field overwrite rules, facet operators, and the self-describing search response structure — see **[Semantic Navigation](./semantic-navigation.md)**.
+| Field | Description |
+|---|---|
+| New Password | Leave blank to keep the current password |
+| Confirm Password | Must match the new password |
 
 ---
 
+## REST API
+
+All administration endpoints require authentication via the `Key` header. For the full endpoint reference, see [REST API Reference](./rest-api.md).
+
+### Users
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/v2/user` | List all users |
+| `GET` | `/api/v2/user/{username}` | Get user by username |
+| `GET` | `/api/v2/user/current` | Get the currently authenticated user |
+| `POST` | `/api/v2/user` | Create a new user |
+| `PUT` | `/api/v2/user/{username}` | Update a user |
+| `DELETE` | `/api/v2/user/{username}` | Delete a user |
+| `PUT` | `/api/v2/user/{username}/avatar` | Update user avatar |
+| `PUT` | `/api/v2/user/{username}/password` | Change user password |
+
+### Groups
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/v2/group` | List all groups |
+| `GET` | `/api/v2/group/{id}` | Get a group |
+| `POST` | `/api/v2/group` | Create a group |
+| `PUT` | `/api/v2/group/{id}` | Update a group |
+| `DELETE` | `/api/v2/group/{id}` | Delete a group |
+
+### Roles
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/v2/role` | List all roles |
+| `GET` | `/api/v2/role/{id}` | Get a role |
+| `POST` | `/api/v2/role` | Create a role |
+| `PUT` | `/api/v2/role/{id}` | Update a role |
+| `DELETE` | `/api/v2/role/{id}` | Delete a role |
+| `GET` | `/api/v2/privilege` | List all available privileges |
+
+### API Tokens
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/dev/token` | List all tokens |
+| `GET` | `/api/dev/token/{id}` | Get a token |
+| `POST` | `/api/dev/token` | Create a token (auto-generates value) |
+| `PUT` | `/api/dev/token/{id}` | Update token metadata |
+| `DELETE` | `/api/dev/token/{id}` | Delete a token |
+
+### Global Settings
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/system/global-settings` | Get all settings |
+| `PUT` | `/api/system/global-settings` | Update settings |
+| `POST` | `/api/system/global-settings/email/test` | Send test email |
+
+### System Information
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/system/info` | System overview (version, database, memory, disk, external services) |
+| `GET` | `/api/system/info/variables` | JVM system properties |
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Security & Authentication](./security-authentication.md) | Authentication mechanisms and API token usage |
+| [Security & Keycloak](./security-keycloak.md) | Keycloak OAuth2/OIDC integration |
+| [Configuration Reference](./configuration-reference.md) | Full `application.yaml` property reference |
+| [Logging](./logging.md) | Server, indexing, and AEM log viewer |
+| [REST API Reference](./rest-api.md) | Complete API endpoint reference |
+
+---
