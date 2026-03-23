@@ -58,9 +58,15 @@ const sidebars: SidebarsConfig = {
             "logging",
           ],
         },
-        "developer-guide",
-        "rest-api",
-        "graphql",
+        {
+          type: "category",
+          label: "Developers",
+          items: [
+            "developer-guide",
+            "rest-api",
+            "graphql",
+          ],
+        },
         {
           type: "category",
           label: "Security",
