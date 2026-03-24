@@ -60,7 +60,7 @@ GET http://localhost:2700/sn/<SITE_NAME>
 
 ### Behavior
 
-Controls how the search engine processes queries and assembles results for this site. All settings are stored on the `TurSNSite` entity and managed via `GET / PUT /api/sn/{id}`.
+Controls how the search engine processes queries and assembles results for this site. All settings are managed via `GET / PUT /api/sn/{id}`.
 
 #### General
 
@@ -282,7 +282,7 @@ This is useful when the raw field values are not user-friendly, when you want to
 
 **Custom Facet item operators**
 
-Each item in a Custom Facet is defined by an operator (`TurSNSiteCustomFacetOperatorEnum`) that generates its Solr filter query:
+Each item in a Custom Facet is defined by an operator that generates its Solr filter query:
 
 | Operator | Behavior | Example |
 |---|---|---|
@@ -514,7 +514,7 @@ Result: documents matching any of the conditions — `segment=premium`, `segment
 
 #### Solr filter query generation
 
-`TurSolrQueryBuilder` converts the rule type into Solr `fq` clauses via `TurSNTargetingRules`.
+Turing ES converts the rule type into Solr `fq` clauses automatically.
 
 **AND logic** (each attribute group becomes a clause, all clauses joined with AND):
 
@@ -647,7 +647,7 @@ Each Spotlight is associated with one or more **terms**. When a search request a
 
 For example, a spotlight with the term `annual report` will match the queries `annual report 2024`, `download annual report`, and `annual report Q3` — any query that contains the phrase.
 
-The term cache (`TurSpotlightCache`) keeps all spotlight terms in memory to avoid repeated database lookups on every search request, making the matching step fast regardless of the number of spotlights configured.
+Spotlight terms are cached in memory to avoid repeated database lookups on every search request, making the matching step fast regardless of the number of spotlights configured.
 
 #### How injection works
 
@@ -802,7 +802,7 @@ An editor for the prompt template sent to the LLM on each chat request. The temp
 
 Saving is blocked if either variable is missing from the template.
 
-**How it works:** When documents are indexed, `TurSNGenAi.addDocuments()` extracts title, summary, and body text and stores their embeddings in the configured vector store. When a user sends a chat request (`GET /api/sn/{siteName}/chat?q=...`), the system performs a similarity search, builds the prompt with the retrieved context, sends it to the LLM, and returns the generated response via Server-Sent Events (SSE). See [Chat](./chat.md) for the front-end experience.
+**How it works:** When documents are indexed, Turing ES extracts title, summary, and body text and stores their embeddings in the configured vector store. When a user sends a chat request (`GET /api/sn/{siteName}/chat?q=...`), the system performs a similarity search, builds the prompt with the retrieved context, sends it to the LLM, and returns the generated response via Server-Sent Events (SSE). See [Chat](./chat.md) for the front-end experience.
 
 ---
 

@@ -111,7 +111,7 @@ Live monitoring panel for the connected backend:
 
 ## Plugin Architecture
 
-Turing ES uses a plugin architecture to support multiple search backends behind a unified `TurSearchEnginePlugin` interface. The active plugin is resolved at runtime based on the vendor configured per instance. If a vendor is unrecognised, the factory falls back to Solr.
+Turing ES uses a plugin architecture to support multiple search backends behind a unified interface. The active plugin is resolved at runtime based on the vendor configured per instance. If a vendor is unrecognised, the factory falls back to Solr.
 
 For the full interface reference — all methods across search, index management, schema management, and document operations — and instructions on implementing a new backend, see [Developer Guide → Search Engine Plugin Architecture](./developer-guide.md#search-engine-plugin-architecture).
 

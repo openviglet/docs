@@ -253,7 +253,7 @@ Individual Semantic Navigation Sites can override this setting in their **Genera
 
 Credentials are handled with care at every layer:
 
-- **Stored encrypted** — credentials are encrypted via `TurSecretCryptoService` before being persisted in the `credentialEncrypted` column
+- **Stored encrypted** — credentials are encrypted before being persisted to the database
 - **Never returned** — the `credential` field is transient and write-only. It flows in on save but never comes back in API responses
 - **Edit safely** — leaving the credential field blank when editing preserves the existing encrypted value
 - **Per-vendor auth** — ChromaDB supports Bearer token or Basic Auth; Milvus uses token-based auth; PgVector uses JDBC credentials with connection pooling

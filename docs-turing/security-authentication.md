@@ -36,7 +36,7 @@ All REST API requests authenticate via an **API Key** passed in the `Key` reques
 For the full endpoint reference, authentication examples, and the list of public endpoints that require no authentication, see [REST API Reference → Authentication](./rest-api.md#authentication).
 
 :::tip Tokens are encrypted at rest
-API Token values are encrypted in the database using `TurSecretCryptoService`. The encryption key is set via `turing.ai.crypto.key` in `application.yaml`. Change this key in production — see [Configuration Reference](./configuration-reference.md).
+API Token values are encrypted at rest in the database. The encryption key is set via `turing.ai.crypto.key` in `application.yaml`. Change this key in production — see [Configuration Reference](./configuration-reference.md).
 :::
 
 ---

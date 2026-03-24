@@ -41,7 +41,7 @@ The creation and edit form is divided into two sections.
 
 ## Integration Detail — Sections
 
-After an integration is created, its detail page provides navigation to several sections. The sections below are common to all connector types. For AEM-specific configuration (Sources, Content Types, Author/Publish environments, Delta Tracking, Locales, Indexing Rules, and the Indexing Manager), see [AEM Connector](./integration-aem.md).
+After an integration is created, its detail page provides navigation to several sections. The sections below are common to all connector types. For AEM-specific configuration, see the [Turing ES AEM Connector](./integration-aem.md) overview and the full [Dumont DEP AEM Connector](/dumont/connectors/aem) documentation.
 
 ---
 

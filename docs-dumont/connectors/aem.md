@@ -194,11 +194,106 @@ curl -X POST http://localhost:30130/api/v2/aem/index/WKND \
 
 ## Source Configuration
 
-Each AEM source defines connection details (endpoint, credentials), content scope (root path, content type), author/publish environments with separate SN Sites and URL prefixes, locale mappings, and delta tracking for incremental indexing.
-
-For the full configuration reference — including all source fields, author/publish settings, delta tracking, locales, indexing rules, and the Indexing Manager — see [AEM Connector in Turing ES](/turing/integration-aem).
+Each AEM source defines connection details, content scope, author/publish environments, locale mappings, and delta tracking. Sources are configured in the **Turing ES Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Sources**.
 
 For the JSON configuration file used by custom extensions (attributes, models, locale paths), see [Extending the AEM Connector](../extending-aem.md#aem-configuration-json).
+
+### General
+
+| Field | Description |
+|---|---|
+| Name | Source identifier |
+| Endpoint | URL of the AEM instance (e.g., `http://localhost:4502`) |
+| Username / Password | Credentials for authenticated access to the AEM instance |
+
+### Root Path
+
+Defines the root content path within the AEM repository from which content is traversed (e.g., `/content/wknd`). All child nodes matching the configured content type are indexed recursively from this path.
+
+### Content Types
+
+| Field | Description |
+|---|---|
+| Content Type | Primary content type to be indexed (e.g., `cq:Page`) |
+| Sub Type | Optional sub-type filter within the content type |
+
+### Delta Tracking
+
+Controls incremental indexing — how the connector detects which content has changed since the last run.
+
+| Field | Description |
+|---|---|
+| Once Pattern | Pattern used to identify content that should only be indexed once |
+| Delta Class | Fully-qualified Java class name responsible for detecting changed content since the last run (see [Extending AEM](../extending-aem.md) for custom implementations) |
+
+### Author / Publish
+
+Configures which AEM environments are indexed and how they map to Turing ES Semantic Navigation Sites.
+
+| Field | Description |
+|---|---|
+| Author | Enable indexing from the AEM author environment |
+| Publish | Enable indexing from the AEM publish environment |
+| SN Site (Author) | Semantic Navigation Site that receives author content |
+| SN Site (Publish) | Semantic Navigation Site that receives publish content |
+| URL Prefix (Author) | URL prefix prepended to document paths in the author index |
+| URL Prefix (Publish) | URL prefix prepended to document paths in the publish index |
+
+### Locales
+
+Maps content language codes to repository paths.
+
+| Field | Description |
+|---|---|
+| Default Locale | Locale used when no language-specific path is matched |
+| Locale Class | Fully-qualified Java class name responsible for resolving document locale (see [Extending AEM](../extending-aem.md) for custom implementations) |
+| Locale → Path | Dynamic list mapping each locale code (e.g., `en_US`) to its root path in the repository |
+
+### Source Actions
+
+Each source has two action buttons available in the Turing ES admin console:
+
+- **Index All** — triggers a full indexing run for all content in this source
+- **Reindex All** — forces a full reindexation, replacing all previously indexed content
+
+---
+
+<div className="page-break" />
+
+## Indexing Rules
+
+Indexing Rules allow you to filter content during indexing — for example, to exclude error pages or draft content before it reaches the search index. Rules are configured in the **Turing ES Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Indexing Rules**.
+
+| Field | Description |
+|---|---|
+| Name | Rule identifier (required) |
+| Description | Purpose of this rule |
+| Source | The source this rule applies to |
+| Attribute | Document field to evaluate (e.g., `template`) |
+| Rule Type | How the rule is applied — currently supports **IGNORE** (skip documents that match) |
+| Values | Dynamic list of values that trigger the rule (add or remove entries) |
+
+**Example:** A rule with `Attribute = template`, `Rule Type = IGNORE`, and `Values = [error-page]` will prevent any document with `template:error-page` from being indexed.
+
+---
+
+## Indexing Manager
+
+The Indexing Manager provides a stepper form in the **Turing ES Admin Console** for targeting specific documents for manual operations.
+
+| Operation | Description | Colour |
+|---|---|---|
+| **INDEXING** | Index specific content | Blue |
+| **DEINDEXING** | Remove specific content from the index | Red |
+| **PUBLISHING** | Publish content | Green |
+| **UNPUBLISHING** | Unpublish content | Orange |
+
+Each operation step allows you to:
+
+- Select the **Source** to operate on
+- Choose the **attribute** to identify documents: **ID** or **URL**
+- Enter one or more specific values (IDs or URLs)
+- Expand **Advanced Settings** to toggle **Recursive** mode, which traverses child content in hierarchical repositories
 
 ## Concurrency
 
@@ -222,4 +317,16 @@ dumont.reactive.parallelism=10
 Need custom attribute extractors, delta date logic, or content processors? See [Extending the AEM Connector](../extending-aem.md) for the full extension system, configuration JSON reference, and step-by-step guide.
 :::
 
-For managing AEM indexing via the Turing ES admin console — including monitoring, indexing stats, and the Indexing Manager — see the [Turing ES Integration documentation](/turing/integration) and [AEM Connector documentation](/turing/integration-aem).
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [AEM Event Listener](../aem-event-listener.md) | Install the OSGi event listener bundle inside AEM for real-time indexing |
+| [Extending the AEM Connector](../extending-aem.md) | Custom attribute extractors, content processors, and configuration JSON reference |
+| [Turing ES — Integration](/turing/integration) | General integration management — monitoring, indexing stats, and system information |
+| [Turing ES — AEM Connector](/turing/integration-aem) | AEM integration overview from the Turing ES perspective |
+| [Turing ES — Semantic Navigation](/turing/semantic-navigation) | Configure the SN Sites that receive indexed content |
+
+---

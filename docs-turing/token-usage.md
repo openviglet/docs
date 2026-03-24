@@ -86,7 +86,7 @@ Turing ES records token usage automatically on every LLM call — no extra confi
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
 sequenceDiagram
     participant User
-    participant API as TurLLMChatAPI /<br/>TurAIAgentChatAPI
+    participant API as Chat API
     participant LLM as LLM Provider
     participant DB as llm_token_usage table
 

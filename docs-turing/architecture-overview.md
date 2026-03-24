@@ -193,7 +193,7 @@ The **Semantic Navigation Site** is the central configuration artifact that driv
 
 ## Search Flow
 
-The search flow is synchronous and request-driven. Every request goes through a structured pipeline inside `TurSNSearchProcess` before a response is returned to the client.
+The search flow is synchronous and request-driven. Every request goes through a structured pipeline before a response is returned to the client.
 
 ![Turing ES — Search Flow](/img/diagrams/turing-search-flow.svg)
 

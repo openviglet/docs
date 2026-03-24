@@ -421,6 +421,65 @@ Manage integration instances. Authentication required.
 
 <div className="page-break" />
 
+## Assets API
+
+Manage files and the RAG Knowledge Base. All endpoints require authentication.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/asset?prefix=` | List files and folders in a prefix (folder) |
+| `POST` | `/api/asset` | Upload one or more files (`multipart/form-data`) |
+| `GET` | `/api/asset/download?objectName=` | Download a file (`Content-Disposition: attachment`) |
+| `GET` | `/api/asset/preview?objectName=` | Preview a file inline (`Content-Disposition: inline`) |
+| `GET` | `/api/asset/metadata?objectName=` | Retrieve file metadata (size, type, date) |
+| `POST` | `/api/asset/folder?path=` | Create a new folder |
+| `DELETE` | `/api/asset?objectName=` | Delete a file or folder |
+| `POST` | `/api/asset/train` | Start batch AI Training |
+| `GET` | `/api/asset/train/status` | Poll current training status |
+| `GET` | `/api/asset/train/records?objectNames=` | Get training timestamps for specific files |
+
+After upload, an asynchronous event triggers AI indexing for each file. When a file is deleted, its embeddings are automatically removed from the vector store.
+
+For full details, see [Assets](./assets.md).
+
+---
+
+<div className="page-break" />
+
+## AI Agent API
+
+### Agent Management
+
+Manage AI Agents. Authentication required.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/ai-agent` | List all agents (ordered by title) |
+| `GET` | `/api/ai-agent/structure` | Get empty structure template for a new agent |
+| `GET` | `/api/ai-agent/{id}` | Get a specific agent |
+| `POST` | `/api/ai-agent` | Create a new agent |
+| `PUT` | `/api/ai-agent/{id}` | Update an existing agent |
+| `DELETE` | `/api/ai-agent/{id}` | Delete an agent |
+
+### Agent Chat
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/v2/ai-agent/{agentId}/chat` | Stream chat response (SSE). Request body: `{ llmInstanceId, messages[] }` |
+| `GET` | `/api/v2/ai-agent/{agentId}/chat/context-info` | Get LLM context window size. Query param: `llmInstanceId` |
+
+### Native Tools
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/native-tool` | List all available tool groups with tool names and descriptions |
+
+For full details, see [AI Agents](./ai-agents.md).
+
+---
+
+<div className="page-break" />
+
 ## Administration API
 
 The following endpoints manage SN Sites, fields, and spotlights. All require authentication via the `Key` header. For full details, explore the Swagger UI at `http://localhost:2700/swagger-ui.html`.
@@ -566,7 +625,7 @@ curl -X POST "http://localhost:2700/api/ocr/url" \
   -d '{ "url": "https://example.com/report.pdf" }'
 ```
 
-Both endpoints return a `TurFileAttributes` JSON object containing the extracted text and file metadata.
+Both endpoints return a JSON object containing the extracted text and file metadata.
 
 ---
 
@@ -577,6 +636,8 @@ Both endpoints return a `TurFileAttributes` JSON object containing the extracted
 | [Authentication](./security-authentication.md) | How to create and use API Tokens |
 | [Semantic Navigation](./semantic-navigation.md) | SN Site configuration and the search response structure |
 | [Chat](./chat.md) | Front-end chat interface and GenAI API |
+| [AI Agents](./ai-agents.md) | Agent composition, tool selection, and MCP Servers |
+| [Assets](./assets.md) | File management and RAG Knowledge Base |
 | [Intent](./intent.md) | Chat prompt suggestions API |
 | [Import & Export](./import-export.md) | Site configuration and content import |
 | [Logging](./logging.md) | Application and indexing log API |

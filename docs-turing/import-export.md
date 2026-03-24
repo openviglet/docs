@@ -101,7 +101,7 @@ In addition to site configuration import, Turing ES accepts **document-level ind
 POST /api/sn/import
 ```
 
-Accepts a JSON body with `TurSNJobItems` — a list of documents to index, deindex, or commit.
+Accepts a JSON body with a list of job items — documents to index, deindex, or commit.
 
 **Example:**
 

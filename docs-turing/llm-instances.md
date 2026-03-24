@@ -43,7 +43,7 @@ The form is organized into **5 colour-coded sections** for quick visual orientat
 | **API Key** | | Provider API key — stored encrypted in the database. Leave blank when editing to keep the existing key. |
 
 :::info API Key security
-The API Key field is **write-only**. It is stored encrypted via `TurSecretCryptoService` and never returned in API responses. When editing an existing instance, leaving the field blank preserves the previously saved key. The encryption key is configured in `turing.ai.crypto.key` in `application.yaml`. See [Configuration Reference](./configuration-reference.md#turing-es-core).
+The API Key field is **write-only**. It is stored encrypted and never returned in API responses. When editing an existing instance, leaving the field blank preserves the previously saved key. The encryption key is configured in `turing.ai.crypto.key` in `application.yaml`. See [Configuration Reference](./configuration-reference.md#turing-es-core).
 :::
 
 ---
@@ -139,8 +139,8 @@ If you need embedding support (for RAG and the Knowledge Base), use **OLLAMA**, 
 
 API Keys are handled with care at every layer:
 
-- **Stored encrypted** — the key is encrypted via `TurSecretCryptoService` before being persisted to the database in the `apiKeyEncrypted` column.
-- **Never returned** — the `apiKey` field is annotated `@Transient` on the JPA entity. It is write-only: it flows in on save but never comes back in API responses or GET endpoints.
+- **Stored encrypted** — the key is encrypted before being persisted to the database.
+- **Never returned** — the API Key field is write-only: it flows in on save but never comes back in API responses or GET endpoints.
 - **Edit safely** — leaving the API Key field blank when editing an instance preserves the existing encrypted value without modification.
 - **Encryption key** — configured via `turing.ai.crypto.key` in `application.yaml`. **Always set a strong, unique value in production** — the default is a placeholder and must be changed before handling real API keys.
 

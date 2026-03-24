@@ -197,7 +197,7 @@ This metadata is used by AI Agents when returning search results, so the LLM can
 
 ### Text Extraction Limits
 
-There is **no hard file size limit** for uploads — MinIO accepts files of any size. However, during AI Training the extracted text is **truncated to 100,000 characters** before chunking. For very large documents this means only the first portion of the content is indexed. The truncation limit is defined by `TurRagUtils.MAX_TEXT_LENGTH`.
+There is **no hard file size limit** for uploads — MinIO accepts files of any size. However, during AI Training the extracted text is **truncated to 100,000 characters** before chunking. For very large documents this means only the first portion of the content is indexed. The truncation limit is a fixed internal constant.
 
 ---
 
