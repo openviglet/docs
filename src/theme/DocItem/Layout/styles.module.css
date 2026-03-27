@@ -1,0 +1,18 @@
+.docItemContainer header + *,
+.docItemContainer article > *:first-child {
+  margin-top: 0;
+}
+
+@media (min-width: 997px) {
+  .docItemCol {
+    max-width: 75% !important;
+  }
+}
+
+/* Collapsed TOC column: shrink to just the toggle button width */
+.tocColCollapsed {
+  flex: 0 0 auto !important;
+  max-width: fit-content !important;
+  width: auto !important;
+  transition: flex 300ms ease, max-width 300ms ease;
+}

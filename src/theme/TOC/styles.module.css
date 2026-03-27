@@ -1,0 +1,101 @@
+/* ── Outer wrapper: holds toggle + panel side by side ── */
+.tocWrapper {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1rem);
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+  display: flex;
+  align-items: flex-start;
+}
+
+/* ── Toggle button on the left edge ── */
+.tocCollapseBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 0.375rem;
+  background: var(--ifm-background-surface-color, var(--ifm-background-color));
+  cursor: pointer;
+  color: var(--ifm-color-emphasis-600);
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.tocCollapseBtn:hover {
+  color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+}
+
+.toggleArrow {
+  display: block;
+}
+
+/* ── Sliding panel ── */
+.tocPanel {
+  overflow: hidden;
+  transition: max-width 300ms ease, opacity 250ms ease, margin-left 300ms ease;
+  max-width: 260px;
+  opacity: 1;
+  margin-left: 0.5rem;
+}
+
+.tocPanelCollapsed {
+  max-width: 0;
+  opacity: 0;
+  margin-left: 0;
+}
+
+/* ── Inner scrollable area ── */
+.tableOfContents {
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+  overflow-y: auto;
+  width: 260px;
+}
+
+/* ── Header row ── */
+.tocHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+
+.tocLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary);
+}
+
+/* ── Copy link button ── */
+.copyLinkButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: none;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-600);
+  transition: background 150ms ease, color 150ms ease;
+  white-space: nowrap;
+}
+
+.copyLinkButton:hover {
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-primary);
+}
+
+@media (max-width: 996px) {
+  .tocWrapper {
+    display: none;
+  }
+}
