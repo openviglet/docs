@@ -27,7 +27,7 @@ const STYLE_CSS  = join(__dirname, 'pdf-style.css');
 const FAVICON    = join(ROOT, 'static', 'img', 'favicon.png');
 const OUTPUT_PDF = join(ROOT, 'dumont-dep-2026.1-documentation.pdf');
 const BASE_URL   = process.env.PDF_BASE_URL || 'http://localhost:3000';
-const PROD_URL   = process.env.PDF_PROD_URL || 'https://docs.viglet.com';
+const PROD_URL   = process.env.PDF_PROD_URL || 'https://docs.viglet.org';
 const ENTRY_PATH = '/dumont/getting-started/intro';
 
 const HEADER_HTML = [
@@ -43,7 +43,7 @@ const FOOTER_HTML = [
   '<div style="width:100%;padding:0 15mm;font-family:system-ui,sans-serif;',
   'font-size:7px;display:flex;justify-content:space-between;align-items:center;',
   'border-top:0.5px solid #e2e8f0;padding-top:3px;margin-top:4px;">',
-  '<span style="color:#94a3b8;">viglet.com</span>',
+  '<span style="color:#94a3b8;">viglet.org</span>',
   '<span style="color:#64748b;">&nbsp;</span>',
   '</div>',
 ].join('');

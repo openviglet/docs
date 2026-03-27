@@ -148,7 +148,7 @@ OpenText WEM Listener to publish content to Viglet Turing.
 ### Installation
 
 #### Download
-Go to [https://viglet.com/turing/download/](https://viglet.com/turing/download/) and click on "Integration > WEM Listener" link to download it.
+Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Integration > WEM Listener" link to download it.
 
 Extract the turing-wem.zip file to /appl/viglet/turing/wem:
 

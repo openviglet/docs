@@ -6,7 +6,7 @@ description: Viglet Turing ES Installation Guide
 
 # Viglet Turing ES: Installation Guide
 
-Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES ([https://viglet.org/turing](https://viglet.org/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 ## Installing Java
 
@@ -383,7 +383,7 @@ $ ./viglet-turing.jar
    |_|  \_,_||_|  |_||_||_|\__, | /_/ \_\|___|  (v0.3.6-d9fc453)
                            |___/
 
-:: Copyright (C) 2016-2022, Viglet Team <opensource@viglet.com>
+:: Copyright (C) 2016-2022, Viglet Team <opensource@viglet.org>
 
 :: Built with Spring Boot :: 2.7.6
 

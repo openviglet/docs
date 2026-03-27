@@ -6,7 +6,7 @@ description: Viglet Shio CMS Installation Guide
 
 # Viglet Shio CMS: Installation Guide
 
-Viglet Shio CMS ([https://viglet.com/shio](https://viglet.com/shio)) is an open source solution ([https://github.com/ShioCMS](https://github.com/ShioCMS)), which allows model content, use GraphQL and create site using Javascript with native cache and search.
+Viglet Shio CMS ([https://viglet.org/shio](https://viglet.org/shio)) is an open source solution ([https://github.com/ShioCMS](https://github.com/ShioCMS)), which allows model content, use GraphQL and create site using Javascript with native cache and search.
 
 ## Installing Java
 

@@ -7,7 +7,7 @@ const config = {
   tagline: "Documentation for Turing ES, Shio CMS and Vecchio Auth",
   favicon: "img/favicon.png",
 
-  url: "https://docs.viglet.com",
+  url: "https://docs.viglet.org",
   baseUrl: "/",
 
   organizationName: "vigletdocs",

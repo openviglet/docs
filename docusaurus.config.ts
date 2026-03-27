@@ -7,7 +7,7 @@ const config: Config = {
   tagline: "Documentation for Turing ES, Shio CMS and Dumont DEP",
   favicon: "img/favicon.png",
 
-  url: "https://docs.viglet.com",
+  url: "https://docs.viglet.org",
   baseUrl: "/",
 
   organizationName: "vigletdocs",

@@ -6,11 +6,11 @@ description: Viglet Turing ES Developer Guide
 
 # Viglet Turing ES: Developer Guide
 
-Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
+Viglet Turing ES ([https://viglet.org/turing](https://viglet.org/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 ## More Documentation
 
-Technical documentation on Turing ES is available at [https://docs.viglet.com/turing](https://docs.viglet.com/docs/turing).
+Technical documentation on Turing ES is available at [https://docs.viglet.org/turing](https://docs.viglet.org/docs/turing).
 
 ## Open Source Development
 

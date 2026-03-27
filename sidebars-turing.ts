@@ -78,7 +78,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "link",
           label: "Javadoc",
-          href: "https://turing.viglet.com/latest/javadoc/",
+          href: "https://turing.viglet.org/latest/javadoc/",
         },
       ],
     },

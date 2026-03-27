@@ -6,7 +6,7 @@ description: Viglet Turing ES Installation Guide
 
 # Viglet Turing ES: Installation Guide
 
-Viglet Turing ES ([https://viglet.com/turing](https://viglet.com/turing)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
+Viglet Turing ES ([https://viglet.org/turing](https://viglet.org/turing)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
 
 ## Installing Java
 

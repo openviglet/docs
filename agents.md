@@ -6,7 +6,7 @@ This file contains conventions and architectural knowledge for AI agents working
 
 ## Project Overview
 
-- **Site:** docs.viglet.com — Docusaurus 3 documentation portal
+- **Site:** docs.viglet.org — Docusaurus 3 documentation portal
 - **Products:** Turing ES, Dumont DEP, Shio CMS
 - **Hosting:** GitHub Pages via GitHub Actions (`.github/workflows/deploy.yml`)
 - **Node:** 20+, npm
