@@ -70,6 +70,9 @@ turing:
   url: http://localhost:2700
   apiKey: ""
 
+  aem.querybuilder: false
+  aem.querybuilder.parallelism: 10
+
 logging:
   file:
     name: store/logs/dum-connector.log
@@ -140,6 +143,13 @@ logging:
 | `dumont.indexing.elasticsearch.index` | `dumont` | Elasticsearch index name |
 | `dumont.indexing.elasticsearch.username` | *(none)* | Optional authentication username |
 | `dumont.indexing.elasticsearch.password` | *(none)* | Optional authentication password |
+
+### AEM QueryBuilder
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.aem.querybuilder` | `false` | Enable QueryBuilder-based content discovery instead of tree traversal during full indexing |
+| `dumont.aem.querybuilder.parallelism` | `10` | Number of parallel threads for processing discovered paths |
 
 ### Logging
 

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: AEM Connector
-description: Index content from Adobe Experience Manager — event-driven indexing, infinity.json traversal, tag facets, model.json attributes, and custom extensions.
+description: Index content from Adobe Experience Manager — event-driven indexing, infinity.json traversal, QueryBuilder discovery, tag facets, model.json attributes, and custom extensions.
 ---
 
 # AEM Connector
@@ -46,6 +46,49 @@ sequenceDiagram
 | **AEM Event Listeners** | Install the `aem-server` OSGi bundle inside AEM — it automatically sends indexing requests when content is published, modified, or deleted | Production — real-time content sync |
 | **Manual API Call** | Send a POST request to `/api/v2/aem/index/{source}` with a JSON payload containing paths and event type | Development, testing, one-off re-indexing |
 | **Turing ES Admin Console** | Use **Enterprise Search → Integration → Indexing Manager** to select paths and trigger indexing/deindexing/publishing operations | Operations — selective re-indexing via UI |
+
+---
+
+## Content Discovery Strategies
+
+The AEM connector supports two strategies for discovering content during a full **Index All** operation:
+
+| Strategy | Property | How it discovers content |
+|---|---|---|
+| **Tree Traversal** *(default)* | `dumont.aem.querybuilder=false` | Recursively walks the content tree from the root path using `infinity.json` — follows parent→child relationships |
+| **QueryBuilder** | `dumont.aem.querybuilder=true` | Uses AEM's native QueryBuilder API (`/bin/querybuilder.json`) to find all content matching the configured content type in paginated batches |
+
+### QueryBuilder Discovery
+
+When enabled, the connector queries the QueryBuilder endpoint instead of walking the tree:
+
+```
+GET http://localhost:4502/bin/querybuilder.json?path=/content/wknd&type=cq:Page&p.hits=slim&p.limit=500&p.offset=0
+```
+
+Each page of discovered paths is immediately processed in parallel using a configurable thread pool — the full path list is never held in memory.
+
+**Enable it** by adding the following properties to `application.yaml` or as JVM arguments:
+
+```yaml
+dumont:
+  aem.querybuilder: true
+  aem.querybuilder.parallelism: 10   # number of parallel threads (default)
+```
+
+Or via command-line:
+
+```bash
+java -Ddumont.aem.querybuilder=true -Ddumont.aem.querybuilder.parallelism=10 -jar dumont-connector.jar
+```
+
+:::warning Content Type required
+QueryBuilder discovery requires a **Content Type** (e.g., `cq:Page`) configured in the AEM source. Without it, the command logs a warning and skips processing.
+:::
+
+:::tip When to use QueryBuilder
+QueryBuilder is recommended for **large content trees** where recursive traversal is slow. It reduces the number of HTTP round-trips to AEM by discovering all paths in bulk, then fetching content in parallel. For small sites (< 1 000 pages), the default tree traversal is typically sufficient.
+:::
 
 ---
 
@@ -310,6 +353,8 @@ Reactive (parallel) processing can be enabled for large sites:
 dumont.reactive.indexing=true
 dumont.reactive.parallelism=10
 ```
+
+When using **QueryBuilder discovery**, parallelism is controlled separately via `dumont.aem.querybuilder.parallelism` (default `10`). See [Content Discovery Strategies](#content-discovery-strategies) above.
 
 ---
 
