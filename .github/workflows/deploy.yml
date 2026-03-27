@@ -46,6 +46,7 @@ jobs:
         run: |
           npx wait-on http://localhost:3000/turing/getting-started/intro --timeout 60000
           npx wait-on http://localhost:3000/dumont/getting-started/intro --timeout 60000
+          npx wait-on http://localhost:3000/shio/getting-started/intro --timeout 60000
 
       - name: Generate Turing ES documentation PDF
         run: npm run gen-pdf
@@ -53,10 +54,14 @@ jobs:
       - name: Generate Dumont DEP documentation PDF
         run: npm run gen-pdf-dumont
 
+      - name: Generate Shio CMS documentation PDF
+        run: npm run gen-pdf-shio
+
       - name: Copy PDFs into build folder
         run: |
           cp turing-es-2026.1-documentation.pdf build/
           cp dumont-dep-2026.1-documentation.pdf build/
+          cp shio-cms-2026.1-documentation.pdf build/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

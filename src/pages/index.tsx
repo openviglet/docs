@@ -48,7 +48,7 @@ const products: Product[] = [
     description:
       "Content Management System with GraphQL, Javascript sites, native cache and search.",
     link: "/shio",
-    release: "0.3.7",
+    release: "2026.1",
     github: "https://github.com/openviglet/shio",
     color: "#FF6347",
   },

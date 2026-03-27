@@ -1,19 +1,19 @@
 ---
 sidebar_position: 1
 title: Installation Guide
-description: Viglet Shio CMS Installation Guide
+description: Viglet Shio CMS Installation Guide — Docker, JAR, build from source, database setup, and Linux service.
 ---
 
 # Viglet Shio CMS: Installation Guide
 
-Viglet Shio CMS ([https://viglet.org/shio](https://viglet.org/shio)) is an open source solution ([https://github.com/ShioCMS](https://github.com/ShioCMS)), which allows model content, use GraphQL and create site using Javascript with native cache and search.
+Viglet Shio CMS ([https://viglet.org/shio](https://viglet.org/shio)) is an open-source headless CMS ([https://github.com/openviglet/shio](https://github.com/openviglet/shio)) that lets you model content, query it via GraphQL, and build websites using JavaScript with native caching and search.
 
 ## Installing Java
 
 Shio CMS requires Java.
 
 :::note
-Shio CMS only supports Java 17.
+Shio CMS only supports Java 21.
 :::
 
 During installation, Shio CMS reads the JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
@@ -167,9 +167,20 @@ ALTER SCHEMA shio OWNER TO shio;
 ALTER USER shio SET SEARCH_PATH = shio;
 ```
 
+---
+
+<div className="page-break" />
+
 ## Installing Shio CMS
 
-### Shio CMS Download
+### Option 1 — Docker (fastest)
+
+```bash
+docker pull openviglet/shio:2026.1
+docker run -p 2710:2710 openviglet/shio:2026.1
+```
+
+### Option 2 — JAR download
 
 Go to [https://viglet.org/shio/download/](https://viglet.org/shio/download/) and click on "Download Shio CMS" button to download the `viglet-shio.jar` executable.
 
@@ -178,49 +189,67 @@ Copy the `viglet-shio.jar` to `/appl/viglet/shio/server`:
 ```shell
 mkdir -p /appl/viglet/shio/server
 cp viglet-shio.jar /appl/viglet/shio/server
-chmod 770 /appl/viglet/shio/server/viglet-shio.jar
+```
+
+### Option 3 — Build from source
+
+```bash
+git clone https://github.com/openviglet/shio.git
+cd shio
+mvn clean package -pl shio-app
+cp shio-app/target/viglet-shio.jar /appl/viglet/shio/server/
 ```
 
 ### Database
 
-By default, Shio uses H2 as its embedded database. For another database, create `/appl/viglet/shio/server/viglet-shio.conf`:
+By default, Shio uses H2 as its embedded database, but if you prefer another database you can create an external properties file and reference it at startup using `--spring.config.additional-location`.
+
+Create `/appl/viglet/shio/server/viglet-shio.properties`:
 
 #### MySQL
 
-```shell
-JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:mariadb://localhost:3306/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=org.mariadb.jdbc.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect"
+```properties
+spring.datasource.url=jdbc:mariadb://localhost:3306/shio
+spring.datasource.username=shio
+spring.datasource.password=shio
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
 ```
 
 #### Oracle Database
 
-```shell
-JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:oracle:thin:@localhost:1521/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=oracle.jdbc.OracleDriver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect"
+```properties
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521/shio
+spring.datasource.username=shio
+spring.datasource.password=shio
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
 ```
 
 #### PostgreSQL
 
-```shell
-JAVA_OPTS="-Xmx1g -Xms1g -Dspring.datasource.url=jdbc:postgresql://localhost:5432/shio -Dspring.datasource.username=shio -Dspring.datasource.password=shio -Dspring.datasource.driver-class-name=org.postgresql.Driver -Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect"
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/shio
+spring.datasource.username=shio
+spring.datasource.password=shio
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 ```
 
-### Encrypting the Database Password
+Then start Shio CMS referencing the properties file:
 
-```shell
-cd /appl/viglet/shio/utils/scripts
-./turGenerateDBPassword.sh /appl/viglet/shio/server
-Password:
-Retype Password:
-
-Thanks, the password was successfully generated in /appl/viglet/shio/server/db-encrypted.properties
+```bash
+java -Xmx1g -Xms1g -jar viglet-shio.jar \
+  --spring.config.additional-location=file:/appl/viglet/shio/server/viglet-shio.properties
 ```
 
-Replace `-Dspring.datasource.password=<PLAIN_TEXT_PASSWORD>` with `-Dspring.datasource.password=ENC(<ENCRYPTED_PASSWORD>)`.
+---
+
+<div className="page-break" />
 
 ### Creating Shio CMS Service on Linux
 
-#### Red Hat and CentOS
-
-Create `/etc/systemd/system/shio.service`:
+As root, create a `/etc/systemd/system/shio.service` file with the following lines:
 
 ```ini
 [Unit]
@@ -229,24 +258,134 @@ After=syslog.target
 
 [Service]
 User=viglet
-ExecStart=/appl/viglet/shio/server/viglet-shio.jar
+Group=viglet
+WorkingDirectory=/appl/viglet/shio/server
+ExecStart=/appl/java/jdk21/bin/java -Xmx1g -Xms1g \
+  -jar /appl/viglet/shio/server/viglet-shio.jar \
+  --spring.config.additional-location=file:/appl/viglet/shio/server/viglet-shio.properties
 SuccessExitStatus=143
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-Interact with the service:
+:::note Spring Boot 4
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-shio.jar`). You must launch Shio CMS using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported — use `--spring.config.additional-location` to load external properties instead.
+:::
+
+Enable and start the service:
 
 ```shell
-./systemctl start shio.service
-./systemctl stop shio.service
-./systemctl restart shio.service
-./systemctl status shio.service
+systemctl daemon-reload
+systemctl enable shio.service
+systemctl start shio.service
+```
+
+Other useful commands:
+
+```shell
+systemctl stop shio.service
+systemctl restart shio.service
+systemctl status shio.service
 ```
 
 ### Accessing the Shio Console
 
-Shio provides remote access through its Web application interfaces at: [http://localhost:2710/content](http://localhost:2710/content).
+Shio provides remote access through its Web application interfaces at: [http://localhost:2710](http://localhost:2710).
 
 By default the login/password are: **admin/admin**
+
+---
+
+## Appendix A: Installation Modes
+
+### Simple
+
+Minimal setup using an embedded H2 database. Suitable for local development and evaluation only — not for production.
+
+**Prerequisites:**
+1. Linux server
+2. Java 21
+3. 50 GB HDD
+4. 2 GB RAM
+
+**Target Audience:** Development and testing environments.
+
+### Docker Compose
+
+Shio CMS and its dependencies installed via Docker Compose, including:
+
+- MariaDB — Shio CMS system tables
+- Nginx — reverse proxy on port 80
+- Shio CMS
+
+**Prerequisites:**
+1. Linux server with Docker and Docker Compose installed
+2. 50 GB HDD
+3. 4 GB RAM
+
+**Target Audience:** Teams that want a complete environment without manual service installation. Suitable for QA and production.
+
+### Kubernetes
+
+Shio CMS and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
+
+- MariaDB — Shio CMS system tables
+- Nginx — reverse proxy
+- Shio CMS
+
+**Prerequisites:**
+1. Linux server with Kubernetes, or a cloud Kubernetes service (GKE, EKS, AKS)
+2. 100 GB storage
+3. 4 GB RAM
+
+**Target Audience:** Cloud deployments requiring horizontal scaling and infrastructure-as-code.
+
+### Manual Installation
+
+Each service installed individually following this guide:
+
+- MariaDB — Shio CMS system tables
+- Shio CMS
+
+**Prerequisites:**
+1. One to two Linux servers
+2. 50–100 GB storage per server
+3. Minimum 2 GB RAM per server
+
+---
+
+## Appendix B: Docker Compose
+
+You can start Shio CMS using MariaDB and Nginx.
+
+```shell
+mvn clean package -pl shio-app
+docker-compose up
+```
+
+:::note
+If you have problems with permissions on directories, run `chmod -R 777 volumes`
+:::
+
+### Docker Commands
+
+#### Shio
+
+```shell
+docker exec -it shio /bin/bash
+```
+
+#### MariaDB
+
+```shell
+docker exec -it shio-mariadb /bin/bash
+```
+
+#### Nginx
+
+```shell
+docker exec -it shio-nginx /bin/bash
+```
+
+---

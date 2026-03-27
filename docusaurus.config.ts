@@ -118,8 +118,8 @@ const config: Config = {
         lastVersion: "current",
         versions: {
           current: {
-            label: "0.3.7",
-            badge: true,
+            label: "2026.1",
+            badge: false,
           },
         },
       },
