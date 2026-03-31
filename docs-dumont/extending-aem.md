@@ -19,7 +19,7 @@ To create custom AEM extensions, add `aem-commons` to your project:
 <dependency>
     <groupId>com.viglet.dumont</groupId>
     <artifactId>aem-commons</artifactId>
-    <version>2026.1.19</version>
+    <version>2026.2.3</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -28,12 +28,13 @@ To create custom AEM extensions, add `aem-commons` to your project:
 
 ## Extension Interfaces
 
-The AEM connector provides four extension interfaces:
+The AEM connector provides these extension interfaces and base classes:
 
-| Interface | Purpose | Config field |
+| Class / Interface | Purpose | Config field |
 |---|---|---|
 | `DumAemExtAttributeInterface` | Custom logic for extracting or transforming individual field values | `attributes[].className` or `sourceAttrs[].className` |
 | `DumAemExtContentInterface` | Extract additional content from AEM pages (e.g., `.model.json`) | `models[].className` |
+| **`DumAemExtModelJsonBase<T>`** | **Abstract base class for `.model.json` extractors — handles fetch, parse, error handling. Use this instead of `DumAemExtContentInterface` for model.json.** | `models[].className` |
 | `DumAemExtDeltaDateInterface` | Custom delta date resolution for incremental indexing | `sources[].deltaClass` |
 | `DumAemExtUrlAttributeInterface` | Specialized URL handling with ID extraction (extends `DumAemExtAttributeInterface`) | `attributes[].className` |
 
@@ -127,6 +128,10 @@ public class MyModelJsonExtractor implements DumAemExtContentInterface {
 
 Referenced in the `models[].className` field of the configuration JSON.
 
+:::tip Prefer the abstract base class
+For model.json extractors, use `DumAemExtModelJsonBase` instead of implementing this interface directly. See [Model JSON Base Class](#model-json-base-class--fluent-api) below.
+:::
+
 ---
 
 ### DumAemExtDeltaDateInterface
@@ -151,6 +156,258 @@ public class MyDeltaDate implements DumAemExtDeltaDateInterface {
 ```
 
 Referenced in the `sources[].deltaClass` field of the configuration JSON.
+
+---
+
+---
+
+## Model JSON Base Class & Fluent API
+
+When your extension extracts data from `.model.json`, you can use `DumAemExtModelJsonBase` and the fluent `DumAemComponentMapper` API to eliminate boilerplate and write concise, declarative extractors.
+
+### DumAemExtModelJsonBase
+
+An abstract class that handles the entire fetch → parse → error-handling lifecycle. Subclasses implement only **two methods**:
+
+| Method | Purpose |
+|---|---|
+| `getModelClass()` | Returns the root bean class for Jackson deserialization |
+| `extractAttributes(model, query, aemObject, attrValues)` | Extracts data from the parsed model and populates the attribute map |
+
+**Minimal example:**
+
+```java
+import com.viglet.dumont.connector.aem.commons.ext.DumAemExtModelJsonBase;
+import com.viglet.dumont.connector.aem.commons.ext.DumAemModelJsonQuery;
+
+public class MyModelJsonExtractor extends DumAemExtModelJsonBase<MyModel> {
+
+    @Override
+    protected Class<MyModel> getModelClass() {
+        return MyModel.class;
+    }
+
+    @Override
+    protected void extractAttributes(MyModel model, DumAemModelJsonQuery query,
+            DumAemObject aemObject, DumAemTargetAttrValueMap attrValues) {
+        attrValues.addWithSingleValue("title", model.getTitle(), true);
+        attrValues.addWithSingleValue("description", model.getDescription(), true);
+    }
+}
+```
+
+This replaces all the boilerplate of building the URL, calling `DumAemCommonsUtils.getResponseBody()`, creating the `ObjectMapper`, handling `IOException`, and wrapping results in `Optional`.
+
+### DumAemModelJsonQuery
+
+A utility class that simplifies finding AEM components inside the model.json by their `:type` using JsonPath. It replaces the repetitive pattern of `JsonPath.parse()` + `Filter.filter()` + `MAPPER.convertValue()`.
+
+```java
+// Before (repeated for every component type):
+DocumentContext jsonContext = JsonPath.parse(json);
+Object jsonDetails = jsonContext.read("$..[?]", Filter.filter(
+    Criteria.where(":type").eq("my-app/components/news")));
+List<MyNews> news = MAPPER.convertValue(jsonDetails, new TypeReference<>() {});
+news.stream().filter(Objects::nonNull).findFirst().ifPresent(item -> { ... });
+
+// After (one line):
+query.findFirstByComponentType("my-app/components/news", MyNews.class)
+    .ifPresent(item -> { ... });
+```
+
+**Available methods:**
+
+| Method | Description |
+|---|---|
+| `findByComponentType(type, class)` | Returns all components matching the `:type` as a typed list |
+| `findFirstByComponentType(type, class)` | Returns the first matching component as `Optional<T>` |
+| `component(type, class)` | Returns a `DumAemComponentMapper<T>` for fluent attribute mapping |
+
+### DumAemComponentMapper — Fluent API
+
+The most concise way to extract component data. Chain `.attr()` calls to declaratively map fields, use `.also()` for custom logic, and `.via()` to navigate into nested objects.
+
+#### Basic — find first component, map fields
+
+```java
+query.component("my-app/components/news", MyNews.class)
+    .first()
+    .attr("date", MyNews::getDate)
+    .attr("author", MyNews::getAuthor)
+    .into(attrValues);
+```
+
+#### Navigate into nested objects with `.via()`
+
+```java
+query.component("my-app/components/teacher", Teacher.class)
+    .first()
+    .via(Teacher::getProfile)
+    .attr("name", Profile::getFullName)
+    .attr("bio", Profile::getBiography)
+    .into(attrValues);
+```
+
+#### Mix declarative and custom logic with `.also()`
+
+Use `.also()` when you need conditional logic, computed values, or fallbacks alongside declarative mappings:
+
+```java
+query.component("my-app/components/banner", Banner.class)
+    .first()
+    .also((banner, attrs) -> {
+        // Fallback logic: use background image, or color if not available
+        String image = banner.getBackgroundImage() != null
+            ? banner.getBackgroundImage()
+            : banner.getBackgroundColor();
+        attrs.addWithSingleValue("image", image, true);
+    })
+    .attr("title", Banner::getTitle)
+    .attr("richText", Banner::getRichText)
+    .into(attrValues);
+```
+
+#### Process all components of a type
+
+```java
+query.component("my-app/components/carousel", Instructor.class)
+    .all()
+    .also((instructor, attrs) -> {
+        attrs.addWithSingleValue("text", instructor.getName(), false);
+        attrs.addWithSingleValue("text", instructor.getBio(), false);
+    })
+    .into(attrValues);
+```
+
+#### Fluent API — complete reference
+
+| Method | Description |
+|---|---|
+| `.first()` | Only process the first matching component |
+| `.all()` | Process all matching components (default) |
+| `.attr(name, getter)` | Map a field to a target attribute (override = true) |
+| `.attr(name, getter, override)` | Map a field with explicit override flag |
+| `.also(biConsumer)` | Execute custom logic for each processed component |
+| `.via(navigator)` | Navigate into a nested object, returns a new mapper of the nested type |
+| `.into(attrValues)` | Execute all accumulated mappings and actions |
+| `.findFirst()` | Returns `Optional<T>` for custom processing outside the chain |
+| `.stream()` | Returns a `Stream<T>` for custom processing outside the chain |
+
+### Base Class Helpers
+
+`DumAemExtModelJsonBase` provides utility methods that address common patterns:
+
+#### `lastModifiedDate(aemObject)`
+
+Extracts the last modified date, falling back to the creation date:
+
+```java
+attrValues.addWithSingleValue("date", lastModifiedDate(aemObject), false);
+```
+
+#### `resolveTemplateName(templateName)` + `templateNameAliases()`
+
+Normalizes AEM template names using a declarative alias map. Override `templateNameAliases()` to define your mappings:
+
+```java
+@Override
+protected Map<String, String> templateNameAliases() {
+    return Map.of(
+        "contact-page",      "institutional",
+        "sub-home",          "institutional",
+        "news-article",      "news",
+        "knowledge-article", "news",
+        "webinar",           "event"
+    );
+}
+```
+
+Then use `resolveTemplateName()` in your extractor:
+
+```java
+attrValues.addWithSingleValue("templateName",
+    resolveTemplateName(model.getTemplateName()), true);
+// "contact-page" → "institutional", "news-article" → "news", etc.
+```
+
+### Complete Example
+
+Here is a complete extractor using all the abstractions:
+
+```java
+public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
+
+    @Override
+    protected Class<MyPortalModel> getModelClass() {
+        return MyPortalModel.class;
+    }
+
+    @Override
+    protected Map<String, String> templateNameAliases() {
+        return Map.of(
+            "contact-page", "institutional",
+            "news-article", "news"
+        );
+    }
+
+    @Override
+    protected void extractAttributes(MyPortalModel model, DumAemModelJsonQuery query,
+            DumAemObject aemObject, DumAemTargetAttrValueMap attrValues) {
+        // Root metadata
+        attrValues.addWithSingleValue("date", lastModifiedDate(aemObject), false);
+        attrValues.addWithSingleValue("fragmentPath", model.getFragmentPath(), true);
+        attrValues.addWithSingleValue("templateName",
+            resolveTemplateName(model.getTemplateName()), true);
+
+        // News component
+        query.component("my-portal/components/news", MyNews.class)
+            .first()
+            .attr("date", MyNews::getDate)
+            .into(attrValues);
+
+        // Banner with image fallback
+        query.component("my-portal/components/banner", MyBanner.class)
+            .first()
+            .also((banner, attrs) -> {
+                String image = banner.getImage() != null
+                    ? banner.getImage() : banner.getFallbackImage();
+                attrs.addWithSingleValue("image", image, true);
+            })
+            .attr("richText", MyBanner::getRichText)
+            .attr("modificationDate", MyBanner::getAuthorDate)
+            .into(attrValues);
+
+        // Event with nested address logic
+        query.component("my-portal/components/event", MyEvent.class)
+            .first()
+            .attr("date", MyEvent::getDate)
+            .attr("endDate", MyEvent::getEndDate)
+            .also((event, attrs) ->
+                attrs.addWithSingleValue("text",
+                    "%s %s".formatted(event.getCity(), event.getAddress()), false))
+            .into(attrValues);
+
+        // Teacher — navigate into elements
+        query.component("my-portal/components/teacher", MyTeacher.class)
+            .first()
+            .via(MyTeacher::getElements)
+            .attr("title", Elements::getName)
+            .attr("abstract", Elements::getQualification)
+            .attr("image", Elements::getPhoto)
+            .into(attrValues);
+    }
+}
+```
+
+### addWithValue — Polymorphic Dispatch
+
+`DumAemTargetAttrValueMap` includes `addWithValue(String name, Object value, boolean override)` which automatically dispatches to the correct typed method. This is used internally by the fluent API and can also be used directly:
+
+```java
+// Automatically calls the right overload based on runtime type
+attrValues.addWithValue("myField", someObject, true);
+// Supports: String, Date, Boolean, Integer, Long, Double, Float, TurMultiValue
+```
 
 ---
 
@@ -295,13 +552,15 @@ Content found under each path is tagged with the corresponding locale.
         <dependency>
             <groupId>com.viglet.dumont</groupId>
             <artifactId>aem-commons</artifactId>
-            <version>2026.1.19</version>
+            <version>2026.2.3</version>
         </dependency>
     </dependencies>
 </project>
 ```
 
 ### Step 2 — Implement your extension
+
+**Attribute extension** (for individual fields):
 
 ```java
 package com.example.ext;
@@ -318,6 +577,34 @@ public class MyBreadcrumb implements DumAemExtAttributeInterface {
             .replace(config.getRootPath(), "");
         return TurMultiValue.singleItem(
             String.join(" > ", path.split("/")));
+    }
+}
+```
+
+**Model JSON extension** (for structured `.model.json` data):
+
+```java
+package com.example.ext;
+
+import com.viglet.dumont.connector.aem.commons.ext.DumAemExtModelJsonBase;
+import com.viglet.dumont.connector.aem.commons.ext.DumAemModelJsonQuery;
+
+public class MyModelJson extends DumAemExtModelJsonBase<MyModel> {
+
+    @Override
+    protected Class<MyModel> getModelClass() {
+        return MyModel.class;
+    }
+
+    @Override
+    protected void extractAttributes(MyModel model, DumAemModelJsonQuery query,
+            DumAemObject aemObject, DumAemTargetAttrValueMap attrValues) {
+        attrValues.addWithSingleValue("title", model.getTitle(), true);
+
+        query.component("my-app/components/news", MyNews.class)
+            .first()
+            .attr("date", MyNews::getDate)
+            .into(attrValues);
     }
 }
 ```

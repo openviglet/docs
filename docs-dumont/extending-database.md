@@ -17,7 +17,7 @@ The Database Connector supports a custom extension point that lets you transform
 <dependency>
     <groupId>com.viglet.dumont</groupId>
     <artifactId>db-commons</artifactId>
-    <version>2026.1.19</version>
+    <version>2026.2.3</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -172,7 +172,7 @@ Your extension JAR must be on the classpath (`-cp`). Add it alongside the `dumon
         <dependency>
             <groupId>com.viglet.dumont</groupId>
             <artifactId>db-commons</artifactId>
-            <version>2026.1.19</version>
+            <version>2026.2.3</version>
         </dependency>
     </dependencies>
 </project>

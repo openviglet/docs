@@ -171,7 +171,7 @@ Add to your `pom.xml`:
 <dependency>
   <groupId>com.viglet.turing</groupId>
   <artifactId>turing-java-sdk</artifactId>
-  <version>2026.1.17</version>
+  <version>2026.2.4</version>
 </dependency>
 ```
 

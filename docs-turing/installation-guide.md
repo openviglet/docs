@@ -238,8 +238,8 @@ Start the Solr service after the collection is created.
 #### Option 1 — Docker (fastest)
 
 ```bash
-docker pull openviglet/turing:2026.1
-docker run -p 2700:2700 openviglet/turing:2026.1
+docker pull openviglet/turing:2026.2
+docker run -p 2700:2700 openviglet/turing:2026.2
 ```
 
 #### Option 2 — JAR download
@@ -358,7 +358,7 @@ $ java -jar viglet-turing.jar
   _____            _               ___  ___
  |_   _|_  _  _ _ (_) _ _   __ _  | __|/ __|
    | | | || || '_|| || ' \ / _` | | _| \__ \
-   |_|  \_,_||_|  |_||_||_|\__, | |___||___/ 2026.1.17
+   |_|  \_,_||_|  |_||_||_|\__, | |___||___/ 2026.2.4
                            |___/
 
 :: Copyright (C) 2016-2026 Viglet Turing Enterprise Search

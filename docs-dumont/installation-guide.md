@@ -57,8 +57,8 @@ In addition:
 ### Option 1 — Docker (fastest)
 
 ```bash
-docker pull openviglet/dumont:2026.1
-docker run -p 30130:30130 openviglet/dumont:2026.1
+docker pull openviglet/dumont:2026.2
+docker run -p 30130:30130 openviglet/dumont:2026.2
 ```
 
 ### Option 2 — Download JARs
@@ -316,7 +316,7 @@ A full stack with Dumont DEP, Turing ES, Solr, and MariaDB:
 ```yaml
 services:
   dumont:
-    image: openviglet/dumont:2026.1
+    image: openviglet/dumont:2026.2
     ports:
       - "30130:30130"
     environment:
@@ -324,7 +324,7 @@ services:
       TURING_APIKEY: <YOUR_API_KEY>
 
   turing:
-    image: openviglet/turing:2026.1
+    image: openviglet/turing:2026.2
     ports:
       - "2700:2700"
 

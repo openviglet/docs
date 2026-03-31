@@ -84,7 +84,7 @@ const config: Config = {
           lastVersion: "current",
           versions: {
             current: {
-              label: "2026.1",
+              label: "2026.2",
               badge: false,
             },
           },
@@ -136,7 +136,7 @@ const config: Config = {
         lastVersion: "current",
         versions: {
           current: {
-            label: "2026.1",
+            label: "2026.2",
             badge: false,
           },
         },

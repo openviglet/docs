@@ -87,8 +87,8 @@ Dumont DEP provides extension points at multiple levels:
 
 | Extension | Guide | Maven Artifact |
 |---|---|---|
-| **AEM extensions** — custom attribute extractors, content processors, delta date logic | [Extending the AEM Connector](./extending-aem.md) | `com.viglet.dumont:aem-commons:2026.1.19` |
-| **Database extensions** — custom row transformations during SQL import | [Extending the Database Connector](./extending-database.md) | `com.viglet.dumont:db-commons:2026.1.19` |
+| **AEM extensions** — attribute extractors, model.json processors (with fluent API), delta date logic | [Extending the AEM Connector](./extending-aem.md) | `com.viglet.dumont:aem-commons:2026.2.3` |
+| **Database extensions** — custom row transformations during SQL import | [Extending the Database Connector](./extending-database.md) | `com.viglet.dumont:db-commons:2026.2.3` |
 
 ### Platform-Level Extensions
 

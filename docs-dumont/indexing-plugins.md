@@ -14,7 +14,7 @@ An **Indexing Plugin** is the output adapter that delivers processed documents f
 
 | Plugin | Target | Client Library | Use Case |
 |---|---|---|---|
-| **Turing** (default) | Viglet Turing ES | Turing Java SDK 2026.1.17 | Full enterprise search with GenAI, facets, spotlights |
+| **Turing** (default) | Viglet Turing ES | Turing Java SDK 2026.2.4 | Full enterprise search with GenAI, facets, spotlights |
 | **Solr** | Apache Solr | SolrJ 10.0.0 | Direct Solr indexing without Turing ES |
 | **Elasticsearch** | Elasticsearch | ES Java Client 9.3.2 | Direct Elasticsearch indexing without Turing ES |
 
