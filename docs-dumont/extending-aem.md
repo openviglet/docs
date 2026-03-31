@@ -399,15 +399,142 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
 }
 ```
 
-### addWithValue — Polymorphic Dispatch
+### DumAemTargetAttrValueMap — API Reference
 
-`DumAemTargetAttrValueMap` includes `addWithValue(String name, Object value, boolean override)` which automatically dispatches to the correct typed method. This is used internally by the fluent API and can also be used directly:
+`DumAemTargetAttrValueMap` is the core data structure for collecting extracted attributes. It extends `HashMap<String, TurMultiValue>` and provides typed methods for adding values safely (null values are silently ignored).
+
+#### The `override` parameter
+
+Every method accepts a `boolean override` parameter that controls what happens when the attribute already exists in the map:
+
+| `override` | Attribute exists? | Behavior |
+|---|---|---|
+| `true` | Yes | **Replaces** the existing value |
+| `true` | No | Adds the value |
+| `false` | Yes | **Appends** to the existing multi-value (merge) |
+| `false` | No | Adds the value |
+
+#### Instance Methods — Adding Single Values
+
+Use `addWithSingleValue` to add a single typed value to the map:
 
 ```java
-// Automatically calls the right overload based on runtime type
-attrValues.addWithValue("myField", someObject, true);
-// Supports: String, Date, Boolean, Integer, Long, Double, Float, TurMultiValue
+// String
+attrValues.addWithSingleValue("title", "My Page Title", true);
+
+// Date
+attrValues.addWithSingleValue("publishDate", new Date(), true);
+
+// Boolean
+attrValues.addWithSingleValue("isPublished", true, false);
+
+// Integer
+attrValues.addWithSingleValue("pageViews", 42, false);
+
+// Long
+attrValues.addWithSingleValue("fileSize", 1024L, true);
+
+// Double
+attrValues.addWithSingleValue("price", 29.99, false);
+
+// Float
+attrValues.addWithSingleValue("rating", 4.5f, true);
+
+// TurMultiValue (pre-built multi-value)
+attrValues.addWithSingleValue("tags", turMultiValue, false);
 ```
+
+All overloads share the same signature pattern:
+
+```java
+void addWithSingleValue(String attributeName, <Type> value, boolean override)
+```
+
+| Type | Description |
+|---|---|
+| `String` | Text value |
+| `Date` | Date/time value |
+| `Boolean` | Boolean flag |
+| `Integer` | Integer number |
+| `Long` | Long number |
+| `Double` | Double-precision decimal |
+| `Float` | Single-precision decimal |
+| `TurMultiValue` | Pre-built multi-value object |
+
+#### Instance Methods — Adding Collections
+
+Use these to add multiple values at once for a single attribute:
+
+```java
+// List of strings
+attrValues.addWithStringCollectionValue("tags",
+    List.of("news", "tech", "java"), true);
+
+// List of dates
+attrValues.addWithDateCollectionValue("eventDates",
+    List.of(startDate, endDate), false);
+```
+
+| Method | Value Type | Description |
+|---|---|---|
+| `addWithStringCollectionValue(name, list, override)` | `List<String>` | Adds multiple string values |
+| `addWithDateCollectionValue(name, list, override)` | `List<Date>` | Adds multiple date values |
+
+#### Instance Methods — Polymorphic Dispatch
+
+`addWithValue` accepts any `Object` and automatically dispatches to the correct typed method based on runtime type. This is used internally by the fluent API and can also be used directly:
+
+```java
+// Automatically calls the right addWithSingleValue overload
+attrValues.addWithValue("myField", someObject, true);
+```
+
+Supports: `String`, `Date`, `Boolean`, `Integer`, `Long`, `Double`, `Float`, and `TurMultiValue`. Any other type is converted to `String` via `toString()`.
+
+#### Instance Methods — Merging Maps
+
+```java
+// Merge another map into this one (respects override flags)
+attrValues.merge(otherAttrValues);
+```
+
+The `merge` method combines two attribute maps. For each key in the source map:
+- If `override` is `true` on the source value → replaces the existing value
+- If `override` is `false` → appends to the existing multi-value
+
+#### Static Factory Methods
+
+Create a pre-populated map with a single attribute in one call:
+
+```java
+// From a typed value
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("title", "Hello", true);
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("date", new Date(), true);
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("active", true, false);
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("count", 42, false);
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("price", 19.99, true);
+
+// From a string collection
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("tags",
+    List.of("a", "b"), true);
+
+// From a TurMultiValue
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("field", turMultiValue);
+
+// From a DumAemTargetAttr (uses the attr's name and textValue)
+DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem(targetAttr, true);
+```
+
+#### Quick Reference Table
+
+| Method | Signature | Use Case |
+|---|---|---|
+| `addWithSingleValue` | `(String, String/Date/Boolean/Integer/Long/Double/Float/TurMultiValue, boolean)` | Add one typed value |
+| `addWithStringCollectionValue` | `(String, List<String>, boolean)` | Add multiple strings |
+| `addWithDateCollectionValue` | `(String, List<Date>, boolean)` | Add multiple dates |
+| `addWithValue` | `(String, Object, boolean)` | Add any value (auto-dispatches by type) |
+| `merge` | `(DumAemTargetAttrValueMap)` | Combine two attribute maps |
+| `singleItem` *(static)* | Various overloads | Create a map with one attribute |
 
 ---
 
