@@ -59,8 +59,8 @@ jobs:
 
       - name: Copy PDFs into build folder
         run: |
-          cp turing-es-2026.1-documentation.pdf build/
-          cp dumont-dep-2026.1-documentation.pdf build/
+          cp turing-es-2026.2-documentation.pdf build/
+          cp dumont-dep-2026.2-documentation.pdf build/
           cp shio-cms-2026.1-documentation.pdf build/
 
       - name: Upload artifact
