@@ -34,7 +34,7 @@ The AEM connector provides these extension interfaces and base classes:
 |---|---|---|
 | `DumAemExtAttributeInterface` | Custom logic for extracting or transforming individual field values | `attributes[].className` or `sourceAttrs[].className` |
 | `DumAemExtContentInterface` | Extract additional content from AEM pages (e.g., `.model.json`) | `models[].className` |
-| **`DumAemExtModelJsonBase<T>`** | **Abstract base class for `.model.json` extractors — handles fetch, parse, error handling. Use this instead of `DumAemExtContentInterface` for model.json.** | `models[].className` |
+| `DumAemExtModelJsonBase<T>` | Recommended abstract base class for `.model.json` extractors — handles fetch, parse, and error handling automatically. Prefer this over implementing `DumAemExtContentInterface` directly. | `models[].className` |
 | `DumAemExtDeltaDateInterface` | Custom delta date resolution for incremental indexing | `sources[].deltaClass` |
 | `DumAemExtUrlAttributeInterface` | Specialized URL handling with ID extraction (extends `DumAemExtAttributeInterface`) | `attributes[].className` |
 
