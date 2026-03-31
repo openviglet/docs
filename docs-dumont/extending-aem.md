@@ -103,24 +103,23 @@ Implement this to fetch additional content from AEM — for example, calling the
 
 ```java
 import com.viglet.dumont.connector.aem.commons.ext.DumAemExtContentInterface;
-import com.viglet.dumont.connector.aem.commons.bean.DumAemTargetAttrValueMap;
+import com.viglet.dumont.connector.aem.commons.bean.DumAemAttrMap;
 
 public class MyModelJsonExtractor implements DumAemExtContentInterface {
 
     @Override
-    public DumAemTargetAttrValueMap consume(
+    public DumAemAttrMap consume(
             DumAemObject aemObject,
             DumAemConfiguration dumAemConfiguration
     ) {
-        DumAemTargetAttrValueMap result = new DumAemTargetAttrValueMap();
+        DumAemAttrMap result = new DumAemAttrMap();
 
         // Fetch the .model.json endpoint
         String url = dumAemConfiguration.getUrl()
             + aemObject.getPath() + ".model.json";
         // ... HTTP call to get JSON ...
 
-        result.addWithSingleValue("fragmentPath",
-            "/content/dam/fragment", false);
+        result.append("fragmentPath", "/content/dam/fragment");
         return result;
     }
 }
@@ -189,9 +188,9 @@ public class MyModelJsonExtractor extends DumAemExtModelJsonBase<MyModel> {
 
     @Override
     protected void extractAttributes(MyModel model, DumAemModelJsonQuery query,
-            DumAemObject aemObject, DumAemTargetAttrValueMap attrValues) {
-        attrValues.addWithSingleValue("title", model.getTitle(), true);
-        attrValues.addWithSingleValue("description", model.getDescription(), true);
+            DumAemObject aemObject, DumAemAttrMap attrValues) {
+        attrValues.set("title", model.getTitle())
+                  .set("description", model.getDescription());
     }
 }
 ```
@@ -260,7 +259,7 @@ query.component("my-app/components/banner", Banner.class)
         String image = banner.getBackgroundImage() != null
             ? banner.getBackgroundImage()
             : banner.getBackgroundColor();
-        attrs.addWithSingleValue("image", image, true);
+        attrs.set("image", image);
     })
     .attr("title", Banner::getTitle)
     .attr("richText", Banner::getRichText)
@@ -273,8 +272,8 @@ query.component("my-app/components/banner", Banner.class)
 query.component("my-app/components/carousel", Instructor.class)
     .all()
     .also((instructor, attrs) -> {
-        attrs.addWithSingleValue("text", instructor.getName(), false);
-        attrs.addWithSingleValue("text", instructor.getBio(), false);
+        attrs.append("text", instructor.getName())
+             .append("text", instructor.getBio());
     })
     .into(attrValues);
 ```
@@ -302,7 +301,7 @@ query.component("my-app/components/carousel", Instructor.class)
 Extracts the last modified date, falling back to the creation date:
 
 ```java
-attrValues.addWithSingleValue("date", lastModifiedDate(aemObject), false);
+attrValues.append("date", lastModifiedDate(aemObject));
 ```
 
 #### `resolveTemplateName(templateName)` + `templateNameAliases()`
@@ -325,8 +324,7 @@ protected Map<String, String> templateNameAliases() {
 Then use `resolveTemplateName()` in your extractor:
 
 ```java
-attrValues.addWithSingleValue("templateName",
-    resolveTemplateName(model.getTemplateName()), true);
+attrValues.set("templateName", resolveTemplateName(model.getTemplateName()));
 // "contact-page" → "institutional", "news-article" → "news", etc.
 ```
 
@@ -352,12 +350,11 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
 
     @Override
     protected void extractAttributes(MyPortalModel model, DumAemModelJsonQuery query,
-            DumAemObject aemObject, DumAemTargetAttrValueMap attrValues) {
+            DumAemObject aemObject, DumAemAttrMap attrValues) {
         // Root metadata
-        attrValues.addWithSingleValue("date", lastModifiedDate(aemObject), false);
-        attrValues.addWithSingleValue("fragmentPath", model.getFragmentPath(), true);
-        attrValues.addWithSingleValue("templateName",
-            resolveTemplateName(model.getTemplateName()), true);
+        attrValues.append("date", lastModifiedDate(aemObject))
+            .set("fragmentPath", model.getFragmentPath())
+            .set("templateName", resolveTemplateName(model.getTemplateName()));
 
         // News component
         query.component("my-portal/components/news", MyNews.class)
@@ -371,7 +368,7 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
             .also((banner, attrs) -> {
                 String image = banner.getImage() != null
                     ? banner.getImage() : banner.getFallbackImage();
-                attrs.addWithSingleValue("image", image, true);
+                attrs.set("image", image);
             })
             .attr("richText", MyBanner::getRichText)
             .attr("modificationDate", MyBanner::getAuthorDate)
@@ -383,8 +380,8 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
             .attr("date", MyEvent::getDate)
             .attr("endDate", MyEvent::getEndDate)
             .also((event, attrs) ->
-                attrs.addWithSingleValue("text",
-                    "%s %s".formatted(event.getCity(), event.getAddress()), false))
+                attrs.append("text",
+                    "%s %s".formatted(event.getCity(), event.getAddress())))
             .into(attrValues);
 
         // Teacher — navigate into elements
@@ -399,142 +396,91 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
 }
 ```
 
-### DumAemTargetAttrValueMap — API Reference
+### DumAemAttrMap — API Reference
 
-`DumAemTargetAttrValueMap` is the core data structure for collecting extracted attributes. It extends `HashMap<String, TurMultiValue>` and provides typed methods for adding values safely (null values are silently ignored).
+`DumAemAttrMap` is the core data structure for collecting extracted attributes. It extends `HashMap<String, TurMultiValue>` and provides typed methods for adding values safely (null values are silently ignored).
 
-#### The `override` parameter
+#### Fluent API (recommended)
 
-Every method accepts a `boolean override` parameter that controls what happens when the attribute already exists in the map:
+The fluent methods provide concise, chainable calls with clear semantics. They accept any supported type (`String`, `Date`, `Boolean`, `Integer`, `Long`, `Double`, `Float`, `TurMultiValue`) and dispatch automatically.
 
-| `override` | Attribute exists? | Behavior |
+##### `set(name, value)` — replace
+
+Sets a value, **replacing** any existing value for this attribute:
+
+```java
+attrValues
+    .set("title", model.getTitle())
+    .set("date", model.getDate())
+    .set("active", true);
+```
+
+##### `append(name, value)` — merge
+
+Appends a value, **merging** with any existing value. If the attribute does not yet exist, it is created:
+
+```java
+attrValues
+    .append("text", teacher.getBio())
+    .append("text", teacher.getName());
+```
+
+##### `setIfAbsent(name, value)` — conditional
+
+Sets a value **only if the attribute does not already exist** in the map. Replaces the common `if (!attrValues.containsKey(...))` pattern:
+
+```java
+attrValues.setIfAbsent("abstract", description);
+```
+
+##### `setAll(name, list)` / `appendAll(name, list)` — string collections
+
+```java
+attrValues
+    .setAll("tags", List.of("news", "tech", "java"))
+    .appendAll("categories", additionalCategories);
+```
+
+##### `setAllDates(name, list)` / `appendAllDates(name, list)` — date collections
+
+```java
+attrValues.setAllDates("eventDates", List.of(startDate, endDate));
+```
+
+##### `of(name, value)` — static factory
+
+Creates a new map with a single attribute:
+
+```java
+return DumAemAttrMap.of("title", model.getTitle());
+```
+
+#### Fluent API — Quick Reference
+
+| Method | Behavior | Returns |
 |---|---|---|
-| `true` | Yes | **Replaces** the existing value |
-| `true` | No | Adds the value |
-| `false` | Yes | **Appends** to the existing multi-value (merge) |
-| `false` | No | Adds the value |
+| `set(name, value)` | Replace existing value | `this` |
+| `append(name, value)` | Merge with existing value | `this` |
+| `setIfAbsent(name, value)` | Set only if key is absent | `this` |
+| `setAll(name, List<String>)` | Replace with string collection | `this` |
+| `appendAll(name, List<String>)` | Merge string collection | `this` |
+| `setAllDates(name, List<Date>)` | Replace with date collection | `this` |
+| `appendAllDates(name, List<Date>)` | Merge date collection | `this` |
+| `of(name, value)` *(static)* | Create map with one attribute (override) | new map |
+| `ofAppend(name, value)` *(static)* | Create map with one attribute (merge) | new map |
+| `ofAppendAll(name, List<String>)` *(static)* | Create map with string collection (merge) | new map |
 
-#### Instance Methods — Adding Single Values
+All methods accept any supported type: `String`, `Date`, `Boolean`, `Integer`, `Long`, `Double`, `Float`, `TurMultiValue`.
 
-Use `addWithSingleValue` to add a single typed value to the map:
-
-```java
-// String
-attrValues.addWithSingleValue("title", "My Page Title", true);
-
-// Date
-attrValues.addWithSingleValue("publishDate", new Date(), true);
-
-// Boolean
-attrValues.addWithSingleValue("isPublished", true, false);
-
-// Integer
-attrValues.addWithSingleValue("pageViews", 42, false);
-
-// Long
-attrValues.addWithSingleValue("fileSize", 1024L, true);
-
-// Double
-attrValues.addWithSingleValue("price", 29.99, false);
-
-// Float
-attrValues.addWithSingleValue("rating", 4.5f, true);
-
-// TurMultiValue (pre-built multi-value)
-attrValues.addWithSingleValue("tags", turMultiValue, false);
-```
-
-All overloads share the same signature pattern:
+#### Merging Maps
 
 ```java
-void addWithSingleValue(String attributeName, <Type> value, boolean override)
-```
-
-| Type | Description |
-|---|---|
-| `String` | Text value |
-| `Date` | Date/time value |
-| `Boolean` | Boolean flag |
-| `Integer` | Integer number |
-| `Long` | Long number |
-| `Double` | Double-precision decimal |
-| `Float` | Single-precision decimal |
-| `TurMultiValue` | Pre-built multi-value object |
-
-#### Instance Methods — Adding Collections
-
-Use these to add multiple values at once for a single attribute:
-
-```java
-// List of strings
-attrValues.addWithStringCollectionValue("tags",
-    List.of("news", "tech", "java"), true);
-
-// List of dates
-attrValues.addWithDateCollectionValue("eventDates",
-    List.of(startDate, endDate), false);
-```
-
-| Method | Value Type | Description |
-|---|---|---|
-| `addWithStringCollectionValue(name, list, override)` | `List<String>` | Adds multiple string values |
-| `addWithDateCollectionValue(name, list, override)` | `List<Date>` | Adds multiple date values |
-
-#### Instance Methods — Polymorphic Dispatch
-
-`addWithValue` accepts any `Object` and automatically dispatches to the correct typed method based on runtime type. This is used internally by the fluent API and can also be used directly:
-
-```java
-// Automatically calls the right addWithSingleValue overload
-attrValues.addWithValue("myField", someObject, true);
-```
-
-Supports: `String`, `Date`, `Boolean`, `Integer`, `Long`, `Double`, `Float`, and `TurMultiValue`. Any other type is converted to `String` via `toString()`.
-
-#### Instance Methods — Merging Maps
-
-```java
-// Merge another map into this one (respects override flags)
 attrValues.merge(otherAttrValues);
 ```
 
-The `merge` method combines two attribute maps. For each key in the source map:
+Combines two attribute maps. For each key in the source map:
 - If `override` is `true` on the source value → replaces the existing value
 - If `override` is `false` → appends to the existing multi-value
-
-#### Static Factory Methods
-
-Create a pre-populated map with a single attribute in one call:
-
-```java
-// From a typed value
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("title", "Hello", true);
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("date", new Date(), true);
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("active", true, false);
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("count", 42, false);
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("price", 19.99, true);
-
-// From a string collection
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("tags",
-    List.of("a", "b"), true);
-
-// From a TurMultiValue
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem("field", turMultiValue);
-
-// From a DumAemTargetAttr (uses the attr's name and textValue)
-DumAemTargetAttrValueMap map = DumAemTargetAttrValueMap.singleItem(targetAttr, true);
-```
-
-#### Quick Reference Table
-
-| Method | Signature | Use Case |
-|---|---|---|
-| `addWithSingleValue` | `(String, String/Date/Boolean/Integer/Long/Double/Float/TurMultiValue, boolean)` | Add one typed value |
-| `addWithStringCollectionValue` | `(String, List<String>, boolean)` | Add multiple strings |
-| `addWithDateCollectionValue` | `(String, List<Date>, boolean)` | Add multiple dates |
-| `addWithValue` | `(String, Object, boolean)` | Add any value (auto-dispatches by type) |
-| `merge` | `(DumAemTargetAttrValueMap)` | Combine two attribute maps |
-| `singleItem` *(static)* | Various overloads | Create a map with one attribute |
 
 ---
 
@@ -725,8 +671,8 @@ public class MyModelJson extends DumAemExtModelJsonBase<MyModel> {
 
     @Override
     protected void extractAttributes(MyModel model, DumAemModelJsonQuery query,
-            DumAemObject aemObject, DumAemTargetAttrValueMap attrValues) {
-        attrValues.addWithSingleValue("title", model.getTitle(), true);
+            DumAemObject aemObject, DumAemAttrMap attrValues) {
+        attrValues.set("title", model.getTitle());
 
         query.component("my-app/components/news", MyNews.class)
             .first()
