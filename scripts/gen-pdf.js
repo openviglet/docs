@@ -9,7 +9,7 @@
  * Usage:
  *   node scripts/gen-pdf.js \
  *     --startUrl http://localhost:3000/turing/getting-started/intro \
- *     --output turing-es-2026.1-documentation.pdf
+ *     --output turing-es-2026.2-documentation.pdf
  */
 
 const puppeteer = require("puppeteer");
@@ -25,7 +25,7 @@ const get = (flag, def) => {
 };
 
 const START_URL       = get("--startUrl", "http://localhost:3000/turing/getting-started/intro");
-const OUTPUT_FILENAME = get("--output",   "turing-es-2026.1-documentation.pdf");
+const OUTPUT_FILENAME = get("--output",   "turing-es-2026.2-documentation.pdf");
 const NEXT_SELECTOR   = "a.pagination-nav__link--next";
 const CONTENT_SEL     = "article";
 

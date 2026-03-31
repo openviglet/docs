@@ -124,8 +124,8 @@ Two PDF generators exist, one per product:
 
 | Product | Script | Cover | Output |
 |---|---|---|---|
-| Turing ES | `scripts/gen-pdf.mjs` | `scripts/pdf-cover.html` | `turing-es-2026.1-documentation.pdf` |
-| Dumont DEP | `scripts/gen-pdf-dumont.mjs` | `scripts/pdf-cover-dumont.html` | `dumont-dep-2026.1-documentation.pdf` |
+| Turing ES | `scripts/gen-pdf.mjs` | `scripts/pdf-cover.html` | `turing-es-2026.2-documentation.pdf` |
+| Dumont DEP | `scripts/gen-pdf-dumont.mjs` | `scripts/pdf-cover-dumont.html` | `dumont-dep-2026.2-documentation.pdf` |
 
 Both share `scripts/pdf-style.css` for content styling.
 
@@ -149,8 +149,8 @@ The GitHub Actions workflow (`deploy.yml`) runs both PDF generators after buildi
   run: npm run gen-pdf-dumont
 - name: Copy PDFs into build folder
   run: |
-    cp turing-es-2026.1-documentation.pdf build/
-    cp dumont-dep-2026.1-documentation.pdf build/
+    cp turing-es-2026.2-documentation.pdf build/
+    cp dumont-dep-2026.2-documentation.pdf build/
 ```
 
 ---
@@ -159,11 +159,11 @@ The GitHub Actions workflow (`deploy.yml`) runs both PDF generators after buildi
 
 | Product | Config Location | Current Version | Has older versions? |
 |---|---|---|---|
-| Turing ES | `docusaurus.config.ts` preset `docs` | `2026.1` | Yes (0.3.5–0.3.9) |
-| Dumont DEP | `docusaurus.config.ts` plugin `dumont` | `2026.1` | No |
+| Turing ES | `docusaurus.config.ts` preset `docs` | `2026.2` | Yes (0.3.5–0.3.9) |
+| Dumont DEP | `docusaurus.config.ts` plugin `dumont` | `2026.2` | No |
 | Shio CMS | `docusaurus.config.ts` plugin `shio` | `0.3.7` | No |
 
-Version labels are set via `lastVersion: "current"` + `versions: { current: { label: "2026.1" } }` to avoid showing "Next" in the navbar.
+Version labels are set via `lastVersion: "current"` + `versions: { current: { label: "2026.2" } }` to avoid showing "Next" in the navbar.
 
 ---
 

@@ -25,7 +25,7 @@ const ROOT       = join(__dirname, '..');
 const COVER_HTML = join(__dirname, 'pdf-cover.html');
 const STYLE_CSS  = join(__dirname, 'pdf-style.css');
 const FAVICON    = join(ROOT, 'static', 'img', 'favicon.png');
-const OUTPUT_PDF = join(ROOT, 'turing-es-2026.1-documentation.pdf');
+const OUTPUT_PDF = join(ROOT, 'turing-es-2026.2-documentation.pdf');
 const BASE_URL   = process.env.PDF_BASE_URL || 'http://localhost:3000';
 const PROD_URL   = process.env.PDF_PROD_URL || 'https://docs.viglet.org';
 const ENTRY_PATH = '/turing/getting-started/intro';
@@ -354,7 +354,7 @@ async function mergePDFs(coverBuf, tocBuf, docBuffers, entries, coverPageCount, 
 
   // Metadata
   merged.setTitle('Turing ES Documentation');
-  merged.setSubject('Enterprise Search Platform — v2026.1');
+  merged.setSubject('Enterprise Search Platform — v2026.2');
   merged.setAuthor('Viglet');
   merged.setCreator('Viglet PDF Generator');
   merged.setProducer('pdf-lib + Puppeteer');
