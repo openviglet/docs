@@ -21,4 +21,3 @@ slug: /
 | [Connectors](/turing/connectors) | Connectors for indexing content |
 | [Developer Guide](/turing/developer-guide) | How to develop with Turing ES |
 | [Release Notes](/turing/release-notes) | Release history and changelog |
-| [Javadoc](https://turing.viglet.org/latest/javadoc/) | API Reference (external) |
