@@ -8,12 +8,12 @@ description: Manage files and train the RAG knowledge base with Viglet Turing ES
 
 Assets is the file manager that feeds the RAG Knowledge Base in Turing ES. Content managers and administrators use it to upload documents (PDFs, Word files, spreadsheets, and more) that are automatically indexed as vector embeddings and made available to AI Agents for semantic search. It is the bridge between your files and the Knowledge Base — everything uploaded here becomes part of what the AI can reference when answering questions.
 
-The **Assets** section (`/console/asset`) is a file manager with built-in RAG training capabilities. It is available in the **Management** section of the sidebar and is only visible when **MinIO is enabled**.
+The **Assets** section (`/console/asset`) is a file manager with built-in RAG training capabilities. It is available in the **Management** section of the sidebar and is only visible when a **storage backend is configured** (`turing.storage.type` is `minio` or `filesystem`).
 
 Assets serves as the Knowledge Base for AI Agents — every file uploaded here can be indexed as vector embeddings and queried by the LLM via tool calling. For the conceptual overview of how this fits into the GenAI architecture, see [Generative AI & LLM Configuration](./genai-llm.md).
 
-:::info MinIO required
-Assets and all RAG Knowledge Base features require MinIO to be configured. See [MinIO Configuration](#minio-configuration) at the bottom of this page.
+:::info Storage required
+Assets and all RAG Knowledge Base features require a storage backend to be configured. See [Storage Configuration](#storage-configuration) at the bottom of this page.
 :::
 
 ---
@@ -218,16 +218,21 @@ For details on configuring AI Agents and tools, see [AI Agents](./ai-agents.md) 
 
 ---
 
-## MinIO Configuration
+## Storage Configuration
 
-MinIO must be enabled and configured before Assets becomes available:
+A storage backend must be configured before Assets becomes available. Turing supports two storage backends: **MinIO** (recommended for production) and **Filesystem** (for simple deployments). Set `turing.storage.type` to enable one.
 
-```properties
-turing.minio.enabled=true
-turing.minio.endpoint=http://minio:9000
-turing.minio.accessKey=minioadmin
-turing.minio.secretKey=minioadmin
-turing.minio.bucket=turing-assets
+### Option 1: MinIO (Recommended)
+
+```yaml
+turing:
+  storage:
+    type: minio
+    minio:
+      endpoint: http://localhost:9000
+      access-key: minioadmin
+      secret-key: minioadmin
+      bucket: turing-assets
 ```
 
 The bucket (`turing-assets` by default) is **created automatically on startup** if it does not exist.
@@ -251,6 +256,24 @@ minio:
 :::tip
 The MinIO web console is available at `http://localhost:9001` when running locally via Docker Compose. Use it to inspect buckets and verify that files are being stored correctly.
 :::
+
+### Option 2: Filesystem
+
+```yaml
+turing:
+  storage:
+    type: filesystem
+    filesystem:
+      path: ./store/assets
+```
+
+Files are stored in the configured directory, which is created automatically if it does not exist. The filesystem backend includes **path traversal protection** — all paths are resolved against the base directory.
+
+:::note
+The filesystem backend is suitable for single-server deployments and development. For production environments with multiple instances or high availability requirements, use MinIO.
+:::
+
+For the full property reference, see [Configuration Reference — Storage](./configuration-reference.md#storage).
 
 ---
 

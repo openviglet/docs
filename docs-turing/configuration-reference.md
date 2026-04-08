@@ -9,7 +9,7 @@ description: Complete reference for the Turing ES application.yaml configuration
 This page documents every significant property in the Turing ES `application.yaml` file. The file uses standard Spring Boot configuration — any property can be overridden via environment variables, JVM system properties (`-Dkey=value`), or a separate `application-production.yaml` file in the working directory.
 
 :::tip Override pattern
-To override a property at runtime without editing the file, use the environment variable convention: replace `.` and `-` with `_` and uppercase everything. For example, `turing.minio.enabled` becomes `TURING_MINIO_ENABLED=true`.
+To override a property at runtime without editing the file, use the environment variable convention: replace `.` and `-` with `_` and uppercase everything. For example, `turing.storage.type` becomes `TURING_STORAGE_TYPE=minio`.
 :::
 
 ---
@@ -138,12 +138,15 @@ turing:
       ttl:
         seconds: 86400000
       enabled: false
-  minio:
-    enabled: false
-    endpoint: http://localhost:9000
-    access-key: admin
-    secret-key: minha_senha_forte
-    bucket: turing-assets
+  storage:
+    type: none
+    filesystem:
+      path: ./store/assets
+    minio:
+      endpoint: http://localhost:9000
+      access-key: admin
+      secret-key: minha_senha_forte
+      bucket: turing-assets
   mongodb:
     enabled: false
     uri: mongodb://localhost:27017
@@ -335,20 +338,41 @@ The `turing.ai.crypto.key` is used to encrypt LLM provider API keys stored in th
 
 ---
 
-### MinIO (Assets & Knowledge Base)
+### Storage (Assets, Knowledge Base & Pages) {#storage}
 
-MinIO powers the [Assets](./assets.md) file manager and the RAG Knowledge Base. Disabled by default.
+Storage powers the [Assets](./assets.md) file manager, the RAG Knowledge Base, and [SPA Pages](./spa-pages.md). Disabled by default (`none`). Turing supports three pluggable storage backends:
+
+| Type | Description |
+|------|-------------|
+| `none` | Disabled — Assets and Pages are hidden from the sidebar |
+| `minio` | MinIO object storage (recommended for production) |
+| `filesystem` | Local filesystem directory (simple deployments, development) |
+
+#### Common
 
 | Property | Default | Description |
 |---|---|---|
-| `turing.minio.enabled` | `false` | Set `true` to enable MinIO integration |
-| `turing.minio.endpoint` | `http://localhost:9000` | MinIO server URL |
-| `turing.minio.access-key` | `admin` | MinIO access key |
-| `turing.minio.secret-key` | `minha_senha_forte` | MinIO secret key |
-| `turing.minio.bucket` | `turing-assets` | Bucket name — created automatically on startup if it does not exist |
+| `turing.storage.type` | `none` | Storage backend: `none`, `minio`, or `filesystem` |
+
+#### MinIO Backend
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.storage.minio.endpoint` | `http://localhost:9000` | MinIO server URL |
+| `turing.storage.minio.access-key` | `admin` | MinIO access key |
+| `turing.storage.minio.secret-key` | `minha_senha_forte` | MinIO secret key |
+| `turing.storage.minio.bucket` | `turing-assets` | Bucket name — created automatically on startup if it does not exist |
+
+#### Filesystem Backend
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.storage.filesystem.path` | `./store/assets` | Base directory for stored files. Created automatically if it does not exist. |
+
+The filesystem backend includes **path traversal protection** — all paths are resolved against the base directory and any attempt to escape it is blocked.
 
 :::note
-The Assets section only appears in the sidebar when `turing.minio.enabled: true`.
+The **Assets** and **Pages** sections only appear in the sidebar when `turing.storage.type` is set to `minio` or `filesystem`.
 :::
 
 ---
@@ -481,11 +505,12 @@ turing:
   url: https://search.yourcompany.com
   allowedOrigins: https://search.yourcompany.com
   ai.crypto.key: your-strong-random-key-here
-  minio:
-    enabled: true
-    endpoint: http://minio:9000
-    access-key: your-minio-user
-    secret-key: your-minio-password
+  storage:
+    type: minio
+    minio:
+      endpoint: http://minio:9000
+      access-key: your-minio-user
+      secret-key: your-minio-password
   mongodb:
     enabled: true
     uri: mongodb://mongo-host:27017

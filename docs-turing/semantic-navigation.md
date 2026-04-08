@@ -36,6 +36,33 @@ General identity and search engine binding for the site.
 | **Description** | Human-readable description shown in the console |
 | **Search Engine** | The Search Engine instance that stores and searches content for this site. See [Search Engine](./search-engine.md) |
 | **Thesaurus** | Enables thesaurus-based query expansion — matching synonyms and related terms |
+| **Search Template** | SPA Page used as the search interface for this site. See [Search Template](#search-template) below |
+
+#### Search Template
+
+The **Search Template** setting allows you to assign a deployed [SPA Page](./spa-pages.md) as the custom search interface for an SN site. When configured, visiting the site's search URL serves the selected SPA instead of the default built-in search page.
+
+| Search URL | Behavior |
+|---|---|
+| `GET /sn/{siteName}` | Serves the SPA Page selected in Search Template |
+| `GET /sn/{siteName}/any/path` | Serves the SPA with client-side routing fallback to `index.html` |
+
+**How it works:**
+
+1. Deploy a SPA via **Enterprise Search > [Pages](./spa-pages.md)** (upload a ZIP with your built React/Vue/Angular app)
+2. Open the SN site's **Settings** tab
+3. Select the deployed page from the **Search Template** dropdown
+4. The site's search URL (`/sn/{siteName}`) now serves your custom SPA
+
+When no template is selected (or storage is disabled), the site uses the default built-in search interface.
+
+:::tip Build with the React SDK
+Use the [Turing React SDK](./react-sdk.md) (`@openviglet/turing-react-sdk`) to build custom search SPAs with hooks for search, facets, pagination, and autocomplete. Deploy the built app via Pages and assign it as the Search Template — the SPA communicates with the Turing REST API on the same origin, so no CORS configuration is needed.
+:::
+
+:::note Storage required
+The Search Template dropdown only appears when a [storage backend](./configuration-reference.md#storage) is configured. If no SPA Pages have been deployed yet, the dropdown shows a message indicating no pages are available.
+:::
 
 ---
 

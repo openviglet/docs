@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "search-engine",
             "semantic-navigation",
+            "spa-pages",
             "integration",
             "integration-aem",
             "import-export",
