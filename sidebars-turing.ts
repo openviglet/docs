@@ -63,6 +63,7 @@ const sidebars: SidebarsConfig = {
           label: "Developers",
           items: [
             "developer-guide",
+            "react-sdk",
             "rest-api",
             "graphql",
           ],
@@ -79,6 +80,11 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Javadoc",
           href: "https://turing.viglet.org/latest/javadoc/",
+        },
+        {
+          type: "link",
+          label: "Storybook (React SDK)",
+          href: "https://turing.viglet.org/react-sdk",
         },
       ],
     },
