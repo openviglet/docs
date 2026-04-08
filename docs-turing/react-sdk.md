@@ -6,7 +6,7 @@ description: Headless hooks and unstyled UI components for building custom searc
 
 # React SDK
 
-The **@openviglet/turing-react-sdk** provides headless hooks and unstyled UI components for building custom search experiences on top of the Viglet Turing ES Semantic Navigation API.
+The **@viglet/turing-react-sdk** provides headless hooks and unstyled UI components for building custom search experiences on top of the Viglet Turing ES Semantic Navigation API.
 
 - **Headless architecture** — zero built-in styles, full render control via render props
 - **Two modes** — manual (programmatic) or URL-synced (URL as source of truth)
@@ -19,23 +19,8 @@ The **@openviglet/turing-react-sdk** provides headless hooks and unstyled UI com
 
 ## Installation
 
-This package is published on the **GitHub npm registry** under the `@openviglet` scope.
-
-### 1. Configure `.npmrc`
-
-Create a `.npmrc` file in your project root (or `~/.npmrc` for global config):
-
-```
-@openviglet:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
-```
-
-Replace `YOUR_GITHUB_TOKEN` with a [GitHub Personal Access Token](https://github.com/settings/tokens) that has the **`read:packages`** scope.
-
-### 2. Install
-
 ```bash
-npm install @openviglet/turing-react-sdk
+npm install @viglet/turing-react-sdk
 ```
 
 **Peer dependencies:** `react` (^18 or ^19) and `axios` (^1.0).
@@ -45,7 +30,7 @@ npm install @openviglet/turing-react-sdk
 ## Quick Start
 
 ```tsx
-import { TuringProvider, useTuringSearch } from "@openviglet/turing-react-sdk";
+import { TuringProvider, useTuringSearch } from "@viglet/turing-react-sdk";
 
 function App() {
   return (
@@ -85,7 +70,7 @@ function SearchPage() {
 The root context provider that makes Turing config and search state available to all hooks.
 
 ```tsx
-import { TuringProvider } from "@openviglet/turing-react-sdk";
+import { TuringProvider } from "@viglet/turing-react-sdk";
 ```
 
 ### Props
@@ -445,7 +430,7 @@ import {
   TuringResultList,
   TuringSearchBar,
   TuringPagination,
-} from "@openviglet/turing-react-sdk";
+} from "@viglet/turing-react-sdk";
 import { useSearchParams } from "react-router-dom";
 
 function App() {
@@ -515,6 +500,6 @@ function SearchPage() {
 ## Links
 
 - [GitHub Repository](https://github.com/openviglet/turing)
-- [npm Package](https://github.com/openviglet/turing/packages)
+- [npm Package](https://www.npmjs.com/package/@viglet/turing-react-sdk)
 - [Storybook (Live Demos)](https://turing.viglet.org/react-sdk)
 - [REST API Reference](rest-api)

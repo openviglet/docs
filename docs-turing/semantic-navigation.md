@@ -57,7 +57,7 @@ The **Search Template** setting allows you to assign a deployed [SPA Page](./spa
 When no template is selected (or storage is disabled), the site uses the default built-in search interface.
 
 :::tip Build with the React SDK
-Use the [Turing React SDK](./react-sdk.md) (`@openviglet/turing-react-sdk`) to build custom search SPAs with hooks for search, facets, pagination, and autocomplete. Deploy the built app via Pages and assign it as the Search Template — the SPA communicates with the Turing REST API on the same origin, so no CORS configuration is needed.
+Use the [Turing React SDK](./react-sdk.md) (`@viglet/turing-react-sdk`) to build custom search SPAs with hooks for search, facets, pagination, and autocomplete. Deploy the built app via Pages and assign it as the Search Template — the SPA communicates with the Turing REST API on the same origin, so no CORS configuration is needed.
 :::
 
 :::note Storage required

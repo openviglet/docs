@@ -139,7 +139,7 @@ This follows the standard SPA caching pattern: hashed asset filenames ensure cac
 
 SPA Pages is designed to work with the [Turing React SDK](./react-sdk.md). A typical workflow:
 
-1. Create a React app using the Turing React SDK (`@openviglet/turing-react-sdk`)
+1. Create a React app using the Turing React SDK (`@viglet/turing-react-sdk`)
 2. Build the app (`npm run build`)
 3. Add a `turing-manifest.json` to the build output with the `snSite` field pointing to your Semantic Navigation site
 4. ZIP the build output and deploy via Pages
