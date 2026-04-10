@@ -1,48 +1,91 @@
 ---
 sidebar_position: 5
 title: Tool Calling
-description: Native tool calling capabilities available to AI Agents in Turing ES — 27 tools across 7 categories.
+description: Native tool calling capabilities available to AI Agents in Turing ES — DSL-based search tools, RAG, web crawling, and more.
 ---
 
 # Tool Calling
 
 A **Tool Calling** is a function that the LLM can invoke autonomously during a conversation to retrieve information or perform an action. Instead of relying purely on training data, the LLM calls tools to fetch live data, search indexed content, execute code, and more — then incorporates the results into its reasoning.
 
-Turing ES includes **27 native tools** organized into 7 categories, plus support for external tools via [MCP Servers](./mcp-servers.md). Tools are enabled per [AI Agent](./ai-agents.md) — each agent selects only the tools it needs.
+Turing ES includes native tools organized into categories, plus support for external tools via [MCP Servers](./mcp-servers.md). Tools are enabled per [AI Agent](./ai-agents.md) — each agent selects only the tools it needs.
 
 ---
 
-## Semantic Navigation — 15 tools
+## DSL Search — 6 tools
 
-These tools allow the LLM to interact with any Semantic Navigation Site as a structured knowledge source, enabling rich search-based reasoning over your indexed content.
+These tools provide **Elasticsearch-compatible Query DSL** access to any Semantic Navigation Site. Inspired by the [Elasticsearch MCP Server](https://github.com/elastic/mcp-server-elasticsearch), they allow the LLM to build and execute full DSL queries, aggregations, and analytics — automatically translated to the site's configured search engine (Elasticsearch, Solr, or Lucene).
 
 | Tool | Description |
 |---|---|
-| `list_sites` | Lists all available SN Sites with their locales |
-| `get_site_fields` | Returns valid facet fields for filtering a specific site |
-| `get_valid_filter_values` | Returns valid values for a specific filter or facet |
-| `search_site` | Searches a site and returns compact results (ID, title, URL, snippet) |
-| `get_document_details` | Retrieves full text and metadata of a document by ID |
-| `get_search_suggestions` | Autocomplete and spelling corrections for a search query |
-| `find_similar_documents` | Finds semantically similar documents (More Like This) |
-| `get_aggregated_stats` | Calculates totals and distributions by category via facet aggregation |
-| `get_document_highlights` | Extracts snippets from a document where search terms appear |
-| `compare_items` | Compares specific fields of two or more documents side by side |
-| `search_recent_updates` | Retrieves the most recently updated content on a topic |
-| `get_facet_summary` | Statistical summary of all available categories and attributes |
-| `search_by_date_range` | Searches documents within a date range |
-| `lookup_facet_value` | Searches a term across all facets to find exact values |
-| `discover_facet_values` | Splits a phrase into words and searches across all facets |
+| `dsl_list_indices` | Lists all available SN Sites with engine type, locales, and status |
+| `dsl_get_mappings` | Returns field mappings (types, facets, multi-valued) in Elasticsearch format |
+| `dsl_search` | Executes a full Elasticsearch Query DSL search (40 query types, 35 aggregations) |
+| `dsl_get_document` | Retrieves a document by ID with all stored fields |
+| `dsl_suggest` | Autocomplete suggestions and spell-check corrections |
+| `dsl_get_shards` | Shard/core information: document counts, engine type, endpoints, locales |
 
-**Prompt examples:**
+### How the LLM uses DSL tools
 
-- *"Search for documents about authentication in the Sample site"* → triggers `search_site`
-- *"What fields can I filter by on the Sample site?"* → triggers `get_site_fields`, then `get_valid_filter_values`
-- *"Show me the full content of document ID abc-123"* → triggers `get_document_details`
-- *"Find documents similar to the article about Solr configuration"* → triggers `find_similar_documents`
-- *"How many documents do we have per content type?"* → triggers `get_aggregated_stats` or `get_facet_summary`
-- *"What articles were updated in the last 7 days about security?"* → triggers `search_recent_updates` or `search_by_date_range`
-- *"Compare the features of Product A and Product B"* → triggers `search_site` then `compare_items`
+The LLM follows a pattern similar to how a developer uses the Elasticsearch API:
+
+1. **Discover** → `dsl_list_indices("*")` to find available sites
+2. **Understand schema** → `dsl_get_mappings("mySite")` to see fields and types
+3. **Search** → `dsl_search("mySite", "en", queryBody)` with full DSL
+4. **Deep dive** → `dsl_get_document("mySite", "en", "doc-123")` for full content
+5. **Correct typos** → `dsl_suggest("mySite", "en", "enterprse")` for corrections
+
+### The `dsl_search` tool
+
+This is the most powerful tool. The `queryBody` parameter accepts the complete Elasticsearch `_search` request body as a JSON string. The LLM constructs the query based on the user's intent:
+
+**Simple search:**
+```json
+{"query":{"match":{"title":"machine learning"}},"size":5}
+```
+
+**Filtered search with aggregations:**
+```json
+{
+  "query":{"bool":{"must":[{"match":{"title":"security"}}],"filter":[{"term":{"type":"article"}}]}},
+  "size":10,
+  "aggs":{"by_author":{"terms":{"field":"author","size":5}}},
+  "highlight":{"fields":{"title":{},"body":{}}}
+}
+```
+
+**Date range with sorting:**
+```json
+{
+  "query":{"range":{"date":{"gte":"2025-01-01"}}},
+  "sort":[{"date":"desc"}],
+  "size":20
+}
+```
+
+**Similar documents (More Like This):**
+```json
+{"query":{"more_like_this":{"fields":["title","body"],"like":"enterprise search platform","min_term_freq":1}}}
+```
+
+**Facet value discovery (terms aggregation):**
+```json
+{"query":{"match_all":{}},"size":0,"aggs":{"categories":{"terms":{"field":"category","size":50}}}}
+```
+
+For the complete DSL reference, see [DSL Query API](./dsl-query.md) and [DSL Compatibility Matrix](./dsl-compatibility.md).
+
+### Prompt examples
+
+- *"Search for documents about authentication in the Sample site"* → `dsl_search` with `match` query
+- *"What fields can I filter by on the Sample site?"* → `dsl_get_mappings`
+- *"Show me the full content of document ID abc-123"* → `dsl_get_document`
+- *"How many documents do we have per content type?"* → `dsl_search` with `terms` aggregation
+- *"Find documents similar to the article about Solr configuration"* → `dsl_search` with `more_like_this`
+- *"What articles were updated in the last 7 days about security?"* → `dsl_search` with `range` + `sort`
+- *"Compare the features of Product A and Product B"* → `dsl_get_document` called for each product
+- *"What categories are available?"* → `dsl_search` with `size:0` and `terms` aggregation
+- *"How many documents per locale does the site have?"* → `dsl_get_shards`
 
 ---
 
@@ -152,7 +195,7 @@ The Python executable path is configured in **Administration → Settings → Py
 
 ## External Tools via MCP Servers
 
-Beyond the 27 native tools, AI Agents can access tools from any external server implementing the **Model Context Protocol (MCP)**. This covers company-internal systems, proprietary data APIs, and the growing ecosystem of public MCP servers.
+Beyond the native tools, AI Agents can access tools from any external server implementing the **Model Context Protocol (MCP)**. This covers company-internal systems, proprietary data APIs, and the growing ecosystem of public MCP servers.
 
 See [MCP Servers](./mcp-servers.md) for configuration details.
 
@@ -164,8 +207,9 @@ See [MCP Servers](./mcp-servers.md) for configuration details.
 |---|---|
 | [AI Agents](./ai-agents.md) | How to compose agents with the tools they need |
 | [MCP Servers](./mcp-servers.md) | Extend agents with external tools via MCP |
+| [DSL Query API](./dsl-query.md) | Full reference for the Elasticsearch-compatible DSL |
+| [DSL Compatibility Matrix](./dsl-compatibility.md) | Engine compatibility for all DSL features |
 | [Assets](./assets.md) | Knowledge Base files queried by RAG tools |
-| [Semantic Navigation](./semantic-navigation.md) | The search experience powering SN tools |
+| [Semantic Navigation](./semantic-navigation.md) | The search experience powering DSL tools |
 
 ---
-
