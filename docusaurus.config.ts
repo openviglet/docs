@@ -68,6 +68,23 @@ const config: Config = {
         gtag('config', 'G-GH4HMEGEZD');
       `,
     },
+    {
+      tagName: "script",
+      attributes: {
+        async: "true",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-SMSL7R3897",
+      },
+    },
+    {
+      tagName: "script",
+      attributes: {},
+      innerHTML: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SMSL7R3897');
+      `,
+    },
   ],
 
   presets: [
