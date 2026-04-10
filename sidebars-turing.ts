@@ -27,9 +27,23 @@ const sidebars: SidebarsConfig = {
           items: [
             "search-engine",
             "semantic-navigation",
+            {
+              type: "category",
+              label: "DSL Query",
+              items: [
+                "dsl-query",
+                "dsl-compatibility",
+              ],
+            },
             "spa-pages",
-            "integration",
-            "integration-aem",
+            {
+              type: "category",
+              label: "Integration",
+              items: [
+                "integration",
+                "integration-aem",
+              ],
+            },
             "import-export",
           ],
         },
