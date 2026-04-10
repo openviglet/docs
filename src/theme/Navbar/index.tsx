@@ -178,7 +178,7 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
           <span className="text-muted-foreground text-sm">Tema</span>
         </div>
         <hr className="nav-mobile-hr" />
-        <
+        <a
           href="https://viglet.org"
           target="_blank"
           rel="noopener noreferrer"

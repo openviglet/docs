@@ -30,15 +30,15 @@
     "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tabs": "^1.1.13",
-    "@tailwindcss/postcss": "^4.2.1",
+    "@tailwindcss/postcss": "^4.2.2",
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.0",
-    "postcss": "^8.5.8",
-    "prism-react-renderer": "^2.3.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "clsx": "^2.1.1",
+    "postcss": "^8.5.9",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.7.0",
@@ -47,7 +47,7 @@
     "@mermaid-js/mermaid-cli": "^11.12.0",
     "pdf-lib": "^1.17.1",
     "typescript": "^5.9.3",
-    "wait-on": "^9.0.4"
+    "wait-on": "^9.0.5"
   },
   "browserslist": {
     "production": [
