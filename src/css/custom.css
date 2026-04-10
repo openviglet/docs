@@ -754,6 +754,12 @@ a {
   border-top-color: #1e293b;
 }
 
+.nav-mobile-theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .nav-mobile-cta {
   display: flex;
   align-items: center;

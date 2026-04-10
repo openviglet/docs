@@ -20,7 +20,8 @@ interface Product {
 interface Stat {
   value: string;
   label: string;
-  icon: string;
+  icon: JSX.Element;
+  iconBg?: string;
 }
 
 interface CommunityLink {
@@ -65,10 +66,47 @@ const products: Product[] = [
 ];
 
 const stats: Stat[] = [
-  { value: "3", label: "Products", icon: "\u{1F4E6}" },
-  { value: "100%", label: "Open Source", icon: "\u{1F513}" },
-  { value: "Apache 2.0", label: "License", icon: "\u{1F4DC}" },
-  { value: "Java + React", label: "Stack", icon: "\u26A1" },
+  {
+    value: "3",
+    label: "Products",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
+        <path d="M12 3l8 4.5v9l-8 4.5-8-4.5v-9l8-4.5z" />
+        <path d="M12 12l8-4.5" />
+        <path d="M12 12v9" />
+        <path d="M12 12L4 7.5" />
+        <path d="M16 5.25l-8 4.5" />
+      </svg>
+    ),
+  },
+  {
+    value: "100%",
+    label: "Open Source",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
+        <path d="M7 8l-4 4 4 4" />
+        <path d="M17 8l4 4-4 4" />
+        <path d="M14 4l-4 16" />
+      </svg>
+    ),
+  },
+  {
+    value: "Apache 2.0",
+    label: "License",
+    iconBg: "bg-emerald-50",
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-emerald-600">
+        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23A11.52 11.52 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z" />
+      </svg>
+    ),
+  },
+  {
+    value: "Java + React",
+    label: "Stack",
+    icon: (
+      <span className="text-brand font-extrabold text-sm">Java</span>
+    ),
+  },
 ];
 
 const community: CommunityLink[] = [
@@ -310,7 +348,7 @@ function TrustBar(): JSX.Element {
             className="flex items-center gap-3 py-5 px-8"
             style={{ borderRight: i < stats.length - 1 ? "1px solid var(--color-border)" : "none" }}
           >
-            <div className="w-10 h-10 rounded-xl bg-brand-bg flex items-center justify-center text-lg">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.iconBg || "bg-brand-bg"}`}>
               {s.icon}
             </div>
             <div>
@@ -400,7 +438,7 @@ function CommunitySection(): JSX.Element {
 
         <div
           className="grid gap-6"
-          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
+          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
         >
           {community.map((c) => (
             <a

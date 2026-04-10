@@ -147,6 +147,7 @@ function ProductNavItem({ product, isActive }: { product: Product; isActive: boo
 /* ── Mobile Dropdown Menu (below header, not overlay) ── */
 function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }): JSX.Element | null {
   const activeProduct = useActiveProduct();
+  const { colorMode, setColorMode } = useColorMode();
   if (!isOpen) return null;
 
   return (
@@ -172,7 +173,12 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
           );
         })}
         <hr className="nav-mobile-hr" />
-        <a
+        <div className="nav-mobile-item nav-mobile-theme-toggle">
+          <ColorModeToggle value={colorMode} onChange={setColorMode} />
+          <span className="text-muted-foreground text-sm">Tema</span>
+        </div>
+        <hr className="nav-mobile-hr" />
+        <
           href="https://viglet.org"
           target="_blank"
           rel="noopener noreferrer"
