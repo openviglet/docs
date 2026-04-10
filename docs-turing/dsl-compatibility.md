@@ -121,7 +121,7 @@ This page documents the compatibility level of every Turing ES DSL Query feature
 | `filter` | **Native** | **Translated** facet query | **Translated** per-filter search |
 | `filters` | **Native** | **Translated** multiple facet queries | **Translated** per-filter search |
 | `significant_terms` | **Native** | **Translated** facet field | **Translated** terms agg fallback |
-| `rare_terms` | **Native** | **Partial** facet sort asc | **Translated** count <= max filter |
+| `rare_terms` | **Native** | **Partial** facet sort asc | **Translated** count within max filter |
 | `nested` | **Native** | N/A (warn) | N/A |
 | `reverse_nested` | **Native** | N/A (warn) | N/A |
 | `auto_date_histogram` | **Native** | N/A (warn) | N/A |
