@@ -159,6 +159,28 @@ const config: Config = {
         },
       },
     ],
+    [
+      require.resolve("./src/plugins/llms-txt"),
+      {
+        title: "Viglet Docs",
+        description:
+          "Documentation for Turing ES, Shio CMS and Dumont DEP",
+        products: [
+          {
+            pluginId: "turing",
+            label: "Turing ES - Enterprise Search with Generative AI",
+          },
+          {
+            pluginId: "shio",
+            label: "Shio CMS - Content Management System",
+          },
+          {
+            pluginId: "dumont",
+            label: "Dumont DEP - Data Entry Platform",
+          },
+        ],
+      },
+    ],
   ],
 
   themeConfig: {
