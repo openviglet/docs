@@ -6,9 +6,15 @@ description: Native authentication for Turing ES — session-based admin console
 
 # Authentication
 
-Turing ES supports two authentication modes. **Native authentication** is the default and requires no external dependencies. **Keycloak OAuth2 / OpenID Connect** is the recommended mode for production SSO environments.
+Turing ES supports three authentication modes:
 
-This page covers **native authentication** — the session-based admin console login and the API Key mechanism for REST API access. For the full Keycloak production setup, see [Security & Keycloak](./security-keycloak.md).
+| Mode | Best for | External dependency |
+|---|---|---|
+| **Native** (default) | Development, simple setups | None |
+| **Social Login (OAuth2)** | Small teams, GitHub/Google/Microsoft accounts | Provider OAuth App |
+| **Keycloak SSO** | Enterprise production with LDAP/AD, MFA, RBAC | Keycloak server |
+
+This page covers **native authentication**. For social login with Google, GitHub, or Microsoft, see [Social Login (OAuth2)](./security-social-login.md). For the full Keycloak production setup, see [Security & Keycloak](./security-keycloak.md).
 
 ---
 
@@ -41,6 +47,25 @@ API Token values are encrypted at rest in the database. The encryption key is se
 
 ---
 
+## Switching to Social Login (OAuth2)
+
+For teams using Google, GitHub, or Microsoft, you can enable social login buttons by adding the provider configuration in `application.yaml`:
+
+```yaml
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: YOUR_CLIENT_ID
+            client-secret: YOUR_CLIENT_SECRET
+```
+
+The login page automatically shows buttons only for configured providers. See [Social Login (OAuth2)](./security-social-login.md) for complete setup instructions for each provider.
+
+---
+
 ## Switching to Keycloak SSO
 
 For production environments with SSO requirements, Turing ES can delegate authentication to Keycloak via OAuth2 / OpenID Connect. Enable it with:
@@ -57,6 +82,7 @@ See [Security & Keycloak](./security-keycloak.md) for the full 6-step production
 
 | Page | Description |
 |---|---|
+| [Social Login (OAuth2)](./security-social-login.md) | Google, GitHub, and Microsoft social login |
 | [Security & Keycloak](./security-keycloak.md) | Full production setup with Keycloak OAuth2/OIDC |
 | [Administration Guide](./administration-guide.md) | Managing users, groups, roles, and API tokens |
 | [REST API](./rest-api.md) | Full REST API reference including authentication examples |

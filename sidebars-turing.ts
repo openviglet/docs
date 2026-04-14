@@ -88,6 +88,7 @@ const sidebars: SidebarsConfig = {
           label: "Security",
           items: [
             "security-authentication",
+            "security-social-login",
             "security-keycloak",
           ],
         },
