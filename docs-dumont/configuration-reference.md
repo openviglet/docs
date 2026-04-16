@@ -151,6 +151,12 @@ logging:
 | `dumont.aem.querybuilder` | `false` | Enable QueryBuilder-based content discovery instead of tree traversal during full indexing |
 | `dumont.aem.querybuilder.parallelism` | `10` | Number of parallel threads for processing discovered paths |
 
+### Dependency Tracking
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.dependencies.enabled` | `false` | Persist `/content/*` references extracted from each indexed page and cascade re-index any dependent document on standalone updates. Currently populated only by the AEM connector — see [AEM Connector → Dependency Tracking](./connectors/aem.md#dependency-tracking-and-cascade-re-indexing) |
+
 ### Logging
 
 | Property | Default | Description |

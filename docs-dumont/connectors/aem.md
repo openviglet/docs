@@ -154,6 +154,77 @@ For each page, the connector:
 
 <div className="page-break" />
 
+## Dependency Tracking and Cascade Re-Indexing
+
+When a page references other content (experience fragments, content fragments, shared components, linked pages), the AEM connector can automatically **re-index every page that depends on an updated path**. This prevents stale content from surviving in the index when a shared resource changes.
+
+### How Dependencies Are Discovered
+
+As each node's `.infinity.json` is fetched, the connector walks the JSON recursively and collects **every string value that starts with `/content`** — those paths become the document's dependency set. The extraction is completely automatic; no configuration on the AEM side is required.
+
+The dependency set is then attached to the `DumJobItemWithSession` and persisted alongside the indexing record (`dum_connector_dependency` table) whenever the record is saved or updated.
+
+### When the Cascade Fires
+
+Dependency processing runs **only on standalone (incremental) indexing** — it is **not** triggered by `Index All`:
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
+sequenceDiagram
+    participant EVT as AEM Event Listener<br/>(or Manual API)
+    participant API as Dumont Connector
+    participant DB as Indexing Store
+    participant SE as Turing ES
+
+    EVT->>API: POST /api/v2/aem/index/{source}<br/>{paths: ["/content/wknd/.../header"]}
+    API->>SE: Index the updated path(s)
+    API->>DB: findObjectIdsByDependencies(paths)
+    DB-->>API: IDs of pages that reference those paths
+    API->>SE: Re-index the dependent pages
+```
+
+1. A page is indexed via event listener, manual API call, or the Indexing Manager.
+2. The main indexing command runs first (the `Job Item` is produced and sent).
+3. `DependencyHandler` queries the indexing store for every document whose stored dependency list contains one of the updated paths.
+4. A second `IndexPaths` command re-indexes those dependents, which in turn also have their own dependencies refreshed.
+
+### Configuration
+
+A single property controls both the persistence of dependency links **and** the cascade behavior:
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.dependencies.enabled` | `false` *(shipped in `application.yaml`)* | Persist `/content/*` dependencies on each indexing record and trigger cascade re-indexing on standalone operations |
+
+Enable it in `application.yaml`:
+
+```yaml
+dumont:
+  dependencies.enabled: true
+```
+
+Or via JVM argument:
+
+```bash
+java -Ddumont.dependencies.enabled=true -jar dumont-connector.jar
+```
+
+:::note Two effects from one flag
+When `false`:
+- New/updated indexing records are saved **without** a dependency set (the join table stays empty for those rows)
+- `DependencyHandler.processDependencies()` returns early and no cascade re-indexing happens
+
+After turning the flag on, previously indexed content still has no stored dependencies — run a **Reindex All** to populate the dependency table for existing records.
+:::
+
+:::tip Performance impact
+Every standalone index operation performs an extra lookup plus a second indexing pass for any dependents. On sources with heavily shared components (templates, headers/footers, fragments), a single page update can fan out into many re-indexations — budget accordingly, or leave the flag off and rely on scheduled full reindexing.
+:::
+
+---
+
+<div className="page-break" />
+
 ## AEM Server-Side Bundle (Event Listeners)
 
 The `aem-server` module is an **OSGi bundle installed inside AEM**. It provides event listeners that automatically notify the Dumont connector when content changes.
