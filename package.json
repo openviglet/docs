@@ -39,7 +39,7 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
-    "@viglet/viglet-design-system": "^2026.2.40",
+    "@viglet/viglet-design-system": "^2026.2.42",
     "i18next": "^26.0.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "next-themes": "^0.4.0",

@@ -7,7 +7,8 @@ import VigletLogo from "@site/src/components/VigletLogo";
 import { Button } from "@site/src/components/ui/button";
 import { Badge } from "@site/src/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@site/src/components/ui/card";
-import { FloatingFormulasBg } from "@viglet/viglet-design-system";
+import { FloatingFormulasBg } from "@viglet/viglet-design-system/floating-formulas-bg";
+import "@viglet/viglet-design-system/floating-formulas-bg.css";
 
 interface Product {
   id: string;
