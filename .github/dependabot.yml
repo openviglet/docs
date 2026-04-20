@@ -7,21 +7,9 @@ updates:
       day: monday
     open-pull-requests-limit: 10
     groups:
-      docusaurus:
+      all-dependencies:
         patterns:
-          - "@docusaurus/*"
-      radix-ui:
-        patterns:
-          - "@radix-ui/*"
-      tailwind:
-        patterns:
-          - "tailwindcss"
-          - "@tailwindcss/*"
-      i18n:
-        patterns:
-          - "i18next"
-          - "i18next-*"
-          - "react-i18next"
+          - "*"
     ignore:
       # Docusaurus 3.x pins react-router-dom@5; design system wants v7.
       # Locked by legacy-peer-deps until Docusaurus migrates.
