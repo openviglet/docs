@@ -44,14 +44,17 @@ If you already have an AEM as a Cloud Service project (created from the [AEM Pro
 From the [Dumont repository](https://github.com/openviglet/dumont), copy these directories into your AEM project:
 
 ```
-From: dumont/aem/aem-server/core/src/main/java/com/viglet/turing/aem/server/
+From: dumont/aem/aem-server/core/src/main/java/com/viglet/dumont/aem/server/
   ├── config/
   │   └── DumAemIndexerConfig.java
   └── core/
       ├── events/
-      │   ├── DumAemPageEventHandler.java
-      │   ├── DumAemPageReplicationEventHandler.java
-      │   ├── DumAemResourceEventHandler.java
+      │   ├── DumAemPageEventHandler.java                       # page create/modify    → INDEXING
+      │   ├── DumAemPageReplicationEventHandler.java            # page activate/deactivate (paths NOT under /content/dam/)
+      │   ├── DumAemContentFragmentReplicationEventHandler.java # content-fragment activate/deactivate (paths under /content/dam/)
+      │   ├── DumAemResourceEventHandler.java                   # dam:Asset create/modify → INDEXING
+      │   ├── DumAemAllComEventHandler.java                     # diagnostic: logs events under com/*
+      │   ├── DumAemAllOrgEventHandler.java                     # diagnostic: logs events under org/*
       │   ├── beans/
       │   │   ├── DumAemEvent.java
       │   │   └── DumAemPayload.java
@@ -61,8 +64,16 @@ From: dumont/aem/aem-server/core/src/main/java/com/viglet/turing/aem/server/
           ├── DumAemIndexerService.java
           └── DumAemIndexerServiceImpl.java
 
-To: your-aem-project/core/src/main/java/com/viglet/turing/aem/server/
+To: your-aem-project/core/src/main/java/com/viglet/dumont/aem/server/
 ```
+
+:::note What each listener does
+- `DumAemPageEventHandler` — subscribes to `PageEvent`; fires when pages are created or modified in author.
+- `DumAemPageReplicationEventHandler` — subscribes to `ReplicationAction`; handles **page** activate/deactivate (filters out any path under `/content/dam/`).
+- `DumAemContentFragmentReplicationEventHandler` — subscribes to the same `ReplicationAction` topic but only processes paths under `/content/dam/` — i.e., Content Fragments and DAM assets being published/unpublished.
+- `DumAemResourceEventHandler` — subscribes to Sling resource events; fires when a `dam:Asset` / `dam:AssetContent` under `/content` is created or modified (incremental asset indexing, independent of replication).
+- `DumAemAllComEventHandler` / `DumAemAllOrgEventHandler` — diagnostic listeners that log every event under `com/*` / `org/*`. They do **not** index anything. Useful during setup to confirm that AEM is firing the expected topics. You can omit them in production or silence via logger configuration.
+:::
 
 ### Step 2 — Add Dependencies to Your Core Module
 

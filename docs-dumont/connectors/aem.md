@@ -231,12 +231,22 @@ The `aem-server` module is an **OSGi bundle installed inside AEM**. It provides 
 
 ### Events Captured
 
-| Event Listener | AEM Event | Dumont Action |
-|---|---|---|
-| `DumAemPageEventHandler` | Page created / modified | `INDEXING` |
-| `DumAemPageReplicationEventHandler` | Page activated (published) | `PUBLISHING` |
-| `DumAemPageReplicationEventHandler` | Page deactivated (unpublished) | `UNPUBLISHING` |
-| `DumAemResourceEventHandler` | DAM asset created / modified | `INDEXING` |
+| Event Listener | OSGi Topic | Trigger | Path Filter | Dumont Action |
+|---|---|---|---|---|
+| `DumAemPageEventHandler` | `com/day/cq/wcm/api/page` | Page created / modified | — | `INDEXING` |
+| `DumAemPageReplicationEventHandler` | `com/day/cq/replication` | Page **activated** (published) | excludes `/content/dam/*` | `PUBLISHING` |
+| `DumAemPageReplicationEventHandler` | `com/day/cq/replication` | Page **deactivated** (unpublished) | excludes `/content/dam/*` | `UNPUBLISHING` |
+| `DumAemContentFragmentReplicationEventHandler` | `com/day/cq/replication` | Content Fragment **activated** | only `/content/dam/*` | `PUBLISHING` |
+| `DumAemContentFragmentReplicationEventHandler` | `com/day/cq/replication` | Content Fragment **deactivated** | only `/content/dam/*` | `UNPUBLISHING` |
+| `DumAemResourceEventHandler` | `org/apache/sling/api/resource/Resource/*` | DAM asset created / modified (`dam:Asset`, `dam:AssetContent`) under `/content` | — | `INDEXING` |
+
+:::note Page vs. Content Fragment replication
+Both replication handlers subscribe to the same OSGi topic, but each one inspects the paths in the `ReplicationAction` and skips anything outside its domain. The page handler ignores everything under `/content/dam/`; the Content Fragment handler only processes paths under `/content/dam/`. Replication types other than `ACTIVATE` / `DEACTIVATE` (e.g., `INTERNAL_POLL`, `TEST`) are logged at debug level and discarded.
+:::
+
+:::tip Diagnostic listeners
+The module also ships `DumAemAllComEventHandler` and `DumAemAllOrgEventHandler`, which log every event under `com/*` and `org/*` topics. They perform **no indexing** and exist only to help diagnose which topics AEM is actually firing — useful when event-driven indexing seems not to trigger. They can be left in place safely; log noise can be trimmed via the AEM logger configuration.
+:::
 
 ### OSGi Configuration
 
