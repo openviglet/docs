@@ -64,7 +64,7 @@ jobs:
           cp shio-cms-2026.1-documentation.pdf build/
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./build
 
