@@ -7,6 +7,7 @@ import VigletLogo from "@site/src/components/VigletLogo";
 import { Button } from "@site/src/components/ui/button";
 import { Badge } from "@site/src/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@site/src/components/ui/card";
+import { FloatingFormulasBg } from "@viglet/viglet-design-system";
 
 interface Product {
   id: string;
@@ -152,18 +153,15 @@ const community: CommunityLink[] = [
 function FloatingFormulas(): JSX.Element {
   return (
     <BrowserOnly>
-      {() => {
-        const { FloatingFormulasBg } = require("@viglet/viglet-design-system");
-        return (
-          <FloatingFormulasBg
-            color="#C2410C"
-            colorDark="#F97316"
-            withLightning
-            withExplosion
-            extraTokens={["Turing", "Shio", "Dumont"]}
-          />
-        );
-      }}
+      {() => (
+        <FloatingFormulasBg
+          color="#C2410C"
+          colorDark="#F97316"
+          withLightning
+          withExplosion
+          extraTokens={["Turing", "Shio", "Dumont"]}
+        />
+      )}
     </BrowserOnly>
   );
 }
