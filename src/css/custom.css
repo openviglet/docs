@@ -1,13 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
-
 @import "tailwindcss" important;
-
-/* ── Docusaurus uses data-theme="dark", map it for Tailwind v4 dark: variant ── */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+/* Design-system preset — brings Inter (--font-sans), Plus Jakarta (--font-brand),
+   --vg-* tokens and the `dark` custom-variant configured for both `.dark`
+   and `[data-theme="dark"]` (Docusaurus uses the latter). */
+@import "@viglet/viglet-design-system/preset";
 
 /* ── Tailwind v4 Theme ── */
 @theme {
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  /* --font-sans (Inter) and --font-brand (Plus Jakarta) come from the DS preset. */
 
   /* Brand palette */
   --color-brand: #C2410C;
@@ -95,8 +94,8 @@ a {
   --ifm-color-primary-light: #EA580C;
   --ifm-color-primary-lighter: #F97316;
   --ifm-color-primary-lightest: #FB923C;
-  --ifm-font-family-base: "Plus Jakarta Sans", system-ui, sans-serif;
-  --ifm-heading-font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  --ifm-font-family-base: var(--font-sans);
+  --ifm-heading-font-family: var(--font-brand);
   --ifm-font-family-monospace: "JetBrains Mono", "Fira Code", monospace;
   --ifm-code-font-size: 95%;
   --ifm-navbar-height: 64px;
@@ -594,7 +593,7 @@ a {
   border: 1px solid #FED7AA;
   line-height: 1.2;
   white-space: nowrap;
-  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-brand);
 }
 
 [data-theme="dark"] .nav-version-badge {
@@ -818,7 +817,6 @@ a {
   border-bottom: 1px solid transparent !important;
   box-shadow: none !important;
   transition: all 0.2s ease;
-  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   box-sizing: border-box !important;
 }
 
@@ -1078,7 +1076,7 @@ a {
 .button {
   border-radius: 9999px;
   font-weight: 600;
-  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-brand);
   transition: all 0.2s;
 }
 

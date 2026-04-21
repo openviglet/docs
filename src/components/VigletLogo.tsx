@@ -82,7 +82,7 @@ export default function VigletLogo({ product, size = 48, glow = true, className 
             fontWeight: 900,
             lineHeight: 1,
             marginTop: smallOffsetY,
-            fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+            fontFamily: "var(--font-brand)",
           }}
         >
           {glow ? <GlowAcronym acronym={meta.acronym} /> : meta.acronym}
@@ -125,7 +125,7 @@ export default function VigletLogo({ product, size = 48, glow = true, className 
           opacity: 0.85,
           letterSpacing: "0.04em",
           alignSelf: "flex-end",
-          fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+          fontFamily: "var(--font-brand)",
         }}
       >
         {meta.section}
@@ -136,7 +136,7 @@ export default function VigletLogo({ product, size = 48, glow = true, className 
           fontWeight: 900,
           lineHeight: 1,
           alignSelf: "flex-start",
-          fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+          fontFamily: "var(--font-brand)",
         }}
       >
         {glow ? <GlowAcronym acronym={meta.acronym} /> : meta.acronym}
