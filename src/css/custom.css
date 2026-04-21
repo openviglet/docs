@@ -470,6 +470,7 @@ a {
 }
 
 .nav-logo-text {
+  font-family: var(--font-brand);
   font-size: 1.125rem;
   font-weight: 800;
   color: #0f172a;
@@ -503,6 +504,7 @@ a {
   gap: 0.5rem;
   padding: 0.5rem 0.875rem;
   border-radius: 0.5rem;
+  font-family: var(--font-brand);
   font-size: 1rem;
   font-weight: 600;
   color: #334155;
