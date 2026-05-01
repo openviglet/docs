@@ -8,7 +8,7 @@ description: Build with and contribute to Viglet Turing ES — setup, APIs, SDKs
 
 Whether you're **building a search experience** on top of Turing ES or **contributing to the project itself**, this guide has everything you need to get up and running quickly.
 
-Turing ES is a fully open-source enterprise search platform with semantic navigation and GenAI capabilities. The source code lives at [github.com/openviglet/turing](https://github.com/openviglet/turing) and all contributions are welcome.
+Turing ES is a fully open-source enterprise search platform with semantic navigation and GenAI capabilities. The source code lives at [github.com/openviglet/turing](https://github.com/openviglet/turing-ce) and all contributions are welcome.
 
 ---
 
@@ -64,7 +64,7 @@ Before you begin, make sure you have these installed:
 ### Clone the Repository
 
 ```shell
-git clone https://github.com/openviglet/turing.git
+git clone https://github.com/openviglet/turing-ce.git
 cd turing
 ```
 
@@ -326,8 +326,8 @@ Turing ES maintains high code quality standards. You can check the project healt
 | Tool | Link |
 |---|---|
 | SonarCloud | [sonarcloud.io/organizations/viglet-turing](https://sonarcloud.io/organizations/viglet-turing/projects) |
-| GitHub Actions | [openviglet/turing/actions](https://github.com/openviglet/turing/actions) |
-| GitHub Security | [openviglet/turing/security](https://github.com/openviglet/turing/security/code-scanning) |
+| GitHub Actions | [openviglet/turing/actions](https://github.com/openviglet/turing-ce/actions) |
+| GitHub Security | [openviglet/turing/security](https://github.com/openviglet/turing-ce/security/code-scanning) |
 | Codecov | [app.codecov.io/gh/openviglet/turing](https://app.codecov.io/gh/openviglet/turing) |
 
 ---
@@ -424,7 +424,7 @@ For interactive exploration, use the built-in Swagger UI at `http://localhost:27
 
 We'd love your help making Turing ES better. Here's how to get involved:
 
-1. **Fork** the [openviglet/turing](https://github.com/openviglet/turing) repository.
+1. **Fork** the [openviglet/turing](https://github.com/openviglet/turing-ce) repository.
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
 3. **Commit your changes** with clear, descriptive messages.
 4. **Open a Pull Request** — describe what you changed and why.
@@ -432,7 +432,7 @@ We'd love your help making Turing ES better. Here's how to get involved:
 For larger contributions, open an issue first to discuss the approach before writing code.
 
 :::tip
-Check the open [GitHub Issues](https://github.com/openviglet/turing/issues) for good first issues tagged with `good first issue` or `help wanted`.
+Check the open [GitHub Issues](https://github.com/openviglet/turing-ce/issues) for good first issues tagged with `good first issue` or `help wanted`.
 :::
 
 ---

@@ -6,7 +6,7 @@ description: Viglet Shio CMS Installation Guide — Docker, JAR, build from sour
 
 # Viglet Shio CMS: Installation Guide
 
-Viglet Shio CMS ([https://viglet.org/shio](https://viglet.org/shio)) is an open-source headless CMS ([https://github.com/openviglet/shio](https://github.com/openviglet/shio)) that lets you model content, query it via GraphQL, and build websites using JavaScript with native caching and search.
+Viglet Shio CMS ([https://viglet.org/shio](https://viglet.org/shio)) is an open-source headless CMS ([https://github.com/openviglet/shio-ce](https://github.com/openviglet/shio-ce)) that lets you model content, query it via GraphQL, and build websites using JavaScript with native caching and search.
 
 ## Installing Java
 
@@ -194,7 +194,7 @@ cp viglet-shio.jar /appl/viglet/shio/server
 ### Option 3 — Build from source
 
 ```bash
-git clone https://github.com/openviglet/shio.git
+git clone https://github.com/openviglet/shio-ce.git
 cd shio
 mvn clean package -pl shio-app
 cp shio-app/target/viglet-shio.jar /appl/viglet/shio/server/

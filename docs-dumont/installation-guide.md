@@ -63,7 +63,7 @@ docker run -p 30130:30130 openviglet/dumont:2026.2
 
 ### Option 2 — Download JARs
 
-Download `dumont-connector.jar` and the connector plugin JARs from the [releases page](https://github.com/openviglet/dumont/releases):
+Download `dumont-connector.jar` and the connector plugin JARs from the [releases page](https://github.com/openviglet/dumont-ce/releases):
 
 ```bash
 mkdir -p /appl/viglet/dumont/server/libs
@@ -79,7 +79,7 @@ cp web-crawler-plugin.jar /appl/viglet/dumont/server/libs/
 ### Option 3 — Build from source
 
 ```bash
-git clone https://github.com/openviglet/dumont.git
+git clone https://github.com/openviglet/dumont-ce.git
 cd dumont
 mvn clean install
 

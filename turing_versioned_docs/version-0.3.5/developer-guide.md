@@ -49,7 +49,7 @@ Use the git command line to download the repository to your computer.
 #### Turing Server and Connectors
 
 ```shell
-git clone https://github.com/openviglet/turing.git
+git clone https://github.com/openviglet/turing-ce.git
 ```
 
 ### Run during Development
@@ -192,7 +192,7 @@ cd turing/
 You can check the quality of Turing Code at:
 
 - [SonarCloud](https://sonarcloud.io/organizations/viglet-turing/projects)
-- [Github Actions](https://github.com/openviglet/turing/actions)
-- [Github Security](https://github.com/openviglet/turing/security/code-scanning)
+- [Github Actions](https://github.com/openviglet/turing-ce/actions)
+- [Github Security](https://github.com/openviglet/turing-ce/security/code-scanning)
 - [Codecov](https://app.codecov.io/gh/openviglet/turing)
 

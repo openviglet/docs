@@ -43,7 +43,7 @@ const products: Product[] = [
       "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
     link: "/dumont",
     release: "2026.1",
-    github: "https://github.com/openviglet/dumont",
+    github: "https://github.com/openviglet/dumont-ce",
     color: "#006400",
   },
   {
@@ -53,7 +53,7 @@ const products: Product[] = [
       "Content Management System with GraphQL, Javascript sites, native cache and search.",
     link: "/shio",
     release: "2026.1",
-    github: "https://github.com/openviglet/shio",
+    github: "https://github.com/openviglet/shio-ce",
     color: "#FF6347",
   },
   {
@@ -63,7 +63,7 @@ const products: Product[] = [
       "Semantic Navigation, Chatbot and NLP. Choose from several NLPs to enrich data, all indexed in Solr.",
     link: "/turing",
     release: "2026.1",
-    github: "https://github.com/openviglet/turing",
+    github: "https://github.com/openviglet/turing-ce",
     color: "#4169E1",
   },
 ];

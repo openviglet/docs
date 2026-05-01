@@ -41,7 +41,7 @@ If you already have an AEM as a Cloud Service project (created from the [AEM Pro
 
 ### Step 1 — Copy the Source Files
 
-From the [Dumont repository](https://github.com/openviglet/dumont), copy these directories into your AEM project:
+From the [Dumont repository](https://github.com/openviglet/dumont-ce), copy these directories into your AEM project:
 
 ```
 From: dumont/aem/aem-server/core/src/main/java/com/viglet/dumont/aem/server/
@@ -183,7 +183,7 @@ For the full archetype reference, see [Adobe's archetype documentation](https://
 You can also build and deploy the `aem-server` module directly from the Dumont repository:
 
 ```bash
-git clone https://github.com/openviglet/dumont.git
+git clone https://github.com/openviglet/dumont-ce.git
 cd dumont/aem/aem-server
 mvn clean install -PautoInstallPackage -Daem.host=localhost -Daem.port=4502
 ```
