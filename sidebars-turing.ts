@@ -58,10 +58,14 @@ const sidebars: SidebarsConfig = {
             "embedding-models",
             "assets",
             "tool-calling",
+            "custom-tools",
             "mcp-servers",
             "ai-agents",
+            "personas",
             "chat",
+            "chat-flow",
             "intent",
+            "chat-analytics",
             "token-usage",
           ],
         },
@@ -71,6 +75,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "administration-guide",
             "logging",
+            "observability",
           ],
         },
         {

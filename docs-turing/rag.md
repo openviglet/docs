@@ -194,6 +194,146 @@ Documents indexed before GenAI was enabled do not have embeddings. A full re-ind
 
 ---
 
+## AI Agents + Semantic Navigation: The Full Loop
+
+Here is the question that determines whether your AI feels alive: *when a user asks a question, does the agent answer from its training data, or does it search **your** content first?*
+
+Turing ES gives the agent the tools to do both — and the wiring is what makes them work together as one experience.
+
+### The two retrieval surfaces
+
+An AI Agent that's wired for SN can reach the index through **two different routes**, each suited to a different shape of question.
+
+| Route | Native tool | What it does | Best when |
+|---|---|---|---|
+| **Keyword + facets** | `search_site` (and the helpers `list_sites`, `get_site_fields`, `get_valid_filter_values`) | Sends a Solr query to the SN Site backend, with optional facet filters and locale. Returns documents with snippets and metadata. | The user asks for something *describable in your taxonomy* — a product category, a brand, a date range |
+| **Semantic similarity (RAG)** | `search_knowledge_base` and the SN site's vector lookup | Embeds the user's question, retrieves the top-K most similar document chunks from the embedding store, and includes them in the prompt | The user asks something fuzzy — *"what does our policy say about X"*, *"is there a way to do Y"* |
+
+Both call the *same indexed content*. The difference is **how** they search it. A site can have both enabled at once — the agent picks the right tool for the question.
+
+### What happens at chat time
+
+Here's the sequence when a user asks an SN-grounded agent: *"Which of our products are best for cold-storage logistics?"*
+
+1. **Tool catalog presented to the LLM.** The agent has `search_site`, `find_similar_documents`, and `search_knowledge_base` attached. Their JSON schemas are part of the prompt; the model can pick any of them.
+2. **LLM picks `search_site`.** It's a domain question with a clear filter (cold storage). The model emits a tool call: `search_site(site="products", query="cold storage logistics", locale="en_US")`.
+3. **Solr handles the query.** Turing ES translates the tool arguments into a Solr query against the products SN Site, applies the configured facets, returns the top results with snippets.
+4. **The model reads the snippets.** They're fed back as the tool's result. The model now has *real product names, real descriptions, real URLs*.
+5. **Possibly a second tool call.** If the snippets are thin, the model may chain `find_similar_documents(documentId="<one-of-the-results>")` to broaden the recommendation. Or `search_knowledge_base("cold storage compliance")` to pull policy context.
+6. **Final answer.** The model composes the response in the agent's voice (and its [Persona](./personas.md), if attached), with concrete product names and links — nothing hallucinated, everything grounded.
+
+If the question had been different — say, *"Why does this product spec say it tolerates -25°C?"* — the LLM would have picked `search_knowledge_base` first, not `search_site`. The RAG embeddings carry semantics that keyword search doesn't.
+
+### The Semantic Navigation chat tab
+
+The [Chat](./chat.md) interface has a dedicated **Semantic Navigation** tab where these tools are pre-wired without you having to build an agent. Use it when you want raw, grounded search-with-explanation. The system prompt for that tab includes:
+
+- The list of available SN Sites and their locales,
+- The configured facets per site (so the model knows what filters it can apply),
+- A directive to **never answer outside the indexed content**.
+
+It's the Turing ES equivalent of *"talk to my site"*.
+
+### Designing an SN-backed agent
+
+A few patterns that work well:
+
+- **Limit which sites an agent can search.** A sales agent shouldn't be searching the internal HR site. Even though `list_sites` returns all of them, you can shape behavior with the agent's system prompt: *"Only use the products and pricing SN Sites. Ignore others."*
+- **Match agent persona to site content.** A persona that says *"speak like a brand voice"* paired with an HR knowledge base will sound off. Pair brand-voice personas with marketing/product sites; pair instructional personas with internal docs.
+- **Combine SN search with Custom Tools for action.** Search returns information; a [Custom Tool](./custom-tools.md) (or MCP) takes action. *"Find me the right product"* → `search_site` → *"and book me a demo on it"* → custom tool that hits your CRM.
+
+---
+
+## The ANN Search Page: See Your Vectors
+
+There's one question RAG operators always end up asking: *"Did the embedding store actually receive what I think it did?"*
+
+The **ANN Search** page (`/ann/{siteName}`) is the answer. It's a developer-facing search page that hits the **vector store directly** — no LLM, no chat, no agent. You type a query, it embeds it, and shows you the raw top-K matches from the embedding store, with similarity scores and full metadata.
+
+Think of it as the *"view source"* of your RAG pipeline.
+
+### What it shows
+
+| Column | Meaning |
+|---|---|
+| **Result content** | The actual chunk text the embedding store returned |
+| **Score** | Similarity score (cosine, typically 0.0–1.0) |
+| **Metadata** | The document's source — URL, file path, locale, custom fields you indexed |
+| **Filters** | Faceted metadata so you can narrow the query (e.g., `locale = pt_BR`, `source = aem`) |
+| **Pagination** | Browse beyond the immediate top-K when you want to see what's *just* below the threshold |
+| **View raw JSON** | The full vector record as it lives in ChromaDB / PgVector / Milvus |
+
+### When to open it
+
+| Scenario | What ANN Search tells you |
+|---|---|
+| *"My agent isn't finding the policy doc I just uploaded."* | Search the page for the doc's title. If it's not there → indexing failed. If it's there with score 0.3 → embedding model is mismatched or chunks too coarse. |
+| *"My RAG answers feel generic."* | Search a sample question. Look at the top 3 chunks. If they're all the same boilerplate, your chunking is too coarse. If they're irrelevant, the embedding model isn't right for your content. |
+| *"I need to verify locale filtering works."* | Search with the locale facet. If the results aren't locale-scoped, the metadata isn't being indexed or the filter isn't being applied. |
+| *"After a re-index, did everything come back?"* | Search a known document. If hit count drops vs. before, indexing dropped chunks. |
+| *"I want to debug a single bad answer."* | Take the user's exact question, paste it into ANN Search, look at the top 10 chunks. Now you know exactly what context the LLM saw. |
+
+### How it relates to the chat
+
+ANN Search shares the same backing infrastructure as the agent's `search_knowledge_base` tool — same embedding model, same vector store, same query pipeline. **What you see in ANN Search is exactly what the LLM would have seen** when answering a related question.
+
+This makes ANN Search the canonical debugging surface. Reproduce the chat answer there, and the cause is one of three things:
+
+1. The chunks the LLM got are wrong → fix indexing or chunking,
+2. The chunks were right but the LLM ignored them → tighten the agent system prompt or persona,
+3. The chunks were right and the LLM used them but the user is asking something not covered → product gap, not a tech gap.
+
+The first two you fix in Turing. The third is a roadmap signal.
+
+:::info ANN Search is RAG-only
+The ANN page only works on SN Sites where **GenAI is enabled** (i.e., embeddings are being indexed). If a site shows *"ANN Search is not available for this site (RAG is disabled)"*, the site doesn't have RAG turned on. Enable it in **Semantic Navigation → [Site] → Generative AI** and re-index.
+:::
+
+### REST API behind the page
+
+The ANN page is just a UI over a small REST contract. Your own tools can call it directly:
+
+```bash
+POST /ann/{siteName}/search
+Content-Type: application/json
+
+{
+  "query": "cold storage compliance",
+  "locale": "en_US",
+  "topK": 10,
+  "filters": { "source": ["aem"] }
+}
+```
+
+Response:
+
+```json
+{
+  "query": "cold storage compliance",
+  "locale": "en_US",
+  "topK": 10,
+  "page": 0,
+  "pageSize": 10,
+  "totalHits": 42,
+  "hasMore": true,
+  "results": [
+    {
+      "id": "doc-789-chunk-3",
+      "content": "Storage at temperatures below -20°C requires...",
+      "score": 0.92,
+      "metadata": { "url": "...", "locale": "en_US", "source": "aem" }
+    }
+  ],
+  "facets": {
+    "source": [{ "value": "aem", "count": 38 }, { "value": "manual", "count": 4 }]
+  }
+}
+```
+
+This is also a useful endpoint for *automated quality checks* — a CI job that verifies critical content is still embedded after a re-index.
+
+---
+
 ## Practical Example
 
 Imagine a company with an internal knowledge base containing HR policies, product documentation, and engineering guides.

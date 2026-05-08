@@ -156,6 +156,39 @@ graph LR
 | **Database** | Configuration, metadata, spotlights | H2 for dev; MariaDB/MySQL for production |
 | **MinIO** | Asset/file object storage | Managed via admin console [Assets](./assets.md) file manager |
 | **MongoDB** | Application log persistence | Optional — custom Logback appender, browsable in admin console |
+| **MongoDB / Redis (Chat Analytics)** | Chat session metadata + AI enrichment | Optional, engine-agnostic via `turing.logging.engine`; powers [Chat Analytics](./chat-analytics.md) |
+
+---
+
+### Observability Layer
+
+Independent of all the above, an optional observability layer instruments every LLM call, search, snapshot lookup, and chat-analytics enrichment cycle. **Spring Boot Actuator** exposes `/actuator/prometheus`; **Prometheus** scrapes it; **Grafana** renders four pre-built dashboards (search health, search insights, search-term detail, chat insights).
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph LR
+    subgraph Obs [" 📊 Observability "]
+        ACT["📡 Spring Actuator\n/actuator/prometheus"]
+        PROM["📊 Prometheus\nScrape interval 5s"]
+        GRAF["📈 Grafana\n4 pre-built dashboards"]
+    end
+
+    ACT --> PROM --> GRAF
+
+    classDef orange fill:#fed7aa,stroke:#EA580C,stroke-width:2px,color:#1a1a1a
+    class ACT,PROM,GRAF orange
+
+    style Obs fill:#EA580C20,stroke:#EA580C,stroke-width:2px,color:#1a1a1a,font-weight:700
+```
+
+| Component | Role | Notes |
+|---|---|---|
+| **Actuator** | Metrics endpoint | Built into Spring Boot; no extra dependency |
+| **Micrometer + Observation API** | Metric/trace emission | Stable metric names defined in `TurMeterNames`; same observation produces both timer + span (OTel bridge) |
+| **Prometheus** | Time-series scrape & store | `containers/prometheus/prometheus.yml` is the local-dev config |
+| **Grafana** | Dashboards over metrics + Chat Analytics | Provisioning under `containers/grafana/` |
+
+The Chat Analytics dashboard reads from Turing ES's REST API (engine-agnostic JSON over HTTP) via the **Infinity datasource** — independent of Prometheus. See [Observability](./observability.md) for full coverage.
 
 ---
 
