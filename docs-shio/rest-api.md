@@ -36,6 +36,13 @@ For write operations (POST, PUT, DELETE), include the CSRF token in the `X-XSRF-
 
 All endpoints are prefixed with `/api/v2`.
 
+:::tip Building a website or app?
+The endpoints below are the **authoring** API (used by the admin console, with
+session + CSRF auth). To **serve published content** to a front-end, use the
+read-only, token-authenticated [Content Delivery API (CDA)](./headless/content-delivery-api.md)
+under `/api/v2/cda/**` — or the typed [`@viglet/shio-client`](./headless/javascript-client.md).
+:::
+
 ---
 
 ## Content Endpoints

@@ -45,6 +45,16 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
+          label: "Headless & JavaScript SDK",
+          items: [
+            "headless/content-delivery-api",
+            "headless/javascript-client",
+            "headless/react-sdk",
+            "headless/nextjs-starter",
+          ],
+        },
+        {
+          type: "category",
           label: "Security",
           items: ["security"],
         },
