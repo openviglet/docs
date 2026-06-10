@@ -4,7 +4,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Viglet Docs",
-  tagline: "Documentation for Turing ES, Shio CMS and Vecchio Auth",
+  tagline: "Documentation for Turing ES, Shio CMS and Dumont DEP",
   favicon: "img/favicon.png",
 
   url: "https://docs.viglet.org",
@@ -101,17 +101,6 @@ const config = {
             badge: true,
           },
         },
-      },
-    ],
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "vecchio",
-        path: "docs-vecchio",
-        routeBasePath: "vecchio",
-        sidebarPath: "./sidebars-vecchio.js",
-        editUrl:
-          "https://github.com/vigletdocs/vigletdocs.github.io/tree/main/",
       },
     ],
   ],

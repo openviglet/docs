@@ -271,6 +271,17 @@ Select which external MCP servers this agent can call. The list shows each serve
 
 ---
 
+## Memory & Workspace
+
+Beyond the four composition layers, an agent has two optional runtime capabilities that make long, multi-step conversations work. Both are off by default and configured on the agent's **Settings** tab.
+
+- **[Chat Memory](./chat-memory.md)** — persist the conversation, surface the most relevant older turns with BM25 retrieval, and compress very long histories into a cheap summary. Turn it on for any agent that holds extended conversations where context stated early still matters later.
+- **[Agent Workspace](./agent-workspace.md)** — a per-conversation file store. Tools write drafts, reports, and charts to it; large tool results are offloaded to it automatically to keep the prompt small; the user downloads finished files from signed links. Requires a [storage backend](./configuration-reference.md#storage).
+
+The two interlock: memory compression stores its summaries *in* the workspace. Neither changes an agent's behaviour until you enable it.
+
+---
+
 ## REST API
 
 ### Agent Management
@@ -331,6 +342,8 @@ Entries are invalidated automatically on create / update / delete. This means ag
 | [Tool Calling](./tool-calling.md) | The 27 native tools, grouped and explained |
 | [MCP Servers](./mcp-servers.md) | Connect agents to external tool servers |
 | [Personas](./personas.md) | Give agents a brand voice |
+| [Chat Memory](./chat-memory.md) | Persist, retrieve, and compress conversation history |
+| [Agent Workspace](./agent-workspace.md) | Per-conversation file store for tool artifacts and offloaded results |
 | [Chat](./chat.md) | The interface where agents come to life |
 | [Chat Analytics](./chat-analytics.md) | Measure which agents are converting |
 | [Observability](./observability.md) | Watch latency, token usage, and tool reliability in real time |

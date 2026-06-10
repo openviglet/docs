@@ -375,6 +375,15 @@ The filesystem backend includes **path traversal protection** — all paths are 
 The **Assets** and **Pages** sections only appear in the sidebar when `turing.storage.type` is set to `minio` or `filesystem`.
 :::
 
+#### Agent Workspace & tool-result offload
+
+The same storage backend also powers the per-conversation [Agent Workspace](./agent-workspace.md). When storage is `none` the workspace is inert and the offload feature below stays off — the default deployment is unchanged.
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.genai.tool-result-offload.enabled` | `true` | Offload a tool result larger than the limit below to the workspace, replacing it inline with a `workspace://` reference the model resolves via the `workspace_read` tool. Only active when storage is enabled. |
+| `turing.genai.tool-result-offload.inline-max-chars` | `4096` | Tool-result size (characters) above which the result is offloaded. |
+
 ---
 
 ### MongoDB (Application Logs)

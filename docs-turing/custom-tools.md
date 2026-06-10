@@ -128,6 +128,44 @@ The sandbox is a Groovy context, not a hardened VM. **Don't paste anything you w
 
 ---
 
+## Built-in script bindings
+
+Besides the parameters you declare, every script receives a set of pre-wired helper objects — scoped to the active agent and conversation — so tools compose with the rest of the platform without you re-implementing plumbing.
+
+| Binding | What it does |
+|---|---|
+| `workspace` | Per-conversation [file store](./agent-workspace.md) — persist drafts, reports, and artifacts across turns and hand the user a signed download URL |
+| `slots` | Read/write [chat-flow](./chat-flow.md) variables on the live conversation (drives dynamic UI cards) |
+| `http` | Generic HTTP client (`getJson`, `postJson`, `getBytes`) for external APIs |
+| `code` | Run Python in the [Code Interpreter](./tool-calling.md#code-interpreter--1-tool) sandbox and read back its output/files |
+| `turingSearch` | High-level access to the Turing search surfaces (semantic navigation, vector store) |
+| `agent` | Delegate to another [AI Agent](./ai-agents.md) and use its reply |
+
+### `workspace` — keep and hand back files
+
+A tool that builds something (a CSV, a PDF, a chart) shouldn't cram it into the reply. Write it to the workspace and return a link instead — the bytes never bloat the prompt, and the file survives to later turns:
+
+```groovy
+// Persist an artifact and return a signed download URL:
+workspace.put("reports/lead-export-${slots.get('export_date')}.csv", csvBytes, "text/csv")
+return "Your export is ready: " + workspace.url("reports/lead-export-2026-06-03.csv")
+
+// Read it back on a later turn:
+def previous = workspace.getText("reports/lead-export-2026-06-03.csv")
+```
+
+| Method | Returns | Purpose |
+|---|---|---|
+| `workspace.put(key, value)` / `put(key, bytes, contentType)` | — | Store a string or byte blob |
+| `workspace.get(key)` / `getText(key)` | `byte[]` / `String` / `null` | Read bytes or UTF-8 text |
+| `workspace.list(prefix)` | `List` | List artifacts under a prefix (no-arg lists all) |
+| `workspace.delete(key)` | — | Remove a blob |
+| `workspace.url(key)` | `String` / `null` | Signed, time-limited download URL |
+
+The workspace requires a [storage backend](./configuration-reference.md#storage); without one these calls are safe no-ops. See [Agent Workspace](./agent-workspace.md) for isolation, the live artifact stream, and automatic offload of large tool results.
+
+---
+
 <div className="page-break" />
 
 ## Vibe Coding: Let the AI Author the Tool
@@ -432,6 +470,7 @@ A complex business process is often: collect inputs → compute → call externa
 | [Tool Calling](./tool-calling.md) | The 27 native tools — when to use a native tool vs. a custom one |
 | [MCP Servers](./mcp-servers.md) | When to build an MCP instead of a Custom Tool |
 | [AI Agents](./ai-agents.md) | Agents are where Custom Tools get attached and used |
+| [Agent Workspace](./agent-workspace.md) | The `workspace` binding — persist artifacts across turns |
 | [Chat Flow](./chat-flow.md) | Use Custom Tools as deterministic Tool nodes in a flow |
 | [Observability](./observability.md) | Watch tool latency and error rates in real time |
 

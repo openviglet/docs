@@ -42,7 +42,7 @@ const products: Product[] = [
     description:
       "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
     link: "/dumont",
-    release: "2026.1",
+    release: "2026.3",
     github: "https://github.com/openviglet/dumont-ce",
     color: "#006400",
   },
@@ -52,7 +52,7 @@ const products: Product[] = [
     description:
       "Content Management System with GraphQL, Javascript sites, native cache and search.",
     link: "/shio",
-    release: "2026.1",
+    release: "2026.3",
     github: "https://github.com/openviglet/shio-ce",
     color: "#FF6347",
   },
@@ -60,9 +60,9 @@ const products: Product[] = [
     id: "turing",
     title: "Turing ES",
     description:
-      "Semantic Navigation, Chatbot and NLP. Choose from several NLPs to enrich data, all indexed in Solr.",
+      "Enterprise Search Intelligence — semantic navigation and faceted discovery fused with Generative AI: RAG, streaming chat, and tool-using agents that act on your content, indexed in Solr, Elasticsearch, or Lucene.",
     link: "/turing",
-    release: "2026.1",
+    release: "2026.3",
     github: "https://github.com/openviglet/turing-ce",
     color: "#4169E1",
   },

@@ -201,12 +201,21 @@ See [MCP Servers](./mcp-servers.md) for configuration details.
 
 ---
 
+## Large results are offloaded automatically
+
+Some tools return a lot — a big search dump, a long catalog, a wide JSON array. Pasting all of that into the prompt every turn is wasteful. When a tool result exceeds `turing.genai.tool-result-offload.inline-max-chars` (default **4096**), Turing writes the full payload to the [Agent Workspace](./agent-workspace.md) and replaces the inline result with a short `workspace://…` reference. The model pulls the data back **only when it needs it**, via an always-present `workspace_read` tool.
+
+This applies uniformly to native, MCP, and [Custom](./custom-tools.md) tools, and is active only when a [storage backend](./configuration-reference.md#storage) is configured — so the default deployment behaves exactly as before. See [Agent Workspace → Auto-offload](./agent-workspace.md#2-auto-offload-of-large-tool-results) for details.
+
+---
+
 ## Related Pages
 
 | Page | Description |
 |---|---|
 | [AI Agents](./ai-agents.md) | How to compose agents with the tools they need |
 | [MCP Servers](./mcp-servers.md) | Extend agents with external tools via MCP |
+| [Agent Workspace](./agent-workspace.md) | Where large tool results are offloaded |
 | [DSL Query API](./dsl-query.md) | Full reference for the Elasticsearch-compatible DSL |
 | [DSL Compatibility Matrix](./dsl-compatibility.md) | Engine compatibility for all DSL features |
 | [Assets](./assets.md) | Knowledge Base files queried by RAG tools |

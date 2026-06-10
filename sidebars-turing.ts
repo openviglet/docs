@@ -62,6 +62,8 @@ const sidebars: SidebarsConfig = {
             "mcp-servers",
             "ai-agents",
             "personas",
+            "agent-workspace",
+            "chat-memory",
             "chat",
             "chat-flow",
             "intent",
