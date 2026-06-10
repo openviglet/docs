@@ -63,6 +63,7 @@ const sidebars: SidebarsConfig = {
             "ai-agents",
             "personas",
             "agent-workspace",
+            "skills",
             "chat-memory",
             "chat",
             "chat-flow",

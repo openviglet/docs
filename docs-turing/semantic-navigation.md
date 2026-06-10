@@ -1049,6 +1049,31 @@ Saving is blocked if either variable is missing from the template.
 
 ---
 
+<div className="page-break" />
+
+### Skills in Semantic Navigation
+
+The AI chat experience for a site can also draw on [**Skills**](./skills.md) — portable, Anthropic-compatible capabilities (a folder of instructions, scripts, and reference docs) that run in a hardened Docker sandbox. Semantic Navigation AI chat shares the same execution path as [AI Agent](./ai-agents.md) chat, so **enabling skills on an agent automatically makes them available in Semantic Navigation mode** — no SN-specific configuration is needed. Like everywhere else, a skill always runs on the Global Settings **Default LLM**, so it behaves identically regardless of which site invokes it.
+
+What makes the Semantic Navigation context special is that the skill's sandbox is also handed **Turing's own search tools** — the same Semantic Navigation DSL toolset the [DSL Query](./dsl-query.md) assistant uses:
+
+| Tool | Purpose |
+|---|---|
+| `dsl_list_indices` | Enumerate the available indices/cores |
+| `dsl_get_mappings` | Inspect a site's indexed fields |
+| `dsl_search` | Run a search against the indexed content |
+| `dsl_get_document` | Fetch a single document by id |
+| `dsl_suggest` | Autocomplete / suggestion lookups |
+| `dsl_get_shards` | Inspect shard layout |
+
+This is the first place a skill can leverage *your own indexed data*: it searches the enterprise content with these standard tools (run in-process, not over the sandbox network), then bridges the results into its `/workspace` and processes them with its bundled scripts — for example, *search the catalog, then render a branded comparison sheet from the results.*
+
+:::note Requirements
+Skills need a [storage backend](./configuration-reference.md#storage), the [Code Interpreter](./tool-calling.md#code-interpreter--1-tool) in **DOCKER** mode, and a configured Default LLM. When any is missing the chat behaves exactly as if Skills didn't exist. See the [Skills](./skills.md) page for authoring, activation, and the sandbox model.
+:::
+
+---
+
 ## Search Response Structure
 
 The full search response schema — including `pagination`, `queryContext`, `results`, and the `widget` object (containing `facet`, `secondaryFacet`, `similar`, `spellCheck`, `spotlights`, `locales`, and `cleanUpFacets`) — is documented in the [REST API Reference → Search Response Structure](./rest-api.md#search-response-structure).
@@ -1063,6 +1088,7 @@ The full search response schema — including `pagination`, `queryContext`, `res
 | [Search Engine](./search-engine.md) | Manage the Solr/Elasticsearch/Lucene backends that SN Sites connect to |
 | [Assets](./assets.md) | Knowledge Base files for RAG — requires an embedding-capable LLM Instance |
 | [LLM Instances](./llm-instances.md) | Configure the language models used by the Generative AI tab |
+| [Skills](./skills.md) | Portable sandboxed capabilities — in SN mode they gain Turing's search tools |
 | [Chat](./chat.md) | Front-end chat interface for the Semantic Navigation tab |
 | [Architecture Overview](./architecture-overview.md) | How SN Sites fit into the overall system architecture |
 

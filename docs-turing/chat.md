@@ -138,11 +138,49 @@ Each [AI Agent](./ai-agents.md) configured and enabled in **Administration → A
 | **LLM Instance** | Agent → LLM tab |
 | **Native tool selection** | Agent → Tools tab |
 | **MCP servers** | Agent → MCP Servers tab |
+| **Skills** *(portable capabilities)* | Agent → Settings (Skills toggle) — see [Skills in Chat](#skills-in-chat) |
 | **Persona** *(brand voice)* | Agent → Settings (Persona dropdown) |
 
 The **Persona** is the voice layer — see [Personas](./personas.md) for full coverage. With a persona attached, every conversation in this tab speaks in your brand's tone, uses your mandatory vocabulary, avoids your forbidden vocabulary, and (if configured) draws on a **few-shot store of curated Q/A pairs** plus **live brand context from an MCP server**.
 
 Use agents when you want consistency across thousands of conversations — *"every visitor who lands on the discovery agent should hear the same voice, regardless of LLM or time of day"*.
+
+---
+
+<div className="page-break" />
+
+## Skills in Chat
+
+A [**Skill**](./skills.md) is a portable, Anthropic-compatible capability — a folder of instructions, scripts, and reference material that runs in a hardened Docker sandbox. When an agent has skills enabled, the conversation can hand off a whole task to one of them ("generate the campaign assets", "build the financial model") without you wiring a tool for it.
+
+Skills are **per-agent**: enable them with the **Skills** toggle in the agent's Settings tab (visible only when the feature is available). The native and MCP tools you select still work exactly as before — skills are an *additional* layer.
+
+### How a skill runs inside a chat turn
+
+The agent doesn't load the whole skill up front. It works by **progressive disclosure** plus a delegated sub-loop:
+
+1. The agent's turn (running on the agent's own LLM) sees only each enabled skill's **name + description**, plus a single `run_skill(skill, task)` tool.
+2. When the model decides a skill fits, it calls `run_skill`. Turing spins up a **sub-conversation on the Global Settings Default LLM**, which reads the skill's full instructions (`load_skill`) and drives a `bash` session in the skill's sandbox (`skill_bash`).
+3. The sub-loop's result text comes back to the agent's turn as the tool result, and the agent weaves it into its reply.
+
+:::info A skill always runs on the Default LLM
+A portable skill should behave identically no matter who calls it, so it never runs on the agent's own model — it runs on the **Default LLM** configured in Global Settings. The agent orchestrates; the Default LLM executes the skill. Token usage for the sub-loop is recorded separately.
+:::
+
+### Skill mode — pin one skill for the conversation
+
+By default every enabled skill is offered and the model picks. You can also pin **one** skill for a conversation using the **Skill mode** selector beside the model/flow selectors:
+
+| Skill mode | Behavior |
+|---|---|
+| **Auto** (default) | All enabled skills offered; the model decides whether and which to use |
+| **A specific skill** | Only that skill is offered — useful when the conversation *is* that capability |
+
+The selector appears only when the agent has skills enabled and the catalog has at least one enabled skill.
+
+:::note Requirements
+Skills need a [storage backend](./configuration-reference.md#storage), the [Code Interpreter](./tool-calling.md#code-interpreter--1-tool) in **DOCKER** mode, and a configured Default LLM. When any is missing the agent behaves exactly as if Skills didn't exist. See the [Skills](./skills.md) page for the full picture.
+:::
 
 ---
 
@@ -305,6 +343,7 @@ See [REST API Reference → GenAI API](./rest-api.md#genai-api) for request/resp
 | [Personas](./personas.md) | The voice layer applied to every customer-facing agent |
 | [LLM Instances](./llm-instances.md) | Configure and connect the model providers |
 | [Tool Calling](./tool-calling.md) | The 27 native tools and how they appear in chat |
+| [Skills](./skills.md) | Portable, sandboxed capabilities an agent can hand a whole task to |
 | [MCP Servers](./mcp-servers.md) | Connect external tool servers to chat |
 | [Chat Analytics](./chat-analytics.md) | Investigate, classify, and learn from past conversations |
 | [Observability](./observability.md) | Prometheus + Grafana dashboards over chat traffic |
