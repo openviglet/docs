@@ -298,7 +298,7 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 | `turing.url` | `http://localhost:2700` | Public base URL of this Turing ES instance |
 | `turing.allowedOrigins` | `http://localhost:4200, http://localhost:5173` | CORS allowed origins for the REST API and GraphQL. Add your frontend URL here. |
 | `turing.keycloak` | `false` | Set `true` to enable Keycloak OAuth2/OIDC. See [Security & Keycloak](./security-keycloak.md). |
-| `turing.multi-tenant` | `false` | Enable multi-tenant mode |
+| `turing.tenancy.enabled` | `false` | Enable multi-tenant mode (one JVM, many isolated tenants). Default `false` = single-tenant, byte-for-byte legacy behavior. See [Multi-Tenancy](./multi-tenancy.md). |
 | `turing.open-browser` | `true` | Automatically open the admin console in the browser on startup |
 | `turing.ai.crypto.key` | `sample-key-for-crypto` | Encryption key for stored AI provider credentials. **Change this in production.** |
 | `turing.code-interpreter.python-executable` | *(auto-detected)* | Absolute path to the Python 3 binary used by the Code Interpreter GenAI tool. When blank, Turing searches standard OS locations automatically. |
