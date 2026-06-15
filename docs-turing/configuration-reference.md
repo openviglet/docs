@@ -475,6 +475,23 @@ LLM instances are created under **GenAI > LLM** in the admin console, where you 
 
 ---
 
+### RAG Reranker (Database Settings) {#rag-reranker-database-settings}
+
+The Semantic Navigation RAG path can run an optional **reranking** pass that re-orders retrieved chunks by relevance before they reach the model (see [Reranking](./rag.md#reranking--sharper-context-before-generation)). It is off by default; the reranker stage is a **pluggable strategy** and **fails open** (any error or missing configuration falls back to the original retrieval order). Configure it under **Settings > Global Settings** in the admin UI:
+
+| Setting | Default | Description |
+|---|---|---|
+| Enable Reranker | `false` | Run the reranking pass over retrieved candidates before generation |
+| Reranker Strategy | `LLM` | Backend: `LLM` (uses the chat model), `CROSS_ENCODER` (self-hosted `/rerank`), or `COHERE` (managed Cohere Rerank) |
+| Reranker Top-K kept | `20` | How many of the highest-ranked chunks survive into the prompt (clamped to 1–100) |
+| Reranker Endpoint | *(none)* | For `CROSS_ENCODER`: the self-hosted `/rerank` endpoint URL (Text Embeddings Inference / Infinity / Jina-compatible) |
+| Reranker Model | *(backend default)* | Rerank model name; for `COHERE` defaults to `rerank-v3.5` |
+| Reranker API Key | *(none)* | For `COHERE`: the Cohere API key. Stored **encrypted**; write-only (never returned by the API) |
+
+**Cross-encoder** is the recommended production choice — purpose-built reranker models (e.g. `BAAI/bge-reranker-v2-m3`) are cheaper, faster, and more precise than borrowing a generative model. **Cohere** is the zero-ops managed alternative. **LLM** needs no extra infrastructure and is the safe default.
+
+---
+
 ### Embedding Store (Database Settings)
 
 Embedding store instances are configured through the **Administration Console** under **GenAI > Embedding Store**. Each instance specifies a vendor, connection URL, credentials, and optional provider-specific options via a JSON field.

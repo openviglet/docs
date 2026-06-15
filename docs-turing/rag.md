@@ -65,6 +65,7 @@ sequenceDiagram
 2. **Similarity search** — The **Embedding Store** finds the vectors most similar to the query vector (cosine similarity)
 3. **Threshold filtering** — Only chunks with similarity ≥ 0.7 are included (configurable)
 4. **Top-K selection** — The top 10 most relevant chunks are selected
+5. **Reranking (optional)** — A second, more precise relevance pass re-orders the candidates and keeps the best few before they reach the model (see [Reranking](#reranking--sharper-context-before-generation))
 
 ### Phase 3 — Generation
 
@@ -334,6 +335,65 @@ This is also a useful endpoint for *automated quality checks* — a CI job that 
 
 ---
 
+## Reranking — sharper context before generation
+
+Similarity search is fast but coarse: a vector score is a good *first* guess at
+relevance, not a final verdict. The top-K chunks it returns often include
+near-duplicates, tangential matches, or passages that *mention* the query terms
+without *answering* the question. Stuffing all of them into the prompt wastes
+context and can dilute the answer.
+
+**Reranking** adds a second, more discerning pass. After hybrid retrieval (BM25 +
+vector) fuses and orders the candidates, an optional reranker re-scores the top
+candidates against the question and keeps only the highest-precision few for the
+prompt — fewer, better chunks instead of more, noisier ones.
+
+```
+Query ──► Hybrid retrieval (BM25 + vector, RRF) ──► top-N candidates
+                                                        │
+                                                        ▼
+                                          Reranker re-orders by relevance
+                                                        │
+                                                        ▼
+                                              keep top-K ──► LLM prompt
+```
+
+### Pluggable reranker strategies
+
+Turing ES treats the reranking stage as a **selectable strategy**, so you can
+match cost, latency, and precision to your deployment:
+
+| Strategy | What it is | When to use |
+|---|---|---|
+| **LLM** *(default)* | Asks the configured chat model to rank the candidate snippets. No extra infrastructure. | Quick start; small candidate pools; you already pay for a chat model. |
+| **Cross-encoder** | Calls a self-hosted `/rerank` endpoint running a purpose-built reranker model (e.g. `BAAI/bge-reranker-v2-m3`) via Text Embeddings Inference, Infinity, or a Jina-compatible server. | Best precision-per-cost. Local, free, fast (sub-100 ms). Recommended for production. |
+| **Cohere** | Calls the managed [Cohere Rerank](https://docs.cohere.com/docs/rerank) API (`rerank-v3.5`). | Zero-ops; you'd rather not host a reranker. Requires a Cohere API key. |
+
+**Safe by design — it never makes retrieval worse.** Reranking is *fail-open*: if
+the chosen strategy errors, times out, isn't configured, or returns nothing
+usable, Turing ES silently falls back to the original retrieval order. Turning
+reranking on can only help or be neutral — it can never degrade results below the
+no-rerank baseline.
+
+### Enabling reranking
+
+Reranking is configured under **Administration → Settings → Global Settings** in
+the **RAG Reranker** section (off by default):
+
+1. Toggle **Enable Reranker** on.
+2. Pick a **Strategy** (`LLM`, `Cross-encoder`, or `Cohere`).
+3. Set **Top-K kept** — how many of the highest-ranked chunks survive into the
+   prompt (1–100, default 20).
+4. For **Cross-encoder**, fill in the **Endpoint URL** (your `/rerank` server)
+   and optionally a **Model** name.
+5. For **Cohere**, paste your **API key** (stored encrypted) and optionally a
+   **Model** name (defaults to `rerank-v3.5`).
+
+See the [Configuration Reference](./configuration-reference.md#rag-reranker-database-settings)
+for the exact setting keys and defaults.
+
+---
+
 ## Practical Example
 
 Imagine a company with an internal knowledge base containing HR policies, product documentation, and engineering guides.
@@ -364,6 +424,9 @@ Imagine a company with an internal knowledge base containing HR policies, produc
 | **RAG Enabled** | Administration → Settings | Off | Whether new SN Sites have RAG by default |
 | **Top-K results** | Internal | 10 | How many chunks are retrieved |
 | **Similarity threshold** | Internal | 0.7 | Minimum similarity to include a chunk |
+| **Enable Reranker** | Administration → Settings | Off | Run an optional reranking pass before generation |
+| **Reranker Strategy** | Administration → Settings | LLM | `LLM`, `Cross-encoder`, or `Cohere` |
+| **Reranker Top-K kept** | Administration → Settings | 20 | Chunks kept after reranking narrows the pool |
 
 ---
 
