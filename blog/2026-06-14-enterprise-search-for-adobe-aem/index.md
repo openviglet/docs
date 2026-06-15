@@ -44,12 +44,22 @@ Turing ES doesn't crawl AEM directly. A dedicated connector —
 OSGi bundle inside AEM emits events, and the Dumont connector fetches the
 content and indexes it into Turing ES.
 
-```
-┌────────────┐   page published   ┌──────────────────┐   index    ┌────────────┐
-│    AEM      │ ─────────────────▶ │   Dumont DEP      │ ─────────▶ │ Turing ES  │
-│ (Event      │  POST /aem/index   │  (AEM Connector)  │  pipeline  │ (Solr /    │
-│  Listener)  │                    │                   │            │  Lucene)   │
-└────────────┘                    └──────────────────┘            └────────────┘
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#64748b'}}}%%
+flowchart LR
+    AEM["<b>AEM</b><br/><small>Event Listener (OSGi)</small>"]
+    DUM["<b>Dumont DEP</b><br/><small>AEM Connector</small>"]
+    TUR["<b>Turing ES</b><br/><small>Solr / Lucene</small>"]
+
+    AEM -->|"page published<br/>POST /api/v2/aem/index"| DUM
+    DUM -->|"index pipeline"| TUR
+
+    classDef aem fill:#dbeafe,stroke:#4A90D9,color:#1a1a1a;
+    classDef dum fill:#ede9fe,stroke:#9B6EC5,color:#1a1a1a;
+    classDef tur fill:#dcfce7,stroke:#50B86C,color:#1a1a1a;
+    class AEM aem;
+    class DUM dum;
+    class TUR tur;
 ```
 
 Three components, each documented in full:
