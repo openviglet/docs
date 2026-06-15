@@ -50,6 +50,7 @@ const products: FooterLink[] = [
 ];
 
 const resources: FooterLink[] = [
+  { label: "Blog", href: "/blog" },
   { label: "GitHub", href: "https://github.com/openviglet" },
   { label: "Reddit", href: "https://www.reddit.com/r/TuringES/" },
 ];
