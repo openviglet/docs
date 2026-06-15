@@ -35,7 +35,7 @@ const config: Config = {
         language: ["en", "pt"],
         docsRouteBasePath: ["turing", "shio", "dumont"],
         indexDocs: true,
-        indexBlog: false,
+        indexBlog: true,
         indexPages: false,
         searchResultLimits: 8,
         searchResultContextMaxLength: 50,
@@ -51,6 +51,40 @@ const config: Config = {
   },
 
   headTags: [
+    {
+      // schema.org structured data — helps search engines and LLMs identify
+      // Viglet Turing ES as enterprise search software for AEM/WordPress.
+      tagName: "script",
+      attributes: { type: "application/ld+json" },
+      innerHTML: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "Viglet Turing ES",
+        alternateName: "Turing Enterprise Search",
+        applicationCategory: "Enterprise Search Software",
+        applicationSubCategory:
+          "Enterprise search for Adobe AEM, WordPress, databases, and files",
+        operatingSystem: "Cross-platform (Java 21, Docker)",
+        description:
+          "Open-source enterprise search platform with semantic navigation, faceted search, generative AI (RAG), and AI agents. Indexes Adobe Experience Manager (AEM), WordPress, databases, and file systems. A self-hosted alternative to Algolia, Coveo, and Lucidworks.",
+        url: "https://www.viglet.org/turing/",
+        downloadUrl: "https://www.viglet.org/turing/download/",
+        softwareHelp: "https://docs.viglet.org/turing/",
+        codeRepository: "https://github.com/openviglet/turing",
+        license: "https://www.apache.org/licenses/LICENSE-2.0",
+        isAccessibleForFree: true,
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD",
+        },
+        author: {
+          "@type": "Organization",
+          name: "Viglet",
+          url: "https://www.viglet.org",
+        },
+      }),
+    },
     {
       tagName: "script",
       attributes: {
@@ -114,7 +148,27 @@ const config: Config = {
             "0.3.5",
           ],
         },
-        blog: false,
+        blog: {
+          path: "blog",
+          routeBasePath: "blog",
+          blogTitle: "Viglet Blog — Enterprise Search & AI",
+          blogDescription:
+            "Guides and comparisons on enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing ES.",
+          showReadingTime: true,
+          blogSidebarTitle: "All posts",
+          blogSidebarCount: "ALL",
+          postsPerPage: 10,
+          feedOptions: {
+            type: ["rss", "atom"],
+            title: "Viglet Blog — Enterprise Search & AI",
+            description:
+              "Enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing ES.",
+            copyright: `Copyright © ${new Date().getFullYear()} Viglet.`,
+            language: "en",
+          },
+          onInlineAuthors: "ignore",
+          onUntruncatedBlogPosts: "ignore",
+        },
         theme: {
           customCss: "./src/css/custom.css",
         },
@@ -198,7 +252,9 @@ const config: Config = {
         width: 28,
         height: 28,
       },
-      items: [],
+      items: [
+        { to: "/blog", label: "Blog", position: "left" },
+      ],
     },
     footer: {
       style: "dark",

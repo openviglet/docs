@@ -1,0 +1,15 @@
+alexandre:
+  name: Alexandre Oliveira
+  title: Creator & Lead Developer, Viglet Turing ES
+  url: https://github.com/alegauss
+  image_url: https://github.com/alegauss.png
+  socials:
+    github: alegauss
+
+viglet:
+  name: Viglet Team
+  title: Open Source Enterprise Search
+  url: https://www.viglet.org
+  image_url: https://github.com/openviglet.png
+  socials:
+    github: openviglet

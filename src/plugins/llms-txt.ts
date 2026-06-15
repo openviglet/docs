@@ -45,11 +45,28 @@ export default function llmsTxtPlugin(
   options: PluginOptions,
 ): Plugin {
   const productDocs = new Map<string, DocInfo[]>();
+  const blogPosts: DocInfo[] = [];
 
   return {
     name: "llms-txt-plugin",
 
     async allContentLoaded({ allContent }) {
+      // Blog posts — surfaced in llms.txt so assistants can cite the
+      // guides/comparisons (highest-intent content for discoverability).
+      const blogContent =
+        allContent["docusaurus-plugin-content-blog"] as Record<string, any>;
+      if (blogContent) {
+        for (const instance of Object.values(blogContent)) {
+          const posts = (instance as any)?.blogPosts ?? [];
+          for (const post of posts) {
+            const meta = post?.metadata;
+            if (meta?.permalink && meta?.title) {
+              blogPosts.push({ title: meta.title, permalink: meta.permalink });
+            }
+          }
+        }
+      }
+
       const docsContent =
         allContent["docusaurus-plugin-content-docs"] as Record<string, any>;
       if (!docsContent) return;
@@ -101,6 +118,15 @@ export default function llmsTxtPlugin(
         lines.push("");
         for (const doc of docs) {
           lines.push(`- [${doc.title}](${siteConfig.url}${doc.permalink})`);
+        }
+      }
+
+      if (blogPosts.length > 0) {
+        lines.push("");
+        lines.push("## Guides & Blog — Enterprise Search & AI");
+        lines.push("");
+        for (const post of blogPosts) {
+          lines.push(`- [${post.title}](${siteConfig.url}${post.permalink})`);
         }
       }
 
