@@ -194,5 +194,4 @@ You can check the quality of Turing Code at:
 - [SonarCloud](https://sonarcloud.io/organizations/viglet-turing/projects)
 - [Github Actions](https://github.com/openviglet/turing-ce/actions)
 - [Github Security](https://github.com/openviglet/turing-ce/security/code-scanning)
-- [Codecov](https://app.codecov.io/gh/openviglet/turing)
 

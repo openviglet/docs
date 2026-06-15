@@ -93,9 +93,9 @@ own infrastructure. See the [RAG guide](/turing/rag).
 Indexing AEM into Turing ES takes about 15 minutes — there's a
 [step-by-step guide using the WKND reference site](/blog/enterprise-search-for-adobe-aem).
 
-- ⭐ [Turing ES on GitHub](https://github.com/openviglet/turing) (Apache 2.0)
+- ⭐ [Turing ES on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
 - 📘 [AEM Connector docs](/dumont/connectors/aem)
-- 💬 [GitHub Discussions](https://github.com/openviglet/turing/discussions)
+- 💬 [GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
 
 *Viglet Turing ES is open-source enterprise search with semantic navigation and
 generative AI — an alternative to Algolia, Coveo, and Lucidworks for teams that

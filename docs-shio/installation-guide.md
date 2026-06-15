@@ -175,10 +175,16 @@ ALTER USER shio SET SEARCH_PATH = shio;
 
 ### Option 1 — Docker (fastest)
 
+Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) by the **Publish Docker Image** GitHub Action:
+
 ```bash
-docker pull openviglet/shio:2026.1
-docker run -p 2710:2710 openviglet/shio:2026.1
+docker pull ghcr.io/openviglet/shio-ce:latest
+docker run -p 2710:2710 ghcr.io/openviglet/shio-ce:latest
 ```
+
+:::tip Image tags
+Besides `latest`, every run also publishes the project version and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
+:::
 
 ### Option 2 — JAR download
 
@@ -363,6 +369,10 @@ You can start Shio CMS using MariaDB and Nginx.
 mvn clean package -pl shio-app
 docker-compose up
 ```
+
+:::tip Deploy with the pre-built image
+The commands above build Shio from source for local development. For deployment, replace the `build:` of the `shio` service with the published image instead — `image: ghcr.io/openviglet/shio-ce:latest` — so the stack pulls the image from `ghcr.io` rather than compiling it.
+:::
 
 :::note
 If you have problems with permissions on directories, run `chmod -R 777 volumes`

@@ -56,10 +56,16 @@ In addition:
 
 ### Option 1 — Docker (fastest)
 
+Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) by the **Publish Docker Image** GitHub Action:
+
 ```bash
-docker pull openviglet/dumont:2026.2
-docker run -p 30130:30130 openviglet/dumont:2026.2
+docker pull ghcr.io/openviglet/dumont-ce:latest
+docker run -p 30130:30130 ghcr.io/openviglet/dumont-ce:latest
 ```
+
+:::tip Image tags
+Besides `latest`, every run also publishes the project version and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
+:::
 
 ### Option 2 — Download JARs
 
@@ -316,7 +322,7 @@ A full stack with Dumont DEP, Turing ES, Solr, and MariaDB:
 ```yaml
 services:
   dumont:
-    image: openviglet/dumont:2026.2
+    image: ghcr.io/openviglet/dumont-ce:latest
     ports:
       - "30130:30130"
     environment:
@@ -324,7 +330,7 @@ services:
       TURING_APIKEY: <YOUR_API_KEY>
 
   turing:
-    image: openviglet/turing:2026.2
+    image: ghcr.io/openviglet/turing-ce:latest
     ports:
       - "2700:2700"
 

@@ -8,7 +8,7 @@ description: Build with and contribute to Viglet Shio CMS — tech stack, dev en
 
 Whether you're **building a website** on top of Shio CMS or **contributing to the project itself**, this guide has everything you need to get up and running.
 
-Shio CMS is a fully open-source headless CMS with JavaScript-based website rendering, GraphQL, and native caching. The source code lives at [github.com/openviglet/shio](https://github.com/openviglet/shio-ce) and all contributions are welcome.
+Shio CMS is a fully open-source headless CMS with JavaScript-based website rendering, GraphQL, and native caching. The source code lives at [github.com/openviglet/shio-ce](https://github.com/openviglet/shio-ce) and all contributions are welcome.
 
 ---
 
@@ -175,7 +175,7 @@ The API base path is `/api/v2`. For the full endpoint reference, see **[REST API
 | Tool | Link |
 |---|---|
 | SonarCloud | [sonarcloud.io/organizations/viglet](https://sonarcloud.io/organizations/viglet/projects) |
-| GitHub Actions | [openviglet/shio/actions](https://github.com/openviglet/shio-ce/actions) |
+| GitHub Actions | [openviglet/shio-ce/actions](https://github.com/openviglet/shio-ce/actions) |
 
 ---
 
@@ -183,7 +183,7 @@ The API base path is `/api/v2`. For the full endpoint reference, see **[REST API
 
 We'd love your help making Shio CMS better. Here's how to get involved:
 
-1. **Fork** the [openviglet/shio](https://github.com/openviglet/shio-ce) repository.
+1. **Fork** the [openviglet/shio-ce](https://github.com/openviglet/shio-ce) repository.
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
 3. **Commit your changes** with clear, descriptive messages.
 4. **Open a Pull Request** — describe what you changed and why.

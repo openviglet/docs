@@ -8,7 +8,7 @@ description: Build Dumont DEP from source, understand the project structure, ext
 
 Whether you're building custom extensions, contributing to the project, or integrating Dumont DEP into your CI/CD pipeline, this guide has everything you need.
 
-Dumont DEP is fully open-source at [github.com/openviglet/dumont](https://github.com/openviglet/dumont-ce). All contributions are welcome.
+Dumont DEP is fully open-source at [github.com/openviglet/dumont-ce](https://github.com/openviglet/dumont-ce). All contributions are welcome.
 
 ---
 
@@ -145,7 +145,7 @@ For the full API surface, start the application and visit the Swagger UI.
 
 ## Contributing
 
-1. **Fork** the [openviglet/dumont](https://github.com/openviglet/dumont-ce) repository
+1. **Fork** the [openviglet/dumont-ce](https://github.com/openviglet/dumont-ce) repository
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
 3. **Commit** with clear, descriptive messages
 4. **Open a Pull Request** — describe what you changed and why

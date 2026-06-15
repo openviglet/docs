@@ -75,8 +75,8 @@ Three components, each documented in full:
 The fastest path is Docker:
 
 ```bash
-docker pull openviglet/turing:latest
-docker run -p 2700:2700 openviglet/turing:latest
+docker pull ghcr.io/openviglet/turing-ce:latest
+docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
 ```
 
 Open `http://localhost:2700/console` and set the admin password on first run
@@ -200,8 +200,8 @@ a third party.
 - 📘 [AEM Connector — full reference](/dumont/connectors/aem) (event listeners, QueryBuilder, custom extractors)
 - 📗 [Turing ES — AEM Integration](/turing/integration-aem)
 - 📙 [Semantic Navigation](/turing/semantic-navigation) and [RAG](/turing/rag) guides
-- ⭐ [Star Turing ES on GitHub](https://github.com/openviglet/turing) — it genuinely helps others find it
-- 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing/discussions)
+- ⭐ [Star Turing ES on GitHub](https://github.com/openviglet/turing-ce) — it genuinely helps others find it
+- 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
 
 *Viglet Turing ES is open-source (Apache 2.0) enterprise search with semantic
 navigation and generative AI. Self-host it, index Adobe AEM, WordPress, databases,

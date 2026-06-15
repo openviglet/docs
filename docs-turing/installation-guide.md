@@ -237,10 +237,16 @@ Start the Solr service after the collection is created.
 
 #### Option 1 — Docker (fastest)
 
+Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) by the **Publish Docker Image** GitHub Action:
+
 ```bash
-docker pull openviglet/turing:2026.2
-docker run -p 2700:2700 openviglet/turing:2026.2
+docker pull ghcr.io/openviglet/turing-ce:latest
+docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
 ```
+
+:::tip Image tags
+Besides `latest`, every run also publishes the project version (for example `2026.3.4`) and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
+:::
 
 #### Option 2 — JAR download
 
@@ -455,6 +461,10 @@ You can start the Turing ES using MariaDB, Solr and Nginx.
 ./gradlew turing-app:build -x test -i --stacktrace
 docker-compose up
 ```
+
+:::tip Deploy with the pre-built image
+The commands above build Turing from source for local development. For deployment, replace the `build:` of the `turing` service with the published image instead — `image: ghcr.io/openviglet/turing-ce:latest` — so the stack pulls the image from `ghcr.io` rather than compiling it.
+:::
 
 :::note
 If you have problems with permissions on directories, run `chmod -R 777 volumes`
