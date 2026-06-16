@@ -32,3 +32,13 @@ open-source:
   label: Open Source
   permalink: /open-source
   description: Apache 2.0 open-source software.
+
+vector-search:
+  label: Vector Search
+  permalink: /vector-search
+  description: Embedding-based vector and kNN search.
+
+mcp:
+  label: MCP
+  permalink: /mcp
+  description: Model Context Protocol — tools and agents over enterprise content.
