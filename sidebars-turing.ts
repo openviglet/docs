@@ -68,6 +68,7 @@ const sidebars: SidebarsConfig = {
             "chat",
             "chat-flow",
             "webhooks",
+            "routines",
             "intent",
             "chat-analytics",
             "token-usage",
