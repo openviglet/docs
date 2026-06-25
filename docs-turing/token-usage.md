@@ -14,6 +14,10 @@ The **Token Usage** page (`/token-usage`) gives administrators a clear view of h
 This page only appears in the sidebar when **at least one LLM instance is enabled**. If no LLM is configured, the Generative AI section will not show Token Usage.
 :::
 
+:::tip Tokens vs. dollars
+Token Usage shows **counts** — how many tokens each model consumed. To see those tokens turned into **USD spend** (with an editable price table, per-agent/model/stage breakdowns, and soft budget caps), use [Cost Governance](./cost-governance.md). Both read the same always-on `llm_token_usage` table.
+:::
+
 ---
 
 ## Period Selector
@@ -114,11 +118,23 @@ sequenceDiagram
 Responses where all token counts are zero are **not recorded**. This filters out failed or incomplete LLM calls that would skew usage statistics.
 :::
 
+The same `llm_token_usage` row also carries a frozen **`cost_usd`** plus the originating **agent** and cost **stage** (`chat.live` / `chat.background` / `chat.skill`), which is what powers [Cost Governance](./cost-governance.md). One table, two views.
+
 ---
 
 ## API Endpoint
 
 Token usage data is also available via the REST API. See [REST API Reference → Token Usage API](./rest-api.md#token-usage-api) for endpoint details and examples.
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Cost Governance](./cost-governance.md) | The USD-spend layer on top of these token counts |
+| [LLM Instances](./llm-instances.md) | The models whose consumption is tracked here |
+| [Observability](./observability.md) | Token/cost metrics in Prometheus + Grafana |
 
 ---
 

@@ -107,6 +107,10 @@ The AI-on-AI pipeline emits its own observability so you can see whether it's ke
 
 If the gauge starts trending up and never comes down, the periodic sweep isn't keeping pace — investigate by looking at agent flows that don't end cleanly.
 
+:::note Beyond Micrometer: the analytics REST surface
+The metrics above watch the *pipeline's health*. The **conversation analytics themselves** — the nine timeseries metrics (`sessions`, `goal_achievement_rate`, `negative_sentiment_rate`, `avg_duration_ms`, `avg_tokens_out`, `tool_calls_per_session`, `tool_errors_per_session`, `avg_tool_latency_ms`, `tool_error_rate_pct`), per-tool p95 latency, funnel, and sentiment trajectory — are served by the [Chat Analytics](./chat-analytics.md) REST API and rendered in the `turing-chat-insights` Grafana dashboard, not as raw Micrometer series. Two of those diagnostic surfaces, **router decisions** and **slot-SSE channels**, are **in-memory and per-node** — they show only the JVM you queried and reset on restart.
+:::
+
 ---
 
 <div className="page-break" />
@@ -249,6 +253,10 @@ sum by (provider) (rate(turing_llm_tokens_total{direction="out"}[1h]))
 ```
 
 Multiply by your provider's per-token cost to get a real-time burn rate. Combined with the `model` tag, you can see which model is dominating cost.
+
+:::tip Prefer real dollars
+This PromQL is a quick burn-rate estimate. For **actual USD** — frozen per turn from an editable price table, broken down by agent/model/stage, with soft budget caps — use [Cost Governance](./cost-governance.md) instead of multiplying token rates by hand.
+:::
 
 ### "Is the in-flight map leaking?"
 
