@@ -191,6 +191,69 @@ The Python executable path is configured in **Administration → Settings → Py
 - *"Calculate the compound interest on $10,000 at 5% for 10 years"* → triggers `execute_python`
 - *"Generate a bar chart showing monthly sales: Jan=100, Feb=150, Mar=120"* → triggers `execute_python` with matplotlib
 
+### Execution modes: NATIVE vs DOCKER
+
+You choose how Python actually runs in **Console → Global Settings → Code Interpreter**:
+
+| Mode | What it is | When to use |
+|---|---|---|
+| **NATIVE** (default) | A host subprocess running the configured Python | Trusted content, simplest setup |
+| **DOCKER** | Each execution runs in a fresh, hardened container | Untrusted input, multi-tenant, defense-in-depth |
+
+**DOCKER** is the recommended posture when code might be influenced by untrusted input. Every execution gets a throwaway container with baseline hardening always applied — `--cap-drop ALL`, `--no-new-privileges`, `--read-only`, and Docker's built-in seccomp profile — plus configurable limits under `turing.genai.code-interpreter.docker.*`:
+
+| Key | Default | Purpose |
+|---|---|---|
+| `network` | `none` | `none` = **no egress**; or a named docker network |
+| `memory` | `512m` | hard RAM cap per execution |
+| `cpus` | `1.0` | CPU quota per execution |
+| `pids-limit` | `128` | max PIDs (fork-bomb containment) |
+| `runtime` | (host default) | set `runsc` for **gVisor** extra isolation (opt-in) |
+| `seccomp-profile` | (Docker default) | path to a tighter seccomp profile (opt-in) |
+
+A **"Check Docker"** probe in Global Settings verifies the daemon is reachable before you switch.
+
+### Resource limits for the NATIVE path
+
+DOCKER caps via the container runtime; the NATIVE path can stop a runaway script (e.g. `[x*x for x in range(10**9)]`) from exhausting host RAM before the timeout fires. Opt in under `turing.genai.code-interpreter.native.limits` (Linux only):
+
+```yaml
+turing:
+  genai:
+    code-interpreter:
+      native:
+        limits:
+          enabled: true       # default false (timeout is the only guard)
+          memory-max: 1g       # hard RAM cap
+          cpu-seconds: 35      # CPU-time cap
+          limiter: auto        # auto | prlimit | systemd-run | none
+```
+
+### Warm pool (NATIVE only)
+
+A frequently-invoked tool pays a ~200ms cold-boot each call. Enable a pre-warmed pool of single-use interpreters to skip it:
+
+```yaml
+turing:
+  genai:
+    code-interpreter:
+      warm-pool:
+        enabled: true   # default false
+        size: 2          # interpreters kept booted and ready
+```
+
+Workers are **single-use** (one execution then exit — no cross-tenant state leak) and refilled asynchronously. The pool is automatically bypassed in DOCKER mode and whenever the NATIVE limits above are enabled (a pooled worker can't be wrapped by `prlimit`/`systemd-run`).
+
+### Structured output & `sandbox:` URLs
+
+Beyond stdout/stderr, the interpreter can return a **structured result** — used by [Custom Tools](./custom-tools.md) via the Groovy `code.executePythonStructured(...)` / `code.executePythonJson(...)` bindings. It carries `stdout`, `stderr`, an `exitCode`, `timedOut`, `durationMs`, a rendered `markdown`, and a list of generated **files** (`name`, `url`, `image`, `sizeBytes`). Files (a chart PNG, a generated PDF) are addressed with Turing's **`sandbox:` URL scheme** (the OpenAI convention) — clients resolve them to a real download URL, and the underlying `/api/v2/code-interpreter/{session}/{file}` URLs are **HMAC-signed and cookie-bound** so they can't be replayed across browsers. This retires the old "regex-parse the markdown for file links" approach.
+
+Agents can also declare extra Python dependencies (e.g. `reportlab matplotlib qrcode`) that Turing ensures are installed before running.
+
+:::tip Tool output feeding a slot
+A Code Interpreter file can land in a **multi-modal slot**. Slot types `IMAGE` / `AUDIO` / `FILE` hold an artifact's storage URL, so a generated chart or document becomes a first-class value in a [Chat Flow](./chat-flow.md#slots-the-conversations-memory).
+:::
+
 ---
 
 ## External Tools via MCP Servers
@@ -214,6 +277,8 @@ This applies uniformly to native, MCP, and [Custom](./custom-tools.md) tools, an
 | Page | Description |
 |---|---|
 | [AI Agents](./ai-agents.md) | How to compose agents with the tools they need |
+| [Custom Tools](./custom-tools.md) | Author Groovy tools; the `code.executePython*` bindings |
+| [Chat Flow](./chat-flow.md) | `functionCall` nodes and multi-modal slots fed by tool output |
 | [MCP Servers](./mcp-servers.md) | Extend agents with external tools via MCP |
 | [Agent Workspace](./agent-workspace.md) | Where large tool results are offloaded |
 | [DSL Query API](./dsl-query.md) | Full reference for the Elasticsearch-compatible DSL |
