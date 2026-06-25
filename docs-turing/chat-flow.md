@@ -1,7 +1,7 @@
 ---
 sidebar_position: 9
 title: Chat Flow
-description: Author conversational state machines visually. Five block types, three guardrail strategies, sub-flows, and AI-assisted authoring (Vibe Coding) that lets you describe the flow in plain English and watch it draw itself.
+description: Author conversational state machines visually. A rich node catalog (questions, slots, tools, routines, webhooks, approvals, sub-flows), three guardrail strategies, error edges, a typed slot store, and AI-assisted authoring (Vibe Coding) that lets you describe the flow in plain English and watch it draw itself.
 ---
 
 # Chat Flow
@@ -38,9 +38,9 @@ Without a flow, you'd write a 1,500-token system prompt full of *"first ask this
 
 ---
 
-## The Five Block Types
+## The Core Block Types
 
-A Chat Flow graph is built from **five node types**. Each one has a specific runtime behavior.
+A Chat Flow graph starts from a small set of **core node types** you'll use in almost every flow. Beyond them is a richer [node catalog](#the-full-node-catalog) for slots, deterministic tool calls, async routines, webhooks, and human approval — covered right after.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
@@ -128,6 +128,96 @@ Sub-flows have their own state row (`TurChatFlowState.parentStateId` records the
 ### End
 
 Terminator. Like Start, exactly one per flow. When the runtime reaches End, it marks the flow's state as completed, persists a `TurChatFlowSubmission` row (full collected variables + outcome), and the conversation continues normally — the agent is back to free-form mode.
+
+---
+
+<div className="page-break" />
+
+## The Full Node Catalog
+
+The five core types cover collection and branching. These additional node types turn a flow into a small automation engine — writing slots deterministically, calling tools and routines, reaching out over webhooks, and pausing for a human.
+
+| Node type | What it does | See |
+|---|---|---|
+| `aiQuestion` | The Question node above — LLM asks, answer captured into a slot | — |
+| `writeSlot` | Sets a slot deterministically (no LLM), with server-side `{{variable}}` interpolation. Honors `overrideExistingValue` | — |
+| `formCapture` | Like a Question but with **strict validation** — built-in patterns for CPF, CNPJ, email, phone, and CEP, including CPF/CNPJ mod-11 checksum | — |
+| `functionCall` | Calls a tool **synchronously** as a flow step (`toolSource` = native/MCP/custom + `functionName`). The deterministic successor to the legacy "Tool" node | [Tool Calling](./tool-calling.md) |
+| `subFlow` | Runs another flow inline and returns (the Sub Flow node above) | — |
+| `subFlowSwitch` | Deterministic multi-way routing into one of several sub-flows based on a `switchVariable` | — |
+| `scheduleAgent` | Fires a **routine** asynchronously and waits for its result slot | [Routines](./routines.md) |
+| `webhook` | POSTs to a configured outbound webhook as a flow step | [Webhooks](./webhooks.md) |
+| `humanApproval` | Parks the conversation until a person approves/rejects | [Human-in-the-Loop](./human-in-the-loop.md) |
+| `suspend` | Parks the conversation indefinitely until an explicit resume | [Human-in-the-Loop](./human-in-the-loop.md) |
+| `planningStep` / `iteratePlan` | Decompose a goal into a typed plan and walk it item by item (long-horizon tasks) | — |
+| `condition` | Branches on a `conditionExpression` (the Condition node above) | — |
+
+Two cross-cutting node fields are worth knowing:
+
+- **`toolsEnabled`** — set `FALSE` on a node to strip *all* tools for that step (e.g. a pure question where you don't want the LLM wandering off to call something). `TRUE`/unset leaves tools available.
+- **`personaId`** — pin a specific [persona](./personas.md) for the duration of a node, overriding the agent default.
+
+### `formCapture` validation
+
+`formCapture` is the node for collecting **structured identifiers** safely. Beyond a free-text validation rule it ships built-in patterns:
+
+| Pattern | Validates | Extra check |
+|---|---|---|
+| `cpf` | Brazilian individual taxpayer id | mod-11 digit checksum |
+| `cnpj` | Brazilian company id | mod-11 digit checksum |
+| `email` | email address | format |
+| `phone` | phone number | format |
+| `cep` | Brazilian postal code | format |
+
+A value that fails validation is rejected and the user is re-prompted — the slot never receives a malformed identifier.
+
+---
+
+## Error Handling: `continueOnFailure` & Error Edges
+
+By default, when a `functionCall`, `scheduleAgent`, or `webhook` node fails (a tool throws, a routine times out, a webhook can't be delivered), the engine logs it and advances on the normal edge. When that's not safe, opt into explicit error routing:
+
+- Set **`continueOnFailure: true`** on the node.
+- Draw an outgoing edge whose `sourceHandle` is **`failure`** — rendered in the editor as a **red "on error" arrow**, exactly like a try/catch.
+
+On failure the engine routes down the `failure` edge instead of advancing silently, so you can show a fallback message, retry via another path, or escalate to a human. `scheduleAgent` additionally has a `timeout` edge for the "routine didn't finish in time" case (see [Routines](./routines.md)).
+
+---
+
+## Advanced Question Behavior
+
+Two policies make Question/`formCapture` nodes more robust under a guardrail.
+
+### Capture-first
+
+Rather than letting a strict judge stall a conversation by rejecting an answer it isn't sure about, the engine **persists the user's message into the slot first**, then runs the judge as *advisory* — the judge writes a `<slot>__confidence` (low/high) into a parallel slot instead of blocking. The flow never gets stuck with `slot = null` because the judge was uncertain; you can branch on the confidence slot later if you care.
+
+### `onJudgeReject` policy
+
+When the judge *does* reject an answer, the node's `onJudgeReject` field decides what happens:
+
+| Value | Behavior |
+|---|---|
+| `reprompt` | Ask the question again (the default conversational behavior) |
+| `advance_with_literal` | Accept the literal answer and move on (don't fight the user) |
+| `block` | Hold the conversation on this node until a valid answer arrives |
+
+---
+
+## Slots: The Conversation's Memory
+
+Every value a flow collects lives in a **slot** — a named, conversation-scoped variable the agent treats as globally addressable across flows. Slots are more than a key-value bag; they come with streaming, auditing, privacy, and multi-modal support.
+
+| Capability | What it gives you |
+|---|---|
+| **Live updates (SSE)** | `GET /chat/slots/stream` pushes the slot map as it changes; `…/stream/delta` pushes only `{added, updated, removed}` (~10× fewer bytes on slot-heavy conversations) |
+| **Audit log** | Every write is recorded in the slot-write audit trail with its origin (`NODE` / `TOOL` / `ENDPOINT` / `EXTRACT`) and old→new delta — the backbone of the [conversation replay timeline](./chat-analytics.md#conversation-replay) and LGPD/GDPR auditing |
+| **PII slots (`pii_*`)** | A slot named with the `pii_*` prefix gets extra handling (encrypted/redacted in exports) — use it for anything sensitive |
+| **Multi-modal slots** | Slot types `IMAGE` / `AUDIO` / `FILE` hold an uploaded artifact's storage URL (optionally vision-extracted), via `POST /chat/slot-upload` |
+| **Document extraction** | `POST /chat/slot-extract` runs an uploaded file through Tika → LLM structured output → per-slot writes |
+| **State snapshot** | `GET /chat/state` returns the active flow, current node, guardrail method, and A/B experiment metadata |
+
+These endpoints power the [Chat Analytics](./chat-analytics.md) replay timeline and the [SDK](./react-sdk.md) live-slot hooks.
 
 ---
 
@@ -229,6 +319,26 @@ Users (or the front-end) can explicitly start a flow by name. This bypasses the 
 - You want a button on the front-end (*"Schedule a demo"*) that always starts the qualification flow.
 - A flow is sensitive enough that you don't want the router making the call (e.g., compliance KYC — only triggered by an authenticated admin).
 
+The **flow chooser** endpoint pins a specific flow for a conversation by UUID or case-insensitive name — deep-link friendly (`?flow=in-company`):
+
+```
+POST /api/sn/{siteName}/chat/flow-select   { "conversationId": "...", "flow": "in-company" }
+```
+
+### Trigger conflict resolver
+
+When two flows on the same agent have **overlapping trigger descriptions**, the router can't reliably tell them apart and routing becomes a coin-flip. The editor surfaces this: a service runs a Jaccard similarity over the analyzer-stemmed trigger descriptions and flags `HIGH` / `WARNING` conflict pairs.
+
+```
+GET /api/ai-agent/{agentId}/chat-flow/trigger-conflicts
+```
+
+Tighten or differentiate the flagged descriptions until the conflicts clear.
+
+### A/B testing a flow
+
+Flows (and even individual nodes) can be **A/B tested** — split traffic across variants, measure the winner with a real significance test, and auto-promote the champion. That's a whole subsystem of its own: see [Experiments](./experiments.md).
+
 ---
 
 <div className="page-break" />
@@ -252,7 +362,7 @@ When the End node is reached, the engine writes a **`TurChatFlowSubmission`** ro
 GET /api/ai-agent/{agentId}/chat-flow/{flowId}/submissions
 ```
 
-A common pattern: a CRM integration listens for new submissions and creates a deal automatically, populated from the variables.
+A common pattern: a [webhook](./webhooks.md) fires on the completing slot and creates a CRM deal automatically, populated from the variables.
 
 ---
 
@@ -397,6 +507,22 @@ One flow, two outcomes, no human intervention.
 | User messages bypass the flow router | The trigger description is too narrow; or the router LLM is too small | Broaden the Trigger Description with more user-language variations; or upgrade the default LLM |
 | Variables aren't being collected | The Question node's Output Variable name doesn't match the validation rule's expected output | Check the Output Variable on the Question node; check the Tool node downstream for matching arg names |
 | Sub-flow runs but never returns | The sub-flow has no End node, or there's a dangling edge before End | Open the sub-flow in the editor — Vibe Coding's auto-fix usually catches this; visual editing can introduce it |
+| Router picks the wrong flow | Two flows have overlapping trigger descriptions | Run the [trigger-conflict resolver](#trigger-conflict-resolver) and differentiate the flagged pair |
+| A `functionCall`/`scheduleAgent`/`webhook` step fails silently | No error edge wired | Set `continueOnFailure` and draw a `failure` edge (see [Error Handling](#error-handling-continueonfailure--error-edges)) |
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Experiments](./experiments.md) | A/B test flows and nodes — significance, bandit, auto-promotion |
+| [Human-in-the-Loop](./human-in-the-loop.md) | The `humanApproval` / `suspend` nodes + spectator/co-pilot |
+| [Webhooks](./webhooks.md) | The `webhook` node and the slot-driven CRM push |
+| [Routines](./routines.md) | The `scheduleAgent` node and async jobs |
+| [Tool Calling](./tool-calling.md) | The tools a `functionCall` node invokes |
+| [Chat Analytics](./chat-analytics.md) | Funnel, replay, and the slot-audit timeline |
+| [AI Agents](./ai-agents.md) | The agent a flow is attached to |
 | State accumulates indefinitely | TTL housekeeping isn't running | Verify `turing.chat.flow.state.ttl-hours` and that the housekeeping `@Scheduled` is firing |
 
 ---
