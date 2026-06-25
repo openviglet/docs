@@ -248,6 +248,8 @@ The agent form is split into four tabs.
 | **System Prompt** | | Instructions sent as a system message before every conversation. Defines purpose, scope, and behavior. |
 | **Persona** | | Optional [Persona](./personas.md) — overlays voice, vocabulary, brand context, and few-shot examples |
 | **Enabled** | | Toggle to activate or deactivate the agent |
+| **Submission retention** | | How long completed-conversation submissions are kept — see [Compliance & retention](#compliance--retention) |
+| **Monthly budget (USD)** | | Soft cap on the agent's monthly AI spend — see [Cost governance](./cost-governance.md). Optional `Per-turn soft cap` + `Downgrade LLM` |
 
 :::info Default system prompt
 If the system prompt is left blank, the agent uses the built-in default:
@@ -268,6 +270,36 @@ Select which of the **27 native tools** are available. Tools are grouped by cate
 ### MCP Servers
 
 Select which external MCP servers this agent can call. The list shows each server's title, description, and connection type.
+
+---
+
+## Provider-native tools (OpenAI Responses)
+
+Turing's own tool catalog (the native tools above, plus MCP and Custom tools) works on **every** provider. Separately, when an agent runs on an OpenAI instance through the **Responses API path**, it can also use OpenAI's *server-side* built-in tools — the model runs them in OpenAI's cloud, not in Turing:
+
+| Capability | Built-in tool |
+|---|---|
+| `openai-web-search` | Live web search |
+| `openai-file-search` | Search over OpenAI-hosted vector stores |
+| `openai-code-interpreter` | OpenAI's managed code sandbox (alongside Turing's own [Code Interpreter](./tool-calling.md)) |
+| `openai-image-generation` | Inline image generation |
+| `openai-mcp` | A remote MCP connector run by OpenAI |
+
+These are governed by a **per-LLM-instance capability matrix** — each capability is switched on per instance. An **empty matrix means the unchanged Spring AI path**: nothing about the default deployment changes until you opt a capability in. (Anthropic and other vendors have their own server-side tools on the roadmap.)
+
+---
+
+## Compliance & retention
+
+A completed conversation writes a **submission** (the collected slots + outcome — see [Chat Flow](./chat-flow.md)). For LGPD/GDPR, each agent chooses how long to keep those:
+
+| Setting | Behavior |
+|---|---|
+| `RETAIN_FOREVER` (default) | Keep submissions indefinitely |
+| `RETAIN_DAYS` | Keep for `submissionRetentionDays`, then a daily cleanup job purges older ones |
+| `DELETE_AFTER_EXPORT` | Treat the conversation export as the system-of-record archive and purge Turing's copy right after export |
+
+The default preserves today's behavior; the other two are opt-in per agent. `pii_*` slots are additionally encrypted/redacted regardless of this setting.
 
 ---
 
@@ -344,6 +376,9 @@ Entries are invalidated automatically on create / update / delete. This means ag
 | [Personas](./personas.md) | Give agents a brand voice |
 | [Chat Memory](./chat-memory.md) | Persist, retrieve, and compress conversation history |
 | [Agent Workspace](./agent-workspace.md) | Per-conversation file store for tool artifacts and offloaded results |
+| [Chat Flow](./chat-flow.md) | Scripted conversational journeys attached to an agent |
+| [Agent Evaluation](./agent-eval.md) | Regression-test an agent before publishing |
+| [Cost Governance](./cost-governance.md) | The per-agent budget fields and AI-spend dashboard |
 | [Chat](./chat.md) | The interface where agents come to life |
 | [Chat Analytics](./chat-analytics.md) | Measure which agents are converting |
 | [Observability](./observability.md) | Watch latency, token usage, and tool reliability in real time |
