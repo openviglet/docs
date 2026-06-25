@@ -68,6 +68,7 @@ const sidebars: SidebarsConfig = {
             "chat",
             "chat-flow",
             "experiments",
+            "human-in-the-loop",
             "webhooks",
             "routines",
             "intent",
