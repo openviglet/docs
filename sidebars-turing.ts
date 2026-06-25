@@ -72,6 +72,7 @@ const sidebars: SidebarsConfig = {
             "intent",
             "chat-analytics",
             "token-usage",
+            "cost-governance",
           ],
         },
         {
