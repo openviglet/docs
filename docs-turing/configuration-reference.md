@@ -508,6 +508,56 @@ Provider options are passed as a JSON object in the **Provider Options** field w
 
 ---
 
+### Code Interpreter (Execution Mode)
+
+The [Code Interpreter](./tool-calling.md) execution mode (`NATIVE` default / `DOCKER`) is chosen in **Console → Global Settings → Code Interpreter**. The YAML below tunes each mode (all under `turing.code-interpreter`):
+
+| Property | Default | Purpose |
+|---|---|---|
+| `turing.code-interpreter.python-executable` | *(auto-detected)* | Python 3 binary (NATIVE) |
+| `turing.code-interpreter.docker.network` | `none` | `none` = no egress; or a named docker network |
+| `turing.code-interpreter.docker.memory` | `512m` | RAM cap per execution (DOCKER) |
+| `turing.code-interpreter.docker.cpus` | `1.0` | CPU quota per execution (DOCKER) |
+| `turing.code-interpreter.docker.pids-limit` | `128` | max PIDs (fork-bomb containment) |
+| `turing.code-interpreter.docker.runtime` | *(host default)* | `runsc` for gVisor (opt-in) |
+| `turing.code-interpreter.native.limits.enabled` | `false` | Opt-in CPU/RAM caps for NATIVE (Linux) |
+| `turing.code-interpreter.native.limits.memory-max` | `1g` | NATIVE RAM cap |
+| `turing.code-interpreter.native.limits.cpu-seconds` | `35` | NATIVE CPU-time cap |
+| `turing.code-interpreter.warm-pool.enabled` | `false` | Pre-warmed interpreter pool (NATIVE only) |
+| `turing.code-interpreter.warm-pool.size` | `2` | interpreters kept ready |
+
+### Routines (Async Queue)
+
+| Property | Default | Purpose |
+|---|---|---|
+| `turing.jms.routine.concurrency` | `1-2` | JMS listener concurrency for the [routine](./routines.md) worker (`scheduleAgent` jobs) |
+| `turing.jms.concurrency` | `1-1` | Default JMS listener concurrency (indexing queue) |
+
+### Turing as an MCP Server
+
+The [MCP server](./mcp-servers.md#turing-as-an-mcp-server) is off by default. Enable and govern it with:
+
+| Property | Default | Purpose |
+|---|---|---|
+| `spring.ai.mcp.server.enabled` | `false` | Master switch — when off, no MCP-server beans exist |
+| `turing.mcp-server.loopback-only` | `true` | Reject non-loopback `/mcp` requests (the T245 trust boundary) |
+| `turing.mcp-server.require-auth` | `false` | Turn `/mcp` into an OAuth 2.1 JWT resource server (set with `spring.security.oauth2.resourceserver.jwt.*`); fails closed if no decoder |
+| `turing.mcp-server.write-enabled` | `false` | Register the write/ingestion tools (still require the `mcp:write` scope per call) |
+
+### Chat Analytics
+
+The [Chat Analytics](./chat-analytics.md) enricher, retention, and in-flight settings are documented in full on that page. One additional flag worth noting here:
+
+| Property | Default | Purpose |
+|---|---|---|
+| `turing.chat.analytics.node-visit-log.enabled` | `false` | Record the per-turn node path on each conversation, enabling the **path-aware funnel** (T237). Off = V1 funnel behavior |
+
+### Cost Governance
+
+[Cost Governance](./cost-governance.md) is configured through data, not YAML: the **price table** (`tur_llm_price`, seeded for OpenAI/Anthropic/Gemini, editable in the console) and the **per-agent budget fields** (`monthlyBudgetUsd`, `perTurnSoftCapUsd`, `budgetDowngradeLlmId`) on the agent Settings form.
+
+---
+
 <div className="page-break" />
 
 ## Common Production Overrides

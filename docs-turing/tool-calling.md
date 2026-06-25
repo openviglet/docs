@@ -200,7 +200,7 @@ You choose how Python actually runs in **Console → Global Settings → Code In
 | **NATIVE** (default) | A host subprocess running the configured Python | Trusted content, simplest setup |
 | **DOCKER** | Each execution runs in a fresh, hardened container | Untrusted input, multi-tenant, defense-in-depth |
 
-**DOCKER** is the recommended posture when code might be influenced by untrusted input. Every execution gets a throwaway container with baseline hardening always applied — `--cap-drop ALL`, `--no-new-privileges`, `--read-only`, and Docker's built-in seccomp profile — plus configurable limits under `turing.genai.code-interpreter.docker.*`:
+**DOCKER** is the recommended posture when code might be influenced by untrusted input. Every execution gets a throwaway container with baseline hardening always applied — `--cap-drop ALL`, `--no-new-privileges`, `--read-only`, and Docker's built-in seccomp profile — plus configurable limits under `turing.code-interpreter.docker.*`:
 
 | Key | Default | Purpose |
 |---|---|---|
@@ -215,18 +215,17 @@ A **"Check Docker"** probe in Global Settings verifies the daemon is reachable b
 
 ### Resource limits for the NATIVE path
 
-DOCKER caps via the container runtime; the NATIVE path can stop a runaway script (e.g. `[x*x for x in range(10**9)]`) from exhausting host RAM before the timeout fires. Opt in under `turing.genai.code-interpreter.native.limits` (Linux only):
+DOCKER caps via the container runtime; the NATIVE path can stop a runaway script (e.g. `[x*x for x in range(10**9)]`) from exhausting host RAM before the timeout fires. Opt in under `turing.code-interpreter.native.limits` (Linux only):
 
 ```yaml
 turing:
-  genai:
-    code-interpreter:
-      native:
-        limits:
-          enabled: true       # default false (timeout is the only guard)
-          memory-max: 1g       # hard RAM cap
-          cpu-seconds: 35      # CPU-time cap
-          limiter: auto        # auto | prlimit | systemd-run | none
+  code-interpreter:
+    native:
+      limits:
+        enabled: true       # default false (timeout is the only guard)
+        memory-max: 1g       # hard RAM cap
+        cpu-seconds: 35      # CPU-time cap
+        limiter: auto        # auto | prlimit | systemd-run | none
 ```
 
 ### Warm pool (NATIVE only)
@@ -235,11 +234,10 @@ A frequently-invoked tool pays a ~200ms cold-boot each call. Enable a pre-warmed
 
 ```yaml
 turing:
-  genai:
-    code-interpreter:
-      warm-pool:
-        enabled: true   # default false
-        size: 2          # interpreters kept booted and ready
+  code-interpreter:
+    warm-pool:
+      enabled: true   # default false
+      size: 2          # interpreters kept booted and ready
 ```
 
 Workers are **single-use** (one execution then exit — no cross-tenant state leak) and refilled asynchronously. The pool is automatically bypassed in DOCKER mode and whenever the NATIVE limits above are enabled (a pooled worker can't be wrapped by `prlimit`/`systemd-run`).
