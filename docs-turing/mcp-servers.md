@@ -1,7 +1,7 @@
 ---
 sidebar_position: 6
 title: MCP Servers
-description: Connect AI Agents to external tools via the Model Context Protocol (MCP) in Turing ES.
+description: MCP works both ways in Turing ES — connect AI Agents to external tool servers (client), and expose Turing's own search/RAG/agent/analytics tools to Claude Desktop, Claude Code, or Cursor (server).
 ---
 
 # MCP Servers
@@ -11,6 +11,10 @@ The **Model Context Protocol (MCP)** is an open standard that lets AI models cal
 An **MCP Server** extends the capabilities of an AI Agent by connecting it to any external server that implements the **Model Context Protocol (MCP)**. This allows Turing ES agents to use tools defined completely outside the platform — a company-internal knowledge system, a proprietary data API, a database query interface, or any of the growing ecosystem of public MCP servers.
 
 MCP Servers are configured in **Administration → MCP Servers** and then selected per [AI Agent](./ai-agents.md).
+
+:::tip MCP works both ways
+This first part of the page is about Turing as an MCP **client** — your agents calling *out* to external tool servers. Turing can also be an MCP **server**, exposing its own search/RAG/agent/analytics tools *in* to clients like Claude Desktop, Claude Code, or Cursor. Jump to [Turing as an MCP Server](#turing-as-an-mcp-server).
+:::
 
 ---
 
@@ -101,12 +105,71 @@ Once configured, MCP servers appear in the **MCP Servers** multi-select field of
 
 ---
 
+## Turing as an MCP Server
+
+Everything above is Turing reaching *out*. The reverse is just as useful: Turing can **publish its own tools as an MCP server**, so an external AI client — **Claude Desktop**, **Claude Code**, **Cursor**, or OpenAI's Responses API — can search your indexes, ask grounded RAG questions, invoke your agents, and read your analytics, all over the standard `/mcp` Streamable HTTP endpoint.
+
+This is **off by default**. Enable it with:
+
+```yaml
+spring:
+  ai:
+    mcp:
+      server:
+        enabled: true   # default false — when off, none of the MCP-server beans exist
+```
+
+When disabled, the deployment is byte-for-byte unchanged.
+
+### Published tools
+
+The MCP server exposes the same tool implementations the internal Semantic-Navigation agent uses (one search implementation, not a fork), grouped by capability:
+
+| Group | Tools | Scope |
+|---|---|---|
+| **Search** | `list_sites`, `get_site_fields`, `search_site`, `get_document`, `similar_documents`, `facet_search`, `autocomplete` | read |
+| **RAG** | `rag_answer` (grounded answer with citations) | read |
+| **Agents** | `list_agents`, `invoke_agent` | read |
+| **Analytics** | `search_metrics`, `content_gaps`, `top_failed_searches` | read |
+| **Write / ingestion** | `index_document`, `deindex_document`, `reindex_site` | **write (opt-in)** |
+
+Read tools are always published. The write/ingestion tools appear **only** when you opt in (`turing.mcp-server.write-enabled=true`) **and** the caller holds the write scope per call — see [scoping](#tool-scoping) below.
+
+### Security: loopback-first, then OAuth
+
+Two layers protect the `/mcp` surface:
+
+1. **Loopback gate (default on).** `turing.mcp-server.loopback-only=true` rejects any non-loopback request with HTTP 403 *before* the security chain even runs — the safe default for a Claude Desktop/Code client on the same machine. Set it to `false` to allow remote access (then rely on OAuth below).
+2. **OAuth 2.1 resource server.** `turing.mcp-server.require-auth=true` turns `/mcp` into a JWT-bearer resource server (configure `spring.security.oauth2.resourceserver.jwt.*`). If you ask for auth but don't configure a decoder, the server **fails closed** — it denies all `/mcp` requests rather than running open.
+
+### Tool scoping
+
+Beyond the endpoint gate, each call is checked by a per-tool **scope policy** (defense in depth, independent of what the endpoint advertised). Read tools are allowed for any caller that cleared the gate; **write tools additionally require the write scope** (`SCOPE_mcp:write` by default, configurable). So even with write tools enabled, a read-only token can't mutate anything.
+
+### One-click client config
+
+To point a client at your server without hand-writing JSON, fetch a ready-made config:
+
+```
+GET /api/v2/mcp/client-config
+```
+
+It returns the connection block to drop into Claude Desktop / Claude Code / Cursor (and the equivalent for OpenAI Responses), pre-filled with your endpoint.
+
+### Resources & prompts
+
+The server also publishes MCP **resources** and **prompts** (not just tools), so a client can discover canned prompts and readable resources alongside the callable tools.
+
+---
+
 ## Related Pages
 
 | Page | Description |
 |---|---|
-| [AI Agents](./ai-agents.md) | Compose agents with native tools + MCP servers |
-| [Tool Calling](./tool-calling.md) | The 27 native tools built into Turing ES |
+| [AI Agents](./ai-agents.md) | Compose agents with native tools + MCP servers; `invoke_agent` exposes them over MCP |
+| [Tool Calling](./tool-calling.md) | The native tools built into Turing ES |
+| [Semantic Navigation](./semantic-navigation.md) | The search surface the MCP read tools delegate to |
+| [Chat Analytics](./chat-analytics.md) | The data behind `search_metrics` / `content_gaps` |
 | [Chat](./chat.md) | Front-end chat interface where agents are used |
 
 ---
