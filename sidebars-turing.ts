@@ -67,6 +67,7 @@ const sidebars: SidebarsConfig = {
             "chat-memory",
             "chat",
             "chat-flow",
+            "experiments",
             "webhooks",
             "routines",
             "intent",
