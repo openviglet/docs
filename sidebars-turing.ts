@@ -93,6 +93,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "developer-guide",
             "react-sdk",
+            "conversion-analytics",
             "rest-api",
             "graphql",
           ],
