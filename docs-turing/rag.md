@@ -83,15 +83,16 @@ sequenceDiagram
 
 The LLM is the "brain" that reads the retrieved context and generates a natural language response. It does the reasoning, summarization, and articulation — but it does **not** search or retrieve content on its own.
 
-In Turing ES, LLMs are configured as **[LLM Instances](./llm-instances.md)** supporting six providers:
+In Turing ES, LLMs are configured as **[LLM Instances](./llm-instances.md)** across **11 vendor types**:
 
 | Provider | Example Models |
 |---|---|
 | **OpenAI** | GPT-4o, GPT-4o-mini |
 | **Anthropic** | Claude Sonnet 4 |
 | **Ollama** | Mistral, Llama, Qwen |
-| **Google Gemini** | Gemini 2.0 Flash |
-| **Azure OpenAI** | GPT-4o (Azure-hosted) |
+| **Google Gemini** | Gemini 2.0 Flash (native + OpenAI-compatible) |
+| **AWS Bedrock** | Claude / Llama / Nova / Titan (IAM) |
+| **Voyage / Cohere / Mistral / Vertex AI / OpenAI-Compatible** | see [LLM Instances](./llm-instances.md#supported-vendors) |
 
 **The LLM does not store knowledge.** It only processes what's given to it in the prompt. RAG ensures the prompt contains the right content.
 
@@ -109,7 +110,7 @@ The Embedding Model is a specialized neural network that converts text into nume
 
 The embedding model is used **twice**: once during indexing (to embed document chunks) and once at query time (to embed the user's question). Both must use the **same model** — otherwise the vectors are incompatible and similarity search fails.
 
-In Turing ES, providers that support embedding include **OpenAI**, **Ollama**, and **Azure OpenAI**. See [Embedding Models](./embedding-models.md) for provider details and model selection.
+In Turing ES, embedding-capable providers include **OpenAI**, **Ollama**, **Gemini** (with asymmetric task types), **Voyage**, **Cohere**, **Mistral**, **Bedrock**, **Vertex AI**, and OpenAI-compatible endpoints. See [Embedding Models](./embedding-models.md) for provider details, model selection, and advanced modes (multimodal, contextualized chunks, Matryoshka).
 
 :::warning Same model for indexing and querying
 Changing the embedding model after documents have been indexed causes dimension mismatches and incorrect results. A full re-indexing is required after any model change.
@@ -119,13 +120,14 @@ Changing the embedding model after documents have been indexed causes dimension 
 
 The Embedding Store is a specialized database optimized for storing and querying high-dimensional vectors. Unlike a traditional database that matches exact values, an embedding store finds the **most similar** vectors using distance metrics (cosine similarity, dot product, or Euclidean distance).
 
-Turing ES supports three backends:
+Turing ES supports four backends:
 
 | Backend | Best for | How it works |
 |---|---|---|
 | **[ChromaDB](./embedding-stores.md#chromadb)** | Development, small/medium deployments | Lightweight, open-source, connects via HTTP API |
 | **[PgVector](./embedding-stores.md#pgvector)** | Teams already using PostgreSQL | PostgreSQL extension — embeddings in the same DB as app data |
 | **[Milvus](./embedding-stores.md#milvus)** | Large-scale production, high throughput | Purpose-built vector DB with advanced indexing (IVF, HNSW) |
+| **[Lucene (embedded)](./embedding-stores.md#lucene-embedded)** | Single-node / zero-infra | Runs in-process, no external service; supports quantization |
 
 **What happens inside the embedding store:**
 
@@ -179,7 +181,7 @@ graph TD
 
 ### Knowledge Base (Assets)
 
-Files uploaded to **[Assets](./assets.md)** are stored in MinIO, extracted with Apache Tika (supporting PDF, DOCX, XLSX, PPTX, HTML, TXT, and more), truncated to 100,000 characters, split into 1,024-character chunks, embedded, and stored in the active embedding store.
+Files uploaded to **[Assets](./assets.md)** are stored in the configured object/file store (MinIO, filesystem, or disabled), extracted with Apache Tika (supporting PDF, DOCX, XLSX, PPTX, HTML, TXT, and more), truncated to 100,000 characters, split into 1,024-character chunks, embedded, and stored in the active embedding store.
 
 The Knowledge Base is queried by the `search_knowledge_base` tool — available in the Chat interface and configurable per AI Agent.
 
@@ -390,7 +392,61 @@ the **RAG Reranker** section (off by default):
    **Model** name (defaults to `rerank-v3.5`).
 
 See the [Configuration Reference](./configuration-reference.md#rag-reranker-database-settings)
-for the exact setting keys and defaults.
+for the exact setting keys and defaults. Managed reranker strategies (Cohere, Voyage,
+Vertex AI Ranking, AWS Bedrock Rerank) and the full strategy reference live on the
+dedicated **[Reranking](./reranking.md)** page.
+
+---
+
+## Advanced RAG capabilities
+
+The default pipeline above — embed, retrieve, rerank, generate — is the foundation. Turing ES layers several **opt-in** capabilities on top of it, each fail-safe: when off (the default) or on error, the pipeline behaves exactly as the baseline.
+
+### Managed-RAG retrieval backends
+
+For tenants standardized on a cloud RAG stack, the *retrieval* half can be delegated to a managed service instead of the built-in vector/hybrid index — without rewriting the rest of the pipeline. A pluggable **retrieval backend** seam returns passages in the same shape as the built-in path, so retrieved documents still flow through reranking, the `sources[]` event, and native citations verbatim.
+
+| Backend | What it is |
+|---|---|
+| **Built-in** *(default)* | Turing's own vector / hybrid index — unchanged |
+| **AWS Bedrock Knowledge Bases** | Delegates retrieval to a Bedrock KB (`Retrieve` API); each result becomes a citation source through the existing citation path |
+
+Configured as deploy-time infrastructure (`turing.retrieval.*`, like `turing.storage.*`); default `BUILT_IN` is byte-for-byte unchanged. Vertex AI Search / RAG Engine are future adapters on the same seam.
+
+### Per-stage model "lanes"
+
+RAG isn't one model call — it's many (query rewrite, router, rerank, judge, summarization, the final answer). **Model lanes** let you bind whole *classes* of work to different vendors: a cheap fast model for autocomplete/rewrite (`FAST`), a strong reasoner for rerank/judge (`REASONING`), and a low-cost model for background summarization (`CHEAP`). Each pipeline stage is mapped to a lane in code; you only configure three lane → instance bindings in Global Settings. A blank binding silently reverts that stage to the default LLM.
+
+### Cost-aware cross-provider fallback
+
+An OpenRouter-style layer that fails over to another vendor when a provider errors or rate-limits, and can route the **cheapest capable** instance first. The fallback chain is an ordered list of instances (each already wrapped in its own retry/circuit-breaker), routed by mode — `PRIORITY` (configured order) or `CHEAPEST` (ascending price). Streaming fails over only *before the first token* (so SSE text is never duplicated), and cost attributes to whichever vendor actually served. An empty chain = the legacy single-model path.
+
+### Answer-grounding guardrail
+
+Validates at answer time that the streamed answer is actually grounded in the retrieved context — and screens it for unsafe content / PII — the managed complement to citation-drift detection. A pluggable guardrail strategy (`NONE` / **AWS Bedrock Guardrails** / **OpenAI Moderation** / **Mistral Moderation**) re-reads the assembled answer against the retrieved chunk texts (teed server-side, never exposed on `sources[]`) and emits a `grounding` SSE event with a confidence verdict; in block-on-violation mode it replaces the answer with redacted/blocked text. Both SDKs surface it (`onGrounding`); the admin chat renders a confidence badge. Opt-in via `turing.safety.guardrail.*`, fail-open — a guardrail outage never blocks an answer.
+
+### Multi-provider "second opinion"
+
+For high-stakes answers, a cheap model from a **different vendor** critiques the primary RAG answer (a cross-vendor fact-check judge) and the agreement is surfaced beside it as a confidence signal — it never alters the answer. The cross-vendor constraint is enforced (a same-family second view shares blind spots). Emitted as a `secondOpinion` SSE event; the admin renders an agrees/disagrees badge. Opt-in via Global Settings; fail-open.
+
+---
+
+## Provenance & citations
+
+RAG grounds an answer in real content; **citations** prove *which* content grounded *which sentence*. When the `citations` Request Option is enabled on a supporting vendor, Turing retrieves the top-K passages, attaches them to the question as citable source blocks, and decodes the model's per-sentence citations onto one provider-agnostic contract — streamed as a `citations` SSE event after the answer.
+
+| Vendor | How citations are produced |
+|---|---|
+| **Anthropic** | Native `search_result` / `document` content blocks with `citations: enabled` — per-sentence char/page spans |
+| **Gemini** | Google Search grounding metadata (per-segment support + source spans) |
+| **Cohere** | Native citation mode (`POST /v2/chat` `documents` array) decoded onto the same contract |
+| **Bedrock KB** | Each Knowledge-Base result becomes a citation source through the same path |
+
+The chat UI underlines the exact span each claim is grounded on, with a hover popover showing the source quote and a deep link.
+
+### Citation drift detection
+
+Provenance becomes *auditable over time*. When citation drift is enabled (`turing.genai.citation-drift.enabled=true`), every per-sentence citation is persisted (source id, cited span, the question, the answer instant). A daily job re-resolves recent records against the live index and flips a record **stale** when the source was re-indexed since the answer or the cited span is no longer present — answering the compliance question *"what document did this answer cite, and has it changed since?"* Query it at `GET /api/chat/sessions/{conversationId}/citation-drift` (`?recheck=true` for an on-demand pass). Strictly opt-in: default off writes no rows and the streaming path is unchanged.
 
 ---
 
@@ -435,9 +491,11 @@ Imagine a company with an internal knowledge base containing HR policies, produc
 | Page | Description |
 |---|---|
 | [Generative AI & LLM Configuration](./genai-llm.md) | Global GenAI settings and architecture overview |
-| [LLM Instances](./llm-instances.md) | Configure LLM providers |
-| [Embedding Stores](./embedding-stores.md) | Vector database backends (ChromaDB, PgVector, Milvus) |
-| [Embedding Models](./embedding-models.md) | Provider support and model selection guidance |
+| [LLM Instances](./llm-instances.md) | Configure LLM providers (11 vendors) |
+| [Reranking](./reranking.md) | Pluggable + managed rerankers (Cohere / Voyage / Vertex / Bedrock) |
+| [Capabilities](./capabilities.md) | The `citations` Request Option and the two-level gate |
+| [Embedding Stores](./embedding-stores.md) | Vector backends (ChromaDB, PgVector, Milvus, embedded Lucene) |
+| [Embedding Models](./embedding-models.md) | Provider support, advanced embedding modes |
 | [Assets](./assets.md) | Knowledge Base file management |
 | [AI Agents](./ai-agents.md) | Compose agents with RAG tools |
 | [Tool Calling](./tool-calling.md) | RAG / Knowledge Base tools reference |
