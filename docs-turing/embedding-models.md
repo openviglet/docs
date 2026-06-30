@@ -26,29 +26,28 @@ Embedding model support depends on the LLM vendor configured in the [LLM Instanc
 | Provider | Embedding Support | Example Models | Default Model |
 |---|:---:|---|---|
 | **OpenAI** | Yes | `text-embedding-3-small`, `text-embedding-3-large`, `text-embedding-ada-002` | `text-embedding-3-small` |
-| **Azure OpenAI** | Yes | Deployment name of an embedding model in your Azure resource | `text-embedding-ada-002` |
-| **Ollama** | Yes | `nomic-embed-text`, `mxbai-embed-large`, `all-minilm`, `stella-v5` | *(configurable)* |
+| **Ollama** | Yes | `nomic-embed-text`, `mxbai-embed-large`, `all-minilm` | *(configurable)* |
+| **Gemini** | Yes | `gemini-embedding-001` *(asymmetric task types — see below)* | `gemini-embedding-001` |
+| **OpenAI-Compatible** | Yes* | whatever the backing endpoint exposes at `/embeddings` | *(per endpoint)* |
+| **Bedrock** | Yes | `amazon.titan-embed-*`, `cohere.embed-*` | — |
+| **Voyage AI** | Yes | `voyage-3`, `voyage-3-large`, `voyage-context-3`, `voyage-multimodal-3` | `voyage-3` |
+| **Cohere** | Yes | `embed-v4.0` (multilingual / multimodal / Matryoshka) | `embed-v4.0` |
+| **Mistral AI** | Yes | `mistral-embed` | `mistral-embed` |
+| **Vertex AI** | Yes | Gemini embeddings on GCP (reuses the native Gemini stack) | — |
 | **Anthropic** | No | — | — |
-| **Gemini** | No | — | — |
 | **Gemini (OpenAI-compatible)** | No | — | — |
+
+> \* OpenAI-Compatible embeds only when the backing endpoint actually exposes `/embeddings`. **Azure OpenAI is no longer a vendor** — reach an Azure embedding deployment via OpenAI-Compatible. See [LLM Instances](./llm-instances.md#capabilities-by-vendor).
 
 ### OpenAI
 
-Connects to the OpenAI API (default: `https://api.openai.com`) using your API key. OpenAI offers three embedding model families:
+Connects to the OpenAI API (default: `https://api.openai.com/v1`) using your API key. OpenAI offers three embedding model families:
 
 | Model | Dimensions | Notes |
 |---|---|---|
 | `text-embedding-3-small` | 1,536 | Best cost-performance balance for most deployments |
 | `text-embedding-3-large` | 3,072 | Higher quality, larger storage footprint |
 | `text-embedding-ada-002` | 1,536 | Legacy model — use `3-small` for new deployments |
-
-### Azure OpenAI
-
-Uses the same OpenAI embedding models, hosted on your Azure tenant. Configuration requires:
-
-- **Endpoint** — your Azure OpenAI resource URL (e.g., `https://my-resource.openai.azure.com`)
-- **Embedding Deployment Name** — the deployment name created in the Azure portal
-- **API Key** — Azure API key (stored encrypted)
 
 ### Ollama (Local)
 
@@ -76,6 +75,40 @@ Turing ES also supports running embedding models locally via ONNX Runtime, witho
 | **Tokenizer Path** | Absolute path to `tokenizer.json` |
 | **Enable GPU** | Toggle GPU acceleration via ONNX Runtime |
 | **Batch Size** | Number of texts to embed per batch |
+
+---
+
+## Advanced embedding capabilities
+
+Beyond plain text→vector, Turing ES exploits provider-specific embedding features. Each is **opt-in by model choice** — pick the right model on the right vendor and the capability engages; everything else keeps the classic per-chunk text path byte-for-byte.
+
+### Asymmetric task types (Gemini)
+
+`gemini-embedding-001` embeds a *document* and a *query* differently for a measured retrieval-quality win the OpenAI/Anthropic models can't match. Turing applies it automatically through the standard VectorStore convention — index-time calls use `RETRIEVAL_DOCUMENT`, query-time calls use `RETRIEVAL_QUERY` — with **zero caller changes**. An optional Matryoshka `outputDimensionality` provider option trades a smaller vector for lower storage/IO. Voyage and Bedrock embedding models apply the same asymmetric `document`/`query` distinction.
+
+### Contextualized chunk embeddings (Voyage `voyage-context-3`)
+
+Attacks the classic RAG failure where a chunk is meaningless without its surrounding section. Instead of embedding each chunk in isolation, `voyage-context-3` embeds every chunk **together with its siblings** so each vector carries document context. Select a `*context*` Voyage model (or set the `contextual` provider option) and the asset indexer embeds a document's chunks as a group and upserts the precomputed vectors. It is **fail-soft** — a non-contextual model, a vector-count mismatch, or any error falls back to per-chunk embedding. Query time is unchanged.
+
+### Multimodal embeddings — search text → match an image (Voyage `voyage-multimodal-3`)
+
+Embeds images *and* text into one shared vector space, so a plain-text query can match a PDF page-image, diagram, or screenshot the text-only path can't reach. Select a `*multimodal*` Voyage model (or set the `multimodal` option); images are indexed tagged `_modality=image`, and a text query is embedded in the same space and KNN-matched against image vectors. Exposed at `/api/v2/multimodal` (`available` / `image` upload / `search`); text-only models stay the default. Cohere `embed-v4.0` is likewise multimodal.
+
+### Domain-specialized model per site
+
+Each Semantic Navigation site can pin its **own** embedding model (`embeddingModelId` override on its GenAI config) — `voyage-law` for legal docs, `voyage-code` for code search, `voyage-finance` for finance, or a Cohere domain model — while every other site stays on the platform default. The site's hybrid-ranking path resolves the override for **both** index and query halves, so its per-site `sn_<siteId>` collection never mismatches. Null/blank = platform default.
+
+:::warning Switching a site's model = re-index that site
+A different model is a different vector space. Changing a site's embedding model requires clearing and re-indexing **that site's** collection.
+:::
+
+### Quantized / Matryoshka vectors
+
+For the embedded Lucene store, scalar quantization (`INT8` / `INT4` / `SEVEN_BIT` / `BINARY`) shrinks the index and speeds search at a measured recall cost. It pairs with Matryoshka `outputDimensionality` truncation (on the Voyage/Gemini models) to compound the savings. Configured on the **store**, not the model — see [Embedding Stores → Lucene (embedded)](./embedding-stores.md#lucene-embedded).
+
+### Mistral OCR extraction bridge
+
+Not an embedding model itself, but it feeds the embedding pipeline: for scanned PDFs and image-only documents that Apache Tika reads poorly, Turing can call Mistral's OCR API (`mistral-ocr-latest`) to produce layout-aware Markdown before chunking and embedding. It runs **only** when a file is OCR-eligible *and* Tika produced no usable text, so ordinary documents spend no OCR credits. Opt-in via `turing.ocr.*`; disabled or keyless → inert (returns the Tika text), and any OCR error fails soft back to Tika.
 
 ---
 
@@ -131,7 +164,10 @@ The embedding model determines two things:
 | **Maximum quality** | `text-embedding-3-large` | OpenAI |
 | **Local / air-gapped** | `nomic-embed-text` | Ollama |
 | **Resource-constrained** | `all-minilm` | Ollama |
-| **Azure enterprise** | `text-embedding-ada-002` deployment | Azure OpenAI |
+| **Best retrieval quality** | `gemini-embedding-001` *(asymmetric task types)* | Gemini |
+| **Retrieval specialist / domain** | `voyage-3-large`, `voyage-law`, `voyage-code` | Voyage AI |
+| **Long-chunk context** | `voyage-context-3` | Voyage AI |
+| **Search text → image** | `voyage-multimodal-3`, `embed-v4.0` | Voyage AI / Cohere |
 | **Custom fine-tuned** | Your `.onnx` model | Local Transformers |
 
 For most deployments, a mid-sized model such as `text-embedding-3-small` (OpenAI) or `nomic-embed-text` (Ollama) provides a good balance between quality and performance.
@@ -181,23 +217,13 @@ The site-level configuration includes:
 
 ---
 
-## Caching
-
-Embedding model data is cached at the repository layer to avoid repeated database reads during high-throughput indexing:
-
-- `turEmbeddingModelfindAll` — caches the full list of models
-- `turEmbeddingModelfindById` — caches individual model lookups
-
-Cache entries are invalidated automatically on create, update, or delete.
-
----
-
 ## Related Pages
 
 | Page | Description |
 |---|---|
-| [Embedding Stores](./embedding-stores.md) | Vector database backends (ChromaDB, PgVector, Milvus) |
+| [Embedding Stores](./embedding-stores.md) | Vector backends (ChromaDB, PgVector, Milvus, embedded Lucene) + quantization |
 | [What is RAG?](./rag.md) | How embedding models fit into the RAG pipeline |
+| [Reranking](./reranking.md) | Re-ordering retrieved chunks (Cohere / Voyage / managed) |
 | [LLM Instances](./llm-instances.md) | Configure the LLM providers that supply embedding APIs |
 | [Assets](./assets.md) | Knowledge Base files indexed using the embedding model |
 | [Semantic Navigation](./semantic-navigation.md) | Per-site GenAI and embedding overrides |
