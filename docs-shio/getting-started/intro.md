@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+description: Viglet Shio CMS is an open-source headless CMS with custom Post Types, GraphQL and REST APIs, server-side rendering, caching, and full-text search.
 ---
 
 # What is Shio CMS?

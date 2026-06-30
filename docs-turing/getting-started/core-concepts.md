@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+description: The mental model behind Viglet Turing ES — semantic navigation sites, faceted search, indexing, and generative AI — explained in plain terms.
 ---
 
 # Core Concepts

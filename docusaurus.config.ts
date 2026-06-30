@@ -172,6 +172,22 @@ const config: Config = {
         theme: {
           customCss: "./src/css/custom.css",
         },
+        sitemap: {
+          lastmod: "date",
+          changefreq: "weekly",
+          priority: 0.5,
+          // Old Turing versions (0.3.x) are near-duplicate, legacy content:
+          // keep them reachable but out of the sitemap to preserve crawl
+          // budget. They are also marked noindex via a <head> tag in each
+          // versioned doc.
+          ignorePatterns: [
+            "/turing/0.3.5/**",
+            "/turing/0.3.6/**",
+            "/turing/0.3.7/**",
+            "/turing/0.3.8/**",
+            "/turing/0.3.9/**",
+          ],
+        },
       } satisfies Preset.Options,
     ],
   ],

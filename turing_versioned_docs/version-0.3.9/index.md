@@ -5,6 +5,10 @@ description: Viglet Turing ES - Semantic Navigation, Chatbot and NLP
 slug: /
 ---
 
+<head>
+  <meta name="robots" content="noindex, follow" />
+</head>
+
 # Viglet Turing ES
 
 **Viglet Turing ES** is an open source solution for **Semantic Navigation** and **Chatbot**. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.

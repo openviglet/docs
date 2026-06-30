@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+description: Viglet Turing ES is an open-source enterprise search platform with keyword search, faceted navigation, and generative AI for files, CMS, and databases.
 ---
 
 # What is Turing ES?

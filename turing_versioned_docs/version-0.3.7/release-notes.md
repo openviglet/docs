@@ -4,6 +4,10 @@ title: Release Notes
 description: Viglet Turing ES Release Notes
 ---
 
+<head>
+  <meta name="robots" content="noindex, follow" />
+</head>
+
 # Viglet Turing ES: Release Notes
 
 ## 0.3.7

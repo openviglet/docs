@@ -4,6 +4,10 @@ title: Connectors
 description: Viglet Turing ES Connectors for indexing content
 ---
 
+<head>
+  <meta name="robots" content="noindex, follow" />
+</head>
+
 # Viglet Turing ES: Connectors
 
 There are several connectors to allow you to index content in Viglet Turing ES.

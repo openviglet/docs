@@ -4,6 +4,10 @@ title: Installation Guide
 description: Viglet Turing ES Installation Guide
 ---
 
+<head>
+  <meta name="robots" content="noindex, follow" />
+</head>
+
 # Viglet Turing ES: Installation Guide
 
 Viglet Turing ES ([https://viglet.org/turing](https://viglet.org/turing)) is an open source solution ([https://github.com/openviglet](https://github.com/openviglet)), which has Semantic Navigation and Chatbot as its main features. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
