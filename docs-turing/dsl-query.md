@@ -6,7 +6,9 @@ description: Elasticsearch-compatible Query DSL API for Turing ES — search acr
 
 # DSL Query API
 
-Turing ES provides an **Elasticsearch-compatible Query DSL** endpoint that translates queries to the configured search engine backend (Solr, Lucene, or Elasticsearch). This allows you to use the same query syntax regardless of the underlying engine.
+The **DSL Query API** lets you search any Semantic Navigation site with the **Elasticsearch Query DSL** — the same JSON query language whether the site is backed by Solr, Lucene, or Elasticsearch. Turing ES translates the DSL to the configured engine and returns an Elasticsearch-shaped response, so you write one query syntax and never re-learn it per backend.
+
+You'd reach for this over the simpler [`/search` REST endpoint](./rest-api.md) when you need the full expressive power of structured queries — bool composition, nested aggregations, range filters, `more_like_this` — or when you're porting an existing Elasticsearch client. The same query types are what AI Agents drive through the [DSL search tools](./tool-calling.md#dsl-search--6-tools).
 
 ## Endpoint
 
@@ -990,9 +992,10 @@ The engine is resolved automatically from the SN site's Search Engine instance c
 
 ---
 
-## See Also
+## Related Pages
 
-- [Search Engine Configuration](./search-engine.md)
-- [Semantic Navigation](./semantic-navigation.md)
-- [REST API Reference](./rest-api.md)
-- [DSL Compatibility Matrix](./dsl-compatibility.md)
+- [DSL Compatibility Matrix](./dsl-compatibility.md) — which DSL features each engine supports
+- [Search Engine Configuration](./search-engine.md) — Solr / Elasticsearch / Lucene backends
+- [Semantic Navigation](./semantic-navigation.md) — the sites these queries run against
+- [Tool Calling](./tool-calling.md#dsl-search--6-tools) — the DSL tools AI Agents use
+- [REST API Reference](./rest-api.md) — the simpler `/search` endpoint

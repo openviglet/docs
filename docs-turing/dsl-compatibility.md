@@ -12,7 +12,9 @@ export const X = () => (<span style={{backgroundColor: '#d1d5db', color: '#6b728
 
 # DSL Compatibility Matrix
 
-Compatibility of every Turing ES DSL Query feature across the three supported search engine backends.
+This page is the **support map** for the [DSL Query API](./dsl-query.md): for every query type, aggregation, and option, it shows how faithfully each search engine backend (Elasticsearch, Solr, Lucene) implements it. Because Turing ES exposes one Elasticsearch-compatible syntax over three different engines, a feature that's native on one may be translated or only partially supported on another.
+
+Reach for this table when you're choosing a backend for a site, or when a DSL query behaves differently than you expected across engines — the badge tells you whether that's a 1:1 mapping, a translation, or a best-effort approximation. Read it alongside the query examples on the [DSL Query API](./dsl-query.md) page.
 
 ### Legend
 
@@ -253,8 +255,8 @@ For **full DSL compatibility**, use Elasticsearch as the search engine backend. 
 
 ---
 
-## See Also
+## Related Pages
 
-- [DSL Query API](./dsl-query.md)
-- [Search Engine Configuration](./search-engine.md)
-- [REST API Reference](./rest-api.md)
+- [DSL Query API](./dsl-query.md) — the query syntax this matrix describes
+- [Search Engine](./search-engine.md) — configure the Solr / Elasticsearch / Lucene backend
+- [REST API Reference](./rest-api.md) — the simpler `/search` endpoint
