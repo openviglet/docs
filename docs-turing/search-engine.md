@@ -133,6 +133,7 @@ Repository-level **caching** is enabled for search engine instances to avoid rep
 | Page | Description |
 |---|---|
 | [Administration Guide](./administration-guide.md) | Full console reference |
+| [Field Manifest & Schema-as-Code](./manifest.md) | Declaratively provision/evolve a site's field schema; field-coverage observability |
 | [Semantic Navigation](./semantic-navigation.md) | How SN Sites use cores and search engines |
 | [Architecture Overview](./architecture-overview.md) | Solr, Elasticsearch, and Lucene in the system architecture |
 | [Configuration Reference](./configuration-reference.md#solr) | Solr and Elasticsearch timeout settings in `application.yaml` |
