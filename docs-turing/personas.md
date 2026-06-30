@@ -41,6 +41,7 @@ A Persona is a small bundle of decisions. Each one nudges the LLM in a specific 
 
 | Field | What it does | Why it matters for conversion |
 |---|---|---|
+| **Persona Kind** | `SPEAKER` · `AUDIENCE` · `BOTH` (default `SPEAKER`) | Decides whether the persona is a *voice* the agent speaks in, a *reader* you evaluate content against, or both — see [Audience personas & content-fit](#audience-personas--content-fit) |
 | **Name** | Internal identifier (not shown to the user) | Lets your team say *"use the Sales Persona for that agent"* without ambiguity |
 | **Description** | One-line summary of when to use it | Helps non-technical admins pick the right persona |
 | **System Instruction** | Free-text directive prepended to the agent's own system prompt | The narrative core — *"Speak as a senior account executive at YourCompany. Lead with outcomes, never features. Ask one question at a time."* |
@@ -233,6 +234,56 @@ The persona converts **activation** into **retention**.
 
 <div className="page-break" />
 
+## Audience Personas & Content-Fit
+
+So far a persona has been a **speaker** — the voice your agent talks *in*. Block AA adds the mirror image: a persona can also describe a **reader** — the audience your content is *for* — so you can evaluate whether a document actually fits the people meant to read it. *"Will a non-technical buyer understand this spec sheet?"* becomes a measurable question, not a guess.
+
+### Speaker vs audience: the `personaKind`
+
+| Kind | Role | Used by |
+|---|---|---|
+| **`SPEAKER`** *(default)* | A voice the agent speaks in | Agent attachment + prompt composition (everything above) |
+| **`AUDIENCE`** | A reader you evaluate content against | The content-fit evaluator (below) |
+| **`BOTH`** | Serves either role | Both |
+
+The default `SPEAKER` keeps every existing persona, agent attachment, and prompt path byte-for-byte unchanged. An **`AUDIENCE`-only persona never resolves as an agent's voice** — the resolver guards against it. When you pick `AUDIENCE` or `BOTH`, the persona form reveals an **Audience** section.
+
+### The audience profile
+
+An audience persona carries a reader profile: a **reading level** band (mapped to an FK-grade ceiling), **domain expertise**, a **vocabulary ceiling** (an allow-list of terms the reader *does* know), comprehension and accessibility notes, and a **primary language**. These drive the scoring below.
+
+### The evaluation notebook
+
+To evaluate content fit you need content. An audience/both persona gets an **evaluation notebook** — a set of sources to score:
+
+| Source type | Where the text comes from |
+|---|---|
+| `SN_DOC` | A Semantic Navigation document (per-locale lookup, fields flattened) |
+| `ASSET` | An uploaded file, text-extracted (Tika) |
+| `URL` | A remote page, fetched behind the SSRF guard and extracted |
+
+Extraction is **fail-soft** (`PENDING` / `EXTRACTED` / `FAILED`, retryable) and the extracted text is cached. Manage it on the persona form's "Evaluation notebook" section (add URL / SN doc / file upload, red/amber/green status, text preview, re-extract). Nested CRUD lives under `/api/persona/{id}/source`.
+
+### How content-fit is scored
+
+Fit combines a deterministic readability signal with a grounded LLM judgment, so it degrades gracefully when no LLM is configured:
+
+1. **Readability (deterministic, no-LLM, multilingual).** A pure scorer computes language-adapted Flesch Reading Ease / Flesch–Kincaid grade (EN, PT, ES), average sentence length, syllables/word, a complex-word ratio (minus the persona's vocabulary-ceiling allow-list), and a passive-voice heuristic — fused into a 0–100 fit score against the reader's grade ceiling. Two hard texts still rank by reader level.
+2. **Content-fit (LLM, grounded).** The LLM **role-plays the persona as a reader** and, grounded strictly in the source text, returns a structured verdict: a fit %, what *fits*, and *misfits* (`{span, reason, suggestion}`). Any flagged span not present verbatim in the source is dropped (the same grounding hard-fail as elsewhere).
+3. **Final score** fuses the two 50/50, and falls back to readability-only when the LLM is unavailable or unparseable.
+
+### The fit report
+
+`POST /api/persona/{id}/content-fit` evaluates one source (`?sourceId`) or the whole notebook and returns an aggregated report: a notebook-wide average plus per-source verdicts. The persona form's **Audience-fit report** section renders an overall + per-source red/amber/green bar (**green ≥ 70 / amber ≥ 40 / red < 40**), the "fits" bullets, and the "misfits" as flagged spans with reason chips and rewrite suggestions — degrading to a readability-only note when no default LLM is set.
+
+### Persona-from-audio authoring
+
+You can **draft** a persona from a voice recording. `POST /api/persona/derive-from-audio` transcribes the clip, then an LLM behavioral analysis extracts **both** voice traits (tone / verbosity / language style / vocabulary) *and* audience descriptors (reading level / expertise / language) into a draft `personaKind = BOTH` persona. The draft is **never auto-saved** — a "Derive from audio" action hands it to the new-persona form for human review and save (the same "derive, never auto-apply" discipline as the manifest wizard).
+
+Transcription rides a pluggable **`TurTranscriptionProvider`** seam (Spring AI ships no transcription module). The default provider POSTs to the configured LLM instance's OpenAI-compatible `{baseUrl}/audio/transcriptions` (`whisper-1`); air-gapped installs override the bean with a local speech-to-text engine.
+
+---
+
 ## Where Personas Fit in the Bigger Picture
 
 A Persona is one of three layers that make an AI Agent come alive:
@@ -258,6 +309,9 @@ Without a Persona, an Agent still works — but its voice is the LLM's default v
 | `POST` | `/api/persona` | Create a persona |
 | `PUT` | `/api/persona/{id}` | Update a persona |
 | `DELETE` | `/api/persona/{id}` | Delete a persona |
+| `GET`/`POST`/`DELETE` | `/api/persona/{id}/source` | Manage the evaluation notebook (`/upload` multipart, `/{id}/extract` to re-extract) |
+| `POST` | `/api/persona/{id}/content-fit` | Run the audience-fit report (`?sourceId` for one source, else the whole notebook) |
+| `POST` | `/api/persona/derive-from-audio` | Draft a `BOTH` persona from an audio recording (multipart; never auto-saved) |
 
 When updating, the `mandatoryTerms` and `forbiddenTerms` arrive as pipe-joined strings from the form; the controller persists them verbatim. Validation happens at the LLM injection point (so an empty list is fine — it simply contributes no constraint).
 
