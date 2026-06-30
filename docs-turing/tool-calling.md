@@ -262,6 +262,23 @@ See [MCP Servers](./mcp-servers.md) for configuration details.
 
 ---
 
+## Provider-native server tools
+
+The tools above are **Turing's own** — Turing runs them and feeds results back to the model. Separately, some vendors expose **server-side built-in tools** that run inside the provider's infrastructure (the model searches the web, executes code, or fetches a URL without Turing doing the work). These are selected through the [capability](./capabilities.md) gate, not the agent's tool list, and they coexist with Turing/MCP tools in one tool loop.
+
+| Function | OpenAI | Anthropic | Gemini |
+|---|---|---|---|
+| Web search | ✅ | ✅ | ✅ *(Google Search grounding)* |
+| Web fetch / URL context | — | ✅ | ✅ |
+| Code execution | ✅ | ✅ | ✅ |
+| Image generation | ✅ | — | ✅ |
+| Computer use | ✅ | ✅ | ✅ |
+| Remote MCP | ✅ | ✅ | — |
+
+Gemini's native primitives (Google Search grounding, URL Context, code execution, image generation, Computer Use — plus thinking budget, context caching, Batch, Files, full-context answering, and native video understanding) are documented in depth in [Generative AI → Gemini native primitives](./genai-llm.md#gemini-native-primitives-f16). For how server-native and Turing tools share one loop, and the two-level gate that controls them, see [Capabilities](./capabilities.md).
+
+---
+
 ## Large results are offloaded automatically
 
 Some tools return a lot — a big search dump, a long catalog, a wide JSON array. Pasting all of that into the prompt every turn is wasteful. When a tool result exceeds `turing.genai.tool-result-offload.inline-max-chars` (default **4096**), Turing writes the full payload to the [Agent Workspace](./agent-workspace.md) and replaces the inline result with a short `workspace://…` reference. The model pulls the data back **only when it needs it**, via an always-present `workspace_read` tool.

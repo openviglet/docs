@@ -99,6 +99,48 @@ See [Tool Calling](./tool-calling.md) for the full tool reference.
 
 ---
 
+## Gemini native primitives (F.16)
+
+Turing ES has **two** ways to reach Google Gemini, and the difference matters:
+
+| Vendor | Path | What you get |
+|---|---|---|
+| **`gemini`** (native GenAI SDK) | A dedicated native chat branch over `com.google.genai.Client` | The full set of Google-native primitives below |
+| **`gemini-openai`** (OpenAI-compatible) | The generic OpenAI seam | Plain chat + function calling only |
+
+The native `gemini` branch engages **only when the instance's [capability matrix](./capabilities.md) is non-empty** — an empty matrix keeps the classic Spring AI path, so every existing Gemini agent is byte-for-byte unchanged. Each primitive is opt-in through the two-level capability gate.
+
+### Server-side built-in tools
+
+These run **in Google's infrastructure**, not via a Turing crawler or sandbox. Each is a capability you select per agent (see the [Capabilities](./capabilities.md) TOOL matrix):
+
+| Primitive | What it does |
+|---|---|
+| **Google Search grounding** | The model runs Google Search server-side and returns grounding metadata (per-segment support + source spans) that decodes onto the same [citation contract](./rag.md#provenance--citations) as Anthropic/Cohere; Google's terms require rendering the returned Search Suggestion chips (streamed as a `searchSuggestions` event) |
+| **URL Context** | The model pulls a URL/PDF named in the prompt directly in Google's infra — no crawler. Coexists with Search grounding in one turn |
+| **Code execution** | A built-in Python sandbox; generated code, output, and inline matplotlib images come back as response parts rendered into the answer (images as inline `data:` URIs) |
+| **Native image generation** | Sets `responseModalities` to include `IMAGE` on an image-capable model (`gemini-2.5-flash-image` / Imagen) — the generated image returns as an inline data part |
+| **Computer Use** | `gemini-2.5-computer-use-*` via the same vendor-neutral driver seam as the OpenAI/Anthropic variants (ships against a no-op driver; owns the whole turn) |
+
+### Reasoning, batch, files & embeddings
+
+| Primitive | What it does |
+|---|---|
+| **Thinking budget + thought summaries** | A `thinkingConfig` caps reasoning tokens (0 disables, -1 dynamic) and can surface a thought summary on the shared `reasoning` SSE event — it lands in the "Why this answer" panel with no UI change |
+| **Batch (chat + embeddings)** | A Gemini Batch provider runs nightly summarization, LLM-Judge eval, and in-place re-embedding at the Batch ~50% discount instead of synchronous full price |
+| **Files bridge** | Binaries mirror into the Gemini Files API and are referenced by URI for native PDF/video grounding (Gemini files are retained ~48 h, so the content-addressed cache row expires and re-uploads after that) |
+| **Embeddings + asymmetric task types** | `gemini-embedding-001` with `RETRIEVAL_DOCUMENT` at index time / `RETRIEVAL_QUERY` at query time — see [Embedding Models](./embedding-models.md#asymmetric-task-types-gemini) |
+
+### Innovation bets
+
+| Primitive | What it does |
+|---|---|
+| **Explicit context caching** | Cache the stable prefix (system prompt + pinned grounding) as a named, TTL'd Gemini `cachedContents` object and reuse it across turns/users at a steep discount — the RAG cost lever (a `gemini-context-cache` Request Option; off by default) |
+| **Full-context (retrieval-free) answering** | For a small site whose whole corpus fits Gemini's 1–2 M-token window, skip top-K retrieval and ground over **every** chunk (100% recall by construction). Opt-in per site with a token budget; fail-open back to top-K when the corpus is too large. Pairs with context caching so the corpus is billed once |
+| **Native video / audio understanding** | Hand a clip to Gemini natively (frames + audio) for a timestamped transcript + scene description — both at chat time (a `VIDEO` multimodal slot) and at index time (transcript appended to the document's text field so spoken/visual content becomes searchable). Opt-in per site, fail-open |
+
+---
+
 ## MCP Servers
 
 AI Agents can connect to any external server implementing the **Model Context Protocol (MCP)** to access tools beyond the 27 native ones — company-internal systems, proprietary APIs, or public MCP services. Configured in **Administration → MCP Servers**.
