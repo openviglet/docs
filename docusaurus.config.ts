@@ -13,7 +13,7 @@ const config: Config = {
   organizationName: "vigletdocs",
   projectName: "vigletdocs.github.io",
   deploymentBranch: "gh-pages",
-  trailingSlash: false,
+  trailingSlash: true,
 
   onBrokenLinks: "warn",
   onBrokenAnchors: "warn",
