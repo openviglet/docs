@@ -35,18 +35,25 @@ The embedding store and embedding model must be consistent across indexing and q
 
 An **LLM Instance** is a named, configured connection to an LLM provider. Multiple instances can coexist — different AI Agents, SN Sites, and the Chat interface can each use a different instance independently.
 
-Turing ES supports **six vendor types**: OLLAMA, OPENAI, ANTHROPIC, GEMINI, GEMINI_OPENAI, and AZURE_OPENAI.
+Turing ES ships **11 vendor types**: OLLAMA, OPENAI, ANTHROPIC, GEMINI, GEMINI_OPENAI, OPENAI_COMPAT (any OpenAI-compatible endpoint), BEDROCK, VOYAGE, COHERE, MISTRAL, and VERTEX_AI.
 
 | Vendor | Default Model | Embedding | Tool Calling |
 |---|---|:---:|:---:|
 | **OLLAMA** | `mistral` | ✅ | ✅ |
 | **OPENAI** | `gpt-4o-mini` | ✅ | ✅ |
 | **ANTHROPIC** | `claude-sonnet-4-20250514` | ❌ | ✅ |
-| **GEMINI** | `gemini-2.0-flash` | ❌ | ✅ |
+| **GEMINI** | `gemini-2.0-flash` | ✅ | ✅ |
 | **GEMINI_OPENAI** | `gemini-2.0-flash` | ❌ | ✅ |
-| **AZURE_OPENAI** | `gpt-4o` | ✅ | ✅ |
+| **OPENAI_COMPAT** | *(per endpoint)* | ✅ | ✅ |
+| **BEDROCK** | `anthropic.claude-3-5-sonnet-...` | ✅ | ✅ |
+| **VOYAGE** | `voyage-3` | ✅ | ❌ *(no chat)* |
+| **COHERE** | `command-r-plus` | ✅ | ✅ |
+| **MISTRAL** | `mistral-large-latest` | ✅ | ✅ |
+| **VERTEX_AI** | `gemini-2.0-flash` | ✅ | ✅ |
 
-For the full UI reference — form sections, provider-specific options, generation parameters, capability matrix, and API key security — see [LLM Instances](./llm-instances.md).
+> **Azure OpenAI was removed** (Spring AI dropped the module). Reach an Azure-hosted deployment via the **OpenAI-Compatible** vendor.
+
+For the full UI reference — form sections, per-vendor authentication, provider options, capability matrix, and API key security — see [LLM Instances](./llm-instances.md).
 
 ---
 
