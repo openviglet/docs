@@ -19,72 +19,105 @@ const sidebars: SidebarsConfig = {
             "architecture-overview",
           ],
         },
-        "installation-guide",
-        "configuration-reference",
+        // ── Search it ────────────────────────────────────────────────────
         {
           type: "category",
           label: "Enterprise Search",
+          link: {
+            type: "generated-index",
+            slug: "/category/enterprise-search",
+            title: "Enterprise Search",
+            description:
+              "Faceted, multilingual, typo-tolerant search on Solr, Elasticsearch or embedded Lucene — one query API, schema as code, hybrid keyword + vector ranking.",
+          },
           items: [
             "search-engine",
             "semantic-navigation",
             {
               type: "category",
               label: "DSL Query",
-              items: [
-                "dsl-query",
-                "dsl-compatibility",
-              ],
+              items: ["dsl-query", "dsl-compatibility"],
             },
             "spa-pages",
             {
               type: "category",
               label: "Integration",
-              items: [
-                "integration",
-                "integration-aem",
-              ],
+              items: ["integration", "integration-aem"],
             },
             "import-export",
           ],
         },
+        // ── Ask it ───────────────────────────────────────────────────────
         {
           type: "category",
-          label: "Generative AI",
+          label: "RAG & Chat",
+          link: {
+            type: "generated-index",
+            slug: "/category/rag-chat",
+            title: "RAG & Chat",
+            description:
+              "Retrieval-augmented generation with citations, a pluggable reranker, relevance gating and groundedness checks — grounded, streamed answers you can audit.",
+          },
           items: [
-            "genai-llm",
             "rag",
-            "llm-instances",
             "embedding-stores",
             "embedding-models",
-            "assets",
+            "chat",
+            "chat-memory",
+            "intent",
+            "personas",
+          ],
+        },
+        // ── Automate it ──────────────────────────────────────────────────
+        {
+          type: "category",
+          label: "Agents, Tools & Skills",
+          link: {
+            type: "generated-index",
+            slug: "/category/agents",
+            title: "Agents, Tools & Skills",
+            description:
+              "Configurable AI agents that call your tools, run Anthropic-standard skills in a sandbox, federate over MCP, and orchestrate multi-step chat flows.",
+          },
+          items: [
+            "ai-agents",
             "tool-calling",
             "custom-tools",
             "mcp-servers",
-            "ai-agents",
-            "agent-eval",
-            "personas",
-            "agent-workspace",
             "skills",
-            "chat-memory",
-            "chat",
+            "agent-workspace",
             "chat-flow",
-            "experiments",
             "human-in-the-loop",
             "webhooks",
             "routines",
-            "intent",
+            "experiments",
+            "agent-eval",
+          ],
+        },
+        // ── Run it ───────────────────────────────────────────────────────
+        {
+          type: "category",
+          label: "Deploy & Operate",
+          link: {
+            type: "generated-index",
+            slug: "/category/deploy-operate",
+            title: "Deploy & Operate",
+            description:
+              "Self-host on your own infrastructure: install, configure any LLM provider, run multi-tenant, and observe cost, tokens and conversations.",
+          },
+          items: [
+            "installation-guide",
+            "configuration-reference",
+            "genai-llm",
+            "llm-instances",
+            "assets",
+            "multi-tenancy",
+            "administration-guide",
+            "observability",
+            "logging",
             "chat-analytics",
             "token-usage",
             "cost-governance",
-          ],
-        },
-        {
-          type: "category",
-          label: "Management",
-          items: [
-            "administration-guide",
-            "logging",
-            "observability",
           ],
         },
         {
@@ -106,7 +139,6 @@ const sidebars: SidebarsConfig = {
             "security-authentication",
             "security-social-login",
             "security-keycloak",
-            "multi-tenancy",
           ],
         },
         {
