@@ -12,7 +12,6 @@ keywords:
   - open source enterprise search
   - Turing ES vs Coveo
 image: https://docs.viglet.org/turing/img/banner.jpg
-draft: true
 ---
 
 If you run a large content portal — intranet, knowledge base, support site, or
