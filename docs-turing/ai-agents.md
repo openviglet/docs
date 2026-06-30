@@ -285,7 +285,41 @@ Turing's own tool catalog (the native tools above, plus MCP and Custom tools) wo
 | `openai-image-generation` | Inline image generation |
 | `openai-mcp` | A remote MCP connector run by OpenAI |
 
-These are governed by a **per-LLM-instance capability matrix** — each capability is switched on per instance. An **empty matrix means the unchanged Spring AI path**: nothing about the default deployment changes until you opt a capability in. (Anthropic and other vendors have their own server-side tools on the roadmap.)
+These are governed by a **per-LLM-instance capability matrix** — each capability is switched on per instance. An **empty matrix means the unchanged Spring AI path**: nothing about the default deployment changes until you opt a capability in. **Anthropic and Gemini have their own server-side tools too** (web search, code execution, computer use, and more) — the full cross-vendor matrix and the two-level gate that governs all of them live on [Capabilities](./capabilities.md).
+
+---
+
+## Reasoning, caching & background execution
+
+Beyond *what tools* an agent can call, three cross-vendor request options tune *how the turn runs* — each opt-in per instance/agent (a [Request Option](./capabilities.md#request_option-capabilities)), each fail-open to the unchanged path when off. They reach parity across OpenAI, Anthropic, and Gemini behind shared seams.
+
+### Extended thinking / reasoning budget
+
+Give the model a reasoning budget and surface its thought summary in the **"Why this answer"** panel — one contract across all three vendors:
+
+| Vendor | How |
+|---|---|
+| **OpenAI** | `reasoning-effort` (minimal/low/medium/high) + `reasoning-summary` |
+| **Anthropic** | `anthropic-extended-thinking` — a positive `thinkingBudget` enables extended thinking (forces `temperature = 1`, as Anthropic requires); `interleavedThinking` lets Claude reason *between* tool calls in the loop |
+| **Gemini** | `thinkingBudget` (0 disables, -1 dynamic) + thought summaries |
+
+All three harvest the thought summary onto the shared `reasoning` SSE event, so it lands in the same panel with no UI change.
+
+### Explicit context caching
+
+The RAG cost lever: cache the stable prefix (system prompt + pinned grounding) once and reuse it across turns, conversations, and users at a steep discount. A vendor-neutral `TurContextCacheProvider` seam routes by vendor:
+
+| Vendor | Mechanism |
+|---|---|
+| **Gemini** | A named, TTL'd remote `cachedContents` object (`gemini-context-cache` option), keyed so one prefix maps to one shared cache (~75% off) |
+| **Anthropic** | *Inline* `cache_control` breakpoints on the system prompt + last grounding block (`cacheControlEnabled`, TTL `5m`/`1h`) — nothing created remotely |
+| **OpenAI** | Automatic prefix caching — no opt-in needed |
+
+The default no-op provider returns empty, so an unconfigured vendor is byte-for-byte unchanged. Fail-open: a too-small prefix, quota, or any error → uncached turn, never a failed turn.
+
+### Background execution (OpenAI)
+
+Long reasoning/agentic turns (deep code-interpreter or computer-use loops) no longer hold the HTTP connection open: `openai-background` submits the Responses call with `background:true` and resumes by polling until terminal — freeing the connection, not the worker. Opt-in per instance (`backgroundEnabled`, poll interval + max-wait configurable); fail-open returns the latest response so text extraction still runs.
 
 ---
 
@@ -339,17 +373,6 @@ The two interlock: memory compression stores its summaries *in* the workspace. N
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/api/native-tool` | List all available tool groups, names, and descriptions |
-
----
-
-## Caching
-
-Agent definitions are cached at the repository layer:
-
-- `turAIAgentfindAll` — the full list
-- `turAIAgentfindById` — individual lookups
-
-Entries are invalidated automatically on create / update / delete. This means agent changes propagate immediately; no app restart needed.
 
 ---
 

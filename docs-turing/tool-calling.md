@@ -277,6 +277,15 @@ The tools above are **Turing's own** — Turing runs them and feeds results back
 
 Gemini's native primitives (Google Search grounding, URL Context, code execution, image generation, Computer Use — plus thinking budget, context caching, Batch, Files, full-context answering, and native video understanding) are documented in depth in [Generative AI → Gemini native primitives](./genai-llm.md#gemini-native-primitives-f16). For how server-native and Turing tools share one loop, and the two-level gate that controls them, see [Capabilities](./capabilities.md).
 
+### Long and reasoning-heavy tool loops
+
+Two cross-vendor request options shape the tool loop itself:
+
+- **Interleaved thinking** (Anthropic) lets Claude reason *between* tool calls, not just before the first one — useful for multi-step agentic loops.
+- **Background mode** (OpenAI Responses) runs a long tool loop asynchronously and resumes by polling, so a deep code-interpreter or computer-use loop doesn't hold the HTTP connection open.
+
+Both are opt-in and fail-open. See [AI Agents → Reasoning, caching & background execution](./ai-agents.md#reasoning-caching--background-execution).
+
 ---
 
 ## Large results are offloaded automatically
