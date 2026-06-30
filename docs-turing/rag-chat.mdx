@@ -1,0 +1,24 @@
+---
+title: RAG & Chat
+description: Retrieval-augmented generation with citations, a pluggable reranker, relevance gating and groundedness checks — grounded, streamed answers you can audit.
+slug: /category/rag-chat
+hide_table_of_contents: true
+---
+
+import DocCardList from '@theme/DocCardList';
+
+# RAG & Chat
+
+Ground answers in **your own content**. Turing's retrieval-augmented generation
+pipeline pulls the most relevant passages, sharpens them with a **pluggable
+reranker** (LLM, cross-encoder or Cohere), and streams a cited answer token by
+token. Every citation traces back to the exact source passage — provider-agnostic
+provenance built on Turing's own retrieval metadata, not a vendor's citation API.
+
+Answers stay honest by construction: a configurable **relevance gate** drops weak
+matches, an optional **groundedness check** appends a low-confidence caveat to
+anything it can't support, and a deterministic refusal fires when a question simply
+isn't covered by your data. Embeddings can use the built-in Lucene vector store or
+your engine's own vectors, and conversation memory keeps long chats coherent.
+
+<DocCardList />

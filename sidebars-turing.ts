@@ -24,11 +24,8 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Enterprise Search",
           link: {
-            type: "generated-index",
-            slug: "/category/enterprise-search",
-            title: "Enterprise Search",
-            description:
-              "Faceted, multilingual, typo-tolerant search on Solr, Elasticsearch or embedded Lucene — one query API, schema as code, hybrid keyword + vector ranking.",
+            type: "doc",
+            id: "enterprise-search",
           },
           items: [
             "search-engine",
@@ -52,11 +49,8 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "RAG & Chat",
           link: {
-            type: "generated-index",
-            slug: "/category/rag-chat",
-            title: "RAG & Chat",
-            description:
-              "Retrieval-augmented generation with citations, a pluggable reranker, relevance gating and groundedness checks — grounded, streamed answers you can audit.",
+            type: "doc",
+            id: "rag-chat",
           },
           items: [
             "rag",
@@ -73,11 +67,8 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Agents, Tools & Skills",
           link: {
-            type: "generated-index",
-            slug: "/category/agents",
-            title: "Agents, Tools & Skills",
-            description:
-              "Configurable AI agents that call your tools, run Anthropic-standard skills in a sandbox, federate over MCP, and orchestrate multi-step chat flows.",
+            type: "doc",
+            id: "agents",
           },
           items: [
             "ai-agents",
@@ -99,11 +90,8 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Deploy & Operate",
           link: {
-            type: "generated-index",
-            slug: "/category/deploy-operate",
-            title: "Deploy & Operate",
-            description:
-              "Self-host on your own infrastructure: install, configure any LLM provider, run multi-tenant, and observe cost, tokens and conversations.",
+            type: "doc",
+            id: "deploy-operate",
           },
           items: [
             "installation-guide",

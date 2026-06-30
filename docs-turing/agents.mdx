@@ -1,0 +1,24 @@
+---
+title: Agents, Tools & Skills
+description: Configurable AI agents that call your tools, run Anthropic-standard skills in a sandbox, federate over MCP, and orchestrate multi-step chat flows.
+slug: /category/agents
+hide_table_of_contents: true
+---
+
+import DocCardList from '@theme/DocCardList';
+
+# Agents, Tools & Skills
+
+Turn retrieval into action. Turing's configurable agents call **your tools** (custom
+Groovy with HTTP, search and slot helpers), run **Anthropic-standard skills** in an
+isolated Docker sandbox, and federate across **MCP servers** — while Turing can
+itself be exposed as an MCP server so any MCP-aware client can query your content.
+Each provider's own server-side tools (web search, code execution, computer use,
+image generation) are available too, opt-in per agent.
+
+For anything beyond a single turn, the declarative **chat-flow** DSL orchestrates
+multi-step conversations — slots, form capture, A/B experiments, **human-in-the-loop**
+approvals, **webhooks** and scheduled **routines**. An evaluation harness lets you
+gate agent and prompt changes in CI before they ship.
+
+<DocCardList />
