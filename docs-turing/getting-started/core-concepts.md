@@ -7,6 +7,10 @@ description: The mental model behind Viglet Turing ES — semantic navigation si
 
 This page explains the fundamental concepts of Turing ES in plain terms. No configuration files, no code — just the mental model you need before diving into the technical documentation.
 
+:::tip This is Step 1 of the learning path
+You're at the start of the [zero → first-agent learning path](./intro.md#your-learning-path). When the model below clicks, move on to **Step 2 — your first search** ([Installation](../installation-guide.md) → [Semantic Navigation](../semantic-navigation.md)).
+:::
+
 ---
 
 ## Semantic Navigation Site

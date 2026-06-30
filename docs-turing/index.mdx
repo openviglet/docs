@@ -160,9 +160,9 @@ export const SectionLabel = ({ children }) => (
   marginBottom: "0.5rem",
 }}>
   {[
-    { step: "01", title: "Install", desc: "Docker, standalone JAR or from source", href: "/turing/installation-guide" },
-    { step: "02", title: "Configure", desc: "application.yaml properties reference", href: "/turing/configuration-reference" },
-    { step: "03", title: "Understand", desc: "SN Sites, connectors and the data model", href: "/turing/getting-started/core-concepts" },
+    { step: "01", title: "Start here", desc: "The zero → first-agent learning path", href: "/turing/getting-started/intro" },
+    { step: "02", title: "Understand", desc: "SN Sites, connectors and the data model", href: "/turing/getting-started/core-concepts" },
+    { step: "03", title: "Install", desc: "Docker, standalone JAR or from source", href: "/turing/installation-guide" },
     { step: "04", title: "Search", desc: "REST API, search params and response format", href: "/turing/rest-api" },
   ].map(({ step, title, desc, href }) => (
     <Link key={step} to={href} style={{ textDecoration: "none" }}>

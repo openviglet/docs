@@ -77,33 +77,54 @@ These are the main building blocks you will work with in Turing ES. You do not n
 
 ---
 
-## Where to go next
+## Your learning path
 
-Not sure where to start? Here is a suggested path depending on what you want to do:
+The fastest way to understand Turing ES is to build up one capability at a time. Each step below stands on the previous one — *index content → search it → ask it → let an agent act → automate the loop* — and links the deep page where you go further. Follow them in order the first time through; come back to any one as a reference later.
 
-**I want to understand how Turing ES works**
-→ Read [Core Concepts](./core-concepts.md) first, then [Architecture Overview](../architecture-overview.md).
+### Step 1 — Understand the model
 
-**I want to set up Turing ES**
-→ Go to the [Installation Guide](../installation-guide.md).
+Before configuring anything, get the mental model: the **Semantic Navigation Site** (the central object), how content is **ingested** by connectors, and how **search** and **GenAI** fit together. Fifteen minutes here saves hours later.
 
-**I want to configure search for my content**
-→ Start with [Core Concepts](./core-concepts.md) then go to [Semantic Navigation](../semantic-navigation.md).
+→ [Core Concepts](./core-concepts.md) · then, when you want the full picture, [Architecture Overview](../architecture-overview.md)
 
-**I want to add generative AI to my search**
-→ Read [GenAI & LLM Configuration](../genai-llm.md).
+### Step 2 — Your first search
 
-**I want to use the AI chat interface**
-→ Go to [Chat](../chat.md) for direct LLM, Semantic Navigation, and AI Agent tabs.
+Stand up Turing ES, create an SN Site, point a connector at some content, and run a faceted search. This is the foundation everything else grounds on.
 
-**I want to upload documents to the Knowledge Base**
-→ Go to [Assets](../assets.md) to manage files and train the RAG index.
+→ [Installation Guide](../installation-guide.md) → [Semantic Navigation](../semantic-navigation.md) → query it via the [REST API](../rest-api.md)
 
-**I want to monitor LLM usage and costs**
-→ Go to [Token Usage](../token-usage.md).
+### Step 3 — Your first RAG answer
 
-**I want to secure Turing ES with SSO**
-→ Go directly to [Security & Keycloak](../security-keycloak.md).
+Turn on Generative AI for that site (or upload files to the **Knowledge Base**), and ask a question in natural language. Turing retrieves the most relevant documents and an LLM answers **grounded in your content** — not a hallucination. You'll wire an [LLM Instance](../llm-instances.md) and an [embedding model + store](../embedding-models.md) once, then it just works.
+
+→ [What is RAG?](../rag.md) → [GenAI & LLM Configuration](../genai-llm.md) → [Assets (Knowledge Base)](../assets.md)
+
+### Step 4 — Your first agent
+
+Compose an **AI Agent**: an LLM + a curated set of tools (search your content, browse the web, run code, call external systems via [MCP](../mcp-servers.md)) + an optional brand [Persona](../personas.md). The agent appears as a chat tab, ready to *act*, not just answer.
+
+→ [AI Agents](../ai-agents.md) → [Tool Calling](../tool-calling.md) → [Capabilities](../capabilities.md)
+
+### Step 5 — Your first automation
+
+Close the loop: schedule an agent to run on a cadence, or design a multi-step **Chat Flow** that collects information and triggers actions. This is where Turing stops being a search box and becomes part of your operations.
+
+→ [Routines](../routines.md) → [Chat Flow](../chat-flow.md)
+
+:::tip See it all wired together
+The [Atlas Store reference showcase](../showcase.md) is every step above, in one runnable app — typed search → RAG chat → agent power → automation. Read it as a worked example once you've done your first search.
+:::
+
+---
+
+## Other starting points
+
+| I want to... | Go to |
+|---|---|
+| Monitor LLM usage and costs | [Token Usage](../token-usage.md) · [Cost Governance](../cost-governance.md) |
+| Secure Turing ES with SSO | [Security & Keycloak](../security-keycloak.md) |
+| Integrate from my own app | [REST API](../rest-api.md) · [GraphQL](../graphql.md) · [React SDK](../react-sdk.md) |
+| Connect a content source | [Integration](../integration.md) |
 
 ---
 
