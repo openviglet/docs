@@ -503,3 +503,15 @@ function SearchPage() {
 - [npm Package](https://www.npmjs.com/package/@viglet/turing-react-sdk)
 - [Storybook (Live Demos)](https://turing.viglet.org/react-sdk)
 - [REST API Reference](rest-api)
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Developer Guide](./developer-guide.md) | Dev environment, stack, contributing |
+| [Client Tools](./client-tools.md) | Live tool activity, client tools, generative UI |
+| [Reference showcase](./showcase.md) | Atlas Store — a full app built on this SDK |
+| [Chat](./chat.md) | The chat surface the hooks drive |
+| [REST API Reference](./rest-api.md) | The endpoints behind the hooks |

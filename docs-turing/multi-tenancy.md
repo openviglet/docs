@@ -165,7 +165,7 @@ Every tenant carries an `isolationMode` of `SHARED`, `SCHEMA`, or `DB` (default 
 
 ---
 
-## See also
+## Related Pages
 
 - [Configuration Reference](./configuration-reference.md) — the `turing.tenancy.enabled` flag.
 - [Security & Keycloak](./security-keycloak.md) — the single realm and the `tenant` claim.

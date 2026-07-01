@@ -506,3 +506,13 @@ docker exec -it turing-nginx /bin/bash
 
 ---
 
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Getting Started](./getting-started/intro.md) | The zero → first-agent learning path — start here after installing |
+| [Configuration Reference](./configuration-reference.md) | Every `application.yaml` property |
+| [Search Engine](./search-engine.md) | Configure the Solr / Elasticsearch / Lucene backend |
+| [Administration Guide](./administration-guide.md) | Users, roles, tokens, global settings |
+| [Security & Keycloak](./security-keycloak.md) | Production SSO setup |
+

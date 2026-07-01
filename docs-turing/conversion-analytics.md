@@ -106,3 +106,14 @@ Both the search and chat controllers key off the same `TUR_SESSION` cookie, and 
 ## Non-goal
 
 Turing does **not** ship its own conversion dashboards here — GA4 (and any sink) owns visualization; the SDK only emits clean, canonical events.
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Chat Analytics](./chat-analytics.md) | The server-side funnel (outcome, sentiment, tools) |
+| [Experiments](./experiments.md) | A/B outcomes recorded server-side |
+| [React SDK](./react-sdk.md) | Where the client-side events are emitted |
+| [Token Usage](./token-usage.md) · [Cost Governance](./cost-governance.md) | The cost side of the funnel |

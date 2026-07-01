@@ -599,3 +599,13 @@ server:
 
 ---
 
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Installation Guide](./installation-guide.md) | Where these properties are set during setup |
+| [Search Engine](./search-engine.md) | Solr / Elasticsearch / Lucene connection settings |
+| [LLM Instances](./llm-instances.md) | `turing.ai.crypto.key` and GenAI provider config |
+| [Reranking](./reranking.md) | The `GLOBAL_RAG_SN_RERANK_*` settings |
+| [Security & Keycloak](./security-keycloak.md) | OAuth2 / OIDC properties |
+

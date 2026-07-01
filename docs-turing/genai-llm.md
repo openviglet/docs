@@ -157,3 +157,14 @@ See [AI Agents](./ai-agents.md) for configuration, composition examples, and the
 
 ---
 
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [LLM Instances](./llm-instances.md) | Configure the 11 vendor connections |
+| [Capabilities](./capabilities.md) | Native server tools + the two-level gate |
+| [What is RAG?](./rag.md) | The retrieval pipeline in depth |
+| [Embedding Models](./embedding-models.md) · [Embedding Stores](./embedding-stores.md) | The vector pipeline |
+| [Reranking](./reranking.md) | Sharpen retrieved context before generation |
+| [AI Agents](./ai-agents.md) | Compose an agent from an LLM + tools + persona |
+

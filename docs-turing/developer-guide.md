@@ -436,3 +436,14 @@ Check the open [GitHub Issues](https://github.com/openviglet/turing-ce/issues) f
 
 ---
 
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [REST API Reference](./rest-api.md) | Search, autocomplete, GenAI chat endpoints |
+| [GraphQL](./graphql.md) | The graph query endpoint |
+| [React SDK](./react-sdk.md) | Headless hooks + components for custom UIs |
+| [Client Tools](./client-tools.md) | Building agent↔UI features against the chat SSE |
+| [Reference showcase](./showcase.md) | A full app built on the SDKs |
+| [Architecture Overview](./architecture-overview.md) | The system at a glance |
+
