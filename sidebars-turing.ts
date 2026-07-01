@@ -30,6 +30,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "search-engine",
             "semantic-navigation",
+            "manifest",
             {
               type: "category",
               label: "DSL Query",
@@ -56,6 +57,7 @@ const sidebars: SidebarsConfig = {
             "rag",
             "embedding-stores",
             "embedding-models",
+            "reranking",
             "chat",
             "chat-memory",
             "intent",
@@ -73,6 +75,8 @@ const sidebars: SidebarsConfig = {
           items: [
             "ai-agents",
             "tool-calling",
+            "capabilities",
+            "client-tools",
             "custom-tools",
             "mcp-servers",
             "skills",
