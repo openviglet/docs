@@ -82,10 +82,12 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 |---|---|---|
 | Dev environment, contributing | [developer-guide](./developer-guide.md) | ✅ |
 | **Block S** — React SDK (hooks + headless UI) | [react-sdk](./react-sdk.md) | ✅ |
+| **Block S** — vanilla `@viglet/turing-sdk` (zero-dep, EDS) | [javascript-sdk](./javascript-sdk.md) | ✅ (T539) |
+| **E.7** — `@viglet/turing-cli` (`turing` command) | [cli](./cli.md) | ✅ (T539, was 🧩 folded into developer-guide) |
+| **`@viglet/turing-flow-dsl`** — flows-as-typed-TS | [flow-dsl](./flow-dsl.md) | ✅ (T539) |
 | **Block Y** — Atlas Store reference showcase | [showcase](./showcase.md) | ✅ |
 | **Block Z** — client-side conversion analytics / GA4 bridge | [conversion-analytics](./conversion-analytics.md) | ✅ |
 | REST API + GraphQL | [rest-api](./rest-api.md) · [graphql](./graphql.md) | ✅ |
-| **E.7** — `@viglet/turing-cli` | [developer-guide](./developer-guide.md) | 🧩 folded (candidate for its own page if it grows) |
 
 ## Security
 

@@ -118,6 +118,9 @@ const sidebars: SidebarsConfig = {
           items: [
             "developer-guide",
             "react-sdk",
+            "javascript-sdk",
+            "cli",
+            "flow-dsl",
             "showcase",
             "conversion-analytics",
             "rest-api",
