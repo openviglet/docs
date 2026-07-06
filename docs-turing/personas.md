@@ -52,6 +52,7 @@ A Persona is a small bundle of decisions. Each one nudges the LLM in a specific 
 | **Forbidden Terms** | Pipe-separated list of words/phrases that must never appear | Compliance and brand safety. Words like competitor names, deprecated product names, or sensitive claims. |
 | **Few-shot Store** | Vector store with example Q/A pairs | Live retrieval of similar past conversations — the LLM learns *your* style by example, not by description |
 | **Brand Context MCP** | An MCP server providing live brand facts | Real-time pricing, product catalogs, current promotions — pulled per conversation, never stale |
+| **Calibrate model from style** | Toggle (default off) | When on, the style also tunes the model's **sampling**, not just the prompt — see below |
 | **Enabled** | Toggle | Disable a persona to retire it without deleting; agents fall back to no-persona behavior |
 
 :::tip Pipe-separated, not comma-separated
@@ -103,6 +104,19 @@ graph TB
 8. **Current user message** — what they just typed.
 
 The model never sees layers 1–6 again after the first turn — they're cached. Layers 7 and 8 evolve naturally with the conversation.
+
+---
+
+## Calibrating the Model from Style (opt-in)
+
+By default, the Style Guidelines reach the model **only as text** in the system prompt — the actual sampling parameters (`temperature`, `max tokens`) come from the [LLM Instance](./llm-instances.md). Turn on **Calibrate model from style** on the persona's Style section to also let the style tune those parameters per turn:
+
+| Style field | Tunes | Mapping |
+|---|---|---|
+| **Verbosity** | `max tokens` (answer length ceiling) | 1 → 256 · 2 → 512 · 3 → 1024 · 4 → 2048 · 5 → 4096 |
+| **Tone** | `temperature` (determinism vs. creativity) | TECHNICAL 0.2 · FORMAL 0.3 · EXECUTIVE 0.4 · CASUAL 0.8 |
+
+So a `TECHNICAL`, verbosity-2 persona runs cooler and shorter (temperature 0.2, ~512 tokens); a `CASUAL`, verbosity-5 persona runs warmer and longer. If no tone is set, temperature is left untouched. When the toggle is **off** (the default), nothing changes — the LLM Instance's own `temperature`/`max tokens` are used, exactly as before. The calibration applies to agent chat, direct [persona chat](#act-on-a-persona-chat-validate-dialogue), and the persona dialogue.
 
 ---
 
