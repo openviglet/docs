@@ -284,6 +284,28 @@ Transcription rides a pluggable **`TurTranscriptionProvider`** seam (Spring AI s
 
 ---
 
+<div className="page-break" />
+
+## Act on a Persona: chat, validate, dialogue
+
+A persona used to be **passive** — it only shaped a conversation once attached to an AI Agent. Now a persona is something you **act on directly**. Open any persona in **Administration → Personas** and its detail is a **dashboard**: the persona's identity, a card for each part of its configuration, and a **Launchpad** of actions.
+
+### Talk directly to a persona
+
+The **Open chat** launch action starts a live conversation *with the persona itself* — no agent required. It's the fastest way to hear a voice before you wire it to an agent: type a message, get an answer in the persona's tone, refine the system instruction, try again. The chat runs on any enabled [LLM Instance](./llm-instances.md) you pick, is stateless (nothing is persisted), and lives at a shareable URL (`/bento/chat/persona/{id}`) so you can send a teammate the exact persona under test. An `AUDIENCE`-only persona can't speak, so the action is offered only for `SPEAKER`/`BOTH` personas.
+
+### Validate content against a persona
+
+For an **audience** persona (`AUDIENCE` or `BOTH`), the **Validate content** launch action opens a focused *"add sources → score"* page. Add documents, links or indexed content to the evaluation notebook and run the [content-fit report](#audience-personas--content-fit) in one place — the compatibility score, the *fits* bullets, and the flagged *misfits* with rewrite suggestions. It's the same evaluator described above, promoted from a buried tab to a first-class action. (For a `SPEAKER`-only persona the action is disabled with an "audience personas only" hint.)
+
+### Two personas in conversation
+
+The **Persona dialogue** action runs an automatic, turn-by-turn conversation between **two** personas on a topic you choose. Because a dialogue is about two peers — neither "owns" it — it's a **global** surface reached from the persona list (or from a persona's launchpad, which pre-selects that persona as the first speaker), never scoped to a single persona.
+
+Pick a topic, the two speakers, an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 20). Turing ES seeds the first persona with the topic, then feeds each persona the other's last reply, alternating until the budget is spent — and renders the exchange as a two-sided transcript. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the other. It's the quickest way to hear two brand voices play off each other — a live "voice diff". If a turn fails mid-way, the partial transcript is still shown with a notice.
+
+---
+
 ## Where Personas Fit in the Bigger Picture
 
 A Persona is one of three layers that make an AI Agent come alive:
@@ -312,6 +334,8 @@ Without a Persona, an Agent still works — but its voice is the LLM's default v
 | `GET`/`POST`/`DELETE` | `/api/persona/{id}/source` | Manage the evaluation notebook (`/upload` multipart, `/{id}/extract` to re-extract) |
 | `POST` | `/api/persona/{id}/content-fit` | Run the audience-fit report (`?sourceId` for one source, else the whole notebook) |
 | `POST` | `/api/persona/derive-from-audio` | Draft a `BOTH` persona from an audio recording (multipart; never auto-saved) |
+| `POST` | `/api/v2/persona/{id}/chat` | Talk directly to a persona (SSE; JSON or multipart) |
+| `POST` | `/api/v2/persona-dialogue` | Run a bounded turn-by-turn dialogue between two personas on a topic |
 
 When updating, the `mandatoryTerms` and `forbiddenTerms` arrive as pipe-joined strings from the form; the controller persists them verbatim. Validation happens at the LLM injection point (so an empty list is fine — it simply contributes no constraint).
 

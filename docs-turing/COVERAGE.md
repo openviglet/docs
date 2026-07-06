@@ -40,6 +40,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **E.6 / F.8** — chat memory, compaction, context editing | [chat-memory](./chat-memory.md) | ✅ |
 | Intents / conversation starters | [intent](./intent.md) | ✅ |
 | **Block AA** — speaker + audience personas, content-fit, persona-from-audio | [personas § Audience Personas & Content-Fit](./personas.md#audience-personas--content-fit) | ✅ |
+| **Block AI** — persona as an actionable surface (persona chat, bento dashboard + launchpad, content-fit launch action, persona dialogue) | [personas § Act on a Persona](./personas.md#act-on-a-persona-chat-validate-dialogue) | ✅ |
 
 ## Automate it
 
