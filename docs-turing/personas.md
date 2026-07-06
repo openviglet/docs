@@ -298,11 +298,11 @@ The **Open chat** launch action starts a live conversation *with the persona its
 
 For an **audience** persona (`AUDIENCE` or `BOTH`), the **Validate content** launch action opens a focused *"add sources → score"* page. Add documents, links or indexed content to the evaluation notebook and run the [content-fit report](#audience-personas--content-fit) in one place — the compatibility score, the *fits* bullets, and the flagged *misfits* with rewrite suggestions. It's the same evaluator described above, promoted from a buried tab to a first-class action. (For a `SPEAKER`-only persona the action is disabled with an "audience personas only" hint.)
 
-### Two personas in conversation
+### Personas in conversation
 
-The **Persona dialogue** action runs an automatic, turn-by-turn conversation between **two** personas on a topic you choose. Because a dialogue is about two peers — neither "owns" it — it's a **global** surface reached from the persona list (or from a persona's launchpad, which pre-selects that persona as the first speaker), never scoped to a single persona.
+The **Persona dialogue** action runs an automatic, turn-by-turn conversation between **two or more** personas on a topic you choose. Because a dialogue is about peer speakers — none of which "owns" it — it's a **global** surface reached from the persona list (or from a persona's launchpad, which pre-selects that persona as the first speaker), never scoped to a single persona.
 
-Pick a topic, the two speakers, an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 20). Turing ES seeds the first persona with the topic, then feeds each persona the other's last reply, alternating until the budget is spent — and renders the exchange as a two-sided transcript. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the other. It's the quickest way to hear two brand voices play off each other — a live "voice diff". If a turn fails mid-way, the partial transcript is still shown with a notice.
+Pick a topic, add **as many speakers as you like** (two minimum — the roster grows with an "Add persona" button), an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 40). Turing ES seeds the first persona with the topic, then goes **round-robin** — feeding each persona the previous speaker's reply — until the budget is spent. The transcript is **streamed live**: each turn appears the moment it's generated (colour-coded per speaker), rather than the whole conversation arriving at the end. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the others. It's the quickest way to hear several brand voices play off each other — a live "voice diff". If a turn fails mid-way, the partial transcript is kept with a notice.
 
 ---
 
