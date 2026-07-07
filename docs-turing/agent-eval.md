@@ -216,7 +216,15 @@ Two questions decide whether you can *trust* your reviewers and your LLM judge �
 
 ## Eval Studio
 
-The **Eval Studio** (**Generative AI → Eval Studio**, at `/bento/eval`) is the visual home for the platform, organized into tabs: browse your reusable **Datasets** (row count + version) and **Grader stacks**, and work the **Review inbox** — pick an agent, review its pending [human-review](#human-review) tasks, and promote the good ones into a golden dataset. The flow editor's eval-gate panel links straight to it. (Per-agent run history, per-case drill-down, and a score timeline are being surfaced inside the Studio incrementally.)
+The **Eval Studio** (**Generative AI → Eval Studio**, at `/bento/eval`) is the visual home for the platform, organized into tabs:
+
+- **Datasets** — browse your reusable datasets (row count + version).
+- **Generate** — synthesize or augment dataset rows with LLM assistance, then review and save them.
+- **Grader stacks** — browse your reusable, named grader stacks.
+- **Runs** — pick an agent to see its evaluation **run history**: a **score timeline** charts every run's aggregate score over time (with regressions visible at a glance), the run list badges each run **pass**/**fail** and marks the green **baseline** and any **regressed** run, and selecting a run drills into the **per-case breakdown** — pass/fail and score per case, the actual-vs-expected outcome, any failing slot values, and the rubric verdict. A **Run gate now** button replays the agent's enabled golden sets and refreshes the timeline.
+- **Review inbox** — pick an agent, review its pending [human-review](#human-review) tasks, and promote the good ones into a golden dataset.
+
+The flow editor's eval-gate panel links straight to it.
 
 ---
 
