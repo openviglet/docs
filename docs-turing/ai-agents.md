@@ -259,6 +259,18 @@ If the system prompt is left blank, the agent uses the built-in default:
 This is fine for prototypes. For any customer-facing agent, write a real system prompt.
 :::
 
+### Live Preview & prompt diagnostics
+
+The **System Prompt** page has a **Live Preview** that reverses the opaque assembled system message into labeled, color-coded segments — persona, agent prompt, MCP instructions, the active chat-flow addendum — rendered as one flowing article so you can read exactly what the model receives, top to bottom. It's also a diagnostic surface for *optimizing the turn* — what the model receives, what it costs, and what is wasted:
+
+- **Flow-aware persona.** Pick a chat flow in the preview and the persona shown is the one the flow actually resolves to — a `persona` flow node that switches the active voice is reflected (labeled *"switched by flow"*), not silently ignored. If a flow's persona node points at a persona that isn't in the agent's catalog (or is audience-only), the conflict check warns you — that's a voice that would silently fall back to the default at runtime.
+- **Token accounting & cost.** A metrics strip shows the total token estimate, the **cacheable-prefix vs per-turn split** (the stable portion a provider prefix cache can reuse across turns), and each segment's token count + share of the total. When the agent's LLM instance has a configured [price](./cost-governance.md), an approximate per-turn cost is shown.
+- **"Inert this turn".** When a flow governs the turn, its addendum tells the model to ignore the agent prompt's welcome / first-interaction / routing scaffolding. The preview **dims those regions** and totals their token cost so you can see and trim the dead weight. Mark a section precisely with an author comment — `<!-- turing:concierge-only -->` (inert when a flow runs) or `<!-- turing:flow-only -->` (inert on a plain turn).
+- **Cross-segment lint.** The conflict check runs *across* segments: it flags a rule repeated in more than one place (e.g. a forbidden-vocabulary list in both the persona and the agent prompt — you pay for it twice) and a directive stated one way in one segment and contradicted in another. A deeper **LLM-powered audit** is available on demand for semantic conflicts.
+- **Node picker & simulated values.** Preview any point in a conversation, not just the flow's entry: pick a flow node and supply the collected slot values, and the addendum's "Already collected" line and next-step hint reflect that real mid-conversation turn.
+
+All of these are read-only and never change the assembled prompt — the preview stays a faithful mirror of what the model receives.
+
 ### LLM
 
 Select one or more LLM Instances. The list shows each instance's title, description, vendor, and model name. The user (or the front-end) picks which one to use at chat time, from the agent's allowed set.

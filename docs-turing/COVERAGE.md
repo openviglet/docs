@@ -47,6 +47,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Block / feature | Page | Status |
 |---|---|---|
 | AI Agents | [ai-agents](./ai-agents.md) | ✅ |
+| **Block AK** — Live Preview prompt diagnostics (flow-aware persona, token/cost metrics, inert-this-turn, cross-segment lint, node picker) | [ai-agents § Live Preview & prompt diagnostics](./ai-agents.md#live-preview--prompt-diagnostics) | 🧩 |
 | Tool calling (native + provider-native) | [tool-calling](./tool-calling.md) | ✅ |
 | **Block F.15** — capability registry + two-level gate | [capabilities](./capabilities.md) | ✅ |
 | **Block W** (AG-UI) — live tool activity, client tools, generative UI | [client-tools](./client-tools.md) | ✅ |
