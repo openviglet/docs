@@ -62,7 +62,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Routines (scheduled agents) | [routines](./routines.md) | ✅ |
 | **D.4** — A/B experiments | [experiments](./experiments.md) | ✅ |
 | **Block K** — agent eval / golden sets | [agent-eval](./agent-eval.md) | ✅ |
-| **Block AJ** — eval platform: pluggable graders (code/model/human) + datasets + grader stacks + versioning + Eval Studio | [agent-eval](./agent-eval.md) | 🧩 |
+| **Block AJ** — eval platform: pluggable graders (code/model/human) + datasets + grader stacks + versioning + Eval Studio + calibration/inter-annotator agreement | [agent-eval](./agent-eval.md) | 🧩 |
 
 ## Run it
 

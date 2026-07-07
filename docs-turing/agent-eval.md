@@ -197,6 +197,21 @@ Reviewers work an inbox — the **Review inbox** tab of the [Eval Studio](#eval-
 
 **Promote to a golden row.** Once you've reviewed a case, one click turns it into a regression test: `promote` appends a new row to the dataset you choose — the transcript's user turns become the row's seed turns, the last assistant reply becomes the golden **reference answer**, and the expected outcome/node carry over (tagged `promoted`, with the source review task recorded in the row's metadata). This closes the loop from *"a human noticed this was wrong"* to *"it's now in the dataset"*.
 
+### Calibration & inter-annotator agreement
+
+Two questions decide whether you can *trust* your reviewers and your LLM judge — and both are answered from a **Calibration & agreement** panel at the top of the Review inbox.
+
+**How much do reviewers agree?** Give a task more than one reviewer and the platform computes an agreement score. Set the required reviewer count on an open task, and it only reaches a verdict once that many people have decided — the verdict is then the **strict-majority pass** with the **mean score** (a single reviewer, the default, behaves exactly as before). Across all your multi-reviewer tasks the panel shows **Fleiss' kappa** (with the usual *slight / fair / moderate / substantial / almost-perfect* band): a low number means your rubric is ambiguous, not that people are careless.
+
+**Can you trust the model judge?** Sample a run's **model-graded** cases into an **audit** — the panel's *Audit MODEL-graded run* control parks each sampled case as a review task carrying the model's original verdict. Reviewers re-judge them, and the panel reports **Cohen's kappa** between the LLM judge and the human consensus, a confusion breakdown (where the judge *over-passes* vs *over-fails*), and a plain-language hint for tuning the judge's rubric prompt. The hint is advice, never applied automatically.
+
+| Method | Path | Purpose |
+|---|---|---|
+| `POST` | `/api/ai-agent/{agentId}/eval/review/{taskId}/reviewers?count=` | Require N reviewers on an open task |
+| `GET` | `/api/ai-agent/{agentId}/eval/review/agreement` | Fleiss' kappa over multi-reviewer tasks |
+| `POST` | `/api/ai-agent/{agentId}/eval/review/audit?sampleSize=&requiredReviewers=` | Sample model-graded cases into audit tasks |
+| `GET` | `/api/ai-agent/{agentId}/eval/review/calibration` | Cohen's kappa (judge vs human) + tuning hint |
+
 ---
 
 ## Eval Studio
