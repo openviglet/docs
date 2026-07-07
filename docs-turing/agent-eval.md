@@ -186,19 +186,22 @@ Datasets are **versioned**. Take an immutable **snapshot** to freeze the current
 
 Some things only a person can judge. The **`human-review`** grader is the third grader kind: instead of deciding automatically it **defers** — the case (and the report) go **`PENDING_REVIEW`**, and a review task is parked for a human. A blocking set with a pending review is *block-until-reviewed*; a non-blocking one just warns.
 
-Reviewers work an inbox: they read the replayed transcript and the expected-vs-actual summary, then submit a verdict, which **merges back** into the report (a fully-reviewed run can then go green):
+Reviewers work an inbox — the **Review inbox** tab of the [Eval Studio](#eval-studio): pick an agent, read a pending task's replayed transcript and the expected-vs-actual summary, then submit a verdict, which **merges back** into the report (a fully-reviewed run can then go green):
 
 | Method | Path | Purpose |
 |---|---|---|
 | `GET` | `/api/ai-agent/{agentId}/eval/review` | Open (pending) review tasks |
 | `GET` | `/api/ai-agent/{agentId}/eval/review/{taskId}` | One task (transcript + expected summary) |
 | `POST` | `/api/ai-agent/{agentId}/eval/review/{taskId}` | Submit `{pass, score, notes}` |
+| `POST` | `/api/ai-agent/{agentId}/eval/review/{taskId}/promote?datasetId=` | Promote the reviewed case into a golden [dataset](#datasets) row |
+
+**Promote to a golden row.** Once you've reviewed a case, one click turns it into a regression test: `promote` appends a new row to the dataset you choose — the transcript's user turns become the row's seed turns, the last assistant reply becomes the golden **reference answer**, and the expected outcome/node carry over (tagged `promoted`, with the source review task recorded in the row's metadata). This closes the loop from *"a human noticed this was wrong"* to *"it's now in the dataset"*.
 
 ---
 
 ## Eval Studio
 
-The **Eval Studio** (**Generative AI → Eval Studio**, at `/bento/eval`) is the visual home for the platform: browse your reusable **datasets** (row count + version) and **grader stacks** in one place. The flow editor's eval-gate panel links straight to it. (Per-agent run history, per-case drill-down, the review inbox, and a score timeline are being surfaced inside the Studio incrementally.)
+The **Eval Studio** (**Generative AI → Eval Studio**, at `/bento/eval`) is the visual home for the platform, organized into tabs: browse your reusable **Datasets** (row count + version) and **Grader stacks**, and work the **Review inbox** — pick an agent, review its pending [human-review](#human-review) tasks, and promote the good ones into a golden dataset. The flow editor's eval-gate panel links straight to it. (Per-agent run history, per-case drill-down, and a score timeline are being surfaced inside the Studio incrementally.)
 
 ---
 
