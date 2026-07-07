@@ -115,6 +115,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 | **Block O** — GEO / LLM discoverability | Marketing-site + `llms.txt` concern (`turing.viglet.org`), not the product docs |
 | **Block AB** — public site & top-of-funnel | Marketing site (`turing.viglet.org`), separate app |
 | **Block AE** — this documentation round | Meta — produced the pages in this very matrix |
+| **Block AL** — prompt-assembly pipeline (`TurPromptContributor` SPI, single-pass assembler, STABLE-first cache ordering) | Internal architecture — the assembled prompt is byte-identical to before; the observable change is a more faithful admin Live Preview (a fix) plus opt-in `turing.prompt.assembly.*` cache knobs not yet wired to provider caching |
 
 ---
 
