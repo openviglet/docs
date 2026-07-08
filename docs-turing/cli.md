@@ -195,6 +195,19 @@ Capture a **real** conversation from a running instance into a starter eval suit
 turing eval record abc-123-def-456 --out evals/from-prod.eval.yaml
 ```
 
+#### `turing eval --dataset <id|name> [--stack <id|name>] [--min-score <n>]`
+
+Run a **stored** eval dataset against a **grader stack** on the server, instead of local YAML fixtures. This is the CLI face of `POST /api/eval/run`: the dataset ([reusable datasets](./agent-eval.md)) and the grader stack both live in the Turing instance and are referenced by **id or name**, so one dataset gates any number of pipelines without checking fixtures into each repo. Omit `--stack` to use the default stack (slot / outcome / node / rubric).
+
+The command replays every dataset row against the agent (`--agent` / `TURING_AGENT_ID`), scores it with the stack, prints a per-case summary, and **exits non-zero when the gate fails**. The gate passes when every case passes and — if you set `--min-score` — the aggregate score is at least that threshold (0–1).
+
+```bash
+turing eval --dataset "Golden Leads" --agent abc-123 --min-score 0.8
+turing eval --dataset ds-42 --stack "Strict RAG" --env=staging
+```
+
+The run is recorded in the agent's history and appears on the [Eval Studio](./agent-eval.md) timeline, but it never becomes the agent's pre-publish baseline — an ad-hoc dataset run can't disturb the golden-set gate.
+
 ### `turing logs --conversation <id> [--slots] [connection flags]`
 
 Tail **live chat events** for a conversation over the spectator SSE stream — first a transcript snapshot, then each new turn as it happens. `--slots` also relays slot updates. `Ctrl-C` stops.
@@ -212,7 +225,16 @@ turing logs --conversation abc-123-def-456 --slots
 
 ## Using it as a library
 
-The CLI's internals are also exported from `@viglet/turing-cli` so you can embed them — e.g. `TuringClient`, `resolveConnection`, `scaffoldFiles`, `deployProject`, `runSuite`/`evaluate` (with a custom `EvalBackend`), `parseYaml`, `buildZip`. Handy for building your own tooling on the same primitives.
+The CLI's internals are also exported from `@viglet/turing-cli` so you can embed them — e.g. `TuringClient`, `resolveConnection`, `scaffoldFiles`, `deployProject`, `runSuite`/`evaluate` (with a custom `EvalBackend`), `runEval` (the programmatic `dataset × grader stack` CI gate, returning `{ gatePassed, report }`), `parseYaml`, `buildZip`. Handy for building your own tooling on the same primitives.
+
+```ts
+import { TuringClient, runEval } from "@viglet/turing-cli";
+
+const client = new TuringClient("https://turing.example.com", { kind: "token", token: process.env.TURING_TOKEN! });
+await client.authenticate();
+const result = await runEval(client, { agentId: "abc-123", dataset: "Golden Leads", minScore: 0.8 });
+if (!result.gatePassed) process.exit(1);
+```
 
 ---
 
