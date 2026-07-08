@@ -221,6 +221,7 @@ The **Eval Studio** (**Generative AI → Eval Studio**, at `/bento/eval`) is the
 - **Datasets** — browse your reusable datasets (row count + version).
 - **Generate** — synthesize or augment dataset rows with LLM assistance, then review and save them.
 - **Grader stacks** — browse your reusable, named grader stacks.
+- **NL→Facet** — evaluate Semantic Navigation's natural-language→facet parser on the same platform. Paste an eval pack (a declared field schema plus prose queries with their golden filters/ranges/sort) to **import it as a reusable dataset**; the saved NL→facet datasets list alongside your chat-flow ones, and **Run** scores each prose query through the grounded parser, showing per-case pass/fail and any *ungrounded* fields (a filter on a field outside the declared schema — the hard failure the scorer flags). One Studio, one gate for both chat-flow and search evals.
 - **Runs** — pick an agent to see its evaluation **run history**: a **score timeline** charts every run's aggregate score over time (with regressions visible at a glance), the run list badges each run **pass**/**fail** and marks the green **baseline** and any **regressed** run, and selecting a run drills into the **per-case breakdown** — pass/fail and score per case, the actual-vs-expected outcome, any failing slot values, and the rubric verdict. A **Run gate now** button replays the agent's enabled golden sets and refreshes the timeline.
 - **Review inbox** — pick an agent, review its pending [human-review](#human-review) tasks, and promote the good ones into a golden dataset.
 
