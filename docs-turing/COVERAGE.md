@@ -117,6 +117,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 | **Block O** — GEO / LLM discoverability | Marketing-site + `llms.txt` concern (`turing.viglet.org`), not the product docs |
 | **Block AB** — public site & top-of-funnel | Marketing site (`turing.viglet.org`), separate app |
 | **Block AE** — this documentation round | Meta — produced the pages in this very matrix |
+| **Block AG** — Bento admin UI redesign + console retirement | UI/design change (frosted-glass admin reskin); no new capability, config, or API — the admin surfaces work the same, only re-skinned. Admin URLs moved `/admin/*` → `/bento/*` with transparent redirects, so bookmarks/deep-links still resolve. Doc screenshots refreshed opportunistically, not gated here |
 | **Block AL** — prompt-assembly pipeline (`TurPromptContributor` SPI, single-pass assembler, STABLE-first cache ordering) | Internal architecture — the assembled prompt is byte-identical to before; the observable change is a more faithful admin Live Preview (a fix) plus opt-in `turing.prompt.assembly.*` cache knobs not yet wired to provider caching |
 
 ---
