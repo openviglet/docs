@@ -318,6 +318,10 @@ The **Persona dialogue** action runs an automatic, turn-by-turn conversation bet
 
 Pick a topic, add **as many speakers as you like** (two minimum — the roster grows with an "Add persona" button), an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 40). Turing ES seeds the first persona with the topic, then goes **round-robin** — feeding each persona the previous speaker's reply — until the budget is spent. The transcript is **streamed live**: each turn appears the moment it's generated (colour-coded per speaker), rather than the whole conversation arriving at the end. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the others. It's the quickest way to hear several brand voices play off each other — a live "voice diff". If a turn fails mid-way, the partial transcript is kept with a notice.
 
+### Suggest the best-fit persona for content
+
+Content-fit answers "does this text fit *this* persona"; **Suggest persona** answers the inverse — "**which** audience persona is this content even *for*". Reached from the persona list, it opens a page where you paste a piece of content (optionally restricting the pool to a few personas), and Turing ES batches the [content-fit evaluator](#how-content-fit-is-scored) across **every enabled audience persona** and returns them **ranked best-fit first**. Each row shows the red/amber/green fit bar plus the same *fits*/*misfits* detail, with the top persona flagged as the best fit — degrading to the readability-only score when no default LLM is configured. It feeds editorial routing (who is this article for?) and A/B persona selection. `POST /api/persona/suggest`.
+
 ---
 
 ## Where Personas Fit in the Bigger Picture

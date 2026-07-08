@@ -39,8 +39,8 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Chat interface | [chat](./chat.md) | ✅ |
 | **E.6 / F.8** — chat memory, compaction, context editing | [chat-memory](./chat-memory.md) | ✅ |
 | Intents / conversation starters | [intent](./intent.md) | ✅ |
-| **Block AA** — speaker + audience personas, content-fit, persona-from-audio | [personas § Audience Personas & Content-Fit](./personas.md#audience-personas--content-fit) | ✅ |
-| **Block AI** — persona as an actionable surface (persona chat, bento dashboard + launchpad, content-fit launch action, persona dialogue) | [personas § Act on a Persona](./personas.md#act-on-a-persona-chat-validate-dialogue) | ✅ |
+| **Block AA** — speaker + audience personas, content-fit, persona-from-audio, persona-suggest | [personas § Audience Personas & Content-Fit](./personas.md#audience-personas--content-fit), [§ Suggest the best-fit persona](./personas.md#suggest-the-best-fit-persona-for-content) | ✅ |
+| **Block AI / AG** — persona as an actionable surface (persona chat, bento dashboard + launchpad, content-fit launch action, persona dialogue, suggest persona; T619 re-added from-audio + suggest to bento) | [personas § Act on a Persona](./personas.md#act-on-a-persona-chat-validate-dialogue) | ✅ |
 
 ## Automate it
 
