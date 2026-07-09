@@ -74,7 +74,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block AD** — 11 vendor types, per-vendor auth | [llm-instances](./llm-instances.md) | ✅ |
 | **T620** — startup LLM auto-provisioning from `OPENAI_API_KEY` | [llm-instances](./llm-instances.md#zero-config-provision-from-openai_api_key-at-startup) | 🧩 |
 | **T622** — local ONNX embeddings + zero-config local RAG at startup; global Default AI Agent fallback for agentless SN sites | [embedding-models § Zero-config local RAG](./embedding-models.md#zero-config-local-rag-at-startup) · [ai-agents § Default AI Agent](./ai-agents.md#default-ai-agent-global-fallback) | 🧩 |
-| **Block AM (T623–T626)** — HuggingFace embedding provider + provider-aware model picker (LLM-embedding / HuggingFace / manual local) | [embedding-models § HuggingFace.co](./embedding-models.md#huggingfaceco) · [embedding-models § Provider](./embedding-models.md#provider) | 🧩 |
+| **Block AM (T623–T627, T629)** — HuggingFace embedding provider + provider-aware model picker (LLM-embedding / HuggingFace / manual local) + on-select dimension/reindex warning + HF-repo-id startup seeding | [embedding-models § HuggingFace.co](./embedding-models.md#huggingfaceco) · [embedding-models § Provider](./embedding-models.md#provider) · [embedding-models § Zero-config local RAG](./embedding-models.md#zero-config-local-rag-at-startup) | 🧩 |
 | Knowledge Base / Assets, pluggable storage | [assets](./assets.md) | ✅ |
 | **Block J** — multi-tenancy | [multi-tenancy](./multi-tenancy.md) | ✅ |
 | Administration (users, roles, tokens, settings) | [administration-guide](./administration-guide.md) | ✅ |

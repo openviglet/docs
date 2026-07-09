@@ -84,6 +84,8 @@ The **HuggingFace.co** provider runs the *same* in-process ONNX runtime as Local
 
 When huggingface.co is unreachable (offline, rate-limited), the picker falls back to a **curated catalog** of known-good ONNX models — the source (*Live from huggingface.co* vs *From the curated catalog*) is badged at the bottom of the list. The picker stays **editable**, so a repo id not in the list can still be typed (private or brand-new models). This is the recommended way to use a local model: same zero-cost, key-free, in-process embeddings, without hunting for URLs.
 
+When you pick a model, Turing reads its **embedding dimension** from the repo's `config.json` and shows it inline. If that dimension differs from your current default embedding model's, a warning appears: changing the dimension means every already-embedded vector is invalid until you **re-index**, against a vector store whose field matches the new dimension. This surfaces the cost *before* you save.
+
 :::note HuggingFace Inference API is not this provider
 This provider downloads and runs the model **locally**. It does *not* call HuggingFace's hosted Inference API (that would need an API key and a remote call — configure it as an [LLM Instance](./llm-instances.md) instead).
 :::
