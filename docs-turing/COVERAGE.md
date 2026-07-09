@@ -73,6 +73,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block F / F.16** — GenAI overview + Gemini native primitives | [genai-llm](./genai-llm.md) | ✅ |
 | **Block AD** — 11 vendor types, per-vendor auth | [llm-instances](./llm-instances.md) | ✅ |
 | **T620** — startup LLM auto-provisioning from `OPENAI_API_KEY` | [llm-instances](./llm-instances.md#zero-config-provision-from-openai_api_key-at-startup) | 🧩 |
+| **T622** — local ONNX embeddings + zero-config local RAG at startup; global Default AI Agent fallback for agentless SN sites | [embedding-models § Zero-config local RAG](./embedding-models.md#zero-config-local-rag-at-startup) · [ai-agents § Default AI Agent](./ai-agents.md#default-ai-agent-global-fallback) | 🧩 |
 | Knowledge Base / Assets, pluggable storage | [assets](./assets.md) | ✅ |
 | **Block J** — multi-tenancy | [multi-tenancy](./multi-tenancy.md) | ✅ |
 | Administration (users, roles, tokens, settings) | [administration-guide](./administration-guide.md) | ✅ |

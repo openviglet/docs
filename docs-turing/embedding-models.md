@@ -67,14 +67,34 @@ ollama pull nomic-embed-text
 
 ### Local Transformers (ONNX)
 
-Turing ES also supports running embedding models locally via ONNX Runtime, without an external LLM provider. This is useful for deploying custom or fine-tuned models.
+Turing ES also supports running embedding models **locally, in-process** via ONNX Runtime, without an external LLM provider, API or key. This is useful for air-gapped deployments, custom/fine-tuned models, and zero-cost embeddings.
 
 | Setting | Description |
 |---|---|
-| **Model Path** | Absolute path to the `.onnx` model file |
-| **Tokenizer Path** | Absolute path to `tokenizer.json` |
+| **Model Path** | Location of the `.onnx` model file. Accepts a `classpath:`, `file:` or `https:` URI. Remote (`https:`) resources are **downloaded and cached** on first use. |
+| **Tokenizer Path** | Location of `tokenizer.json` (same URI schemes as above). |
 | **Enable GPU** | Toggle GPU acceleration via ONNX Runtime |
 | **Batch Size** | Number of texts to embed per batch |
+
+The default recommended model is `all-MiniLM-L6-v2` (384-dimensional, ~80 MB), a small, fast sentence-transformers model. For example, point **Model Path** at `https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx` and **Tokenizer Path** at the matching `.../tokenizer.json`; the first embedding call downloads and caches both.
+
+#### Zero-config local RAG at startup
+
+A fresh install (notably the public demo) can provision a complete local retrieval backend automatically, with no admin step. When a global [Default AI Agent](./ai-agents.md) is configured and no embedding model or vector store exists yet, Turing ES creates a local ONNX embedding model (`all-MiniLM-L6-v2`) plus an embedded [Lucene vector store](./embedding-stores.md), registers both as the global defaults, wires them onto the Default AI Agent (enabling RAG), then downloads the model and reindexes existing content into the store — so grounded chat works out of the box.
+
+It is controlled by `turing.startup.default-rag.*`:
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.startup.default-rag.enabled` | `true` | Master switch for the startup provisioning. |
+| `turing.startup.default-rag.model-name` | `all-MiniLM-L6-v2` | Display name of the provisioned embedding model. |
+| `turing.startup.default-rag.model-path` | HuggingFace `all-MiniLM-L6-v2` ONNX URL | Overrides the ONNX model URI. |
+| `turing.startup.default-rag.tokenizer-path` | HuggingFace `tokenizer.json` URL | Overrides the tokenizer URI. |
+| `turing.startup.default-rag.store-path` | `./store/lucene-vector` | Filesystem root for the Lucene index. |
+| `turing.startup.default-rag.reindex` | `true` | Reindex existing site content into the new store after provisioning. |
+| `turing.genai.embedding.local.cache-dir` | *(temp dir)* | Where downloaded ONNX/tokenizer resources are cached; set a persistent path to keep them across restarts. |
+
+The step is **idempotent** — it acts only on a fresh install (no embedding model and no store yet) and never overrides an existing setup.
 
 ---
 
