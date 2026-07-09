@@ -86,6 +86,8 @@ When huggingface.co is unreachable (offline, rate-limited), the picker falls bac
 
 When you pick a model, Turing reads its **embedding dimension** from the repo's `config.json` and shows it inline. If that dimension differs from your current default embedding model's, a warning appears: changing the dimension means every already-embedded vector is invalid until you **re-index**, against a vector store whose field matches the new dimension. This surfaces the cost *before* you save.
 
+If the repo ships more than one ONNX artifact (a full-precision `model.onnx` plus quantized variants like `model_quantized.onnx`), an **ONNX Variant** selector appears. Quantized variants are smaller and faster to run at a small accuracy cost; leave it on *Default (recommended)* unless you specifically want to trade accuracy for size/latency. The chosen variant is remembered with the model.
+
 :::note HuggingFace Inference API is not this provider
 This provider downloads and runs the model **locally**. It does *not* call HuggingFace's hosted Inference API (that would need an API key and a remote call — configure it as an [LLM Instance](./llm-instances.md) instead).
 :::
