@@ -78,6 +78,16 @@ Turing ES also supports running embedding models **locally, in-process** via ONN
 
 The default recommended model is `all-MiniLM-L6-v2` (384-dimensional, ~80 MB), a small, fast sentence-transformers model. For example, point **Model Path** at `https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx` and **Tokenizer Path** at the matching `.../tokenizer.json`; the first embedding call downloads and caches both.
 
+### HuggingFace.co
+
+The **HuggingFace.co** provider runs the *same* in-process ONNX runtime as Local Transformers — but instead of typing the `.onnx` and `tokenizer.json` URLs by hand, you **pick a model from a searchable list**. Choose it from the provider dropdown and search HuggingFace directly in the form: Turing lists sentence-transformers repos ranked by popularity and only offers ones it has **verified expose a loadable ONNX model + tokenizer** (an *ONNX verified* check appears next to each), showing the embedding **dimensions** and **download** count. Selecting a model stores just its **repo id** (e.g. `sentence-transformers/all-MiniLM-L6-v2`); Turing resolves the artifact URLs at load time, handling both repo layouts (ONNX at the root or under an `onnx/` subfolder).
+
+When huggingface.co is unreachable (offline, rate-limited), the picker falls back to a **curated catalog** of known-good ONNX models — the source (*Live from huggingface.co* vs *From the curated catalog*) is badged at the bottom of the list. The picker stays **editable**, so a repo id not in the list can still be typed (private or brand-new models). This is the recommended way to use a local model: same zero-cost, key-free, in-process embeddings, without hunting for URLs.
+
+:::note HuggingFace Inference API is not this provider
+This provider downloads and runs the model **locally**. It does *not* call HuggingFace's hosted Inference API (that would need an API key and a remote call — configure it as an [LLM Instance](./llm-instances.md) instead).
+:::
+
 #### Zero-config local RAG at startup
 
 A fresh install (notably the public demo) can provision a complete local retrieval backend automatically, with no admin step. When a global [Default AI Agent](./ai-agents.md) is configured and no embedding model or vector store exists yet, Turing ES creates a local ONNX embedding model (`all-MiniLM-L6-v2`) plus an embedded [Lucene vector store](./embedding-stores.md), registers both as the global defaults, wires them onto the Default AI Agent (enabling RAG), then downloads the model and reindexes existing content into the store — so grounded chat works out of the box.
@@ -145,10 +155,15 @@ Navigate to **Generative AI → Embedding Models** to manage embedding model con
 
 ### Provider
 
-| Field | Required | Description |
+The **Provider Type** dropdown selects one of three modes, and the model field adapts to match:
+
+| Provider mode | Model field | What is stored |
 |---|---|---|
-| **LLM Instance** | Yes* | Select the [LLM Instance](./llm-instances.md) that provides the embedding API. Not required for Local Transformers. |
-| **Model Reference** | Yes | Technical model identifier (e.g., `text-embedding-3-large`, `nomic-embed-text`) |
+| An **LLM Instance** (remote embedding API) | A **model picker** listing the vendor's *embedding-capable* models (the same combobox the LLM form uses, filtered to embeddings) — live from the vendor when a key is available, otherwise the bundled catalog. Stays editable. | `Model Reference` = the vendor model id (e.g. `text-embedding-3-large`) |
+| **HuggingFace.co** | A **searchable HuggingFace picker** (ONNX-verified repos, dimensions, downloads, live/catalog badge). Stays editable. | `Model Reference` = the HuggingFace repo id (e.g. `sentence-transformers/all-MiniLM-L6-v2`) |
+| **Transformers (Local)** | Manual **Model Path** + **Tokenizer Path** inputs (below) | The `.onnx` / `tokenizer.json` URIs |
+
+The model field is no longer free-text for the LLM and HuggingFace paths — fat-fingering `text-embedding-3-smal` is caught by the picker, while an unlisted id can still be typed when needed.
 
 ### Local Transformers Options
 
