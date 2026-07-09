@@ -98,8 +98,9 @@ It is controlled by `turing.startup.default-rag.*`:
 |---|---|---|
 | `turing.startup.default-rag.enabled` | `true` | Master switch for the startup provisioning. |
 | `turing.startup.default-rag.model-name` | `all-MiniLM-L6-v2` | Display name of the provisioned embedding model. |
-| `turing.startup.default-rag.model-path` | HuggingFace `all-MiniLM-L6-v2` ONNX URL | Overrides the ONNX model URI. |
-| `turing.startup.default-rag.tokenizer-path` | HuggingFace `tokenizer.json` URL | Overrides the tokenizer URI. |
+| `turing.startup.default-rag.model-repo-id` | `sentence-transformers/all-MiniLM-L6-v2` | HuggingFace repo id to provision as the default (a `HuggingFace.co` model — same shape as one you'd pick in the form). **Blank it** to fall back to the raw-URL local path below. |
+| `turing.startup.default-rag.model-path` | HuggingFace `all-MiniLM-L6-v2` ONNX URL | Fallback ONNX model URI, used only when `model-repo-id` is blank. |
+| `turing.startup.default-rag.tokenizer-path` | HuggingFace `tokenizer.json` URL | Fallback tokenizer URI, used only when `model-repo-id` is blank. |
 | `turing.startup.default-rag.store-path` | `./store/lucene-vector` | Filesystem root for the Lucene index. |
 | `turing.startup.default-rag.reindex` | `true` | Reindex existing site content into the new store after provisioning. |
 | `turing.genai.embedding.local.cache-dir` | *(temp dir)* | Where downloaded ONNX/tokenizer resources are cached; set a persistent path to keep them across restarts. |
