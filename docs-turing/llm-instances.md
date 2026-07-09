@@ -26,6 +26,32 @@ That instance is now selectable in every agent, site, and the Chat tab.
 
 ---
 
+## Zero-config: provision from `OPENAI_API_KEY` at startup
+
+For containerized and hands-off deployments (the public demo is the canonical case), Viglet Turing ES can create the first LLM instance for you at boot, straight from an environment variable — no admin visit required.
+
+**On startup, when all of these hold, Turing creates a GLOBAL OpenAI instance and sets it as the [Default LLM Instance](./genai-llm.md#global-settings):**
+
+- `OPENAI_API_KEY` is present and non-blank in the environment,
+- `turing.startup.default-llm.enabled` is not `false` (it defaults to **on**), and
+- **no LLM instance exists yet** — the table is empty.
+
+The created instance uses the **OpenAI** vendor, endpoint `https://api.openai.com/v1`, a cheap default model, has tools enabled, and stores the key encrypted exactly like a manually-created one. Because it is a GLOBAL instance (no owning tenant), every tenant can use it.
+
+| Setting | Env var | Default | Purpose |
+|---|---|---|---|
+| Enable startup provisioning | `TURING_STARTUP_DEFAULT_LLM_ENABLED` | `true` | Set `false` to never auto-create the instance. |
+| API key (the trigger) | `OPENAI_API_KEY` | *(unset)* | When unset/blank, nothing is provisioned. |
+| Model | `TURING_STARTUP_DEFAULT_LLM_MODEL` | `gpt-4o-mini` | Chat model for the created instance. |
+
+:::note Idempotent by design — it never overrides your setup
+The empty-table guard means this runs only on a **fresh install**. The moment any instance exists — created here, imported, or added in the admin — the bootstrap is skipped on every subsequent boot and your instances are never touched. (On an ephemeral demo whose store volume is wiped, the table is empty again, so the default is recreated automatically.)
+:::
+
+You can override the model, disable auto-provisioning, or add more instances in the admin at any time; the auto-created instance behaves like any other from then on.
+
+---
+
 ## Instance Listing
 
 The page displays all configured instances as a grid of cards (title and description). Use the **"New language model instance"** button to create a new one. The vendor dropdown is populated from `/api/llm/vendor` — the list is database-driven, not hard-coded, so the vendors you see are exactly the ones seeded into your install.
