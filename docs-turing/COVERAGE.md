@@ -26,6 +26,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | SPA / search-template pages | [spa-pages](./spa-pages.md) | ✅ |
 | Connectors (AEM, web crawler) | [integration](./integration.md) · [integration-aem](./integration-aem.md) | ✅ |
 | Import / export | [import-export](./import-export.md) | ✅ |
+| Migrating from Algolia / Elasticsearch (guide) | [migration](./migration.md) | ✅ |
 
 ## Ask it
 

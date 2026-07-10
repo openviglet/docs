@@ -43,6 +43,7 @@ const sidebars: SidebarsConfig = {
               items: ["integration", "integration-aem"],
             },
             "import-export",
+            "migration",
           ],
         },
         // ── Ask it ───────────────────────────────────────────────────────
