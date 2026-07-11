@@ -28,10 +28,10 @@ spring:
     active: production
   h2:
     console:
-      enabled: false
+      enabled: false          # keep off in production
       path: /h2
       settings:
-        web-allow-others: true
+        web-allow-others: false   # loopback-only if ever enabled
   datasource:
     url: jdbc:h2:file:./store/db/turingDB;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=true
     username: sa
@@ -76,8 +76,8 @@ spring:
       default-destination: indexing.queue
   servlet:
     multipart:
-      max-file-size: 1024MB
-      max-request-size: 1024MB
+      max-file-size: 64MB
+      max-request-size: 64MB
   mvc:
     async:
       request-timeout: 3600000
@@ -115,8 +115,9 @@ server:
     maxHttpResponseHeaderSize: 800KB
 
 turing:
-  ai.crypto.key: sample-key-for-crypto
+  ai.crypto.key: ${TURING_AI_CRYPTO_KEY:}   # required in production (fail-fast on blank/sample)
   allowedOrigins: http://localhost:4200,http://localhost:5173
+  permissions: true                          # authn is NOT admin; false = trusted single-user mode
   multi-tenant: false
   keycloak: false
   url: http://localhost:2700
@@ -143,10 +144,10 @@ turing:
     filesystem:
       path: ./store/assets
     minio:
-      endpoint: http://localhost:9000
-      access-key: admin
-      secret-key: minha_senha_forte
-      bucket: turing-assets
+      endpoint: ${TURING_STORAGE_MINIO_ENDPOINT:http://localhost:9000}
+      access-key: ${TURING_STORAGE_MINIO_ACCESS_KEY:minioadmin}   # set via env for real deployments
+      secret-key: ${TURING_STORAGE_MINIO_SECRET_KEY:minioadmin}
+      bucket: ${TURING_STORAGE_MINIO_BUCKET:turing-assets}
   mongodb:
     enabled: false
     uri: mongodb://localhost:27017
@@ -168,7 +169,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "health,info,prometheus"   # env/heapdump/etc. not exposed over HTTP
 
 logging:
   config: classpath:logback-spring.xml
@@ -267,8 +268,8 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 
 | Property | Default | Description |
 |---|---|---|
-| `spring.servlet.multipart.max-file-size` | `1024MB` | Maximum size of a single uploaded file |
-| `spring.servlet.multipart.max-request-size` | `1024MB` | Maximum total size of a multipart request |
+| `spring.servlet.multipart.max-file-size` | `64MB` | Maximum size of a single uploaded file (was 1024MB; anonymous slot uploads are additionally capped by `turing.abuse.chat.max-upload-bytes`) |
+| `spring.servlet.multipart.max-request-size` | `64MB` | Maximum total size of a multipart request |
 
 ---
 
@@ -300,12 +301,40 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 | `turing.keycloak` | `false` | Set `true` to enable Keycloak OAuth2/OIDC. See [Security & Keycloak](./security-keycloak.md). |
 | `turing.tenancy.enabled` | `false` | Enable multi-tenant mode (one JVM, many isolated tenants). Default `false` = single-tenant, byte-for-byte legacy behavior. See [Multi-Tenancy](./multi-tenancy.md). |
 | `turing.open-browser` | `true` | Automatically open the admin console in the browser on startup |
-| `turing.ai.crypto.key` | `sample-key-for-crypto` | Encryption key for stored AI provider credentials. **Change this in production.** |
+| `turing.permissions` | `true` | When `true`, users get only their real group/role authorities. When `false`, **any** authenticated principal is granted `ROLE_ADMIN` + all privileges (trusted single-user mode only — logs a `SECURITY` warning at startup). See [Security Hardening](./security-hardening.md#2-turingpermissions-defaults-to-true-authn--admin). |
+| `turing.ai.crypto.key` | *(blank → env `TURING_AI_CRYPTO_KEY`)* | AES/GCM key encrypting all stored provider credentials. **Required in production** — the app fails to start on the `production` profile with a blank or known-sample value. |
 | `turing.code-interpreter.python-executable` | *(auto-detected)* | Absolute path to the Python 3 binary used by the Code Interpreter GenAI tool. When blank, Turing searches standard OS locations automatically. |
 
-:::warning Change the crypto key
-The `turing.ai.crypto.key` is used to encrypt LLM provider API keys stored in the database. Always set a strong, unique value in production.
+:::warning Set the crypto key in production
+`turing.ai.crypto.key` encrypts every LLM provider API key + store credential in the database. Supply it via the `TURING_AI_CRYPTO_KEY` environment variable (`openssl rand -base64 48`). Under the `production` profile a blank or known-sample key makes startup **fail fast**. See [Security Hardening § crypto key](./security-hardening.md#1-ai-crypto-master-key-must-be-set-in-production).
 :::
+
+### Abuse Controls (`turing.abuse`) {#abuse-controls-turingabuse}
+
+In-process protection for the anonymous public chat/search surface (all on by default except the hard cost cap). See [Security Hardening § abuse controls](./security-hardening.md#5-abuse-controls-on-the-anonymous-chatsearch-surface).
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.abuse.chat.rate-limit-enabled` | `true` | Per-IP + per-session fixed-window rate limit on the LLM-cost chat surface. Over the limit → HTTP 429 + `Retry-After`. |
+| `turing.abuse.chat.requests-per-minute-per-ip` | `60` | IP-dimension request limit. `≤0` disables it. |
+| `turing.abuse.chat.requests-per-minute-per-session` | `30` | Session/conversation-dimension limit. `≤0` disables it. |
+| `turing.abuse.chat.hard-monthly-cap-usd` | `0` | `>0` enforces a hard month-to-date LLM-spend ceiling on anonymous chat (refuses new conversations, no upstream call). |
+| `turing.abuse.chat.anonymous-tools-enabled` | `true` | `false` strips all tool callbacks for anonymous SN chat (visitors can't trigger tool execution). |
+| `turing.abuse.chat.max-upload-bytes` | `10485760` | Per-file cap on anonymous slot uploads, enforced before extraction/vision. |
+| `turing.abuse.chat.max-messages-per-turn` | `100` | Max messages per anonymous chat turn. |
+| `turing.abuse.chat.max-message-chars` | `24000` | Max characters per anonymous message. |
+| `turing.abuse.chat.max-zip-entries` | `5000` | Max entries in a page/skill import ZIP. |
+| `turing.abuse.chat.max-zip-entry-bytes` | `52428800` | Max uncompressed size of one ZIP entry (zip-bomb guard). |
+| `turing.abuse.chat.max-zip-total-bytes` | `262144000` | Max total uncompressed ZIP size. |
+
+### MCP Client Guards (`turing.mcp-client`) {#mcp-client-guards}
+
+Guardrails for the agent-as-MCP-client path. See [MCP Servers](./mcp-servers.md) and [Security Hardening § MCP](./security-hardening.md#8-mcp-client-guards).
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.mcp-client.allowed-stdio-commands` | *(empty = any)* | Allowlist of permitted stdio command base-names (e.g. `[npx, uvx]`). When set, other commands are refused — blocks arbitrary local-process execution by config. |
+| `turing.mcp-client.block-private-urls` | `false` | When `true`, an HTTP MCP-client URL resolving to a private/loopback address is refused via the SSRF guard. Leave `false` for internal-network MCP servers. |
 
 ---
 
@@ -359,8 +388,8 @@ Storage powers the [Assets](./assets.md) file manager, the RAG Knowledge Base, a
 | Property | Default | Description |
 |---|---|---|
 | `turing.storage.minio.endpoint` | `http://localhost:9000` | MinIO server URL |
-| `turing.storage.minio.access-key` | `admin` | MinIO access key |
-| `turing.storage.minio.secret-key` | `minha_senha_forte` | MinIO secret key |
+| `turing.storage.minio.access-key` | *(env `TURING_STORAGE_MINIO_ACCESS_KEY`)* | MinIO access key. Set via env for any real deployment. |
+| `turing.storage.minio.secret-key` | *(env `TURING_STORAGE_MINIO_SECRET_KEY`)* | MinIO secret key. Set via env for any real deployment. |
 | `turing.storage.minio.bucket` | `turing-assets` | Bucket name — created automatically on startup if it does not exist |
 
 #### Filesystem Backend

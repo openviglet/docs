@@ -291,6 +291,10 @@ Like the enricher, the retention worker is ShedLock-protected — only one node 
 
 All endpoints are read-only and live under `/api/system/chat-analytics`. Designed to be consumed by Grafana via the [Infinity datasource](https://grafana.com/grafana/plugins/yesoreyeram-infinity-datasource/) — engine-agnostic JSON/HTTP.
 
+:::warning Requires authentication
+These endpoints expose session transcripts and other end-user chat content, so they require an **authenticated admin** (`ROLE_ADMIN` / `AI_AGENT_VIEW`) — they are **not** anonymous. Configure your Grafana Infinity datasource with HTTP Basic auth using a Turing admin account (the shipped provisioning uses Basic auth with placeholder credentials — replace them). See [Security Hardening § chat-analytics](./security-hardening.md#3-chat-analytics-api-requires-authentication).
+:::
+
 ### Health
 
 | Method | Endpoint | Returns |

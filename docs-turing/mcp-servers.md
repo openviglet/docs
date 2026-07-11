@@ -54,6 +54,15 @@ https://mcp.example.com/api/tools
 
 Use HTTP when the MCP server is a hosted service or when it runs on a different machine or container.
 
+:::note Client hardening (`turing.mcp-client.*`)
+Because an MCP client server is admin-configured, two optional guardrails let you lock the client path down (both default to the permissive/legacy behavior so internal-network MCP keeps working):
+
+- `turing.mcp-client.allowed-stdio-commands` — an allowlist of permitted stdio command base-names (e.g. `[npx, uvx]`). When set, any other `Command` is refused, blocking arbitrary local-process execution by configuration.
+- `turing.mcp-client.block-private-urls` — when `true`, an HTTP MCP-client URL that resolves to a private/loopback address is refused via the SSRF egress guard.
+
+See [Security Hardening § MCP client guards](./security-hardening.md#8-mcp-client-guards).
+:::
+
 ---
 
 ## Execution Modes

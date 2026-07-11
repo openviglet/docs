@@ -106,6 +106,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | API key + session auth | [security-authentication](./security-authentication.md) | ✅ |
 | Social login | [security-social-login](./security-social-login.md) | ✅ |
 | Keycloak OAuth2 / OIDC SSO | [security-keycloak](./security-keycloak.md) | ✅ |
+| **Block AN** — post-audit security hardening: prod-required crypto key, `permissions=true` default (authn ≠ admin), chat-analytics auth, dev-token header-only + expiry/revocation, anonymous-chat abuse controls (`turing.abuse.*`), RAG untrusted-content framing + tool trust boundary, SSRF egress guard, storage traversal/Zip-Slip caps, actuator restriction, MCP client guards (`turing.mcp-client.*`), MinIO-creds/H2 hardening, frontend XSS sanitisers, dependency-audit CI gate | [security-hardening](./security-hardening.md) · [configuration-reference § Abuse Controls](./configuration-reference.md#abuse-controls-turingabuse) | ✅ |
 
 ---
 

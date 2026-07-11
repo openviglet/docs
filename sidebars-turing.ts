@@ -137,6 +137,7 @@ const sidebars: SidebarsConfig = {
             "security-authentication",
             "security-social-login",
             "security-keycloak",
+            "security-hardening",
           ],
         },
         {

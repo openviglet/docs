@@ -30,20 +30,32 @@ Users, groups, and roles are managed in **Administration → Users**, **Groups**
 
 ### REST API — API Key
 
-All REST API requests authenticate via an **API Key** passed in the `Key` request header. API Tokens are not tied to user sessions — they are created in **Administration → API Tokens** and remain valid until explicitly deleted.
+All REST API requests authenticate via an **API Key** passed in the **`Key` request header** (never a query parameter — see the note below). API Tokens are created in **Administration → API Tokens**.
+
+```bash
+curl -H "Key: <your-token>" https://your-host/api/sn/mysite/search?q=hello
+```
 
 **Creating an API Token:**
 
 1. Sign in to the Administration Console.
 2. Navigate to **Administration → API Tokens**.
-3. Click **New**, fill in a name and description.
+3. Click **New**, fill in a name and description (optionally set an expiry).
 4. Copy the generated token immediately — it will not be shown again.
+
+:::warning `?apiKey=` query parameter removed
+Passing the token as a `?apiKey=` URL query parameter is **no longer supported** — a secret in the URL leaks into access logs, `Referer` headers and browser history. Always send it in the `Key` header. This affects the public Semantic Navigation endpoints on API-key-mode sites and the MCP server. Tokens also now support **expiry and revocation** (`enabled` flag / `expiresAt`); a disabled or expired token is rejected. See [Security Hardening](./security-hardening.md#4-developer-tokens-header-only-with-expiry--revocation).
+:::
 
 For the full endpoint reference, authentication examples, and the list of public endpoints that require no authentication, see [REST API Reference → Authentication](./rest-api.md#authentication).
 
 :::tip Tokens are encrypted at rest
-API Token values are encrypted at rest in the database. The encryption key is set via `turing.ai.crypto.key` in `application.yaml`. Change this key in production — see [Configuration Reference](./configuration-reference.md).
+API Token values are encrypted at rest in the database. The encryption key is set via `turing.ai.crypto.key` (env `TURING_AI_CRYPTO_KEY`) — **required in production**. See [Configuration Reference](./configuration-reference.md) and [Security Hardening](./security-hardening.md).
 :::
+
+### Authorization — `turing.permissions`
+
+By default (`turing.permissions: true`) authenticated users receive only the authorities from their assigned groups/roles. Setting it to `false` grants **every** authenticated principal full admin rights (a trusted single-user convenience) and logs a `SECURITY` warning at startup. See [Security Hardening § permissions](./security-hardening.md#2-turingpermissions-defaults-to-true-authn--admin).
 
 ---
 
