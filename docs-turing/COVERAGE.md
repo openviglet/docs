@@ -29,6 +29,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Migrating from Algolia / Elasticsearch (guide) | [migration](./migration.md) | ✅ |
 | **Block AO** — migration tooling: ES/Algolia importers + `turing migrate` CLI + field-mapping overrides + shadow-comparison (parity check) | [migration § fast path](./migration.md#the-fast-path-turing-migrate) · [cli](./cli.md#turing-migrate-elasticsearchalgolia--connection-flags) | 🧩 |
 | **Block AP** — native synonyms (5 types, query-time on Solr/ES/Lucene, no reindex) + admin UI + Import from Algolia + AI-assisted mining | [synonyms](./synonyms.md) | ✅ |
+| **Block AQ** — Thesaurus: hierarchical controlled-vocabulary microthesauri + index-time expansion (`microthesaurus_terms`) + concept/hierarchical facets + per-site opt-in + seed library + XML import + AI generation + related-term suggestions | [thesaurus](./thesaurus.md) | ✅ |
 
 ## Ask it
 

@@ -31,6 +31,7 @@ const sidebars: SidebarsConfig = {
             "search-engine",
             "semantic-navigation",
             "synonyms",
+            "thesaurus",
             "manifest",
             {
               type: "category",
