@@ -28,6 +28,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Import / export | [import-export](./import-export.md) | ✅ |
 | Migrating from Algolia / Elasticsearch (guide) | [migration](./migration.md) | ✅ |
 | **Block AO** — migration tooling: ES/Algolia importers + `turing migrate` CLI + field-mapping overrides + shadow-comparison (parity check) | [migration § fast path](./migration.md#the-fast-path-turing-migrate) · [cli](./cli.md#turing-migrate-elasticsearchalgolia--connection-flags) | 🧩 |
+| **Block AP** — native synonyms (5 types, query-time on Solr/ES/Lucene, no reindex) + admin UI + Import from Algolia + AI-assisted mining | [synonyms](./synonyms.md) | ✅ |
 
 ## Ask it
 
