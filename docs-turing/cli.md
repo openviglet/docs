@@ -247,10 +247,41 @@ turing migrate algolia \
 | `--source-user` / `--source-password` / `--source-api-key` | ES | Source authentication. |
 | `--app-id` / `--api-key` | Algolia | Application id + a read-capable API key (required). |
 | `--use-llm` | Algolia | Refine the inferred schema with a configured LLM. |
+| `--overrides-file <path>` | both | JSON array of field-mapping overrides (rename / retype / drop / default). |
 | `--locale` · `--batch-size` · `--max-documents` · `--dry-run` | both | Tuning + preview. |
 
 Synonyms found on an Algolia index are reported so you can apply them in your target
 engine (Solr / Elasticsearch); native synonym management in Turing is on the roadmap.
+
+**Reshape fields on the way in** — a source schema is rarely 1:1 with what you want.
+`--overrides-file` points at a JSON array that renames, retypes, drops, or defaults
+fields (applied to both the manifest and every document):
+
+```json
+[
+  { "field": "cost", "rename": "price", "type": "CURRENCY" },
+  { "field": "internal_notes", "drop": true },
+  { "field": "source", "type": "STRING", "defaultValue": "algolia-import" }
+]
+```
+
+#### `turing migrate compare --engine <e> --index <i> --site <s> --queries-file <path>`
+
+Before you flip traffic, **measure relevance parity**: run the same queries against
+the source engine and the migrated SN site and diff the top-N result sets. Read-only
+on both sides.
+
+```bash
+turing migrate compare \
+  --engine elasticsearch \
+  --source-url https://es.example.com:9200 --source-user elastic --source-password "$ES_PASSWORD" \
+  --index products --site Products \
+  --queries-file ./queries.txt --rows 10
+```
+
+`--queries-file` is one query per line (blank lines and `#` comments ignored). The
+report gives, per query and in aggregate, the set overlap (Jaccard), how much of the
+source's top-N Turing reproduced (source recall), and how often the #1 result matches.
 
 ### `turing version` · `turing help`
 

@@ -27,7 +27,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Connectors (AEM, web crawler) | [integration](./integration.md) · [integration-aem](./integration-aem.md) | ✅ |
 | Import / export | [import-export](./import-export.md) | ✅ |
 | Migrating from Algolia / Elasticsearch (guide) | [migration](./migration.md) | ✅ |
-| **Block AO** — migration tooling: ES/Algolia index importers + `turing migrate` CLI | [migration § fast path](./migration.md#the-fast-path-turing-migrate) · [cli](./cli.md#turing-migrate-elasticsearchalgolia--connection-flags) | 🧩 |
+| **Block AO** — migration tooling: ES/Algolia importers + `turing migrate` CLI + field-mapping overrides + shadow-comparison (parity check) | [migration § fast path](./migration.md#the-fast-path-turing-migrate) · [cli](./cli.md#turing-migrate-elasticsearchalgolia--connection-flags) | 🧩 |
 
 ## Ask it
 

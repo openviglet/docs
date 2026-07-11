@@ -68,6 +68,30 @@ configured LLM. `--se-instance` is only required when the target site doesn't ex
 yet. Any **synonyms** on an Algolia index are reported so you can apply them in your
 target engine's schema (Solr / Elasticsearch).
 
+A source schema is rarely 1:1 with what you want in Turing, so pass
+`--overrides-file <path>` — a JSON array that **renames**, **retypes**, **drops**, or
+**defaults** fields on the way in (applied to both the schema and every record):
+
+```json
+[
+  { "field": "cost", "rename": "price", "type": "CURRENCY" },
+  { "field": "internal_notes", "drop": true },
+  { "field": "source", "type": "STRING", "defaultValue": "algolia-import" }
+]
+```
+
+**Verify relevance parity before cutover.** Run your top queries against both the old
+engine and Turing and diff the results, so you switch on evidence, not hope:
+
+```bash
+turing migrate compare --engine elasticsearch \
+  --source-url https://es.example.com:9200 --source-user elastic --source-password "$ES_PASSWORD" \
+  --index products --site Products --queries-file ./queries.txt --rows 10
+```
+
+The report shows, per query and in aggregate, the result-set overlap (Jaccard), how
+much of the source's top-N Turing reproduced, and how often the #1 result matches.
+
 Then do only **step 3** below — swap the front-end client.
 
 Prefer to drive the import yourself, or scripting it without the CLI? The same
