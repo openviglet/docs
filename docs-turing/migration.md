@@ -35,7 +35,45 @@ The building blocks line up almost one-to-one. Where a hosted feature is paid, b
 
 ---
 
-## The import path: three moves
+## The fast path: `turing migrate`
+
+The [`turing` CLI](./cli.md) automates schema translation **and** record import in a
+single command. Point it at your source index — Turing reads the mapping/settings,
+derives the [field manifest](./manifest.md), provisions the SN site, and imports
+every record for you. This is the recommended "step 1 + step 2".
+
+```bash
+# Elasticsearch — URL + credentials + index only, no vendor SDK
+turing migrate elasticsearch \
+  --source-url https://es.example.com:9200 \
+  --source-user elastic --source-password <password> \
+  --index products --site Products \
+  --se-instance <search-engine-instance-id>
+
+# Algolia — schema inferred from a sample of records + your index settings
+turing migrate algolia \
+  --app-id <APP_ID> --api-key <read-capable-key> \
+  --index catalog --site Catalog \
+  --se-instance <search-engine-instance-id> --use-llm
+```
+
+Add `--dry-run` to preview the derived schema (field name, type, facet, multi-valued)
+**without** provisioning or importing anything — review it, then run for real. For
+Elasticsearch the mapping is translated deterministically (`text`→`TEXT`,
+`keyword`→`STRING`, numeric/date/boolean → the matching type; `keyword`/boolean
+fields become facets). Algolia has no strict schema, so the types are inferred from
+a record sample and refined by your index settings (`attributesForFaceting` →
+facets, `searchableAttributes` → text); `--use-llm` sharpens the draft with a
+configured LLM. `--se-instance` is only required when the target site doesn't exist
+yet. Any **synonyms** on an Algolia index are reported so you can apply them in your
+target engine's schema (Solr / Elasticsearch).
+
+Then do only **step 3** below — swap the front-end client.
+
+Prefer to drive the import yourself, or scripting it without the CLI? The same
+result is available over the REST API in three moves.
+
+## Doing it by hand: the API path
 
 ### 1. Describe the schema as code
 

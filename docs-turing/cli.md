@@ -19,6 +19,7 @@ description: "@viglet/turing-cli — the `turing` command. Scaffold an agent pro
 > | `turing deploy` | Push agent + flows + tools + skills to an environment. |
 > | `turing eval` | Run `*.eval.yaml` regression suites (exits non-zero on failure → CI-ready). |
 > | `turing logs` | Tail live chat events (SSE) for a conversation. |
+> | `turing migrate` | Import an Elasticsearch/Algolia index into an SN site (schema + records). |
 
 ---
 
@@ -216,6 +217,40 @@ Tail **live chat events** for a conversation over the spectator SSE stream — f
 turing logs --conversation abc-123-def-456
 turing logs --conversation abc-123-def-456 --slots
 ```
+
+### `turing migrate elasticsearch|algolia … [connection flags]`
+
+Import a source search index into a Turing **SN site** — the automated "step 2" of
+[switching from Elasticsearch or Algolia](./migration.md). Turing reads the source
+schema, derives a [field manifest](./manifest.md), provisions the site, and imports
+every record. Add `--dry-run` to preview the derived schema without changing anything.
+
+```bash
+# Elasticsearch — URL + credentials + index only, no vendor SDK
+turing migrate elasticsearch \
+  --source-url https://es.example.com:9200 \
+  --source-user elastic --source-password "$ES_PASSWORD" \
+  --index products --site Products --se-instance <seInstanceId> --dry-run
+
+# Algolia — schema inferred from a record sample + index settings
+turing migrate algolia \
+  --app-id "$ALGOLIA_APP" --api-key "$ALGOLIA_KEY" \
+  --index catalog --site Catalog --se-instance <seInstanceId> --use-llm
+```
+
+| Flag | Engine | Purpose |
+|---|---|---|
+| `--index` | both | Source index name (required). |
+| `--site` | both | Target SN site name (required). |
+| `--se-instance` | both | Search-engine instance id (required only to create a new site). |
+| `--source-url` | ES | Source cluster URL (required). |
+| `--source-user` / `--source-password` / `--source-api-key` | ES | Source authentication. |
+| `--app-id` / `--api-key` | Algolia | Application id + a read-capable API key (required). |
+| `--use-llm` | Algolia | Refine the inferred schema with a configured LLM. |
+| `--locale` · `--batch-size` · `--max-documents` · `--dry-run` | both | Tuning + preview. |
+
+Synonyms found on an Algolia index are reported so you can apply them in your target
+engine (Solr / Elasticsearch); native synonym management in Turing is on the roadmap.
 
 ### `turing version` · `turing help`
 
