@@ -294,7 +294,7 @@ Fit combines a deterministic readability signal with a grounded LLM judgment, so
 
 You can **draft** a persona from a voice recording. `POST /api/persona/derive-from-audio` transcribes the clip, then an LLM behavioral analysis extracts **both** voice traits (tone / verbosity / language style / vocabulary) *and* audience descriptors (reading level / expertise / language) into a draft `personaKind = BOTH` persona. The draft is **never auto-saved** — a "Derive from audio" action hands it to the new-persona form for human review and save (the same "derive, never auto-apply" discipline as the manifest wizard).
 
-Transcription rides a pluggable **`TurTranscriptionProvider`** seam (Spring AI ships no transcription module). The default provider POSTs to the configured LLM instance's OpenAI-compatible `{baseUrl}/audio/transcriptions` (`whisper-1`); air-gapped installs override the bean with a local speech-to-text engine.
+Transcription rides a **config-selectable, chunk-capable** backend — cloud OpenAI, a self-hosted OpenAI-compatible server, or (once bundled) an in-process engine — so persona-from-audio works past any single-request upload limit and can run fully on-prem. Choose the backend in **Administration → Settings → Global Settings → Transcription**; see [Transcription](./transcription.md) for the full setup.
 
 ---
 
