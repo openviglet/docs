@@ -314,9 +314,9 @@ For an **audience** persona (`AUDIENCE` or `BOTH`), the **Validate content** lau
 
 ### Personas in conversation
 
-The **Persona dialogue** action runs an automatic, turn-by-turn conversation between **two or more** personas on a topic you choose. Because a dialogue is about peer speakers — none of which "owns" it — it's a **global** surface reached from the persona list (or from a persona's launchpad, which pre-selects that persona as the first speaker), never scoped to a single persona.
+**Persona dialogue** runs an automatic, turn-by-turn conversation between **two or more** personas on a topic you choose. Because a dialogue is about peer speakers — none of which "owns" it — it's a **global** surface reached from the persona list (**Persona dialogue**), never scoped to a single persona. Like [Persona Match](#persona-match-nn-content-fit-projects), it is organized as **saved projects**: `/bento/persona/dialogue` is a mosaic of dialogue projects, each re-openable and re-runnable.
 
-Pick a topic, add **as many speakers as you like** (two minimum — the roster grows with an "Add persona" button), an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 40). Turing ES seeds the first persona with the topic, then goes **round-robin** — feeding each persona the previous speaker's reply — until the budget is spent. The transcript is **streamed live**: each turn appears the moment it's generated (colour-coded per speaker), rather than the whole conversation arriving at the end. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the others. It's the quickest way to hear several brand voices play off each other — a live "voice diff". If a turn fails mid-way, the partial transcript is kept with a notice.
+Open (or create) a project, then configure it: a **topic**, a roster of **speaker personas** (two minimum — pick them in the shared persona grid; the number badge is the **speaking order**), an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 40). Only `SPEAKER`/`BOTH` personas are selectable (an audience-only persona can't talk). Turing ES seeds the first persona with the topic, then goes **round-robin** — feeding each persona the previous speaker's reply — until the budget is spent. The transcript is **streamed live** (each turn appears the moment it's generated, colour-coded per speaker) **and persisted**, so re-opening a project shows its last conversation; re-running replaces it. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the others. It's the quickest way to hear several brand voices play off each other — a live "voice diff". If a turn fails mid-way, the partial transcript is kept with a notice.
 
 ### Suggest the best-fit persona for content
 
@@ -377,7 +377,8 @@ Without a Persona, an Agent still works — but its voice is the LLM's default v
 | `POST` | `/api/persona/{id}/content-fit` | Run the audience-fit report (`?sourceId` for one source, else the whole notebook) |
 | `POST` | `/api/persona/derive-from-audio` | Draft a `BOTH` persona from an audio recording (multipart; never auto-saved) |
 | `POST` | `/api/v2/persona/{id}/chat` | Talk directly to a persona (SSE; JSON or multipart) |
-| `POST` | `/api/v2/persona-dialogue` | Run a bounded turn-by-turn dialogue between two personas on a topic |
+| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-dialogue` | Persona Dialogue **projects** — CRUD, ordered `PUT .../{id}/speakers`, `GET .../{id}/transcript`, and `POST .../{id}/run/stream` (SSE, persists the transcript) |
+| `POST` | `/api/v2/persona-dialogue` | Run a bounded turn-by-turn dialogue between personas on a topic (ephemeral stream; kept for compatibility) |
 
 When updating, the `mandatoryTerms` and `forbiddenTerms` arrive as pipe-joined strings from the form; the controller persists them verbatim. Validation happens at the LLM injection point (so an empty list is fine — it simply contributes no constraint).
 
