@@ -310,7 +310,7 @@ The **Open chat** launch action starts a live conversation *with the persona its
 
 ### Validate content against a persona
 
-For an **audience** persona (`AUDIENCE` or `BOTH`), the **Validate content** launch action opens a focused *"add sources → score"* page. Add documents, links or indexed content to the evaluation notebook and run the [content-fit report](#audience-personas--content-fit) in one place — the compatibility score, the *fits* bullets, and the flagged *misfits* with rewrite suggestions. It's the same evaluator described above, promoted from a buried tab to a first-class action. (For a `SPEAKER`-only persona the action is disabled with an "audience personas only" hint.)
+For an **audience** persona (`AUDIENCE` or `BOTH`), the **Validate content** launch action opens (or re-opens) a **single-persona [Persona Match](#persona-match-nn-content-fit-projects) project** for that persona and takes you straight to its studio — add documents, links or indexed content and run the same content-fit evaluator, now as a project with one persona instead of a per-persona notebook. The launch action is preserved; the canonical home for content-fit is the Persona Match project. (For a `SPEAKER`-only persona the action is disabled with an "audience personas only" hint.)
 
 ### Personas in conversation
 
@@ -321,6 +321,30 @@ Pick a topic, add **as many speakers as you like** (two minimum — the roster g
 ### Suggest the best-fit persona for content
 
 Content-fit answers "does this text fit *this* persona"; **Suggest persona** answers the inverse — "**which** audience persona is this content even *for*". Reached from the persona list, it opens a page where you paste a piece of content (optionally restricting the pool to a few personas), and Turing ES batches the [content-fit evaluator](#how-content-fit-is-scored) across **every enabled audience persona** and returns them **ranked best-fit first**. Each row shows the red/amber/green fit bar plus the same *fits*/*misfits* detail, with the top persona flagged as the best fit — degrading to the readability-only score when no default LLM is configured. It feeds editorial routing (who is this article for?) and A/B persona selection. `POST /api/persona/suggest`.
+
+---
+
+## Persona Match: N×N content-fit projects
+
+The [content-fit evaluator](#audience-personas--content-fit) scores **one** persona against your content. **Persona Match** lifts that into a reusable **project** that scores **many contents × many personas** at once, and keeps them tuned to each other over time. It's a **global** surface at **Administration → Personas → Persona Match** (`/bento/persona/match`), sibling to Persona Dialogue — not scoped to a single persona.
+
+A **project** groups three things:
+
+- **Contents** — added **once per project** (not per persona) as a **URL** (fetched behind the SSRF guard), an **indexed document** (picked from a Semantic Navigation site), or an **uploaded file** (PDF/DOC/… parsed to text). Each content's text is extracted and cached on add; a content hash lets re-runs skip work that hasn't changed.
+- **Personas** — any set of your existing personas, selected from the catalog.
+- A **schedule** (`Manual` / `Daily` / `Weekly`) and an optional **LLM Instance** (defaults to the Global default LLM).
+
+Running the analysis evaluates every **(content × persona)** pair and stores the result as a **matrix cell** — the same fused *readability ⊕ grounded-LLM* fit score, *fits*, and flagged *misfits* with rewrite suggestions you get from the single-persona report. The studio shows it three ways:
+
+- **Matrix** — a heatmap grid (contents as rows, personas as columns) coloured green / amber / red by fit. It **fills live** as the analysis runs, cell by cell, over a server-sent-events stream. Click any cell to open a drawer with that pair's score, *fits*, and *misfits*.
+- **By content** — for each content, the personas ranked best-fit first (which audience each piece serves best).
+- **By persona** — for each persona, the contents ranked best-fit first (which content serves each audience best).
+
+Both report lenses export to **PDF** (print-to-PDF, one document per lens).
+
+**Scheduled re-analysis.** A project set to `Daily` or `Weekly` is re-run automatically (cluster-wide-once): its sources are re-extracted — so a drifted URL is picked up — and only cells whose content changed are recomputed. `Manual` projects run only when you click **Rodar análise**. This is the "keep personas and content tuned to each other as content changes" loop.
+
+Because a project can hold a **single** persona, it also **replaces the old per-persona validate notebook**: the persona **Validate content** action now spins up (or re-opens) a one-persona project and drops you in the studio.
 
 ---
 

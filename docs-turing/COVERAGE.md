@@ -46,6 +46,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block AA** — speaker + audience personas, content-fit, persona-from-audio, persona-suggest | [personas § Audience Personas & Content-Fit](./personas.md#audience-personas--content-fit), [§ Suggest the best-fit persona](./personas.md#suggest-the-best-fit-persona-for-content) | ✅ |
 | **Block AS** — pluggable/chunk-capable transcription: config-selectable backends (OpenAI / self-hosted OpenAI-compatible / none), ffmpeg chunking, async jobs, AUDIO-slot transcription, per-backend metrics, confidence fallback | [transcription](./transcription.md) | ✅ |
 | **Block AI / AG** — persona as an actionable surface (persona chat, bento dashboard + launchpad, content-fit launch action, persona dialogue, suggest persona; T619 re-added from-audio + suggest to bento) | [personas § Act on a Persona](./personas.md#act-on-a-persona-chat-validate-dialogue) | ✅ |
+| **Block AT** (T696–T703) — Persona Match: N×N persona↔content fit projects (project-scoped contents × personas → live fit heatmap + by-content/by-persona reports + PDF, scheduled re-analysis, validate-route folded into a single-persona project) | [personas § Persona Match](./personas.md#persona-match-nn-content-fit-projects) | 🧩 |
 
 ## Automate it
 
