@@ -1,14 +1,14 @@
 ---
 sidebar_position: 10
 title: Transcription
-description: Speech-to-text in Viglet Turing ES — a config-selectable, chunk-capable transcription backend (cloud OpenAI, self-hosted OpenAI-compatible, or in-process) that powers persona-from-audio, AUDIO chat slots, and async jobs for long recordings.
+description: Speech-to-text in Viglet Turing ES — a config-selectable, chunk-capable transcription backend (cloud OpenAI or a self-hosted OpenAI-compatible server) that powers persona-from-audio, AUDIO chat slots, and async jobs for long recordings.
 ---
 
 # Transcription (Speech-to-Text)
 
 **Transcription** turns an audio recording into text inside Viglet Turing ES. It is the engine behind three product surfaces: [drafting a persona from a voice recording](./personas.md#persona-from-audio-authoring), filling an **AUDIO chat slot** from an uploaded clip, and the standalone **async transcription jobs** API for long recordings.
 
-You'd reach for this page when you want to point transcription at a specific backend (a cloud provider, a self-hosted server, or an air-gapped in-process engine), when a recording is **larger than the provider's per-request upload limit**, or when you need to transcribe multi-hour audio without tying up a request thread.
+You'd reach for this page when you want to point transcription at a specific backend (a cloud provider or a self-hosted, air-gapped server), when a recording is **larger than the provider's per-request upload limit**, or when you need to transcribe multi-hour audio without tying up a request thread.
 
 The design goal is that everything here is **opt-in**: with no `turing.transcription.*` configuration set, transcription behaves exactly as it did before — a single cloud OpenAI-compatible call using your default [LLM instance](./llm-instances.md)'s connection.
 
@@ -21,7 +21,7 @@ Transcription rides a single pluggable seam (`TurTranscriptionProvider`) so ever
 ```
 Audio ──► Chunker (splits past the per-request limit) ──► Provider ──► Transcript
                                                             │
-                                        OPENAI · OPENAI_COMPATIBLE · LOCAL_ONNX · NONE
+                                        OPENAI · OPENAI_COMPATIBLE · NONE
 ```
 
 ---
@@ -44,12 +44,11 @@ Transcription is a **selectable strategy** so you can match cost, privacy, and i
 | Strategy | What it is | Setup | Best for |
 |---|---|---|---|
 | **`OPENAI`** *(default)* | Cloud OpenAI-compatible `/audio/transcriptions` (`whisper-1`). With no dedicated config it reuses your default LLM instance's base URL + key. | Zero-config if you already run OpenAI | Managed cloud stacks |
-| **`OPENAI_COMPATIBLE`** | The **recommended local path** — a self-hosted server speaking the OpenAI transcription contract (e.g. [`faster-whisper-server`](https://github.com/fedirz/faster-whisper-server)). | Run the server, set a dedicated **Endpoint** | Cost-sensitive, on-prem, GPU-capable |
-| **`LOCAL_ONNX`** | An air-gapped, no-sidecar path that runs Whisper **in-process**. The seam and model-size contract ship today; the in-process inference runtime is **not yet bundled** — selecting it fails safely with an actionable message and **never sends audio anywhere**. | — (see note) | Fully offline (once bundled) |
+| **`OPENAI_COMPATIBLE`** | The **fully-local path** — a self-hosted server speaking the OpenAI transcription contract (e.g. [`faster-whisper-server`](https://github.com/fedirz/faster-whisper-server)). | Run the server, set a dedicated **Endpoint** | Cost-sensitive, on-prem, air-gapped, GPU-capable |
 | **`NONE`** | Transcription disabled. Callers fail soft with a clear message. | — | Turning the feature off |
 
-:::note `LOCAL_ONNX` is a validated seam, not yet a runtime
-Selecting `LOCAL_ONNX` today returns a clear "not bundled in this build" message and points you to the supported local path (`OPENAI_COMPATIBLE` with a self-hosted server). Crucially, it **never falls back to a cloud backend** — an air-gapped selection can't leak audio off-box. The in-process runtime is deliberately deferred until the engine choice is settled. For a fully local backend now, use `OPENAI_COMPATIBLE`.
+:::note Running fully locally
+There is **no in-process transcription engine** — a fully-local / air-gapped deployment runs `OPENAI_COMPATIBLE` against a self-hosted server (e.g. faster-whisper-server) on your own network. This keeps audio on your infrastructure while reusing the exact same, battle-tested REST path as the cloud backend.
 :::
 
 ### Self-hosted OpenAI-compatible server
@@ -131,12 +130,11 @@ All keys live under `turing.transcription.*`. A non-blank value **wins** over th
 
 | Key | Default | Purpose |
 |---|---|---|
-| `type` | `OPENAI` | Backend: `OPENAI` · `OPENAI_COMPATIBLE` · `LOCAL_ONNX` · `NONE`. |
+| `type` | `OPENAI` | Backend: `OPENAI` · `OPENAI_COMPATIBLE` · `NONE`. |
 | `endpoint` | — | Dedicated OpenAI-compatible base URL (e.g. `http://faster-whisper:8000/v1`). |
 | `model` | `whisper-1` | Transcription model name. |
 | `api-key` | — | API key for the endpoint (blank = no `Authorization` header). |
 | `max-upload-bytes` | `26214400` | Per-request upload limit (25 MiB); the chunker splits above this. |
-| `onnx-model-size` | `base` | `LOCAL_ONNX` Whisper size: `tiny` · `base` · `small`. |
 | `ffmpeg-path` | `ffmpeg` | `ffmpeg` executable used to split/re-encode large audio. |
 | `ffprobe-path` | `ffprobe` | `ffprobe` executable used to probe duration. |
 | `chunk-overlap-seconds` | `2.0` | Overlap carried between chunks so the stitch drops no words. |
