@@ -330,7 +330,7 @@ The [content-fit evaluator](#audience-personas--content-fit) scores **one** pers
 
 A **project** groups three things:
 
-- **Contents** — added **once per project** (not per persona) as a **URL** (fetched behind the SSRF guard), an **indexed document** (picked from a Semantic Navigation site), or an **uploaded file** (PDF/DOC/… parsed to text). Each content's text is extracted and cached on add; a content hash lets re-runs skip work that hasn't changed.
+- **Contents** — added **once per project** (not per persona) as a **URL** (fetched behind the SSRF guard — see [Content ingestion](#content-ingestion-fetching-js-rendered-pages) if a URL is added but no text is extracted), an **indexed document** (picked from a Semantic Navigation site), or an **uploaded file** (PDF/DOC/… parsed to text). Each content's text is extracted and cached on add; a content hash lets re-runs skip work that hasn't changed.
 - **Personas** — any set of your existing personas, selected from the catalog.
 - A **schedule** (`Manual` / `Daily` / `Weekly`) and an optional **LLM Instance** (defaults to the Global default LLM).
 
@@ -345,6 +345,21 @@ Both report lenses export to **PDF** (print-to-PDF, one document per lens).
 **Scheduled re-analysis.** A project set to `Daily` or `Weekly` is re-run automatically (cluster-wide-once): its sources are re-extracted — so a drifted URL is picked up — and only cells whose content changed are recomputed. `Manual` projects run only when you click **Rodar análise**. This is the "keep personas and content tuned to each other as content changes" loop.
 
 Because a project can hold a **single** persona, it also **replaces the old per-persona validate notebook**: the persona **Validate content** action now spins up (or re-opens) a one-persona project and drops you in the studio.
+
+### Content ingestion: fetching JS-rendered pages
+
+By default a **URL** content is fetched with a plain HTTP request and parsed to text. That works for static pages, PDFs and server-rendered sites, but a **JavaScript-rendered page** (a React/Vue/Angular single-page app — many modern marketing sites) returns an almost-empty HTML shell, so no text is extracted and the content is marked **Failed** with *"No text could be extracted"*. The same applies to URL sources on a persona's [content-fit notebook](#audience-personas--content-fit).
+
+To handle those, Turing can render the page in a real headless browser first. Configure it under **Administration → Settings → Platform → Content Ingestion**:
+
+- **Fetch mode**
+  - **Simple** (default) — fast HTTP fetch only; no browser. JS-rendered pages come back empty.
+  - **Auto** *(recommended)* — try the fast fetch first, and only render the page in the browser when too little text is extracted. Static pages stay fast; SPAs are rendered transparently.
+  - **Headless** — always render every page in the browser.
+- **Browserless URL** — the base URL of a [`browserless/chromium`](https://www.browserless.io/) sidecar that renders the pages (for example `http://browserless:3000`). A ready-to-use `turing-browserless` service is included in `docker-compose.yaml`. Keep the sidecar on an internal network — a headless browser reachable from anywhere is a security risk.
+- **Browserless token** — optional auth token for the sidecar (leave blank if it has none).
+
+Use **Check browserless** to confirm the sidecar is reachable before saving. The mode can also be pinned per container with the `turing.url-fetch.mode` / `turing.url-fetch.browserless-url` properties (which take precedence over this screen). Rendered content is cached like any other source, so a page is only rendered once until it changes.
 
 ---
 
