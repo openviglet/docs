@@ -493,6 +493,7 @@ When you create or edit an [AI Agent](./ai-agents.md), the **Persona** field is 
 
 | Page | Description |
 |---|---|
+| [The Persona Book](./persona-book.md) | The long-form, didactic companion to this reference — every feature with a worked example, plus six customer scenarios |
 | [AI Agents](./ai-agents.md) | Where personas are attached |
 | [Chat](./chat.md) | The interface where personas show their voice |
 | [Embedding Stores](./embedding-stores.md) | Backend for the few-shot store |

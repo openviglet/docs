@@ -65,6 +65,7 @@ const sidebars: SidebarsConfig = {
             "chat-memory",
             "intent",
             "personas",
+            "persona-book",
             "transcription",
           ],
         },
