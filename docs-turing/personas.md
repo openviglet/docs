@@ -348,6 +348,74 @@ Because a project can hold a **single** persona, it also **replaces the old per-
 
 ---
 
+## Synthetic User Research
+
+**Synthetic User Research** interviews a **cohort** of personas over a research protocol and synthesizes what they said into a thematic **insights report**. It's a **global** surface at **Administration → Personas → Synthetic research** (`/bento/persona/research`), sibling to Persona Match and Dialogue.
+
+:::caution A discovery co-pilot — not a replacement for real users
+Synthetic research **front-loads** the problem space: it sharpens your questions, maps likely themes, and stress-tests a concept before you spend real-participant time. It is **not** ground truth and makes no claim of statistical validity. Two features exist to keep the output honest — **saturation scoring** (below) and persona **knowledge grounding** — and the report is framed as a co-pilot throughout. Validate with real users before acting.
+:::
+
+### Persona depth: Big Five (OCEAN) + knowledge grounding
+
+Two opt-in persona properties (on the persona's **Style** / **Audience** sections) give a cohort the range that makes synthetic research useful — both are off by default, so existing personas are unchanged:
+
+- **Big Five / OCEAN personality** — five 0–100 sliders (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism). When set, they render as behavioural guidance in the persona's prompt and — with *style→model calibration* on — nudge the sampling temperature. Spreading these facets across a cohort is what stops every synthetic participant sounding the same.
+- **Knowledge grounding** — a persona's answers can be grounded on a **Semantic Navigation site** or its own **notebook** source set instead of the model's priors, so a participant reacts from real indexed content.
+
+### A study
+
+A **study** is the reusable unit. It carries:
+
+- A **goal** and optional **hypothesis** — what you want to learn.
+- A **protocol** — how each participant is interviewed:
+  - **Dynamic interview** — a goal-driven interviewer asks adaptive follow-ups until it has enough (bounded by *max questions*).
+  - **Scripted questions** — a fixed question list asked verbatim, in order.
+  - **Concept test** — the interviewer seeds a proposed concept/message the synthetic user reacts to.
+- An **audience** — an ordered roster of your personas, each interviewed independently.
+- An **interview target** — either the **Default LLM** (a bare model plays the assistant) or a **live deployed agent**. Pointing a study at one of your agents inverts the roles: the persona becomes the synthetic *user* and your real agent — with its actual prompt, tools and RAG — answers, so the cohort UX-tests / red-teams the shipped assistant.
+- **Per-stage model lanes** ("Big Shuffle") — an optional distinct LLM instance for the *interview* stage vs the *synthesis* stage, so no single model's bias colours the whole study.
+- A **schedule** (`Manual` / `Daily` / `Weekly`) for continuous re-runs.
+
+### Running & the live feed
+
+**Run interviews** streams the cohort over server-sent events: each transcript lands in the **interview feed** as it completes, with a status badge, and expands to its question/answer turns. Re-running an unchanged study is cheap (a content hash skips work).
+
+### The insights report
+
+Once a study has run, the studio synthesizes (and caches) an **insights report**:
+
+- An **executive summary**.
+- **Ranked themes**, each with **verbatim participant quotes** traced back to the persona who said them (fabricated attributions are flagged, not trusted).
+- **Recommendations**.
+- Two lenses — **by theme** and **by persona** — a **Regenerate** button, and **PDF export**.
+
+**Saturation** is the honest sufficiency signal: as personas are interviewed in roster order, it measures whether marginal participants still raise **new** themes. When the tail goes dry it reports *"sample adequate at N"* — the deterministic, LLM-free antidote to fabricated confidence. A **theme-affinity** view shows which participants cluster on which theme, and — for scheduled studies — an **insight-drift** chart shows how theme coverage moves across re-runs (one-shot research becoming continuous validation).
+
+A **concept-test** study also gets a **concept-fit** report: the concept scored against each participant through the same content-fit evaluator used by [Persona Match](#persona-match-nn-content-fit-projects).
+
+### Reuse a study as an eval dataset
+
+A completed study can be **promoted to an evaluation dataset** (one click → deep-links into the [Eval Studio](./agent-eval.md)): the interviewer's questions become replay turns and the participants' answers become reference material, turning a one-shot study into a **repeatable agent-QA harness** that regression-tests an agent against a synthetic audience.
+
+### Audience cohort synthesis
+
+Don't have a cohort yet? **Synthesize cohort** (`/bento/persona/cohort`) turns a **one-paragraph audience brief** into a **diverse** set of persona **drafts** with spread OCEAN facets. Nothing is saved automatically — you review each draft in a grid and **keep** (opens the normal persona form to edit + save) or **discard** it. The saved personas then populate a study's audience.
+
+### Research Assistant (guided authoring)
+
+New studies open with a skippable **Research Assistant**: describe what you want to learn in free text and it drafts a full study proposal (name, goal, hypothesis, protocol + questions/concept, a suggested cohort brief) that pre-fills the create form for you to edit. You can also ignore it and fill the fields directly.
+
+### Program rollup (multi-study)
+
+**Program rollup** (`/bento/persona/research/program`) plans several studies across different audiences and rolls their insights up into one **program view**: totals, each study's sufficiency, and — the point — the themes that **recur across audiences** (a theme raised in ≥2 studies is highlighted). It's a deterministic aggregation of the already-synthesized reports, so it adds no new inference.
+
+### Developer surface
+
+The [`turing research` CLI verb](./cli.md#turing-research--define-run--fetch-a-study) defines/runs a study and fetches its insights from code or CI (mirroring `turing eval`). The customer-facing embed SDKs are unchanged — synthetic research is an admin/research tool, so its programmatic surface is a CLI concern.
+
+---
+
 ## Where Personas Fit in the Bigger Picture
 
 A Persona is one of three layers that make an AI Agent come alive:

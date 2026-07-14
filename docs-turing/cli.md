@@ -20,6 +20,7 @@ description: "@viglet/turing-cli — the `turing` command. Scaffold an agent pro
 > | `turing eval` | Run `*.eval.yaml` regression suites (exits non-zero on failure → CI-ready). |
 > | `turing logs` | Tail live chat events (SSE) for a conversation. |
 > | `turing migrate` | Import an Elasticsearch/Algolia index into an SN site (schema + records). |
+> | `turing research` | Define/run a Synthetic User Research study and fetch its insights (CI-ready). |
 
 ---
 
@@ -282,6 +283,24 @@ turing migrate compare \
 `--queries-file` is one query per line (blank lines and `#` comments ignored). The
 report gives, per query and in aggregate, the set overlap (Jaccard), how much of the
 source's top-N Turing reproduced (source recall), and how often the #1 result matches.
+
+### `turing research` — define, run & fetch a study
+
+Drive [Synthetic User Research](./personas.md#synthetic-user-research) from code or CI, mirroring `turing eval`. Subcommands take the same connection flags and resolve the instance the same way.
+
+```bash
+turing research list                       # studies on the instance
+turing research run <studyId> --force      # run the cohort interviews (blocking)
+turing research insights <studyId>         # print the synthesized report
+turing research rollup <studyId> <studyId> # cross-study program rollup (PRISMA)
+```
+
+- **`list`** — id, name, protocol, participant/interview counts, last-run.
+- **`run <studyId> [--force]`** — runs the cohort (blocking) and reports the resulting interview count. **Exits non-zero when no interview ran**, so a CI job can gate on it.
+- **`insights <studyId>`** — prints the executive summary, ranked themes (with participant counts) and recommendations; exits non-zero when the report isn't available yet.
+- **`rollup <studyId> [<studyId>…]`** — program totals + the themes that recur across the selected studies.
+
+The customer-facing embed SDKs (`@viglet/turing-sdk`, `@viglet/turing-react-sdk`) stay focused on search & chat — running studies is an admin/research capability, so it lives here in the CLI.
 
 ### `turing version` · `turing help`
 
