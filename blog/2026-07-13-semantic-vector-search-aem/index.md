@@ -12,7 +12,6 @@ keywords:
   - semantic search Adobe Experience Manager
   - open source vector search
 image: https://docs.viglet.org/turing/img/banner.jpg
-draft: true
 ---
 
 Once your Adobe Experience Manager content is indexed into an enterprise search
