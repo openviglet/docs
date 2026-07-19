@@ -12,6 +12,7 @@ keywords:
   - WordPress semantic search
   - self-hosted WordPress search
 image: https://docs.viglet.org/turing/img/banner.jpg
+viglet_products: [turing, dumont]
 draft: true
 ---
 

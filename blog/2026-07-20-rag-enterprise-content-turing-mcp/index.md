@@ -12,6 +12,7 @@ keywords:
   - retrieval augmented generation self-hosted
   - MCP server search
 image: https://docs.viglet.org/turing/img/banner.jpg
+viglet_products: [turing]
 draft: true
 ---
 

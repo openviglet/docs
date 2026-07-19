@@ -230,6 +230,14 @@ const config: Config = {
       },
     ],
     [
+      // Emits /guides.json — the endpoint viglet.org fetches to cross-link the
+      // published blog guides dynamically (drafts excluded upstream).
+      require.resolve("./src/plugins/guides-json"),
+      {
+        knownProducts: ["turing", "shio", "dumont"],
+      },
+    ],
+    [
       require.resolve("./src/plugins/llms-txt"),
       {
         title: "Viglet Docs",

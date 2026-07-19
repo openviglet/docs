@@ -12,6 +12,7 @@ keywords:
   - Coveo alternative AEM
   - semantic search AEM
 image: https://docs.viglet.org/turing/img/banner.jpg
+viglet_products: [turing, dumont]
 ---
 
 Adobe Experience Manager (AEM) ships with Oak/Lucene indexing that is excellent

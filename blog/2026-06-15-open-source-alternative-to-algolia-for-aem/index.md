@@ -12,6 +12,7 @@ keywords:
   - enterprise search for AEM
   - Algolia vs Coveo vs Turing
 image: https://docs.viglet.org/turing/img/banner.jpg
+viglet_products: [turing]
 ---
 
 If you run **Adobe Experience Manager** and need a real search experience —

@@ -12,6 +12,7 @@ keywords:
   - open source search engine
   - Solr enterprise search
 image: https://docs.viglet.org/turing/img/banner.jpg
+viglet_products: [turing]
 ---
 
 "Should we use Solr or Elasticsearch?" is one of the most common engineering
