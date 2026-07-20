@@ -81,6 +81,7 @@ The `model` string routes the request into the Turing stack:
 | `turing-agent:<id>` | Runs the full **AI Agent** — its system prompt, tools, MCP servers and grounding mode |
 | `turing-sn:<site>` | A **RAG-grounded** answer over a Semantic Navigation site (retrieval + citations + reranker) |
 | `turing-local:*` | Forces the embedded, local ($0) model |
+| `turing-router:<strategy>/<id1,id2,…>` | **Load-balances** across several deployments with a fallback chain. Strategy: `rr` (round-robin, default), `latency` (least observed latency) or `failover` (declared order). Example: `turing-router:latency/inst-a,inst-b` |
 
 ## Cross-cutting headers
 
@@ -110,6 +111,18 @@ The **`/bento/gateway`** console page (admin only) provides virtual-key CRUD
 (create / rotate / revoke with scope + budget), a per-key spend dashboard, and a
 copy-paste playground snippet. Inbound spend also flows into the standard
 [Cost Governance](./cost-governance.md) view, keyed by virtual key.
+
+## Learning from traffic (optional)
+
+With `turing.gateway.capture-traffic=true`, the gateway records inbound
+base-model and router turns as rows of a reusable **evaluation dataset** (prompts
+as the replay turns; the answer kept as reference *material*, asserting nothing
+until a human curates it). That dataset runs through the standard
+[evaluation](./agent-eval.md) graders to measure quality on real traffic, and an
+admin can request a **propose-only** distilled/cheaper-model suggestion for an
+agent (`POST /api/gateway/traffic/distill?agentId=…`, gated by
+`turing.distillation.enabled`) — the recommendation is never applied
+automatically. Capturing prompts/answers is off by default and admin-managed.
 
 ## Notes & limits
 
