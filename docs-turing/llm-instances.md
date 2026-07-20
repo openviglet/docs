@@ -75,14 +75,29 @@ The form is organized into **5 colour-coded sections** for quick visual orientat
 | Field | Required | Description |
 |---|---|---|
 | **Endpoint URL** | ✅ (URL-based vendors) | Base URL for the provider API. Left empty for IAM-authenticated vendors (Bedrock, Vertex AI) and the native Gemini SDK, which are not addressed by URL. |
-| **Model Name** | ✅ | Specific model identifier (e.g., `gpt-4o-mini`, `mistral`, `claude-sonnet-4-20250514`, or a Bedrock model id / inference-profile ARN) |
 | **API Key** | | Provider API key — stored encrypted in the database. Leave blank when editing to keep the existing key. Optional for local Ollama and OpenAI-compatible endpoints that need no auth. |
 
 :::info API Key security
 The API Key field is **write-only**. It is stored encrypted and never returned in API responses. When editing an existing instance, leaving the field blank preserves the previously saved key. The encryption key is configured in `turing.ai.crypto.key` in `application.yaml`. See [Configuration Reference](./configuration-reference.md#turing-es-core).
 :::
 
-### 3. Generation Parameters (emerald)
+### 3. Models (violet)
+
+Choose **one or more models** the instance may serve, and mark exactly one as the **default**. The default is the model used everywhere the platform points at this instance (AI Agents, Semantic Navigation RAG, Chat, rerankers, embeddings) — the rest of the platform is single-model and always consumes the default.
+
+To use the picker:
+
+1. Click **Add a model…** to open the picker. It lists the known models for the selected vendor (live from the provider when a key is available, otherwise a suggested catalog). You can also type a model identifier that isn't in the list — useful for preview models, private fine-tunes, or a Bedrock model id / inference-profile ARN — and press **Enter** to add it.
+2. Each selected model appears as a row. Click the **★ star** on a row to make that model the **default** (the default row is highlighted and badged **Default**).
+3. Remove a model with the **✕** button. If you remove the current default, the first remaining model is promoted automatically.
+
+At least one model is required to save. Selecting a vendor (or changing it) resets the list and seeds it with that vendor's default model. Instances created before this feature keep their single model as the default.
+
+:::info Multiple models, one default
+The extra models are recorded on the instance (as a comma-separated `modelNames` list) and surfaced where multi-model selection is useful — for example the [Governed LLM Gateway](./gateway.md) model picker. They do **not** change which model a given feature calls: that is always the **default** (`modelName`).
+:::
+
+### 4. Generation Parameters (emerald)
 
 Fine-tune how the model generates responses. Defaults are appropriate for most use cases.
 
@@ -92,7 +107,7 @@ Fine-tune how the model generates responses. Defaults are appropriate for most u
 | **Top P** | Nucleus sampling — restricts token selection to the top P probability mass | Applies to all chat vendors |
 | **Seed** | Fixed seed for reproducible outputs | Defaulted for **OLLAMA** and **OPENAI** |
 
-### 4. Advanced Options (amber)
+### 5. Advanced Options (amber)
 
 | Field | Description |
 |---|---|
@@ -103,7 +118,7 @@ Fine-tune how the model generates responses. Defaults are appropriate for most u
 | **Provider Options (Visual)** | Vendor-specific fields rendered dynamically based on the selected vendor (see [Provider Options](#provider-options) below) |
 | **Provider Options (JSON)** | Raw JSON override for any vendor-specific setting — the home for cloud-IAM credentials and other settings not exposed as visual fields (see [Authentication by vendor](#authentication-by-vendor)) |
 
-### 5. Status (slate)
+### 6. Status (slate)
 
 | Field | Description |
 |---|---|
