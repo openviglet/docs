@@ -115,6 +115,7 @@ const sidebars: SidebarsConfig = {
             "chat-analytics",
             "token-usage",
             "cost-governance",
+            "llm-gateway",
           ],
         },
         {
