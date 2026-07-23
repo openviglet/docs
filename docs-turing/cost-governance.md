@@ -67,6 +67,8 @@ The price table shows, per row, the **Source** badge, an **Indicative** badge (a
 
 Before an expensive batch — an eval dataset run, a research study, or a batch re-embedding job — you can quote the projected cost from the item count × per-item token budget × the catalog-backed rate. `POST /api/v2/llm/cost/preflight-batch` returns `{ perItemCostUsd, totalCostUsd, priced, overBudget }` so a UI can gate the run behind a "this will cost ~$X — proceed?" confirm. (The per-turn chat quote and the runtime soft caps cover the interactive path; this covers offline batches.)
 
+The **Synthetic Research** study runner uses this: clicking **Run** shows a projected-cost confirm (personas × interview turns priced against the study's model) before the run starts. The same confirm dialog is reusable across the other batch runners.
+
 ### Right-sizing suggestions
 
 `GET /api/v2/llm/cost/rightsizing?windowDays=30` looks at each agent's real usage (its dominant model, average prompt/output sizes, monthly spend) and suggests a **cheaper same-vendor model that still fits** — big enough context for the observed turn, covering the current model's capabilities, not deprecated — with the **projected monthly savings**. Because Turing doesn't meter which capabilities a turn actually used, the suggestion conservatively preserves the current model's declared capabilities (it never proposes dropping one).

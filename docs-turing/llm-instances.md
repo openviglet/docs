@@ -150,6 +150,8 @@ The **LLM instance list** surfaces two catalog-driven banners:
 - **Deprecated models in use** (amber) — lists any instance whose configured model the catalog marks `deprecated` / `RETIRED`, with a suggested GA replacement (same vendor, covers the model's capabilities, similar-or-lower price).
 - **Catalog changes to your models** (blue) — consumes the catalog change feed to flag configured models that were **removed**, **superseded** (removed while a newer same-vendor model appeared), or **changed** since the last catalog snapshot.
 
+You can also receive the change feed by **email**: set `turing.model-catalog.change-feed.email-enabled=true` and a daily job emails the recipient configured in Global Settings a digest whenever a change affects a model you use (deduped so an unchanged feed is never re-sent). The in-UI banner is always on regardless of the email setting.
+
 ### Model Advisor — "find me a model"
 
 The **Find a model** launcher on the instance list opens the **Model Advisor** (`/bento/llm/advisor`). Describe what you need — required capabilities (tools / vision / reasoning), a minimum context window, a maximum input price, a minimum intelligence index, and a minimum tier — and it returns a **ranked shortlist** of catalog models that satisfy every constraint (ranked by intelligence, then price, then context). Each result has a **Create instance** button that one-click-creates a draft LLM instance for that vendor + model and drops you on its edit page to add credentials.
