@@ -54,6 +54,27 @@ The price table (`tur_llm_price`) holds, per `(vendor, model)`:
 
 Sensible defaults for OpenAI, Anthropic, and Gemini are seeded on first boot. When a vendor changes its pricing, edit the row in the inline price editor on the Cost Governance page (or via the API) — the change is an upsert on the natural `(vendor, model)` key and applies to **future** turns only.
 
+### Automatic pricing from the catalog
+
+You no longer have to hand-enter a price for every model. A scheduled reconciler seeds and refreshes the price table from the public **model catalog**'s indicative pricing, so a well-known model gets a price automatically (closing the old "unpriced model billed at $0" gap). Each row carries a **source**:
+
+- **Manual** — a rate you entered or negotiated. The reconciler **never** overwrites it. (Editing a catalog row in the UI flips it to Manual, so your override always wins.)
+- **Catalog** — auto-seeded from the catalog. The reconciler is free to refresh it.
+
+The price table shows, per row, the **Source** badge, an **Indicative** badge (a published list price, not a verified/negotiated one), the **last-verified** date with a **Stale** badge when it's over ~180 days old, and a **verify at vendor** link to the official pricing page. Two callouts cross-check the period's billed models: **used but unpriced** (billed at $0, add a price) and **used on an indicative price** (confirm at the vendor if the figures must be exact). Set `turing.model-catalog.price-sync.enabled=false` to keep the table manual-only.
+
+### Pre-flight cost estimate for batch runs
+
+Before an expensive batch — an eval dataset run, a research study, or a batch re-embedding job — you can quote the projected cost from the item count × per-item token budget × the catalog-backed rate. `POST /api/v2/llm/cost/preflight-batch` returns `{ perItemCostUsd, totalCostUsd, priced, overBudget }` so a UI can gate the run behind a "this will cost ~$X — proceed?" confirm. (The per-turn chat quote and the runtime soft caps cover the interactive path; this covers offline batches.)
+
+### Right-sizing suggestions
+
+`GET /api/v2/llm/cost/rightsizing?windowDays=30` looks at each agent's real usage (its dominant model, average prompt/output sizes, monthly spend) and suggests a **cheaper same-vendor model that still fits** — big enough context for the observed turn, covering the current model's capabilities, not deprecated — with the **projected monthly savings**. Because Turing doesn't meter which capabilities a turn actually used, the suggestion conservatively preserves the current model's declared capabilities (it never proposes dropping one).
+
+### Consumer plan reference
+
+The Cost Governance page also shows a **Consumer plan reference** card — indicative consumer subscription plans (Claude Pro, ChatGPT Plus…) from the public catalog, grouped by vendor, each linking to the vendor page. It is a **reference only** (US list prices, may be stale) — always verify at the vendor.
+
 ---
 
 ## The dashboard

@@ -81,7 +81,9 @@ The `model` string routes the request into the Turing stack:
 | `turing-agent:<id>` | Runs the full **AI Agent** — its system prompt, tools, MCP servers and grounding mode |
 | `turing-sn:<site>` | A **RAG-grounded** answer over a Semantic Navigation site (retrieval + citations + reranker) |
 | `turing-local:*` | Forces the embedded, local ($0) model |
-| `turing-router:<strategy>/<id1,id2,…>` | **Load-balances** across several deployments with a fallback chain. Strategy: `rr` (round-robin, default), `latency` (least observed latency) or `failover` (declared order). Example: `turing-router:latency/inst-a,inst-b` |
+| `turing-router:<strategy>/<id1,id2,…>` | **Load-balances** across several deployments with a fallback chain. Strategy: `rr` (round-robin, default), `latency` (least observed latency), `failover` (declared order), or the catalog-driven `cost` (cheapest), `quality` (highest intelligence index) or `ttft` (lowest time-to-first-token). Example: `turing-router:cost/inst-a,inst-b` picks the cheapest first, the rest as fallback |
+
+The `cost` / `quality` / `ttft` strategies order the declared deployments by the public model catalog's pricing / intelligence index / time-to-first-token for each deployment's configured model. A deployment whose model has no catalog value for the chosen metric sorts **last**, so a missing figure never wins a "cheapest" or "fastest" pick.
 
 ## Cross-cutting headers
 

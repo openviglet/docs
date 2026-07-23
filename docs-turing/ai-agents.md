@@ -258,6 +258,7 @@ The agent form is split into four tabs.
 | **Enabled** | | Toggle to activate or deactivate the agent |
 | **Submission retention** | | How long completed-conversation submissions are kept — see [Compliance & retention](#compliance--retention) |
 | **Monthly budget (USD)** | | Soft cap on the agent's monthly AI spend — see [Cost governance](./cost-governance.md). Optional `Per-turn soft cap` + `Downgrade LLM` |
+| **Disclose knowledge cutoff** | | Opt-in toggle: injects *"Your knowledge cutoff is &lt;date&gt;"* into the system prompt, using the configured model's cutoff from the public model catalog, so answers self-disclose how stale their knowledge may be. Off by default; a no-op when the catalog doesn't know the model's cutoff. |
 
 :::info Default system prompt
 If the system prompt is left blank, the agent uses the built-in default:

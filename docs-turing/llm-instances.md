@@ -127,6 +127,35 @@ Fine-tune how the model generates responses. Defaults are appropriate for most u
 
 ---
 
+## Catalog-driven intelligence
+
+Turing consumes a public **model catalog** (published at `openviglet.github.io/model-catalog`) that describes each well-known model — pricing, context window, max output, capabilities, modalities, benchmarks, performance, knowledge cutoff, tier and deprecation status. The instance form and pickers use that data so you configure models with the facts in front of you instead of from memory.
+
+### Enriched model picker
+
+Every row in the model picker shows the catalog facts for that model: a compact line with **price** (input/output per 1M tokens), **context window**, **max output**, **intelligence index**, **time-to-first-token**, **knowledge cutoff**, and capability icons (vision / tools / reasoning), plus a **tier badge** (Frontier / High / Mid / Light). A **Sort** control orders the list by *relevance*, *cheapest*, *largest context*, or *most intelligent*. Models discovered live from a vendor that aren't in the catalog simply show no extra metadata — never a misleading zero.
+
+### Auto-filled limits
+
+Selecting a model **pre-fills** the instance's **Context window** and **Max output tokens** from the catalog (and **embedding dimensions** when you pick an embedding model). The pre-fill only fills a field you left empty — your own values are never overwritten, and you can edit or clear a pre-filled value. A hint under each field shows the catalog value, and warns (in amber) when a hand-entered value **exceeds the catalog maximum** for that model.
+
+### Capability warnings
+
+When you enable **Tool calling** or **File upload** on an instance whose selected model the catalog does *not* list as supporting it, an amber warning appears under the toggle — so you catch "an image sent to a text-only model" or "tools on a model without tool support" before it fails at runtime. The warning only shows on positive evidence the model lacks the capability; it stays silent when the catalog doesn't describe the model.
+
+### Deprecation & change-feed banners
+
+The **LLM instance list** surfaces two catalog-driven banners:
+
+- **Deprecated models in use** (amber) — lists any instance whose configured model the catalog marks `deprecated` / `RETIRED`, with a suggested GA replacement (same vendor, covers the model's capabilities, similar-or-lower price).
+- **Catalog changes to your models** (blue) — consumes the catalog change feed to flag configured models that were **removed**, **superseded** (removed while a newer same-vendor model appeared), or **changed** since the last catalog snapshot.
+
+### Model Advisor — "find me a model"
+
+The **Find a model** launcher on the instance list opens the **Model Advisor** (`/bento/llm/advisor`). Describe what you need — required capabilities (tools / vision / reasoning), a minimum context window, a maximum input price, a minimum intelligence index, and a minimum tier — and it returns a **ranked shortlist** of catalog models that satisfy every constraint (ranked by intelligence, then price, then context). Each result has a **Create instance** button that one-click-creates a draft LLM instance for that vendor + model and drops you on its edit page to add credentials.
+
+---
+
 ## Supported Vendors
 
 Viglet Turing ES ships **11 vendor types**, resolved by plugin identifier through `TurGenAiLlmProviderFactory`. The canonical set is `LlmProviderType.KNOWN`, seeded into the `llm_vendor` table by `TurLLMVendorOnStartup`. When a vendor is selected in the form, the Endpoint URL, Model Name, and generation defaults are pre-filled as shown below.
