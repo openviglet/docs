@@ -163,6 +163,59 @@ turing:
       stuff-all-max-docs: 1000
 ```
 
+## Indexing large catalogs (performance)
+
+A structured catalog can be big — hundreds or thousands of rows. Turing indexes a
+catalog-scale import in a **single bulk pass** rather than one document at a time,
+so a large feed lands fast. This is automatic and needs no configuration: when a
+batch of records arrives, they are grouped and written to the search engine in one
+bulk request with a single commit, the field schema is converged once for the whole
+batch (not re-checked per row), and the embedded **Lucene** engine writes the whole
+batch in one writer session with one flush. If a bulk write fails, indexing falls
+back to one-document-at-a-time automatically, so robustness is unchanged.
+
+### Chunking the scheduled feed
+
+When you use the scheduled JSON-feed ingester (`turing.genai.structured-feed`), a
+large feed is split into **bounded chunks** — each chunk is imported and committed
+on its own, with per-chunk progress in the logs, and one failing chunk never aborts
+the rest. Tune the chunk size for very large feeds:
+
+```yaml
+turing:
+  genai:
+    structured-feed:
+      batch-size: 200   # records per chunk (default 200; 0 = one unbounded chunk)
+```
+
+De-index of rows that vanished from the feed is still computed over the whole run,
+so chunking never changes which stale rows are reconciled.
+
+### Direct bulk-index fast path (advanced, opt-in)
+
+For a **very large reindex of a Vectorless site**, the asynchronous indexing queue
+buys nothing — its purpose is to offload embedding work, and a vectorless site does
+none. An opt-in endpoint writes the documents straight to the search engine in
+bounded chunks, skipping the queue:
+
+```yaml
+turing:
+  sn:
+    import:
+      bulk-direct:
+        enabled: false   # default off — the ordered queue stays the default path
+        batch-size: 500  # documents per direct chunk
+```
+
+```
+POST /api/sn/import/bulk      # same TurSNJobItems body as POST /api/sn/import
+```
+
+It is **vectorless-only**: if any target site has embeddings enabled, the request
+transparently falls back to the normal queued import — never rejected, never
+skipping a site's embedding. Leave it **off** unless you are reindexing a large
+vectorless catalog and have measured that the queue is the bottleneck.
+
 ## Live example
 
 The public [`openviglet/model-catalog`](https://openviglet.github.io/model-catalog/)
