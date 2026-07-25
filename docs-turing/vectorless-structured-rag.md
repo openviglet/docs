@@ -127,6 +127,44 @@ fields' **names and descriptions**, so a clear description
 "cheapest" or "biggest context" to the right field. Give each ranking field a
 descriptive `description` in its manifest and superlative questions just work.
 
+### Query-planning strategy
+
+Turning a question into a structured search is a step you can choose a strategy
+for, per site, under **Semantic Navigation → your site → GenAI → Copilot Query
+Planning**:
+
+| Strategy | What it does | Cost per question |
+| --- | --- | --- |
+| **Deterministic** (default) | Ranking phrases are resolved without an LLM (as described above), and one LLM call maps the rest of the question onto your facets. Fully reproducible. The ranking vocabulary it understands is **English only**. | 1 LLM call |
+| **LLM-assisted** | Multi-pass: parse, then an LLM pass audits the query against the question (dropped filter? missing sort? undeclared field?), then a refine pass restates it. Understands questions in **any language** with no per-language configuration, and recovers when the first parse comes back empty. | up to 3 LLM calls |
+| **Hybrid** | Runs the deterministic plan first and only escalates to the audit/refine passes when it returned nothing, or produced no filter and no ordering. Common questions stay instant and free. | 1 LLM call, 3 only on a failed search |
+| **Default** | Pins nothing on the site — inherits the deployment setting below. | — |
+
+Pick **Hybrid** if your users ask questions in more than one language, or you have
+seen a question return no results that clearly should have matched. Pick
+**LLM-assisted** if most of your traffic is non-English. **Deterministic** — the
+default — is the cheapest and needs no LLM budget beyond the single parse.
+
+**Analysis depth** bounds how many passes the LLM strategies may spend after the
+initial parse: `0` = parse only, `1` = + the audit pass, `2` = + the refine pass.
+The control is only active on a strategy that spends passes.
+
+Deployment-wide defaults (used by every site set to *Default*):
+
+```yaml
+turing:
+  genai:
+    copilot:
+      planning:
+        strategy: DETERMINISTIC # or LLM_ASSISTED / HYBRID
+        max-passes: 2           # 0 = parse only, 1 = + audit, 2 = + refine
+```
+
+Every strategy keeps the same guarantees: each field the LLM proposes is checked
+against your declared schema before it reaches the index (an invented field is
+dropped, never queried), and a failed pass falls back to the previous plan rather
+than erroring.
+
 ### From React (SDK)
 
 The `@viglet/turing-react-sdk` ships a `useTuringCopilot` hook and an embeddable
@@ -167,10 +205,24 @@ curl -sX POST https://<host>/v1/chat/completions \
 
 For a catalog small enough to fit in one prompt (a few hundred rows), the copilot
 can skip retrieval entirely and ground the LLM on **every** row — the
-extreme-vectorless path. It is **self-gating by size**: enabled by default, it only
-activates when the whole index fits within a token budget and document cap, and
-otherwise falls back to the normal filtered retrieval. Answers stay cited and
-fail-open either way. Configure under `turing.genai.copilot`:
+extreme-vectorless path. This is what makes open-ended advisory questions work
+("which of these would suit a small documentation site?"): the model sees the whole
+catalog rather than a filtered slice. It is **self-gating by size**: enabled by
+default, it only activates when the whole index fits within a token budget and
+document cap, and otherwise falls back to the normal filtered retrieval. Answers
+stay cited and fail-open either way.
+
+As a catalog grows, Turing adapts before giving up on whole-catalog grounding: it
+first tries a full description-labelled row per document, and if that exceeds the
+budget it retries a **compact** projection — one lean line per row covering only
+your sortable and facet fields, no snippet or descriptions — which is roughly ten
+times smaller, so several times more rows still fit. Only when even the compact
+whole catalog is over budget does it fall back to filtered retrieval. If you want a
+large catalog to keep answering advisory questions, raise the token budget
+(`TURING_GENAI_COPILOT_STUFFALLTOKENBUDGET`); the application log states which mode
+each request used and, when it fell back, by how much it was over.
+
+Configure under `turing.genai.copilot`:
 
 ```yaml
 turing:
