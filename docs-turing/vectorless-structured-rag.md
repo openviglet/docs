@@ -165,6 +165,44 @@ against your declared schema before it reaches the index (an invented field is
 dropped, never queried), and a failed pass falls back to the previous plan rather
 than erroring.
 
+#### Comparing the strategies on your own catalog
+
+Rather than guess which strategy suits your data, measure it. An
+[NL→facet eval pack](./agent-eval.md) — the prose questions your users ask, each
+with the filters/ordering it should produce — can be run through **every** strategy
+at once, scoring them side by side:
+
+- In the admin, open **Eval Studio → NL→Facet**, import your pack as a dataset, and
+  press **Compare planners**.
+- Over the API:
+
+  ```bash
+  curl -X POST https://<turing>/api/sn/nl-facet-eval/planning-comparison \
+    -H 'Content-Type: application/json' \
+    -d '{ "pack": { … }, "strategies": ["DETERMINISTIC","LLM_ASSISTED"], "maxPasses": 2 }'
+  ```
+
+  `strategies` is optional (omit it to compare all three) and `maxPasses` overrides
+  the analysis depth for the run. A saved dataset can be compared directly with
+  `POST /api/sn/nl-facet-eval/dataset/{id}/planning-comparison`.
+
+The report gives one row per strategy with the three numbers the choice turns on —
+**score** (how many of your golden filters/ordering the plan reproduced), **LLM
+calls** (the cost per run) and **elapsed** (the latency) — plus the per-case
+breakdown for the questions that missed.
+
+:::caution Read the caveats printed with the table
+The comparison scores the query each strategy **plans**; it does not execute it
+against your index. That matters for **Hybrid**: its escalation only triggers on a
+live search that came back empty, which a plan-only run cannot produce — so Hybrid
+scores exactly like Deterministic here. That is its fast-path, not what it does in
+production. Elapsed time is real LLM wall-clock and varies run to run; compare
+orders of magnitude, not milliseconds.
+:::
+
+Because an LLM-assisted row costs up to three LLM calls **per case**, restrict
+`strategies` (or lower `maxPasses`) when the pack is large.
+
 ### From React (SDK)
 
 The `@viglet/turing-react-sdk` ships a `useTuringCopilot` hook and an embeddable
