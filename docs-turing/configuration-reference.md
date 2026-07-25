@@ -125,6 +125,13 @@ turing:
   jms.concurrency: 1-1
   code-interpreter:
     python-executable: ""
+  model-catalog:                               # public LLM catalog powering the model picker
+    url: ${TURING_MODEL_CATALOG_URL:https://openviglet.github.io/model-catalog/catalog.json}
+    remote-enabled: true                       # remote-only; false = live vendor listing only
+    price-sync:
+      enabled: true                            # seed tur_llm_price from indicative pricing
+    change-feed:
+      email-enabled: false                     # opt-in daily change-feed digest email
   solr:
     timeout: 30000
     cloud: false
@@ -308,6 +315,18 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 :::warning Set the crypto key in production
 `turing.ai.crypto.key` encrypts every LLM provider API key + store credential in the database. Supply it via the `TURING_AI_CRYPTO_KEY` environment variable (`openssl rand -base64 48`). Under the `production` profile a blank or known-sample key makes startup **fail fast**. See [Security Hardening § crypto key](./security-hardening.md#1-ai-crypto-master-key-must-be-set-in-production).
 :::
+
+### Model Catalog (`turing.model-catalog`) {#model-catalog}
+
+Turing enriches its LLM-instance model picker from a public, vendor-neutral [**model catalog**](https://openviglet.github.io/model-catalog/) ([openviglet/model-catalog](https://github.com/openviglet/model-catalog)) — pricing, context windows, capabilities, tiers and deprecations. The fetch is **remote-only** (no bundled copy), best-effort, runs off the boot path on a TTL, and never blocks startup; until the first successful fetch the picker falls back to live vendor listing only. See [LLM Instances § Catalog-driven intelligence](./llm-instances.md#catalog-driven-intelligence).
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.model-catalog.url` | `https://openviglet.github.io/model-catalog/catalog.json` | Catalog endpoint the model picker reads. Override with `TURING_MODEL_CATALOG_URL` to pin a self-hosted or air-gapped copy. |
+| `turing.model-catalog.remote-enabled` | `true` | Set `false` to disable the remote fetch entirely — the picker then uses only models listed live by each vendor's API. |
+| `turing.model-catalog.refresh-interval-ms` | `21600000` | Refresh cadence for the catalog (6h). A short initial delay (`refresh-initial-delay-ms`, default `8000`) keeps the fetch off the boot path. |
+| `turing.model-catalog.price-sync.enabled` | `true` | Auto-seed/refresh the per-model price table (`tur_llm_price`) from the catalog's indicative pricing on a TTL. Only CATALOG-sourced rows are written — an operator's MANUAL rate is never overwritten. `false` keeps the price table manual-only. See [Cost Governance](./cost-governance.md). |
+| `turing.model-catalog.change-feed.email-enabled` | `false` | Opt-in: a daily job emails the Global Settings recipient a digest when the catalog change feed affects a model you use (removed / superseded / changed), deduped. The in-UI change-feed banner is always on regardless. |
 
 ### Abuse Controls (`turing.abuse`) {#abuse-controls-turingabuse}
 

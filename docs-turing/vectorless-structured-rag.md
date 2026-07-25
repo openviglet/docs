@@ -109,6 +109,24 @@ drives retrieval.
 `GET /api/sn/{siteName}/copilot/available` reports whether a default LLM is
 configured (i.e. whether the copilot can answer).
 
+### Ranking & superlative questions
+
+Superlative and comparative questions are understood out of the box — "the
+**cheapest** embedding model", "which chat model scores **highest** on the
+intelligence index", "the model with the **biggest** context window", "chat models
+**sorted by** price". Turing recognises the ranking phrase and sorts the results by
+the matching **numeric** field in your declared schema (ascending for a minimum —
+cheapest / lowest / smallest / fastest — descending for a maximum — highest /
+largest / most / best), while still keeping any facet filter in the same question
+("**chat** models sorted by intelligence index" stays scoped to chat models).
+
+This works generically for any catalog: the sort field is resolved from your
+fields' **names and descriptions**, so a clear description
+(`"Overall intelligence index"`, `"Input price per 1M tokens (USD)"`,
+`"Maximum context window in tokens"`) is what lets Turing map "most intelligent",
+"cheapest" or "biggest context" to the right field. Give each ranking field a
+descriptive `description` in its manifest and superlative questions just work.
+
 ### From React (SDK)
 
 The `@viglet/turing-react-sdk` ships a `useTuringCopilot` hook and an embeddable
