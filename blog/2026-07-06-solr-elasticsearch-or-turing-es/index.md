@@ -17,12 +17,12 @@ viglet_products: [turing]
 
 "Should we use Solr or Elasticsearch?" is one of the most common engineering
 questions when a search project starts. It's also slightly the wrong question.
-**Solr and Elasticsearch are search *engines*** — they index and rank documents.
+**Solr and Elasticsearch are search *engines***: they index and rank documents.
 What most teams actually need is an enterprise search *platform*: connectors,
 facets, multi-language, semantic search, RAG, and an admin UI on top of that
 engine.
 
-That's the distinction this post draws — and where
+That's the distinction this post draws, and where
 [**Viglet Turing ES**](https://www.viglet.org/turing/) fits, because it's not a
 competitor to Solr/Elasticsearch. It runs **on** them.
 
@@ -47,7 +47,7 @@ flowchart TB
 
 Turing ES is the **platform** layer, and its engine backend is
 [pluggable](/turing/search-engine): you can run it on **Apache Solr**,
-**Elasticsearch**, or an embedded **Lucene** engine — and switch without
+**Elasticsearch**, or an embedded **Lucene** engine, and switch without
 rewriting your application.
 
 ## Solr vs. Elasticsearch (the engine choice)
@@ -62,7 +62,7 @@ rewriting your application.
 
 Short version: for **content/site search with heavy faceting**, Solr is a
 natural fit and fully Apache-licensed. For **log analytics and dynamic schemas**,
-Elasticsearch's ecosystem leads. Both are excellent engines — and both leave the
+Elasticsearch's ecosystem leads. Both are excellent engines, and both leave the
 *platform* work (connectors, relevance UI, semantic, RAG) to you.
 
 ## When raw Solr/Elasticsearch is the right call
@@ -76,8 +76,8 @@ Elasticsearch's ecosystem leads. Both are excellent engines — and both leave t
 
 Turing ES adds, on top of the engine you choose:
 
-- **Connectors** — [Adobe AEM](/dumont/connectors/aem), WordPress, databases,
-  file systems, web crawl — with event-driven sync and tag → facet mapping.
+- **Connectors** for [Adobe AEM](/dumont/connectors/aem), WordPress, databases,
+  file systems, and web crawl, with event-driven sync and tag → facet mapping.
 - **Semantic + vector search** and **RAG** with your LLM
   ([guide](/turing/rag)), instead of building an AI tier separately.
 - **Multi-language, faceting, autocomplete, spotlights, targeting** out of the
@@ -85,7 +85,7 @@ Turing ES adds, on top of the engine you choose:
 - **AI agents** with 27 tools and [MCP](/turing/mcp-servers) support.
 - An **admin console**, SDKs (Java, JS/TS), and a REST/GraphQL API.
 
-All open source under Apache 2.0, self-hosted — and engine-agnostic, so the
+All open source under Apache 2.0, self-hosted, and engine-agnostic, so the
 Solr-vs-Elasticsearch decision stops being a lock-in.
 
 ## How to decide
@@ -96,7 +96,7 @@ Solr-vs-Elasticsearch decision stops being a lock-in.
 2. **If platform → Turing ES**, then choose the engine underneath by workload:
    Solr for content/faceted search, Elasticsearch/OpenSearch if you're
    standardizing on that ecosystem, Lucene for a zero-dependency embedded setup.
-3. **Licensing matters** — Solr and Turing ES are Apache 2.0 end to end.
+3. **Licensing matters**: Solr and Turing ES are Apache 2.0 end to end.
 
 ## Try it
 
@@ -110,5 +110,5 @@ docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
 - ⭐ [Turing ES on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
 
 *Viglet Turing ES is an open-source enterprise search platform that runs on
-Apache Solr, Elasticsearch, or Lucene — adding connectors, faceted and semantic
+Apache Solr, Elasticsearch, or Lucene, adding connectors, faceted and semantic
 search, and RAG on top of the engine you choose.*

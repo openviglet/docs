@@ -1,7 +1,7 @@
 ---
 slug: enterprise-search-for-adobe-aem
 title: "How to Add Enterprise Search to Adobe AEM with Viglet Turing ES"
-description: "A step-by-step guide to indexing Adobe Experience Manager content into an open-source enterprise search engine with faceted navigation, semantic search, and RAG — an alternative to Algolia, Coveo, and Lucidworks."
+description: "A step-by-step guide to indexing Adobe Experience Manager content into an open-source enterprise search engine with faceted navigation, semantic search, and RAG: an alternative to Algolia, Coveo, and Lucidworks."
 authors: [alexandre]
 tags: [aem, enterprise-search, semantic-search, open-source]
 keywords:
@@ -16,12 +16,12 @@ viglet_products: [turing, dumont]
 ---
 
 Adobe Experience Manager (AEM) ships with Oak/Lucene indexing that is excellent
-for authoring and repository operations — but it was never meant to power a
+for authoring and repository operations, but it was never meant to power a
 public-facing **search experience**: faceted navigation, autocomplete,
 relevance tuning, multi-language sites, and increasingly, conversational
 (RAG) answers over your content.
 
-Most teams reach for a SaaS layer — **Algolia, Coveo, or Lucidworks** — and pay
+Most teams reach for a SaaS layer (**Algolia, Coveo, or Lucidworks**) and pay
 per document and per query, while their content leaves their infrastructure.
 This guide shows the open-source alternative: indexing AEM into
 [**Viglet Turing ES**](https://www.viglet.org/turing/), an Apache-2.0 enterprise
@@ -33,15 +33,15 @@ search platform you self-host, with semantic navigation and generative AI built 
 
 By the end you'll have AEM pages flowing into a Turing ES search index, with:
 
-- **Faceted search** — AEM tags become filterable facets automatically
-- **Real-time sync** — pages re-index the moment they're published in AEM
-- **A query API** — REST, GraphQL, or SDK, ready for any front end
-- **(Optional) RAG** — grounded, citeable AI answers over the same content
+- **Faceted search**: AEM tags become filterable facets automatically
+- **Real-time sync**: pages re-index the moment they're published in AEM
+- **A query API**: REST, GraphQL, or SDK, ready for any front end
+- **(Optional) RAG**: grounded, citeable AI answers over the same content
 
 ## The architecture in one picture
 
-Turing ES doesn't crawl AEM directly. A dedicated connector —
-[**Viglet Dumont DEP**](https://www.viglet.org/dumont/) — sits between them: an
+Turing ES doesn't crawl AEM directly. A dedicated connector,
+[**Viglet Dumont DEP**](https://www.viglet.org/dumont/), sits between them: an
 OSGi bundle inside AEM emits events, and the Dumont connector fetches the
 content and indexes it into Turing ES.
 
@@ -71,7 +71,7 @@ Three components, each documented in full:
 | **AEM Connector Plugin** | Dumont DEP process | Fetches content from AEM, indexes into Turing ES |
 | **Integration Instance** | Turing ES admin console | Proxy config + monitoring |
 
-## Step 1 — Run Turing ES
+## Step 1: Run Turing ES
 
 The fastest path is Docker:
 
@@ -81,10 +81,10 @@ docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
 ```
 
 Open `http://localhost:2700/console` and set the admin password on first run
-(`TURING_ADMIN_PASSWORD` env var). Create a **Semantic Navigation (SN) Site** —
-this is the index your AEM content will land in.
+(`TURING_ADMIN_PASSWORD` env var). Create a **Semantic Navigation (SN) Site**.
+This is the index your AEM content will land in.
 
-## Step 2 — Configure the AEM source in Dumont
+## Step 2: Configure the AEM source in Dumont
 
 In the Turing ES admin console, go to **Enterprise Search → Integration** and
 add an AEM instance. The key source fields:
@@ -97,9 +97,9 @@ add an AEM instance. The key source fields:
 | SN Site (Publish) | `wknd-search` | The Turing ES index to feed |
 
 That's it for the happy path. AEM **tags are converted to facets
-automatically** — no field mapping required.
+automatically**, with no field mapping required.
 
-## Step 3 — Index your first content
+## Step 3: Index your first content
 
 You have three ways to trigger indexing. For a first run, call the connector
 directly (the WKND reference site is perfect for testing):
@@ -127,7 +127,7 @@ dumont:
   aem.querybuilder.parallelism: 10
 ```
 
-## Step 4 — Real-time sync (production)
+## Step 4: Real-time sync (production)
 
 For production, install the `aem-server` OSGi bundle inside AEM. It subscribes
 to AEM's replication and page events and notifies Dumont automatically:
@@ -141,23 +141,23 @@ to AEM's replication and page events and notifies Dumont automatically:
 
 Configure the bundle in AEM's Web Console (**Host** = your Dumont URL,
 **Config Name** = the source name). From then on, publishing a page in AEM
-re-indexes it within seconds — no cron, no full re-crawl.
+re-indexes it within seconds, with no cron and no full re-crawl.
 
-> **Tip — cascade re-indexing.** When a shared component or experience fragment
+> **Tip: cascade re-indexing.** When a shared component or experience fragment
 > changes, every page that references it can go stale. Turing/Dumont can track
 > `/content/*` dependencies and automatically re-index dependents. Enable
 > `dumont.dependencies.enabled=true` and run a Reindex All to populate the
 > dependency graph.
 
-## Step 5 — Query it
+## Step 5: Query it
 
 Your AEM content is now searchable through any of these:
 
 ```bash
-# REST — faceted search
+# REST: faceted search
 curl "http://localhost:2700/api/sn/wknd-search/search?q=adventure&rows=10&_setlocale=en_US"
 
-# REST — autocomplete
+# REST: autocomplete
 curl "http://localhost:2700/api/sn/wknd-search/ac?q=adven&_setlocale=en_US"
 ```
 
@@ -172,12 +172,13 @@ const results = await search.search("wknd-search", {
 ```
 
 Or via GraphQL at `http://localhost:2700/graphiql`. The facets derived from
-your AEM tags come back with the results — wire them straight into a filter panel.
+your AEM tags come back with the results, so you can wire them straight into a
+filter panel.
 
-## Step 6 (optional) — Conversational answers (RAG)
+## Step 6 (optional): Conversational answers (RAG)
 
 Because Turing ES already holds your AEM content, turning on **RAG** gives you
-grounded AI answers with citations — over your own content, on your own
+grounded AI answers with citations, over your own content, on your own
 infrastructure, with the LLM of your choice (OpenAI, Ollama, Anthropic, Gemini):
 
 ```bash
@@ -189,19 +190,19 @@ a third party.
 
 ## Why open-source for AEM search?
 
-- **Your content stays in your infrastructure** — no per-document SaaS pricing,
+- **Your content stays in your infrastructure**: no per-document SaaS pricing,
   no data egress, AEM author content never leaves the building.
 - **Tags → facets with zero mapping**, real-time event-driven sync, and
   cascade re-indexing for shared components.
-- **Search + semantic + RAG in one platform** under Apache 2.0 — not three
+- **Search + semantic + RAG in one platform** under Apache 2.0, not three
   separate vendor bills.
 
 ## Next steps
 
-- 📘 [AEM Connector — full reference](/dumont/connectors/aem) (event listeners, QueryBuilder, custom extractors)
-- 📗 [Turing ES — AEM Integration](/turing/integration-aem)
+- 📘 [AEM Connector: full reference](/dumont/connectors/aem) (event listeners, QueryBuilder, custom extractors)
+- 📗 [Turing ES: AEM Integration](/turing/integration-aem)
 - 📙 [Semantic Navigation](/turing/semantic-navigation) and [RAG](/turing/rag) guides
-- ⭐ [Star Turing ES on GitHub](https://github.com/openviglet/turing-ce) — it genuinely helps others find it
+- ⭐ [Star Turing ES on GitHub](https://github.com/openviglet/turing-ce) (it genuinely helps others find it)
 - 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
 
 *Viglet Turing ES is open-source (Apache 2.0) enterprise search with semantic

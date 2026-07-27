@@ -1,7 +1,7 @@
 ---
 slug: open-source-alternative-to-algolia-for-aem
 title: "Open-Source Alternatives to Algolia and Coveo for Adobe AEM"
-description: "Comparing search options for Adobe Experience Manager — Algolia, Coveo, Lucidworks, raw Solr/Elasticsearch, and the open-source Viglet Turing ES. Pricing model, data residency, facets, semantic search, and RAG."
+description: "Comparing search options for Adobe Experience Manager: Algolia, Coveo, Lucidworks, raw Solr/Elasticsearch, and the open-source Viglet Turing ES. Pricing model, data residency, facets, semantic search, and RAG."
 authors: [alexandre]
 tags: [aem, comparison, enterprise-search, open-source]
 keywords:
@@ -15,14 +15,14 @@ image: https://docs.viglet.org/turing/img/banner.jpg
 viglet_products: [turing]
 ---
 
-If you run **Adobe Experience Manager** and need a real search experience —
-facets, autocomplete, relevance, and increasingly AI answers — you'll quickly
+If you run **Adobe Experience Manager** and need a real search experience, with
+facets, autocomplete, relevance, and increasingly AI answers, you'll quickly
 hit the limits of out-of-the-box Oak indexing and start evaluating a dedicated
 search layer. The usual shortlist is **Algolia**, **Coveo**, and
-**Lucidworks** — all excellent, all SaaS, all priced per document and per query.
+**Lucidworks**: all excellent, all SaaS, all priced per document and per query.
 
 This post lays out the trade-offs honestly, including where the open-source
-option — [**Viglet Turing ES**](https://www.viglet.org/turing/) — fits and where
+option, [**Viglet Turing ES**](https://www.viglet.org/turing/), fits and where
 it doesn't.
 
 <!-- truncate -->
@@ -39,12 +39,12 @@ it doesn't.
 
 ## The real decision axes
 
-### 1. Pricing model — per-document SaaS vs. self-host
+### 1. Pricing model: per-document SaaS vs. self-host
 
 SaaS search bills scale with your **content volume and query traffic**. For a
 large AEM repository (hundreds of thousands of pages, public traffic), that
 line item grows every year. Self-hosting Turing ES on infrastructure you
-already run flips it to a fixed cost — you pay for compute, not per record.
+already run flips it to a fixed cost: you pay for compute, not per record.
 
 > If your content set is small and traffic is spiky, managed SaaS may genuinely
 > be cheaper *and* less operational work. Be honest about your scale.
@@ -52,7 +52,7 @@ already run flips it to a fixed cost — you pay for compute, not per record.
 ### 2. Data residency
 
 With Algolia and Coveo, your indexed content lives in **their** cloud. For
-regulated industries — finance, healthcare, education, government — AEM author
+regulated industries (finance, healthcare, education, government), AEM author
 content leaving the building is often a non-starter. Turing ES, Lucidworks, and
 raw Solr/ES all index **inside your perimeter**.
 
@@ -61,11 +61,11 @@ raw Solr/ES all index **inside your perimeter**.
 A search engine is only as good as how cleanly it ingests AEM. The hard parts:
 real-time sync on publish, tags → facets, multi-language paths, author *and*
 publish environments, and **cascade re-indexing** when a shared fragment
-changes. Turing ES handles these through [Dumont DEP](/dumont/connectors/aem):
-OSGi event listeners, `infinity.json` traversal, automatic tag facets, and
-dependency-tracked cascade re-indexing — out of the box.
+changes. Turing ES handles these through [Dumont DEP](/dumont/connectors/aem)
+out of the box: OSGi event listeners, `infinity.json` traversal, automatic tag
+facets, and dependency-tracked cascade re-indexing.
 
-Raw Solr/Elasticsearch give you the engine but **none** of this — you build the
+Raw Solr/Elasticsearch give you the engine but **none** of this. You build the
 AEM pipeline yourself, which is usually months of work.
 
 ### 4. Semantic search + RAG without a second vendor
@@ -74,7 +74,7 @@ The 2026 reality is that "search" now includes conversational, grounded AI
 answers. With SaaS you often add a separate AI tier (and a separate bill).
 Turing ES bundles faceted search, **vector/semantic search**, and **RAG** with
 your choice of LLM (OpenAI, Ollama, Anthropic, Gemini) in one Apache-2.0
-platform — answers are grounded in your AEM content with citations, on your
+platform, so answers are grounded in your AEM content with citations, on your
 own infrastructure. See the [RAG guide](/turing/rag).
 
 ## When to pick which
@@ -83,15 +83,15 @@ own infrastructure. See the [RAG guide](/turing/rag).
   data residency isn't a constraint.
 - **Choose Coveo** if you're a large enterprise already invested in their
   ecosystem and want a fully managed AEM connector with a budget to match.
-- **Choose raw Solr/Elasticsearch** if you have a search engineering team and
-  want maximum control — and are prepared to build the AEM pipeline.
+- **Choose raw Solr/Elasticsearch** if you have a search engineering team, want
+  maximum control, and are prepared to build the AEM pipeline.
 - **Choose Viglet Turing ES** if you want self-hosted enterprise search with a
-  first-class AEM connector, facets, semantic search, and RAG built in — under
+  first-class AEM connector, facets, semantic search, and RAG built in, under
   an open-source license, with optional commercial support.
 
 ## Try it
 
-Indexing AEM into Turing ES takes about 15 minutes — there's a
+Indexing AEM into Turing ES takes about 15 minutes, and there's a
 [step-by-step guide using the WKND reference site](/blog/enterprise-search-for-adobe-aem).
 
 - ⭐ [Turing ES on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
@@ -99,5 +99,5 @@ Indexing AEM into Turing ES takes about 15 minutes — there's a
 - 💬 [GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
 
 *Viglet Turing ES is open-source enterprise search with semantic navigation and
-generative AI — an alternative to Algolia, Coveo, and Lucidworks for teams that
+generative AI: an alternative to Algolia, Coveo, and Lucidworks for teams that
 want to keep their content on their own infrastructure.*
