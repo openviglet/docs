@@ -106,8 +106,6 @@ Validates content differences between the source and the search index. Used by t
 
 ---
 
-<div className="page-break" />
-
 ## Monitoring API
 
 Base path: `/api/v2/connector/monitoring`
@@ -201,8 +199,6 @@ Returns runtime system information consumed by the Turing ES Integration → Sys
 
 ---
 
-<div className="page-break" />
-
 ## Indexing Rules API
 
 Base path: `/api/v2/connector/indexing-rule`
@@ -270,8 +266,6 @@ GET /api/v2/connector/indexing-rule/structure
 Returns an empty model for reference.
 
 ---
-
-<div className="page-break" />
 
 ## AEM Plugin API
 

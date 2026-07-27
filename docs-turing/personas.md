@@ -137,8 +137,6 @@ You don't need to choose. Both are on by default whenever a Persona is attached.
 
 ---
 
-<div className="page-break" />
-
 ## The Few-Shot Store: Teach by Example
 
 The hardest part of a brand voice isn't the rules — it's the *feel*. You can describe FORMAL, but you can't fully describe *"the way Maria from sales answers a discount request"*. So Turing ES lets you point a Persona at a **vector store of past Q/A pairs**, and at every conversation it retrieves the most relevant ones to use as few-shot examples.
@@ -246,8 +244,6 @@ The persona converts **activation** into **retention**.
 
 ---
 
-<div className="page-break" />
-
 ## Audience Personas & Content-Fit
 
 So far a persona has been a **speaker** — the voice your agent talks *in*. Block AA adds the mirror image: a persona can also describe a **reader** — the audience your content is *for* — so you can evaluate whether a document actually fits the people meant to read it. *"Will a non-technical buyer understand this spec sheet?"* becomes a measurable question, not a guess.
@@ -297,8 +293,6 @@ You can **draft** a persona from a voice recording. `POST /api/persona/derive-fr
 Transcription rides a **config-selectable, chunk-capable** backend — cloud OpenAI, a self-hosted OpenAI-compatible server, or (once bundled) an in-process engine — so persona-from-audio works past any single-request upload limit and can run fully on-prem. Choose the backend in **Administration → Settings → Global Settings → Transcription**; see [Transcription](./transcription.md) for the full setup.
 
 ---
-
-<div className="page-break" />
 
 ## Act on a Persona: chat, validate, dialogue
 

@@ -155,8 +155,6 @@ your-aem-project/ui.config/src/main/content/jcr_root/apps/<your-project>/osgicon
 
 ---
 
-<div className="page-break" />
-
 ## Option 2: Create a New AEM Project from Archetype
 
 If you don't have an existing AEM project, create one from the [AEM Project Archetype](https://experienceleague.adobe.com/docs/experience-manager-core-components/using/developing/archetype/using.html):

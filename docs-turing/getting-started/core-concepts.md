@@ -78,8 +78,6 @@ Sometimes the same real-world document exists in two systems with complementary 
 
 ---
 
-<div className="page-break" />
-
 ## Search
 
 When a user searches on an SN Site, this is what happens — in simple terms:
@@ -128,8 +126,6 @@ Targeting Rules let you show different results to different users from the same 
 See [Targeting Rules](../semantic-navigation.md#targeting-rules) for a full explanation.
 
 ---
-
-<div className="page-break" />
 
 ## Generative AI
 

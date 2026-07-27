@@ -131,8 +131,6 @@ public class EnrichWithCategory implements DumDbExtCustomImpl {
 
 ---
 
-<div className="page-break" />
-
 ## Using the Extension
 
 ### Via CLI

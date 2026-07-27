@@ -12,9 +12,6 @@
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
-    "gen-pdf": "node scripts/gen-pdf.mjs",
-    "gen-pdf-dumont": "node scripts/gen-pdf-dumont.mjs",
-    "gen-pdf-shio": "node scripts/gen-pdf-shio.mjs",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids"
   },
@@ -51,10 +48,8 @@
     "@docusaurus/tsconfig": "^3.10.2",
     "@docusaurus/types": "^3.10.0",
     "@mermaid-js/mermaid-cli": "^11.16.0",
-    "pdf-lib": "^1.17.1",
     "puppeteer": "^25.3.0",
-    "typescript": "^7.0.2",
-    "wait-on": "^9.0.10"
+    "typescript": "^7.0.2"
   },
   "browserslist": {
     "production": [

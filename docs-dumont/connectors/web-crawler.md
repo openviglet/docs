@@ -99,8 +99,6 @@ Define which parts of the HTML page map to which fields in the search index:
 
 ---
 
-<div className="page-break" />
-
 ## Example: Crawling a Documentation Site
 
 Crawl a documentation site starting from the homepage, only following links within the `/docs/` path:

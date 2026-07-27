@@ -166,8 +166,6 @@ The workspace requires a [storage backend](./configuration-reference.md#storage)
 
 ---
 
-<div className="page-break" />
-
 ## Vibe Coding: Let the AI Author the Tool
 
 Writing a tool from scratch — even a trivial one — usually means writing four things: the LLM description, the parameter list, the script, and a quick test. The Vibe Coding chat does all four for you, then hands you a draft to review.
@@ -231,8 +229,6 @@ Use this pattern when:
 The direct [Chat](./chat.md) mode (no agent) doesn't expose Custom Tools by default — that mode is for *general-purpose assistance with optional toolboxes*. If you need a Custom Tool in direct chat, attach it to a thin "default agent" instead. This keeps the catalog manageable.
 
 ---
-
-<div className="page-break" />
 
 ## Three Real Custom Tools
 
@@ -383,8 +379,6 @@ The model decides on its own when to call it. When it does, Turing ES:
 If the script throws, the error message is fed back to the LLM as the tool result — the model usually recovers gracefully (*"I couldn't look up that CEP — could you double-check the digits?"*).
 
 ---
-
-<div className="page-break" />
 
 ## REST API
 

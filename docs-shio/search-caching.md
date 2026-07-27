@@ -67,8 +67,6 @@ Search providers are configured in the **Configuration Console > Search Provider
 
 ---
 
-<div className="page-break" />
-
 ## Hazelcast Cache
 
 Shio CMS uses **Hazelcast** as a distributed caching layer for website rendering. The cache dramatically improves response times by storing rendered page HTML and content objects.

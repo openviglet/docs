@@ -114,8 +114,6 @@ The panel footer displays the file size, content type, modification date, and fi
 
 ---
 
-<div className="page-break" />
-
 ## AI Training (RAG)
 
 The AI training features are only available when `ragEnabled=true` **and** an embedding model and embedding store are configured in **Administration → Global Settings → RAG Settings**.
@@ -200,8 +198,6 @@ This metadata is used by AI Agents when returning search results, so the LLM can
 There is **no hard file size limit** for uploads — MinIO accepts files of any size. However, during AI Training the extracted text is **truncated to 100,000 characters** before chunking. For very large documents this means only the first portion of the content is indexed. The truncation limit is a fixed internal constant.
 
 ---
-
-<div className="page-break" />
 
 ## How AI Agents Use the Knowledge Base
 

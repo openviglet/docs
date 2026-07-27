@@ -49,8 +49,6 @@ The `export.json` inside the ZIP archive contains:
 
 ---
 
-<div className="page-break" />
-
 ## Import
 
 The import page (`/admin/exchange/import`) accepts a ZIP file previously exported from Turing ES and recreates the site configurations in the target environment.

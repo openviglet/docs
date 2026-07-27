@@ -99,8 +99,6 @@ wp-content/plugins/viglet-turing-for-wordpress/
 
 ---
 
-<div className="page-break" />
-
 ## Indexed Fields
 
 The plugin extracts and sends these fields to Turing ES:

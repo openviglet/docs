@@ -70,8 +70,6 @@ All connectors implement the `DumConnectorPlugin` interface:
 
 ---
 
-<div className="page-break" />
-
 ## Connector Plugins vs. Standalone Tools
 
 Dumont DEP connectors are distributed in two forms:

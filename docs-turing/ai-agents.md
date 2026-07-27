@@ -109,8 +109,6 @@ This is what lets a search-only site (for example the zero-config public demo, w
 
 ---
 
-<div className="page-break" />
-
 ## How an Agent Actually Runs
 
 When a user sends a message, this loop runs end-to-end. Understanding it is the difference between debugging "the AI gave a weird answer" in five minutes vs. five hours.
@@ -239,8 +237,6 @@ For employees, on-premises, behind your firewall.
 **Outcome target:** **first-call resolution rate.**
 
 ---
-
-<div className="page-break" />
 
 ## Configuration Form
 

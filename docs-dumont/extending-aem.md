@@ -95,8 +95,6 @@ public class MyCustomAttribute implements DumAemExtAttributeInterface {
 
 ---
 
-<div className="page-break" />
-
 ### DumAemExtContentInterface
 
 Implement this to fetch additional content from AEM — for example, calling the `.model.json` Sling Model exporter to get structured data.
@@ -484,8 +482,6 @@ Combines two attribute maps. For each key in the source map:
 
 ---
 
-<div className="page-break" />
-
 ## AEM Configuration JSON
 
 The AEM connector is configured via a JSON file that defines sources, attributes, locale mappings, and content models. This file is placed in an `export/` directory and imported at startup.
@@ -608,8 +604,6 @@ Content found under each path is tagged with the corresponding locale.
 | `targetAttrs[].sourceAttrs[].className` | string | Class implementing `DumAemExtAttributeInterface` for custom extraction |
 
 ---
-
-<div className="page-break" />
 
 ## Creating a Custom AEM Extension
 

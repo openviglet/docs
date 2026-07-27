@@ -51,8 +51,6 @@ The application starts at `http://localhost:30130`.
 
 ---
 
-<div className="page-break" />
-
 ## Project Structure
 
 ```

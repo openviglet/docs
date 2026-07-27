@@ -79,8 +79,6 @@ The standalone Database Connector accepts the following command-line parameters:
 
 ---
 
-<div className="page-break" />
-
 ## Example: Indexing a Product Catalog
 
 ### SQL Query

@@ -103,8 +103,6 @@ graph TD
 
 ---
 
-<div className="page-break" />
-
 ## Website Rendering Flow
 
 When a visitor requests a page, the website engine resolves the URL to a content object, loads the associated Page Layout, evaluates each Region with its Component APIs, and assembles the final HTML. Hazelcast caches the rendered output for subsequent requests.
@@ -157,8 +155,6 @@ sequenceDiagram
 ```
 
 ---
-
-<div className="page-break" />
 
 ## Technology Stack
 

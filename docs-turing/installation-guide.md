@@ -229,8 +229,6 @@ cd <SOLR_DIR>/bin
 
 Start the Solr service after the collection is created.
 
-<div className="page-break" />
-
 ## Installing Turing ES
 
 ### Turing ES Download
@@ -311,8 +309,6 @@ java -Xmx1g -Xms1g -jar viglet-turing.jar \
   --spring.config.additional-location=file:/appl/viglet/turing/server/viglet-turing.properties
 ```
 
-<div className="page-break" />
-
 ### Creating Turing ES Service on Linux
 
 As root, create a `/etc/systemd/system/turing.service` file with the following lines:
@@ -380,8 +376,6 @@ Configuration finished.
 Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing ES. The default port is **2700**.
 
 The default username is **admin**. The password is set via the `TURING_ADMIN_PASSWORD` environment variable before first startup — see the [Administration Guide](./administration-guide.md#login) for details.
-
-<div className="page-break" />
 
 ## Appendix A: Installation Modes
 

@@ -83,8 +83,6 @@ logging:
 
 ---
 
-<div className="page-break" />
-
 ## Property Reference
 
 ### Server
@@ -165,8 +163,6 @@ logging:
 | `logging.level.com.viglet` | `INFO` | Log level for Dumont DEP application code |
 
 ---
-
-<div className="page-break" />
 
 ## Common Production Overrides
 

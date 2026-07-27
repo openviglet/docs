@@ -100,8 +100,6 @@ cp web-crawler/wc-plugin/target/web-crawler-plugin.jar /appl/viglet/dumont/serve
 
 ---
 
-<div className="page-break" />
-
 ## Starting with a Connector Plugin
 
 The key to running Dumont DEP is the `-Dloader.path` JVM property. It tells Spring Boot's PropertiesLauncher where to find the connector plugin JARs.
@@ -201,8 +199,6 @@ Dumont DEP cannot send content to Turing ES without a valid API Token. Create on
 :::
 
 ---
-
-<div className="page-break" />
 
 ## Creating a Linux Service
 
@@ -312,8 +308,6 @@ java -cp dumont-filesystem-indexer.jar com.viglet.dumont.filesystem.DumFSImportT
 These tools run independently and can be scheduled via cron jobs or CI/CD pipelines.
 
 ---
-
-<div className="page-break" />
 
 ## Docker Compose
 

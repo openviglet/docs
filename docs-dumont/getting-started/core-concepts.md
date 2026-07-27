@@ -45,8 +45,6 @@ Job Items are the universal data format inside Dumont DEP. Every connector produ
 
 ---
 
-<div className="page-break" />
-
 ## The Processing Pipeline
 
 When a connector extracts a document, it does not send it directly to the search engine. Instead, the document passes through a multi-stage pipeline designed for reliability, efficiency, and flexibility.
@@ -95,8 +93,6 @@ The **Indexing Plugin** consumes messages from the queue and delivers them to th
 
 ---
 
-<div className="page-break" />
-
 ## Indexing Rules
 
 **Indexing Rules** allow you to filter content during extraction — before it enters the pipeline. A rule defines:
@@ -125,8 +121,6 @@ On subsequent runs, the connector compares the new checksum against the stored o
 This mechanism enables efficient **incremental indexing** — only changed content is sent to the search engine, regardless of how large the source is.
 
 ---
-
-<div className="page-break" />
 
 ## Indexing Status Values
 

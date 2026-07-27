@@ -169,8 +169,6 @@ ALTER USER shio SET SEARCH_PATH = shio;
 
 ---
 
-<div className="page-break" />
-
 ## Installing Shio CMS
 
 ### Option 1 — Docker (fastest)
@@ -250,8 +248,6 @@ java -Xmx1g -Xms1g -jar viglet-shio.jar \
 ```
 
 ---
-
-<div className="page-break" />
 
 ### Creating Shio CMS Service on Linux
 

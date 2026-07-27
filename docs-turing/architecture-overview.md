@@ -87,8 +87,6 @@ graph LR
 
 ---
 
-<div className="page-break" />
-
 ### Core Modules
 
 ```mermaid
@@ -192,8 +190,6 @@ The Chat Analytics dashboard reads from Turing ES's REST API (engine-agnostic JS
 
 ---
 
-<div className="page-break" />
-
 ## Indexing Flow
 
 Content ingestion is handled externally by **Viglet Dumont DEP**. Each connector runs as an independent process and sends documents to Turing ES via its **REST API**. The API receives the request, validates it against the target Semantic Navigation Site configuration, and creates an indexing job that is queued internally via Apache Artemis for asynchronous processing.
@@ -222,8 +218,6 @@ The **Semantic Navigation Site** is the central configuration artifact that driv
 
 ---
 
-<div className="page-break" />
-
 ## Search Flow
 
 The search flow is synchronous and request-driven. Every request goes through a structured pipeline before a response is returned to the client.
@@ -245,8 +239,6 @@ The search flow is synchronous and request-driven. Every request goes through a 
 **Metrics:** After assembling the response, query metrics (search term, result count, site, timestamp) are logged asynchronously to avoid adding latency to the response.
 
 ---
-
-<div className="page-break" />
 
 ## Technology Stack
 
@@ -275,8 +267,6 @@ The search flow is synchronous and request-driven. Every request goes through a 
 | **JavaScript SDK** | `@viglet/turing-sdk` | Available on npm; TypeScript-ready client for web and Node.js |
 
 ---
-
-<div className="page-break" />
 
 ## Deployment Topologies
 

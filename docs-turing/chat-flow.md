@@ -131,8 +131,6 @@ Terminator. Like Start, exactly one per flow. When the runtime reaches End, it m
 
 ---
 
-<div className="page-break" />
-
 ## The Full Node Catalog
 
 The five core types cover collection and branching. These additional node types turn a flow into a small automation engine — writing slots deterministically, calling tools and routines, reaching out over webhooks, and pausing for a human.
@@ -220,8 +218,6 @@ Every value a flow collects lives in a **slot** — a named, conversation-scoped
 These endpoints power the [Chat Analytics](./chat-analytics.md) replay timeline and the [SDK](./react-sdk.md) live-slot hooks.
 
 ---
-
-<div className="page-break" />
 
 ## Guardrails: Three Strategies, Three Levels of Strictness
 
@@ -341,8 +337,6 @@ Flows (and even individual nodes) can be **A/B tested** — split traffic across
 
 ---
 
-<div className="page-break" />
-
 ## Per-Conversation State
 
 Every running flow has a `TurChatFlowState` row identified by `(conversationId, flowId)`. It tracks:
@@ -442,8 +436,6 @@ In [Chat Analytics](./chat-analytics.md):
 That's the loop. Conversation → flow → submission → analytics → product decision → flow update → better conversation. Closed.
 
 ---
-
-<div className="page-break" />
 
 ## REST API
 

@@ -61,8 +61,6 @@ Explore and test every endpoint interactively:
 
 ---
 
-<div className="page-break" />
-
 ## Semantic Navigation API
 
 ### Search
@@ -317,8 +315,6 @@ curl "http://localhost:2700/api/sn/Sample/en_US/spell-check?q=entirprise"
 
 ---
 
-<div className="page-break" />
-
 ## GenAI API
 
 :::note Streaming responses
@@ -380,8 +376,6 @@ Authentication required. See [Token Usage](./token-usage.md) for details.
 
 ---
 
-<div className="page-break" />
-
 ## Integration API
 
 The Integration API provides a **reverse-proxy** endpoint that forwards requests to a configured external integration instance (e.g., an AEM connector or Web Crawler). All HTTP methods are supported. The proxy validates the target host and path to prevent SSRF attacks.
@@ -419,8 +413,6 @@ Manage integration instances. Authentication required.
 
 ---
 
-<div className="page-break" />
-
 ## Assets API
 
 Manage files and the RAG Knowledge Base. All endpoints require authentication.
@@ -443,8 +435,6 @@ After upload, an asynchronous event triggers AI indexing for each file. When a f
 For full details, see [Assets](./assets.md).
 
 ---
-
-<div className="page-break" />
 
 ## AI Agent API
 
@@ -477,8 +467,6 @@ Manage AI Agents. Authentication required.
 For full details, see [AI Agents](./ai-agents.md).
 
 ---
-
-<div className="page-break" />
 
 ## Administration API
 
@@ -558,8 +546,6 @@ For full details, see [Import & Export](./import-export.md).
 For full details, see [Logging](./logging.md).
 
 ---
-
-<div className="page-break" />
 
 ## GraphQL API
 

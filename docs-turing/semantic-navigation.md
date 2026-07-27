@@ -373,8 +373,6 @@ Custom Facet items use concrete `BigDecimal` values (for numeric fields) or `Ins
 
 ---
 
-<div className="page-break" />
-
 ### Merge Providers
 
 Merge Providers enable Turing ES to detect when two connectors have indexed the same real-world document and merge their fields into a single enriched Solr document.
@@ -454,8 +452,6 @@ The merge is triggered when the **source** connector's document arrives and a ma
 **Merge scope:** Merge Providers are site-scoped. The same connector can participate in different merge configurations across different SN Sites.
 
 ---
-
-<div className="page-break" />
 
 ### Targeting Rules
 
@@ -654,8 +650,6 @@ Every search request with targeting rules is recorded in `sn_site_metric_access_
 
 ---
 
-<div className="page-break" />
-
 ### Spotlights
 
 Spotlights are curated search results that are pinned to specific search terms. When a user's query matches a spotlight term, configured documents are injected into the result list at defined positions, before the organic (ranked) results at those positions.
@@ -730,8 +724,6 @@ Spotlights operate in two modes:
 
 ---
 
-<div className="page-break" />
-
 ### Custom Sort
 
 Custom Sort allows administrators to define named, multi-level sort options beyond the built-in "relevance", "newest", and "oldest". Each custom sort consists of one or more sort levels (field + direction), applied in priority order to the Solr query.
@@ -799,8 +791,6 @@ The endpoint `GET /api/sn/{siteName}/search/sort-options` returns all available 
 | `DELETE` | `/api/sn/{siteId}/custom-sort/{id}` | Delete a custom sort |
 
 ---
-
-<div className="page-break" />
 
 ### Search Rules
 
@@ -961,8 +951,6 @@ Each report shows the term and its search count for the selected period. Use thi
 
 ---
 
-<div className="page-break" />
-
 ### Result Ranking
 
 Configures boost expressions that influence search relevance. Each ranking expression boosts documents matching a set of conditions by a configured weight. Expressions are converted into Solr boost queries in the format `(condition)^weight` and applied at query time.
@@ -1003,8 +991,6 @@ The AI Insights tab displays an AI-generated natural language summary of this SN
 Click **Generate** to trigger the summary. The response streams in progressively as it is generated.
 
 ---
-
-<div className="page-break" />
 
 ### Generative AI
 
@@ -1048,8 +1034,6 @@ Saving is blocked if either variable is missing from the template.
 **How it works:** When documents are indexed, Turing ES extracts title, summary, and body text and stores their embeddings in the configured vector store. When a user sends a chat request (`GET /api/sn/{siteName}/chat?q=...`), the system performs a similarity search, builds the prompt with the retrieved context, sends it to the LLM, and returns the generated response via Server-Sent Events (SSE). See [Chat](./chat.md) for the front-end experience.
 
 ---
-
-<div className="page-break" />
 
 ### Skills in Semantic Navigation
 

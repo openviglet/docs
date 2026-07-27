@@ -113,8 +113,6 @@ The metrics above watch the *pipeline's health*. The **conversation analytics th
 
 ---
 
-<div className="page-break" />
-
 ## How to Bring the Stack Up
 
 ### Local Development
@@ -195,8 +193,6 @@ Linked from the term-list dashboard. Pick a term, see the full picture: query vo
 The full Chat Analytics dashboard. Reads from `/api/system/chat-analytics/**` via the Infinity datasource (engine-agnostic). See [Chat Analytics](./chat-analytics.md) for the panel-by-panel breakdown.
 
 ---
-
-<div className="page-break" />
 
 ## Useful Queries
 
@@ -334,8 +330,6 @@ The `meterRegistry == null` check is important — it makes the metric optional,
 Add the metric name to `TurMeterNames.java` so it's part of the public observability contract.
 
 ---
-
-<div className="page-break" />
 
 ## Where Logs Fit
 

@@ -10,7 +10,7 @@ build
 /.vscode/
 /.claude
 
-# PDF generation
+# PDFs are not versioned (no PDF build step — see agents.md)
 *.pdf
 !presentation.pdf
 

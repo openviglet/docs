@@ -38,8 +38,6 @@ For details on each connector, see [Connectors Overview](./connectors/overview.m
 
 ---
 
-<div className="page-break" />
-
 ## ② Pipeline Engine — How Content Is Processed
 
 Once a connector produces a Job Item, it passes through a multi-stage pipeline before reaching the search engine.
@@ -66,8 +64,6 @@ The complete sequence from content source to search engine:
 ![Dumont DEP — Indexing Flow](/img/diagrams/dumont-indexing-flow.svg)
 
 ---
-
-<div className="page-break" />
 
 ## Internal Module Structure
 

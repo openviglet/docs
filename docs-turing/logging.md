@@ -26,8 +26,6 @@ The logging landing page displays three cards, each linking to a dedicated log v
 
 ---
 
-<div className="page-break" />
-
 ## Server Logging
 
 Displays general application logs captured from the Turing ES runtime.
@@ -107,8 +105,6 @@ Displays logs specific to the Adobe Experience Manager integration. The filter a
 Use this view to diagnose AEM authentication failures, content retrieval errors, or replication issues.
 
 ---
-
-<div className="page-break" />
 
 ## Common Features
 

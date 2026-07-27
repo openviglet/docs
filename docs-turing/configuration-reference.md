@@ -201,8 +201,6 @@ logging:
 
 ---
 
-<div className="page-break" />
-
 ## Property Reference
 
 ### Server
@@ -605,8 +603,6 @@ The [Chat Analytics](./chat-analytics.md) enricher, retention, and in-flight set
 [Cost Governance](./cost-governance.md) is configured through data, not YAML: the **price table** (`tur_llm_price`, seeded for OpenAI/Anthropic/Gemini, editable in the console) and the **per-agent budget fields** (`monthlyBudgetUsd`, `perTurnSoftCapUsd`, `budgetDowngradeLlmId`) on the agent Settings form.
 
 ---
-
-<div className="page-break" />
 
 ## Common Production Overrides
 

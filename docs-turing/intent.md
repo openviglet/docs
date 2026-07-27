@@ -63,8 +63,6 @@ The label is what the user clicks. The prompt is what the LLM receives. They don
 
 ---
 
-<div className="page-break" />
-
 ## Vibe Coding: Author Intents With AI
 
 Writing 4 categories × 6 actions × 2 languages = 48 prompts is exactly the kind of work the AI is best at. The Intent form has a **Vibe Coding** mode — you describe what you want; the assistant drafts the entire intent.

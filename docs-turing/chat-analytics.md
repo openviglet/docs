@@ -129,8 +129,6 @@ The next set are populated *later* by the AI-on-AI enricher:
 
 ---
 
-<div className="page-break" />
-
 ## The AI-on-AI Classifier
 
 The classifier is a small service that does one thing: take a transcript, ask the default LLM to label it, parse the response.
@@ -191,8 +189,6 @@ If the enricher is *not* keeping up, the cycle's `elapsedMs` will keep growing, 
 :::
 
 ---
-
-<div className="page-break" />
 
 ## Storage Backends
 
@@ -284,8 +280,6 @@ A daily log line tells you how many were removed:
 Like the enricher, the retention worker is ShedLock-protected — only one node runs it per cycle.
 
 ---
-
-<div className="page-break" />
 
 ## REST API
 
@@ -400,8 +394,6 @@ See [Observability](./observability.md) for the full Grafana setup, including th
 
 ---
 
-<div className="page-break" />
-
 ## The Investigation View (React Console)
 
 `Console → Chat Analytics` is where individual conversations come to life. The page is two halves:
@@ -421,8 +413,6 @@ The drill-down isn't just for QA — it's a feedback channel into your product. 
 :::
 
 ---
-
-<div className="page-break" />
 
 ## Beyond the Basics: Funnels, Replay & Live Diagnostics
 

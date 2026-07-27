@@ -96,8 +96,6 @@ Files that Tika cannot extract text from are silently skipped.
 
 ---
 
-<div className="page-break" />
-
 ## Example: Indexing a Document Repository
 
 ```bash

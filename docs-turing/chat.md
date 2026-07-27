@@ -147,8 +147,6 @@ Use agents when you want consistency across thousands of conversations — *"eve
 
 ---
 
-<div className="page-break" />
-
 ## Skills in Chat
 
 A [**Skill**](./skills.md) is a portable, Anthropic-compatible capability — a folder of instructions, scripts, and reference material that runs in a hardened Docker sandbox. When an agent has skills enabled, the conversation can hand off a whole task to one of them ("generate the campaign assets", "build the financial model") without you wiring a tool for it.
@@ -183,8 +181,6 @@ Skills need a [storage backend](./configuration-reference.md#storage), the [Code
 :::
 
 ---
-
-<div className="page-break" />
 
 ## Picking a Mode for the Job
 
@@ -264,8 +260,6 @@ The IndexedDB **session history** is a *user convenience* — it's how a single 
 :::
 
 ---
-
-<div className="page-break" />
 
 ## Context Window Management
 

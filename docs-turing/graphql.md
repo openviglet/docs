@@ -71,8 +71,6 @@ query {
 
 ---
 
-<div className="page-break" />
-
 ## Site Name Enum
 
 Site names are exposed as a **dynamic GraphQL enum** (`TurSNSiteName`) that is generated at runtime from the configured sites in the database.
@@ -124,8 +122,6 @@ The `fqOp` and `fqiOp` parameters control how multiple filter queries are combin
 Invalid operator values fall back to `NONE`.
 
 ---
-
-<div className="page-break" />
 
 ## Response Schema
 
@@ -226,8 +222,6 @@ The top-level response object:
 
 ---
 
-<div className="page-break" />
-
 ## Document Fields
 
 ### Static Fields
@@ -278,8 +272,6 @@ The locale for a search is resolved with the following precedence:
 If the resolved locale is not configured on the target SN Site, the search falls back to the site's first available locale.
 
 ---
-
-<div className="page-break" />
 
 ## Examples
 

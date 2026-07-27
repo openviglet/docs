@@ -22,11 +22,7 @@ vigletdocs.github.io/
 ├── diagrams/             # Mermaid .mmd source files (pre-rendered to SVG)
 ├── static/img/diagrams/  # Pre-rendered SVG output from diagrams/
 ├── scripts/
-│   ├── gen-pdf.mjs             # Turing ES PDF generator (6-stage pipeline)
-│   ├── gen-pdf-dumont.mjs      # Dumont DEP PDF generator
-│   ├── pdf-cover.html          # Turing PDF cover (orange theme)
-│   ├── pdf-cover-dumont.html   # Dumont PDF cover (orange theme)
-│   └── pdf-style.css           # Shared PDF content stylesheet
+│   └── render-diagrams.mjs     # Mermaid .mmd → SVG (runs on prebuild)
 ├── src/
 │   ├── pages/index.tsx   # Homepage with product cards
 │   ├── css/custom.css    # Tailwind v4 + CSS variables + dark mode
@@ -52,23 +48,20 @@ Large/complex diagrams (architecture, sequence, flow) must be **pre-rendered as 
 - The `diagrams` npm script in `package.json` renders all `.mmd` to `.svg` (runs automatically via `prebuild`)
 - Small/simple diagrams (< 5 nodes) can stay as inline mermaid
 
-**Why:** Inline mermaid renders poorly in PDF generation (Puppeteer) and has inconsistent sizing. Pre-rendered SVGs look identical in web and PDF.
+**Why:** Inline mermaid has inconsistent sizing and renders poorly when printed. Pre-rendered SVGs look identical on screen and on paper.
 
-### Page Breaks
+### No Manual Page Breaks
 
-Use `<div className="page-break" />` in markdown at major section boundaries for PDF generation.
-
-- Place before H2 headings that start a new conceptual section
-- Align with PDF page boundaries (compare with the generated PDF)
-- Not needed for files under ~120 lines
-- The PDF stylesheet (`scripts/pdf-style.css`) has `.page-break { page-break-before: always; }` rule
+Do **not** add `<div className="page-break" />` (or `page-break-before` /
+`page-break-after`) to markdown. All 108 occurrences were removed along with the
+PDF pipeline — pagination is the browser's job when printing.
 
 ### Color Theme
 
-All products (Turing, Dumont, Shio) use the **same orange brand** (`--color-brand: #C2410C`). No per-product color differentiation on pages or in PDFs.
+All products (Turing, Dumont, Shio) use the **same orange brand** (`--color-brand: #C2410C`). No per-product color differentiation.
 
 - `index.mdx` pages use `var(--color-brand)`, `var(--color-brand-bg)`, `var(--color-brand-border)` CSS variables — these adapt to dark mode automatically
-- PDF covers use the same orange palette: `#F97316` (lighter), `#C2410C` (primary), `#9A3412` (darker)
+- Brand palette: `#F97316` (lighter), `#C2410C` (primary), `#9A3412` (darker)
 - Never hardcode light-mode colors in JSX components — always use CSS variables
 
 ### Landing Pages (index.mdx)
@@ -118,40 +111,21 @@ java -Xmx512m -Xms512m \
 
 ---
 
-## PDF Generation
+## Offline Copies (no PDF build)
 
-Two PDF generators exist, one per product:
+There is **no PDF generation step** in this repository — it was removed because it
+was slow to run and the binary output was impractical to version. Readers who
+need an offline copy use the browser's **Print → Save as PDF**, supported by the
+`@media print` block in `src/css/custom.css`.
 
-| Product | Script | Cover | Output |
-|---|---|---|---|
-| Turing ES | `scripts/gen-pdf.mjs` | `scripts/pdf-cover.html` | `turing-es-2026.2-documentation.pdf` |
-| Dumont DEP | `scripts/gen-pdf-dumont.mjs` | `scripts/pdf-cover-dumont.html` | `dumont-dep-2026.2-documentation.pdf` |
-
-Both share `scripts/pdf-style.css` for content styling.
-
-### PDF Pipeline (6 stages)
-
-1. **Cover** — Render branded HTML cover to PDF
-2. **Crawl** — Follow pagination links, print each doc page to PDF
-3. **TOC** — Generate Table of Contents with page numbers
-4. **Merge** — Combine cover + TOC + doc pages into single PDF
-5. **Link rewrite** — Convert internal URI links to in-PDF GoTo navigation
-6. **Page numbers** — Stamp `X / Y` on every content page
+Do not reintroduce a PDF pipeline, a `gen-pdf` npm script, or a "Download PDF"
+banner on the `index.mdx` landing pages.
 
 ### CI/CD
 
-The GitHub Actions workflow (`deploy.yml`) runs both PDF generators after building the site:
-
-```yaml
-- name: Generate Turing ES documentation PDF
-  run: npm run gen-pdf
-- name: Generate Dumont DEP documentation PDF
-  run: npm run gen-pdf-dumont
-- name: Copy PDFs into build folder
-  run: |
-    cp turing-es-2026.2-documentation.pdf build/
-    cp dumont-dep-2026.2-documentation.pdf build/
-```
+The GitHub Actions workflow (`deploy.yml`) installs Chromium, pre-renders the
+Mermaid diagrams, builds the site, and uploads `build/` to GitHub Pages. Nothing
+else.
 
 ---
 
@@ -177,11 +151,9 @@ Version labels are set via `lastVersion: "current"` + `versions: { current: { la
 | Dumont sidebar | `sidebars-dumont.ts` |
 | Mermaid diagram sources | `diagrams/*.mmd` |
 | Pre-rendered SVGs | `static/img/diagrams/*.svg` |
-| PDF generation scripts | `scripts/gen-pdf*.mjs` |
-| PDF cover pages | `scripts/pdf-cover*.html` |
-| PDF content stylesheet | `scripts/pdf-style.css` |
+| Diagram render script | `scripts/render-diagrams.mjs` |
 | GitHub Actions workflow | `.github/workflows/deploy.yml` |
-| npm scripts (diagrams, gen-pdf) | `package.json` |
+| npm scripts (diagrams, build) | `package.json` |
 
 ## Diagram Conventions (Documentation Site)
 

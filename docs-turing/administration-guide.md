@@ -86,8 +86,6 @@ The Groups page (`/admin/groups`) organises users into groups for role-based acc
 
 ---
 
-<div className="page-break" />
-
 ## Roles
 
 The Roles page (`/admin/roles`) defines permissions that are assigned to groups.
@@ -166,8 +164,6 @@ curl "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
 
 ---
 
-<div className="page-break" />
-
 ## Global Settings
 
 The Global Settings page (`/admin/settings`) is the central configuration panel for defaults and external service integrations. Divided into four sections.
@@ -222,8 +218,6 @@ Used by Turing ES to send notifications and test email connectivity.
 | Send Test Email | Button to send a test message and verify configuration |
 
 ---
-
-<div className="page-break" />
 
 ## System Information
 
@@ -309,8 +303,6 @@ A searchable table of all JVM system properties active at runtime. The search in
 Useful for verifying configuration overrides, checking classpath entries, or confirming environment variable values at deployment.
 
 ---
-
-<div className="page-break" />
 
 ## User Account
 

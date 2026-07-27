@@ -152,8 +152,6 @@ For each page, the connector:
 
 ---
 
-<div className="page-break" />
-
 ## Dependency Tracking and Cascade Re-Indexing
 
 When a page references other content (experience fragments, content fragments, shared components, linked pages), the AEM connector can automatically **re-index every page that depends on an updated path**. This prevents stale content from surviving in the index when a shared resource changes.
@@ -222,8 +220,6 @@ Every standalone index operation performs an extra lookup plus a second indexing
 :::
 
 ---
-
-<div className="page-break" />
 
 ## AEM Server-Side Bundle (Event Listeners)
 
@@ -314,8 +310,6 @@ curl -X POST http://localhost:30130/api/v2/aem/index/WKND \
 
 ---
 
-<div className="page-break" />
-
 ## Source Configuration
 
 Each AEM source defines connection details, content scope, author/publish environments, locale mappings, and delta tracking. Sources are configured in the **Turing ES Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Sources**.
@@ -381,8 +375,6 @@ Each source has two action buttons available in the Turing ES admin console:
 - **Reindex All** — forces a full reindexation, replacing all previously indexed content
 
 ---
-
-<div className="page-break" />
 
 ## Indexing Rules
 

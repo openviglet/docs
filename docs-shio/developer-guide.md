@@ -139,8 +139,6 @@ shio/
 
 ---
 
-<div className="page-break" />
-
 ## Deploy Table
 
 | Directory | Deployed File | Provided By |
