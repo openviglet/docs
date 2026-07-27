@@ -1,22 +1,22 @@
 ---
 sidebar_position: 4
 title: Security & Keycloak
-description: Full production setup for Keycloak OAuth2/OIDC with Turing ES — database, Keycloak install, realm config, SSL, JVM properties, and Apache reverse proxy.
+description: "Full production setup for Keycloak OAuth2/OIDC with Turing ES: database, Keycloak install, realm config, SSL, JVM properties, and Apache reverse proxy."
 ---
 
 # Security & Keycloak
 
 This page covers the full **Keycloak OAuth2 / OpenID Connect** production setup for Turing ES, enabling SSO integration with corporate identity providers and centralized user management.
 
-For day-to-day authentication — native session-based login and REST API Key usage — see **[Authentication](./security-authentication.md)**.
+For day-to-day authentication (native session-based login and REST API Key usage) see **[Authentication](./security-authentication.md)**.
 
 ---
 
 ## Why Use Keycloak with Turing ES?
 
-The primary reason to integrate Keycloak is to connect Turing ES to your organization's **existing Single Sign-On (SSO) infrastructure**. Instead of managing a separate set of credentials just for Turing ES, users sign in with the same corporate identity they already use for email, cloud tools, and internal applications — no additional password, no extra login step.
+The primary reason to integrate Keycloak is to connect Turing ES to your organization's **existing Single Sign-On (SSO) infrastructure**. Instead of managing a separate set of credentials just for Turing ES, users sign in with the same corporate identity they already use for email, cloud tools, and internal applications, no additional password, no extra login step.
 
-Keycloak acts as an **identity broker** between Turing ES and your identity provider. Turing ES never sees or stores user passwords — it receives a signed JWT token from Keycloak confirming who the user is and what roles they have.
+Keycloak acts as an **identity broker** between Turing ES and your identity provider. Turing ES never sees or stores user passwords: it receives a signed JWT token from Keycloak confirming who the user is and what roles they have.
 
 ### Supported Identity Providers
 
@@ -31,20 +31,20 @@ Because Keycloak supports the **SAML 2.0**, **OAuth 2.0**, and **OpenID Connect*
 | **Ping Identity** | SAML 2.0 / OIDC | Large enterprises, government, regulated industries |
 | **OneLogin** | SAML 2.0 / OIDC | HR-integrated identity management |
 | **ADFS** (Active Directory Federation Services) | SAML 2.0 | On-premise Windows Server / Active Directory |
-| **LDAP / Active Directory** | LDAP | Direct directory sync without SAML — Keycloak federates LDAP users natively |
+| **LDAP / Active Directory** | LDAP | Direct directory sync without SAML: Keycloak federates LDAP users natively |
 | **GitHub / GitLab** | OAuth 2.0 | Developer-focused organizations |
 | **Any SAML 2.0 IdP** | SAML 2.0 | Shibboleth, SimpleSAMLphp, custom SAML providers |
 | **Any OIDC provider** | OIDC | Any standards-compliant OpenID Connect provider |
 
 ### What This Enables
 
-**Single Sign-On (SSO):** Users click "Sign in" on Turing ES, are redirected to their corporate login (e.g., Microsoft 365 login page), authenticate once, and are immediately signed in to Turing ES. If they're already signed in to another corporate application, they skip the login form entirely — the SSO session is shared.
+**Single Sign-On (SSO):** Users click "Sign in" on Turing ES, are redirected to their corporate login (e.g., Microsoft 365 login page), authenticate once, and are immediately signed in to Turing ES. If they're already signed in to another corporate application, they skip the login form entirely: the SSO session is shared.
 
 **Single Sign-Out:** Logging out of Turing ES triggers a Keycloak OIDC logout that propagates to the corporate IdP. The user is signed out of Turing ES and optionally out of all applications sharing the same SSO session.
 
-**Centralized User Management:** User accounts, groups, and roles are managed in Keycloak (or synchronized from the corporate directory). No need to create or maintain users in Turing ES manually — Keycloak provides the identity, roles, and group memberships via JWT claims.
+**Centralized User Management:** User accounts, groups, and roles are managed in Keycloak (or synchronized from the corporate directory). No need to create or maintain users in Turing ES manually: Keycloak provides the identity, roles, and group memberships via JWT claims.
 
-**Multi-Factor Authentication (MFA):** Keycloak supports TOTP (Google Authenticator, Microsoft Authenticator), WebAuthn/FIDO2 (hardware security keys, biometrics), SMS OTP, and email verification. MFA policies are configured in Keycloak and enforced transparently — Turing ES requires no changes.
+**Multi-Factor Authentication (MFA):** Keycloak supports TOTP (Google Authenticator, Microsoft Authenticator), WebAuthn/FIDO2 (hardware security keys, biometrics), SMS OTP, and email verification. MFA policies are configured in Keycloak and enforced transparently, Turing ES requires no changes.
 
 **Role-Based Access Control (RBAC):** Keycloak roles and realm roles are mapped to Turing ES permissions. Define roles like `turing-admin`, `turing-editor`, `turing-viewer` in Keycloak, assign them to users or groups, and Turing ES enforces access accordingly.
 
@@ -52,13 +52,13 @@ Because Keycloak supports the **SAML 2.0**, **OAuth 2.0**, and **OpenID Connect*
 
 **User Federation:** Keycloak can synchronize users from **LDAP** or **Active Directory** without requiring SAML. Users are imported (or federated on-demand) from the directory, with password validation delegated to the directory server. This is the simplest path for organizations running on-premise AD without ADFS.
 
-**Token-Based API Access:** When Keycloak is enabled, REST API clients can authenticate using **OAuth2 access tokens** in addition to API Keys. Obtain a token via Keycloak's token endpoint and pass it as a Bearer token — useful for service-to-service integrations where API Keys are not appropriate.
+**Token-Based API Access:** When Keycloak is enabled, REST API clients can authenticate using **OAuth2 access tokens** in addition to API Keys. Obtain a token via Keycloak's token endpoint and pass it as a Bearer token: useful for service-to-service integrations where API Keys are not appropriate.
 
-**Audit and Compliance:** Keycloak logs all authentication events — successful logins, failed attempts, token refreshes, logouts. These events can be exported to SIEM systems for compliance and security monitoring.
+**Audit and Compliance:** Keycloak logs all authentication events: successful logins, failed attempts, token refreshes, logouts. These events can be exported to SIEM systems for compliance and security monitoring.
 
 ### Architecture
 
-When `turing.keycloak=true` is set in the JVM properties, Turing ES delegates all authentication to Keycloak using the Authorization Code flow (OAuth2) and validates access tokens as JWTs (OpenID Connect). Keycloak can be dedicated to Turing ES or shared with other applications — in both cases, Turing ES registers as a **client** within a Keycloak **realm**.
+When `turing.keycloak=true` is set in the JVM properties, Turing ES delegates all authentication to Keycloak using the Authorization Code flow (OAuth2) and validates access tokens as JWTs (OpenID Connect). Keycloak can be dedicated to Turing ES or shared with other applications, in both cases, Turing ES registers as a **client** within a Keycloak **realm**.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
@@ -102,7 +102,7 @@ Apache HTTP Server (reverse proxy)
 
 ---
 
-## Step 1 — Database Setup
+## Step 1: Database Setup
 
 Both Turing ES and Keycloak require their own databases. Create them before starting either service.
 
@@ -126,7 +126,7 @@ Replace all placeholder passwords (`<turing-db-password>`, `<keycloak-db-passwor
 
 ---
 
-## Step 2 — Keycloak Installation and Build
+## Step 2: Keycloak Installation and Build
 
 Download and extract the Keycloak distribution. Before starting Keycloak for the first time, run the build step to configure the HTTP relative path. This is required when Keycloak runs behind a reverse proxy at a path prefix (e.g., `/kc/`).
 
@@ -187,7 +187,7 @@ systemctl start keycloak
 
 ---
 
-## Step 3 — Keycloak Realm and Client Configuration
+## Step 3: Keycloak Realm and Client Configuration
 
 After starting Keycloak, open the admin console and perform the following setup:
 
@@ -218,7 +218,7 @@ Ensure the client requests the following scopes: `openid`, `profile`, `roles`. T
 
 ---
 
-## Step 4 — SSL Certificate for Turing ES
+## Step 4: SSL Certificate for Turing ES
 
 Turing ES can terminate HTTPS directly via its embedded Tomcat server. Generate a self-signed certificate (replace with a CA-signed certificate for production):
 
@@ -264,7 +264,7 @@ The default truststore password is `changeit`.
 
 ---
 
-## Step 5 — Turing ES JVM Configuration
+## Step 5: Turing ES JVM Configuration
 
 All Turing ES configuration is passed via JVM system properties at startup. Set `JAVA_OPTS` before launching the JAR:
 
@@ -319,7 +319,7 @@ java $JAVA_OPTS -jar viglet-turing.jar
 
 ---
 
-## Step 6 — Apache HTTP Server as Reverse Proxy
+## Step 6: Apache HTTP Server as Reverse Proxy
 
 Build Apache HTTP Server with the required modules, or install a distribution package that includes `mod_ssl`, `mod_proxy`, and `mod_proxy_http`.
 
@@ -383,11 +383,11 @@ make && make install
 
 **Key configuration notes:**
 
-`ProxyPreserveHost On` — passes the original `Host` header to the backend. Required for Keycloak and Turing ES to generate correct redirect URIs.
+`ProxyPreserveHost On`: passes the original `Host` header to the backend. Required for Keycloak and Turing ES to generate correct redirect URIs.
 
-`RequestHeader set X-Forwarded-Proto "https"` — tells backend services that the original request was HTTPS, even though the internal connection may be unencrypted (in configurations where backends do not use SSL).
+`RequestHeader set X-Forwarded-Proto "https"`: tells backend services that the original request was HTTPS, even though the internal connection may be unencrypted (in configurations where backends do not use SSL).
 
-`SSLProxyCheckPeerName off` — disables hostname verification for the backend SSL connections. Required when using self-signed certificates on Keycloak and Turing ES. In production with CA-signed certificates, this should be set to `on`.
+`SSLProxyCheckPeerName off`: disables hostname verification for the backend SSL connections. Required when using self-signed certificates on Keycloak and Turing ES. In production with CA-signed certificates, this should be set to `on`.
 
 `/kc/` routes to Keycloak HTTPS because Keycloak was started with HTTPS. The path prefix matches the `--http-relative-path=/kc` configured in Step 2.
 
@@ -415,7 +415,7 @@ If your organization already runs a Keycloak instance, you do not need to instal
 2. Register Turing ES as a new client within that realm following the configuration in Step 3
 3. Configure the JVM properties in Step 5 to point to the existing Keycloak's issuer URI
 
-The `issuer-uri` format is always `https://<keycloak-hostname>/kc/realms/<realm-name>` — adjust the path prefix if your existing Keycloak uses a different one (or no prefix).
+The `issuer-uri` format is always `https://<keycloak-hostname>/kc/realms/<realm-name>`: adjust the path prefix if your existing Keycloak uses a different one (or no prefix).
 
 ---
 
@@ -425,12 +425,12 @@ Before going to production, verify the following:
 
 - [ ] Keycloak is only accessible via the Apache reverse proxy (port 8443 is not exposed externally)
 - [ ] Solr is only accessible via the reverse proxy or not exposed externally at all
-- [ ] Turing ES port (2700) is not exposed externally — all traffic goes through Apache
+- [ ] Turing ES port (2700) is not exposed externally: all traffic goes through Apache
 - [ ] All self-signed certificates are replaced with CA-signed certificates (or certificates from an internal PKI)
 - [ ] `SSLProxyCheckPeerName` is set to `on` if using CA-signed backend certificates
 - [ ] Keycloak admin credentials have been changed from defaults
 - [ ] Database users have minimum required permissions (no superuser)
-- [ ] JVM properties containing secrets (`client-secret`, `key-store-password`, `datasource.password`) are not logged or exposed in process listings — consider using an environment file or a secrets manager
+- [ ] JVM properties containing secrets (`client-secret`, `key-store-password`, `datasource.password`) are not logged or exposed in process listings: consider using an environment file or a secrets manager
 - [ ] HTTP (port 80) redirects to HTTPS (port 443)
 - [ ] Keycloak's `hostname-strict` mode is evaluated for your network topology
 

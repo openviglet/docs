@@ -6,7 +6,7 @@ description: Configure Google, GitHub, and Microsoft social login for Turing ES 
 
 # Social Login (OAuth2)
 
-Turing ES supports **social login** via OAuth2 with Google, GitHub, and Microsoft. When configured, users can sign in with their existing accounts from these providers — no separate password required.
+Turing ES supports **social login** via OAuth2 with Google, GitHub, and Microsoft. When configured, users can sign in with their existing accounts from these providers, no separate password required.
 
 This is ideal for development environments, small teams, and scenarios where a full Keycloak deployment is not needed. For enterprise SSO with LDAP/AD federation, MFA, and centralized user management, see [Security & Keycloak](./security-keycloak.md).
 
@@ -65,7 +65,7 @@ spring:
 ```
 
 :::tip Scopes
-Spring Security auto-configures the Google provider with `openid`, `profile`, and `email` scopes — no need to set them manually.
+Spring Security auto-configures the Google provider with `openid`, `profile`, and `email` scopes: no need to set them manually.
 :::
 
 ### GitHub
@@ -87,7 +87,7 @@ spring:
 ```
 
 :::note GitHub specifics
-- GitHub does not provide a separate first/last name — Turing splits the `name` attribute automatically.
+- GitHub does not provide a separate first/last name, Turing splits the `name` attribute automatically.
 - Email may be `null` if the user's GitHub email is private. The email field is hidden in the profile page when empty.
 - The username is the GitHub `login` handle.
 :::
@@ -164,9 +164,9 @@ For production with HTTPS: `https://turing.example.com/login/oauth2/code/google`
 
 When logged in via a social provider:
 
-- **Profile fields are read-only** — name, email, and username are managed by the provider
+- **Profile fields are read-only**: name, email, and username are managed by the provider
 - **Avatar can still be customized** in Turing
-- **Password section is hidden** — authentication is handled by the provider
+- **Password section is hidden**: authentication is handled by the provider
 - **The provider name is displayed** on the profile page (e.g., "github", "google")
 
 ---
@@ -176,8 +176,8 @@ When logged in via a social provider:
 | Property | Default | Description |
 |---|---|---|
 | `turing.authentication.thirdparty` | `true` | Enable third-party OAuth2 login buttons |
-| `spring.security.oauth2.client.registration.<provider>.client-id` | — | OAuth2 Client ID from the provider |
-| `spring.security.oauth2.client.registration.<provider>.client-secret` | — | OAuth2 Client Secret from the provider |
+| `spring.security.oauth2.client.registration.<provider>.client-id` | n/a | OAuth2 Client ID from the provider |
+| `spring.security.oauth2.client.registration.<provider>.client-secret` | n/a | OAuth2 Client Secret from the provider |
 
 ---
 
@@ -193,7 +193,7 @@ The provider attributes may use different field names. Turing handles Google (`g
 
 ### Email is empty (GitHub)
 
-GitHub may not expose the user's email if it is set to private. This is by design — the email field is hidden in the profile page when empty.
+GitHub may not expose the user's email if it is set to private. This is by design: the email field is hidden in the profile page when empty.
 
 ### Login redirects to wrong page
 

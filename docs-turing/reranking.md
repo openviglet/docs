@@ -1,16 +1,16 @@
 ---
 sidebar_position: 9
 title: Reranking
-description: The reranking stage in Viglet Turing ES — a selectable, fail-open second pass (LLM, cross-encoder, Cohere, Voyage, Bedrock, Vertex AI) that sharpens retrieved context before generation.
+description: "The reranking stage in Viglet Turing ES: a selectable, fail-open second pass (LLM, cross-encoder, Cohere, Voyage, Bedrock, Vertex AI) that sharpens retrieved context before generation."
 ---
 
 # Reranking
 
-**Reranking** is a second, more discerning relevance pass that runs *after* retrieval and *before* the answer is generated. Vector similarity is fast but coarse — it's a good first guess at relevance, not a final verdict. The top-K chunks it returns often include near-duplicates, tangential matches, or passages that *mention* the query terms without *answering* the question. A reranker re-scores those candidates against the question and keeps only the highest-precision few, so the model sees **fewer, better** chunks instead of more, noisier ones.
+**Reranking** is a second, more discerning relevance pass that runs *after* retrieval and *before* the answer is generated. Vector similarity is fast but coarse: it's a good first guess at relevance, not a final verdict. The top-K chunks it returns often include near-duplicates, tangential matches, or passages that *mention* the query terms without *answering* the question. A reranker re-scores those candidates against the question and keeps only the highest-precision few, so the model sees **fewer, better** chunks instead of more, noisier ones.
 
 You'd reach for this page when RAG answers feel "almost right but padded with irrelevant context," when you want to shrink the prompt (and its token cost) without losing the chunk that actually answers the question, or when you've standardized on a cloud stack and want a managed reranker rather than a self-hosted one.
 
-The single most important property to know up front: **reranking is fail-open.** Turning it on can only help or be neutral — it can never make retrieval worse.
+The single most important property to know up front: **reranking is fail-open.** Turning it on can only help or be neutral: it can never make retrieval worse.
 
 ---
 
@@ -36,7 +36,7 @@ The BM25 half of hybrid retrieval can live in one of two places, chosen per SN s
 | **`EMBEDDED`** *(default)* | A single in-process Lucene index | One analyzer for every locale | Zero-config | Single-language, dev/test, PoCs |
 | **`SE_INSTANCE`** | Per-locale Solr / Elasticsearch cores (`rag_<store>_<locale>`) | Per-locale analyzer (PT/EN/ES…) | Provision cores + reindex | Production, multi-language, large corpora |
 
-`EMBEDDED` is always the safe fallback — if an `SE_INSTANCE` core is missing or unreachable, retrieval degrades to vector-only rather than failing. The vector half always uses the configured [embedding store](./embedding-stores.md). You can switch modes per site at any time.
+`EMBEDDED` is always the safe fallback: if an `SE_INSTANCE` core is missing or unreachable, retrieval degrades to vector-only rather than failing. The vector half always uses the configured [embedding store](./embedding-stores.md). You can switch modes per site at any time.
 :::
 
 ---
@@ -45,11 +45,11 @@ The BM25 half of hybrid retrieval can live in one of two places, chosen per SN s
 
 1. Open **Administration → Settings → Global Settings**, **RAG Reranker** section.
 2. Toggle **Enable Reranker** on.
-3. Pick a **Strategy** (start with `LLM` — no extra infrastructure).
-4. Set **Top-K kept** — how many of the highest-ranked chunks survive into the prompt (default 20).
+3. Pick a **Strategy** (start with `LLM`, no extra infrastructure).
+4. Set **Top-K kept**: how many of the highest-ranked chunks survive into the prompt (default 20).
 5. Save and ask a RAG question. The reranker now narrows the candidate pool before the model answers.
 
-If anything goes wrong with the chosen strategy, you won't see an error — you'll see the original retrieval order. That's the fail-open guarantee at work.
+If anything goes wrong with the chosen strategy, you won't see an error: you'll see the original retrieval order. That's the fail-open guarantee at work.
 
 ---
 
@@ -63,19 +63,19 @@ Turing ES treats reranking as a **selectable strategy** so you can match cost, l
 | **`LLM_LOGPROBS`** | OpenAI-only confidence reranker: a per-candidate yes/no relevance classification with `top_logprobs`, whose calibrated P(relevant) is blended with the retrieval rank. | OpenAI key | You want calibrated confidence, not just an ordering, on an OpenAI model. |
 | **`CROSS_ENCODER`** | A self-hosted cross-encoder over an HTTP `/rerank` endpoint (Text Embeddings Inference, Infinity, or a Jina-compatible server, e.g. `BAAI/bge-reranker-v2-m3`). | endpoint URL | Best precision-per-cost. Local, free, fast (sub-100 ms). Recommended for production. |
 | **`COHERE`** | The managed [Cohere Rerank](https://docs.cohere.com/docs/rerank) API (`https://api.cohere.com/v2/rerank`, default `rerank-v3.5`). | API key | Zero-ops managed reranker. |
-| **`VOYAGE`** | The managed Voyage AI Rerank API (`https://api.voyageai.com/v1/rerank`, `rerank-2.5`) — the retrieval specialist Anthropic recommends. | API key | Zero-ops; pairs naturally with Voyage embeddings. |
+| **`VOYAGE`** | The managed Voyage AI Rerank API (`https://api.voyageai.com/v1/rerank`, `rerank-2.5`), the retrieval specialist Anthropic recommends. | API key | Zero-ops; pairs naturally with Voyage embeddings. |
 | **`BEDROCK`** | The managed AWS Bedrock `Rerank` API. Model is the ARN or a bare id (e.g. `amazon.rerank-v1:0`) expanded for the region. | AWS IAM | Cloud-native AWS deployments; no self-hosted model. |
 | **`VERTEX_AI`** | The managed Google Vertex AI Ranking API (Discovery Engine `rankingConfigs:rank`, default `semantic-ranker-default-004`). | GCP service account / ADC | Cloud-native GCP deployments. |
 
 :::tip Mistral has no rerank API
-There is intentionally no `MISTRAL` strategy — Mistral exposes no managed rerank endpoint. To rerank with a Mistral model, use the `LLM` strategy pointed at a Mistral [LLM instance](./llm-instances.md).
+There is intentionally no `MISTRAL` strategy: Mistral exposes no managed rerank endpoint. To rerank with a Mistral model, use the `LLM` strategy pointed at a Mistral [LLM instance](./llm-instances.md).
 :::
 
 ---
 
 ## Fail-open by design
 
-Reranking is wrapped in a single fail-open facade (`TurRagReranker`). If the chosen strategy **errors, times out, isn't configured, or returns nothing usable**, Turing ES silently falls back to the original retrieval order. A corrupt strategy value parses leniently back to `LLM` rather than throwing. The net effect: enabling reranking can only improve or be neutral — it can never degrade results below the no-rerank baseline.
+Reranking is wrapped in a single fail-open facade (`TurRagReranker`). If the chosen strategy **errors, times out, isn't configured, or returns nothing usable**, Turing ES silently falls back to the original retrieval order. A corrupt strategy value parses leniently back to `LLM` rather than throwing. The net effect: enabling reranking can only improve or be neutral: it can never degrade results below the no-rerank baseline.
 
 ```mermaid
 flowchart TD

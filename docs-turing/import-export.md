@@ -42,7 +42,7 @@ The `export.json` inside the ZIP archive contains:
 
 | Section | Description |
 |---|---|
-| `snSites` | Complete SN Site configurations — fields, facets, spotlights, ranking expressions, merge providers, locales, and GenAI settings |
+| `snSites` | Complete SN Site configurations: fields, facets, spotlights, ranking expressions, merge providers, locales, and GenAI settings |
 | `llm` | LLM instance references used by sites with GenAI enabled |
 | `store` | Embedding store instance references |
 | `se` | Search engine instance references |
@@ -66,9 +66,9 @@ The import page (`/admin/exchange/import`) accepts a ZIP file previously exporte
 
 | State | Description |
 |---|---|
-| Idle | Dashed border with upload icon — ready for file drop or click |
+| Idle | Dashed border with upload icon: ready for file drop or click |
 | Uploading | Blue background with spinning loader and progress percentage |
-| Success | Green border with checkmark — "Import Completed" message and auto-redirect |
+| Success | Green border with checkmark: "Import Completed" message and auto-redirect |
 | Error | Red border with error message and "Try Again" button |
 
 ### Using the REST API
@@ -99,7 +99,7 @@ In addition to site configuration import, Turing ES accepts **document-level ind
 POST /api/sn/import
 ```
 
-Accepts a JSON body with a list of job items — documents to index, deindex, or commit.
+Accepts a JSON body with a list of job items: documents to index, deindex, or commit.
 
 **Example:**
 
@@ -130,7 +130,7 @@ curl -X POST "http://localhost:2700/api/sn/import" \
 POST /api/sn/import/zip
 ```
 
-Accepts a `multipart/form-data` ZIP file containing an `export.json` with job items. Document attributes can reference embedded files using the `file://` protocol — Turing ES extracts text from these files using Apache Tika before indexing.
+Accepts a `multipart/form-data` ZIP file containing an `export.json` with job items. Document attributes can reference embedded files using the `file://` protocol, Turing ES extracts text from these files using Apache Tika before indexing.
 
 ### Job Actions
 
@@ -147,9 +147,9 @@ Accepts a `multipart/form-data` ZIP file containing an `export.json` with job it
 | `locale` | `string` | Document locale (e.g., `en_US`) |
 | `turSNJobAction` | `string` | `CREATE`, `DELETE`, or `COMMIT` |
 | `siteNames` | `string[]` | Target SN Site names |
-| `attributes` | `map` | Document fields — must include `id` |
+| `attributes` | `map` | Document fields: must include `id` |
 | `checksum` | `string` | Optional content checksum for change detection |
-| `environment` | `string` | Optional — `AUTHOR` or `PUBLISHING` |
+| `environment` | `string` | Optional: `AUTHOR` or `PUBLISHING` |
 
 ---
 

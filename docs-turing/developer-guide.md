@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: Developer Guide
-description: Build with and contribute to Viglet Turing ES — setup, APIs, SDKs, and more.
+description: "Build with and contribute to Viglet Turing ES: setup, APIs, SDKs, and more."
 ---
 
 # Developer Guide
@@ -104,7 +104,7 @@ mvn spring-boot:run -pl turing-app -Dskip.npm
 
 The backend starts at **`http://localhost:2700`**.
 
-### Frontend — React Admin Console
+### Frontend: React Admin Console
 
 For active frontend development, run the React dev server separately. First start the backend in headless mode:
 
@@ -188,15 +188,15 @@ mvn package
 
 ## Database Migrations with Liquibase
 
-Turing ES uses **[Liquibase](https://www.liquibase.org/)** (v5.0.2) for database schema management. All schema changes — tables, columns, indexes, foreign keys — are tracked as versioned changelogs and applied automatically on startup. This ensures every environment (dev, staging, production) runs the exact same schema, regardless of the database platform.
+Turing ES uses **[Liquibase](https://www.liquibase.org/)** (v5.0.2) for database schema management. All schema changes (tables, columns, indexes, foreign keys) are tracked as versioned changelogs and applied automatically on startup. This ensures every environment (dev, staging, production) runs the exact same schema, regardless of the database platform.
 
 ### How it works
 
 When Turing ES starts, Spring Boot runs Liquibase before the application context is fully initialized. Liquibase reads the master changelog, compares it against the `DATABASECHANGELOG` tracking table, and applies any pending changesets. This means:
 
-- **First startup** — all migrations run, creating the full schema from scratch
-- **Upgrades** — only new changesets (added since the last startup) are applied
-- **Rollbacks** — changesets already applied are skipped (`DATABASECHANGELOG` tracks what has run)
+- **First startup**: all migrations run, creating the full schema from scratch
+- **Upgrades**: only new changesets (added since the last startup) are applied
+- **Rollbacks**: changesets already applied are skipped (`DATABASECHANGELOG` tracks what has run)
 
 ### Configuration
 
@@ -256,7 +256,7 @@ databaseChangeLog:
 
 When adding a new table, column, or index, create a new changelog file following the naming convention and add it to the master changelog.
 
-**Example — adding a column to an existing table:**
+**Example, adding a column to an existing table:**
 
 ```yaml
 databaseChangeLog:
@@ -283,10 +283,10 @@ databaseChangeLog:
 
 Key rules:
 
-- **Always use preconditions** with `onFail: MARK_RAN` to make changesets idempotent — safe to re-run if the change was already applied manually
+- **Always use preconditions** with `onFail: MARK_RAN` to make changesets idempotent: safe to re-run if the change was already applied manually
 - **Changeset IDs** use the format `v{version}-{sequence}-{description}` (e.g., `v2026.1.14-01-add-default-label-to-custom-facet`)
 - **Authors** use `viglet-team` for manual migrations or `{name} (generated)` for auto-generated diffs
-- **Never modify** an already-released changeset — always create a new one
+- **Never modify** an already-released changeset: always create a new one
 
 ### Generating a diff changelog
 
@@ -307,7 +307,7 @@ Liquibase abstracts SQL differences across platforms. The same changelogs work o
 
 | Database | Driver | Notes |
 |---|---|---|
-| **H2** | `org.h2.Driver` | Default for development — embedded, zero setup |
+| **H2** | `org.h2.Driver` | Default for development: embedded, zero setup |
 | **MariaDB / MySQL** | `org.mariadb.jdbc.Driver` | Production recommended |
 | **PostgreSQL** | `org.postgresql.Driver` | Production recommended |
 | **Oracle** | `oracle.jdbc.OracleDriver` | Enterprise environments |
@@ -331,7 +331,7 @@ Turing ES maintains high code quality standards. You can check the project healt
 
 ## Search Engine Plugin Architecture
 
-Turing ES uses a **plugin architecture** to support multiple search backends behind a unified interface. This abstraction allows the same application code to work with Apache Solr, Elasticsearch, or Lucene — the active plugin is resolved at runtime based on the vendor configured per Search Engine instance.
+Turing ES uses a **plugin architecture** to support multiple search backends behind a unified interface. This abstraction allows the same application code to work with Apache Solr, Elasticsearch, or Lucene: the active plugin is resolved at runtime based on the vendor configured per Search Engine instance.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
@@ -409,7 +409,7 @@ If a vendor is unrecognised or unavailable, `TurSearchEnginePluginFactory` falls
 
 Turing ES exposes a REST API for integrating search and AI capabilities into any application. All endpoints use **JSON**. Authentication uses the `Key` header with an API Token created in **Administration → API Tokens**.
 
-For the full endpoint reference — search, autocomplete, spell check, latest searches, GenAI chat, and token usage — see **[REST API Reference](./rest-api.md)**.
+For the full endpoint reference (search, autocomplete, spell check, latest searches, GenAI chat, and token usage) see **[REST API Reference](./rest-api.md)**.
 
 For interactive exploration, use the built-in Swagger UI at `http://localhost:2700/swagger-ui.html` or the OpenAPI spec at `http://localhost:2700/v3/api-docs`.
 
@@ -422,7 +422,7 @@ We'd love your help making Turing ES better. Here's how to get involved:
 1. **Fork** the [openviglet/turing-ce](https://github.com/openviglet/turing-ce) repository.
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
 3. **Commit your changes** with clear, descriptive messages.
-4. **Open a Pull Request** — describe what you changed and why.
+4. **Open a Pull Request**: describe what you changed and why.
 
 For larger contributions, open an issue first to discuss the approach before writing code.
 

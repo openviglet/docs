@@ -1,25 +1,25 @@
 ---
 sidebar_position: 20
 title: Conversion Analytics (GA4 bridge)
-description: Measure lead conversion, abandonment, and which persona A/B variation was preferred — in the browser, in your own Google Analytics. A zero-dependency canonical event bus in the Turing SDK with pluggable sinks (GA4/GTM first), auto-detecting an existing gtag/dataLayer for zero-config Adobe EDS setups.
+description: Measure lead conversion, abandonment, and which persona A/B variation was preferred, in the browser, in your own Google Analytics. A zero-dependency canonical event bus in the Turing SDK with pluggable sinks (GA4/GTM first), auto-detecting an existing gtag/dataLayer for zero-config Adobe EDS setups.
 ---
 
 # Conversion Analytics & the Google Analytics bridge
 
-> *Turing already measures the funnel server-side (outcome, experiment, persona). This is the other half: the **browser-owned** view, emitted at the lifecycle moments only the client can see — like a tab close — and delivered straight into your own GA4 next to acquisition source, campaign and audiences.*
+> *Turing already measures the funnel server-side (outcome, experiment, persona). This is the other half: the **browser-owned** view, emitted at the lifecycle moments only the client can see (like a tab close) and delivered straight into your own GA4 next to acquisition source, campaign and audiences.*
 
 Turing's [Chat Analytics](./chat-analytics.md) and [Experiments](./experiments.md) record conversion, abandonment and A/B outcomes **server-side**. But marketing teams run **GA4 in the browser**, where conversion lives next to media spend and audiences. Block Z adds a **client-side, marketing-owned** measurement layer that answers three concrete questions *in your GA*, not ours:
 
 1. **Lead conversion** in chat & semantic navigation.
-2. **Drop-off / abandonment** — and *where* the visitor gave up.
+2. **Drop-off / abandonment**: and *where* the visitor gave up.
 3. **Which persona A/B variation was preferred.**
 
 ## The architecture: a canonical bus + pluggable sinks
 
-Google Analytics is **not** hard-coded into the SDK — that would break the zero-dependency, framework-agnostic, [EDS-friendly](#adobe-eds-zero-config) contract. Instead:
+Google Analytics is **not** hard-coded into the SDK: that would break the zero-dependency, framework-agnostic, [EDS-friendly](#adobe-eds-zero-config) contract. Instead:
 
 - a **canonical, vendor-neutral event bus** (`createTuringAnalytics`) that the chat / search controllers feed, plus
-- **pluggable sinks** — GA4 is the *first adapter*, not a dependency.
+- **pluggable sinks**: GA4 is the *first adapter*, not a dependency.
 
 The bus is **no-op when no `analytics` option is passed**, so every existing embed is byte-for-byte unchanged.
 
@@ -61,7 +61,7 @@ function Storefront() {
 
 ## The canonical event taxonomy
 
-Vendor-neutral names — sinks map them verbatim, so a funnel built on `turing_*` is portable across GA4, Segment, Matomo, …
+Vendor-neutral names: sinks map them verbatim, so a funnel built on `turing_*` is portable across GA4, Segment, Matomo, …
 
 | Event | Fired when | Key params |
 |-------|-----------|-----------|
@@ -76,11 +76,11 @@ Vendor-neutral names — sinks map them verbatim, so a funnel built on `turing_*
 | `turing_search_result_click` | a result is clicked | `query`, `document_id`, `position` |
 | `turing_search_refined` | a query is reformulated | `from`, `to` |
 
-Once `turing_ab_variant_assigned` fires, `experiment_key` / `variant_label` / `persona_id` are stamped on **every subsequent event** — so a GA4 comparison or audience answers *"which persona variation converted"* natively.
+Once `turing_ab_variant_assigned` fires, `experiment_key` / `variant_label` / `persona_id` are stamped on **every subsequent event**, so a GA4 comparison or audience answers *"which persona variation converted"* natively.
 
 ## Abandonment: the signal the server can't see
 
-The server only *infers* abandonment from a session TTL. The browser actually sees the visitor leave. A started conversation (≥1 user message) with no conversion emits a single `turing_chat_abandoned` on tab hide / page unload / idle timeout — carrying the last step reached and the turn count. On unload the GA4 sink flags the event `transport_type: 'beacon'` so `navigator.sendBeacon` flushes it before teardown.
+The server only *infers* abandonment from a session TTL. The browser actually sees the visitor leave. A started conversation (≥1 user message) with no conversion emits a single `turing_chat_abandoned` on tab hide / page unload / idle timeout, carrying the last step reached and the turn count. On unload the GA4 sink flags the event `transport_type: 'beacon'` so `navigator.sendBeacon` flushes it before teardown.
 
 ```js
 createChatController(client, {
@@ -91,13 +91,13 @@ createChatController(client, {
 
 ## Cross-surface stitching (search → chat → lead)
 
-Both the search and chat controllers key off the same `TUR_SESSION` cookie, and the bus stamps it as the session id. A chat lead therefore attributes back to the **originating search query** — GA4 shows one journey, not two disjoint funnels.
+Both the search and chat controllers key off the same `TUR_SESSION` cookie, and the bus stamps it as the session id. A chat lead therefore attributes back to the **originating search query**: GA4 shows one journey, not two disjoint funnels.
 
 ## Sinks
 
-- **`googleAnalyticsSink({ measurementId?, transport? })`** — maps each event to GA4 `gtag('event', name, params)` **and/or** a GTM `dataLayer.push({ event, ... })`. Identity fields are snake_cased to GA convention; the reserved `session_id` is namespaced to `turing_session_id`.
-- **`onEventSink(fn)`** — generic escape hatch for Segment / Matomo / Plausible or any custom pipeline.
-- **`debugSink()`** — console tracing during integration.
+- **`googleAnalyticsSink({ measurementId?, transport? })`**: maps each event to GA4 `gtag('event', name, params)` **and/or** a GTM `dataLayer.push({ event, ... })`. Identity fields are snake_cased to GA convention; the reserved `session_id` is namespaced to `turing_session_id`.
+- **`onEventSink(fn)`**: generic escape hatch for Segment / Matomo / Plausible or any custom pipeline.
+- **`debugSink()`**: console tracing during integration.
 
 ### Adobe EDS zero-config
 
@@ -105,7 +105,7 @@ Both the search and chat controllers key off the same `TUR_SESSION` cookie, and 
 
 ## Non-goal
 
-Turing does **not** ship its own conversion dashboards here — GA4 (and any sink) owns visualization; the SDK only emits clean, canonical events.
+Turing does **not** ship its own conversion dashboards here: GA4 (and any sink) owns visualization; the SDK only emits clean, canonical events.
 
 ---
 

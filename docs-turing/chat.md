@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: Chat
-description: The Turing ES Chat interface is where AI Agents meet customers. Direct LLM, Semantic Navigation grounded chat, and agent-per-tab — each tuned for a different conversion moment.
+description: The Turing ES Chat interface is where AI Agents meet customers. Direct LLM, Semantic Navigation grounded chat, and agent-per-tab, each tuned for a different conversion moment.
 ---
 
 # Chat
@@ -12,11 +12,11 @@ The **Chat** interface is the front door of every AI capability in Turing ES. It
 
 | Mode | When it shines | What grounds the answer |
 |---|---|---|
-| **Chat (direct LLM)** | The user wants raw assistance — *"summarize this PDF"*, *"draft this email"* | The LLM's parametric knowledge + any tools the user enables |
-| **Semantic Navigation** | The user is looking for something *inside your indexed content* | Strict — only your indexed sites and documents |
+| **Chat (direct LLM)** | The user wants raw assistance: *"summarize this PDF"*, *"draft this email"* | The LLM's parametric knowledge + any tools the user enables |
+| **Semantic Navigation** | The user is looking for something *inside your indexed content* | Strict: only your indexed sites and documents |
 | **AI Agent** *(one tab per agent)* | The user is having a purpose-specific conversation (sales, onboarding, support) | The agent's tools + persona + your content |
 
-Every mode streams responses token by token, supports rich content (Markdown, code, charts, diagrams, HTML previews), and stores history in the user's browser — *not* on your servers.
+Every mode streams responses token by token, supports rich content (Markdown, code, charts, diagrams, HTML previews), and stores history in the user's browser, *not* on your servers.
 
 :::info LLM required
 The Chat interface is only available when at least one LLM Instance is configured and enabled. See [LLM Instances](./llm-instances.md) to set one up.
@@ -28,7 +28,7 @@ The Chat interface is only available when at least one LLM Instance is configure
 
 The chat surface looks the same across modes, but each mode reaches a different backend and uses a different prompt strategy.
 
-![Chat Interface — Layout Overview](/img/diagrams/turing-chat-layout.svg)
+![Chat Interface: Layout Overview](/img/diagrams/turing-chat-layout.svg)
 
 **Header controls:**
 
@@ -40,19 +40,19 @@ The chat surface looks the same across modes, but each mode reaches a different 
 | **Dark mode toggle** | Switch between light and dark themes; code highlighting follows |
 | **Session history** | Browse, restore, or delete previous conversations from this browser |
 
-**Context Bar** — sits below the message area:
+**Context Bar**, sits below the message area:
 
 | Indicator | Behaviour |
 |---|---|
 | **Token counter** | Shows `current/max` (e.g., `2.5k/128k`); estimated client-side at ~4 chars per token |
-| **Progress bar** | Visual fill — **blue** under 60%, **yellow** at 60–79%, **red** at 80%+ |
+| **Progress bar** | Visual fill: **blue** under 60%, **yellow** at 60–79%, **red** at 80%+ |
 | **Compact** | Compresses the conversation via the LLM to free context space |
 
 ---
 
-## Mode 1 — Chat (Direct LLM)
+## Mode 1: Chat (Direct LLM)
 
-A general-purpose conversation with the selected LLM. Use this when the question doesn't depend on your enterprise content — the user wants the model itself, sometimes augmented with a few opt-in tools.
+A general-purpose conversation with the selected LLM. Use this when the question doesn't depend on your enterprise content, the user wants the model itself, sometimes augmented with a few opt-in tools.
 
 **Real conversations this mode handles well:**
 
@@ -74,7 +74,7 @@ Attached files appear as badges on the message they're sent with. Multiple files
 
 ### Streaming
 
-Every response streams in real time over **Server-Sent Events (SSE)**. The user sees tokens arrive as the model produces them — no spinner, no wait. Perceived latency drops by roughly half compared to wait-then-show.
+Every response streams in real time over **Server-Sent Events (SSE)**. The user sees tokens arrive as the model produces them, no spinner, no wait. Perceived latency drops by roughly half compared to wait-then-show.
 
 ### Tools You Can Enable
 
@@ -94,7 +94,7 @@ The model picks which tool to call based on the question. The user enables the m
 
 ---
 
-## Mode 2 — Semantic Navigation
+## Mode 2: Semantic Navigation
 
 This is where the chat becomes a *grounded* conversation: the LLM's job is no longer to answer from its training data, but to **search your indexed sites and explain what it finds**.
 
@@ -102,7 +102,7 @@ Use this mode when:
 
 - The question is about your **products**, **internal documentation**, or **published content**.
 - You need answers that **always trace back to a real document**.
-- Hallucinations are unacceptable — the LLM is constrained to answer from indexed content.
+- Hallucinations are unacceptable: the LLM is constrained to answer from indexed content.
 
 The system prompt for this mode is built per request and includes:
 
@@ -116,18 +116,18 @@ The system prompt for this mode is built per request and includes:
 |---|---|
 | `list_sites` | Enumerates available SN Sites and their locales |
 | `get_site_fields` | Returns the indexed fields and facets for a specific site |
-| `get_valid_filter_values` | Lists valid values for a given facet field — prevents the model from inventing filters |
+| `get_valid_filter_values` | Lists valid values for a given facet field: prevents the model from inventing filters |
 | `search_site` | Performs a semantic search and returns results with snippets and metadata |
 
 Any **MCP Servers** configured globally are also available here, extending the tool set with external capabilities (e.g., a CRM lookup, a translation service).
 
 :::tip When to use SN mode vs. an Agent
-**SN mode** is the right answer when the user is *looking for something inside your content* but doesn't need a specific persona or workflow. It's the AI version of *"search the site, but smart"*. **Agent mode** is the right answer when the conversation has a *purpose* — booking a demo, qualifying a lead, getting onboarded. Both can search the same content; the agent layers persona + workflow on top.
+**SN mode** is the right answer when the user is *looking for something inside your content* but doesn't need a specific persona or workflow. It's the AI version of *"search the site, but smart"*. **Agent mode** is the right answer when the conversation has a *purpose*, booking a demo, qualifying a lead, getting onboarded. Both can search the same content; the agent layers persona + workflow on top.
 :::
 
 ---
 
-## Mode 3 — AI Agents
+## Mode 3: AI Agents
 
 Each [AI Agent](./ai-agents.md) configured and enabled in **Administration → AI Agents** appears as its own tab in Chat. The visitor picks the specialist that fits their need.
 
@@ -138,20 +138,20 @@ Each [AI Agent](./ai-agents.md) configured and enabled in **Administration → A
 | **LLM Instance** | Agent → LLM tab |
 | **Native tool selection** | Agent → Tools tab |
 | **MCP servers** | Agent → MCP Servers tab |
-| **Skills** *(portable capabilities)* | Agent → Settings (Skills toggle) — see [Skills in Chat](#skills-in-chat) |
+| **Skills** *(portable capabilities)* | Agent → Settings (Skills toggle): see [Skills in Chat](#skills-in-chat) |
 | **Persona** *(brand voice)* | Agent → Settings (Persona dropdown) |
 
-The **Persona** is the voice layer — see [Personas](./personas.md) for full coverage. With a persona attached, every conversation in this tab speaks in your brand's tone, uses your mandatory vocabulary, avoids your forbidden vocabulary, and (if configured) draws on a **few-shot store of curated Q/A pairs** plus **live brand context from an MCP server**.
+The **Persona** is the voice layer: see [Personas](./personas.md) for full coverage. With a persona attached, every conversation in this tab speaks in your brand's tone, uses your mandatory vocabulary, avoids your forbidden vocabulary, and (if configured) draws on a **few-shot store of curated Q/A pairs** plus **live brand context from an MCP server**.
 
-Use agents when you want consistency across thousands of conversations — *"every visitor who lands on the discovery agent should hear the same voice, regardless of LLM or time of day"*.
+Use agents when you want consistency across thousands of conversations, *"every visitor who lands on the discovery agent should hear the same voice, regardless of LLM or time of day"*.
 
 ---
 
 ## Skills in Chat
 
-A [**Skill**](./skills.md) is a portable, Anthropic-compatible capability — a folder of instructions, scripts, and reference material that runs in a hardened Docker sandbox. When an agent has skills enabled, the conversation can hand off a whole task to one of them ("generate the campaign assets", "build the financial model") without you wiring a tool for it.
+A [**Skill**](./skills.md) is a portable, Anthropic-compatible capability, a folder of instructions, scripts, and reference material that runs in a hardened Docker sandbox. When an agent has skills enabled, the conversation can hand off a whole task to one of them ("generate the campaign assets", "build the financial model") without you wiring a tool for it.
 
-Skills are **per-agent**: enable them with the **Skills** toggle in the agent's Settings tab (visible only when the feature is available). The native and MCP tools you select still work exactly as before — skills are an *additional* layer.
+Skills are **per-agent**: enable them with the **Skills** toggle in the agent's Settings tab (visible only when the feature is available). The native and MCP tools you select still work exactly as before: skills are an *additional* layer.
 
 ### How a skill runs inside a chat turn
 
@@ -162,22 +162,22 @@ The agent doesn't load the whole skill up front. It works by **progressive discl
 3. The sub-loop's result text comes back to the agent's turn as the tool result, and the agent weaves it into its reply.
 
 :::info A skill always runs on the Default LLM
-A portable skill should behave identically no matter who calls it, so it never runs on the agent's own model — it runs on the **Default LLM** configured in Global Settings. The agent orchestrates; the Default LLM executes the skill. Token usage for the sub-loop is recorded separately.
+A portable skill should behave identically no matter who calls it, so it never runs on the agent's own model: it runs on the **Default LLM** configured in Global Settings. The agent orchestrates; the Default LLM executes the skill. Token usage for the sub-loop is recorded separately.
 :::
 
-### Skill mode — pin one skill for the conversation
+### Skill mode: pin one skill for the conversation
 
 By default every enabled skill is offered and the model picks. You can also pin **one** skill for a conversation using the **Skill mode** selector beside the model/flow selectors:
 
 | Skill mode | Behavior |
 |---|---|
 | **Auto** (default) | All enabled skills offered; the model decides whether and which to use |
-| **A specific skill** | Only that skill is offered — useful when the conversation *is* that capability |
+| **A specific skill** | Only that skill is offered: useful when the conversation *is* that capability |
 
 The selector appears only when the agent has skills enabled and the catalog has at least one enabled skill.
 
 :::note Requirements
-Skills need a [storage backend](./configuration-reference.md#storage), the [Code Interpreter](./tool-calling.md#code-interpreter--1-tool) in **DOCKER** mode, and a configured Default LLM. When any is missing the agent behaves exactly as if Skills didn't exist. See the [Skills](./skills.md) page for the full picture.
+Skills need a [storage backend](./configuration-reference.md#storage), the [Code Interpreter](./tool-calling.md#code-interpreter-1-tool) in **DOCKER** mode, and a configured Default LLM. When any is missing the agent behaves exactly as if Skills didn't exist. See the [Skills](./skills.md) page for the full picture.
 :::
 
 ---
@@ -193,7 +193,7 @@ If you take one thing away from this page, take this:
 | Do a *purposeful* conversation (sell, support, onboard, qualify) | **AI Agent** with a persona |
 | Investigate a specific past conversation and what went well or wrong | Open the [Chat Analytics](./chat-analytics.md) page (separate, not in Chat) |
 
-You don't have to pick one mode and stick with it. Most deployments use all three — direct chat for power users, SN chat for content exploration, and agents for customer-facing flows.
+You don't have to pick one mode and stick with it. Most deployments use all three: direct chat for power users, SN chat for content exploration, and agents for customer-facing flows.
 
 ---
 
@@ -206,13 +206,13 @@ What actually happens between *the user pressing Enter* and *the response appear
    - SN chat → `/api/v2/llm/{instanceId}/semantic-chat`
    - Agent → `/api/v2/ai-agent/{agentId}/chat`
 2. **Spring AI** assembles the prompt: agent system prompt → persona overlays (if any) → tool definitions → conversation history → current message + media.
-3. **Tool calling** — if the LLM requests a tool, Spring AI executes it (native or MCP), returns the result, and the loop continues until the model decides to answer.
-4. **Streaming** — the response flows back through `Flux<ChatResponse>`. The front-end consumes it as SSE, rendering each token as it arrives.
-5. **Persona post-validation** — `TurPersonaToneValidator` redacts any forbidden terms before the response is finalized.
-6. **Analytics emission** — `TurChatAnalyticsService.recordSessionStart` / `recordTurn` / `recordSessionEnd` record turn count, token usage, and outcome to the analytics store. See [Chat Analytics](./chat-analytics.md).
+3. **Tool calling**: if the LLM requests a tool, Spring AI executes it (native or MCP), returns the result, and the loop continues until the model decides to answer.
+4. **Streaming**: the response flows back through `Flux<ChatResponse>`. The front-end consumes it as SSE, rendering each token as it arrives.
+5. **Persona post-validation**: `TurPersonaToneValidator` redacts any forbidden terms before the response is finalized.
+6. **Analytics emission**: `TurChatAnalyticsService.recordSessionStart` / `recordTurn` / `recordSessionEnd` record turn count, token usage, and outcome to the analytics store. See [Chat Analytics](./chat-analytics.md).
 7. **Browser** stores the session in IndexedDB, attaches an auto-generated title (LLM-summarized from the first exchange), and updates the session sidebar.
 
-If observability is enabled (Prometheus scraping `/actuator/prometheus`), every step also emits metrics — see [Observability](./observability.md).
+If observability is enabled (Prometheus scraping `/actuator/prometheus`), every step also emits metrics: see [Observability](./observability.md).
 
 ---
 
@@ -222,13 +222,13 @@ Chat responses are rendered with full media-type awareness:
 
 | Content type | Rendering |
 |---|---|
-| **Markdown** | GitHub Flavored — tables, strikethrough, task lists, inline code, blockquotes |
+| **Markdown** | GitHub Flavored: tables, strikethrough, task lists, inline code, blockquotes |
 | **Code blocks** | Syntax highlighting via highlight.js with automatic light/dark theme switching |
 | **D2 diagrams** | Rendered to SVG via WASM; falls back to a dev server in development |
 | **HTML** | Sandboxed preview in an iframe; toggle between rendered view and source, with fullscreen |
 | **Generated files** | Files from the Code Interpreter (charts, CSVs, processed data) appear as inline download links |
 
-Code blocks pick up the chat's dark/light theme automatically — no flash on switch.
+Code blocks pick up the chat's dark/light theme automatically, no flash on switch.
 
 ---
 
@@ -238,7 +238,7 @@ Sessions are stored in the **browser's IndexedDB**. They never leave the user's 
 
 What that means in practice:
 
-- Sessions are **per browser and per device** — clearing browser data removes them.
+- Sessions are **per browser and per device**, clearing browser data removes them.
 - **No authentication** is required to access past sessions.
 - **No server cost** for session storage.
 
@@ -256,7 +256,7 @@ What that means in practice:
 Sessions are saved automatically after each complete response.
 
 :::info Browser-local vs. Chat Analytics
-The IndexedDB **session history** is a *user convenience* — it's how a single user finds their own past conversations. The **[Chat Analytics](./chat-analytics.md)** store is *operator analytics* — anonymized session metadata + transcripts that ship to MongoDB or Redis for dashboarding. They serve different audiences and don't depend on each other.
+The IndexedDB **session history** is a *user convenience*: it's how a single user finds their own past conversations. The **[Chat Analytics](./chat-analytics.md)** store is *operator analytics*, anonymized session metadata + transcripts that ship to MongoDB or Redis for dashboarding. They serve different audiences and don't depend on each other.
 :::
 
 ---
@@ -275,9 +275,9 @@ Tokens are estimated client-side at **~4 characters per token** (`Math.ceil(text
 
 When the front-end first loads a session, it figures out the model's window via a three-tier fallback:
 
-1. **Backend API** — `GET /v2/llm/{instanceId}/chat/context-info` returns the configured limit. The front-end caches it.
-2. **LLM Instance configuration** — the `contextWindow` field set on the instance.
-3. **Default** — 128,000 tokens, used when neither of the above is available.
+1. **Backend API**: `GET /v2/llm/{instanceId}/chat/context-info` returns the configured limit. The front-end caches it.
+2. **LLM Instance configuration**: the `contextWindow` field set on the instance.
+3. **Default**: 128,000 tokens, used when neither of the above is available.
 
 ### Progress Bar Colours
 

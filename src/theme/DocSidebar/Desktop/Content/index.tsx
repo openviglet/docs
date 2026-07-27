@@ -250,7 +250,7 @@ export default function DocSidebarDesktopContent({
         </label>
       </div>
 
-      {/* ── Sidebar items — key forces remount on expand-all toggle ── */}
+      {/* ── Sidebar items: key forces remount on expand-all toggle ── */}
       <ul
         key={expandKey}
         className={clsx(ThemeClassNames.docs.docSidebarMenu, "menu__list")}

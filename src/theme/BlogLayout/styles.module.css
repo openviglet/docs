@@ -1,5 +1,5 @@
 /* Collapsed TOC column: shrink to just the toggle button width so the
-   main blog content can expand into the freed space — mirrors the docs
+   main blog content can expand into the freed space, mirroring the docs
    layout (@theme/DocItem/Layout). */
 .tocColCollapsed {
   flex: 0 0 auto !important;

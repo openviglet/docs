@@ -15,8 +15,8 @@ This document lists all configuration properties available in Shio CMS. Properti
 | Property | Default | Description |
 |---|---|---|
 | `shio.mgmt.enabled` | `true` | Enable the management interface |
-| `shio.git.url` | — | Git repository URL for version control |
-| `shio.git.token` | — | Authentication token for Git repository |
+| `shio.git.url` | n/a | Git repository URL for version control |
+| `shio.git.token` | n/a | Authentication token for Git repository |
 | `shio.website.nashorn` | `--persistent-code-cache,--optimistic-types=true,-pcc,--class-cache-size=50000` | Nashorn JavaScript engine options |
 | `shio.website.javascript.engine` | `nashorn` | JavaScript engine: `nashorn` or `nodejs` |
 | `shio.allowedOrigins` | `localhost` | CORS allowed origins |
@@ -41,7 +41,7 @@ This document lists all configuration properties available in Shio CMS. Properti
 
 ## Database Properties
 
-### H2 (Default — Development)
+### H2 (Default: Development)
 
 | Property | Default | Description |
 |---|---|---|
@@ -119,7 +119,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
 |---|---|---|
 | `spring.servlet.multipart.max-file-size` | `1024MB` | Maximum file upload size |
 | `spring.servlet.multipart.max-request-size` | `1024MB` | Maximum request size |
-| `spring.mvc.async.request-timeout` | `3600000` | Async request timeout (ms) — 1 hour |
+| `spring.mvc.async.request-timeout` | `3600000` | Async request timeout (ms): 1 hour |
 
 ---
 
@@ -163,7 +163,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
 
 | Profile | Purpose |
 |---|---|
-| `production` | Default profile — optimized for production |
+| `production` | Default profile: optimized for production |
 | `development` | Development mode with additional logging |
 | `ui-dev` | Headless mode for frontend development with separate Vite dev server |
 

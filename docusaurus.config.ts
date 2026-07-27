@@ -52,7 +52,7 @@ const config: Config = {
 
   headTags: [
     {
-      // schema.org structured data — helps search engines and LLMs identify
+      // schema.org structured data: helps search engines and LLMs identify
       // Viglet Turing ES as enterprise search software for AEM/WordPress.
       tagName: "script",
       attributes: { type: "application/ld+json" },
@@ -151,7 +151,7 @@ const config: Config = {
         blog: {
           path: "blog",
           routeBasePath: "blog",
-          blogTitle: "Viglet Blog — Enterprise Search & AI",
+          blogTitle: "Viglet Blog: Enterprise Search & AI",
           blogDescription:
             "Guides and comparisons on enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing ES.",
           showReadingTime: true,
@@ -160,7 +160,7 @@ const config: Config = {
           postsPerPage: 10,
           feedOptions: {
             type: ["rss", "atom"],
-            title: "Viglet Blog — Enterprise Search & AI",
+            title: "Viglet Blog: Enterprise Search & AI",
             description:
               "Enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing ES.",
             copyright: `Copyright © ${new Date().getFullYear()} Viglet.`,
@@ -230,7 +230,7 @@ const config: Config = {
       },
     ],
     [
-      // Emits /guides.json — the endpoint viglet.org fetches to cross-link the
+      // Emits /guides.json: the endpoint viglet.org fetches to cross-link the
       // published blog guides dynamically (drafts excluded upstream).
       require.resolve("./src/plugins/guides-json"),
       {

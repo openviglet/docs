@@ -4,7 +4,7 @@ title: Architecture Overview
 description: High-level architecture, component diagram, request flow, and deployment topologies for Viglet Shio CMS.
 ---
 
-# Shio CMS — Architecture Overview
+# Shio CMS: Architecture Overview
 
 ## Introduction
 

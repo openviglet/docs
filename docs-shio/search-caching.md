@@ -14,7 +14,7 @@ Shio CMS provides automatic content indexing with full-text search capabilities,
 
 ### Automatic Indexing
 
-Content in Shio CMS is **automatically indexed** when created or updated. This means your site has search functionality out of the box — no additional configuration required.
+Content in Shio CMS is **automatically indexed** when created or updated. This means your site has search functionality out of the box, no additional configuration required.
 
 ### Built-in Search
 
@@ -27,7 +27,7 @@ The embedded search engine provides:
 
 ## Viglet Turing ES Integration
 
-For advanced search capabilities, Shio CMS integrates with **Viglet Turing ES** — an enterprise search platform with semantic navigation and generative AI.
+For advanced search capabilities, Shio CMS integrates with **Viglet Turing ES**, an enterprise search platform with semantic navigation and generative AI.
 
 ### What Turing ES adds
 
@@ -43,10 +43,10 @@ For advanced search capabilities, Shio CMS integrates with **Viglet Turing ES** 
 
 When configuring Post Type fields, you can map each field to a Turing Semantic Navigation field:
 
-- **Search Field Association** — map to a default Turing SN field:
+- **Search Field Association**: map to a default Turing SN field:
   - Title, Description, Text, Date, URL, Image
 
-- **Create Additional Search Field** — map to a custom field for facets or advanced filtering
+- **Create Additional Search Field**: map to a custom field for facets or advanced filtering
 
 ### Turing Search Endpoint
 
@@ -106,9 +106,9 @@ graph LR
 
 Hazelcast is configured via `hazelcast.xml` in the application resources. Key settings:
 
-- **Cluster name** — identifies the Hazelcast cluster
-- **Network** — multicast or TCP/IP discovery for multi-node setups
-- **Map configuration** — TTL, max size, and eviction policies per cache map
+- **Cluster name**: identifies the Hazelcast cluster
+- **Network**: multicast or TCP/IP discovery for multi-node setups
+- **Map configuration**: TTL, max size, and eviction policies per cache map
 
 ### Multi-Node Caching
 

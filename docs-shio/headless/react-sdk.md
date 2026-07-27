@@ -1,14 +1,14 @@
 ---
 sidebar_position: 9
 title: React SDK
-description: "@viglet/shio-react-sdk — React hooks and render components for the Shio Content Delivery API."
+description: "@viglet/shio-react-sdk: React hooks and render components for the Shio Content Delivery API."
 ---
 
-# React SDK — `@viglet/shio-react-sdk`
+# React SDK: `@viglet/shio-react-sdk`
 
 React hooks and render components for consuming Shio content, built on top of
 [`@viglet/shio-client`](./javascript-client.md). React is one consumer of the
-core client — the data fetching, types, and auth all come from the core.
+core client, the data fetching, types, and auth all come from the core.
 
 ## Install
 
@@ -106,4 +106,4 @@ when you need a specific renderer.
 
 ## Next steps
 
-- [Next.js Starter](./nextjs-starter.md) — scaffold a full site in seconds.
+- [Next.js Starter](./nextjs-starter.md): scaffold a full site in seconds.

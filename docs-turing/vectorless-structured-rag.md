@@ -1,14 +1,14 @@
 ---
 sidebar_position: 5
 title: Vectorless (Structured-Data) RAG
-description: Answer questions over a structured catalog — products, prices, specs, a model registry — grounded and cited, using only an LLM and your search index. No embeddings, no vector store.
+description: Answer questions over a structured catalog (products, prices, specs, a model registry) grounded and cited, using only an LLM and your search index. No embeddings, no vector store.
 ---
 
 # Vectorless (Structured-Data) RAG
 
-**Talk to a structured catalog — grounded, cited, with no vector database.** Viglet
+**Talk to a structured catalog, grounded, cited, with no vector database.** Viglet
 Turing ES can answer questions over your product catalog, price list, spec sheet,
-or model registry using only a language model and your existing search index — no
+or model registry using only a language model and your existing search index, no
 embeddings, no vector store, and no chunking pipeline to stand up.
 
 ---
@@ -18,11 +18,11 @@ embeddings, no vector store, and no chunking pipeline to stand up.
 Most RAG (Retrieval-Augmented Generation) needs a vector database: your content is
 chunked, each chunk is turned into an embedding vector, stored in an [Embedding
 Store](./embedding-stores.md), and queries are matched by cosine similarity. That
-is the right tool for **unstructured prose** — articles, manuals, support tickets.
+is the right tool for **unstructured prose**: articles, manuals, support tickets.
 See [What is RAG?](./rag.md) for that path.
 
-But when your knowledge is **structured** — rows with named fields such as `price`,
-`contextWindow`, `category`, `inStock`, `rating` — you do not need any of that.
+But when your knowledge is **structured** (rows with named fields such as `price`,
+`contextWindow`, `category`, `inStock`, `rating`) you do not need any of that.
 Turing parses the user's question into a search over your **declared field
 schema**, runs it against the search engine (Solr / Elasticsearch / Lucene) as
 ordinary field / facet / range queries, and the language model answers **strictly
@@ -43,19 +43,19 @@ Navigation → (site) → Generative AI → Knowledge Base Mode**:
 
 | Mode | Best for | Requires |
 | ---- | -------- | -------- |
-| **Vector** (default) | Prose / unstructured content — articles, docs, manuals, support tickets | Embedding model **+** vector store on the bound AI Agent |
-| **Vectorless (Structured)** | A structured catalog — products, prices, specs, a model registry | **Only a default LLM** |
+| **Vector** (default) | Prose / unstructured content: articles, docs, manuals, support tickets | Embedding model **+** vector store on the bound AI Agent |
+| **Vectorless (Structured)** | A structured catalog: products, prices, specs, a model registry | **Only a default LLM** |
 | **Hybrid** | A site that has both prose *and* structured attributes | The full vector setup (a superset of Vector) |
 
 The default is **Vector**, so every existing site is unchanged. Choosing
 **Vectorless (Structured)** makes the AI-Mode readiness check report the site as
-ready as soon as a default LLM is configured — instead of asking you to wire up an
+ready as soon as a default LLM is configured: instead of asking you to wire up an
 embedding model and a vector store you do not need.
 
 ## Vectorless disables embedding indexing entirely
 
 This is the key guarantee to be sure of when you pick the mode. When a site is set
-to **Vectorless (Structured)**, Turing **never generates embeddings for it** — on
+to **Vectorless (Structured)**, Turing **never generates embeddings for it**, on
 any path:
 
 - **No embedding at import / reindex.** Documents are indexed into the search
@@ -83,7 +83,7 @@ Switch back to **Vector** or **Hybrid** to re-enable embedding indexing.
 2. **Declare the field schema.** Enable the fields you want the assistant to reason
    over (`price`, `contextWindow`, `kind`, …) as Semantic Navigation site fields,
    with facet/type set correctly. The NL→filter step may only reference **declared**
-   fields — anything it cannot ground is dropped, and it never invents a field.
+   fields, anything it cannot ground is dropped, and it never invents a field.
 3. **Set Knowledge Base Mode = Vectorless (Structured)** on the site's Generative
    AI form.
 4. **Configure a default LLM** in Global Settings.
@@ -101,7 +101,7 @@ Switch back to **Vector** or **Hybrid** to re-enable embedding indexing.
 }
 ```
 
-The response is a grounded answer plus a `citations[]` array — each citation is a
+The response is a grounded answer plus a `citations[]` array: each citation is a
 matched row (id, title, optional link, score) the answer is allowed to reference.
 Multi-turn is supported: pass the running conversation and the latest user turn
 drives retrieval.
@@ -111,12 +111,12 @@ configured (i.e. whether the copilot can answer).
 
 ### Ranking & superlative questions
 
-Superlative and comparative questions are understood out of the box — "the
+Superlative and comparative questions are understood out of the box: "the
 **cheapest** embedding model", "which chat model scores **highest** on the
 intelligence index", "the model with the **biggest** context window", "chat models
 **sorted by** price". Turing recognises the ranking phrase and sorts the results by
-the matching **numeric** field in your declared schema (ascending for a minimum —
-cheapest / lowest / smallest / fastest — descending for a maximum — highest /
+the matching **numeric** field in your declared schema (ascending for a minimum
+(cheapest / lowest / smallest / fastest) descending for a maximum, highest /
 largest / most / best), while still keeping any facet filter in the same question
 ("**chat** models sorted by intelligence index" stays scoped to chat models).
 
@@ -138,12 +138,12 @@ Planning**:
 | **Deterministic** (default) | Ranking phrases are resolved without an LLM (as described above), and one LLM call maps the rest of the question onto your facets. Fully reproducible. The ranking vocabulary it understands is **English only**. | 1 LLM call |
 | **LLM-assisted** | Multi-pass: parse, then an LLM pass audits the query against the question (dropped filter? missing sort? undeclared field?), then a refine pass restates it. Understands questions in **any language** with no per-language configuration, and recovers when the first parse comes back empty. | up to 3 LLM calls |
 | **Hybrid** | Runs the deterministic plan first and only escalates to the audit/refine passes when it returned nothing, or produced no filter and no ordering. Common questions stay instant and free. | 1 LLM call, 3 only on a failed search |
-| **Default** | Pins nothing on the site — inherits the deployment setting below. | — |
+| **Default** | Pins nothing on the site: inherits the deployment setting below. | n/a |
 
 Pick **Hybrid** if your users ask questions in more than one language, or you have
 seen a question return no results that clearly should have matched. Pick
-**LLM-assisted** if most of your traffic is non-English. **Deterministic** — the
-default — is the cheapest and needs no LLM budget beyond the single parse.
+**LLM-assisted** if most of your traffic is non-English. **Deterministic** (the
+default) is the cheapest and needs no LLM budget beyond the single parse.
 
 **Analysis depth** bounds how many passes the LLM strategies may spend after the
 initial parse: `0` = parse only, `1` = + the audit pass, `2` = + the refine pass.
@@ -168,8 +168,8 @@ than erroring.
 #### Comparing the strategies on your own catalog
 
 Rather than guess which strategy suits your data, measure it. An
-[NL→facet eval pack](./agent-eval.md) — the prose questions your users ask, each
-with the filters/ordering it should produce — can be run through **every** strategy
+[NL→facet eval pack](./agent-eval.md) (the prose questions your users ask, each
+with the filters/ordering it should produce) can be run through **every** strategy
 at once, scoring them side by side:
 
 - In the admin, open **Eval Studio → NL→Facet**, import your pack as a dataset, and
@@ -186,15 +186,15 @@ at once, scoring them side by side:
   the analysis depth for the run. A saved dataset can be compared directly with
   `POST /api/sn/nl-facet-eval/dataset/{id}/planning-comparison`.
 
-The report gives one row per strategy with the three numbers the choice turns on —
+The report gives one row per strategy with the three numbers the choice turns on,
 **score** (how many of your golden filters/ordering the plan reproduced), **LLM
-calls** (the cost per run) and **elapsed** (the latency) — plus the per-case
+calls** (the cost per run) and **elapsed** (the latency), plus the per-case
 breakdown for the questions that missed.
 
 :::caution Read the caveats printed with the table
 The comparison scores the query each strategy **plans**; it does not execute it
 against your index. That matters for **Hybrid**: its escalation only triggers on a
-live search that came back empty, which a plan-only run cannot produce — so Hybrid
+live search that came back empty, which a plan-only run cannot produce, so Hybrid
 scores exactly like Deterministic here. That is its fast-path, not what it does in
 production. Elapsed time is real LLM wall-clock and varies run to run; compare
 orders of magnitude, not milliseconds.
@@ -206,26 +206,26 @@ Because an LLM-assisted row costs up to three LLM calls **per case**, restrict
 ### From React (SDK)
 
 The `@viglet/turing-react-sdk` ships a `useTuringCopilot` hook and an embeddable
-`TuringCopilot` widget bound to the endpoint above — the copilot analogue of the
+`TuringCopilot` widget bound to the endpoint above, the copilot analogue of the
 vector-RAG chat, fully skinnable via a `classNames` map. See the
 [JavaScript SDK](./javascript-sdk.md).
 
 ## Guarantees
 
-- **Grounded** — the answer asserts nothing that is not in the matched rows; the
+- **Grounded**: the answer asserts nothing that is not in the matched rows; the
   parser never invents a field.
-- **Cited** — every claim carries the `[n]` of the row it came from, and the
+- **Cited**: every claim carries the `[n]` of the row it came from, and the
   returned citations are limited to the rows the answer actually references.
-- **Objective ranking** — results are ordered by relevance / objective signals
+- **Objective ranking**: results are ordered by relevance / objective signals
   only; no paid placement ever enters the pipeline.
-- **Fail-open** — a parse failure degrades to a free-text query, a ranking failure
+- **Fail-open**: a parse failure degrades to a free-text query, a ranking failure
   degrades to lexical order, and an LLM failure still returns the matched citations
   so the client can render results without a synthesized answer.
 
 ## Over the OpenAI-compatible gateway (zero SDK)
 
 Any OpenAI-style client can get grounded, cited structured answers with **no
-Turing SDK** through the [Governed LLM Gateway](./llm-gateway.md) — either a
+Turing SDK** through the [Governed LLM Gateway](./llm-gateway.md), either a
 `turing-copilot:<site>` model name or an `x-turing-copilot-site: <site>` header
 routes the request to the vectorless copilot. The cited rows come back as a
 plain-text **Sources** footer so the answer stays traceable over the OpenAI wire
@@ -242,7 +242,7 @@ curl -sX POST https://<host>/v1/chat/completions \
 ## Stuff-all mode (small catalogs)
 
 For a catalog small enough to fit in one prompt (a few hundred rows), the copilot
-can skip retrieval entirely and ground the LLM on **every** row — the
+can skip retrieval entirely and ground the LLM on **every** row, the
 extreme-vectorless path. This is what makes open-ended advisory questions work
 ("which of these would suit a small documentation site?"): the model sees the whole
 catalog rather than a filtered slice. It is **self-gating by size**: enabled by
@@ -252,8 +252,8 @@ stay cited and fail-open either way.
 
 As a catalog grows, Turing adapts before giving up on whole-catalog grounding: it
 first tries a full description-labelled row per document, and if that exceeds the
-budget it retries a **compact** projection — one lean line per row covering only
-your sortable and facet fields, no snippet or descriptions — which is roughly ten
+budget it retries a **compact** projection (one lean line per row covering only
+your sortable and facet fields, no snippet or descriptions) which is roughly ten
 times smaller, so several times more rows still fit. Only when even the compact
 whole catalog is over budget does it fall back to filtered retrieval. If you want a
 large catalog to keep answering advisory questions, raise the token budget
@@ -273,7 +273,7 @@ turing:
 
 ## Indexing large catalogs (performance)
 
-A structured catalog can be big — hundreds or thousands of rows. Turing indexes a
+A structured catalog can be big: hundreds or thousands of rows. Turing indexes a
 catalog-scale import in a **single bulk pass** rather than one document at a time,
 so a large feed lands fast. This is automatic and needs no configuration: when a
 batch of records arrives, they are grouped and written to the search engine in one
@@ -285,7 +285,7 @@ back to one-document-at-a-time automatically, so robustness is unchanged.
 ### Chunking the scheduled feed
 
 When you use the scheduled JSON-feed ingester (`turing.genai.structured-feed`), a
-large feed is split into **bounded chunks** — each chunk is imported and committed
+large feed is split into **bounded chunks**: each chunk is imported and committed
 on its own, with per-chunk progress in the logs, and one failing chunk never aborts
 the rest. Tune the chunk size for very large feeds:
 
@@ -302,7 +302,7 @@ so chunking never changes which stale rows are reconciled.
 ### Direct bulk-index fast path (advanced, opt-in)
 
 For a **very large reindex of a Vectorless site**, the asynchronous indexing queue
-buys nothing — its purpose is to offload embedding work, and a vectorless site does
+buys nothing: its purpose is to offload embedding work, and a vectorless site does
 none. An opt-in endpoint writes the documents straight to the search engine in
 bounded chunks, skipping the queue:
 
@@ -311,7 +311,7 @@ turing:
   sn:
     import:
       bulk-direct:
-        enabled: false   # default off — the ordered queue stays the default path
+        enabled: false   # default off, the ordered queue stays the default path
         batch-size: 500  # documents per direct chunk
 ```
 
@@ -320,13 +320,13 @@ POST /api/sn/import/bulk      # same TurSNJobItems body as POST /api/sn/import
 ```
 
 It is **vectorless-only**: if any target site has embeddings enabled, the request
-transparently falls back to the normal queued import — never rejected, never
+transparently falls back to the normal queued import, never rejected, never
 skipping a site's embedding. Leave it **off** unless you are reindexing a large
 vectorless catalog and have measured that the queue is the bottleneck.
 
 ## Live example
 
 The public [`openviglet/model-catalog`](https://openviglet.github.io/model-catalog/)
-is dogfooded as the first vectorless knowledge base on `turing-demo.viglet.org` —
+is dogfooded as the first vectorless knowledge base on `turing-demo.viglet.org`:
 ask it *"cheapest embedding model with ≥ 1M context?"* and it answers with linked,
 cited model rows.

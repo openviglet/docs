@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: Web Crawler Connector
-description: Crawl websites recursively — URL filtering, authentication, locale detection, and content extraction with JSoup.
+description: "Crawl websites recursively: URL filtering, authentication, locale detection, and content extraction with JSoup."
 ---
 
 # Web Crawler Connector
@@ -62,7 +62,7 @@ graph TD
 | **Visited URL tracking** | CRC32 checksums prevent re-visiting the same URL in a single crawl |
 | **Locale detection** | Extensible interface (`DumWCExtLocaleInterface`) for detecting content language |
 | **URL normalization** | Normalizes URLs to avoid duplicate crawling of the same page |
-| **Incremental indexing** | Checksum-based change detection — only re-indexes pages that changed |
+| **Incremental indexing** | Checksum-based change detection: only re-indexes pages that changed |
 
 ---
 
@@ -81,8 +81,8 @@ graph TD
 
 | Field | Description |
 |---|---|
-| **Allow URL Patterns** | Regex patterns — only URLs matching these patterns are crawled |
-| **Deny URL Patterns** | Regex patterns — URLs matching these patterns are skipped |
+| **Allow URL Patterns** | Regex patterns: only URLs matching these patterns are crawled |
+| **Deny URL Patterns** | Regex patterns: URLs matching these patterns are skipped |
 | **Allowed File Extensions** | List of file extensions to include (e.g., `.html`, `.php`, `.aspx`) |
 
 ### Attribute Mapping
@@ -135,9 +135,9 @@ If no locale extension is configured, the default locale from the source configu
 
 ## Limitations
 
-- The crawler follows **HTML links only** — it does not execute JavaScript. Single-page applications (SPAs) that render content via JavaScript are not supported without a pre-rendering solution.
-- **robots.txt** — The crawler does not currently enforce robots.txt directives. Ensure you have permission to crawl the target site.
-- **Rate limiting** — There is no built-in rate limiter. For large sites, monitor server load and consider adding delays between requests.
+- The crawler follows **HTML links only**: it does not execute JavaScript. Single-page applications (SPAs) that render content via JavaScript are not supported without a pre-rendering solution.
+- **robots.txt**: The crawler does not currently enforce robots.txt directives. Ensure you have permission to crawl the target site.
+- **Rate limiting**: There is no built-in rate limiter. For large sites, monitor server load and consider adding delays between requests.
 
 ---
 
@@ -147,7 +147,7 @@ If no locale extension is configured, the default locale from the source configu
 |---|---|
 | [Connectors Overview](./overview.md) | All available connectors |
 | [Core Concepts](../getting-started/core-concepts.md) | Pipeline, strategies, and change detection |
-| [Turing ES — Integration](/turing/integration) | How Turing ES receives content from connectors |
+| [Turing ES: Integration](/turing/integration) | How Turing ES receives content from connectors |
 
 ---
 

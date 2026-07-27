@@ -8,12 +8,12 @@ description: Headless hooks and unstyled UI components for building custom searc
 
 The **@viglet/turing-react-sdk** provides headless hooks and unstyled UI components for building custom search experiences on top of the Viglet Turing ES Semantic Navigation API.
 
-- **Headless architecture** — zero built-in styles, full render control via render props
-- **Two modes** — manual (programmatic) or URL-synced (URL as source of truth)
-- **TypeScript-first** — full type safety for all hooks, components, and API responses
+- **Headless architecture**: zero built-in styles, full render control via render props
+- **Two modes**: manual (programmatic) or URL-synced (URL as source of truth)
+- **TypeScript-first**: full type safety for all hooks, components, and API responses
 - **React 18 & 19** compatible
 
-> **Storybook** — Interactive demos and live examples at [turing.viglet.org/react-sdk](https://turing.viglet.org/react-sdk)
+> **Storybook**: Interactive demos and live examples at [turing.viglet.org/react-sdk](https://turing.viglet.org/react-sdk)
 
 ---
 
@@ -143,7 +143,7 @@ Autocomplete hook that calls the Turing `/ac` endpoint with built-in debouncing.
 
 ```tsx
 const {
-  suggestions, // string[] — completion suggestions
+  suggestions, // string[]: completion suggestions
   isLoading,   // Fetching state
   fetch,       // Trigger autocomplete (min 2 chars)
   clear,       // Clear suggestions
@@ -512,6 +512,6 @@ function SearchPage() {
 |---|---|
 | [Developer Guide](./developer-guide.md) | Dev environment, stack, contributing |
 | [Client Tools](./client-tools.md) | Live tool activity, client tools, generative UI |
-| [Reference showcase](./showcase.md) | Atlas Store — a full app built on this SDK |
+| [Reference showcase](./showcase.md) | Atlas Store: a full app built on this SDK |
 | [Chat](./chat.md) | The chat surface the hooks drive |
 | [REST API Reference](./rest-api.md) | The endpoints behind the hooks |

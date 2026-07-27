@@ -40,7 +40,7 @@ All endpoints are prefixed with `/api/v2`.
 The endpoints below are the **authoring** API (used by the admin console, with
 session + CSRF auth). To **serve published content** to a front-end, use the
 read-only, token-authenticated [Content Delivery API (CDA)](./headless/content-delivery-api.md)
-under `/api/v2/cda/**` — or the typed [`@viglet/shio-client`](./headless/javascript-client.md).
+under `/api/v2/cda/**`, or the typed [`@viglet/shio-client`](./headless/javascript-client.md).
 :::
 
 ---

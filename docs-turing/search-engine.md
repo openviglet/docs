@@ -24,7 +24,7 @@ The page displays all configured instances as a grid of cards (title and descrip
 
 | Field | Required | Description |
 |---|---|---|
-| **Title** | ✅ | Display name for this instance — shown in SN Site dropdowns |
+| **Title** | ✅ | Display name for this instance: shown in SN Site dropdowns |
 | **Description** | | Free-text notes about this instance |
 
 ### Connection Settings
@@ -56,7 +56,7 @@ Editing form for all fields listed above, plus a **Delete instance** button. An 
 
 ### Cores (Collections)
 
-Manages the search indices — called **cores** in Solr terminology — within this search engine instance. Each Semantic Navigation Site locale maps to one core.
+Manages the search indices (called **cores** in Solr terminology) within this search engine instance. Each Semantic Navigation Site locale maps to one core.
 
 #### Core Listing
 
@@ -74,7 +74,7 @@ Cores are grouped by locale pattern: `{base}_{lang}_{COUNTRY}` (e.g., `product-d
 
 | Action | Description |
 |---|---|
-| **Delete core** | Permanently removes the core and all its indexed data. **Blocked** if the core is in use by any SN Site — the UI shows which sites and locales are preventing deletion. |
+| **Delete core** | Permanently removes the core and all its indexed data. **Blocked** if the core is in use by any SN Site, the UI shows which sites and locales are preventing deletion. |
 | **Clear documents** | Erases all indexed documents from the core without removing the core itself. Useful for a clean re-index without reconfiguring site associations. |
 
 #### Create a New Core
@@ -83,7 +83,7 @@ Cores are grouped by locale pattern: `{base}_{lang}_{COUNTRY}` (e.g., `product-d
 |---|---|---|
 | **Name / Name Prefix** | ✅ | Core name or prefix |
 | **Locale** | ✅ | Language and country (e.g., `en_US`, `pt_BR`) |
-| **Append locale to name** | | Toggle — when enabled, the locale is automatically appended to the prefix, generating the canonical name (e.g., prefix `my-site` + locale `en_US` → `my-site_en_US`) |
+| **Append locale to name** | | Toggle: when enabled, the locale is automatically appended to the prefix, generating the canonical name (e.g., prefix `my-site` + locale `en_US` → `my-site_en_US`) |
 
 A **name preview** shows the final core name as you type, before saving.
 
@@ -99,7 +99,7 @@ Live monitoring panel for the connected backend:
 
 | Item | Description |
 |---|---|
-| **Status badge** | `UP` (green) or `DOWN` (red) — real-time connectivity check |
+| **Status badge** | `UP` (green) or `DOWN` (red): real-time connectivity check |
 | **Engine version** | Solr or Elasticsearch version string |
 | **Lucene version** | Underlying Lucene library version |
 | **Operating system** | OS name and version of the engine host |
@@ -113,7 +113,7 @@ Live monitoring panel for the connected backend:
 
 Turing ES uses a plugin architecture to support multiple search backends behind a unified interface. The active plugin is resolved at runtime based on the vendor configured per instance. If a vendor is unrecognised, the factory falls back to Solr.
 
-For the full interface reference — all methods across search, index management, schema management, and document operations — and instructions on implementing a new backend, see [Developer Guide → Search Engine Plugin Architecture](./developer-guide.md#search-engine-plugin-architecture).
+For the full interface reference (all methods across search, index management, schema management, and document operations) and instructions on implementing a new backend, see [Developer Guide → Search Engine Plugin Architecture](./developer-guide.md#search-engine-plugin-architecture).
 
 ---
 
@@ -121,8 +121,8 @@ For the full interface reference — all methods across search, index management
 
 | Scenario | Behaviour |
 |---|---|
-| **Delete core in use** | Blocked — the UI displays a list of SN Sites and locales currently using the core |
-| **Delete instance in use** | Should be avoided — removing an instance with active sites will break indexing and search for those sites |
+| **Delete core in use** | Blocked: the UI displays a list of SN Sites and locales currently using the core |
+| **Delete instance in use** | Should be avoided: removing an instance with active sites will break indexing and search for those sites |
 
 Repository-level **caching** is enabled for search engine instances to avoid repeated database reads during high-frequency searches.
 

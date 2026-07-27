@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: Installation Guide
-description: Install and configure Viglet Dumont DEP — connector JAR, connector plugins, classpath configuration, and service setup.
+description: "Install and configure Viglet Dumont DEP: connector JAR, connector plugins, classpath configuration, and service setup."
 ---
 
 # Viglet Dumont DEP: Installation Guide
 
-Viglet Dumont DEP is an open-source data extraction platform that connects content sources to search engines. The connector application (`dumont-connector.jar`) provides the pipeline infrastructure — message queue, batch processing, strategies, and indexing plugins — while **connector plugins** (AEM, Web Crawler) provide the actual content extraction capabilities.
+Viglet Dumont DEP is an open-source data extraction platform that connects content sources to search engines. The connector application (`dumont-connector.jar`) provides the pipeline infrastructure (message queue, batch processing, strategies, and indexing plugins) while **connector plugins** (AEM, Web Crawler) provide the actual content extraction capabilities.
 
 :::warning The connector JAR alone does not crawl content
 `dumont-connector.jar` is the pipeline engine. To actually extract content from sources, you must add a **connector plugin JAR** (AEM or Web Crawler) to the classpath via `-Dloader.path`. Without a plugin, the connector has no data source to crawl.
@@ -24,7 +24,7 @@ dumont-connector.jar          ← Pipeline engine (queue, strategies, indexing)
        └── my-custom-plugin.jar    ← Your custom extensions (optional)
 ```
 
-The connector JAR is built with Spring Boot's **ZIP layout** (PropertiesLauncher), which allows loading additional JARs from external directories at runtime. When you pass `-Dloader.path=libs`, Spring Boot scans the `libs/` directory and adds all JARs to the application classpath — making the connector plugins available to the pipeline.
+The connector JAR is built with Spring Boot's **ZIP layout** (PropertiesLauncher), which allows loading additional JARs from external directories at runtime. When you pass `-Dloader.path=libs`, Spring Boot scans the `libs/` directory and adds all JARs to the application classpath, making the connector plugins available to the pipeline.
 
 ---
 
@@ -54,7 +54,7 @@ In addition:
 
 ## Installing Dumont DEP
 
-### Option 1 — Docker (fastest)
+### Option 1: Docker (fastest)
 
 Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) by the **Publish Docker Image** GitHub Action:
 
@@ -67,7 +67,7 @@ docker run -p 30130:30130 ghcr.io/openviglet/dumont-ce:latest
 Besides `latest`, every run also publishes the project version and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
 :::
 
-### Option 2 — Download JARs
+### Option 2: Download JARs
 
 Download `dumont-connector.jar` and the connector plugin JARs from the [releases page](https://github.com/openviglet/dumont-ce/releases):
 
@@ -82,7 +82,7 @@ cp aem-plugin.jar /appl/viglet/dumont/server/libs/
 cp web-crawler-plugin.jar /appl/viglet/dumont/server/libs/
 ```
 
-### Option 3 — Build from source
+### Option 3: Build from source
 
 ```bash
 git clone https://github.com/openviglet/dumont-ce.git
@@ -123,7 +123,7 @@ java -Dloader.path=libs \
 ```
 
 :::note One connector plugin per JVM
-Currently, only **one connector plugin** can be active per JVM instance. To run both AEM and Web Crawler, start two separate instances of `dumont-connector.jar` — each with its own `libs/` directory containing the appropriate plugin, and each on a different port.
+Currently, only **one connector plugin** can be active per JVM instance. To run both AEM and Web Crawler, start two separate instances of `dumont-connector.jar`, each with its own `libs/` directory containing the appropriate plugin, and each on a different port.
 :::
 
 ### With Custom AEM Extensions
@@ -153,7 +153,7 @@ You can point to a directory or a specific JAR: `-Dloader.path=libs` or `-Dloade
 
 By default, Dumont DEP uses **H2** as its embedded database for tracking indexing state. For production, replace with PostgreSQL.
 
-### H2 (default — development only)
+### H2 (default: development only)
 
 No configuration needed. The database is created automatically at `./store/db/dumontDB`.
 
@@ -257,7 +257,7 @@ systemctl start dumont-aem.service
 
 ### Running Multiple Connectors
 
-Since only one connector plugin is supported per JVM, run separate services for each connector — each with its own directory, config, and port:
+Since only one connector plugin is supported per JVM, run separate services for each connector, each with its own directory, config, and port:
 
 ```
 /appl/viglet/dumont/
@@ -279,7 +279,7 @@ Create a separate systemd service for each (e.g., `dumont-aem.service`, `dumont-
 
 ## Standalone Connectors (Database & FileSystem)
 
-The **Database** and **FileSystem** connectors are **standalone CLI tools** — they do not run as plugins inside the connector application. Instead, they connect to a running Dumont DEP instance via its REST API.
+The **Database** and **FileSystem** connectors are **standalone CLI tools**: they do not run as plugins inside the connector application. Instead, they connect to a running Dumont DEP instance via its REST API.
 
 ### Database Connector
 

@@ -1,11 +1,11 @@
-# Turing ES — Documentation Update Plan (RETIRED)
+# Turing ES: Documentation Update Plan (RETIRED)
 
-> **Working/planning artifact — not a published page.** The leading `_` keeps
+> **Working/planning artifact, not a published page.** The leading `_` keeps
 > Docusaurus from including this file in the build or sidebar.
 
 ---
 
-## Retired — 2026-06-30
+## Retired: 2026-06-30
 
 This planning document has been **retired**. It scoped the **first** documentation
 round, **Block U** (T411–T423, parity through T410), which shipped, and was

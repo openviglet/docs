@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: Database Connector
-description: Index content from any JDBC database — SQL queries, batch processing, multi-database support, and standalone CLI mode.
+description: "Index content from any JDBC database: SQL queries, batch processing, multi-database support, and standalone CLI mode."
 ---
 
 # Database Connector
@@ -50,7 +50,7 @@ graph TD
 | Feature | Description |
 |---|---|
 | **Any JDBC database** | Oracle, PostgreSQL, MariaDB, MySQL, and any JDBC-compatible source |
-| **SQL flexibility** | Use any SELECT query — joins, aggregations, subqueries, functions |
+| **SQL flexibility** | Use any SELECT query: joins, aggregations, subqueries, functions |
 | **External SQL files** | Load queries from files using the `file://` protocol |
 | **Batch processing** | Configurable chunk size for memory-efficient processing |
 | **Max content size** | Limits per-document content size (default: 5 MB) to prevent oversized documents |
@@ -66,12 +66,12 @@ The standalone Database Connector accepts the following command-line parameters:
 
 | Parameter | Required | Default | Description |
 |---|---|---|---|
-| `--driver` | Yes | — | JDBC driver class name |
-| `--connect` | Yes | — | JDBC connection string |
-| `--query` / `-q` | Yes | — | SQL query or `file://path/to/query.sql` |
-| `--site` | Yes | — | Target Semantic Navigation Site name |
-| `--server` / `-s` | Yes | — | Dumont DEP server URL |
-| `--api-key` / `-a` | Yes | — | API key for authentication |
+| `--driver` | Yes | n/a | JDBC driver class name |
+| `--connect` | Yes | n/a | JDBC connection string |
+| `--query` / `-q` | Yes | n/a | SQL query or `file://path/to/query.sql` |
+| `--site` | Yes | n/a | Target Semantic Navigation Site name |
+| `--server` / `-s` | Yes | n/a | Dumont DEP server URL |
+| `--api-key` / `-a` | Yes | n/a | API key for authentication |
 | `--locale` | No | `en_US` | Default locale for documents |
 | `--chunk` / `-z` | No | *(varies)* | Batch size for processing |
 | `--max-content-size` | No | `5` | Maximum content size in MB |
@@ -134,7 +134,7 @@ This will:
 
 - **Use aliases** in your SQL query to match the field names expected by Turing ES (e.g., `SELECT name AS title`).
 - **External SQL files** (`file://` protocol) keep complex queries maintainable and version-controlled.
-- **De-index before importing** (`--deindex-before-importing`) is useful for full refreshes — it removes stale documents that no longer exist in the database.
+- **De-index before importing** (`--deindex-before-importing`) is useful for full refreshes: it removes stale documents that no longer exist in the database.
 - **Chunk size** affects memory usage: larger chunks are faster but use more memory. Start with 100 and adjust based on document size.
 
 ---

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 10
 title: REST API Reference
-description: Complete REST API reference for Dumont DEP — connector, monitoring, indexing rules, AEM plugin, and system information endpoints.
+description: "Complete REST API reference for Dumont DEP: connector, monitoring, indexing rules, AEM plugin, and system information endpoints."
 ---
 
 # REST API Reference
@@ -102,7 +102,7 @@ Validates content differences between the source and the search index. Used by t
 |---|---|---|
 | `source` | Path | Source name |
 
-**Response:** `DumConnectorValidateDifference` — lists missing and extra documents.
+**Response:** `DumConnectorValidateDifference`: lists missing and extra documents.
 
 ---
 
@@ -289,7 +289,7 @@ Returns `{"status": "ok"}`.
 POST /api/v2/aem/index/{source}
 ```
 
-Triggers indexing for specific AEM content paths. Includes built-in deduplication — repeated requests for the same paths within 30 seconds are ignored.
+Triggers indexing for specific AEM content paths. Includes built-in deduplication, repeated requests for the same paths within 30 seconds are ignored.
 
 | Parameter | Location | Description |
 |---|---|---|
@@ -340,7 +340,7 @@ GET /api/v2/aem/source/{id}
 POST /api/v2/aem/source
 ```
 
-**Request body:** Full `DumAemSource` JSON (see [Extending the AEM Connector — Configuration JSON](./extending-aem.md#aem-configuration-json)).
+**Request body:** Full `DumAemSource` JSON (see [Extending the AEM Connector, Configuration JSON](./extending-aem.md#aem-configuration-json)).
 
 #### Update Source
 
@@ -380,4 +380,4 @@ Returns an empty AEM source model for reference.
 |---|---|
 | [AEM Connector](./connectors/aem.md) | AEM indexing flow, event listeners, and manual triggering |
 | [Connectors Overview](./connectors/overview.md) | All connectors and how they're managed |
-| [Turing ES — Integration](/turing/integration) | Turing ES admin console for managing connectors |
+| [Turing ES: Integration](/turing/integration) | Turing ES admin console for managing connectors |

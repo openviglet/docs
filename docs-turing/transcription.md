@@ -1,7 +1,7 @@
 ---
 sidebar_position: 10
 title: Transcription
-description: Speech-to-text in Viglet Turing ES — a config-selectable, chunk-capable transcription backend (cloud OpenAI or a self-hosted OpenAI-compatible server) that powers persona-from-audio, AUDIO chat slots, and async jobs for long recordings.
+description: Speech-to-text in Viglet Turing ES, a config-selectable, chunk-capable transcription backend (cloud OpenAI or a self-hosted OpenAI-compatible server) that powers persona-from-audio, AUDIO chat slots, and async jobs for long recordings.
 ---
 
 # Transcription (Speech-to-Text)
@@ -10,13 +10,13 @@ description: Speech-to-text in Viglet Turing ES — a config-selectable, chunk-c
 
 You'd reach for this page when you want to point transcription at a specific backend (a cloud provider or a self-hosted, air-gapped server), when a recording is **larger than the provider's per-request upload limit**, or when you need to transcribe multi-hour audio without tying up a request thread.
 
-The design goal is that everything here is **opt-in**: with no `turing.transcription.*` configuration set, transcription behaves exactly as it did before — a single cloud OpenAI-compatible call using your default [LLM instance](./llm-instances.md)'s connection.
+The design goal is that everything here is **opt-in**: with no `turing.transcription.*` configuration set, transcription behaves exactly as it did before: a single cloud OpenAI-compatible call using your default [LLM instance](./llm-instances.md)'s connection.
 
 ---
 
 ## The transcription seam
 
-Transcription rides a single pluggable seam (`TurTranscriptionProvider`) so every caller — persona-from-audio, AUDIO slots, async jobs — inherits the same backend choice, chunking, and metrics for free. You choose the backend once; the rest of the platform follows.
+Transcription rides a single pluggable seam (`TurTranscriptionProvider`) so every caller (persona-from-audio, AUDIO slots, async jobs) inherits the same backend choice, chunking, and metrics for free. You choose the backend once; the rest of the platform follows.
 
 ```
 Audio ──► Chunker (splits past the per-request limit) ──► Provider ──► Transcript
@@ -29,11 +29,11 @@ Audio ──► Chunker (splits past the per-request limit) ──► Provider �
 ## From zero: turn on transcription
 
 1. Open **Administration → Settings → Global Settings**, **Transcription (Speech-to-Text)** section (Generative AI tab).
-2. Pick a **Strategy** (start with `OPENAI` — it reuses your default LLM instance's OpenAI-compatible connection, no extra setup).
+2. Pick a **Strategy** (start with `OPENAI`, it reuses your default LLM instance's OpenAI-compatible connection, no extra setup).
 3. Optionally set a dedicated **Endpoint**, **Model**, **API key** (write-only, encrypted) and **Max upload bytes** for the backend.
 4. Save, then use any transcription surface (upload to an AUDIO slot, derive a persona from audio, or submit an async job).
 
-Headless / Viglet Cloud deployments can pin the backend per container with the `turing.transcription.*` properties instead of the UI — a non-blank property **wins** over the DB Global Settings value, so the container is authoritative.
+Headless / Viglet Cloud deployments can pin the backend per container with the `turing.transcription.*` properties instead of the UI: a non-blank property **wins** over the DB Global Settings value, so the container is authoritative.
 
 ---
 
@@ -44,16 +44,16 @@ Transcription is a **selectable strategy** so you can match cost, privacy, and i
 | Strategy | What it is | Setup | Best for |
 |---|---|---|---|
 | **`OPENAI`** *(default)* | Cloud OpenAI-compatible `/audio/transcriptions` (`whisper-1`). With no dedicated config it reuses your default LLM instance's base URL + key. | Zero-config if you already run OpenAI | Managed cloud stacks |
-| **`OPENAI_COMPATIBLE`** | The **fully-local path** — a self-hosted server speaking the OpenAI transcription contract (e.g. [`faster-whisper-server`](https://github.com/fedirz/faster-whisper-server)). | Run the server, set a dedicated **Endpoint** | Cost-sensitive, on-prem, air-gapped, GPU-capable |
-| **`NONE`** | Transcription disabled. Callers fail soft with a clear message. | — | Turning the feature off |
+| **`OPENAI_COMPATIBLE`** | The **fully-local path**: a self-hosted server speaking the OpenAI transcription contract (e.g. [`faster-whisper-server`](https://github.com/fedirz/faster-whisper-server)). | Run the server, set a dedicated **Endpoint** | Cost-sensitive, on-prem, air-gapped, GPU-capable |
+| **`NONE`** | Transcription disabled. Callers fail soft with a clear message. | n/a | Turning the feature off |
 
 :::note Running fully locally
-There is **no in-process transcription engine** — a fully-local / air-gapped deployment runs `OPENAI_COMPATIBLE` against a self-hosted server (e.g. faster-whisper-server) on your own network. This keeps audio on your infrastructure while reusing the exact same, battle-tested REST path as the cloud backend.
+There is **no in-process transcription engine**: a fully-local / air-gapped deployment runs `OPENAI_COMPATIBLE` against a self-hosted server (e.g. faster-whisper-server) on your own network. This keeps audio on your infrastructure while reusing the exact same, battle-tested REST path as the cloud backend.
 :::
 
 ### Self-hosted OpenAI-compatible server
 
-`OPENAI_COMPATIBLE` points the same REST path at your own server. Any server implementing OpenAI's `POST {baseUrl}/audio/transcriptions` works — a common choice is `faster-whisper-server`:
+`OPENAI_COMPATIBLE` points the same REST path at your own server. Any server implementing OpenAI's `POST {baseUrl}/audio/transcriptions` works, a common choice is `faster-whisper-server`:
 
 ```yaml
 # docker-compose snippet
@@ -64,7 +64,7 @@ services:
       - "8000:8000"
 ```
 
-Then set the transcription **Endpoint** to `http://faster-whisper:8000/v1` (leave the API key blank — self-hosted servers usually need none; Turing omits the `Authorization` header when the key is blank). Only the URL differs from the cloud path, so it scales horizontally and can be GPU-backed.
+Then set the transcription **Endpoint** to `http://faster-whisper:8000/v1` (leave the API key blank, self-hosted servers usually need none; Turing omits the `Authorization` header when the key is blank). Only the URL differs from the cloud path, so it scales horizontally and can be GPU-backed.
 
 ---
 
@@ -100,23 +100,23 @@ curl https://your-turing/api/genai/transcription/jobs/{jobId}
 # → {"state":"SUCCEEDED","transcript":"…","language":"en", …}
 ```
 
-A job moves `QUEUED → RUNNING → SUCCEEDED | FAILED`. Work runs on a **bounded worker pool** with a bounded queue: when both are saturated, a submission is rejected with **HTTP 429** (back-pressure) rather than growing memory without limit — retry shortly. Terminal results are retained for a configurable window, then evicted. Each job reuses the same chunk-aware pipeline, so multi-hour audio just works.
+A job moves `QUEUED → RUNNING → SUCCEEDED | FAILED`. Work runs on a **bounded worker pool** with a bounded queue: when both are saturated, a submission is rejected with **HTTP 429** (back-pressure) rather than growing memory without limit: retry shortly. Terminal results are retained for a configurable window, then evicted. Each job reuses the same chunk-aware pipeline, so multi-hour audio just works.
 
 ---
 
 ## AUDIO chat slots
 
-When an [AI Agent](./ai-agents.md) has an **AUDIO** multi-modal slot, uploading a clip to it now **transcribes** the audio (through the configured backend, chunked if large) and writes the transcript into the agent's first target **text** slot — so a spoken answer becomes a filled slot value. If no transcription backend is configured, the upload falls back to Gemini native understanding (when the agent's LLM is a Gemini instance). A **VIDEO** slot continues to use Gemini understanding, which also describes the visual track.
+When an [AI Agent](./ai-agents.md) has an **AUDIO** multi-modal slot, uploading a clip to it now **transcribes** the audio (through the configured backend, chunked if large) and writes the transcript into the agent's first target **text** slot, so a spoken answer becomes a filled slot value. If no transcription backend is configured, the upload falls back to Gemini native understanding (when the agent's LLM is a Gemini instance). A **VIDEO** slot continues to use Gemini understanding, which also describes the visual track.
 
 ## Persona from audio
 
-Drafting a persona from a voice recording (`POST /api/persona/derive-from-audio`) transcribes the clip through this same seam before the LLM analyses it — so it, too, benefits from chunking and your chosen backend. See [Personas → Persona-from-audio authoring](./personas.md#persona-from-audio-authoring).
+Drafting a persona from a voice recording (`POST /api/persona/derive-from-audio`) transcribes the clip through this same seam before the LLM analyses it, so it, too, benefits from chunking and your chosen backend. See [Personas → Persona-from-audio authoring](./personas.md#persona-from-audio-authoring).
 
 ---
 
 ## Per-backend metrics
 
-`GET /api/genai/transcription/metrics` returns one row per backend that has served a transcription — **count, error rate, latency percentiles (avg / p50 / p95 / max), and total bytes** — so you can see whether the local path is fast enough or the cloud fallback is carrying the load. It's the same "which backend is the p95 outlier?" view as [tool-latency analytics](./chat-analytics.md), applied to transcription.
+`GET /api/genai/transcription/metrics` returns one row per backend that has served a transcription, **count, error rate, latency percentiles (avg / p50 / p95 / max), and total bytes**, so you can see whether the local path is fast enough or the cloud fallback is carrying the load. It's the same "which backend is the p95 outlier?" view as [tool-latency analytics](./chat-analytics.md), applied to transcription.
 
 ## Confidence fallback (local → cloud)
 
@@ -131,9 +131,9 @@ All keys live under `turing.transcription.*`. A non-blank value **wins** over th
 | Key | Default | Purpose |
 |---|---|---|
 | `type` | `OPENAI` | Backend: `OPENAI` · `OPENAI_COMPATIBLE` · `NONE`. |
-| `endpoint` | — | Dedicated OpenAI-compatible base URL (e.g. `http://faster-whisper:8000/v1`). |
+| `endpoint` | n/a | Dedicated OpenAI-compatible base URL (e.g. `http://faster-whisper:8000/v1`). |
 | `model` | `whisper-1` | Transcription model name. |
-| `api-key` | — | API key for the endpoint (blank = no `Authorization` header). |
+| `api-key` | n/a | API key for the endpoint (blank = no `Authorization` header). |
 | `max-upload-bytes` | `26214400` | Per-request upload limit (25 MiB); the chunker splits above this. |
 | `ffmpeg-path` | `ffmpeg` | `ffmpeg` executable used to split/re-encode large audio. |
 | `ffprobe-path` | `ffprobe` | `ffprobe` executable used to probe duration. |

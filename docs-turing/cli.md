@@ -1,12 +1,12 @@
 ---
 sidebar_position: 8
 title: Turing CLI
-description: "@viglet/turing-cli — the `turing` command. Scaffold an agent project, run a full local stack, deploy agents/flows/tools/skills to any environment, tail live chat events, and run YAML eval suites in CI. Zero runtime dependencies."
+description: "@viglet/turing-cli, the `turing` command. Scaffold an agent project, run a full local stack, deploy agents/flows/tools/skills to any environment, tail live chat events, and run YAML eval suites in CI. Zero runtime dependencies."
 ---
 
 # Turing CLI
 
-**`@viglet/turing-cli`** gives you the **`turing`** command — a developer CLI for building, deploying and testing Viglet Turing ES agents as **code in a Git repo** instead of clicking through the admin console. It's zero-dependency (compiled ESM, `tsc`-only) and needs a modern Node runtime (see the package's `engines`).
+**`@viglet/turing-cli`** gives you the **`turing`** command, a developer CLI for building, deploying and testing Viglet Turing ES agents as **code in a Git repo** instead of clicking through the admin console. It's zero-dependency (compiled ESM, `tsc`-only) and needs a modern Node runtime (see the package's `engines`).
 
 **When you'd reach for it.** Use the CLI when you want an **agent-as-code workflow**: keep your agent definition, chat flows, custom tools, skills and regression tests in version control; boot a local Turing stack to iterate; and `deploy` the whole thing to `local` / `staging` / `production` from a script or CI pipeline. It pairs naturally with **[`@viglet/turing-flow-dsl`](./flow-dsl.md)** (author flows as typed TypeScript that compile to the `flows/*.chat-flow.json` the CLI deploys).
 
@@ -54,10 +54,10 @@ That's the full loop: scaffold → run → deploy → test. Everything below is 
 
 | Path | Purpose |
 |---|---|
-| `agent.json` | The [AI Agent](./ai-agents.md) definition — title, system prompt, flags, native tools. |
+| `agent.json` | The [AI Agent](./ai-agents.md) definition: title, system prompt, flags, native tools. |
 | `flows/` | `*.chat-flow.json` [chat flows](./chat-flow.md). Author them with **[`@viglet/turing-flow-dsl`](./flow-dsl.md)**. |
 | `tools/` | `*.groovy` [custom-tool](./custom-tools.md) scripts (+ an optional `<name>.tool.json` sidecar for metadata). |
-| `skills/` | Anthropic-compatible [skill](./skills.md) folders — one per subdirectory, each with a `SKILL.md`. |
+| `skills/` | Anthropic-compatible [skill](./skills.md) folders, one per subdirectory, each with a `SKILL.md`. |
 | `evals/` | `*.eval.yaml` regression suites (a sample `smoke.eval.yaml` is scaffolded). |
 | `turing.config.json` | Instance URL(s) per environment + the deployed agent id. **Never secrets.** |
 | `docker-compose.dev.yml` | The local stack `turing dev` brings up. |
@@ -70,7 +70,7 @@ Connection settings resolve in this order (**last wins**): `turing.config.json` 
 
 ### `turing.config.json`
 
-Holds only **non-secret** settings — the project name, the deployed `agentId` (auto-filled after the first `deploy`), and a URL per environment:
+Holds only **non-secret** settings, the project name, the deployed `agentId` (auto-filled after the first `deploy`), and a URL per environment:
 
 ```json
 {
@@ -86,7 +86,7 @@ Holds only **non-secret** settings — the project name, the deployed `agentId` 
 
 ### Credentials
 
-Credentials are **never** written to the config file — supply them via the environment or flags. Two auth modes:
+Credentials are **never** written to the config file, supply them via the environment or flags. Two auth modes:
 
 - **Dev token (preferred for CI):** set `TURING_TOKEN` (or `--token`). Sent as the `Key:` header. No prompt.
 - **HTTP Basic (interactive):** set `TURING_USERNAME` (or `--username`); the password comes from `TURING_PASSWORD`, `--password`, or an interactive hidden prompt. Fails on a non-TTY (CI) if no password env var is set.
@@ -110,9 +110,9 @@ Under the hood the CLI primes a CSRF token (`GET /api/csrf`) and carries the ses
 
 Scaffold a new agent project directory.
 
-- `<name>` — project name (required).
-- `--dir <path>` — target directory (default `./<name>`).
-- `--force`, `-f` — overwrite an existing folder.
+- `<name>`: project name (required).
+- `--dir <path>`: target directory (default `./<name>`).
+- `--force`, `-f`: overwrite an existing folder.
 
 ```bash
 turing init my-copilot
@@ -123,9 +123,9 @@ turing init my-copilot --dir ./projects/ai --force
 
 Boot a local Turing stack via `docker compose up`. It resolves `docker-compose.yml` → `docker-compose.yaml` → `docker-compose.dev.yml` (first match wins).
 
-- `--file <compose>` — use a specific compose file.
-- `--detach`, `-d` — run in the background.
-- `--watch` — detach the stack, then **redeploy the project on file changes** (watches `agent.json`, `flows/`, `tools/`, `skills/`; 400 ms debounce; `Ctrl-C` to stop).
+- `--file <compose>`: use a specific compose file.
+- `--detach`, `-d`: run in the background.
+- `--watch`: detach the stack, then **redeploy the project on file changes** (watches `agent.json`, `flows/`, `tools/`, `skills/`; 400 ms debounce; `Ctrl-C` to stop).
 
 ```bash
 turing dev            # foreground
@@ -139,10 +139,10 @@ Push the whole project to an environment. The default env resolves `--env` → `
 
 What it deploys, and how it stays **idempotent**:
 
-- **Agent** — `POST /api/ai-agent` on first deploy, then `PUT /api/ai-agent/{id}` after. The new id is **written back to `turing.config.json`**.
-- **Flows** — every `flows/*.chat-flow.json` pushed atomically via `POST /api/ai-agent/{id}/chat-flow/import-bundle`.
-- **Custom tools** — every `tools/*.groovy` (+ optional `<name>.tool.json` sidecar); matched by title → `PUT` if it exists, else `POST`. A file `my-tool.groovy` auto-titles to *"My Tool"*.
-- **Skills** — each `skills/<name>/` folder (must contain `SKILL.md`) is zipped and uploaded to `POST /api/skill/import`.
+- **Agent**: `POST /api/ai-agent` on first deploy, then `PUT /api/ai-agent/{id}` after. The new id is **written back to `turing.config.json`**.
+- **Flows**: every `flows/*.chat-flow.json` pushed atomically via `POST /api/ai-agent/{id}/chat-flow/import-bundle`.
+- **Custom tools**: every `tools/*.groovy` (+ optional `<name>.tool.json` sidecar); matched by title → `PUT` if it exists, else `POST`. A file `my-tool.groovy` auto-titles to *"My Tool"*.
+- **Skills**: each `skills/<name>/` folder (must contain `SKILL.md`) is zipped and uploaded to `POST /api/skill/import`.
 
 ```bash
 turing deploy --env=local
@@ -171,7 +171,7 @@ fixtures:
       - assert.persona.forbidden: ["I cannot help", "I'm just an AI"]
   - id: capture-email
     steps:
-      - user: "I want the brochure — my email is ada@example.com"
+      - user: "I want the brochure: my email is ada@example.com"
       - assert.slot.email: "ada@example.com"
       - assert.tool_called: "save_lead"
 ```
@@ -187,7 +187,7 @@ fixtures:
 | `persona.required` / `persona.forbidden` | Required / forbidden phrases (case-insensitive). |
 | `node` | The flow cursor position (via `/state`). |
 
-> Related: the console has its own pre-publish [Agent Eval](./agent-eval.md) gate (golden sets + LLM judge). The CLI's YAML evals are the **code-first, CI-runnable** counterpart — the same idea, checked into your repo.
+> Related: the console has its own pre-publish [Agent Eval](./agent-eval.md) gate (golden sets + LLM judge). The CLI's YAML evals are the **code-first, CI-runnable** counterpart, the same idea, checked into your repo.
 
 #### `turing eval record <conversationId> [--out <file>]`
 
@@ -201,18 +201,18 @@ turing eval record abc-123-def-456 --out evals/from-prod.eval.yaml
 
 Run a **stored** eval dataset against a **grader stack** on the server, instead of local YAML fixtures. This is the CLI face of `POST /api/eval/run`: the dataset ([reusable datasets](./agent-eval.md)) and the grader stack both live in the Turing instance and are referenced by **id or name**, so one dataset gates any number of pipelines without checking fixtures into each repo. Omit `--stack` to use the default stack (slot / outcome / node / rubric).
 
-The command replays every dataset row against the agent (`--agent` / `TURING_AGENT_ID`), scores it with the stack, prints a per-case summary, and **exits non-zero when the gate fails**. The gate passes when every case passes and — if you set `--min-score` — the aggregate score is at least that threshold (0–1).
+The command replays every dataset row against the agent (`--agent` / `TURING_AGENT_ID`), scores it with the stack, prints a per-case summary, and **exits non-zero when the gate fails**. The gate passes when every case passes and (if you set `--min-score`) the aggregate score is at least that threshold (0–1).
 
 ```bash
 turing eval --dataset "Golden Leads" --agent abc-123 --min-score 0.8
 turing eval --dataset ds-42 --stack "Strict RAG" --env=staging
 ```
 
-The run is recorded in the agent's history and appears on the [Eval Studio](./agent-eval.md) timeline, but it never becomes the agent's pre-publish baseline — an ad-hoc dataset run can't disturb the golden-set gate.
+The run is recorded in the agent's history and appears on the [Eval Studio](./agent-eval.md) timeline, but it never becomes the agent's pre-publish baseline: an ad-hoc dataset run can't disturb the golden-set gate.
 
 ### `turing logs --conversation <id> [--slots] [connection flags]`
 
-Tail **live chat events** for a conversation over the spectator SSE stream — first a transcript snapshot, then each new turn as it happens. `--slots` also relays slot updates. `Ctrl-C` stops.
+Tail **live chat events** for a conversation over the spectator SSE stream: first a transcript snapshot, then each new turn as it happens. `--slots` also relays slot updates. `Ctrl-C` stops.
 
 ```bash
 turing logs --conversation abc-123-def-456
@@ -221,19 +221,19 @@ turing logs --conversation abc-123-def-456 --slots
 
 ### `turing migrate elasticsearch|algolia … [connection flags]`
 
-Import a source search index into a Turing **SN site** — the automated "step 2" of
+Import a source search index into a Turing **SN site**, the automated "step 2" of
 [switching from Elasticsearch or Algolia](./migration.md). Turing reads the source
 schema, derives a [field manifest](./manifest.md), provisions the site, and imports
 every record. Add `--dry-run` to preview the derived schema without changing anything.
 
 ```bash
-# Elasticsearch — URL + credentials + index only, no vendor SDK
+# Elasticsearch: URL + credentials + index only, no vendor SDK
 turing migrate elasticsearch \
   --source-url https://es.example.com:9200 \
   --source-user elastic --source-password "$ES_PASSWORD" \
   --index products --site Products --se-instance <seInstanceId> --dry-run
 
-# Algolia — schema inferred from a record sample + index settings
+# Algolia: schema inferred from a record sample + index settings
 turing migrate algolia \
   --app-id "$ALGOLIA_APP" --api-key "$ALGOLIA_KEY" \
   --index catalog --site Catalog --se-instance <seInstanceId> --use-llm
@@ -254,7 +254,7 @@ turing migrate algolia \
 Synonyms found on an Algolia index are reported so you can apply them in your target
 engine (Solr / Elasticsearch); native synonym management in Turing is on the roadmap.
 
-**Reshape fields on the way in** — a source schema is rarely 1:1 with what you want.
+**Reshape fields on the way in**: a source schema is rarely 1:1 with what you want.
 `--overrides-file` points at a JSON array that renames, retypes, drops, or defaults
 fields (applied to both the manifest and every document):
 
@@ -284,7 +284,7 @@ turing migrate compare \
 report gives, per query and in aggregate, the set overlap (Jaccard), how much of the
 source's top-N Turing reproduced (source recall), and how often the #1 result matches.
 
-### `turing research` — define, run & fetch a study
+### `turing research`: define, run & fetch a study
 
 Drive [Synthetic User Research](./personas.md#synthetic-user-research) from code or CI, mirroring `turing eval`. Subcommands take the same connection flags and resolve the instance the same way.
 
@@ -295,12 +295,12 @@ turing research insights <studyId>         # print the synthesized report
 turing research rollup <studyId> <studyId> # cross-study program rollup (PRISMA)
 ```
 
-- **`list`** — id, name, protocol, participant/interview counts, last-run.
-- **`run <studyId> [--force]`** — runs the cohort (blocking) and reports the resulting interview count. **Exits non-zero when no interview ran**, so a CI job can gate on it.
-- **`insights <studyId>`** — prints the executive summary, ranked themes (with participant counts) and recommendations; exits non-zero when the report isn't available yet.
-- **`rollup <studyId> [<studyId>…]`** — program totals + the themes that recur across the selected studies.
+- **`list`**: id, name, protocol, participant/interview counts, last-run.
+- **`run <studyId> [--force]`**: runs the cohort (blocking) and reports the resulting interview count. **Exits non-zero when no interview ran**, so a CI job can gate on it.
+- **`insights <studyId>`**: prints the executive summary, ranked themes (with participant counts) and recommendations; exits non-zero when the report isn't available yet.
+- **`rollup <studyId> [<studyId>…]`**: program totals + the themes that recur across the selected studies.
 
-The customer-facing embed SDKs (`@viglet/turing-sdk`, `@viglet/turing-react-sdk`) stay focused on search & chat — running studies is an admin/research capability, so it lives here in the CLI.
+The customer-facing embed SDKs (`@viglet/turing-sdk`, `@viglet/turing-react-sdk`) stay focused on search & chat, running studies is an admin/research capability, so it lives here in the CLI.
 
 ### `turing version` · `turing help`
 
@@ -310,7 +310,7 @@ The customer-facing embed SDKs (`@viglet/turing-sdk`, `@viglet/turing-react-sdk`
 
 ## Using it as a library
 
-The CLI's internals are also exported from `@viglet/turing-cli` so you can embed them — e.g. `TuringClient`, `resolveConnection`, `scaffoldFiles`, `deployProject`, `runSuite`/`evaluate` (with a custom `EvalBackend`), `runEval` (the programmatic `dataset × grader stack` CI gate, returning `{ gatePassed, report }`), `parseYaml`, `buildZip`. Handy for building your own tooling on the same primitives.
+The CLI's internals are also exported from `@viglet/turing-cli` so you can embed them, e.g. `TuringClient`, `resolveConnection`, `scaffoldFiles`, `deployProject`, `runSuite`/`evaluate` (with a custom `EvalBackend`), `runEval` (the programmatic `dataset × grader stack` CI gate, returning `{ gatePassed, report }`), `parseYaml`, `buildZip`. Handy for building your own tooling on the same primitives.
 
 ```ts
 import { TuringClient, runEval } from "@viglet/turing-cli";
@@ -325,9 +325,9 @@ if (!result.gatePassed) process.exit(1);
 
 ## Related pages
 
-- **[Flow DSL](./flow-dsl.md)** — author the `flows/*.chat-flow.json` the CLI deploys, as typed TypeScript.
-- **[AI Agents](./ai-agents.md)** — what `agent.json` configures.
-- **[Custom Tools](./custom-tools.md)** — the `.groovy` scripts in `tools/`.
-- **[Skills](./skills.md)** — the skill folders in `skills/`.
-- **[Agent Eval](./agent-eval.md)** — the console-side eval gate the CLI evals complement.
-- **[JavaScript SDK](./javascript-sdk.md)** · **[React SDK](./react-sdk.md)** — the runtime clients your app uses once deployed.
+- **[Flow DSL](./flow-dsl.md)**: author the `flows/*.chat-flow.json` the CLI deploys, as typed TypeScript.
+- **[AI Agents](./ai-agents.md)**: what `agent.json` configures.
+- **[Custom Tools](./custom-tools.md)**: the `.groovy` scripts in `tools/`.
+- **[Skills](./skills.md)**: the skill folders in `skills/`.
+- **[Agent Eval](./agent-eval.md)**: the console-side eval gate the CLI evals complement.
+- **[JavaScript SDK](./javascript-sdk.md)** · **[React SDK](./react-sdk.md)**: the runtime clients your app uses once deployed.

@@ -4,7 +4,7 @@ title: Architecture Overview
 description: High-level architecture, component diagram, indexing and search flows, and deployment topologies for Viglet Turing ES.
 ---
 
-# Turing ES — Architecture Overview
+# Turing ES: Architecture Overview
 
 ## Introduction
 
@@ -18,7 +18,7 @@ This document describes the system's components, internal modules, and the two c
 
 ## High-Level Component Diagram
 
-![Turing ES — High-Level Architecture](/img/diagrams/turing-architecture.svg)
+![Turing ES: High-Level Architecture](/img/diagrams/turing-architecture.svg)
 
 The architecture is organized into **four layers**: Clients & External Services at the top, an API gateway in the middle, Core Modules for business logic, and Backends & Storage at the bottom. Each layer is detailed below.
 
@@ -53,7 +53,7 @@ graph LR
 
 | Component | Description |
 |---|---|
-| **JS SDK / Java SDK** | Typed clients for search and indexing — available on npm and Maven Central |
+| **JS SDK / Java SDK** | Typed clients for search and indexing: available on npm and Maven Central |
 | **Dumont DEP** | Separate application that runs connectors and sends documents to Turing ES via REST API |
 | **Keycloak** | Optional OAuth2 / OIDC provider for production SSO |
 | **LLM Providers** | Six supported vendors: Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Gemini (OpenAI-compatible), Ollama |
@@ -121,7 +121,7 @@ graph TB
 | **LLM Providers** | `genai/provider/llm` | Pluggable provider factory: Anthropic, OpenAI, Azure OpenAI, Gemini, Gemini-OpenAI, Ollama |
 | **AI Agents** | `agent` | Composition of LLM Instance + Tools + MCP Servers into deployable assistants |
 | **Indexing Pipeline** | `indexer` | Receives documents via Artemis, applies Merge Providers, writes to Solr and embedding stores |
-| **Message Queue** | `artemis` | Apache Artemis — async communication between Dumont DEP and the indexing pipeline |
+| **Message Queue** | `artemis` | Apache Artemis: async communication between Dumont DEP and the indexing pipeline |
 | **OCR** | `ocr` | Text extraction from PDFs, Word documents, and images via Apache Tika |
 | **Persistence** | `persistence` | JPA entities, repositories, DTOs, and MapStruct mappers for all domain objects |
 
@@ -150,10 +150,10 @@ graph LR
 | Backend | Purpose | Notes |
 |---|---|---|
 | **Apache Solr** | Primary search index | SolrCloud mode with Zookeeper in production |
-| **Embedding Stores** | Vector storage for RAG | One active per deployment — [details](./embedding-stores.md) |
+| **Embedding Stores** | Vector storage for RAG | One active per deployment: [details](./embedding-stores.md) |
 | **Database** | Configuration, metadata, spotlights | H2 for dev; MariaDB/MySQL for production |
 | **MinIO** | Asset/file object storage | Managed via admin console [Assets](./assets.md) file manager |
-| **MongoDB** | Application log persistence | Optional — custom Logback appender, browsable in admin console |
+| **MongoDB** | Application log persistence | Optional: custom Logback appender, browsable in admin console |
 | **MongoDB / Redis (Chat Analytics)** | Chat session metadata + AI enrichment | Optional, engine-agnostic via `turing.logging.engine`; powers [Chat Analytics](./chat-analytics.md) |
 
 ---
@@ -186,7 +186,7 @@ graph LR
 | **Prometheus** | Time-series scrape & store | `containers/prometheus/prometheus.yml` is the local-dev config |
 | **Grafana** | Dashboards over metrics + Chat Analytics | Provisioning under `containers/grafana/` |
 
-The Chat Analytics dashboard reads from Turing ES's REST API (engine-agnostic JSON over HTTP) via the **Infinity datasource** — independent of Prometheus. See [Observability](./observability.md) for full coverage.
+The Chat Analytics dashboard reads from Turing ES's REST API (engine-agnostic JSON over HTTP) via the **Infinity datasource**: independent of Prometheus. See [Observability](./observability.md) for full coverage.
 
 ---
 
@@ -196,25 +196,25 @@ Content ingestion is handled externally by **Viglet Dumont DEP**. Each connector
 
 The **Semantic Navigation Site** is the central configuration artifact that drives the entire indexing behavior: it defines which Solr instance to use, which fields the documents carry, how those fields are mapped and used (title, text, URL, date, image, facets, etc.), how search will behave, and which spotlights are configured. The indexing pipeline reads this configuration to know exactly what to do with each incoming document.
 
-![Turing ES — Indexing Flow](/img/diagrams/turing-indexing-flow.svg)
+![Turing ES, Indexing Flow](/img/diagrams/turing-indexing-flow.svg)
 
 ### Key indexing concepts
 
-**REST API as entry point:** Dumont DEP connectors send documents to Turing ES via REST API, not by writing directly to Solr or the queue. The API is the single integration point — it validates the request, loads the target SN Site configuration, and enqueues an indexing job via Apache Artemis for asynchronous processing.
+**REST API as entry point:** Dumont DEP connectors send documents to Turing ES via REST API, not by writing directly to Solr or the queue. The API is the single integration point: it validates the request, loads the target SN Site configuration, and enqueues an indexing job via Apache Artemis for asynchronous processing.
 
 **SN Site as the indexing blueprint:** Every indexing job is bound to a Semantic Navigation Site. The site configuration defines the complete indexing contract: which Solr collection to write to, which document fields exist and how they are typed, which fields become facets, how highlighting and autocomplete will work, and which spotlights are active. The pipeline reads this configuration at job execution time to determine field mappings, facet assignments, and spotlight handling.
 
-**Spotlight persistence:** When an incoming document matches a configured Spotlight — for example, its URL or ID matches a spotlight term — the pipeline indexes the document in Solr normally and also persists the spotlight content (title, description, URL, position) in the relational database. This ensures the spotlight data remains available for injection even if the document is later removed from the Solr index.
+**Spotlight persistence:** When an incoming document matches a configured Spotlight (for example, its URL or ID matches a spotlight term) the pipeline indexes the document in Solr normally and also persists the spotlight content (title, description, URL, position) in the relational database. This ensures the spotlight data remains available for injection even if the document is later removed from the Solr index.
 
 **Viglet Dumont DEP:** The connector system that feeds Turing ES. It runs as a separate application and manages its own connector lifecycle (schedules, credentials, field mappings). Connectors currently available in Dumont DEP include WebCrawler (Nutch-based), Database, FileSystem, AEM, and WordPress. Refer to the Dumont DEP documentation for connector configuration.
 
-**Merge Providers:** When two Dumont DEP connectors independently index different representations of the same real-world document — for example, AEM indexing structured metadata from `model.json` and WebCrawler indexing the rendered HTML of the same page — the Merge Provider identifies them as the same document using a configured join key and merges their fields before writing to Solr. See [Semantic Navigation](./semantic-navigation.md) for a detailed explanation.
+**Merge Providers:** When two Dumont DEP connectors independently index different representations of the same real-world document (for example, AEM indexing structured metadata from `model.json` and WebCrawler indexing the rendered HTML of the same page) the Merge Provider identifies them as the same document using a configured join key and merges their fields before writing to Solr. See [Semantic Navigation](./semantic-navigation.md) for a detailed explanation.
 
 **Embedding stores:** If Generative AI is enabled for an SN Site, a vector embedding is generated for each indexed document and written to the configured embedding store. Turing ES supports three embedding backends via Spring AI: **ChromaDB**, **PgVector** (PostgreSQL extension), and **Milvus**. Only one is active per deployment. The default embedding store and embedding model are defined globally in **Administration → Settings**.
 
 **MinIO asset indexing:** Turing ES includes an **[Assets](./assets.md)** file manager in the admin console, backed by MinIO as the object storage layer. Files are uploaded via drag-and-drop, organized into folders, and automatically indexed as vector embeddings on upload (and unindexed on deletion). A batch "Train AI with Assets" operation processes all files using Apache Tika for text extraction, chunking at 1,024 characters, and storing embeddings in the active vector store.
 
-**Application logs in MongoDB:** When MongoDB is configured, Turing ES ships with a custom Logback appender that extends `ch.qos.logback`. Every log entry generated by the application — including indexing events, search requests, errors, and system events — is persisted to MongoDB in addition to standard output. These logs are exposed in the admin console, giving administrators full visibility into application behavior without requiring access to the server file system or a separate log management tool.
+**Application logs in MongoDB:** When MongoDB is configured, Turing ES ships with a custom Logback appender that extends `ch.qos.logback`. Every log entry generated by the application (including indexing events, search requests, errors, and system events) is persisted to MongoDB in addition to standard output. These logs are exposed in the admin console, giving administrators full visibility into application behavior without requiring access to the server file system or a separate log management tool.
 
 ---
 
@@ -222,7 +222,7 @@ The **Semantic Navigation Site** is the central configuration artifact that driv
 
 The search flow is synchronous and request-driven. Every request goes through a structured pipeline before a response is returned to the client.
 
-![Turing ES — Search Flow](/img/diagrams/turing-search-flow.svg)
+![Turing ES: Search Flow](/img/diagrams/turing-search-flow.svg)
 
 ### Key search concepts
 
@@ -259,7 +259,7 @@ The search flow is synchronous and request-driven. Every request goes through a 
 | **Load Balancer** | Apache HTTP Server | Optional; required for high-availability cluster deployments |
 | **Connector System** | Viglet Dumont DEP | Separate application; sends documents to Turing ES via REST API, which queues them internally to Artemis |
 | **Build System** | Apache Maven | Multi-module project |
-| **Frontend** | React + TypeScript + shadcn/ui + Vite | Admin console (`turing-react`) — includes SN configuration, [Assets](./assets.md) manager, [Chat](./chat.md) interface, [Token Usage](./token-usage.md) dashboard |
+| **Frontend** | React + TypeScript + shadcn/ui + Vite | Admin console (`turing-react`): includes SN configuration, [Assets](./assets.md) manager, [Chat](./chat.md) interface, [Token Usage](./token-usage.md) dashboard |
 | **Containerization** | Docker / Docker Compose | Available in `containers/` directory |
 | **Orchestration** | Kubernetes | Manifests available in `k8s/` directory |
 | **API Protocols** | REST + GraphQL | Swagger UI available in development mode |
@@ -270,7 +270,7 @@ The search flow is synchronous and request-driven. Every request goes through a 
 
 ## Deployment Topologies
 
-Turing ES supports several deployment configurations. Each builds on the previous one — start with what you need and add components as requirements grow.
+Turing ES supports several deployment configurations. Each builds on the previous one: start with what you need and add components as requirements grow.
 
 ### Development
 
@@ -310,7 +310,7 @@ Keycloak handles authentication via OAuth2 / OpenID Connect. Users log in throug
 
 ### Production with Log UI
 
-For environments where administrators need visibility into application behavior directly from the Turing ES admin console — without access to server logs or external log tools.
+For environments where administrators need visibility into application behavior directly from the Turing ES admin console, without access to server logs or external log tools.
 
 ```
 Turing ES + Apache Solr + Zookeeper + MariaDB / MySQL + MongoDB
@@ -346,8 +346,8 @@ Multiple Turing ES instances run behind Apache HTTP Server configured as a rever
 | [Installation Guide](./installation-guide.md) | Setup with Docker, JAR, or build from source |
 | [Configuration Reference](./configuration-reference.md) | All application.yaml properties |
 | [Integration](./integration.md) | Manage content connectors in the admin console |
-| [Dumont DEP — Architecture](/dumont/architecture) | Connector-side architecture — pipeline engine, message queue, and indexing plugins |
-| [Dumont DEP — Connectors](/dumont/connectors/overview) | Available connectors and deployment types |
+| [Dumont DEP: Architecture](/dumont/architecture) | Connector-side architecture: pipeline engine, message queue, and indexing plugins |
+| [Dumont DEP: Connectors](/dumont/connectors/overview) | Available connectors and deployment types |
 
 ---
 

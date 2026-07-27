@@ -88,7 +88,7 @@ export default function TOC({ className, ...props }: Props): ReactNode {
 
   return (
     <div className={clsx(styles.tocWrapper, collapsed && styles.tocWrapperCollapsed)}>
-      {/* Toggle button — always visible on the left edge */}
+      {/* Toggle button, always visible on the left edge */}
       <button
         type="button"
         className={styles.tocCollapseBtn}
@@ -100,7 +100,7 @@ export default function TOC({ className, ...props }: Props): ReactNode {
         <ToggleArrow collapsed={collapsed} />
       </button>
 
-      {/* Panel content — slides out to the right when collapsed */}
+      {/* Panel content: slides out to the right when collapsed */}
       <div className={clsx(styles.tocPanel, collapsed && styles.tocPanelCollapsed)}>
         <div
           className={clsx(styles.tableOfContents, "thin-scrollbar", className)}

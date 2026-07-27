@@ -19,10 +19,10 @@ http://localhost:2710/graphiql
 ```
 
 The console provides:
-- **Schema explorer** — browse available types and fields
-- **Auto-complete** — type-ahead suggestions for queries
-- **Query history** — review and re-run previous queries
-- **Documentation** — inline documentation for all types
+- **Schema explorer**: browse available types and fields
+- **Auto-complete**: type-ahead suggestions for queries
+- **Query history**: review and re-run previous queries
+- **Documentation**: inline documentation for all types
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
 title: FileSystem Connector
-description: Index files from local and network directories — text extraction with Apache Tika, OCR, metadata mapping, and standalone CLI mode.
+description: "Index files from local and network directories: text extraction with Apache Tika, OCR, metadata mapping, and standalone CLI mode."
 ---
 
 # FileSystem Connector
@@ -82,17 +82,17 @@ Files that Tika cannot extract text from are silently skipped.
 
 | Parameter | Required | Default | Description |
 |---|---|---|---|
-| `--source-dir` / `-d` | Yes | — | Root directory to scan |
-| `--server` / `-s` | Yes | — | Dumont DEP server URL |
-| `--api-key` / `-a` | Yes | — | API key for authentication |
-| `--site` | Yes | — | Target Semantic Navigation Site name |
+| `--source-dir` / `-d` | Yes | n/a | Root directory to scan |
+| `--server` / `-s` | Yes | n/a | Dumont DEP server URL |
+| `--api-key` / `-a` | Yes | n/a | API key for authentication |
+| `--site` | Yes | n/a | Target Semantic Navigation Site name |
 | `--type` / `-t` | No | `Static File` | Content type label for all documents |
 | `--locale` | No | `en_US` | Default locale |
 | `--chunk` / `-z` | No | `100` | Batch size |
-| `--file-size-field` | No | — | Field name to store file size |
-| `--file-extension-field` | No | — | Field name to store file extension |
-| `--prefix-from-replace` | No | — | Path prefix to replace (e.g., `/mnt/docs`) |
-| `--prefix-to-replace` | No | — | Replacement prefix (e.g., `https://docs.example.com`) |
+| `--file-size-field` | No | n/a | Field name to store file size |
+| `--file-extension-field` | No | n/a | Field name to store file extension |
+| `--prefix-from-replace` | No | n/a | Path prefix to replace (e.g., `/mnt/docs`) |
+| `--prefix-to-replace` | No | n/a | Replacement prefix (e.g., `https://docs.example.com`) |
 
 ---
 

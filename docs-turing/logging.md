@@ -20,9 +20,9 @@ The logging landing page displays three cards, each linking to a dedicated log v
 
 | Category | Path | Description |
 |---|---|---|
-| **Server** | `/admin/logging/instance/server` | General application logs — startup, runtime errors, request processing, and framework messages |
-| **Indexing** | `/admin/logging/instance/indexing` | Content indexing pipeline events — tracks every document from connector receipt through queue processing to final index commit |
-| **AEM** | `/admin/logging/instance/aem` | Adobe Experience Manager connector logs — authentication, content retrieval, and AEM-specific processing |
+| **Server** | `/admin/logging/instance/server` | General application logs: startup, runtime errors, request processing, and framework messages |
+| **Indexing** | `/admin/logging/instance/indexing` | Content indexing pipeline events: tracks every document from connector receipt through queue processing to final index commit |
+| **AEM** | `/admin/logging/instance/aem` | Adobe Experience Manager connector logs: authentication, content retrieval, and AEM-specific processing |
 
 ---
 
@@ -34,7 +34,7 @@ Displays general application logs captured from the Turing ES runtime.
 
 | Filter | Description |
 |---|---|
-| Level | `INFO`, `WARN`, `ERROR`, `DEBUG`, `TRACE` — or All |
+| Level | `INFO`, `WARN`, `ERROR`, `DEBUG`, `TRACE`: or All |
 | Date From / Date To | Restrict results to a time window |
 | Search | Free-text search across log messages and stack traces |
 
@@ -44,7 +44,7 @@ Displays general application logs captured from the Turing ES runtime.
 |---|---|
 | Date | Full timestamp with relative time (e.g., "2 hours ago") |
 | Node | Cluster node name (useful in multi-node deployments) |
-| Level | Color-coded badge — blue (INFO), yellow (WARN), red (ERROR), purple (DEBUG), slate (TRACE) |
+| Level | Color-coded badge: blue (INFO), yellow (WARN), red (ERROR), purple (DEBUG), slate (TRACE) |
 | Logger | Java class that produced the log entry |
 | Message | Log message text with syntax highlighting |
 
@@ -54,7 +54,7 @@ Displays general application logs captured from the Turing ES runtime.
 
 ## Indexing Logging
 
-Tracks every document through the indexing pipeline — from connector receipt to final index commit. This is the primary troubleshooting view for content indexing issues.
+Tracks every document through the indexing pipeline, from connector receipt to final index commit. This is the primary troubleshooting view for content indexing issues.
 
 **Filters:**
 
@@ -100,7 +100,7 @@ Tracks every document through the indexing pipeline — from connector receipt t
 
 ## AEM Logging
 
-Displays logs specific to the Adobe Experience Manager integration. The filter and column layout is identical to [Server Logging](#server-logging) — level, date range, and text search are available.
+Displays logs specific to the Adobe Experience Manager integration. The filter and column layout is identical to [Server Logging](#server-logging): level, date range, and text search are available.
 
 Use this view to diagnose AEM authentication failures, content retrieval errors, or replication issues.
 
@@ -138,12 +138,12 @@ The last sync timestamp is displayed next to the refresh indicator.
 
 Log messages are rendered with syntax highlighting for:
 
-- **Severity keywords** — ERROR/FATAL (red), WARN (yellow), INFO (blue), DEBUG (purple)
-- **Spring components** — DispatcherServlet, ContextLoaderListener, Servlet, Filter (indigo)
-- **Java packages and classes** — amber italic
-- **URLs and file paths** — blue with underline
-- **IP addresses** — cyan
-- **Quoted strings** — sky blue monospace
+- **Severity keywords**: ERROR/FATAL (red), WARN (yellow), INFO (blue), DEBUG (purple)
+- **Spring components**: DispatcherServlet, ContextLoaderListener, Servlet, Filter (indigo)
+- **Java packages and classes**: amber italic
+- **URLs and file paths**: blue with underline
+- **IP addresses**: cyan
+- **Quoted strings**: sky blue monospace
 
 ---
 

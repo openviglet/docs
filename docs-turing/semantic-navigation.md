@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: Semantic Navigation
-description: Configure and manage Semantic Navigation Sites — behavior, facets, fields, targeting rules, spotlights, merge providers, and generative AI.
+description: "Configure and manage Semantic Navigation Sites: behavior, facets, fields, targeting rules, spotlights, merge providers, and generative AI."
 ---
 
 # Semantic Navigation
@@ -32,10 +32,10 @@ General identity and search engine binding for the site.
 
 | Attribute | Description |
 |---|---|
-| **Name** | Identifier for the site — used in API URLs (e.g., `/api/sn/{Name}/search`) |
+| **Name** | Identifier for the site: used in API URLs (e.g., `/api/sn/{Name}/search`) |
 | **Description** | Human-readable description shown in the console |
 | **Search Engine** | The Search Engine instance that stores and searches content for this site. See [Search Engine](./search-engine.md) |
-| **Thesaurus** | Enables thesaurus-based query expansion — matching synonyms and related terms |
+| **Thesaurus** | Enables thesaurus-based query expansion: matching synonyms and related terms |
 | **Search Template** | SPA Page used as the search interface for this site. See [Search Template](#search-template) below |
 
 #### Search Template
@@ -57,7 +57,7 @@ The **Search Template** setting allows you to assign a deployed [SPA Page](./spa
 When no template is selected (or storage is disabled), the site uses the default built-in search interface.
 
 :::tip Build with the React SDK
-Use the [Turing React SDK](./react-sdk.md) (`@viglet/turing-react-sdk`) to build custom search SPAs with hooks for search, facets, pagination, and autocomplete. Deploy the built app via Pages and assign it as the Search Template — the SPA communicates with the Turing REST API on the same origin, so no CORS configuration is needed.
+Use the [Turing React SDK](./react-sdk.md) (`@viglet/turing-react-sdk`) to build custom search SPAs with hooks for search, facets, pagination, and autocomplete. Deploy the built app via Pages and assign it as the Search Template, the SPA communicates with the Turing REST API on the same origin, so no CORS configuration is needed.
 :::
 
 :::note Storage required
@@ -106,7 +106,7 @@ Controls how the search engine processes queries and assembles results for this 
 Use **Wildcard No Results** to recover gracefully from zero-result queries.
 
 :::caution Wildcard Always reduces precision
-**Wildcard Always** appends `*` to every query term regardless of result count. This increases recall — more documents match — but significantly reduces relevance precision. Avoid using it in sites where ranking quality matters. Prefer **Wildcard No Results** as a safer fallback.
+**Wildcard Always** appends `*` to every query term regardless of result count. This increases recall (more documents match) but significantly reduces relevance precision. Avoid using it in sites where ranking quality matters. Prefer **Wildcard No Results** as a safer fallback.
 :::
 
 #### Facets
@@ -130,15 +130,15 @@ These two settings control **different levels** of the filter query. Think of a 
 
 | Facet Item Type | Filter logic | Practical effect |
 |---|---|---|
-| **OR** (recommended) | `category:"News" OR category:"Blog"` | Show documents that are News **or** Blog — **broadens** results within this facet |
-| **AND** | `category:"News" AND category:"Blog"` | Show documents that are News **and** Blog simultaneously — **narrows** results (often returns 0 results for single-value fields) |
+| **OR** (recommended) | `category:"News" OR category:"Blog"` | Show documents that are News **or** Blog: **broadens** results within this facet |
+| **AND** | `category:"News" AND category:"Blog"` | Show documents that are News **and** Blog simultaneously, **narrows** results (often returns 0 results for single-value fields) |
 
 **Facet Type** controls how the Category group and the Year group combine (they're **different facets**):
 
 | Facet Type | Filter logic | Practical effect |
 |---|---|---|
-| **AND** (recommended) | `(category filter) AND (year filter)` | Results must match **both** facets — **narrows** results progressively as more facets are selected |
-| **OR** | `(category filter) OR (year filter)` | Results can match **either** facet — **broadens** results when more facets are selected |
+| **AND** (recommended) | `(category filter) AND (year filter)` | Results must match **both** facets: **narrows** results progressively as more facets are selected |
+| **OR** | `(category filter) OR (year filter)` | Results can match **either** facet: **broadens** results when more facets are selected |
 
 ##### The four combinations
 
@@ -193,15 +193,15 @@ For most search interfaces, use **Facet Type = AND** with **Facet Item Type = OR
 
 The facet operators are resolved with a three-level priority:
 
-1. **Request-level** (highest) — the `fqOperator` and `fqItemOperator` fields in the POST body override everything
-2. **Field-level** — each field can set its own `Facet Type` and `Facet Item Type` in the Fields configuration (set to `DEFAULT` to inherit from site)
-3. **Site-level** (fallback) — the values configured here in the Behavior tab
+1. **Request-level** (highest): the `fqOperator` and `fqItemOperator` fields in the POST body override everything
+2. **Field-level**: each field can set its own `Facet Type` and `Facet Item Type` in the Fields configuration (set to `DEFAULT` to inherit from site)
+3. **Site-level** (fallback): the values configured here in the Behavior tab
 
 This allows fine-grained control: for example, the site default can be `Facet Type = AND`, while a `tags` field overrides its `Facet Item Type` to `OR` because tags are multi-valued and should always use OR logic.
 
 ##### Secondary Facets
 
-Any field configured as a facet can additionally be promoted to a **Secondary Facet** in the field's settings. Secondary facets are returned in a separate `widget.secondaryFacet` section of the search response, completely independent from the regular `widget.facet` section. This gives the front-end full control over how to render them — for example, a `content_type` field configured as a secondary facet can be rendered as navigation tabs ("All · Articles · Videos · Downloads") while the remaining facets appear as sidebar filters. The field must be a facet first; secondary facet is a promotion, not a replacement.
+Any field configured as a facet can additionally be promoted to a **Secondary Facet** in the field's settings. Secondary facets are returned in a separate `widget.secondaryFacet` section of the search response, completely independent from the regular `widget.facet` section. This gives the front-end full control over how to render them, for example, a `content_type` field configured as a secondary facet can be rendered as navigation tabs ("All · Articles · Videos · Downloads") while the remaining facets appear as sidebar filters. The field must be a facet first; secondary facet is a promotion, not a replacement.
 
 #### Highlighting
 
@@ -226,7 +226,7 @@ The HL Pre and HL Post values are injected directly around matched terms in the 
 |---|---|
 | **MLT** | Enables the More Like This feature, which finds documents semantically similar to a given result |
 
-When MLT is enabled, each search result can be expanded to show related documents — useful for discovery experiences and content recommendation.
+When MLT is enabled, each search result can be expanded to show related documents: useful for discovery experiences and content recommendation.
 
 #### Spotlight
 
@@ -272,7 +272,7 @@ Clicking a field opens its detail form:
 
 | Attribute | Description |
 |---|---|
-| **Name** | Field identifier — must match the Solr schema field name |
+| **Name** | Field identifier: must match the Solr schema field name |
 | **Description** | Purpose or contents of this field |
 | **Type** | Data type: `INT`, `LONG`, `FLOAT`, `DOUBLE`, `CURRENCY`, `STRING`, `DATE`, or `BOOL` |
 | **Multi Valued** | Whether the field holds an array of values |
@@ -286,7 +286,7 @@ Clicking a field opens its detail form:
 | **Default Value** | Value used when a document is indexed without this field |
 
 :::tip Secondary Facets
-A secondary facet is a regular facet that is additionally returned in a separate `secondaryFacet` section of the search response. This lets the front-end render it differently — for example, as horizontal tabs ("All · Articles · Videos") — while other facets appear as sidebar filters. The field must have **Facet** enabled first; **Secondary Facet** is a promotion, not a replacement.
+A secondary facet is a regular facet that is additionally returned in a separate `secondaryFacet` section of the search response. This lets the front-end render it differently, for example, as horizontal tabs ("All · Articles · Videos"), while other facets appear as sidebar filters. The field must have **Facet** enabled first; **Secondary Facet** is a promotion, not a replacement.
 :::
 
 #### Field-Level Facet Overrides
@@ -299,11 +299,11 @@ Beyond the standard settings, each field can override the site-level facet behav
 | **Facet Item Type** | Overrides the site-level operator between values within this facet (`AND` / `OR`) |
 | **Facet Range** | Enables date range faceting for this field. Instead of listing discrete values, the facet groups documents by predefined date periods: **day**, **month**, or **year** |
 
-A date field configured with **Facet Range** groups results into date period buckets rather than listing individual values. The available granularities are **day**, **month**, and **year** — selected in the field configuration. The response returns one facet item per period that has at least one matching document, each with its pre-built filter link.
+A date field configured with **Facet Range** groups results into date period buckets rather than listing individual values. The available granularities are **day**, **month**, and **year**, selected in the field configuration. The response returns one facet item per period that has at least one matching document, each with its pre-built filter link.
 
 #### Custom Facets
 
-**Custom Facets** let you define the exact items that appear in a facet, each with its own filter rule, label, and position — rather than relying on the values that happen to exist in the index. They are created from an existing field and appear automatically in the search response alongside regular facets, following the site's behavior settings.
+**Custom Facets** let you define the exact items that appear in a facet, each with its own filter rule, label, and position: rather than relying on the values that happen to exist in the index. They are created from an existing field and appear automatically in the search response alongside regular facets, following the site's behavior settings.
 
 This is useful when the raw field values are not user-friendly, when you want to group multiple values into a named bucket, or when you need range-based navigation (e.g., price ranges, date periods, score thresholds).
 
@@ -332,7 +332,7 @@ Each item in a Custom Facet is defined by an operator that generates its Solr fi
 
 **How it works**
 
-Once a Custom Facet is saved, Turing ES generates the facet items automatically on every search request. Each item appears in the `widget.facet` (or `widget.secondaryFacet`) section of the response with its pre-built filter link, exactly like a regular facet value. The front-end renders it without any special handling — Custom Facets are indistinguishable from regular facets in the response structure.
+Once a Custom Facet is saved, Turing ES generates the facet items automatically on every search request. Each item appears in the `widget.facet` (or `widget.secondaryFacet`) section of the response with its pre-built filter link, exactly like a regular facet value. The front-end renders it without any special handling: Custom Facets are indistinguishable from regular facets in the response structure.
 
 **Example: Price range facet**
 
@@ -340,12 +340,12 @@ A field `price` (numeric type) configured as a Custom Facet with four items:
 
 | Label | Operator | rangeStart | rangeEnd |
 |---|---|---|---|
-| Under $50 | `LESS_THAN` | — | 50 |
+| Under $50 | `LESS_THAN` | n/a | 50 |
 | $50 – $200 | `BETWEEN` | 50 | 200 |
 | $200 – $500 | `BETWEEN` | 200 | 500 |
-| Over $500 | `GREATER_THAN` | 500 | — |
+| Over $500 | `GREATER_THAN` | 500 | n/a |
 
-The search response returns these four items as a facet, each with a pre-built filter link — exactly like regular facet values.
+The search response returns these four items as a facet, each with a pre-built filter link, exactly like regular facet values.
 
 **Example: Score threshold facet**
 
@@ -353,9 +353,9 @@ A field `relevance_score` configured as a Custom Facet:
 
 | Label | Operator | rangeStart | rangeEnd |
 |---|---|---|---|
-| High relevance | `GREATER_THAN` | 80 | — |
+| High relevance | `GREATER_THAN` | 80 | n/a |
 | Medium relevance | `BETWEEN` | 50 | 80 |
-| Low relevance | `LESS_THAN` | — | 50 |
+| Low relevance | `LESS_THAN` | n/a | 50 |
 
 **Example: Date range facet**
 
@@ -363,12 +363,12 @@ For date fields, use `rangeStartDate` and `rangeEndDate` (Instant values) instea
 
 | Label | Operator | rangeStartDate | rangeEndDate |
 |---|---|---|---|
-| This year | `GREATER_THAN` | `2026-01-01T00:00:00Z` | — |
+| This year | `GREATER_THAN` | `2026-01-01T00:00:00Z` | n/a |
 | Last year | `BETWEEN` | `2025-01-01T00:00:00Z` | `2025-12-31T23:59:59Z` |
-| Older | `LESS_THAN` | — | `2025-01-01T00:00:00Z` |
+| Older | `LESS_THAN` | n/a | `2025-01-01T00:00:00Z` |
 
 :::note Custom Facets use explicit values, not Solr expressions
-Custom Facet items use concrete `BigDecimal` values (for numeric fields) or `Instant` timestamps (for date fields). Solr query expressions like `NOW-7DAYS` are not supported — use absolute values instead.
+Custom Facet items use concrete `BigDecimal` values (for numeric fields) or `Instant` timestamps (for date fields). Solr query expressions like `NOW-7DAYS` are not supported: use absolute values instead.
 :::
 
 ---
@@ -379,7 +379,7 @@ Merge Providers enable Turing ES to detect when two connectors have indexed the 
 
 #### What they are
 
-Merge Providers solve the problem of having two independent connectors that index different representations of the same real-world document. Without merging, the same content ends up as two separate entries in the search index — one from each connector — with incomplete information in each.
+Merge Providers solve the problem of having two independent connectors that index different representations of the same real-world document. Without merging, the same content ends up as two separate entries in the search index (one from each connector) with incomplete information in each.
 
 A classic example: an **AEM connector** indexes structured data from the CMS (`model.json`), capturing content metadata such as content type, author, tags, and structured fields. A **WebCrawler** indexes the same page as rendered HTML, capturing the full readable text. Both connectors run independently and neither has access to the data the other collects.
 
@@ -389,9 +389,9 @@ Merge Providers instruct Turing ES to detect when both connectors have indexed t
 
 A Merge Provider is configured with:
 
-1. **A join key** — a pair of fields, one from each connector, whose values identify the same document. For example, the `url` field in the AEM document equals the `id` field in the WebCrawler document.
+1. **A join key**: a pair of fields, one from each connector, whose values identify the same document. For example, the `url` field in the AEM document equals the `id` field in the WebCrawler document.
 
-2. **A set of field overwrite rules** — which fields from the source connector (the one arriving second) should overwrite fields in the destination document (the one already in the index).
+2. **A set of field overwrite rules**: which fields from the source connector (the one arriving second) should overwrite fields in the destination document (the one already in the index).
 
 When the indexing pipeline receives a document from connector B and finds that a document from connector A already exists in the index with a matching join key value, it fetches the existing document, applies the field overwrite rules, and writes the merged result back to Solr.
 
@@ -437,7 +437,7 @@ Each Merge Provider entry defines:
 | **locale** | The locale this merge provider applies to |
 | **description** | Optional description of the merge provider's purpose |
 
-Each entry has a set of **overwrittenFields** — the field names from the source that replace values in the destination document.
+Each entry has a set of **overwrittenFields**, the field names from the source that replace values in the destination document.
 
 #### Important considerations
 
@@ -455,7 +455,7 @@ The merge is triggered when the **source** connector's document arrives and a ma
 
 ### Targeting Rules
 
-Targeting Rules are a search-time personalization mechanism that filters results based on user profile attributes — group, role, segment, country, department, or any indexed field. They allow different users to see different content from the same Solr index without maintaining separate cores or running multiple queries.
+Targeting Rules are a search-time personalization mechanism that filters results based on user profile attributes: group, role, segment, country, department, or any indexed field. They allow different users to see different content from the same Solr index without maintaining separate cores or running multiple queries.
 
 **There is no admin UI for Targeting Rules.** Rules are passed by the client in the body of the `POST /api/sn/{siteName}/search` request and applied dynamically at query time. The Solr schema only needs to have the targeting attributes indexed on the documents.
 
@@ -474,7 +474,7 @@ Common use cases:
 
 Targeting Rules are sent in the POST request body (see [POST Body Parameters](./rest-api.md#post-body-parameters)). The four types differ in how values are combined across attributes:
 
-##### 1. `targetingRules` — simple list
+##### 1. `targetingRules`: simple list
 
 A flat array of `attribute:value` strings. Values for the **same attribute** are combined with **OR**; different attributes are combined with **AND**.
 
@@ -487,7 +487,7 @@ A flat array of `attribute:value` strings. Values for the **same attribute** are
 
 Result: documents where `(department=HR OR department=Finance)` AND `(clearance=confidential OR no clearance)`.
 
-##### 2. `targetingRulesWithCondition` — map with default logic
+##### 2. `targetingRulesWithCondition`: map with default logic
 
 A map of `attribute → list of values`. Behaves identically to `targetingRules` but uses a structured map format instead of a flat list. Values for the **same attribute** are combined with **OR**; different attributes are combined with **AND**.
 
@@ -501,11 +501,11 @@ A map of `attribute → list of values`. Behaves identically to `targetingRules`
 }
 ```
 
-Result: equivalent to the `targetingRules` example above — `(department=HR OR department=Finance)` AND `(clearance=confidential OR no clearance)`.
+Result: equivalent to the `targetingRules` example above: `(department=HR OR department=Finance)` AND `(clearance=confidential OR no clearance)`.
 
-##### 3. `targetingRulesWithConditionAND` — explicit AND
+##### 3. `targetingRulesWithConditionAND`: explicit AND
 
-A map of `attribute → list of values`. Every attribute group must be satisfied simultaneously — AND between groups, OR within each group.
+A map of `attribute → list of values`. Every attribute group must be satisfied simultaneously, AND between groups, OR within each group.
 
 ```json
 {
@@ -519,9 +519,9 @@ A map of `attribute → list of values`. Every attribute group must be satisfied
 
 Result: documents matching `country=BR` **AND** `language=pt` (or documents with no restrictions on either attribute).
 
-##### 4. `targetingRulesWithConditionOR` — explicit OR
+##### 4. `targetingRulesWithConditionOR`: explicit OR
 
-A map of `attribute → list of values`. Any condition is sufficient — OR across all groups.
+A map of `attribute → list of values`. Any condition is sufficient, OR across all groups.
 
 ```json
 {
@@ -533,7 +533,7 @@ A map of `attribute → list of values`. Any condition is sufficient — OR acro
 }
 ```
 
-Result: documents matching any of the conditions — `segment=premium`, `segment=gold`, or `loyalty=active`. More permissive than AND.
+Result: documents matching any of the conditions: `segment=premium`, `segment=gold`, or `loyalty=active`. More permissive than AND.
 
 #### Solr filter query generation
 
@@ -547,7 +547,7 @@ AND
 (role:editor OR (*:* NOT role:*))
 ```
 
-Each clause includes `(*:* NOT attribute:*)` — documents that are not tagged with the attribute are always included (the fallback clause). This ensures untagged, unrestricted content is always visible regardless of the active rules.
+Each clause includes `(*:* NOT attribute:*)`: documents that are not tagged with the attribute are always included (the fallback clause). This ensures untagged, unrestricted content is always visible regardless of the active rules.
 
 **OR logic** (all attribute-value pairs flattened, joined with OR):
 
@@ -569,7 +569,7 @@ Both AND and OR methods include `(*:* NOT attribute:*)` to ensure documents that
 
 #### Practical examples
 
-##### Example 1 — Corporate portal with department-scoped content
+##### Example 1: Corporate portal with department-scoped content
 
 ```json
 POST /api/sn/portal/search
@@ -581,7 +581,7 @@ POST /api/sn/portal/search
 
 Returns documents tagged for HR or Finance departments, plus all untagged public documents. A Marketing employee does not see HR-restricted content.
 
-##### Example 2 — E-commerce: country and language (AND)
+##### Example 2: E-commerce: country and language (AND)
 
 ```json
 {
@@ -597,7 +597,7 @@ Solr `fq`: `(country:BR OR (*:* NOT country:*)) AND (language:pt OR (*:* NOT lan
 
 Returns only documents for Brazil **and** in Portuguese, plus documents with no country or language restriction. A document tagged `country:US` is filtered out.
 
-##### Example 3 — Internal system with role and group (AND)
+##### Example 3: Internal system with role and group (AND)
 
 ```json
 {
@@ -613,7 +613,7 @@ Solr `fq`: `(role:admin OR role:manager OR (*:* NOT role:*)) AND (group:sales OR
 
 Documents visible to admins or managers (or no role restriction), and within the sales group (or no group restriction).
 
-##### Example 4 — Promotional content by segment (OR)
+##### Example 4: Promotional content by segment (OR)
 
 ```json
 {
@@ -625,9 +625,9 @@ Documents visible to admins or managers (or no role restriction), and within the
 }
 ```
 
-Returns documents matching any condition — premium, gold, or active loyalty. More permissive than AND; used when any segment match is sufficient.
+Returns documents matching any condition: premium, gold, or active loyalty. More permissive than AND; used when any segment match is sufficient.
 
-##### Example 5 — Intranet with access group control
+##### Example 5: Intranet with access group control
 
 ```json
 {
@@ -642,7 +642,7 @@ Returns documents accessible to IT or Security groups, AND with clearance=confid
 
 The targeting attributes must be **indexed fields** in the Solr schema and **populated at indexing time** by the Dumont DEP connector. Add the desired targeting fields to the SN Site's Fields configuration so they are included in the schema.
 
-If a document is indexed without a targeting attribute (the field is absent or empty), it is treated as unrestricted and always visible — the fallback clause ensures this.
+If a document is indexed without a targeting attribute (the field is absent or empty), it is treated as unrestricted and always visible, the fallback clause ensures this.
 
 #### Metrics
 
@@ -666,15 +666,15 @@ Spotlights are used for:
 
 Each Spotlight is associated with one or more **terms**. When a search request arrives, the system checks whether the query string contains any of the spotlight terms as a substring. The match is case-insensitive.
 
-For example, a spotlight with the term `annual report` will match the queries `annual report 2024`, `download annual report`, and `annual report Q3` — any query that contains the phrase.
+For example, a spotlight with the term `annual report` will match the queries `annual report 2024`, `download annual report`, and `annual report Q3`, any query that contains the phrase.
 
 Spotlight terms are cached in memory to avoid repeated database lookups on every search request, making the matching step fast regardless of the number of spotlights configured.
 
 #### How injection works
 
-Each document within a Spotlight has a configured **position** — the ordinal slot in the result list where it should appear. When a spotlight match is detected, the system iterates through the result list and inserts each spotlight document at its configured position, shifting organic results down.
+Each document within a Spotlight has a configured **position**, the ordinal slot in the result list where it should appear. When a spotlight match is detected, the system iterates through the result list and inserts each spotlight document at its configured position, shifting organic results down.
 
-If a spotlight references a document by its Solr ID and that document exists in the index, the full indexed document is retrieved and injected with its live metadata. If the document is not found in the index (e.g., it was deleted or not yet indexed), the system falls back to the raw content configured directly in the spotlight — a manually defined title, description, URL, and type.
+If a spotlight references a document by its Solr ID and that document exists in the index, the full indexed document is retrieved and injected with its live metadata. If the document is not found in the index (e.g., it was deleted or not yet indexed), the system falls back to the raw content configured directly in the spotlight: a manually defined title, description, URL, and type.
 
 ```
 Search request: "annual report"
@@ -708,7 +708,7 @@ A document entry within a spotlight defines:
 | Field | Description |
 |---|---|
 | **position** | The slot in the result list where this document is injected (1-based) |
-| **referenceId** | The `id` field value of the target document in the Solr index (optional — used in managed mode) |
+| **referenceId** | The `id` field value of the target document in the Solr index (optional, used in managed mode) |
 | **title** | Fallback title if the document is not found in the index |
 | **content** | Fallback description (max 2000 characters) |
 | **link** | Fallback URL |
@@ -739,7 +739,7 @@ Custom Sort allows administrators to define named, multi-level sort options beyo
 |---|---|
 | **Field** | The Solr field to sort by (selected from the site's configured fields) |
 | **Direction** | `ASC` (ascending) or `DESC` (descending) |
-| **Position** | Priority order — position 0 is the primary sort, position 1 is the first tiebreaker, and so on |
+| **Position** | Priority order: position 0 is the primary sort, position 1 is the first tiebreaker, and so on |
 
 Use the move up/down buttons to reorder levels.
 
@@ -767,7 +767,7 @@ These are always available alongside any custom sorts:
 
 #### Sort Options API
 
-The endpoint `GET /api/sn/{siteName}/search/sort-options` returns all available sort options — built-in and custom — as a list of `{value, label}` pairs. This is consumed by the [React SDK's `useTuringSortOptions`](./react-sdk.md#useturingsortoptions) hook to populate sort dropdowns in the search UI.
+The endpoint `GET /api/sn/{siteName}/search/sort-options` returns all available sort options (built-in and custom) as a list of `{value, label}` pairs. This is consumed by the [React SDK's `useTuringSortOptions`](./react-sdk.md#useturingsortoptions) hook to populate sort dropdowns in the search UI.
 
 ```json
 [
@@ -794,7 +794,7 @@ The endpoint `GET /api/sn/{siteName}/search/sort-options` returns all available 
 
 ### Search Rules
 
-Search Rules are a powerful automation mechanism that dynamically modifies search behavior based on conditions evaluated at query time. When a rule's conditions match the incoming search request, its actions are applied to the Solr query — overriding sort, adding filters, changing facets, or boosting results — all without any client-side logic.
+Search Rules are a powerful automation mechanism that dynamically modifies search behavior based on conditions evaluated at query time. When a rule's conditions match the incoming search request, its actions are applied to the Solr query (overriding sort, adding filters, changing facets, or boosting results) all without any client-side logic.
 
 Rules use **first-match semantics**: they are evaluated in position order, and only the first matching rule's actions are applied.
 
@@ -805,7 +805,7 @@ Each rule has three parts:
 | Part | Description |
 |---|---|
 | **Details** | Name, description, position (priority), and enabled/disabled toggle |
-| **Conditions** | One or more conditions grouped by parameter — all groups must match (AND between groups) |
+| **Conditions** | One or more conditions grouped by parameter: all groups must match (AND between groups) |
 | **Actions** | One or more actions applied when the rule matches |
 
 #### Conditions
@@ -887,7 +887,7 @@ Rules are evaluated **before** the Solr query is built, allowing them to modify 
 
 #### Examples
 
-##### Example 1 — Force sort for product queries
+##### Example 1: Force sort for product queries
 
 When the user searches for "cheap" or "affordable", sort by price ascending:
 
@@ -896,7 +896,7 @@ When the user searches for "cheap" or "affordable", sort by price ascending:
 | **Condition** | QUERY CONTAINS "cheap" OR QUERY CONTAINS "affordable" |
 | **Action** | SET_SORT → `price_asc` (a custom sort) |
 
-##### Example 2 — Add filters for a specific locale
+##### Example 2: Add filters for a specific locale
 
 When the locale is `pt_BR`, automatically filter to Portuguese content:
 
@@ -905,7 +905,7 @@ When the locale is `pt_BR`, automatically filter to Portuguese content:
 | **Condition** | LOCALE EQUALS "pt_BR" |
 | **Action** | ADD_FILTER_QUERY → `language:pt` |
 
-##### Example 3 — Boost featured content and limit results
+##### Example 3: Boost featured content and limit results
 
 When the query is empty (wildcard search), boost featured content and show fewer results:
 
@@ -914,7 +914,7 @@ When the query is empty (wildcard search), boost featured content and show fewer
 | **Condition** | QUERY IS_EMPTY |
 | **Actions** | SET_BOOST_QUERY → `featured:true^10`, SET_ROWS → `5` |
 
-##### Example 4 — Show specific facets for filtered searches
+##### Example 4: Show specific facets for filtered searches
 
 When the user filters by `category:electronics`, add brand and price facets:
 
@@ -974,7 +974,7 @@ A dynamic list of one or more field-value conditions. At least one condition is 
 | **Condition** | `Is` (equals) or `Is not` (not equals) |
 | **Value** | The value to compare against |
 
-Multiple conditions are combined with AND logic — all conditions must match for the boost to apply.
+Multiple conditions are combined with AND logic: all conditions must match for the boost to apply.
 
 **Ranking Weight**
 
@@ -986,7 +986,7 @@ A slider from **0** to **10** that sets the boost intensity. Higher weight cause
 
 ### AI Insights
 
-The AI Insights tab displays an AI-generated natural language summary of this SN Site — aggregating information about its configuration, fields, behavior settings, and indexed content. The summary is generated on demand and gives administrators a quick overview of what the site is configured to do, without having to navigate through all the tabs.
+The AI Insights tab displays an AI-generated natural language summary of this SN Site, aggregating information about its configuration, fields, behavior settings, and indexed content. The summary is generated on demand and gives administrators a quick overview of what the site is configured to do, without having to navigate through all the tabs.
 
 Click **Generate** to trigger the summary. The response streams in progressively as it is generated.
 
@@ -1037,9 +1037,9 @@ Saving is blocked if either variable is missing from the template.
 
 ### Skills in Semantic Navigation
 
-The AI chat experience for a site can also draw on [**Skills**](./skills.md) — portable, Anthropic-compatible capabilities (a folder of instructions, scripts, and reference docs) that run in a hardened Docker sandbox. Semantic Navigation AI chat shares the same execution path as [AI Agent](./ai-agents.md) chat, so **enabling skills on an agent automatically makes them available in Semantic Navigation mode** — no SN-specific configuration is needed. Like everywhere else, a skill always runs on the Global Settings **Default LLM**, so it behaves identically regardless of which site invokes it.
+The AI chat experience for a site can also draw on [**Skills**](./skills.md): portable, Anthropic-compatible capabilities (a folder of instructions, scripts, and reference docs) that run in a hardened Docker sandbox. Semantic Navigation AI chat shares the same execution path as [AI Agent](./ai-agents.md) chat, so **enabling skills on an agent automatically makes them available in Semantic Navigation mode**: no SN-specific configuration is needed. Like everywhere else, a skill always runs on the Global Settings **Default LLM**, so it behaves identically regardless of which site invokes it.
 
-What makes the Semantic Navigation context special is that the skill's sandbox is also handed **Turing's own search tools** — the same Semantic Navigation DSL toolset the [DSL Query](./dsl-query.md) assistant uses:
+What makes the Semantic Navigation context special is that the skill's sandbox is also handed **Turing's own search tools**, the same Semantic Navigation DSL toolset the [DSL Query](./dsl-query.md) assistant uses:
 
 | Tool | Purpose |
 |---|---|
@@ -1050,17 +1050,17 @@ What makes the Semantic Navigation context special is that the skill's sandbox i
 | `dsl_suggest` | Autocomplete / suggestion lookups |
 | `dsl_get_shards` | Inspect shard layout |
 
-This is the first place a skill can leverage *your own indexed data*: it searches the enterprise content with these standard tools (run in-process, not over the sandbox network), then bridges the results into its `/workspace` and processes them with its bundled scripts — for example, *search the catalog, then render a branded comparison sheet from the results.*
+This is the first place a skill can leverage *your own indexed data*: it searches the enterprise content with these standard tools (run in-process, not over the sandbox network), then bridges the results into its `/workspace` and processes them with its bundled scripts, for example, *search the catalog, then render a branded comparison sheet from the results.*
 
 :::note Requirements
-Skills need a [storage backend](./configuration-reference.md#storage), the [Code Interpreter](./tool-calling.md#code-interpreter--1-tool) in **DOCKER** mode, and a configured Default LLM. When any is missing the chat behaves exactly as if Skills didn't exist. See the [Skills](./skills.md) page for authoring, activation, and the sandbox model.
+Skills need a [storage backend](./configuration-reference.md#storage), the [Code Interpreter](./tool-calling.md#code-interpreter-1-tool) in **DOCKER** mode, and a configured Default LLM. When any is missing the chat behaves exactly as if Skills didn't exist. See the [Skills](./skills.md) page for authoring, activation, and the sandbox model.
 :::
 
 ---
 
 ## Search Response Structure
 
-The full search response schema — including `pagination`, `queryContext`, `results`, and the `widget` object (containing `facet`, `secondaryFacet`, `similar`, `spellCheck`, `spotlights`, `locales`, and `cleanUpFacets`) — is documented in the [REST API Reference → Search Response Structure](./rest-api.md#search-response-structure).
+The full search response schema, including `pagination`, `queryContext`, `results`, and the `widget` object (containing `facet`, `secondaryFacet`, `similar`, `spellCheck`, `spotlights`, `locales`, and `cleanUpFacets`), is documented in the [REST API Reference → Search Response Structure](./rest-api.md#search-response-structure).
 
 ---
 
@@ -1070,9 +1070,9 @@ The full search response schema — including `pagination`, `queryContext`, `res
 |---|---|
 | [REST API Reference](./rest-api.md) | Search, autocomplete, spell check, and all other API endpoints |
 | [Search Engine](./search-engine.md) | Manage the Solr/Elasticsearch/Lucene backends that SN Sites connect to |
-| [Assets](./assets.md) | Knowledge Base files for RAG — requires an embedding-capable LLM Instance |
+| [Assets](./assets.md) | Knowledge Base files for RAG: requires an embedding-capable LLM Instance |
 | [LLM Instances](./llm-instances.md) | Configure the language models used by the Generative AI tab |
-| [Skills](./skills.md) | Portable sandboxed capabilities — in SN mode they gain Turing's search tools |
+| [Skills](./skills.md) | Portable sandboxed capabilities: in SN mode they gain Turing's search tools |
 | [Chat](./chat.md) | Front-end chat interface for the Semantic Navigation tab |
 | [Architecture Overview](./architecture-overview.md) | How SN Sites fit into the overall system architecture |
 

@@ -1,14 +1,14 @@
 ---
 sidebar_position: 8
 title: JavaScript Client
-description: "@viglet/shio-client — the framework-agnostic TypeScript client for the Shio Content Delivery API."
+description: "@viglet/shio-client, the framework-agnostic TypeScript client for the Shio Content Delivery API."
 ---
 
-# JavaScript Client — `@viglet/shio-client`
+# JavaScript Client: `@viglet/shio-client`
 
 A **framework-agnostic**, **zero-dependency** TypeScript client for the
 [Content Delivery API](./content-delivery-api.md). It runs anywhere `fetch` is
-available — Node, the browser, edge runtimes, Next.js server components, Astro,
+available: Node, the browser, edge runtimes, Next.js server components, Astro,
 Vue, Svelte, or plain scripts. It is the **base** SDK; the
 [React SDK](./react-sdk.md) is one consumer of it.
 
@@ -98,5 +98,5 @@ export const shio = new ShioClient({
 
 ## Next steps
 
-- [React SDK](./react-sdk.md) — hooks and render components built on this client.
-- [Next.js Starter](./nextjs-starter.md) — a ready-made app using it.
+- [React SDK](./react-sdk.md): hooks and render components built on this client.
+- [Next.js Starter](./nextjs-starter.md): a ready-made app using it.

@@ -10,9 +10,9 @@ description: AI Agents are purpose-built specialists you compose from an LLM, to
 
 An **AI Agent** in Turing ES is the specialist you don't have to recruit, train, or replace. It's a small, named bundle of:
 
-- a **brain** — an [LLM Instance](./llm-instances.md) you've already configured,
-- a set of **hands** — [native tools](./tool-calling.md) and [MCP servers](./mcp-servers.md) that let the agent actually *do* things (search your content, fetch live data, run code),
-- a **voice** — a [Persona](./personas.md) that aligns the answers with your brand, your funnel stage, and your compliance posture.
+- a **brain**, an [LLM Instance](./llm-instances.md) you've already configured,
+- a set of **hands**: [native tools](./tool-calling.md) and [MCP servers](./mcp-servers.md) that let the agent actually *do* things (search your content, fetch live data, run code),
+- a **voice**, a [Persona](./personas.md) that aligns the answers with your brand, your funnel stage, and your compliance posture.
 
 Each agent appears as its own tab in the [Chat](./chat.md) interface. Visitors pick the specialist that matches their need; agents stay in their lane.
 
@@ -24,10 +24,10 @@ Configure agents in **Administration → AI Agents**.
 
 The word "agent" is overloaded. In Turing ES, an Agent has two non-negotiable properties:
 
-1. **It's a composition, not a model.** You're not picking a model from a marketplace and renaming it. You're combining decisions — *which* LLM, *which* tools, *which* voice — into a single, deployable unit. Change any of the three, and you've changed the agent.
-2. **It can act, not just answer.** The defining feature of an agent over a plain chatbot is its ability to call tools — search a knowledge base, look up a stock quote, run a Python script, query an MCP server. The model doesn't just generate words; it *requests an action*, Turing ES executes it, and the model reasons over the result.
+1. **It's a composition, not a model.** You're not picking a model from a marketplace and renaming it. You're combining decisions (*which* LLM, *which* tools, *which* voice) into a single, deployable unit. Change any of the three, and you've changed the agent.
+2. **It can act, not just answer.** The defining feature of an agent over a plain chatbot is its ability to call tools: search a knowledge base, look up a stock quote, run a Python script, query an MCP server. The model doesn't just generate words; it *requests an action*, Turing ES executes it, and the model reasons over the result.
 
-Together, these mean an agent is a **business process expressed as a conversation**. A user asks; the agent searches your documentation, fetches their account data, summarizes the answer, and books a follow-up — in one exchange.
+Together, these mean an agent is a **business process expressed as a conversation**. A user asks; the agent searches your documentation, fetches their account data, summarizes the answer, and books a follow-up, in one exchange.
 
 ---
 
@@ -35,14 +35,14 @@ Together, these mean an agent is a **business process expressed as a conversatio
 
 An AI Agent is built from four layers. Get all four right and the agent feels like a senior team member; get any one wrong and it feels like a generic chatbot.
 
-![AI Agent — Composition](/img/diagrams/turing-agent-composition.svg)
+![AI Agent: Composition](/img/diagrams/turing-agent-composition.svg)
 
 ### 1. Identity
 
 | Field | Description |
 |---|---|
 | **Name** | Display name shown as the tab label in the Chat interface. *"Sales Concierge"* beats *"Agent #3"*. |
-| **Avatar** | Profile image. Even a small one moves trust meters — visitors react to faces, even illustrated ones. |
+| **Avatar** | Profile image. Even a small one moves trust meters, visitors react to faces, even illustrated ones. |
 | **Description** | One-line explanation of the agent's purpose. Shown in admin lists; hints visitors what to expect. |
 | **Enabled** | Toggle to activate or hide the agent. Disabled agents do not appear in the Chat interface. |
 
@@ -61,7 +61,7 @@ See [LLM Instances](./llm-instances.md) for vendor support, default models, and 
 
 This is the largest configuration surface. Two sets of capabilities can be attached:
 
-**Native tools** — 27 first-party tools, grouped into 8 categories:
+**Native tools**, 27 first-party tools, grouped into 8 categories:
 
 | Category | Tools | When to attach |
 |---|---|---|
@@ -74,12 +74,12 @@ This is the largest configuration surface. Two sets of capabilities can be attac
 | **Date / Time** | `get_current_time` | Any agent that books, schedules, or references "now" |
 | **Code Interpreter** | `execute_python` | Data analysis, chart generation, technical agents |
 
-**MCP Servers** — external tool servers the agent can call:
+**MCP Servers**, external tool servers the agent can call:
 
 | Badge | Transport | Typical use |
 |---|---|---|
 | **HTTP** (blue) | SSE over HTTP | A REST API your team owns; a brand-context server; a CRM lookup |
-| **COMMAND** (amber) | stdio | A local script or process — useful for filesystem or shell access on the host |
+| **COMMAND** (amber) | stdio | A local script or process: useful for filesystem or shell access on the host |
 
 See [Tool Calling](./tool-calling.md) for the full native tool reference and [MCP Servers](./mcp-servers.md) for connection setup.
 
@@ -103,7 +103,7 @@ A persona is **optional**. An agent without one uses the LLM's default voice. Fo
 
 ## Default AI Agent (global fallback)
 
-One agent can be marked as the global **Default AI Agent** in Global Settings. When a Semantic Navigation site's chat is invoked but the site has **no agent of its own**, chat resolves to this default agent (using its LLM, embedding model and vector store) instead of reporting chat as disabled. This is **fail-open and gated**: it only happens when a default agent is actually configured — with none set, a site without its own agent keeps chat disabled exactly as before.
+One agent can be marked as the global **Default AI Agent** in Global Settings. When a Semantic Navigation site's chat is invoked but the site has **no agent of its own**, chat resolves to this default agent (using its LLM, embedding model and vector store) instead of reporting chat as disabled. This is **fail-open and gated**: it only happens when a default agent is actually configured, with none set, a site without its own agent keeps chat disabled exactly as before.
 
 This is what lets a search-only site (for example the zero-config public demo, whose seed is search-only) answer grounded chat without wiring a per-site agent. A site that *does* bind its own agent always uses that one; the default is only a fallback.
 
@@ -113,62 +113,62 @@ This is what lets a search-only site (for example the zero-config public demo, w
 
 When a user sends a message, this loop runs end-to-end. Understanding it is the difference between debugging "the AI gave a weird answer" in five minutes vs. five hours.
 
-![AI Agent — Execution Flow](/img/diagrams/turing-agent-flow.svg)
+![AI Agent: Execution Flow](/img/diagrams/turing-agent-flow.svg)
 
-### Step 1 — Prompt assembly
+### Step 1: Prompt assembly
 
 Turing ES builds the prompt in this exact order:
 
 1. **Persona system instruction** (if a persona is attached)
-2. **Style guidelines block** — derived from the persona's tone + verbosity + language style
+2. **Style guidelines block**: derived from the persona's tone + verbosity + language style
 3. **Mandatory / forbidden vocabulary lists** (if any)
-4. **Brand context** — fetched from the persona's MCP server, if configured
-5. **Agent system prompt** — the agent's own purpose-specific instruction
-6. **Tool definitions** — JSON schemas for every native tool and MCP tool the agent has access to
-7. **Few-shot examples** — top-K Q/A pairs retrieved by similarity from the persona's few-shot store, if configured (only on the first user turn)
-8. **Conversation history** — full message log so far
+4. **Brand context**: fetched from the persona's MCP server, if configured
+5. **Agent system prompt**: the agent's own purpose-specific instruction
+6. **Tool definitions**: JSON schemas for every native tool and MCP tool the agent has access to
+7. **Few-shot examples**: top-K Q/A pairs retrieved by similarity from the persona's few-shot store, if configured (only on the first user turn)
+8. **Conversation history**: full message log so far
 9. **Current user message**
 
 Layers 1–6 don't change per turn after the first message. Spring AI, the underlying integration, handles the assembly; you don't write any of this manually.
 
-### Step 2 — LLM inference
+### Step 2: LLM inference
 
 The assembled prompt goes to the LLM Instance the user picked. The model receives it and decides one of two things:
 
-- **Respond directly** — when the answer doesn't need any tool. Common for chit-chat, restated questions, simple factual recall.
-- **Request a tool call** — when the answer requires action. The model emits a structured request: tool name + arguments.
+- **Respond directly**: when the answer doesn't need any tool. Common for chit-chat, restated questions, simple factual recall.
+- **Request a tool call**: when the answer requires action. The model emits a structured request: tool name + arguments.
 
 This decision is the agent's "thinking step". Tool-capable models (Claude, GPT-4, Gemini) do this well; small or older models struggle and may hallucinate tool calls or skip them entirely.
 
-### Step 3 — Tool execution
+### Step 3: Tool execution
 
 If the model requested a tool, Turing ES:
 
 1. Validates the call (does the agent have access to that tool? are the arguments valid JSON?).
-2. Routes it to the correct executor — native tool implementation or MCP server.
+2. Routes it to the correct executor: native tool implementation or MCP server.
 3. Captures the result (or the error).
 4. Logs the invocation: tool name, arguments, latency, response size.
 
-### Step 4 — Multi-step reasoning
+### Step 4: Multi-step reasoning
 
 The tool result is fed back to the model, which can:
 
-- **Call another tool** — chain steps. For example: `search_knowledge_base` → `get_file_content` → `execute_python` to chart the data.
-- **Stop and answer** — synthesize the results into a final response.
+- **Call another tool**: chain steps. For example: `search_knowledge_base` → `get_file_content` → `execute_python` to chart the data.
+- **Stop and answer**: synthesize the results into a final response.
 
-This loop runs until the model decides it has enough. Spring AI's `internalToolExecutionEnabled(true)` setting handles the loop transparently — the orchestration is built in.
+This loop runs until the model decides it has enough. Spring AI's `internalToolExecutionEnabled(true)` setting handles the loop transparently: the orchestration is built in.
 
-### Step 5 — Streaming the response
+### Step 5: Streaming the response
 
-The final response streams back to the chat UI **token by token** via Server-Sent Events. The user sees the answer as it's being generated, the same way they'd watch someone typing. This isn't cosmetic — perceived latency drops by half versus waiting for a complete response.
+The final response streams back to the chat UI **token by token** via Server-Sent Events. The user sees the answer as it's being generated, the same way they'd watch someone typing. This isn't cosmetic, perceived latency drops by half versus waiting for a complete response.
 
-### Step 6 — Post-LLM persona enforcement
+### Step 6: Post-LLM persona enforcement
 
 Before the response leaves the chat executor, **`TurPersonaToneValidator`** scans it for forbidden vocabulary from the persona. Matches are masked. The user never sees them. Logs record the event so you know your prompt isn't holding in some scenarios.
 
-### Step 7 — Analytics emission
+### Step 7: Analytics emission
 
-A **chat session event** is recorded by `TurChatAnalyticsService` (turn count, token usage, agent ID, persona ID, locale, started-at, completed-at). This is the foundation for [Chat Analytics](./chat-analytics.md) — the dashboard that tells you, days later, *which agents are converting and which aren't*.
+A **chat session event** is recorded by `TurChatAnalyticsService` (turn count, token usage, agent ID, persona ID, locale, started-at, completed-at). This is the foundation for [Chat Analytics](./chat-analytics.md): the dashboard that tells you, days later, *which agents are converting and which aren't*.
 
 ---
 
@@ -183,10 +183,10 @@ For visitors who arrived from a marketing campaign and don't yet know what they 
 | Layer | Configuration |
 |---|---|
 | **Name** | Discovery Concierge |
-| **LLM** | A fast, cheap instance (Gemini Flash, GPT-4o-mini) — discovery is high-volume |
+| **LLM** | A fast, cheap instance (Gemini Flash, GPT-4o-mini), discovery is high-volume |
 | **Tools** | `search_site` (your marketing pages), `find_similar_documents` |
 | **MCP Servers** | Optional: a CRM-lookup MCP that personalizes if the user is logged in |
-| **Persona** | `top-of-funnel-sales` — EXECUTIVE tone, PERSUASIVE, verbosity 2 |
+| **Persona** | `top-of-funnel-sales`: EXECUTIVE tone, PERSUASIVE, verbosity 2 |
 | **System Prompt** | *"You greet first-time visitors. Ask one qualifying question per turn. Don't list features; ask about outcomes. After three turns, offer a 15-min call."* |
 
 **Conversion target:** **discovery → demo booking.**
@@ -198,10 +198,10 @@ For technical evaluators in active comparison.
 | Layer | Configuration |
 |---|---|
 | **Name** | Solutions Engineer |
-| **LLM** | A top-tier reasoner (Claude Sonnet, GPT-4) — evaluators ask hard questions |
+| **LLM** | A top-tier reasoner (Claude Sonnet, GPT-4): evaluators ask hard questions |
 | **Tools** | `search_knowledge_base`, `get_file_content`, `fetch_webpage`, `execute_python` |
 | **MCP Servers** | Internal API documentation MCP |
-| **Persona** | `solutions-engineer` — TECHNICAL tone, INSTRUCTIONAL, verbosity 4 |
+| **Persona** | `solutions-engineer`: TECHNICAL tone, INSTRUCTIONAL, verbosity 4 |
 | **System Prompt** | *"You answer integration and architecture questions. Lead with the architectural answer. Confirm assumptions before recommending. Cite docs when possible."* |
 
 **Conversion target:** **evaluation → technical buy-in.**
@@ -213,10 +213,10 @@ For customers who just signed up.
 | Layer | Configuration |
 |---|---|
 | **Name** | Onboarding Coach |
-| **LLM** | Mid-tier (Sonnet, GPT-4o) — needs to follow conversational state precisely |
+| **LLM** | Mid-tier (Sonnet, GPT-4o): needs to follow conversational state precisely |
 | **Tools** | `search_knowledge_base` (product docs), `get_file_content` |
 | **MCP Servers** | Optional: account-state MCP that knows where the user is in the wizard |
-| **Persona** | `onboarding-coach` — CASUAL, INSTRUCTIONAL, verbosity 3 |
+| **Persona** | `onboarding-coach`: CASUAL, INSTRUCTIONAL, verbosity 3 |
 | **System Prompt** | *"You guide brand-new users through their first day. Show one next step. Wait for confirmation. Celebrate small wins."* |
 
 **Conversion target:** **signup → activation milestone.**
@@ -228,10 +228,10 @@ For employees, on-premises, behind your firewall.
 | Layer | Configuration |
 |---|---|
 | **Name** | IT Helpdesk |
-| **LLM** | A local LLM via Ollama — keeps queries off third-party clouds |
+| **LLM** | A local LLM via Ollama: keeps queries off third-party clouds |
 | **Tools** | `search_knowledge_base` (IT runbook), `execute_python`, `get_current_time` |
 | **MCP Servers** | Internal ticketing system (stdio MCP) |
-| **Persona** | None — this one optimizes for precision, not voice |
+| **Persona** | None: this one optimizes for precision, not voice |
 | **System Prompt** | *"You answer IT questions for employees. Cite the runbook section. If the issue isn't covered, open a ticket via the MCP and reply with the ticket ID."* |
 
 **Outcome target:** **first-call resolution rate.**
@@ -247,13 +247,13 @@ The agent form is split into four tabs.
 | Field | Required | Description |
 |---|---|---|
 | **Name** | Yes | Display name shown as the tab label in the Chat interface |
-| **Avatar** | | Profile image — supports upload and removal |
+| **Avatar** | | Profile image: supports upload and removal |
 | **Description** | | Brief explanation of the agent's purpose |
 | **System Prompt** | | Instructions sent as a system message before every conversation. Defines purpose, scope, and behavior. |
-| **Persona** | | Optional [Persona](./personas.md) — overlays voice, vocabulary, brand context, and few-shot examples |
+| **Persona** | | Optional [Persona](./personas.md): overlays voice, vocabulary, brand context, and few-shot examples |
 | **Enabled** | | Toggle to activate or deactivate the agent |
-| **Submission retention** | | How long completed-conversation submissions are kept — see [Compliance & retention](#compliance--retention) |
-| **Monthly budget (USD)** | | Soft cap on the agent's monthly AI spend — see [Cost governance](./cost-governance.md). Optional `Per-turn soft cap` + `Downgrade LLM` |
+| **Submission retention** | | How long completed-conversation submissions are kept, see [Compliance & retention](#compliance--retention) |
+| **Monthly budget (USD)** | | Soft cap on the agent's monthly AI spend: see [Cost governance](./cost-governance.md). Optional `Per-turn soft cap` + `Downgrade LLM` |
 | **Disclose knowledge cutoff** | | Opt-in toggle: injects *"Your knowledge cutoff is &lt;date&gt;"* into the system prompt, using the configured model's cutoff from the public model catalog, so answers self-disclose how stale their knowledge may be. Off by default; a no-op when the catalog doesn't know the model's cutoff. |
 
 :::info Default system prompt
@@ -266,18 +266,18 @@ This is fine for prototypes. For any customer-facing agent, write a real system 
 
 ### Live Preview & prompt diagnostics
 
-The **System Prompt** page has a **Live Preview** that reverses the opaque assembled system message into labeled, color-coded segments — persona, agent prompt, MCP instructions, the active chat-flow addendum — rendered as one flowing article so you can read exactly what the model receives, top to bottom. It's also a diagnostic surface for *optimizing the turn* — what the model receives, what it costs, and what is wasted:
+The **System Prompt** page has a **Live Preview** that reverses the opaque assembled system message into labeled, color-coded segments (persona, agent prompt, MCP instructions, the active chat-flow addendum) rendered as one flowing article so you can read exactly what the model receives, top to bottom. It's also a diagnostic surface for *optimizing the turn*, what the model receives, what it costs, and what is wasted:
 
-- **Flow-aware persona.** Pick a chat flow in the preview and the persona shown is the one the flow actually resolves to — a `persona` flow node that switches the active voice is reflected (labeled *"switched by flow"*), not silently ignored. If a flow's persona node points at a persona that isn't in the agent's catalog (or is audience-only), the conflict check warns you — that's a voice that would silently fall back to the default at runtime.
+- **Flow-aware persona.** Pick a chat flow in the preview and the persona shown is the one the flow actually resolves to, a `persona` flow node that switches the active voice is reflected (labeled *"switched by flow"*), not silently ignored. If a flow's persona node points at a persona that isn't in the agent's catalog (or is audience-only), the conflict check warns you: that's a voice that would silently fall back to the default at runtime.
 - **Token accounting & cost.** A metrics strip shows the total token estimate, the **cacheable-prefix vs per-turn split** (the stable portion a provider prefix cache can reuse across turns), and each segment's token count + share of the total. When the agent's LLM instance has a configured [price](./cost-governance.md), an approximate per-turn cost is shown.
-- **"Inert this turn".** When a flow governs the turn, its addendum tells the model to ignore the agent prompt's welcome / first-interaction / routing scaffolding. The preview **dims those regions** and totals their token cost so you can see and trim the dead weight. Mark a section precisely with an author comment — `<!-- turing:concierge-only -->` (inert when a flow runs) or `<!-- turing:flow-only -->` (inert on a plain turn).
-- **Cross-segment lint.** The conflict check runs *across* segments: it flags a rule repeated in more than one place (e.g. a forbidden-vocabulary list in both the persona and the agent prompt — you pay for it twice) and a directive stated one way in one segment and contradicted in another. A deeper **LLM-powered audit** is available on demand for semantic conflicts.
+- **"Inert this turn".** When a flow governs the turn, its addendum tells the model to ignore the agent prompt's welcome / first-interaction / routing scaffolding. The preview **dims those regions** and totals their token cost so you can see and trim the dead weight. Mark a section precisely with an author comment: `<!-- turing:concierge-only -->` (inert when a flow runs) or `<!-- turing:flow-only -->` (inert on a plain turn).
+- **Cross-segment lint.** The conflict check runs *across* segments: it flags a rule repeated in more than one place (e.g. a forbidden-vocabulary list in both the persona and the agent prompt, you pay for it twice) and a directive stated one way in one segment and contradicted in another. A deeper **LLM-powered audit** is available on demand for semantic conflicts.
 - **Node picker & simulated values.** Preview any point in a conversation, not just the flow's entry: pick a flow node and supply the collected slot values, and the addendum's "Already collected" line and next-step hint reflect that real mid-conversation turn.
-- **Replay a real conversation.** Instead of *simulating* a turn, paste a **conversation id** into the "Replay a real conversation" box and the preview is rebuilt from that conversation's actual persisted state — its governing flow, cursor node, collected slots, and the persona the runtime really resolved (honouring any flow persona switch). The assembled prompt shown is exactly what the model would receive for that conversation's next turn — the ground truth for debugging a specific reply, not a synthesized turn. A **tool-call trace** below the article lists what the model actually called during that conversation (name, arguments digest, ok/error, duration), so you can read "what the prompt said" against "what the model did". (The conversation id is the value the SDK stores in the session cookie; find it on the conversation's inspector/export.)
-- **Whole message list.** Beyond the system message, a **Message list** section shows the full ordered set of messages the model receives — the assembled system message, the *history-prefix* turns the runtime prepends from memory (a compressed summary of older turns, plus the earlier turns most relevant to the current message), then the recent conversation window. Each prefix turn is labeled with its source, so you can see the entire input, not just the system prompt.
-- **Replay any *past* turn, verbatim.** Replaying a conversation (above) rebuilds the prompt from its *current* state — what the *next* turn would send. That is enough for most debugging, but by the time you inspect it the flow may have advanced, slots may have been overwritten, and memory may have been compacted, so it is not the exact prompt sent on an earlier turn. Enable **Prompt Capture (Replay)** on the agent's **Settings** tab and Turing saves the exact system message and whole-message list of every turn to object storage as it is sent. The replay bar then shows a **turn picker**: pick "Current state (reconstructed)" for the live rebuild, or any captured turn ("Turn N · timestamp") to load it **byte-for-byte** — the precise prompt the model received on that turn. Capture is off by default (it only writes when enabled), requires object storage to be configured, and is bounded automatically (a per-conversation turn limit, a per-entry size cap, and a retention window) so it can't grow without limit.
+- **Replay a real conversation.** Instead of *simulating* a turn, paste a **conversation id** into the "Replay a real conversation" box and the preview is rebuilt from that conversation's actual persisted state, its governing flow, cursor node, collected slots, and the persona the runtime really resolved (honouring any flow persona switch). The assembled prompt shown is exactly what the model would receive for that conversation's next turn, the ground truth for debugging a specific reply, not a synthesized turn. A **tool-call trace** below the article lists what the model actually called during that conversation (name, arguments digest, ok/error, duration), so you can read "what the prompt said" against "what the model did". (The conversation id is the value the SDK stores in the session cookie; find it on the conversation's inspector/export.)
+- **Whole message list.** Beyond the system message, a **Message list** section shows the full ordered set of messages the model receives: the assembled system message, the *history-prefix* turns the runtime prepends from memory (a compressed summary of older turns, plus the earlier turns most relevant to the current message), then the recent conversation window. Each prefix turn is labeled with its source, so you can see the entire input, not just the system prompt.
+- **Replay any *past* turn, verbatim.** Replaying a conversation (above) rebuilds the prompt from its *current* state: what the *next* turn would send. That is enough for most debugging, but by the time you inspect it the flow may have advanced, slots may have been overwritten, and memory may have been compacted, so it is not the exact prompt sent on an earlier turn. Enable **Prompt Capture (Replay)** on the agent's **Settings** tab and Turing saves the exact system message and whole-message list of every turn to object storage as it is sent. The replay bar then shows a **turn picker**: pick "Current state (reconstructed)" for the live rebuild, or any captured turn ("Turn N · timestamp") to load it **byte-for-byte**, the precise prompt the model received on that turn. Capture is off by default (it only writes when enabled), requires object storage to be configured, and is bounded automatically (a per-conversation turn limit, a per-entry size cap, and a retention window) so it can't grow without limit.
 
-All of these are read-only and never change the assembled prompt — the preview stays a faithful mirror of what the model receives.
+All of these are read-only and never change the assembled prompt: the preview stays a faithful mirror of what the model receives.
 
 ### LLM
 
@@ -285,7 +285,7 @@ Select one or more LLM Instances. The list shows each instance's title, descript
 
 ### Tools
 
-Select which of the **27 native tools** are available. Tools are grouped by category — each group has a select-all checkbox for quick configuration.
+Select which of the **27 native tools** are available. Tools are grouped by category: each group has a select-all checkbox for quick configuration.
 
 ### MCP Servers
 
@@ -295,7 +295,7 @@ Select which external MCP servers this agent can call. The list shows each serve
 
 ## Provider-native tools (OpenAI Responses)
 
-Turing's own tool catalog (the native tools above, plus MCP and Custom tools) works on **every** provider. Separately, when an agent runs on an OpenAI instance through the **Responses API path**, it can also use OpenAI's *server-side* built-in tools — the model runs them in OpenAI's cloud, not in Turing:
+Turing's own tool catalog (the native tools above, plus MCP and Custom tools) works on **every** provider. Separately, when an agent runs on an OpenAI instance through the **Responses API path**, it can also use OpenAI's *server-side* built-in tools, the model runs them in OpenAI's cloud, not in Turing:
 
 | Capability | Built-in tool |
 |---|---|
@@ -305,22 +305,22 @@ Turing's own tool catalog (the native tools above, plus MCP and Custom tools) wo
 | `openai-image-generation` | Inline image generation |
 | `openai-mcp` | A remote MCP connector run by OpenAI |
 
-These are governed by a **per-LLM-instance capability matrix** — each capability is switched on per instance. An **empty matrix means the unchanged Spring AI path**: nothing about the default deployment changes until you opt a capability in. **Anthropic and Gemini have their own server-side tools too** (web search, code execution, computer use, and more) — the full cross-vendor matrix and the two-level gate that governs all of them live on [Capabilities](./capabilities.md).
+These are governed by a **per-LLM-instance capability matrix**: each capability is switched on per instance. An **empty matrix means the unchanged Spring AI path**: nothing about the default deployment changes until you opt a capability in. **Anthropic and Gemini have their own server-side tools too** (web search, code execution, computer use, and more), the full cross-vendor matrix and the two-level gate that governs all of them live on [Capabilities](./capabilities.md).
 
 ---
 
 ## Reasoning, caching & background execution
 
-Beyond *what tools* an agent can call, three cross-vendor request options tune *how the turn runs* — each opt-in per instance/agent (a [Request Option](./capabilities.md#request_option-capabilities)), each fail-open to the unchanged path when off. They reach parity across OpenAI, Anthropic, and Gemini behind shared seams.
+Beyond *what tools* an agent can call, three cross-vendor request options tune *how the turn runs*, each opt-in per instance/agent (a [Request Option](./capabilities.md#request_option-capabilities)), each fail-open to the unchanged path when off. They reach parity across OpenAI, Anthropic, and Gemini behind shared seams.
 
 ### Extended thinking / reasoning budget
 
-Give the model a reasoning budget and surface its thought summary in the **"Why this answer"** panel — one contract across all three vendors:
+Give the model a reasoning budget and surface its thought summary in the **"Why this answer"** panel, one contract across all three vendors:
 
 | Vendor | How |
 |---|---|
 | **OpenAI** | `reasoning-effort` (minimal/low/medium/high) + `reasoning-summary` |
-| **Anthropic** | `anthropic-extended-thinking` — a positive `thinkingBudget` enables extended thinking (forces `temperature = 1`, as Anthropic requires); `interleavedThinking` lets Claude reason *between* tool calls in the loop |
+| **Anthropic** | `anthropic-extended-thinking`: a positive `thinkingBudget` enables extended thinking (forces `temperature = 1`, as Anthropic requires); `interleavedThinking` lets Claude reason *between* tool calls in the loop |
 | **Gemini** | `thinkingBudget` (0 disables, -1 dynamic) + thought summaries |
 
 All three harvest the thought summary onto the shared `reasoning` SSE event, so it lands in the same panel with no UI change.
@@ -332,20 +332,20 @@ The RAG cost lever: cache the stable prefix (system prompt + pinned grounding) o
 | Vendor | Mechanism |
 |---|---|
 | **Gemini** | A named, TTL'd remote `cachedContents` object (`gemini-context-cache` option), keyed so one prefix maps to one shared cache (~75% off) |
-| **Anthropic** | *Inline* `cache_control` breakpoints on the system prompt + last grounding block (`cacheControlEnabled`, TTL `5m`/`1h`) — nothing created remotely |
-| **OpenAI** | Automatic prefix caching — no opt-in needed |
+| **Anthropic** | *Inline* `cache_control` breakpoints on the system prompt + last grounding block (`cacheControlEnabled`, TTL `5m`/`1h`), nothing created remotely |
+| **OpenAI** | Automatic prefix caching: no opt-in needed |
 
 The default no-op provider returns empty, so an unconfigured vendor is byte-for-byte unchanged. Fail-open: a too-small prefix, quota, or any error → uncached turn, never a failed turn.
 
 ### Background execution (OpenAI)
 
-Long reasoning/agentic turns (deep code-interpreter or computer-use loops) no longer hold the HTTP connection open: `openai-background` submits the Responses call with `background:true` and resumes by polling until terminal — freeing the connection, not the worker. Opt-in per instance (`backgroundEnabled`, poll interval + max-wait configurable); fail-open returns the latest response so text extraction still runs.
+Long reasoning/agentic turns (deep code-interpreter or computer-use loops) no longer hold the HTTP connection open: `openai-background` submits the Responses call with `background:true` and resumes by polling until terminal, freeing the connection, not the worker. Opt-in per instance (`backgroundEnabled`, poll interval + max-wait configurable); fail-open returns the latest response so text extraction still runs.
 
 ---
 
 ## Compliance & retention
 
-A completed conversation writes a **submission** (the collected slots + outcome — see [Chat Flow](./chat-flow.md)). For LGPD/GDPR, each agent chooses how long to keep those:
+A completed conversation writes a **submission** (the collected slots + outcome, see [Chat Flow](./chat-flow.md)). For LGPD/GDPR, each agent chooses how long to keep those:
 
 | Setting | Behavior |
 |---|---|
@@ -361,8 +361,8 @@ The default preserves today's behavior; the other two are opt-in per agent. `pii
 
 Beyond the four composition layers, an agent has two optional runtime capabilities that make long, multi-step conversations work. Both are off by default and configured on the agent's **Settings** tab.
 
-- **[Chat Memory](./chat-memory.md)** — persist the conversation, surface the most relevant older turns with BM25 retrieval, and compress very long histories into a cheap summary. Turn it on for any agent that holds extended conversations where context stated early still matters later.
-- **[Agent Workspace](./agent-workspace.md)** — a per-conversation file store. Tools write drafts, reports, and charts to it; large tool results are offloaded to it automatically to keep the prompt small; the user downloads finished files from signed links. Requires a [storage backend](./configuration-reference.md#storage).
+- **[Chat Memory](./chat-memory.md)**: persist the conversation, surface the most relevant older turns with BM25 retrieval, and compress very long histories into a cheap summary. Turn it on for any agent that holds extended conversations where context stated early still matters later.
+- **[Agent Workspace](./agent-workspace.md)**: a per-conversation file store. Tools write drafts, reports, and charts to it; large tool results are offloaded to it automatically to keep the prompt small; the user downloads finished files from signed links. Requires a [storage backend](./configuration-reference.md#storage).
 
 The two interlock: memory compression stores its summaries *in* the workspace. Neither changes an agent's behaviour until you enable it.
 

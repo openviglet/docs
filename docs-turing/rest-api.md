@@ -22,7 +22,7 @@ Key: <YOUR_API_TOKEN>
 
 Create tokens in **Administration → API Tokens**. See [Authentication](./security-authentication.md) for step-by-step instructions.
 
-**Example — authenticated API call:**
+**Example, authenticated API call:**
 
 ```bash
 curl "http://localhost:2700/api/sn/Sample/search?q=cloud&_setlocale=en_US" \
@@ -46,7 +46,7 @@ Certain endpoints are publicly accessible, allowing client applications to perfo
 | `POST /graphql` | GraphQL queries |
 | `GET /api/login` | Login endpoint |
 
-All other endpoints require authentication — including the full administration API, user management, site configuration, and AI Agent management.
+All other endpoints require authentication, including the full administration API, user management, site configuration, and AI Agent management.
 
 ---
 
@@ -81,7 +81,7 @@ POST http://localhost:2700/api/sn/{siteName}/search
 | `p` | | Page number (default: `1`) |
 | `rows` | | Results per page (overrides site default) |
 | `sort` | | Sort field and direction (e.g., `date desc`) |
-| `fq[]` | | Filter query — apply a facet filter (e.g., `fq[]=type:news`) |
+| `fq[]` | | Filter query: apply a facet filter (e.g., `fq[]=type:news`) |
 | `group` | | Group results by a field value |
 
 **Example (GET):**
@@ -93,7 +93,7 @@ curl "http://localhost:2700/api/sn/Sample/search?q=enterprise+search&p=1&_setloc
 
 #### Search Response Structure
 
-The search response is a **self-describing navigational JSON**: every link a user might follow — apply a filter, remove a filter, paginate, filter by metadata — is pre-built and ready to use. The front-end does not need to construct query strings or manage filter state.
+The search response is a **self-describing navigational JSON**: every link a user might follow (apply a filter, remove a filter, paginate, filter by metadata) is pre-built and ready to use. The front-end does not need to construct query strings or manage filter state.
 
 ```json
 {
@@ -147,25 +147,25 @@ The search response is a **self-describing navigational JSON**: every link a use
 
 | Section | Description |
 |---|---|
-| **pagination** | Pre-built page links (`FIRST`, `PREVIOUS`, `CURRENT`, `NEXT`, `LAST`) — the front-end follows them directly |
+| **pagination** | Pre-built page links (`FIRST`, `PREVIOUS`, `CURRENT`, `NEXT`, `LAST`), the front-end follows them directly |
 | **queryContext** | Result count, page info, response time, active facet operators, and default field mappings |
 | **results.document** | Array of matched documents. Each contains `fields` (all indexed values), `metadata` (facet values with pre-built filter links), `source`, and `elevate` flag |
 | **widget.facet** | Primary facet groups with counts and pre-built filter/clear links per value. Enabled by `Facet = true` |
-| **widget.secondaryFacet** | Separate facet groups for fields promoted to Secondary Facet — independent from `facet`, for different UI treatment (e.g., tabs) |
+| **widget.secondaryFacet** | Separate facet groups for fields promoted to Secondary Facet, independent from `facet`, for different UI treatment (e.g., tabs) |
 | **widget.similar** | More Like This results. Enabled by `MLT = true` |
 | **widget.spellCheck** | Spelling correction with `original`, `corrected` text, and `usingCorrectedText` flag. Enabled by `Spell Check = true` |
 | **widget.spotlights** | Curated documents injected at configured positions when the query matches a spotlight term |
-| **widget.locales** | All configured locales with pre-built links — use as valid values for `_setlocale` |
+| **widget.locales** | All configured locales with pre-built links: use as valid values for `_setlocale` |
 | **widget.cleanUpFacets** | Pre-built link to clear all active facet filters |
 | **groups** | Grouped results when the `group` parameter is used |
 
 **Self-describing navigation** operates at three levels:
 
-1. **Facet navigation** — Each facet value carries pre-built links for applying, removing, or clearing filters
-2. **Document metadata navigation** — Each result's metadata values carry filter links (e.g., click a `type:article` tag to filter all articles)
-3. **Pagination** — Next/previous/specific page links are included; no offset calculation needed
+1. **Facet navigation**: Each facet value carries pre-built links for applying, removing, or clearing filters
+2. **Document metadata navigation**: Each result's metadata values carry filter links (e.g., click a `type:article` tag to filter all articles)
+3. **Pagination**: Next/previous/specific page links are included; no offset calculation needed
 
-A Turing ES search UI can be built as a **pure rendering layer** — render results, facets, tags, pagination, and locale switchers directly from the response. Adding a new facet to the SN Site configuration propagates automatically, with no client code changes.
+A Turing ES search UI can be built as a **pure rendering layer**: render results, facets, tags, pagination, and locale switchers directly from the response. Adding a new facet to the SN Site configuration propagates automatically, with no client code changes.
 
 **Locale selection:**
 
@@ -194,7 +194,7 @@ The POST endpoint accepts the same query parameters plus additional fields in th
 | `fieldList` | `string[]` | Restrict which fields are returned |
 | `disableAutoComplete` | `boolean` | Disable autocomplete suggestions (default: `false`) |
 | `populateMetrics` | `boolean` | Enable search metrics recording (default: `true`) |
-| `targetingRules` | `string[]` | Targeting rules — see [Targeting Rules](./semantic-navigation.md#targeting-rules) |
+| `targetingRules` | `string[]` | Targeting rules: see [Targeting Rules](./semantic-navigation.md#targeting-rules) |
 | `targetingRulesWithCondition` | `map` | Targeting rules with conditions |
 | `targetingRulesWithConditionAND` | `map` | Targeting rules with AND conditions |
 | `targetingRulesWithConditionOR` | `map` | Targeting rules with OR conditions |
@@ -212,7 +212,7 @@ curl -X POST "http://localhost:2700/api/sn/Sample/search" \
   }'
 ```
 
-For the full Targeting Rules reference — rule types, Solr query generation, fallback clause, and practical examples — see [Semantic Navigation → Targeting Rules](./semantic-navigation.md#targeting-rules).
+For the full Targeting Rules reference (rule types, Solr query generation, fallback clause, and practical examples) see [Semantic Navigation → Targeting Rules](./semantic-navigation.md#targeting-rules).
 
 ---
 
@@ -246,7 +246,7 @@ curl "http://localhost:2700/api/sn/Sample/ac?q=enter&_setlocale=en_US"
 
 ### Latest Searches
 
-Returns the most recent search terms for a given user — useful for personalised search history UIs.
+Returns the most recent search terms for a given user: useful for personalised search history UIs.
 
 ```
 POST http://localhost:2700/api/sn/{siteName}/search/latest
@@ -318,7 +318,7 @@ curl "http://localhost:2700/api/sn/Sample/en_US/spell-check?q=entirprise"
 ## GenAI API
 
 :::note Streaming responses
-Both chat endpoints return **Server-Sent Events (SSE)** streams — content is delivered progressively as the model generates it. Clients should consume the response as an event stream rather than waiting for a single JSON payload.
+Both chat endpoints return **Server-Sent Events (SSE)** streams: content is delivered progressively as the model generates it. Clients should consume the response as an event stream rather than waiting for a single JSON payload.
 :::
 
 ### RAG Chat (SN Site)
@@ -485,7 +485,7 @@ The following endpoints manage SN Sites, fields, and spotlights. All require aut
 | `GET` | `/api/sn/{id}/export` | Export an SN Site configuration |
 | `GET` | `/api/sn/export` | Export all SN Site configurations |
 
-**Example — list sites:**
+**Example: list sites:**
 
 ```bash
 curl "http://localhost:2700/api/sn" \
@@ -578,7 +578,7 @@ For the full schema reference, query examples, dynamic fields, filter operators,
 
 ## OCR API
 
-Extracts text from documents via OCR. Two endpoints are available — one for file uploads and one for URLs. Both are **public** (no authentication required).
+Extracts text from documents via OCR. Two endpoints are available, one for file uploads and one for URLs. Both are **public** (no authentication required).
 
 ### Extract Text from File
 

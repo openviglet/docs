@@ -6,9 +6,9 @@ description: Viglet Dumont DEP is an open-source data extraction platform that c
 
 # What is Dumont DEP?
 
-**Viglet Dumont DEP** is an open-source data extraction platform. It connects your content — wherever it lives — to [Viglet Turing ES](/turing) for indexing and search.
+**Viglet Dumont DEP** is an open-source data extraction platform. It connects your content (wherever it lives) to [Viglet Turing ES](/turing) for indexing and search.
 
-Think of Dumont DEP as the bridge between your content sources and the search engine. It crawls websites, queries databases, scans file systems, reads AEM repositories, and pulls from WordPress — then delivers every document to Turing ES through a reliable, asynchronous pipeline.
+Think of Dumont DEP as the bridge between your content sources and the search engine. It crawls websites, queries databases, scans file systems, reads AEM repositories, and pulls from WordPress, then delivers every document to Turing ES through a reliable, asynchronous pipeline.
 
 ---
 
@@ -16,7 +16,7 @@ Think of Dumont DEP as the bridge between your content sources and the search en
 
 ### Crawl websites
 
-Point the **Web Crawler** at a starting URL and let it discover and extract content from your entire site — pages, articles, documentation. It handles authentication, URL filtering, locale detection, and incremental updates.
+Point the **Web Crawler** at a starting URL and let it discover and extract content from your entire site: pages, articles, documentation. It handles authentication, URL filtering, locale detection, and incremental updates.
 
 ### Index databases
 
@@ -24,11 +24,11 @@ The **Database Connector** runs any SQL query against Oracle, PostgreSQL, MariaD
 
 ### Scan file systems
 
-The **FileSystem Connector** walks a directory tree, extracts text from PDFs, Word documents, spreadsheets, presentations, and images (via OCR), and indexes everything with full metadata — file size, extension, modification date.
+The **FileSystem Connector** walks a directory tree, extracts text from PDFs, Word documents, spreadsheets, presentations, and images (via OCR), and indexes everything with full metadata: file size, extension, modification date.
 
 ### Connect to AEM
 
-The **AEM Connector** indexes content from Adobe Experience Manager author and publish instances — supporting content fragments, delta tracking, locale mapping, and custom extension points for your specific AEM setup.
+The **AEM Connector** indexes content from Adobe Experience Manager author and publish instances, supporting content fragments, delta tracking, locale mapping, and custom extension points for your specific AEM setup.
 
 ### Integrate with WordPress
 
@@ -36,7 +36,7 @@ The **WordPress Connector** indexes posts, pages, and custom content types from 
 
 ### Send to any search engine
 
-Beyond Turing ES, Dumont DEP can deliver content directly to **Apache Solr** or **Elasticsearch** via pluggable indexing adapters — no Turing ES required.
+Beyond Turing ES, Dumont DEP can deliver content directly to **Apache Solr** or **Elasticsearch** via pluggable indexing adapters, no Turing ES required.
 
 ---
 
@@ -63,22 +63,22 @@ graph LR
     DUM -->|"REST API\n+ Message Queue"| TUR
 ```
 
-Content flows from its original source through Dumont DEP connectors, into an internal message queue for reliable processing, and out to the search engine — where it becomes immediately searchable.
+Content flows from its original source through Dumont DEP connectors, into an internal message queue for reliable processing, and out to the search engine, where it becomes immediately searchable.
 
 ---
 
 ## Key concepts
 
-These are the main building blocks you will work with in Dumont DEP. You do not need to understand all of them before getting started — come back to each one as you need it.
+These are the main building blocks you will work with in Dumont DEP. You do not need to understand all of them before getting started: come back to each one as you need it.
 
 | Concept | What it is | Learn more |
 |---|---|---|
 | **Connector** | A component that extracts content from a specific source type (web, database, files, AEM, WordPress) | [Connectors](../connectors/overview.md) |
-| **Indexing Plugin** | The output adapter that delivers documents to a search engine — Turing ES (default), Apache Solr, or Elasticsearch | [Indexing Plugins](../indexing-plugins.md) |
-| **Job Item** | A single document being processed through the pipeline — with fields, metadata, and an action (index, de-index, update) | [Core Concepts](./core-concepts.md) |
+| **Indexing Plugin** | The output adapter that delivers documents to a search engine, Turing ES (default), Apache Solr, or Elasticsearch | [Indexing Plugins](../indexing-plugins.md) |
+| **Job Item** | A single document being processed through the pipeline, with fields, metadata, and an action (index, de-index, update) | [Core Concepts](./core-concepts.md) |
 | **Batch Processor** | Groups individual job items into configurable batches (default: 50) for efficient queue delivery | [Core Concepts](./core-concepts.md) |
-| **Message Queue** | Apache Artemis (embedded) — decouples connector extraction from indexing delivery for reliability and throughput | [Architecture](../architecture.md) |
-| **Processing Strategy** | Priority-based rules that determine how each document is handled — index, re-index, de-index, ignore, or skip unchanged | [Core Concepts](./core-concepts.md) |
+| **Message Queue** | Apache Artemis (embedded): decouples connector extraction from indexing delivery for reliability and throughput | [Architecture](../architecture.md) |
+| **Processing Strategy** | Priority-based rules that determine how each document is handled, index, re-index, de-index, ignore, or skip unchanged | [Core Concepts](./core-concepts.md) |
 | **Indexing Rules** | Regex-based filters that skip documents matching specific attribute patterns before they reach the queue | [Core Concepts](./core-concepts.md) |
 
 ---

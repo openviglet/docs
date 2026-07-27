@@ -1,20 +1,20 @@
 ---
 sidebar_position: 6
 title: Custom Tools
-description: Build your own AI tools in Groovy and let your agents call them like first-class capabilities. Plus Vibe Coding — the AI helps you write the tool, describe it to the LLM, and shape its parameters.
+description: "Build your own AI tools in Groovy and let your agents call them like first-class capabilities. Plus Vibe Coding: the AI helps you write the tool, describe it to the LLM, and shape its parameters."
 ---
 
 # Custom Tools
 
-> *The 27 native tools cover most of what an agent needs to do. The 28th — and the 29th, and the 50th — is whatever your business actually does. **Custom Tools** is how you teach an agent to do it.*
+> *The 27 native tools cover most of what an agent needs to do. The 28th (and the 29th, and the 50th) is whatever your business actually does. **Custom Tools** is how you teach an agent to do it.*
 
-A **Custom Tool** is a function you write that any [AI Agent](./ai-agents.md) or [Chat Flow](./chat-flow.md) can call as if it were native. You declare what it does, what arguments it accepts, and how the LLM should think about it. The body is a **Groovy script** — a friendly Java dialect that runs in a sandboxed JVM context.
+A **Custom Tool** is a function you write that any [AI Agent](./ai-agents.md) or [Chat Flow](./chat-flow.md) can call as if it were native. You declare what it does, what arguments it accepts, and how the LLM should think about it. The body is a **Groovy script**, a friendly Java dialect that runs in a sandboxed JVM context.
 
 Three things make Custom Tools different from "just write a microservice":
 
 1. **No deployment, no rebuild.** You write a Custom Tool in the admin console, click Save, and it's available to every agent immediately.
 2. **First-class to the LLM.** The tool's name, description, and parameter schema are exposed to the LLM exactly like a native tool. The model picks it on its own when relevant.
-3. **Vibe Coding.** Tell the AI what you want — *"a tool that takes a CEP code and returns the address from BrasilAPI"* — and it writes the description, the LLM-facing prompt, the parameter schema, **and** the Groovy script. You review, save, ship.
+3. **Vibe Coding.** Tell the AI what you want (*"a tool that takes a CEP code and returns the address from BrasilAPI"*) and it writes the description, the LLM-facing prompt, the parameter schema, **and** the Groovy script. You review, save, ship.
 
 Configure tools in **Administration → Custom Tools**.
 
@@ -53,13 +53,13 @@ Every tool is a small bundle of seven decisions. Get the first three right and t
 
 Two quiet but important fields back the Vibe Coding experience:
 
-- `descriptionMetaPrompt`, `llmDescriptionMetaPrompt`, `groovyMetaPrompt` — when you ask the AI to author a piece, the meta-prompt that produced it is stored alongside the result. You can revise *the prompt* later, not just the output.
+- `descriptionMetaPrompt`, `llmDescriptionMetaPrompt`, `groovyMetaPrompt`: when you ask the AI to author a piece, the meta-prompt that produced it is stored alongside the result. You can revise *the prompt* later, not just the output.
 
 ---
 
 ## The Groovy Sandbox
 
-Custom Tools run in a Groovy script context — full Java/Groovy semantics, with one strong constraint: **the script returns a single value**, declared in `Return Type`.
+Custom Tools run in a Groovy script context: full Java/Groovy semantics, with one strong constraint: **the script returns a single value**, declared in `Return Type`.
 
 A trivial example: a tool that adds two numbers.
 
@@ -120,7 +120,7 @@ When an LLM calls this tool, it gets back something like:
 }
 ```
 
-…and uses that to answer the user. The whole loop — user asks for an address from a postal code, model picks the tool, Groovy runs, model formats the answer — happens inside a single chat turn, no extra services.
+…and uses that to answer the user. The whole loop (user asks for an address from a postal code, model picks the tool, Groovy runs, model formats the answer) happens inside a single chat turn, no extra services.
 
 :::warning Security caveats
 The sandbox is a Groovy context, not a hardened VM. **Don't paste anything you wouldn't paste into a backend script you control.** Groovy can hit the network, read environment variables, and call any Java class on the classpath. In production, restrict who can author Custom Tools (the existing `CUSTOM_TOOL_*` permissions).
@@ -130,20 +130,20 @@ The sandbox is a Groovy context, not a hardened VM. **Don't paste anything you w
 
 ## Built-in script bindings
 
-Besides the parameters you declare, every script receives a set of pre-wired helper objects — scoped to the active agent and conversation — so tools compose with the rest of the platform without you re-implementing plumbing.
+Besides the parameters you declare, every script receives a set of pre-wired helper objects (scoped to the active agent and conversation) so tools compose with the rest of the platform without you re-implementing plumbing.
 
 | Binding | What it does |
 |---|---|
-| `workspace` | Per-conversation [file store](./agent-workspace.md) — persist drafts, reports, and artifacts across turns and hand the user a signed download URL |
+| `workspace` | Per-conversation [file store](./agent-workspace.md), persist drafts, reports, and artifacts across turns and hand the user a signed download URL |
 | `slots` | Read/write [chat-flow](./chat-flow.md) variables on the live conversation (drives dynamic UI cards) |
 | `http` | Generic HTTP client (`getJson`, `postJson`, `getBytes`) for external APIs |
-| `code` | Run Python in the [Code Interpreter](./tool-calling.md#code-interpreter--1-tool) sandbox and read back its output/files |
+| `code` | Run Python in the [Code Interpreter](./tool-calling.md#code-interpreter-1-tool) sandbox and read back its output/files |
 | `turingSearch` | High-level access to the Turing search surfaces (semantic navigation, vector store) |
 | `agent` | Delegate to another [AI Agent](./ai-agents.md) and use its reply |
 
-### `workspace` — keep and hand back files
+### `workspace`: keep and hand back files
 
-A tool that builds something (a CSV, a PDF, a chart) shouldn't cram it into the reply. Write it to the workspace and return a link instead — the bytes never bloat the prompt, and the file survives to later turns:
+A tool that builds something (a CSV, a PDF, a chart) shouldn't cram it into the reply. Write it to the workspace and return a link instead, the bytes never bloat the prompt, and the file survives to later turns:
 
 ```groovy
 // Persist an artifact and return a signed download URL:
@@ -156,10 +156,10 @@ def previous = workspace.getText("reports/lead-export-2026-06-03.csv")
 
 | Method | Returns | Purpose |
 |---|---|---|
-| `workspace.put(key, value)` / `put(key, bytes, contentType)` | — | Store a string or byte blob |
+| `workspace.put(key, value)` / `put(key, bytes, contentType)` | n/a | Store a string or byte blob |
 | `workspace.get(key)` / `getText(key)` | `byte[]` / `String` / `null` | Read bytes or UTF-8 text |
 | `workspace.list(prefix)` | `List` | List artifacts under a prefix (no-arg lists all) |
-| `workspace.delete(key)` | — | Remove a blob |
+| `workspace.delete(key)` | n/a | Remove a blob |
 | `workspace.url(key)` | `String` / `null` | Signed, time-limited download URL |
 
 The workspace requires a [storage backend](./configuration-reference.md#storage); without one these calls are safe no-ops. See [Agent Workspace](./agent-workspace.md) for isolation, the live artifact stream, and automatic offload of large tool results.
@@ -168,22 +168,22 @@ The workspace requires a [storage backend](./configuration-reference.md#storage)
 
 ## Vibe Coding: Let the AI Author the Tool
 
-Writing a tool from scratch — even a trivial one — usually means writing four things: the LLM description, the parameter list, the script, and a quick test. The Vibe Coding chat does all four for you, then hands you a draft to review.
+Writing a tool from scratch (even a trivial one) usually means writing four things: the LLM description, the parameter list, the script, and a quick test. The Vibe Coding chat does all four for you, then hands you a draft to review.
 
 Click **Vibe Coding** on the Custom Tool form and describe what you want:
 
-> **You:** *"A tool that takes a Brazilian CEP and returns the full address — street, neighborhood, city, state. Use BrasilAPI."*
+> **You:** *"A tool that takes a Brazilian CEP and returns the full address: street, neighborhood, city, state. Use BrasilAPI."*
 >
 > **Assistant:** *"Done. Here's the draft:*
-> *— LLM Description: 'Returns the full Brazilian address (street, neighborhood, city, state, full postal code) for a given CEP. Use this when the user asks about an address by postal code.'*
-> *— Parameters: `cep` (string)*
-> *— Return Type: object*
-> *— Script: a Groovy block that calls `https://brasilapi.com.br/api/cep/v2/{cep}`, parses the JSON, returns the result; on 404 it returns `{error: 'CEP not found'}`.*
+> *LLM Description: 'Returns the full Brazilian address (street, neighborhood, city, state, full postal code) for a given CEP. Use this when the user asks about an address by postal code.'*
+> *Parameters: `cep` (string)*
+> *Return Type: object*
+> *Script: a Groovy block that calls `https://brasilapi.com.br/api/cep/v2/{cep}`, parses the JSON, returns the result; on 404 it returns `{error: 'CEP not found'}`.*
 > *Want me to also strip non-digits from the input?"*
 
 You read the draft, accept it, save. Two minutes from idea to working tool.
 
-The Vibe Coding chat is **incremental** — you can revise individual parts:
+The Vibe Coding chat is **incremental**, you can revise individual parts:
 
 > **You:** *"Make the description more specific to addresses, and add a note that the script handles malformed CEP."*
 >
@@ -213,7 +213,7 @@ The same agent can mix:
 - MCP server tools (e.g., a CRM lookup),
 - Custom Tools (e.g., your CEP lookup, your scoring formula).
 
-The LLM doesn't distinguish — they all look like callable functions in the same catalog.
+The LLM doesn't distinguish: they all look like callable functions in the same catalog.
 
 ### In a Chat Flow
 
@@ -222,11 +222,11 @@ A [Chat Flow](./chat-flow.md) Tool node accepts `native`, `mcp`, or `custom` as 
 Use this pattern when:
 
 - A flow needs to look up data deterministically *between questions* (not when the LLM thinks it's a good time).
-- You want auditability — the submission record will show that the tool ran with these inputs and got that result.
+- You want auditability: the submission record will show that the tool ran with these inputs and got that result.
 
 ### In the Direct LLM Chat
 
-The direct [Chat](./chat.md) mode (no agent) doesn't expose Custom Tools by default — that mode is for *general-purpose assistance with optional toolboxes*. If you need a Custom Tool in direct chat, attach it to a thin "default agent" instead. This keeps the catalog manageable.
+The direct [Chat](./chat.md) mode (no agent) doesn't expose Custom Tools by default, that mode is for *general-purpose assistance with optional toolboxes*. If you need a Custom Tool in direct chat, attach it to a thin "default agent" instead. This keeps the catalog manageable.
 
 ---
 
@@ -340,7 +340,7 @@ def data = new JsonSlurper().parseText(conn.inputStream.text)
 return [tier: data.tier, since: data.created_at, found: true]
 ```
 
-The agent is now grounded — it never quotes ENTERPRISE features to a STARTER customer.
+The agent is now grounded: it never quotes ENTERPRISE features to a STARTER customer.
 
 :::tip Secrets in Groovy
 Use `System.getenv('YOUR_TOKEN')` for secrets, not literal strings. The Groovy text is logged when the tool runs (for debugging), and the script may be exported with the agent definition. Pull tokens from the JVM environment so they don't show up in logs or exports.
@@ -376,7 +376,7 @@ The model decides on its own when to call it. When it does, Turing ES:
 3. Captures the return value.
 4. Feeds it back to the LLM in the next reasoning step.
 
-If the script throws, the error message is fed back to the LLM as the tool result — the model usually recovers gracefully (*"I couldn't look up that CEP — could you double-check the digits?"*).
+If the script throws, the error message is fed back to the LLM as the tool result, the model usually recovers gracefully (*"I couldn't look up that CEP, could you double-check the digits?"*).
 
 ---
 
@@ -389,10 +389,10 @@ If the script throws, the error message is fed back to the LLM as the tool resul
 | `POST` | `/api/custom-tool` | Create a tool |
 | `PUT` | `/api/custom-tool/{id}` | Update a tool |
 | `DELETE` | `/api/custom-tool/{id}` | Delete a tool |
-| `POST` | `/api/custom-tool/validate` | Validate a script — returns syntax errors with line/column |
-| `POST` | `/api/custom-tool/ai-chat` | Vibe Coding endpoint — describe a tool, get a draft back |
+| `POST` | `/api/custom-tool/validate` | Validate a script: returns syntax errors with line/column |
+| `POST` | `/api/custom-tool/ai-chat` | Vibe Coding endpoint: describe a tool, get a draft back |
 
-The validate endpoint runs a fast Groovy parse without executing the script — a smoke test before save.
+The validate endpoint runs a fast Groovy parse without executing the script, a smoke test before save.
 
 ---
 
@@ -405,7 +405,7 @@ The validate endpoint runs a fast Groovy parse without executing the script — 
 | `CUSTOM_TOOL_EDIT` | Edit existing tools |
 | `CUSTOM_TOOL_DELETE` | Delete tools |
 
-All require `ROLE_ADMIN`. In production, restrict authoring to a small group — Groovy is full Java, and bad scripts can do real damage.
+All require `ROLE_ADMIN`. In production, restrict authoring to a small group: Groovy is full Java, and bad scripts can do real damage.
 
 ---
 
@@ -419,7 +419,7 @@ The fastest dev loop:
 4. Attach the tool to a test [AI Agent](./ai-agents.md) (or use a "sandbox" agent you keep around).
 5. Open [Chat](./chat.md), pick that agent, ask a question that should trigger the tool.
 6. Watch the response. If the LLM didn't pick the tool, your **LLM Description** is too vague. If it picked it but with wrong arguments, your **Parameters JSON** doesn't match the script's bindings. If it picked it but the script errored, the script needs work.
-7. Edit the tool. The agent picks up the change immediately — no restart.
+7. Edit the tool. The agent picks up the change immediately, no restart.
 
 For deeper diagnostics, [Observability](./observability.md) shows tool latency through the `turing.llm.calls` timer, and [Chat Analytics](./chat-analytics.md) shows whether the agent's goal-rate moves when you change the tool.
 
@@ -437,7 +437,7 @@ If you already have an MCP server, you usually don't need a Custom Tool that cal
 
 ### Self-documenting business logic
 
-A Groovy script reads top-to-bottom. When your finance team disputes how the lead score is computed, they can read the script. A custom tool can become *the* source of truth for a piece of business logic — readable, versionable, and callable.
+A Groovy script reads top-to-bottom. When your finance team disputes how the lead score is computed, they can read the script. A custom tool can become *the* source of truth for a piece of business logic: readable, versionable, and callable.
 
 ### Composability with Chat Flow
 
@@ -461,10 +461,10 @@ A complex business process is often: collect inputs → compute → call externa
 
 | Page | Description |
 |---|---|
-| [Tool Calling](./tool-calling.md) | The 27 native tools — when to use a native tool vs. a custom one |
+| [Tool Calling](./tool-calling.md) | The 27 native tools: when to use a native tool vs. a custom one |
 | [MCP Servers](./mcp-servers.md) | When to build an MCP instead of a Custom Tool |
 | [AI Agents](./ai-agents.md) | Agents are where Custom Tools get attached and used |
-| [Agent Workspace](./agent-workspace.md) | The `workspace` binding — persist artifacts across turns |
+| [Agent Workspace](./agent-workspace.md) | The `workspace` binding: persist artifacts across turns |
 | [Chat Flow](./chat-flow.md) | Use Custom Tools as deterministic Tool nodes in a flow |
 | [Observability](./observability.md) | Watch tool latency and error rates in real time |
 

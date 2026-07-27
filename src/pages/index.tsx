@@ -60,7 +60,7 @@ const products: Product[] = [
     id: "turing",
     title: "Turing ES",
     description:
-      "Enterprise Search Intelligence — semantic navigation and faceted discovery fused with Generative AI: RAG, streaming chat, and tool-using agents that act on your content, indexed in Solr, Elasticsearch, or Lucene.",
+      "Enterprise Search Intelligence: semantic navigation and faceted discovery fused with Generative AI: RAG, streaming chat, and tool-using agents that act on your content, indexed in Solr, Elasticsearch, or Lucene.",
     link: "/turing",
     release: "2026.3",
     github: "https://github.com/openviglet/turing-ce",
@@ -148,7 +148,7 @@ const community: CommunityLink[] = [
   },
 ];
 
-/* Animated hero background — sourced from the Viglet Design System.
+/* Animated hero background, sourced from the Viglet Design System.
  * Wrapped in <BrowserOnly> because FloatingFormulasBg uses Date.now() as a
  * seed, which would mismatch between Docusaurus SSR and client hydration. */
 function FloatingFormulas(): JSX.Element {

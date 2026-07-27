@@ -214,7 +214,7 @@ unzip turing-utils.zip -d /appl/viglet/turing/utils
 
 ## Keycloak
 
-For production deployments that require SSO, Keycloak integrates with Turing ES via OAuth2 / OpenID Connect. Full setup instructions — including database creation, keystore generation, Keycloak configuration, realm and client setup, JVM properties, and Apache reverse proxy configuration — are covered in the [Security & Keycloak](./security-keycloak.md) guide.
+For production deployments that require SSO, Keycloak integrates with Turing ES via OAuth2 / OpenID Connect. Full setup instructions (including database creation, keystore generation, Keycloak configuration, realm and client setup, JVM properties, and Apache reverse proxy configuration) are covered in the [Security & Keycloak](./security-keycloak.md) guide.
 
 ## Solr Configuration
 
@@ -233,7 +233,7 @@ Start the Solr service after the collection is created.
 
 ### Turing ES Download
 
-#### Option 1 — Docker (fastest)
+#### Option 1: Docker (fastest)
 
 Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) by the **Publish Docker Image** GitHub Action:
 
@@ -246,7 +246,7 @@ docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
 Besides `latest`, every run also publishes the project version (for example `2026.3.4`) and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
 :::
 
-#### Option 2 — JAR download
+#### Option 2: JAR download
 
 Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Download Turing ES" button to download `viglet-turing.jar`.
 
@@ -257,7 +257,7 @@ mkdir -p /appl/viglet/turing/server
 cp viglet-turing.jar /appl/viglet/turing/server
 ```
 
-#### Option 3 — Build from source
+#### Option 3: Build from source
 
 ```bash
 git clone https://github.com/openviglet/turing-ce.git
@@ -332,7 +332,7 @@ WantedBy=multi-user.target
 ```
 
 :::note Spring Boot 4
-Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-turing.jar`). You must launch Turing ES using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported — use `--spring.config.additional-location` to load external properties instead.
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-turing.jar`). You must launch Turing ES using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported: use `--spring.config.additional-location` to load external properties instead.
 :::
 
 Enable and start the service:
@@ -375,7 +375,7 @@ Configuration finished.
 
 Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing ES. The default port is **2700**.
 
-The default username is **admin**. The password is set via the `TURING_ADMIN_PASSWORD` environment variable before first startup — see the [Administration Guide](./administration-guide.md#login) for details.
+The default username is **admin**. The password is set via the `TURING_ADMIN_PASSWORD` environment variable before first startup: see the [Administration Guide](./administration-guide.md#login) for details.
 
 ## Appendix A: Installation Modes
 
@@ -383,7 +383,7 @@ The default username is **admin**. The password is set via the `TURING_ADMIN_PAS
 
 #### Simple
 
-Minimal setup using an embedded H2 database. Suitable for local development and evaluation only — not for production.
+Minimal setup using an embedded H2 database. Suitable for local development and evaluation only, not for production.
 
 **Prerequisites:**
 1. Linux server
@@ -397,9 +397,9 @@ Minimal setup using an embedded H2 database. Suitable for local development and 
 
 Turing ES and its dependencies installed via Docker Compose, including:
 
-- MariaDB — Turing ES system tables
-- Solr — Semantic Navigation search backend
-- Nginx — reverse proxy on port 80
+- MariaDB, Turing ES system tables
+- Solr: Semantic Navigation search backend
+- Nginx: reverse proxy on port 80
 - Turing ES
 
 **Prerequisites:**
@@ -413,9 +413,9 @@ Turing ES and its dependencies installed via Docker Compose, including:
 
 Turing ES and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
 
-- MariaDB — Turing ES system tables
-- Solr — Semantic Navigation search backend
-- Nginx — reverse proxy
+- MariaDB, Turing ES system tables
+- Solr: Semantic Navigation search backend
+- Nginx: reverse proxy
 - Turing ES
 
 **Prerequisites:**
@@ -429,9 +429,9 @@ Turing ES and its dependencies deployed via Kubernetes manifests (available in t
 
 Each service installed individually following this guide:
 
-- MariaDB — Turing ES system tables
-- Solr + Zookeeper — Semantic Navigation search backend
-- Apache HTTP Server — reverse proxy (required for Keycloak integration)
+- MariaDB, Turing ES system tables
+- Solr + Zookeeper: Semantic Navigation search backend
+- Apache HTTP Server: reverse proxy (required for Keycloak integration)
 - Turing ES
 
 **Prerequisites:**
@@ -457,7 +457,7 @@ docker-compose up
 ```
 
 :::tip Deploy with the pre-built image
-The commands above build Turing from source for local development. For deployment, replace the `build:` of the `turing` service with the published image instead — `image: ghcr.io/openviglet/turing-ce:latest` — so the stack pulls the image from `ghcr.io` rather than compiling it.
+The commands above build Turing from source for local development. For deployment, replace the `build:` of the `turing` service with the published image instead (`image: ghcr.io/openviglet/turing-ce:latest`) so the stack pulls the image from `ghcr.io` rather than compiling it.
 :::
 
 :::note
@@ -504,7 +504,7 @@ docker exec -it turing-nginx /bin/bash
 
 | Page | Description |
 |---|---|
-| [Getting Started](./getting-started/intro.md) | The zero → first-agent learning path — start here after installing |
+| [Getting Started](./getting-started/intro.md) | The zero → first-agent learning path: start here after installing |
 | [Configuration Reference](./configuration-reference.md) | Every `application.yaml` property |
 | [Search Engine](./search-engine.md) | Configure the Solr / Elasticsearch / Lucene backend |
 | [Administration Guide](./administration-guide.md) | Users, roles, tokens, global settings |

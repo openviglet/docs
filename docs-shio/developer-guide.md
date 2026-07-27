@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: Developer Guide
-description: Build with and contribute to Viglet Shio CMS — tech stack, dev environment, APIs, and more.
+description: "Build with and contribute to Viglet Shio CMS: tech stack, dev environment, APIs, and more."
 ---
 
 # Developer Guide
@@ -76,7 +76,7 @@ mvn spring-boot:run -pl shio-app
 
 The backend starts at **`http://localhost:2710`**.
 
-### Frontend — React Admin Console
+### Frontend: React Admin Console
 
 For active frontend development, run the React dev server separately:
 
@@ -155,7 +155,7 @@ The application JAR is produced by the Maven build and contains the backend, fro
 Optional external properties file for database configuration and other overrides. See [Configuration Reference](./configuration-reference.md) for all available properties.
 
 :::note Spring Boot 4
-Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-shio.jar`). You must launch Shio CMS using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported — use `--spring.config.additional-location` to load external properties instead.
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-shio.jar`). You must launch Shio CMS using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported: use `--spring.config.additional-location` to load external properties instead.
 :::
 
 ---
@@ -184,7 +184,7 @@ We'd love your help making Shio CMS better. Here's how to get involved:
 1. **Fork** the [openviglet/shio-ce](https://github.com/openviglet/shio-ce) repository.
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
 3. **Commit your changes** with clear, descriptive messages.
-4. **Open a Pull Request** — describe what you changed and why.
+4. **Open a Pull Request**: describe what you changed and why.
 
 For larger contributions, open an issue first to discuss the approach before writing code.
 

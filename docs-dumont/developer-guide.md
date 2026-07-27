@@ -59,7 +59,7 @@ dumont/
 ├── aem-commons/                # AEM extension interfaces (published to Maven Central)
 ├── spring/                     # Spring Boot configuration and JPA persistence
 ├── connector/
-│   └── connector-app/          # Main pipeline — strategies, batch, queue, indexing plugins, API
+│   └── connector-app/          # Main pipeline: strategies, batch, queue, indexing plugins, API
 ├── web-crawler/
 │   └── wc-plugin/              # Web Crawler connector plugin
 ├── db/
@@ -85,8 +85,8 @@ Dumont DEP provides extension points at multiple levels:
 
 | Extension | Guide | Maven Artifact |
 |---|---|---|
-| **AEM extensions** — attribute extractors, model.json processors (with fluent API), delta date logic | [Extending the AEM Connector](./extending-aem.md) | `com.viglet.dumont:aem-commons:2026.2.3` |
-| **Database extensions** — custom row transformations during SQL import | [Extending the Database Connector](./extending-database.md) | `com.viglet.dumont:db-commons:2026.2.3` |
+| **AEM extensions**: attribute extractors, model.json processors (with fluent API), delta date logic | [Extending the AEM Connector](./extending-aem.md) | `com.viglet.dumont:aem-commons:2026.2.3` |
+| **Database extensions**: custom row transformations during SQL import | [Extending the Database Connector](./extending-database.md) | `com.viglet.dumont:db-commons:2026.2.3` |
 
 ### Platform-Level Extensions
 
@@ -122,7 +122,7 @@ Register your plugin as a Spring `@Component` with `@ConditionalOnProperty(name 
 
 Strategies are evaluated in priority order for each Job Item:
 
-![Dumont DEP — Processing Strategy Flow](/img/diagrams/dumont-strategy-flow.svg)
+![Dumont DEP, Processing Strategy Flow](/img/diagrams/dumont-strategy-flow.svg)
 
 To add a custom strategy, implement the strategy interface and assign a priority between the existing ones.
 
@@ -146,7 +146,7 @@ For the full API surface, start the application and visit the Swagger UI.
 1. **Fork** the [openviglet/dumont-ce](https://github.com/openviglet/dumont-ce) repository
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
 3. **Commit** with clear, descriptive messages
-4. **Open a Pull Request** — describe what you changed and why
+4. **Open a Pull Request**: describe what you changed and why
 
 ---
 

@@ -6,16 +6,16 @@ description: Monitor and analyse LLM token consumption in Viglet Turing ES.
 
 # Token Usage
 
-If you are an administrator responsible for monitoring AI spend, this page is for you. Token Usage helps you track how much each LLM model is costing your organization by showing consumption broken down by model, day, and month — so you can identify heavy usage patterns, set budgets, and avoid unexpected bills.
+If you are an administrator responsible for monitoring AI spend, this page is for you. Token Usage helps you track how much each LLM model is costing your organization by showing consumption broken down by model, day, and month, so you can identify heavy usage patterns, set budgets, and avoid unexpected bills.
 
-The **Token Usage** page (`/token-usage`) gives administrators a clear view of how many tokens are being consumed by the LLM integrations — broken down by model, day, and month. This is the primary tool for tracking AI costs and identifying heavy usage patterns.
+The **Token Usage** page (`/token-usage`) gives administrators a clear view of how many tokens are being consumed by the LLM integrations: broken down by model, day, and month. This is the primary tool for tracking AI costs and identifying heavy usage patterns.
 
 :::info Availability
 This page only appears in the sidebar when **at least one LLM instance is enabled**. If no LLM is configured, the Generative AI section will not show Token Usage.
 :::
 
 :::tip Tokens vs. dollars
-Token Usage shows **counts** — how many tokens each model consumed. To see those tokens turned into **USD spend** (with an editable price table, per-agent/model/stage breakdowns, and soft budget caps), use [Cost Governance](./cost-governance.md). Both read the same always-on `llm_token_usage` table.
+Token Usage shows **counts**: how many tokens each model consumed. To see those tokens turned into **USD spend** (with an editable price table, per-agent/model/stage breakdowns, and soft budget caps), use [Cost Governance](./cost-governance.md). Both read the same always-on `llm_token_usage` table.
 :::
 
 ---
@@ -41,7 +41,7 @@ Four cards provide an at-a-glance snapshot of the selected month:
 | **Output Tokens** | Total tokens received from the model (generated responses) |
 | **Total Tokens** | Sum of input + output tokens |
 
-Values are displayed in a human-readable format — for example `1.2M`, `45K`, or `8.3K` — rather than raw numbers.
+Values are displayed in a human-readable format (for example `1.2M`, `45K`, or `8.3K`) rather than raw numbers.
 
 ---
 
@@ -78,13 +78,13 @@ A day-by-day table showing consumption per model across the selected month:
 | **Total Tokens** | Combined token count for that day |
 | **Requests** | Number of requests on that day |
 
-Days with no LLM activity do not appear in the table. This breakdown helps spot daily spikes — for example, a batch re-indexing job or a high-traffic event.
+Days with no LLM activity do not appear in the table. This breakdown helps spot daily spikes, for example, a batch re-indexing job or a high-traffic event.
 
 ---
 
 ## How Token Recording Works
 
-Turing ES records token usage automatically on every LLM call — no extra configuration is needed.
+Turing ES records token usage automatically on every LLM call: no extra configuration is needed.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'labelBoxBkgColor': '#fef3c7', 'labelBoxBorderColor': '#E8A838', 'labelTextColor': '#1a1a1a', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%

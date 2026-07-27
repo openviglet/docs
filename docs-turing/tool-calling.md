@@ -1,20 +1,20 @@
 ---
 sidebar_position: 5
 title: Tool Calling
-description: Native tool calling capabilities available to AI Agents in Turing ES — DSL-based search tools, RAG, web crawling, and more.
+description: Native tool calling capabilities available to AI Agents in Turing ES, DSL-based search tools, RAG, web crawling, and more.
 ---
 
 # Tool Calling
 
-A **Tool Calling** is a function that the LLM can invoke autonomously during a conversation to retrieve information or perform an action. Instead of relying purely on training data, the LLM calls tools to fetch live data, search indexed content, execute code, and more — then incorporates the results into its reasoning.
+A **Tool Calling** is a function that the LLM can invoke autonomously during a conversation to retrieve information or perform an action. Instead of relying purely on training data, the LLM calls tools to fetch live data, search indexed content, execute code, and more, then incorporates the results into its reasoning.
 
-Turing ES includes native tools organized into categories, plus support for external tools via [MCP Servers](./mcp-servers.md). Tools are enabled per [AI Agent](./ai-agents.md) — each agent selects only the tools it needs.
+Turing ES includes native tools organized into categories, plus support for external tools via [MCP Servers](./mcp-servers.md). Tools are enabled per [AI Agent](./ai-agents.md), each agent selects only the tools it needs.
 
 ---
 
-## DSL Search — 6 tools
+## DSL Search: 6 tools
 
-These tools provide **Elasticsearch-compatible Query DSL** access to any Semantic Navigation Site. Inspired by the [Elasticsearch MCP Server](https://github.com/elastic/mcp-server-elasticsearch), they allow the LLM to build and execute full DSL queries, aggregations, and analytics — automatically translated to the site's configured search engine (Elasticsearch, Solr, or Lucene).
+These tools provide **Elasticsearch-compatible Query DSL** access to any Semantic Navigation Site. Inspired by the [Elasticsearch MCP Server](https://github.com/elastic/mcp-server-elasticsearch), they allow the LLM to build and execute full DSL queries, aggregations, and analytics, automatically translated to the site's configured search engine (Elasticsearch, Solr, or Lucene).
 
 | Tool | Description |
 |---|---|
@@ -89,9 +89,9 @@ For the complete DSL reference, see [DSL Query API](./dsl-query.md) and [DSL Com
 
 ---
 
-## RAG / Knowledge Base — 4 tools
+## RAG / Knowledge Base: 4 tools
 
-These tools enable the LLM to query the **Knowledge Base** — files indexed from MinIO via the [Assets](./assets.md) section — using semantic similarity search.
+These tools enable the LLM to query the **Knowledge Base**, files indexed from MinIO via the [Assets](./assets.md) section, using semantic similarity search.
 
 | Tool | Description |
 |---|---|
@@ -108,7 +108,7 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 
 ---
 
-## Web Crawler — 2 tools
+## Web Crawler: 2 tools
 
 | Tool | Description |
 |---|---|
@@ -122,7 +122,7 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 
 ---
 
-## Finance — 2 tools
+## Finance: 2 tools
 
 | Tool | Description |
 |---|---|
@@ -136,7 +136,7 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 
 ---
 
-## Weather — 1 tool
+## Weather: 1 tool
 
 | Tool | Description |
 |---|---|
@@ -148,7 +148,7 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 
 ---
 
-## Image Search — 1 tool
+## Image Search: 1 tool
 
 | Tool | Description |
 |---|---|
@@ -160,7 +160,7 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 
 ---
 
-## DateTime — 1 tool
+## DateTime: 1 tool
 
 | Tool | Description |
 |---|---|
@@ -172,7 +172,7 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 
 ---
 
-## Code Interpreter — 1 tool
+## Code Interpreter: 1 tool
 
 | Tool | Description |
 |---|---|
@@ -181,7 +181,7 @@ These tools enable the LLM to query the **Knowledge Base** — files indexed fro
 The Code Interpreter runs Python in an isolated sandbox directory with a **30-second execution timeout**. It supports:
 
 - Standard output capture
-- Matplotlib chart generation (with `Agg` backend — no display required)
+- Matplotlib chart generation (with `Agg` backend, no display required)
 - Automatic `print()` wrapping for bare expressions
 
 The Python executable path is configured in **Administration → Settings → Python Path**.
@@ -200,7 +200,7 @@ You choose how Python actually runs in **Console → Global Settings → Code In
 | **NATIVE** (default) | A host subprocess running the configured Python | Trusted content, simplest setup |
 | **DOCKER** | Each execution runs in a fresh, hardened container | Untrusted input, multi-tenant, defense-in-depth |
 
-**DOCKER** is the recommended posture when code might be influenced by untrusted input. Every execution gets a throwaway container with baseline hardening always applied — `--cap-drop ALL`, `--no-new-privileges`, `--read-only`, and Docker's built-in seccomp profile — plus configurable limits under `turing.code-interpreter.docker.*`:
+**DOCKER** is the recommended posture when code might be influenced by untrusted input. Every execution gets a throwaway container with baseline hardening always applied (`--cap-drop ALL`, `--no-new-privileges`, `--read-only`, and Docker's built-in seccomp profile) plus configurable limits under `turing.code-interpreter.docker.*`:
 
 | Key | Default | Purpose |
 |---|---|---|
@@ -240,11 +240,11 @@ turing:
       size: 2          # interpreters kept booted and ready
 ```
 
-Workers are **single-use** (one execution then exit — no cross-tenant state leak) and refilled asynchronously. The pool is automatically bypassed in DOCKER mode and whenever the NATIVE limits above are enabled (a pooled worker can't be wrapped by `prlimit`/`systemd-run`).
+Workers are **single-use** (one execution then exit, no cross-tenant state leak) and refilled asynchronously. The pool is automatically bypassed in DOCKER mode and whenever the NATIVE limits above are enabled (a pooled worker can't be wrapped by `prlimit`/`systemd-run`).
 
 ### Structured output & `sandbox:` URLs
 
-Beyond stdout/stderr, the interpreter can return a **structured result** — used by [Custom Tools](./custom-tools.md) via the Groovy `code.executePythonStructured(...)` / `code.executePythonJson(...)` bindings. It carries `stdout`, `stderr`, an `exitCode`, `timedOut`, `durationMs`, a rendered `markdown`, and a list of generated **files** (`name`, `url`, `image`, `sizeBytes`). Files (a chart PNG, a generated PDF) are addressed with Turing's **`sandbox:` URL scheme** (the OpenAI convention) — clients resolve them to a real download URL, and the underlying `/api/v2/code-interpreter/{session}/{file}` URLs are **HMAC-signed and cookie-bound** so they can't be replayed across browsers. This retires the old "regex-parse the markdown for file links" approach.
+Beyond stdout/stderr, the interpreter can return a **structured result**, used by [Custom Tools](./custom-tools.md) via the Groovy `code.executePythonStructured(...)` / `code.executePythonJson(...)` bindings. It carries `stdout`, `stderr`, an `exitCode`, `timedOut`, `durationMs`, a rendered `markdown`, and a list of generated **files** (`name`, `url`, `image`, `sizeBytes`). Files (a chart PNG, a generated PDF) are addressed with Turing's **`sandbox:` URL scheme** (the OpenAI convention): clients resolve them to a real download URL, and the underlying `/api/v2/code-interpreter/{session}/{file}` URLs are **HMAC-signed and cookie-bound** so they can't be replayed across browsers. This retires the old "regex-parse the markdown for file links" approach.
 
 Agents can also declare extra Python dependencies (e.g. `reportlab matplotlib qrcode`) that Turing ensures are installed before running.
 
@@ -264,24 +264,24 @@ See [MCP Servers](./mcp-servers.md) for configuration details.
 
 ## Provider-native server tools
 
-The tools above are **Turing's own** — Turing runs them and feeds results back to the model. Separately, some vendors expose **server-side built-in tools** that run inside the provider's infrastructure (the model searches the web, executes code, or fetches a URL without Turing doing the work). These are selected through the [capability](./capabilities.md) gate, not the agent's tool list, and they coexist with Turing/MCP tools in one tool loop.
+The tools above are **Turing's own**, Turing runs them and feeds results back to the model. Separately, some vendors expose **server-side built-in tools** that run inside the provider's infrastructure (the model searches the web, executes code, or fetches a URL without Turing doing the work). These are selected through the [capability](./capabilities.md) gate, not the agent's tool list, and they coexist with Turing/MCP tools in one tool loop.
 
 | Function | OpenAI | Anthropic | Gemini |
 |---|---|---|---|
 | Web search | ✅ | ✅ | ✅ *(Google Search grounding)* |
-| Web fetch / URL context | — | ✅ | ✅ |
+| Web fetch / URL context | n/a | ✅ | ✅ |
 | Code execution | ✅ | ✅ | ✅ |
-| Image generation | ✅ | — | ✅ |
+| Image generation | ✅ | n/a | ✅ |
 | Computer use | ✅ | ✅ | ✅ |
-| Remote MCP | ✅ | ✅ | — |
+| Remote MCP | ✅ | ✅ | n/a |
 
-Gemini's native primitives (Google Search grounding, URL Context, code execution, image generation, Computer Use — plus thinking budget, context caching, Batch, Files, full-context answering, and native video understanding) are documented in depth in [Generative AI → Gemini native primitives](./genai-llm.md#gemini-native-primitives-f16). For how server-native and Turing tools share one loop, and the two-level gate that controls them, see [Capabilities](./capabilities.md).
+Gemini's native primitives (Google Search grounding, URL Context, code execution, image generation, Computer Use, plus thinking budget, context caching, Batch, Files, full-context answering, and native video understanding) are documented in depth in [Generative AI → Gemini native primitives](./genai-llm.md#gemini-native-primitives-f16). For how server-native and Turing tools share one loop, and the two-level gate that controls them, see [Capabilities](./capabilities.md).
 
 ### Long and reasoning-heavy tool loops
 
 Two cross-vendor request options shape the tool loop itself:
 
-- **Interleaved thinking** (Anthropic) lets Claude reason *between* tool calls, not just before the first one — useful for multi-step agentic loops.
+- **Interleaved thinking** (Anthropic) lets Claude reason *between* tool calls, not just before the first one: useful for multi-step agentic loops.
 - **Background mode** (OpenAI Responses) runs a long tool loop asynchronously and resumes by polling, so a deep code-interpreter or computer-use loop doesn't hold the HTTP connection open.
 
 Both are opt-in and fail-open. See [AI Agents → Reasoning, caching & background execution](./ai-agents.md#reasoning-caching--background-execution).
@@ -290,9 +290,9 @@ Both are opt-in and fail-open. See [AI Agents → Reasoning, caching & backgroun
 
 ## Large results are offloaded automatically
 
-Some tools return a lot — a big search dump, a long catalog, a wide JSON array. Pasting all of that into the prompt every turn is wasteful. When a tool result exceeds `turing.genai.tool-result-offload.inline-max-chars` (default **4096**), Turing writes the full payload to the [Agent Workspace](./agent-workspace.md) and replaces the inline result with a short `workspace://…` reference. The model pulls the data back **only when it needs it**, via an always-present `workspace_read` tool.
+Some tools return a lot: a big search dump, a long catalog, a wide JSON array. Pasting all of that into the prompt every turn is wasteful. When a tool result exceeds `turing.genai.tool-result-offload.inline-max-chars` (default **4096**), Turing writes the full payload to the [Agent Workspace](./agent-workspace.md) and replaces the inline result with a short `workspace://…` reference. The model pulls the data back **only when it needs it**, via an always-present `workspace_read` tool.
 
-This applies uniformly to native, MCP, and [Custom](./custom-tools.md) tools, and is active only when a [storage backend](./configuration-reference.md#storage) is configured — so the default deployment behaves exactly as before. See [Agent Workspace → Auto-offload](./agent-workspace.md#2-auto-offload-of-large-tool-results) for details.
+This applies uniformly to native, MCP, and [Custom](./custom-tools.md) tools, and is active only when a [storage backend](./configuration-reference.md#storage) is configured, so the default deployment behaves exactly as before. See [Agent Workspace → Auto-offload](./agent-workspace.md#2-auto-offload-of-large-tool-results) for details.
 
 ---
 

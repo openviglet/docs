@@ -1,11 +1,11 @@
 ---
 title: The Persona Book
-description: The complete, didactic, strategic guide to Personas in Viglet Turing ES — from why a generic AI voice costs you money to Persona Match, Dialogue, and Synthetic User Research, with worked examples for every feature.
+description: The complete, didactic, strategic guide to Personas in Viglet Turing ES, from why a generic AI voice costs you money to Persona Match, Dialogue, and Synthetic User Research, with worked examples for every feature.
 ---
 
 # Personas in Viglet Turing ES
 
-### The Book — A Complete, Didactic, Strategic Guide
+### The Book: A Complete, Didactic, Strategic Guide
 
 :::tip
 This is the long-form companion guide to Personas. For a concise, technical overview, see [Personas](./personas.md) for the concise reference.
@@ -38,12 +38,12 @@ the business**, and **how you use it in practice**, always with examples.
 
 # Contents
 
-**Part I — Fundamentals**
+**Part I: Fundamentals**
 1. The problem: why the generic voice is expensive
 2. What a Persona is in Turing
 3. The Persona in the company's day-to-day: who gets what
 
-**Part II — Anatomy of a Persona**
+**Part II: Anatomy of a Persona**
 4. The three roles: SPEAKER, AUDIENCE, and BOTH
 5. Identity: name, description, state
 6. The System Instruction (the narrative core)
@@ -55,46 +55,46 @@ the business**, and **how you use it in practice**, always with examples.
 12. Live brand context (MCP)
 13. Calibrating the model from style
 
-**Part III — How the Persona reaches the model**
+**Part III: How the Persona reaches the model**
 14. Assembling the prompt, layer by layer
 15. Post-response tone validation (the second barrier)
 
-**Part IV — Persona as Voice**
+**Part IV: Persona as Voice**
 16. Attaching personas to an AI Agent
 17. Talking directly to a Persona
 18. Switching persona mid-conversation (flows)
 
-**Part V — Persona as Audience**
+**Part V: Persona as Audience**
 19. The reader profile and the evaluation notebook
 20. The content-fit score: does the text match the reader?
 21. The fit report
 22. Suggesting the best persona for a piece of content
 
-**Part VI — Persona Match (N×N)**
+**Part VI: Persona Match (N×N)**
 23. Content-fit projects: many contents × many personas
 24. Matrix, lenses, and scheduled re-analysis
 
-**Part VII — Persona Dialogue**
+**Part VII: Persona Dialogue**
 25. Dialogues between personas
 
-**Part VIII — Synthetic User Research**
+**Part VIII: Synthetic User Research**
 26. Studies, protocols, and the participant cohort
 27. The insights report: themes, the saturation signal, and change over time
 28. Synthesize a cohort, assistant, and program
 29. The bridge to agent evaluation
 
-**Part IX — Customer scenarios**
+**Part IX: Customer scenarios**
 30. E-commerce, banking, healthcare, SaaS, public sector, media
 
-**Part X — Persona from audio**
+**Part X: Persona from audio**
 
-**Part XI — Operational guide and best practices**
+**Part XI: Operational guide and best practices**
 
-**Appendices** — API reference · Glossary of options · Checklist
+**Appendices**: API reference · Glossary of options · Checklist
 
 ---
 
-# Part I — Fundamentals
+# Part I: Fundamentals
 
 ## 1. The problem: why the generic voice is expensive
 
@@ -107,11 +107,11 @@ This is a problem for **two concrete business reasons**:
 
 1. **Conversion.** A generic voice doesn't sell. Customers convert when they feel
    they're being treated like adults, by someone who knows what they came for. A
-   senior sales rep doesn't read scripts — they sound like *the company*. A
+   senior sales rep doesn't read scripts: they sound like *the company*. A
    Persona gives your AI assistant that consistency, at scale, 24 hours a day.
 2. **Risk.** That same generic voice can say something you'd never authorize: a
    wrong product name, a discount that doesn't exist, a claim about a competitor.
-   A Persona installs guardrails: vocabulary you require, vocabulary you forbid —
+   A Persona installs guardrails: vocabulary you require, vocabulary you forbid,
    enforced **in the prompt** and **after the response**, before it reaches the
    user.
 
@@ -167,14 +167,14 @@ that rarely speak the same language. Here's how it shows up in the daily routine
 | **Product / UX** | Synthetic research anticipates how personas react to an idea before spending real-participant time; content-fit evaluation checks whether documentation reaches the right audience. |
 | **Content / Editorial** | "Who is this article for?" becomes a measurable question (Suggest + Persona Match), not a guess. |
 | **Compliance / Legal** | Forbidden terms enforced in two layers; post-response validation masks slips. |
-| **Engineering** | A Persona is attached to any agent without rewriting prompts; the voice is decoupled from the model and the tools. Swap the LLM — the voice stays. |
+| **Engineering** | A Persona is attached to any agent without rewriting prompts; the voice is decoupled from the model and the tools. Swap the LLM, the voice stays. |
 
 > **The sentence that sums it all up:** *swap the brain (the LLM), swap the hands
-> (the tools) — the voice is still yours.*
+> (the tools): the voice is still yours.*
 
 ---
 
-# Part II — Anatomy of a Persona
+# Part II: Anatomy of a Persona
 
 A Persona is a small bundle of decisions. Each one nudges the model in a specific
 direction, and together they replace the model's default voice with yours. In the
@@ -183,7 +183,7 @@ matters**, and **how to fill it in well**.
 
 ## 4. The three roles: SPEAKER, AUDIENCE, and BOTH
 
-The first field — **Persona Kind** (`personaKind`) — decides what the persona is
+The first field, **Persona Kind** (`personaKind`), decides what the persona is
 for:
 
 | Kind | Role | Used by |
@@ -193,7 +193,7 @@ for:
 | **`BOTH`** | Serves either role | Both |
 
 The default `SPEAKER` keeps every existing persona byte-for-byte unchanged. An
-**`AUDIENCE`-only persona never resolves as an agent's voice** — the system has a
+**`AUDIENCE`-only persona never resolves as an agent's voice**: the system has a
 guard that prevents it (`isUsableAsSpeaker()`). When you pick `AUDIENCE` or
 `BOTH`, the form reveals the **Audience** section.
 
@@ -212,17 +212,17 @@ guard that prevents it (`isUsableAsSpeaker()`). When you pick `AUDIENCE` or
 | **Description** | One-line summary of when to use it | Helps non-technical admins pick the right persona (max. 500 characters) |
 | **Enabled** | On/off | Retire a persona without deleting it; agents fall back to no-persona behavior |
 
-Naming best practice: use names that signal the stage or the function —
+Naming best practice: use names that signal the stage or the function:
 `top-of-funnel-sales`, `solutions-engineer`, `onboarding-coach`,
 `executive-buyer-audience`. Personas are cheap; make several, each one nicely
 specific.
 
-> **💡 Worked example — the pharmacy chain.** "VitaPharm" has 4 personas in its
+> **💡 Worked example: the pharmacy chain.** "VitaPharm" has 4 personas in its
 > catalog: `pharmacist-advisor` (answers medication questions), `deals-promoter`
 > (pushes the week's promotion), `formal-support` (complaints), and
 > `senior-audience` (target reader for validating package inserts). When a manager
 > says *"the homepage chat is too aggressive"*, the team knows exactly which
-> persona to disable (`deals-promoter`) and which to keep — without touching code.
+> persona to disable (`deals-promoter`) and which to keep, without touching code.
 > The **Description** field on each one (*"use in the clinical-question flow"*)
 > lets the manager herself, non-technical, choose correctly in the agent's
 > dropdown.
@@ -230,33 +230,33 @@ specific.
 ## 6. The System Instruction (the narrative core)
 
 The **System Instruction** (`systemInstruction`) is free text that is prepended
-to the agent's prompt. It's the narrative core of the persona — where you describe
+to the agent's prompt. It's the narrative core of the persona, where you describe
 *who it is* and *how it behaves*.
 
 Example (top-of-funnel sales persona):
 
 > *"You are a senior account executive. Open with a one-sentence outcome the
 > prospect can imagine. Ask exactly one qualifying question per turn. Never quote
-> prices in the first 5 turns — instead, anchor on value."*
+> prices in the first 5 turns: instead, anchor on value."*
 
 The editor has a **"Help me write"** assistant (AI Authoring): describe in natural
 language what you want and the AI drafts the instruction (and other fields) for
-you to review. Nothing is saved automatically — you approve.
+you to review. Nothing is saved automatically: you approve.
 
 :::tip Golden tip
 The system instruction says **what** and **how** the persona *speaks*; it must
-not repeat the agent's **purpose** (what the agent *does*). Keep the two separate
-— otherwise the model "fights itself".
+not repeat the agent's **purpose** (what the agent *does*). Keep the two separate:
+ otherwise the model "fights itself".
 :::
 
-> **💡 Worked example — the same shop, two personalities.** An artisan coffee shop
+> **💡 Worked example, the same shop, two personalities.** An artisan coffee shop
 > writes the instruction for the `passionate-barista` persona: *"You are a barista
 > who loves specialty coffee. Speak with genuine enthusiasm, always suggest a bean
-> by its origin, and never push the most expensive one — recommend what matches
+> by its origin, and never push the most expensive one: recommend what matches
 > the person's taste."* Months later, for the airport counter (where the customer
 > is in a hurry), they create the `express-barista`: *"You are quick and kind.
 > Answer in one sentence, offer the most popular order right away, and confirm
-> whether the person wants it to go."* Same menu, same brand — but the
+> whether the person wants it to go."* Same menu, same brand, but the
 > **instruction** draws two complete personalities, each right for its context.
 
 ## 7. Style: tone, verbosity, and language style
@@ -276,7 +276,7 @@ Three structured fields shape the register of the response:
 (mobile-friendly answers) and **4** for advisory contexts where the user expects
 depth.
 
-**Language style** (`languageStyle`) — the shape of the response:
+**Language style** (`languageStyle`), the shape of the response:
 
 | Value | Typical use |
 |---|---|
@@ -289,7 +289,7 @@ depth.
 These three fields become a small structured paragraph in the prompt (e.g., *"Use
 an EXECUTIVE tone, verbosity 2 (concise), PERSUASIVE language."*).
 
-> **💡 Worked example — the same question, three voices.** A customer asks *"is the
+> **💡 Worked example, the same question, three voices.** A customer asks *"is the
 > annual plan worth it?"*. See how each configuration changes the answer:
 > - **`EXECUTIVE` · verbosity 2 · `PERSUASIVE`** → *"It is: you lock in the 2025
 >   price and get 2 months free. Most teams that switch recover the cost within 90
@@ -299,7 +299,7 @@ an EXECUTIVE tone, verbosity 2 (concise), PERSUASIVE language."*).
 > - **`CASUAL` · verbosity 2 · `DIRECT`** → *"Way cheaper over the year 😊 it's 16%
 >   off. Shall we?"*
 >
-> It's the **same AI, the same model, the same question** — only the persona
+> It's the **same AI, the same model, the same question**, only the persona
 > changes. Pick `EXECUTIVE`/verbosity 2 for the sales chat on the corporate site
 > and `CASUAL`/verbosity 2 for the delivery app's WhatsApp.
 
@@ -310,11 +310,11 @@ Two fields enforce the brand's language explicitly:
 - **Mandatory Terms** (`mandatoryTerms`): words/phrases the LLM **must** use. It
   anchors the brand vocabulary. E.g.: `Customer Success | ROI | outcome`.
 - **Forbidden Terms** (`forbiddenTerms`): words/phrases that must **never**
-  appear. Compliance and brand safety — competitor names, discontinued products,
+  appear. Compliance and brand safety: competitor names, discontinued products,
   sensitive claims.
 
 > **The separator is the pipe (`|`), not the comma.** This lets a single term
-> contain a comma — important for phrases like *"Tier 1, Tier 2 customers"*. In
+> contain a comma: important for phrases like *"Tier 1, Tier 2 customers"*. In
 > the form you type **one term per line**; the system joins them with pipes on
 > save.
 
@@ -322,7 +322,7 @@ Forbidden terms are enforced in **two layers** (see Chapter 15): in the prompt
 (the model never *intends* to say them) and after the response (if it says them
 anyway, they're masked).
 
-> **💡 Worked example — the health insurer.** "HealthPlus" **cannot** let the AI
+> **💡 Worked example, the health insurer.** "HealthPlus" **cannot** let the AI
 > say "cure", "guaranteed", or name the competitor "LifePlan". And it **wants**
 > every response to use "coverage", "provider network", and "waiting period".
 > Configuration:
@@ -331,13 +331,13 @@ anyway, they're masked).
 >
 > When the model, under pressure from an insistent question, writes *"this
 > treatment is guaranteed by LifePlan"*, the user receives *"this treatment is
-> `[***]` by `[***]`"* — and a log records the slip for the compliance team to
+> `[***]` by `[***]`"*, and a log records the slip for the compliance team to
 > review the prompt. No forbidden claim reaches the member.
 
 ## 9. Big Five (OCEAN) personality
 
 Five optional controls from 0–100 give the persona a measurable psychological
-personality — the **Big Five (OCEAN)** model:
+personality, the **Big Five (OCEAN)** model:
 
 - **O**penness
 - **C**onscientiousness
@@ -346,16 +346,16 @@ personality — the **Big Five (OCEAN)** model:
 - **N**euroticism
 
 When set, they become behavioral guidance in the prompt (only the traits outside
-the neutral 34–66 band are injected, to avoid clutter) and — with style
-calibration on — nudge the sampling temperature slightly.
+the neutral 34–66 band are injected, to avoid clutter) and (with style
+calibration on) nudge the sampling temperature slightly.
 
 **Why does this matter?** In a **research participant cohort** (Part VIII),
 spreading OCEAN traits across participants is what stops every simulated user
 sounding the same. It's the difference between "10 polite clones" and "a diverse,
-realistic audience". They're optional and off by default — existing personas don't
+realistic audience". They're optional and off by default, existing personas don't
 change.
 
-> **💡 Worked example — testing a finance app with a realistic cohort.** A fintech
+> **💡 Worked example, testing a finance app with a realistic cohort.** A fintech
 > wants to know how different profiles react to the "invest now" screen. Instead
 > of 5 identical personas, the team spreads the OCEAN traits:
 > - `anxious-anna`: Neuroticism **85**, Openness 30 → reacts with fear of losing
@@ -372,7 +372,7 @@ change.
 
 ## 10. Grounding source: where the persona gets its answers
 
-By default, a persona answers "from memory" — using the AI model's general
+By default, a persona answers "from memory", using the AI model's general
 knowledge. The problem is that, when the subject is specific to your business, the
 model sometimes **makes up** something that *looks* right. The **grounding source**
 (`groundingSource` field) solves this: it **binds the answers to real content you
@@ -381,16 +381,16 @@ control**, instead of letting the AI improvise.
 | Source | What it does |
 |---|---|
 | `NONE` *(default)* | The persona answers with the model's own general knowledge |
-| `SN_SITE` | Answers become grounded on an **indexed search site** (a Semantic Navigation site) — the AI consults real content before answering |
+| `SN_SITE` | Answers become grounded on an **indexed search site** (a Semantic Navigation site), the AI consults real content before answering |
 | `NOTEBOOK` | Answers are grounded on the **persona's own material** (the sources you attached to it) |
 
 In practice: before answering, Turing searches the chosen content for the most
 relevant passages and hands them to the model in a separate, labeled block. That
 way, the AI answers from what's written there, not from guesses. It's a safe
-process — if the search fails for any reason, the conversation **continues
+process: if the search fails for any reason, the conversation **continues
 normally**, without breaking.
 
-> **💡 Worked example — the advisor who only says what's in the manual.** A
+> **💡 Worked example, the advisor who only says what's in the manual.** A
 > carmaker has a `mechanic-specialist` persona that serves dealerships. Without a
 > grounding source, it sometimes "invents" a bolt torque that looks right but is
 > wrong. By turning on the `SN_SITE` source pointing to the indexed site of the
@@ -402,12 +402,12 @@ normally**, without breaking.
 
 ## 11. Few-shot Store: teaching the persona by imitation
 
-The hardest part of a brand voice isn't the rules — it's the *feel*. You can
+The hardest part of a brand voice isn't the rules: it's the *feel*. You can
 describe "be formal", but you can't fully describe *"the way Maria, the best
 salesperson, answers a discount request"*.
 
 The solution is to teach **by example**, not just by description. The persona can
-have a **Few-shot Store** — a collection of model conversations, each with a
+have a **Few-shot Store**, a collection of model conversations, each with a
 typical customer question and the ideal answer, written in the persona's voice. At
 every new conversation, Turing looks in the store for the examples most similar to
 what the customer just asked and shows them to the AI as a reference, an instant
@@ -416,14 +416,14 @@ top-performing employee and saying: *"answer roughly like this"*.
 
 > In the form, this feature appears as the **Few-shot Store** field and, under the
 > hood, uses a "searchable content bank" of the platform (the *Embedding Store*,
-> the same one semantic search uses). You don't need to understand the mechanics —
+> the same one semantic search uses). You don't need to understand the mechanics:
 > just point the persona at the right collection.
 
 **How to build the store:**
 
 1. Create a dedicated collection just for that persona's examples (e.g.,
    `sales-examples`).
-2. Put pairs of **real or reviewed question and answer** in it — each item is a
+2. Put pairs of **real or reviewed question and answer** in it: each item is a
    question your customers would ask + the answer in the persona's tone. **Quality
    beats quantity: 20 well-written examples beat 200 mediocre ones.**
 3. Point that collection at the persona's **Few-shot Store** field.
@@ -431,14 +431,14 @@ top-performing employee and saying: *"answer roughly like this"*.
 **During the conversation:** when the customer writes, Turing retrieves the 3 most
 similar conversations from the store (by default) and places them before the AI as
 *"here's how we've answered questions like this"*. The AI then answers in the same
-style, adapting to the current case — without copying.
+style, adapting to the current case, without copying.
 
 > **Where do the best examples come from?** From **Chat Analytics**: export the
 > sessions where the AI got it right (the customer reached their goal, sentiment
 > was positive, the deal closed) and use them as a starting point. The store stays
 > fresh because *it's the conversations that worked that feed it*.
 
-> **💡 Worked example — the real-estate agency that learned to "talk like an
+> **💡 Worked example, the real-estate agency that learned to "talk like an
 > agent".** "RightHome" had defined its voice as persuasive, but the answers
 > sounded robotic. The team gathered 25 real conversations where the
 > top-performing agent booked a viewing. One of the examples stored in the
@@ -449,7 +449,7 @@ style, adapting to the current case — without copying.
 >   for a viewing tomorrow at 10am, or do you prefer late afternoon?"*
 >
 > When a new customer asks about a 3-bedroom, the AI **doesn't copy** that answer
-> — it mimics the *rhythm*: confirms availability, highlights one concrete
+>: it mimics the *rhythm*: confirms availability, highlights one concrete
 > differentiator, and already offers two time slots. It's the house's "way of
 > closing", learned by example, not memorized as a rule.
 
@@ -475,11 +475,11 @@ A common architecture: marketing maintains a CMS, an MCP server reads from the
 CMS, the persona pulls from the MCP. The CMS is the system of record; everything
 else is downstream.
 
-> **💡 Worked example — the Black Friday that didn't need engineering.** An
+> **💡 Worked example, the Black Friday that didn't need engineering.** An
 > electronics retailer has the `store-salesperson` persona wired to a `deals-mcp`
 > that reads marketing's campaign panel. At 11:59pm on Thursday, the discount on
 > the "gaming laptop" was 10%. At midnight, marketing changes it to 25% in the
-> panel — and **on the very next message** the chat already answers *"the gaming
+> panel, and **on the very next message** the chat already answers *"the gaming
 > laptop is 25% off today, only on Black Friday!"*. Nobody touched the persona,
 > nobody shipped code, and the promotion was never out of date. The same
 > `deals-mcp` feeds the personas for the website, WhatsApp, and the in-store kiosk
@@ -487,7 +487,7 @@ else is downstream.
 
 ## 13. Calibrating the model from style
 
-By default, the style reaches the model **only as text** — the actual sampling
+By default, the style reaches the model **only as text**, the actual sampling
 parameters (`temperature`, `max tokens`) come from the LLM Instance. Turn on
 **Calibrate model from style** (`calibrateModelParams`) so the style also tunes
 those parameters per turn:
@@ -503,23 +503,23 @@ nudge to the temperature. With the toggle **off** (the default), nothing changes
 The calibration applies to agent chat, direct chat with the persona, and the
 persona dialogue.
 
-> **💡 Worked example — stopping the legal assistant's "flights of fancy".** A law
+> **💡 Worked example, stopping the legal assistant's "flights of fancy".** A law
 > firm had a `paralegal` persona (`TECHNICAL` tone) that, on the LLM Instance
 > configured with temperature 0.7, sometimes over-embellished and cited
 > nonexistent case law. By turning on **Calibrate model from style**, the
-> `TECHNICAL` tone pulls the temperature down to **0.2** automatically — more
-> predictable, sober answers — and verbosity 2 keeps the answers **short**,
+> `TECHNICAL` tone pulls the temperature down to **0.2** automatically, more
+> predictable, sober answers, and verbosity 2 keeps the answers **short**,
 > cutting the rambling. The same firm's `blog-writer` persona (`CASUAL` tone,
 > verbosity 5), by contrast, gets long, loose answers. One LLM Instance, two
-> behaviors — decided by the persona.
+> behaviors, decided by the persona.
 
 ---
 
-# Part III — How the Persona reaches the model
+# Part III: How the Persona reaches the model
 
 ## 14. Assembling the prompt, layer by layer
 
-A Persona doesn't **replace** the agent's system prompt — it's **stacked on top**.
+A Persona doesn't **replace** the agent's system prompt: it's **stacked on top**.
 Here's exactly what happens at chat time:
 
 ```
@@ -542,20 +542,20 @@ Here's exactly what happens at chat time:
       💬 Response to the user
 ```
 
-Layers 1–6 form a cached **static block** (`TurPersonaStaticPromptCache`) — the
+Layers 1–6 form a cached **static block** (`TurPersonaStaticPromptCache`): the
 model doesn't reprocess them on every message, which saves time and cost. Layers 7
 and 9 evolve per turn; 10 and 11 grow naturally with the conversation.
 
 Internally, the one that performs this merge is the `TurPersonaPromptComposer`,
 fed by prompt contributors (`TurPersonaPromptContributor`,
-`TurPersonaGroundingPromptContributor`). You don't need to know this to use it —
+`TurPersonaGroundingPromptContributor`). You don't need to know this to use it,
 but it's helpful to understand that **the order is always the same and can be
 audited**.
 
-> **💡 Worked example — why the second message is cheaper.** In a telecom support
+> **💡 Worked example: why the second message is cheaper.** In a telecom support
 > chat, the customer's first message assembles the whole prompt: layers 1–6 (the
 > persona's static block) plus the brand facts from the MCP. From the second
-> message on, that block comes **from the cache** — the model doesn't reprocess
+> message on, that block comes **from the cache**: the model doesn't reprocess
 > the system instruction, the vocabulary, or the personality on every turn. In a
 > 15-message conversation, this reduces reprocessing and latency visibly. And when
 > you **edit the persona** (change a forbidden term), a database listener
@@ -565,12 +565,12 @@ audited**.
 ## 15. Post-response tone validation (the second barrier)
 
 The prompt's guardrails (forbidden vocabulary in the system message) are
-necessary but not sufficient. LLMs sometimes drift — under tool-calling pressure
+necessary but not sufficient. LLMs sometimes drift, under tool-calling pressure
 or in long sessions. That's why Turing enforces forbidden terms **a second time,
 after the response**, before it reaches the user.
 
 `TurPersonaToneValidator` scans every assistant response against the forbidden
-list. Matches are **masked** — replaced with `[***]` — rather than blocking the
+list. Matches are **masked** (replaced with `[***]`) rather than blocking the
 entire response. And it works in Portuguese, English, and Spanish: it analyzes the
 response and the forbidden terms in the right language and recognizes variations
 of the same word (singular/plural, conjugations), as well as whole phrases.
@@ -584,18 +584,18 @@ Why two layers?
 
 You don't choose between the two: both stay on whenever a Persona is attached.
 
-> **💡 Worked example — why recognizing word variations matters.** A brand forbids
+> **💡 Worked example: why recognizing word variations matters.** A brand forbids
 > the term `promotion`. A literal comparison would let *"we're **promoting** this
 > item"* and *"see our **promotions**"* slip through. Because the check understands
 > **English** and recognizes variations of the same word, it catches all three
-> forms — `promotion`, `promotions`, `promoting` — and masks them all. In a store
+> forms (`promotion`, `promotions`, `promoting`) and masks them all. In a store
 > serving customers in Portuguese, English, and Spanish, the same persona catches
 > `oferta`/`offer`/`oferta` in the language of each response, without you
 > maintaining three lists.
 
 ---
 
-# Part IV — Persona as Voice
+# Part IV: Persona as Voice
 
 ## 16. Attaching personas to an AI Agent
 
@@ -614,7 +614,7 @@ Agent, open the **Persona** tab (`/bento/ai-agent/instance/:id/persona`):
 **Decision tree for choosing an agent's persona:**
 
 1. **Is the agent customer-facing?** If not, the persona is optional (internal
-   agents often just need precision). If yes, **always pick a persona** — even a
+   agents often just need precision). If yes, **always pick a persona**, even a
    minimal one. Customer-facing without a persona means *the LLM's default voice
    is your company's voice*.
 2. **Which part of the funnel?** Pick a persona built for that stage. Don't try to
@@ -623,11 +623,11 @@ Agent, open the **Persona** tab (`/bento/ai-agent/instance/:id/persona`):
    has had two launches since, the answers will cite features that no longer
    exist. Review it quarterly.
 
-> **💡 Worked example — one agent, two personas, one default.** A university has a
+> **💡 Worked example: one agent, two personas, one default.** A university has a
 > "Student Center" agent. Its catalog holds two personas: `formal-registrar`
 > (default ⭐) and `laid-back-senior`. In normal service the AI uses the default.
 > But during the admissions campaign, the landing page passes `requestPersonaId =
-> laid-back-senior` on the chat call — and the **same agent**, with the same tools
+> laid-back-senior` on the chat call, and the **same agent**, with the same tools
 > and the same knowledge, serves applicants in the voice of an upbeat senior
 > student. Once the campaign is over, just stop sending the override: it goes back
 > to the registrar. Zero change to the agent.
@@ -635,7 +635,7 @@ Agent, open the **Persona** tab (`/bento/ai-agent/instance/:id/persona`):
 ## 17. Talking directly to a Persona
 
 The **Open chat** action (on the persona's dashboard) starts a live conversation
-*with the persona itself* — no agent required. It's the fastest way to **hear a
+*with the persona itself*, no agent required. It's the fastest way to **hear a
 voice before attaching it**: type a message, hear the answer in the persona's
 tone, refine the instruction, try again.
 
@@ -644,18 +644,18 @@ tone, refine the instruction, try again.
 - Lives at a shareable URL (`/bento/chat/persona/{id}`), so you can send a
   colleague the exact persona under test;
 - Supports multimodal attachments and all native tools;
-- An `AUDIENCE`-only persona can't speak — the action appears only for
+- An `AUDIENCE`-only persona can't speak: the action appears only for
   `SPEAKER`/`BOTH`.
 
 Under the hood, this uses the endpoint `POST /api/v2/persona/{personaId}/chat`
 (for those integrating on their own).
 
-> **💡 Worked example — approving the voice before going live.** The marketing
+> **💡 Worked example, approving the voice before going live.** The marketing
 > director of a digital bank wants to approve the assistant's new voice before
 > launch. The team opens `Administration → Personas → genz-assistant → Open chat`,
 > picks the production LLM, and chats: *"my bill is wrong, now what?"*. The answer
 > comes in the voice under test. She finds it "too informal for billing", the team
-> adjusts the system instruction and tests again — all in minutes, without
+> adjusts the system instruction and tests again, all in minutes, without
 > touching any agent. Satisfied, she **sends the link
 > (`/bento/chat/persona/{id}`) to legal** to validate the same persona. Only then
 > is the persona attached to the real agent.
@@ -665,15 +665,15 @@ Under the hood, this uses the endpoint `POST /api/v2/persona/{personaId}/chat`
 In a **Chat Flow**, a node can switch the active persona mid-conversation by
 setting `__activePersonaId` in the flow state. This lets you, for example, start
 with a **casual triage** persona and escalate to a **formal specialist** persona
-when the conversation gets technical — all in the same session, without the user
+when the conversation gets technical, all in the same session, without the user
 noticing the infrastructure transition.
 
 ---
 
-# Part V — Persona as Audience
+# Part V: Persona as Audience
 
 Up to here the persona has been a **voice**. Now comes the mirror: a persona can
-describe a **reader** — the audience your content is made for — so you can
+describe a **reader** (the audience your content is made for) so you can
 evaluate whether a document **actually fits** the people who should read it.
 *"Will a non-technical buyer understand this spec sheet?"* becomes a measurable
 question, not a guess.
@@ -691,7 +691,7 @@ An `AUDIENCE`/`BOTH` persona carries a **reader profile**:
 | **Primary language** | ISO-639 (e.g., `pt`, `en`, `es`) |
 
 To evaluate fit you need content. An audience persona gets an **evaluation
-notebook** — a set of sources:
+notebook**, a set of sources:
 
 | Source type | Where the text comes from |
 |---|---|
@@ -705,13 +705,13 @@ reuse. You manage everything in the persona's **Evaluation notebook** section: a
 a link, an indexed document, or a file; see the state in red/amber/green; preview
 the text; and re-extract what failed.
 
-> **💡 Worked example — the reader profile that exposes hidden jargon.** An insurer
+> **💡 Worked example: the reader profile that exposes hidden jargon.** An insurer
 > creates the `AUDIENCE` persona `everyday-customer`: reading level `MIDDLE(8)`,
 > expertise `NOVICE`, and a **vocabulary ceiling** with the few terms the customer
 > knows (`deductible`, `claim`, `policy`). In the notebook, it adds 3 sources: the
 > URL of the "general terms" page, the policy PDF (a file, from which the text is
 > extracted), and the indexed document of the FAQs. One of the sources fails
-> extraction (the URL blocked the bot) — it stays **red (`FAILED`)**, but the
+> extraction (the URL blocked the bot): it stays **red (`FAILED`)**, but the
 > other two go green, and the evaluation runs on them while the team re-extracts
 > the failed one. Since any word outside the vocabulary ceiling counts as
 > "complex", terms like *"subrogation"* jump out in the readability score.
@@ -731,25 +731,25 @@ combines two signals, and keeps working even if you don't have an AI configured:
    itself in the reader's shoes** and, looking **only** at the source text,
    returns: a fit score, **what fits** and **what doesn't fit** (each problem with
    the exact span, the reason, and an improvement suggestion). If the AI flags a
-   span that **doesn't exist** verbatim in the text, that flag is discarded — no
+   span that **doesn't exist** verbatim in the text, that flag is discarded, no
    invented problems.
 3. **Final score** = the average of the two (half each). If there's no AI, it uses
    readability only.
 
 Color bands: **green ≥ 70 · amber ≥ 40 · red < 40**.
 
-> **💡 Worked example — the two signals disagreeing on purpose.** An HR piece about
+> **💡 Worked example, the two signals disagreeing on purpose.** An HR piece about
 > career paths is evaluated for the `intern` persona.
 > - **Readability** gives 82 (green): short sentences, few difficult words.
 > - **AI evaluation** gives 45 (amber): in the intern's shoes, it points out that
->   the text assumes you know what a "9-box review cycle" and a "PDP" are —
->   concepts an intern hasn't mastered yet — each with the **exact span** and a
+>   the text assumes you know what a "9-box review cycle" and a "PDP" are
+(>   concepts an intern hasn't mastered yet) each with the **exact span** and a
 >   rewrite suggestion.
 > - **Final score** = the average → **~64 (amber)**.
 >
 > The lesson: the text is *easy to read*, but *hard for this reader to
 > understand*. Without AI configured, the report would show only the 82
-> readability score — still useful, but missing the jargon.
+> readability score, still useful, but missing the jargon.
 
 ## 21. The fit report
 
@@ -764,10 +764,10 @@ report** section shows, in "fits / doesn't fit" style:
 
 Without an AI configured, it shows only the readability score.
 
-> **💡 Worked example — the material that didn't speak the CFO's language.**
+> **💡 Worked example, the material that didn't speak the CFO's language.**
 > Marketing writes a piece aimed at finance directors. You point the
 > `non-technical-cfo` persona at the file and run the report: score 48 (amber),
-> with problems in "microservices architecture" and "p99 latency" — each with a
+> with problems in "microservices architecture" and "p99 latency", each with a
 > rewrite suggestion in financial-outcome language. The material is fixed
 > **before** it goes live.
 
@@ -785,15 +785,15 @@ fit* detail, with the best one flagged at the top.
 It's for **deciding whom to publish each article for** and for **choosing between**
 similar personas.
 
-> **💡 Worked example — the news portal that discovered the right audience.** An
+> **💡 Worked example, the news portal that discovered the right audience.** An
 > editor finished a dense piece on "tax reform and small-business tax regimes" and
 > didn't know which section to publish it in. They paste the text into **Suggest
 > persona**, without limiting the options. Turing evaluates it against every
 > audience persona and returns the order:
-> 1. `business-accountant` — **88 (green)** ← best fit, flagged at the top
-> 2. `solo-entrepreneur` — 61 (amber): understands the topic, but gets stuck on
+> 1. `business-accountant`: **88 (green)** ← best fit, flagged at the top
+> 2. `solo-entrepreneur`: 61 (amber): understands the topic, but gets stuck on
 >    "assessment regime"
-> 3. `general-reader` — 34 (red): too dense
+> 3. `general-reader`: 34 (red): too dense
 >
 > Immediate editorial decision: publish in the Accounting section and, if they
 > want to reach solo entrepreneurs, commission a lighter version. What was a guess
@@ -801,7 +801,7 @@ similar personas.
 
 ---
 
-# Part VI — Persona Match (N×N)
+# Part VI: Persona Match (N×N)
 
 ## 23. Content-fit projects: many contents × many personas
 
@@ -813,37 +813,37 @@ time. It's at **Administration → Personas → Persona Match**
 
 A **project** brings together three things:
 
-- **Contents** — added **once per project** (not per persona), in three ways: a
+- **Contents**: added **once per project** (not per persona), in three ways: a
   **link (URL)**, an **already-indexed document** (picked from a search site), or
   a **file** (PDF, DOC…) from which the text is extracted. Each content's text is
   read and stored on add; when you re-run the analysis, Turing recognizes what
   hasn't changed and doesn't redo the work needlessly.
-- **Personas** — any set of your personas.
+- **Personas**: any set of your personas.
 - A **schedule** (`Manual` / `Daily` / `Weekly`) and, if you want, a specific AI
   model (by default, the global model).
 
 Running the analysis evaluates each **(content × persona)** pair and stores the
-result in a **grid cell** — the same content-fit score (readability + AI
+result in a **grid cell**: the same content-fit score (readability + AI
 evaluation), with what **fits**, what **doesn't fit**, and rewrite suggestions.
 
 ## 24. The matrix, the lenses, and scheduled re-analysis
 
 The project screen shows the result three ways:
 
-- **Colored grid** — a table (contents as rows, personas as columns) painted
+- **Colored grid**: a table (contents as rows, personas as columns) painted
   green/amber/red by fit. It **fills live**, cell by cell, as the analysis runs.
   Click any cell to open a panel with that pair's score, what fits, and what
   doesn't.
-- **By content** — for each content, the personas ranked (which audience each
+- **By content**: for each content, the personas ranked (which audience each
   piece serves best).
-- **By persona** — for each persona, the contents ranked (which content serves
+- **By persona**: for each persona, the contents ranked (which content serves
   each audience best).
 
 Both lenses export to **PDF**.
 
 **Scheduled re-analysis.** A `Daily`/`Weekly` project re-runs itself (once only,
-even if you have several servers): the sources are re-read — so a link whose
-content changed is captured — and only the cells whose content changed are
+even if you have several servers): the sources are re-read (so a link whose
+content changed is captured) and only the cells whose content changed are
 recomputed. `Manual` projects run only when you click **Run analysis**. This is
 how personas and content stay tuned to each other as content changes.
 
@@ -851,14 +851,14 @@ Because a project can hold a **single** persona, it also **replaces the old
 per-persona validate notebook**: the persona's **Validate content** action now
 opens (or re-opens) a one-persona project and takes you to the project area.
 
-> **💡 Worked example — a SaaS help center audited every Monday.** The Success team
+> **💡 Worked example, a SaaS help center audited every Monday.** The Success team
 > creates the "Help Center × Personas" project. Contents: the 40 indexed articles
 > from the help center (SN_DOC) + 3 quick-start guide PDFs (upload). Personas:
 > `beginner-user`, `it-admin`, `developer`. Schedule **Weekly**. Every Monday
 > morning the colored 40×3 grid appears already filled in:
 > - The row for "Configuring SSO" is **green** for `it-admin` and `developer`, but
->   **red** for `beginner-user` — expected.
-> - But "Getting started" is also **amber** for the beginner — it shouldn't be!
+>   **red** for `beginner-user`, expected.
+> - But "Getting started" is also **amber** for the beginner: it shouldn't be!
 >   Clicking the cell, the drawer shows the mismatch: the article already assumes
 >   the user created an API key. A rewrite suggestion is attached.
 >
@@ -868,26 +868,26 @@ opens (or re-opens) a one-persona project and takes you to the project area.
 
 ---
 
-# Part VII — Persona Dialogue
+# Part VII: Persona Dialogue
 
 ## 25. Dialogues between personas
 
 **Persona Dialogue** runs an automatic, turn-by-turn conversation between **two or
-more** personas on a topic you choose. Because a dialogue is about peer speakers —
-none of them "owns" the conversation — it's a **global** surface, reached from the
+more** personas on a topic you choose. Because a dialogue is about peer speakers
+(none of them "owns" the conversation) it's a **global** surface, reached from the
 personas list (`/bento/persona/dialogue`) and organized as **saved projects**
 (each one can be re-opened and re-run).
 
 When opening/creating a project, you configure:
 
 - a **topic**;
-- a **cast** of speaker personas (minimum 2 — the number in the badge is the
+- a **cast** of speaker personas (minimum 2, the number in the badge is the
   **speaking order**; only `SPEAKER`/`BOTH` are selectable);
 - an **LLM Instance**;
 - a **turn budget** (rounds; default **10**, with a generous practical limit).
 
-Turing seeds the first persona with the topic, then goes **round-robin** — feeding
-each persona the previous speaker's reply — until the budget runs out. The
+Turing seeds the first persona with the topic, then goes **round-robin** (feeding
+each persona the previous speaker's reply) until the budget runs out. The
 transcript is **streamed live** (each turn appears the moment it's generated,
 color-coded per speaker) **and persisted**, so re-opening a project shows the last
 conversation; re-running replaces it.
@@ -898,7 +898,7 @@ a closing directive. If a turn fails mid-way, the partial transcript is kept wit
 a notice.
 
 > **What it's for.** It's the quickest way to hear several brand voices talking to
-> each other — a live "voice diff". Put `aggressive-sales` and `cautious-advisor`
+> each other, a live "voice diff". Put `aggressive-sales` and `cautious-advisor`
 > to debate "is the Enterprise plan worth it?" and you **hear** where the two
 > voices diverge before deciding which to attach to which agent. It's also great
 > for team training and content scripting.
@@ -910,20 +910,20 @@ compatibility.
 
 ---
 
-# Part VIII — Synthetic User Research
+# Part VIII: Synthetic User Research
 
-**Synthetic User Research** interviews a **cohort of personas** — playing the role
-of participants — over a research protocol and then **synthesizes everything they
+**Synthetic User Research** interviews a **cohort of personas** (playing the role
+of participants) over a research protocol and then **synthesizes everything they
 said** into an insights report organized by theme. It's at **Administration →
 Personas → Synthetic research** (`/bento/persona/research`), alongside Persona
 Match and Persona Dialogue.
 
 :::warning
-**It's a discovery co-pilot — not a replacement for real users.** Synthetic
+**It's a discovery co-pilot, not a replacement for real users.** Synthetic
 research **front-loads** the problem: it sharpens your questions, reveals the
 likely themes, and stress-tests an idea before you spend the (expensive) time of a
 real participant. It is **not** absolute truth and has no statistical validity.
-Two mechanisms exist precisely to keep the output honest — the **saturation
+Two mechanisms exist precisely to keep the output honest, the **saturation
 signal** (warns you when interviewing more people no longer brings anything new)
 and the **persona's grounding source** (Ch. 10). The report frames itself as a
 co-pilot throughout. **Always validate with real users before acting.**
@@ -933,26 +933,26 @@ co-pilot throughout. **Always validate with real users before acting.**
 
 A **study** is the reusable unit. It brings together:
 
-- A **goal** and an optional **hypothesis** — what you want to learn.
-- An **interview protocol** — how each participant is interviewed. There are three
+- A **goal** and an optional **hypothesis**: what you want to learn.
+- An **interview protocol**: how each participant is interviewed. There are three
   formats:
-  - **Dynamic interview** — the interviewer starts with the basics and **adapts
+  - **Dynamic interview**: the interviewer starts with the basics and **adapts
     the next questions** based on the answers, until it has enough (bounded by a
     maximum number of questions). Ideal when you don't yet know what to ask.
-  - **Scripted questions** — a fixed list, asked in the same order for everyone,
+  - **Scripted questions**: a fixed list, asked in the same order for everyone,
     word for word. Good for comparing answers side by side.
-  - **Concept test** — the interviewer presents a proposed idea or message and
+  - **Concept test**: the interviewer presents a proposed idea or message and
     measures the participant's reaction.
-- An **audience** — the ordered list of participant personas, each interviewed
+- An **audience**, the ordered list of participant personas, each interviewed
   separately.
-- **Who answers the questions** — either a "bare" AI model (playing the
+- **Who answers the questions**: either a "bare" AI model (playing the
   assistant), or **one of your already-deployed agents**. Choosing one of your
   agents **inverts the roles**: the persona becomes the *user* and your real agent
-  — with all its knowledge and tools — is the one that answers. That way the
+   (with all its knowledge and tools) is the one that answers. That way the
   cohort **stress-tests the assistant you've already shipped**, finding flaws
   before the real customer does.
 - **Two models, one for each stage** (an optional feature nicknamed "Big
-  Shuffle") — you can use one AI model to *interview* and another to *synthesize*,
+  Shuffle"): you can use one AI model to *interview* and another to *synthesize*,
   so no single model's bias colors the whole study.
 - A **schedule** (`Manual` / `Daily` / `Weekly`) to re-run the research
   automatically.
@@ -962,22 +962,22 @@ screen as soon as it finishes, with its status, and you can expand it to read th
 questions and answers. Re-running an unchanged study is cheap: the system
 recognizes what has already been done and doesn't redo work needlessly.
 
-> **💡 Worked example — three protocols, three business questions.** A mobility
+> **💡 Worked example, three protocols, three business questions.** A mobility
 > startup wants to launch a scooter subscription plan:
-> - **Dynamic interview** — goal *"understand what's blocking the subscription"*.
+> - **Dynamic interview**: goal *"understand what's blocking the subscription"*.
 >   The interviewer asks the basics and **digs deeper**: if the persona mentions
 >   "fear of not using it enough", it probes that fear. Good when you don't yet
 >   know which questions to ask.
-> - **Scripted questions** — the same 6 questions for all personas, in the same
+> - **Scripted questions**: the same 6 questions for all personas, in the same
 >   order, to **compare the answers side by side**.
-> - **Concept test** — presents the real offer text (*"$49/month, 60 min/day
+> - **Concept test**: presents the real offer text (*"$49/month, 60 min/day
 >   included"*) and measures the reaction. This is where the `anxious-anna`
->   persona says *"what if I travel for a month?"* — an objection nobody had
+>   persona says *"what if I travel for a month?"*: an objection nobody had
 >   foreseen.
 >
 > **Inverting the roles:** by pointing the interviews at the *already-deployed*
 > support agent (instead of the bare model), the personas become *users* and test
-> the real assistant — `methodical-carla` asks 8 questions in a row and reveals
+> the real assistant: `methodical-carla` asks 8 questions in a row and reveals
 > that the agent loses track after the third. It's putting the assistant to the
 > test before the real customer complains. And, using **two models**, the study
 > interviews with one and synthesizes with the other, so a single model's bias
@@ -993,7 +993,7 @@ result) into an **insights report**:
   participants, traced back to the persona who said them (fabricated quotes are
   flagged, not accepted).
 - **Recommendations**.
-- Two ways to view — **by theme** and **by persona** — a **Regenerate** button,
+- Two ways to view (**by theme** and **by persona**) a **Regenerate** button,
   and **PDF export**.
 
 **The saturation signal** answers the honest question *"have I interviewed enough
@@ -1001,7 +1001,7 @@ people?"*. As personas are interviewed in list order, Turing measures whether ea
 new participant still raises a **new** theme. When new themes stop appearing, it
 reports: *"sample adequate at N participants"*. It's a direct calculation (no AI),
 so it serves as a brake against overconfidence. A **theme-affinity map** shows
-which participants cluster around each theme; and — for scheduled studies — a
+which participants cluster around each theme; and (for scheduled studies) a
 **change-over-time** chart shows how the themes shift with each new run (one-shot
 research becoming continuous validation).
 
@@ -1009,38 +1009,38 @@ A **concept-test** study also gets a **concept-fit** score: the proposed idea is
 scored for each participant through the same content-fit evaluator as Persona
 Match (Ch. 20).
 
-> **💡 Worked example — when to stop interviewing.** In the scooter study, the team
+> **💡 Worked example: when to stop interviewing.** In the scooter study, the team
 > registered 12 personas in the cohort. The report brings the executive summary, 5
 > themes ranked by relevance (*"fear of a fine for parking wrong"* at the top,
 > with the verbatim quote of whoever said it) and recommendations. But the most
 > valuable part is the **saturation signal**: from the 7th participant on, no
-> **new** theme appeared — Turing reports *"sample adequate at 7"*. The team saves
+> **new** theme appeared, Turing reports *"sample adequate at 7"*. The team saves
 > the remaining 5 and, better yet, gains an honest argument against the boss who
 > wanted "just 20 more personas to be sure". In the **by persona** view,
-> `anxious-anna` is alone on the "fear of a fine" theme — a sign that it's a niche
+> `anxious-anna` is alone on the "fear of a fine" theme, a sign that it's a niche
 > concern, not a general one. Because the study runs **every week**, the
 > **change-over-time** chart shows that, after the app added a "parking photo"
 > feature, that fear shrank in the following rounds.
 
 ## 28. Synthesize a cohort, assistant, and program
 
-- **Synthesize a cohort** (`/bento/persona/cohort`) — don't have personas for the
+- **Synthesize a cohort** (`/bento/persona/cohort`): don't have personas for the
   cohort yet? Write a **one-paragraph summary** describing the audience and Turing
   creates a **diverse** set of persona **drafts**, with well-spread OCEAN
-  personalities. Nothing is saved automatically — you review each draft in a grid
+  personalities. Nothing is saved automatically: you review each draft in a grid
   and **keep** it (opens the normal form to edit and save) or **discard** it.
-- **Research Assistant** — every new study opens with an assistant (which you can
+- **Research Assistant**: every new study opens with an assistant (which you can
   skip): describe in free text what you want to learn and it builds a complete
   proposal (name, goal, hypothesis, protocol with the questions, and a suggested
   audience), already filling in the form for you.
-- **Program view** (`/bento/persona/research/program`) — plan **several studies**
+- **Program view** (`/bento/persona/research/program`): plan **several studies**
   with different audiences and roll everything up into a single view: totals, each
-  study's saturation, and — most importantly — the themes that **recur across
+  study's saturation, and (most importantly) the themes that **recur across
   different audiences** (a theme raised in 2 or more studies is highlighted). It's
   just a sum of the reports that already exist; it generates no new conclusion on
   its own.
 
-> **💡 Worked example — from zero to a research program in one afternoon.** A
+> **💡 Worked example, from zero to a research program in one afternoon.** A
 > product manager has never run research and needs to validate 3 feature ideas.
 > - **Research Assistant:** she types *"I want to know whether pet owners would pay
 >   for veterinary telemedicine"* → the assistant builds a complete study (goal,
@@ -1050,10 +1050,10 @@ Match (Ch. 20).
 >   cat owners in major cities, middle income, varying levels of attachment"* and
 >   asks for 8. Turing creates 8 **drafts** with varied personalities (from the
 >   super-devoted owner to the practical one). She **keeps** 6 and **discards** 2
->   — nothing was saved without review.
+>, nothing was saved without review.
 > - **Program view:** she runs the 3 studies (telemedicine, pet daycare, vaccine
 >   plan) and opens the program view. The theme *"price distrust"* appeared in
->   **all three** — highlighted as recurring. That, and not any specific feature,
+>   **all three**, highlighted as recurring. That, and not any specific feature,
 >   becomes the quarter's number-one priority.
 
 ## 29. The bridge to agent evaluation
@@ -1064,13 +1064,13 @@ turns and the participants' answers become reference material, turning a one-sho
 study into a **repeatable agent-QA harness** that regression-tests against a
 synthetic audience.
 
-> **💡 Worked example — the research that became an automated test.** The study
+> **💡 Worked example, the research that became an automated test.** The study
 > that stress-tested the support agent (Ch. 26) yielded 40 good synthetic-user
 > questions and the expected answers. With one click, the team **promotes it to an
 > evaluation dataset** and lands in the Eval Studio. From then on, every time
 > someone tweaks the agent's prompt or swaps the LLM, CI runs those 40 questions
 > and fails the build if quality drops. The interview that was "one-shot
-> discovery" became a **permanent safety net** — `methodical-carla` now tests
+> discovery" became a **permanent safety net**: `methodical-carla` now tests
 > every new version, for free.
 
 **Developer surface.** The `turing research` CLI verb defines/runs a study and
@@ -1079,13 +1079,13 @@ fetches its findings from code or from an automation (in the same spirit as the
 
 ---
 
-# Part IX — Customer scenarios
+# Part IX: Customer scenarios
 
 This part is for managers. Each scenario shows **the real problem**, **which
 persona features solve it**, and **the business outcome**. The figures are
 illustrative.
 
-## 30.1 Fashion e-commerce — "turn browsing into a purchase"
+## 30.1 Fashion e-commerce: "turn browsing into a purchase"
 
 **Problem.** The store's chat answers politely but doesn't sell; it cites products
 that no longer exist and sometimes mentions "competitor X".
@@ -1096,14 +1096,14 @@ that no longer exist and sometimes mentions "competitor X".
   `competitor | cheap | clearance-bin`.
 - Few-shot Store populated with Chat Analytics conversations that **converted**.
 - Brand-context MCP pulling **live inventory and promotions** from the CMS.
-- `SN_SITE` grounding on the indexed catalog — never suggests a discontinued
+- `SN_SITE` grounding on the indexed catalog, never suggests a discontinued
   product.
 
 **Outcome.** The AI talks like the store's senior salesperson, with always-current
 inventory, without naming a competitor. Marketing swaps the week's promotion
 without filing a ticket with engineering.
 
-## 30.2 Banking / regulated industry — "consistency and compliance"
+## 30.2 Banking / regulated industry: "consistency and compliance"
 
 **Problem.** An investment assistant must be accurate and **never** use language
 that suggests a guarantee of returns.
@@ -1111,7 +1111,7 @@ that suggests a guarantee of returns.
 **Solution.**
 - `SPEAKER` persona `formal-advisor`: `FORMAL` tone, `INSTRUCTIONAL` style;
   forbidden `guaranteed | risk-free | sure profit | guaranteed returns`.
-- Post-response tone validation masks any slip before it reaches the customer — a
+- Post-response tone validation masks any slip before it reaches the customer, a
   double compliance barrier.
 - `AUDIENCE` persona `beginner-investor` to validate whether the educational
   materials are understandable (reading level `SECONDARY`).
@@ -1119,12 +1119,12 @@ that suggests a guarantee of returns.
 **Outcome.** Every response passes through two compliance filters; the legal team
 audits the forbidden-terms list, not every response.
 
-## 30.3 B2B SaaS — "one funnel, several voices"
+## 30.3 B2B SaaS: "one funnel, several voices"
 
 **Problem.** A single chatbot tries to do top-of-funnel, technical evaluation, and
-onboarding — and does all three badly.
+onboarding, and does all three badly.
 
-**Solution — one persona per stage:**
+**Solution, one persona per stage:**
 - `top-of-funnel-sales` (EXECUTIVE, PERSUASIVE) → converts discovery into a demo.
 - `solutions-engineer` (TECHNICAL, INSTRUCTIONAL) → converts technical evaluation
   into buy-in from the technical side.
@@ -1136,7 +1136,7 @@ stage (`__activePersonaId`).
 **Outcome.** Each funnel stage has the right voice; no persona tries to do
 everything.
 
-## 30.4 Healthcare — "genuinely accessible language"
+## 30.4 Healthcare: "genuinely accessible language"
 
 **Problem.** Patient-guidance materials are written in medical jargon; nobody
 knows whether the patient understands.
@@ -1151,7 +1151,7 @@ knows whether the patient understands.
 **Outcome.** Health content measured objectively by readability + AI evaluation
 grounded in the text; rewrites prioritized by what's red.
 
-## 30.5 Public sector — "serve every citizen"
+## 30.5 Public sector: "serve every citizen"
 
 **Problem.** A services portal must speak to very different audiences (seniors,
 young people, business owners) and prove accessibility.
@@ -1165,7 +1165,7 @@ young people, business owners) and prove accessibility.
 
 **Outcome.** Public communication validated by audience, with an auditable trail.
 
-## 30.6 Media / editorial — "who is this content for?"
+## 30.6 Media / editorial: "who is this content for?"
 
 **Problem.** The newsroom produces a lot of content and doesn't know which
 audience each piece serves best.
@@ -1178,26 +1178,26 @@ says which content is missing for each audience (editorial gaps).
 
 ---
 
-# Part X — Persona from audio
+# Part X: Persona from audio
 
 You can **draft** a persona from a voice recording. The flow
 (`POST /api/persona/derive-from-audio`, with a version that runs in the background
 and shows progress live):
 
-1. **Transcribes** the audio (the transcription engine is chosen in settings —
-   cloud OpenAI, a compatible server installed in your own environment, or an
-   engine embedded in Turing itself — and it splits large files into parts
+1. **Transcribes** the audio (the transcription engine is chosen in settings
+   (cloud OpenAI, a compatible server installed in your own environment, or an
+   engine embedded in Turing itself) and it splits large files into parts
    automatically).
 2. **Two LLM calls**: (a) classifies the constrained fields as strict JSON (tone,
    verbosity, style, vocabulary, and audience descriptors); (b) writes a
    **character portrait** in text → becomes the system instruction.
-3. Produces a `personaKind = BOTH` draft — **never saved automatically**. The
+3. Produces a `personaKind = BOTH` draft, **never saved automatically**. The
    "Derive from audio" action hands the draft to the new-persona form for human
    review and save.
 
 > **Scenario.** A customer records 5 minutes describing "how our brand's ideal
 > salesperson talks". In a minute, you have a persona draft with a tone,
-> vocabulary, and a written system instruction — ready to edit and save. The same
+> vocabulary, and a written system instruction: ready to edit and save. The same
 > "derive, never auto-apply" discipline as the manifest wizard.
 
 Choose the engine in **Administration → Settings → Global Settings →
@@ -1205,7 +1205,7 @@ Transcription**.
 
 ---
 
-# Part XI — Operational guide and best practices
+# Part XI: Operational guide and best practices
 
 ## Who does what, and how often
 
@@ -1244,10 +1244,10 @@ Transcription**.
 
 ---
 
-# Appendix A — API reference
+# Appendix A: API reference
 
 > This appendix is **for those integrating Turing by code**. If you only use the
-> administration screen, you can safely ignore it — nothing here is needed to
+> administration screen, you can safely ignore it, nothing here is needed to
 > operate personas through the interface.
 
 | Method | Endpoint | Description |
@@ -1263,17 +1263,17 @@ Transcription**.
 | `POST` | `/api/persona/suggest` | Ranks audience personas by fit to a piece of content |
 | `POST` | `/api/persona/derive-from-audio` | Draft a `BOTH` persona from audio (multipart; never auto-saved); an async `/jobs` variant + SSE exists |
 | `POST` | `/api/v2/persona/{id}/chat` | Talk directly to a persona (SSE; JSON or multipart) |
-| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-match` | Persona Match projects — CRUD, `/{id}/personas`, `/{id}/sources` (+`/upload`, `/{sid}/extract`), `/{id}/matrix`, `/{id}/report`, `/{id}/run` (+`/stream` SSE) |
-| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-dialogue` | Dialogue projects — CRUD, `PUT .../{id}/speakers`, `GET .../{id}/transcript`, `POST .../{id}/run/stream` (SSE, persists) |
+| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-match` | Persona Match projects: CRUD, `/{id}/personas`, `/{id}/sources` (+`/upload`, `/{sid}/extract`), `/{id}/matrix`, `/{id}/report`, `/{id}/run` (+`/stream` SSE) |
+| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-dialogue` | Dialogue projects: CRUD, `PUT .../{id}/speakers`, `GET .../{id}/transcript`, `POST .../{id}/run/stream` (SSE, persists) |
 | `POST` | `/api/v2/persona-dialogue` | Ephemeral dialogue stream (compatibility) |
 | `POST` | `/api/sn/{site}/persona/{id}/content-fit` | Anonymous fit evaluation (public demo; read-only; 12,000-character limit) |
 
 > On save, the mandatory and forbidden terms arrive from the form as a
 > pipe-separated (`|`) list and are stored exactly as received. The check happens
-> at conversation-assembly time (an empty list is fine — it simply adds no
+> at conversation-assembly time (an empty list is fine, it simply adds no
 > constraint).
 
-# Appendix B — Glossary of options (each field's values)
+# Appendix B: Glossary of options (each field's values)
 
 > These are the internal values of each field; on the administration screen they
 > appear with translated labels.
@@ -1296,7 +1296,7 @@ Transcription**.
 - **Audio processing state**: `QUEUED` · `TRANSCRIBING` · `ANALYZING` ·
   `SUCCEEDED` · `FAILED`
 
-# Appendix C — Checklist for a new customer-facing persona
+# Appendix C: Checklist for a new customer-facing persona
 
 - [ ] Correct **kind** set (voice / audience / both)?
 - [ ] Does the **system instruction** describe *who speaks* and *how*, without
@@ -1321,14 +1321,14 @@ A Persona is one of three layers that bring an AI Agent to life:
 
 | Layer | What it provides |
 |---|---|
-| **LLM Instance** | The brain — the reasoning engine |
-| **Tools + MCP Servers** | The hands — what the agent *does* |
-| **Persona** | The voice — *how* it speaks |
+| **LLM Instance** | The brain: the reasoning engine |
+| **Tools + MCP Servers** | The hands: what the agent *does* |
+| **Persona** | The voice: *how* it speaks |
 
-Without a Persona, an Agent still works — but its voice is the LLM's default
+Without a Persona, an Agent still works, but its voice is the LLM's default
 voice. With a Persona, every agent that uses it sounds like the same coherent
-representative of your brand. Swap the LLM, swap the tools — **the voice stays**.
+representative of your brand. Swap the LLM, swap the tools: **the voice stays**.
 
 ---
 
-*Viglet Turing ES — Enterprise Search Intelligence. This guide tracks the current platform release; the concise technical reference lives in [Personas](./personas.md).*
+*Viglet Turing ES: Enterprise Search Intelligence. This guide tracks the current platform release; the concise technical reference lives in [Personas](./personas.md).*

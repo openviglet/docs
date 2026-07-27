@@ -14,7 +14,7 @@ Whether you need a traditional CMS with page rendering, a headless API for a sin
 ## What can you do with Shio CMS?
 
 ### Model your content
-Define custom **Post Types** with flexible fields — text, HTML, file uploads, relationships, date pickers, code editors, and more. Each Post Type becomes a reusable content template that editors can populate through the admin console.
+Define custom **Post Types** with flexible fields: text, HTML, file uploads, relationships, date pickers, code editors, and more. Each Post Type becomes a reusable content template that editors can populate through the admin console.
 
 ### Build websites with JavaScript
 Create **Page Layouts** and **Regions** using server-side JavaScript. The Nashorn/Node.js engine renders pages dynamically, and the `shObject` API gives you access to content, navigation, and URL generation directly from your templates.
@@ -23,7 +23,7 @@ Create **Page Layouts** and **Regions** using server-side JavaScript. The Nashor
 Use the built-in **GraphQL** endpoint with an interactive **GraphiQL** console to query posts, folders, and sites. Perfect for decoupled frontends and mobile applications.
 
 ### Integrate with any stack
-Consume Shio CMS from your application via **REST API** or **GraphQL**. All content operations — CRUD, search, file upload, user management — are available as JSON endpoints.
+Consume Shio CMS from your application via **REST API** or **GraphQL**. All content operations (CRUD, search, file upload, user management) are available as JSON endpoints.
 
 ### Search your content
 Contents are indexed automatically and searchable through the embedded search engine. For advanced search, Shio integrates with **Viglet Turing ES** for faceted search, semantic navigation, and generative AI.
@@ -64,17 +64,17 @@ Content authors create and manage content through the admin console. Shio CMS st
 
 ## Key concepts
 
-These are the main building blocks you will work with in Shio CMS. You do not need to understand all of them before getting started — come back to each one as you need it.
+These are the main building blocks you will work with in Shio CMS. You do not need to understand all of them before getting started: come back to each one as you need it.
 
 | Concept | What it is | Learn more |
 |---|---|---|
 | **Site** | The top-level container for a website. Defines URL, theme, and Post Type associations. | [Core Concepts](./core-concepts.md) |
 | **Folder** | Organizes content hierarchically within a site. Folders can be nested. | [Core Concepts](./core-concepts.md) |
-| **Post** | A content item — an instance of a Post Type with field values. | [Core Concepts](./core-concepts.md) |
+| **Post** | A content item: an instance of a Post Type with field values. | [Core Concepts](./core-concepts.md) |
 | **Post Type** | A content model that defines fields, labels, and publishing rules. | [Content Modeling](../content-modeling.md) |
-| **Page Layout** | A template that controls how a page is structured — defines regions and rendering logic. | [Website Development](../website-development.md) |
+| **Page Layout** | A template that controls how a page is structured, defines regions and rendering logic. | [Website Development](../website-development.md) |
 | **Region** | A section within a Page Layout that renders content using component APIs. | [Website Development](../website-development.md) |
-| **Component API** | Reusable content source within a Region — Navigation Component, Query Component, etc. | [Website Development](../website-development.md) |
+| **Component API** | Reusable content source within a Region: Navigation Component, Query Component, etc. | [Website Development](../website-development.md) |
 | **Publishing** | Content lifecycle: Draft, Published, Stale, Unpublished. | [Content Modeling](../content-modeling.md) |
 | **GraphQL** | Query interface for accessing content programmatically. | [GraphQL](../graphql.md) |
 | **Hazelcast Cache** | Distributed cache for rendered pages and objects. | [Search & Caching](../search-caching.md) |

@@ -35,7 +35,7 @@ the [React SDK](./react-sdk.md), or scaffold a ready-made Next.js app with
 | Auth | Session + CSRF | API **token** (`Key` header) |
 
 The CDA never exposes drafts or authoring-only fields (`owner`, `publisher`,
-`publishStatus`), and its response shape is **frozen** — safe to build a public
+`publishStatus`), and its response shape is **frozen**: safe to build a public
 site on.
 
 ---
@@ -43,7 +43,7 @@ site on.
 ## Authentication
 
 The CDA is authenticated with an **API token** sent in the `Key` header. CDA
-tokens are **read-only** — any non-GET request is rejected with `403`.
+tokens are **read-only**: any non-GET request is rejected with `403`.
 
 ```bash
 curl https://cms.example.com/api/v2/cda/site \
@@ -163,6 +163,6 @@ The `breadcrumb` array is ordered **root → … → current**.
 
 ## Next steps
 
-- [JavaScript Client](./javascript-client.md) — the framework-agnostic `@viglet/shio-client`.
-- [React SDK](./react-sdk.md) — hooks and render components.
-- [Next.js Starter](./nextjs-starter.md) — `npx create-shio-app`.
+- [JavaScript Client](./javascript-client.md): the framework-agnostic `@viglet/shio-client`.
+- [React SDK](./react-sdk.md): hooks and render components.
+- [Next.js Starter](./nextjs-starter.md): `npx create-shio-app`.

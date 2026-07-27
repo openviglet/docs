@@ -51,7 +51,7 @@ export default function llmsTxtPlugin(
     name: "llms-txt-plugin",
 
     async allContentLoaded({ allContent }) {
-      // Blog posts — surfaced in llms.txt so assistants can cite the
+      // Blog posts, surfaced in llms.txt so assistants can cite the
       // guides/comparisons (highest-intent content for discoverability).
       const blogContent =
         allContent["docusaurus-plugin-content-blog"] as Record<string, any>;
@@ -123,7 +123,7 @@ export default function llmsTxtPlugin(
 
       if (blogPosts.length > 0) {
         lines.push("");
-        lines.push("## Guides & Blog — Enterprise Search & AI");
+        lines.push("## Guides & Blog, Enterprise Search & AI");
         lines.push("");
         for (const post of blogPosts) {
           lines.push(`- [${post.title}](${siteConfig.url}${post.permalink})`);

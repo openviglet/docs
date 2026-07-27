@@ -32,7 +32,7 @@ flowchart LR
 3. **Upload** the ZIP in the Admin Console under **Pages**
 4. **Access** the deployed app at `http://your-turing-url/pages/{siteName}/`
 
-Turing handles SPA routing automatically — if a requested file doesn't exist, it falls back to `index.html`, allowing client-side routers (React Router, Vue Router, etc.) to work correctly.
+Turing handles SPA routing automatically: if a requested file doesn't exist, it falls back to `index.html`, allowing client-side routers (React Router, Vue Router, etc.) to work correctly.
 
 ---
 
@@ -105,8 +105,8 @@ All fields are optional. When present, the manifest metadata is displayed on the
 The Pages admin page displays a card grid of all deployed sites. Each card shows:
 
 - **Site name** and manifest metadata (if available)
-- **Preview link** — opens the deployed site in a new tab
-- **Delete button** — removes the site and all its files
+- **Preview link**: opens the deployed site in a new tab
+- **Delete button**: removes the site and all its files
 
 ### Deleting a Site
 

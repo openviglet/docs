@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: Core Concepts
-description: The fundamental concepts of Dumont DEP — connectors, job items, the processing pipeline, strategies, and indexing plugins.
+description: "The fundamental concepts of Dumont DEP: connectors, job items, the processing pipeline, strategies, and indexing plugins."
 ---
 
 # Core Concepts
 
-This page explains the fundamental concepts of Dumont DEP in plain terms. No configuration files, no code — just the mental model you need before diving into the technical documentation.
+This page explains the fundamental concepts of Dumont DEP in plain terms. No configuration files, no code, just the mental model you need before diving into the technical documentation.
 
 ---
 
@@ -36,10 +36,10 @@ Each connector implements the `DumConnectorPlugin` interface and provides three 
 
 A **Job Item** is a single document moving through the pipeline. It contains:
 
-- **Fields** — key-value pairs representing the document's content (title, text, URL, date, author, and any custom fields)
-- **Action** — what to do with this document: `INDEX` (add or update) or `DELETE` (remove from the index)
-- **Provider** — which connector produced this item
-- **Locale** — the language/country of the content (e.g., `en_US`, `pt_BR`)
+- **Fields**: key-value pairs representing the document's content (title, text, URL, date, author, and any custom fields)
+- **Action**: what to do with this document: `INDEX` (add or update) or `DELETE` (remove from the index)
+- **Provider**: which connector produced this item
+- **Locale**: the language/country of the content (e.g., `en_US`, `pt_BR`)
 
 Job Items are the universal data format inside Dumont DEP. Every connector produces them, every strategy evaluates them, and every indexing plugin consumes them.
 
@@ -49,13 +49,13 @@ Job Items are the universal data format inside Dumont DEP. Every connector produ
 
 When a connector extracts a document, it does not send it directly to the search engine. Instead, the document passes through a multi-stage pipeline designed for reliability, efficiency, and flexibility.
 
-![Dumont DEP — Processing Pipeline](/img/diagrams/dumont-pipeline.svg)
+![Dumont DEP, Processing Pipeline](/img/diagrams/dumont-pipeline.svg)
 
-### Stage 1 — Extraction
+### Stage 1: Extraction
 
 The connector reads content from the source and produces Job Items. Each item includes all the fields needed for indexing.
 
-### Stage 2 — Strategy Evaluation
+### Stage 2: Strategy Evaluation
 
 Every Job Item passes through a chain of **Processing Strategies**, evaluated in priority order. Each strategy decides whether the item should be indexed, re-indexed, de-indexed, ignored, or skipped:
 
@@ -67,21 +67,21 @@ Every Job Item passes through a chain of **Processing Strategies**, evaluated in
 | 40 | **Re-index** | Updates documents whose content has changed (checksum comparison) |
 | 50 | **Unchanged** | Skips documents that haven't changed since the last run |
 
-The strategy chain uses **checksum-based change detection** — each document's content is hashed, and the hash is compared against the last indexed version. Only documents that have actually changed are re-indexed.
+The strategy chain uses **checksum-based change detection**: each document's content is hashed, and the hash is compared against the last indexed version. Only documents that have actually changed are re-indexed.
 
-### Stage 3 — Batching
+### Stage 3: Batching
 
 Accepted Job Items are collected by the **Batch Processor** into groups (default: 50 items per batch). This reduces the number of messages sent to the queue and improves indexing throughput.
 
 When a batch reaches its configured size, or when the connector signals it has finished, the batch is flushed to the message queue.
 
-### Stage 4 — Queue
+### Stage 4: Queue
 
-The batch is sent to **Apache Artemis** (embedded JMS message queue). The queue decouples extraction from delivery — if the search engine is temporarily unavailable, messages wait in the queue and are delivered when the connection is restored.
+The batch is sent to **Apache Artemis** (embedded JMS message queue). The queue decouples extraction from delivery: if the search engine is temporarily unavailable, messages wait in the queue and are delivered when the connection is restored.
 
 Queue messages are persisted to disk (`store/queue/`) and survive application restarts.
 
-### Stage 5 — Delivery
+### Stage 5: Delivery
 
 The **Indexing Plugin** consumes messages from the queue and delivers them to the configured search engine. Dumont DEP supports three output targets:
 
@@ -95,7 +95,7 @@ The **Indexing Plugin** consumes messages from the queue and delivers them to th
 
 ## Indexing Rules
 
-**Indexing Rules** allow you to filter content during extraction — before it enters the pipeline. A rule defines:
+**Indexing Rules** allow you to filter content during extraction, before it enters the pipeline. A rule defines:
 
 - An **attribute** (a field name in the document)
 - A **rule type** (currently `IGNORE`)
@@ -103,7 +103,7 @@ The **Indexing Plugin** consumes messages from the queue and delivers them to th
 
 When a document's attribute matches any of the values, the document is skipped entirely. For example, a rule with `attribute = template` and `values = [error-page, redirect]` will prevent any document with those templates from being indexed.
 
-Indexing Rules are configured per source in the admin console and are evaluated by the **IgnoreIndexingRuleStrategy** at priority 20 — before the index/re-index/unchanged strategies run.
+Indexing Rules are configured per source in the admin console and are evaluated by the **IgnoreIndexingRuleStrategy** at priority 20, before the index/re-index/unchanged strategies run.
 
 ---
 
@@ -111,14 +111,14 @@ Indexing Rules are configured per source in the admin console and are evaluated 
 
 Dumont DEP tracks every document it has processed using a persistent indexing database. For each document, it stores:
 
-- **Object ID** — the unique identifier from the source
-- **Checksum** — a CRC32 hash of the document's content
-- **Timestamp** — when the document was last indexed
-- **Status** — the current state (preparing, indexed, de-indexed, etc.)
+- **Object ID**: the unique identifier from the source
+- **Checksum**: a CRC32 hash of the document's content
+- **Timestamp**: when the document was last indexed
+- **Status**: the current state (preparing, indexed, de-indexed, etc.)
 
 On subsequent runs, the connector compares the new checksum against the stored one. If they match, the document is **unchanged** and skipped. If they differ, the document is **re-indexed**. If a previously indexed document is no longer present in the source, it is **de-indexed**.
 
-This mechanism enables efficient **incremental indexing** — only changed content is sent to the search engine, regardless of how large the source is.
+This mechanism enables efficient **incremental indexing**, only changed content is sent to the search engine, regardless of how large the source is.
 
 ---
 

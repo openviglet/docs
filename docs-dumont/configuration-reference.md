@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: Configuration Reference
-description: Complete reference for all Dumont DEP application.yaml properties — server, database, queue, connectors, and indexing plugins.
+description: "Complete reference for all Dumont DEP application.yaml properties: server, database, queue, connectors, and indexing plugins."
 ---
 
 # Configuration Reference
@@ -99,7 +99,7 @@ logging:
 | `spring.datasource.username` | `sa` | Database username |
 | `spring.datasource.password` | `""` | Database password |
 | `spring.datasource.driver-class-name` | `org.h2.Driver` | JDBC driver class |
-| `spring.h2.console.enabled` | `false` | Enable H2 web console — **do not enable in production** |
+| `spring.h2.console.enabled` | `false` | Enable H2 web console: **do not enable in production** |
 
 ### Message Queue (Apache Artemis)
 
@@ -153,7 +153,7 @@ logging:
 
 | Property | Default | Description |
 |---|---|---|
-| `dumont.dependencies.enabled` | `false` | Persist `/content/*` references extracted from each indexed page and cascade re-index any dependent document on standalone updates. Currently populated only by the AEM connector — see [AEM Connector → Dependency Tracking](./connectors/aem.md#dependency-tracking-and-cascade-re-indexing) |
+| `dumont.dependencies.enabled` | `false` | Persist `/content/*` references extracted from each indexed page and cascade re-index any dependent document on standalone updates. Currently populated only by the AEM connector, see [AEM Connector → Dependency Tracking](./connectors/aem.md#dependency-tracking-and-cascade-re-indexing) |
 
 ### Logging
 

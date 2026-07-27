@@ -52,7 +52,7 @@ Content-Type: multipart/form-data
 
 Exchange providers enable content import from external content management systems. Providers are configured in **Configuration Console > Exchange Providers**.
 
-### OTCS — OpenText Content Services
+### OTCS: OpenText Content Services
 
 Import documents from **OpenText Content Services**:
 
@@ -62,7 +62,7 @@ Import documents from **OpenText Content Services**:
 | **Content** | Documents, folders, and metadata |
 | **Authentication** | OTCS credentials |
 
-### OTMM — OpenText Media Management
+### OTMM: OpenText Media Management
 
 Import media files from **OpenText Media Management**:
 

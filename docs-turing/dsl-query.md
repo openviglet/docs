@@ -1,14 +1,14 @@
 ---
 sidebar_position: 7
 title: DSL Query API
-description: Elasticsearch-compatible Query DSL API for Turing ES — search across Solr, Lucene, and Elasticsearch with a unified query language.
+description: "Elasticsearch-compatible Query DSL API for Turing ES: search across Solr, Lucene, and Elasticsearch with a unified query language."
 ---
 
 # DSL Query API
 
-The **DSL Query API** lets you search any Semantic Navigation site with the **Elasticsearch Query DSL** — the same JSON query language whether the site is backed by Solr, Lucene, or Elasticsearch. Turing ES translates the DSL to the configured engine and returns an Elasticsearch-shaped response, so you write one query syntax and never re-learn it per backend.
+The **DSL Query API** lets you search any Semantic Navigation site with the **Elasticsearch Query DSL**: the same JSON query language whether the site is backed by Solr, Lucene, or Elasticsearch. Turing ES translates the DSL to the configured engine and returns an Elasticsearch-shaped response, so you write one query syntax and never re-learn it per backend.
 
-You'd reach for this over the simpler [`/search` REST endpoint](./rest-api.md) when you need the full expressive power of structured queries — bool composition, nested aggregations, range filters, `more_like_this` — or when you're porting an existing Elasticsearch client. The same query types are what AI Agents drive through the [DSL search tools](./tool-calling.md#dsl-search--6-tools).
+You'd reach for this over the simpler [`/search` REST endpoint](./rest-api.md) when you need the full expressive power of structured queries (bool composition, nested aggregations, range filters, `more_like_this`) or when you're porting an existing Elasticsearch client. The same query types are what AI Agents drive through the [DSL search tools](./tool-calling.md#dsl-search-6-tools).
 
 ## Endpoint
 
@@ -994,8 +994,8 @@ The engine is resolved automatically from the SN site's Search Engine instance c
 
 ## Related Pages
 
-- [DSL Compatibility Matrix](./dsl-compatibility.md) — which DSL features each engine supports
-- [Search Engine Configuration](./search-engine.md) — Solr / Elasticsearch / Lucene backends
-- [Semantic Navigation](./semantic-navigation.md) — the sites these queries run against
-- [Tool Calling](./tool-calling.md#dsl-search--6-tools) — the DSL tools AI Agents use
-- [REST API Reference](./rest-api.md) — the simpler `/search` endpoint
+- [DSL Compatibility Matrix](./dsl-compatibility.md): which DSL features each engine supports
+- [Search Engine Configuration](./search-engine.md): Solr / Elasticsearch / Lucene backends
+- [Semantic Navigation](./semantic-navigation.md): the sites these queries run against
+- [Tool Calling](./tool-calling.md#dsl-search-6-tools): the DSL tools AI Agents use
+- [REST API Reference](./rest-api.md): the simpler `/search` endpoint

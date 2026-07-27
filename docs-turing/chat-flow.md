@@ -6,15 +6,15 @@ description: Author conversational state machines visually. A rich node catalog 
 
 # Chat Flow
 
-> *Sometimes a conversation needs to go somewhere specific. A demo qualification has six questions in a precise order. An onboarding wizard has a checklist that can't be skipped. A support escalation collects four pieces of information before opening a ticket. **Chat Flow** is how you draw those journeys — visually, declaratively, and in five minutes.*
+> *Sometimes a conversation needs to go somewhere specific. A demo qualification has six questions in a precise order. An onboarding wizard has a checklist that can't be skipped. A support escalation collects four pieces of information before opening a ticket. **Chat Flow** is how you draw those journeys, visually, declaratively, and in five minutes.*
 
-A **Chat Flow** is a graph of conversational steps attached to an [AI Agent](./ai-agents.md). Each step (a *node*) is a small contract — *"ask this, validate that, store this answer in this variable, then go to the next step"*. The agent still uses the LLM to talk to the user; the flow steers the conversation while the LLM does the talking.
+A **Chat Flow** is a graph of conversational steps attached to an [AI Agent](./ai-agents.md). Each step (a *node*) is a small contract: *"ask this, validate that, store this answer in this variable, then go to the next step"*. The agent still uses the LLM to talk to the user; the flow steers the conversation while the LLM does the talking.
 
 Three things make Chat Flow special:
 
 1. **Visual authoring.** You drag nodes onto a canvas, draw edges between them, and the runtime walks the graph for you. No code.
-2. **Multiple guardrail strategies.** You decide *how strictly* the flow is enforced — from a lightweight prompt-only nudge to a JSON-validating LLM judge.
-3. **Vibe Coding.** A built-in AI authoring chat lets you describe the flow in plain English (*"a five-step demo qualification flow that collects company name, role, current solution, decision timeline, and email"*) and watch it draw itself. You revise it the same way: *"split the timeline question into two — short term and long term"*.
+2. **Multiple guardrail strategies.** You decide *how strictly* the flow is enforced, from a lightweight prompt-only nudge to a JSON-validating LLM judge.
+3. **Vibe Coding.** A built-in AI authoring chat lets you describe the flow in plain English (*"a five-step demo qualification flow that collects company name, role, current solution, decision timeline, and email"*) and watch it draw itself. You revise it the same way: *"split the timeline question into two: short term and long term"*.
 
 Configure flows in **Administration → AI Agents → \<your agent\> → Chat Flow**.
 
@@ -22,7 +22,7 @@ Configure flows in **Administration → AI Agents → \<your agent\> → Chat Fl
 
 ## When You Need a Chat Flow
 
-A free-form agent works beautifully when the conversation is open-ended. *"Help me find a product"* or *"explain this concept"* don't need scripted scaffolding — the LLM and your tools are enough.
+A free-form agent works beautifully when the conversation is open-ended. *"Help me find a product"* or *"explain this concept"* don't need scripted scaffolding: the LLM and your tools are enough.
 
 But there are conversations where you actually need to **collect specific information in a specific order**:
 
@@ -34,13 +34,13 @@ But there are conversations where you actually need to **collect specific inform
 | Run a survey or NPS conversation | Questions follow a strict structure for analysis later |
 | Gather KYC / compliance information | Regulators expect a complete audit trail of *what was asked* and *what was answered* |
 
-Without a flow, you'd write a 1,500-token system prompt full of *"first ask this, then ask that, never skip..."* — and the LLM would still skip something halfway through. With a flow, the prompt is short, the order is enforced by the engine, and every collected value is stored in a typed variable.
+Without a flow, you'd write a 1,500-token system prompt full of *"first ask this, then ask that, never skip..."*, and the LLM would still skip something halfway through. With a flow, the prompt is short, the order is enforced by the engine, and every collected value is stored in a typed variable.
 
 ---
 
 ## The Core Block Types
 
-A Chat Flow graph starts from a small set of **core node types** you'll use in almost every flow. Beyond them is a richer [node catalog](#the-full-node-catalog) for slots, deterministic tool calls, async routines, webhooks, and human approval — covered right after.
+A Chat Flow graph starts from a small set of **core node types** you'll use in almost every flow. Beyond them is a richer [node catalog](#the-full-node-catalog) for slots, deterministic tool calls, async routines, webhooks, and human approval, covered right after.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
@@ -77,24 +77,24 @@ A typical demo-qualification graph: an identity sub-flow at the start, three Que
 
 The single entry point of every flow. There is exactly one Start node per flow. It has no input edges and one output edge to the first real step.
 
-The Start node is invisible to the user — the conversation simply begins at the node it points to.
+The Start node is invisible to the user, the conversation simply begins at the node it points to.
 
 ### 2. Question
 
 The bread and butter of a flow. A Question node:
 
-- Carries an **AI Instruction** — what the LLM should ask the user. Written in natural language: *"Ask the user what their current monthly active user count is. Frame it as a market-sizing question, not an audit."*
-- Optionally has a **Validation Rule** — what counts as a valid answer. *"Must be a number; if the user says 'a lot' or 'many', ask them to estimate."*
-- Stores the user's answer in an **Output Variable** — a named slot in the flow's state (e.g., `monthly_active_users`).
+- Carries an **AI Instruction**: what the LLM should ask the user. Written in natural language: *"Ask the user what their current monthly active user count is. Frame it as a market-sizing question, not an audit."*
+- Optionally has a **Validation Rule**: what counts as a valid answer. *"Must be a number; if the user says 'a lot' or 'many', ask them to estimate."*
+- Stores the user's answer in an **Output Variable**, a named slot in the flow's state (e.g., `monthly_active_users`).
 
-When a Question node is active, the runtime injects the AI Instruction into the system prompt so the LLM knows exactly what to ask. The LLM still controls the *wording*, the *register*, the *follow-up* — but the *intent* is locked.
+When a Question node is active, the runtime injects the AI Instruction into the system prompt so the LLM knows exactly what to ask. The LLM still controls the *wording*, the *register*, the *follow-up*, but the *intent* is locked.
 
 ### 3. Condition
 
 Branches the flow based on collected variables. A Condition node has:
 
 - A **Condition Expression** evaluated against the flow's variables (e.g., `monthly_active_users > 10000`).
-- **Two outgoing edges** — one labelled *true*, one labelled *false*. The runtime follows whichever matches.
+- **Two outgoing edges**: one labelled *true*, one labelled *false*. The runtime follows whichever matches.
 
 Use Condition nodes to skip questions that don't apply, route enterprise leads differently from self-serve, or fork a survey based on an earlier answer.
 
@@ -102,8 +102,8 @@ Use Condition nodes to skip questions that don't apply, route enterprise leads d
 
 Calls a tool *as part of the flow*, not because the LLM asked for it. A Tool node has:
 
-- A **tool source** — `native` (one of the 27 [native tools](./tool-calling.md)), `mcp` (a connected [MCP server](./mcp-servers.md)), or `custom` (a [Custom Tool](./custom-tools.md) you authored).
-- The **tool identifier** — function name for native, server id for MCP, custom-tool id for custom.
+- A **tool source**: `native` (one of the 27 [native tools](./tool-calling.md)), `mcp` (a connected [MCP server](./mcp-servers.md)), or `custom` (a [Custom Tool](./custom-tools.md) you authored).
+- The **tool identifier**: function name for native, server id for MCP, custom-tool id for custom.
 
 Use Tool nodes when a step needs a deterministic action *between questions*. Examples:
 
@@ -127,33 +127,33 @@ Sub-flows have their own state row (`TurChatFlowState.parentStateId` records the
 
 ### End
 
-Terminator. Like Start, exactly one per flow. When the runtime reaches End, it marks the flow's state as completed, persists a `TurChatFlowSubmission` row (full collected variables + outcome), and the conversation continues normally — the agent is back to free-form mode.
+Terminator. Like Start, exactly one per flow. When the runtime reaches End, it marks the flow's state as completed, persists a `TurChatFlowSubmission` row (full collected variables + outcome), and the conversation continues normally: the agent is back to free-form mode.
 
 ---
 
 ## The Full Node Catalog
 
-The five core types cover collection and branching. These additional node types turn a flow into a small automation engine — writing slots deterministically, calling tools and routines, reaching out over webhooks, and pausing for a human.
+The five core types cover collection and branching. These additional node types turn a flow into a small automation engine, writing slots deterministically, calling tools and routines, reaching out over webhooks, and pausing for a human.
 
 | Node type | What it does | See |
 |---|---|---|
-| `aiQuestion` | The Question node above — LLM asks, answer captured into a slot | — |
-| `writeSlot` | Sets a slot deterministically (no LLM), with server-side `{{variable}}` interpolation. Honors `overrideExistingValue` | — |
-| `formCapture` | Like a Question but with **strict validation** — built-in patterns for CPF, CNPJ, email, phone, and CEP, including CPF/CNPJ mod-11 checksum | — |
+| `aiQuestion` | The Question node above: LLM asks, answer captured into a slot | n/a |
+| `writeSlot` | Sets a slot deterministically (no LLM), with server-side `{{variable}}` interpolation. Honors `overrideExistingValue` | n/a |
+| `formCapture` | Like a Question but with **strict validation**, built-in patterns for CPF, CNPJ, email, phone, and CEP, including CPF/CNPJ mod-11 checksum | n/a |
 | `functionCall` | Calls a tool **synchronously** as a flow step (`toolSource` = native/MCP/custom + `functionName`). The deterministic successor to the legacy "Tool" node | [Tool Calling](./tool-calling.md) |
-| `subFlow` | Runs another flow inline and returns (the Sub Flow node above) | — |
-| `subFlowSwitch` | Deterministic multi-way routing into one of several sub-flows based on a `switchVariable` | — |
+| `subFlow` | Runs another flow inline and returns (the Sub Flow node above) | n/a |
+| `subFlowSwitch` | Deterministic multi-way routing into one of several sub-flows based on a `switchVariable` | n/a |
 | `scheduleAgent` | Fires a **routine** asynchronously and waits for its result slot | [Routines](./routines.md) |
 | `webhook` | POSTs to a configured outbound webhook as a flow step | [Webhooks](./webhooks.md) |
 | `humanApproval` | Parks the conversation until a person approves/rejects | [Human-in-the-Loop](./human-in-the-loop.md) |
 | `suspend` | Parks the conversation indefinitely until an explicit resume | [Human-in-the-Loop](./human-in-the-loop.md) |
-| `planningStep` / `iteratePlan` | Decompose a goal into a typed plan and walk it item by item (long-horizon tasks) | — |
-| `condition` | Branches on a `conditionExpression` (the Condition node above) | — |
+| `planningStep` / `iteratePlan` | Decompose a goal into a typed plan and walk it item by item (long-horizon tasks) | n/a |
+| `condition` | Branches on a `conditionExpression` (the Condition node above) | n/a |
 
 Two cross-cutting node fields are worth knowing:
 
-- **`toolsEnabled`** — set `FALSE` on a node to strip *all* tools for that step (e.g. a pure question where you don't want the LLM wandering off to call something). `TRUE`/unset leaves tools available.
-- **`personaId`** — pin a specific [persona](./personas.md) for the duration of a node, overriding the agent default.
+- **`toolsEnabled`**: set `FALSE` on a node to strip *all* tools for that step (e.g. a pure question where you don't want the LLM wandering off to call something). `TRUE`/unset leaves tools available.
+- **`personaId`**: pin a specific [persona](./personas.md) for the duration of a node, overriding the agent default.
 
 ### `formCapture` validation
 
@@ -167,7 +167,7 @@ Two cross-cutting node fields are worth knowing:
 | `phone` | phone number | format |
 | `cep` | Brazilian postal code | format |
 
-A value that fails validation is rejected and the user is re-prompted — the slot never receives a malformed identifier.
+A value that fails validation is rejected and the user is re-prompted, the slot never receives a malformed identifier.
 
 ---
 
@@ -176,7 +176,7 @@ A value that fails validation is rejected and the user is re-prompted — the sl
 By default, when a `functionCall`, `scheduleAgent`, or `webhook` node fails (a tool throws, a routine times out, a webhook can't be delivered), the engine logs it and advances on the normal edge. When that's not safe, opt into explicit error routing:
 
 - Set **`continueOnFailure: true`** on the node.
-- Draw an outgoing edge whose `sourceHandle` is **`failure`** — rendered in the editor as a **red "on error" arrow**, exactly like a try/catch.
+- Draw an outgoing edge whose `sourceHandle` is **`failure`**, rendered in the editor as a **red "on error" arrow**, exactly like a try/catch.
 
 On failure the engine routes down the `failure` edge instead of advancing silently, so you can show a fallback message, retry via another path, or escalate to a human. `scheduleAgent` additionally has a `timeout` edge for the "routine didn't finish in time" case (see [Routines](./routines.md)).
 
@@ -188,7 +188,7 @@ Two policies make Question/`formCapture` nodes more robust under a guardrail.
 
 ### Capture-first
 
-Rather than letting a strict judge stall a conversation by rejecting an answer it isn't sure about, the engine **persists the user's message into the slot first**, then runs the judge as *advisory* — the judge writes a `<slot>__confidence` (low/high) into a parallel slot instead of blocking. The flow never gets stuck with `slot = null` because the judge was uncertain; you can branch on the confidence slot later if you care.
+Rather than letting a strict judge stall a conversation by rejecting an answer it isn't sure about, the engine **persists the user's message into the slot first**, then runs the judge as *advisory*: the judge writes a `<slot>__confidence` (low/high) into a parallel slot instead of blocking. The flow never gets stuck with `slot = null` because the judge was uncertain; you can branch on the confidence slot later if you care.
 
 ### `onJudgeReject` policy
 
@@ -204,13 +204,13 @@ When the judge *does* reject an answer, the node's `onJudgeReject` field decides
 
 ## Slots: The Conversation's Memory
 
-Every value a flow collects lives in a **slot** — a named, conversation-scoped variable the agent treats as globally addressable across flows. Slots are more than a key-value bag; they come with streaming, auditing, privacy, and multi-modal support.
+Every value a flow collects lives in a **slot**, a named, conversation-scoped variable the agent treats as globally addressable across flows. Slots are more than a key-value bag; they come with streaming, auditing, privacy, and multi-modal support.
 
 | Capability | What it gives you |
 |---|---|
 | **Live updates (SSE)** | `GET /chat/slots/stream` pushes the slot map as it changes; `…/stream/delta` pushes only `{added, updated, removed}` (~10× fewer bytes on slot-heavy conversations) |
-| **Audit log** | Every write is recorded in the slot-write audit trail with its origin (`NODE` / `TOOL` / `ENDPOINT` / `EXTRACT`) and old→new delta — the backbone of the [conversation replay timeline](./chat-analytics.md#conversation-replay) and LGPD/GDPR auditing |
-| **PII slots (`pii_*`)** | A slot named with the `pii_*` prefix gets extra handling (encrypted/redacted in exports) — use it for anything sensitive |
+| **Audit log** | Every write is recorded in the slot-write audit trail with its origin (`NODE` / `TOOL` / `ENDPOINT` / `EXTRACT`) and old→new delta, the backbone of the [conversation replay timeline](./chat-analytics.md#conversation-replay) and LGPD/GDPR auditing |
+| **PII slots (`pii_*`)** | A slot named with the `pii_*` prefix gets extra handling (encrypted/redacted in exports), use it for anything sensitive |
 | **Multi-modal slots** | Slot types `IMAGE` / `AUDIO` / `FILE` hold an uploaded artifact's storage URL (optionally vision-extracted), via `POST /chat/slot-upload` |
 | **Document extraction** | `POST /chat/slot-extract` runs an uploaded file through Tika → LLM structured output → per-slot writes |
 | **State snapshot** | `GET /chat/state` returns the active flow, current node, guardrail method, and A/B experiment metadata |
@@ -221,9 +221,9 @@ These endpoints power the [Chat Analytics](./chat-analytics.md) replay timeline 
 
 ## Guardrails: Three Strategies, Three Levels of Strictness
 
-The same flow graph can be enforced **three different ways** at runtime. You pick per-flow which strategy fits the conversation. There is no "best" — there is a tradeoff between strictness, latency, and token cost.
+The same flow graph can be enforced **three different ways** at runtime. You pick per-flow which strategy fits the conversation. There is no "best": there is a tradeoff between strictness, latency, and token cost.
 
-### Strategy 1 — `HEURISTIC` (default)
+### Strategy 1: `HEURISTIC` (default)
 
 **The fast lane.** No extra LLM calls. The current node's instruction is injected as a firm contract in the system prompt; after the LLM replies, a lightweight Java-side heuristic decides whether the user gave a valid answer and the engine advances.
 
@@ -232,12 +232,12 @@ The same flow graph can be enforced **three different ways** at runtime. You pic
 | Extra LLM calls | 0 |
 | Latency overhead | None |
 | Token overhead | ~50–150 tokens added to system prompt |
-| Strictness | Low — the LLM may sometimes accept fuzzy answers |
+| Strictness | Low: the LLM may sometimes accept fuzzy answers |
 | Use when | The flow is conversational, customers can rephrase, and the cost of a mis-route is low |
 
 Heuristic is the right starting point for most flows. Run it. Watch [Chat Analytics](./chat-analytics.md) for sessions where the goal wasn't achieved. Upgrade only if you see drift.
 
-### Strategy 2 — `LLM_JUDGE`
+### Strategy 2: `LLM_JUDGE`
 
 **Two-call enforcement.** After the chat LLM replies to the user, a *second* LLM call ("the judge") is made with a tiny structured prompt: *"Was the user's answer on-topic? Did they provide a valid value? Should we advance?"* The judge returns JSON like:
 
@@ -249,25 +249,25 @@ Heuristic is the right starting point for most flows. Run it. Watch [Chat Analyt
 }
 ```
 
-If `on_topic` is false, the engine substitutes a redirect message (*"Let's stay on track — could you share your monthly active users?"*) instead of advancing. If `collected_value` is present, it's stored in the node's output variable.
+If `on_topic` is false, the engine substitutes a redirect message (*"Let's stay on track, could you share your monthly active users?"*) instead of advancing. If `collected_value` is present, it's stored in the node's output variable.
 
 | Property | Value |
 |---|---|
 | Extra LLM calls | 1 per turn while a flow is active |
 | Latency overhead | ~200–500ms (judge call) |
 | Token overhead | ~200 tokens per turn |
-| Strictness | High — drift is caught and corrected |
+| Strictness | High: drift is caught and corrected |
 | Use when | The flow is a structured form (KYC, compliance), drift costs money or violates policy |
 
-The judge can use a smaller, cheaper model than the chat LLM — its job is classification, not generation.
+The judge can use a smaller, cheaper model than the chat LLM: its job is classification, not generation.
 
-### Strategy 3 — `STRUCTURED_OUTPUT`
+### Strategy 3: `STRUCTURED_OUTPUT`
 
 **Single-call enforcement.** Instead of two LLM calls, the chat LLM is instructed to reply with a **single JSON object** that bundles both the user-facing message *and* the verdict:
 
 ```json
 {
-  "reply": "Got it — 12,500 monthly active users. Next, what's your role on the team?",
+  "reply": "Got it: 12,500 monthly active users. Next, what's your role on the team?",
   "on_topic": true,
   "collected_value": "12500",
   "ready_to_advance": true,
@@ -280,15 +280,15 @@ The engine extracts `reply` and shows it to the user; applies the verdict; advan
 | Property | Value |
 |---|---|
 | Extra LLM calls | 0 (the chat call carries both) |
-| Latency overhead | None — the judge piggybacks on the reply |
+| Latency overhead | None: the judge piggybacks on the reply |
 | Token overhead | ~100 tokens (structured response is more verbose than free text) |
-| Strictness | High — same as `LLM_JUDGE` |
+| Strictness | High: same as `LLM_JUDGE` |
 | Use when | You want strict enforcement *and* low latency |
 
-Modern providers (OpenAI, Gemini, Ollama) follow JSON instructions reliably. Anthropic occasionally drifts to free text — when that happens, the engine falls back gracefully to heuristic mode for that turn.
+Modern providers (OpenAI, Gemini, Ollama) follow JSON instructions reliably. Anthropic occasionally drifts to free text: when that happens, the engine falls back gracefully to heuristic mode for that turn.
 
 :::tip Picking a strategy
-Start with `HEURISTIC`. Run it for a week. Read 20 sessions in [Chat Analytics](./chat-analytics.md) drill-down — pay attention to ones that ended with `goalAchieved=NO` or `sentiment=FRUSTRATED`. If the LLM was drifting off-topic, upgrade to `STRUCTURED_OUTPUT`. Only escalate to `LLM_JUDGE` if `STRUCTURED_OUTPUT` falls back too often (provider-specific issue) or if you need the judge to use a different model from the chat LLM.
+Start with `HEURISTIC`. Run it for a week. Read 20 sessions in [Chat Analytics](./chat-analytics.md) drill-down: pay attention to ones that ended with `goalAchieved=NO` or `sentiment=FRUSTRATED`. If the LLM was drifting off-topic, upgrade to `STRUCTURED_OUTPUT`. Only escalate to `LLM_JUDGE` if `STRUCTURED_OUTPUT` falls back too often (provider-specific issue) or if you need the judge to use a different model from the chat LLM.
 :::
 
 ---
@@ -304,7 +304,7 @@ When you set a **Trigger Description** on a flow (e.g., *"User wants to book a d
 | Trigger Mode | Behavior |
 |---|---|
 | `ONCE` (default) | Auto-trigger at most once per conversation. After the flow reaches End, the router won't pick it again in this conversation. |
-| `ALWAYS` | Re-trigger whenever the router decides the message matches — even after a previous run. |
+| `ALWAYS` | Re-trigger whenever the router decides the message matches, even after a previous run. |
 
 Leave Trigger Description blank to disable auto-trigger entirely. The flow can still be invoked manually.
 
@@ -313,9 +313,9 @@ Leave Trigger Description blank to disable auto-trigger entirely. The flow can s
 Users (or the front-end) can explicitly start a flow by name. This bypasses the router and is useful when:
 
 - You want a button on the front-end (*"Schedule a demo"*) that always starts the qualification flow.
-- A flow is sensitive enough that you don't want the router making the call (e.g., compliance KYC — only triggered by an authenticated admin).
+- A flow is sensitive enough that you don't want the router making the call (e.g., compliance KYC, only triggered by an authenticated admin).
 
-The **flow chooser** endpoint pins a specific flow for a conversation by UUID or case-insensitive name — deep-link friendly (`?flow=in-company`):
+The **flow chooser** endpoint pins a specific flow for a conversation by UUID or case-insensitive name, deep-link friendly (`?flow=in-company`):
 
 ```
 POST /api/sn/{siteName}/chat/flow-select   { "conversationId": "...", "flow": "in-company" }
@@ -333,7 +333,7 @@ Tighten or differentiate the flagged descriptions until the conflicts clear.
 
 ### A/B testing a flow
 
-Flows (and even individual nodes) can be **A/B tested** — split traffic across variants, measure the winner with a real significance test, and auto-promote the champion. That's a whole subsystem of its own: see [Experiments](./experiments.md).
+Flows (and even individual nodes) can be **A/B tested**: split traffic across variants, measure the winner with a real significance test, and auto-promote the champion. That's a whole subsystem of its own: see [Experiments](./experiments.md).
 
 ---
 
@@ -345,10 +345,10 @@ Every running flow has a `TurChatFlowState` row identified by `(conversationId, 
 |---|---|
 | `currentNodeId` | The node the user is currently on |
 | `variablesJson` | All collected output variables, JSON-serialized |
-| `parentStateId` | Set when this state is running a sub-flow — points to the parent state. The runtime walks back up when the sub-flow ends. |
-| `updatedAt` | Last touched — useful for stale-flow cleanup |
+| `parentStateId` | Set when this state is running a sub-flow: points to the parent state. The runtime walks back up when the sub-flow ends. |
+| `updatedAt` | Last touched: useful for stale-flow cleanup |
 
-The state is updated **after** the assistant replies — so if the conversation crashes mid-turn, the state still reflects the last completed step.
+The state is updated **after** the assistant replies, so if the conversation crashes mid-turn, the state still reflects the last completed step.
 
 When the End node is reached, the engine writes a **`TurChatFlowSubmission`** row: the full graph traversal, all collected variables, and the outcome. This is your audit log. You can list submissions by flow:
 
@@ -368,11 +368,11 @@ Click **Vibe Coding** on the flow editor and you're talking to an authoring assi
 
 ### First-turn creation
 
-You describe the flow in plain English — short or long, structured or rambling, your call. The assistant returns a complete graph: nodes positioned, edges connected, instructions written, output variables named.
+You describe the flow in plain English: short or long, structured or rambling, your call. The assistant returns a complete graph: nodes positioned, edges connected, instructions written, output variables named.
 
 > **You:** *"I need a five-step demo qualification: company name, role, current solution, decision timeline (under 3 months / 3-6 months / over 6 months), and email. After collecting all five, call our CRM via MCP to look up the company. End the flow."*
 >
-> **Assistant:** *"Done. I've created six Question nodes for the data you listed, a Tool node calling your `crm-lookup` MCP server after the email, and an End node. The decision timeline question uses a Condition node so you can branch the follow-up depending on urgency. Take a look — I positioned everything left to right with the Start node on the far left."*
+> **Assistant:** *"Done. I've created six Question nodes for the data you listed, a Tool node calling your `crm-lookup` MCP server after the email, and an End node. The decision timeline question uses a Condition node so you can branch the follow-up depending on urgency. Take a look: I positioned everything left to right with the Start node on the far left."*
 
 The flow appears on the canvas. You can drag, edit, save.
 
@@ -385,17 +385,17 @@ What's happening under the hood:
 
 Once a flow exists, you can keep talking:
 
-> **You:** *"Split the timeline question into two — one for short-term plans (this quarter) and one for long-term (this year)."*
+> **You:** *"Split the timeline question into two, one for short-term plans (this quarter) and one for long-term (this year)."*
 >
 > **Assistant:** *"Done. I split the timeline node into `short_term_plans` and `long_term_plans`, kept them in sequence after the role question, and adjusted the CRM lookup to fire after both are collected."*
 
 In revision turns the model sees the **full current state** plus a slimmer *edit-focused* prompt. It only changes what you asked for; the rest of your graph stays untouched.
 
 :::tip When Vibe Coding is the right move vs. visual editing
-**Vibe Coding wins** when you're starting from scratch, when you're rearranging structurally (*"split this", "merge those"*), or when you don't yet know what blocks you'll need. **Visual editing wins** when you're tweaking copy on a single node, dragging to reorganize visually, or fine-tuning a validation rule. Use both — they edit the same graph.
+**Vibe Coding wins** when you're starting from scratch, when you're rearranging structurally (*"split this", "merge those"*), or when you don't yet know what blocks you'll need. **Visual editing wins** when you're tweaking copy on a single node, dragging to reorganize visually, or fine-tuning a validation rule. Use both: they edit the same graph.
 :::
 
-The same Vibe Coding pattern is available for [Intents](./intent.md) and [Custom Tools](./custom-tools.md). The pattern is general — described in [AI Authoring (Vibe Coding)](./ai-agents.md) — but Chat Flow is the most powerful expression of it because of the structural complexity of the graph.
+The same Vibe Coding pattern is available for [Intents](./intent.md) and [Custom Tools](./custom-tools.md). The pattern is general, described in [AI Authoring (Vibe Coding)](./ai-agents.md), but Chat Flow is the most powerful expression of it because of the structural complexity of the graph.
 
 ---
 
@@ -447,7 +447,7 @@ That's the loop. Conversation → flow → submission → analytics → product 
 | `PUT` | `/api/ai-agent/{agentId}/chat-flow/{flowId}` | Update a flow's graph or settings |
 | `DELETE` | `/api/ai-agent/{agentId}/chat-flow/{flowId}` | Delete a flow |
 | `GET` | `/api/ai-agent/{agentId}/chat-flow/{flowId}/submissions` | List collected submissions |
-| `POST` | `/api/ai-agent/{agentId}/chat-flow/ai-chat` | Vibe Coding endpoint — describe a flow, get a graph back |
+| `POST` | `/api/ai-agent/{agentId}/chat-flow/ai-chat` | Vibe Coding endpoint: describe a flow, get a graph back |
 
 The Vibe Coding endpoint follows the standard [AI Authoring](./ai-agents.md) shape: a chat over `AiAuthoringRequest<ChatFlowGeneration>` / `AiAuthoringResponse<ChatFlowGeneration>`.
 
@@ -459,10 +459,10 @@ The flow engine has a few knobs:
 
 | Property | Default | Purpose |
 |---|---|---|
-| `turing.chat.flow.judge.model` | (default LLM) | Which LLM the `LLM_JUDGE` strategy uses for the judge call. Pick a small/cheap model — classification is its only job. |
+| `turing.chat.flow.judge.model` | (default LLM) | Which LLM the `LLM_JUDGE` strategy uses for the judge call. Pick a small/cheap model, classification is its only job. |
 | `turing.chat.flow.state.ttl-hours` | 24 | How long an in-flight `TurChatFlowState` is kept before being considered stale. Stale states are cleaned by a daily housekeeping job. |
 
-State is per-conversation — abandoning a conversation leaves a state row that's pruned by the housekeeping job after the TTL.
+State is per-conversation, abandoning a conversation leaves a state row that's pruned by the housekeeping job after the TTL.
 
 ---
 
@@ -478,7 +478,7 @@ A single `verify-identity` flow with three Question nodes (name, account email, 
 
 ### Tool nodes as side effects
 
-Don't make the LLM ask the user *"would you like me to look up your account?"* — just put a Tool node after the relevant Question. The flow handles it deterministically. The LLM gets the result and weaves it into the next message.
+Don't make the LLM ask the user *"would you like me to look up your account?"*, just put a Tool node after the relevant Question. The flow handles it deterministically. The LLM gets the result and weaves it into the next message.
 
 ### Conditional branching for self-serve vs. enterprise
 
@@ -498,7 +498,7 @@ One flow, two outcomes, no human intervention.
 | Flow drifts off-topic mid-conversation | `HEURISTIC` strategy is too lenient for this flow | Switch to `STRUCTURED_OUTPUT`; if the issue persists, switch to `LLM_JUDGE` with a stronger judge model |
 | User messages bypass the flow router | The trigger description is too narrow; or the router LLM is too small | Broaden the Trigger Description with more user-language variations; or upgrade the default LLM |
 | Variables aren't being collected | The Question node's Output Variable name doesn't match the validation rule's expected output | Check the Output Variable on the Question node; check the Tool node downstream for matching arg names |
-| Sub-flow runs but never returns | The sub-flow has no End node, or there's a dangling edge before End | Open the sub-flow in the editor — Vibe Coding's auto-fix usually catches this; visual editing can introduce it |
+| Sub-flow runs but never returns | The sub-flow has no End node, or there's a dangling edge before End | Open the sub-flow in the editor: Vibe Coding's auto-fix usually catches this; visual editing can introduce it |
 | Router picks the wrong flow | Two flows have overlapping trigger descriptions | Run the [trigger-conflict resolver](#trigger-conflict-resolver) and differentiate the flagged pair |
 | A `functionCall`/`scheduleAgent`/`webhook` step fails silently | No error edge wired | Set `continueOnFailure` and draw a `failure` edge (see [Error Handling](#error-handling-continueonfailure--error-edges)) |
 
@@ -508,7 +508,7 @@ One flow, two outcomes, no human intervention.
 
 | Page | Description |
 |---|---|
-| [Experiments](./experiments.md) | A/B test flows and nodes — significance, bandit, auto-promotion |
+| [Experiments](./experiments.md) | A/B test flows and nodes: significance, bandit, auto-promotion |
 | [Human-in-the-Loop](./human-in-the-loop.md) | The `humanApproval` / `suspend` nodes + spectator/co-pilot |
 | [Webhooks](./webhooks.md) | The `webhook` node and the slot-driven CRM push |
 | [Routines](./routines.md) | The `scheduleAgent` node and async jobs |

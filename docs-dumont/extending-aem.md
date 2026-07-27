@@ -1,12 +1,12 @@
 ---
 sidebar_position: 8
 title: Extending the AEM Connector
-description: Create custom AEM extensions — attribute extractors, content processors, delta date logic, and the configuration JSON reference.
+description: "Create custom AEM extensions: attribute extractors, content processors, delta date logic, and the configuration JSON reference."
 ---
 
 # Extending the AEM Connector
 
-The AEM connector provides a powerful extension system that lets you customize how content is extracted, transformed, and indexed from Adobe Experience Manager. Extensions are Java classes that implement interfaces from the `aem-commons` library — published on Maven Central.
+The AEM connector provides a powerful extension system that lets you customize how content is extracted, transformed, and indexed from Adobe Experience Manager. Extensions are Java classes that implement interfaces from the `aem-commons` library, published on Maven Central.
 
 ---
 
@@ -34,7 +34,7 @@ The AEM connector provides these extension interfaces and base classes:
 |---|---|---|
 | `DumAemExtAttributeInterface` | Custom logic for extracting or transforming individual field values | `attributes[].className` or `sourceAttrs[].className` |
 | `DumAemExtContentInterface` | Extract additional content from AEM pages (e.g., `.model.json`) | `models[].className` |
-| `DumAemExtModelJsonBase<T>` | Recommended abstract base class for `.model.json` extractors — handles fetch, parse, and error handling automatically. Prefer this over implementing `DumAemExtContentInterface` directly. | `models[].className` |
+| `DumAemExtModelJsonBase<T>` | Recommended abstract base class for `.model.json` extractors, handles fetch, parse, and error handling automatically. Prefer this over implementing `DumAemExtContentInterface` directly. | `models[].className` |
 | `DumAemExtDeltaDateInterface` | Custom delta date resolution for incremental indexing | `sources[].deltaClass` |
 | `DumAemExtUrlAttributeInterface` | Specialized URL handling with ID extraction (extends `DumAemExtAttributeInterface`) | `attributes[].className` |
 
@@ -97,7 +97,7 @@ public class MyCustomAttribute implements DumAemExtAttributeInterface {
 
 ### DumAemExtContentInterface
 
-Implement this to fetch additional content from AEM — for example, calling the `.model.json` Sling Model exporter to get structured data.
+Implement this to fetch additional content from AEM, for example, calling the `.model.json` Sling Model exporter to get structured data.
 
 ```java
 import com.viglet.dumont.connector.aem.commons.ext.DumAemExtContentInterface;
@@ -220,11 +220,11 @@ query.findFirstByComponentType("my-app/components/news", MyNews.class)
 | `findFirstByComponentType(type, class)` | Returns the first matching component as `Optional<T>` |
 | `component(type, class)` | Returns a `DumAemComponentMapper<T>` for fluent attribute mapping |
 
-### DumAemComponentMapper — Fluent API
+### DumAemComponentMapper: Fluent API
 
 The most concise way to extract component data. Chain `.attr()` calls to declaratively map fields, use `.also()` for custom logic, and `.via()` to navigate into nested objects.
 
-#### Basic — find first component, map fields
+#### Basic: find first component, map fields
 
 ```java
 query.component("my-app/components/news", MyNews.class)
@@ -276,7 +276,7 @@ query.component("my-app/components/carousel", Instructor.class)
     .into(attrValues);
 ```
 
-#### Fluent API — complete reference
+#### Fluent API: complete reference
 
 | Method | Description |
 |---|---|
@@ -382,7 +382,7 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
                     "%s %s".formatted(event.getCity(), event.getAddress())))
             .into(attrValues);
 
-        // Teacher — navigate into elements
+        // Teacher: navigate into elements
         query.component("my-portal/components/teacher", MyTeacher.class)
             .first()
             .via(MyTeacher::getElements)
@@ -394,7 +394,7 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
 }
 ```
 
-### DumAemAttrMap — API Reference
+### DumAemAttrMap: API Reference
 
 `DumAemAttrMap` is the core data structure for collecting extracted attributes. It extends `HashMap<String, TurMultiValue>` and provides typed methods for adding values safely (null values are silently ignored).
 
@@ -402,7 +402,7 @@ public class MyPortalModelJson extends DumAemExtModelJsonBase<MyPortalModel> {
 
 The fluent methods provide concise, chainable calls with clear semantics. They accept any supported type (`String`, `Date`, `Boolean`, `Integer`, `Long`, `Double`, `Float`, `TurMultiValue`) and dispatch automatically.
 
-##### `set(name, value)` — replace
+##### `set(name, value)`: replace
 
 Sets a value, **replacing** any existing value for this attribute:
 
@@ -413,7 +413,7 @@ attrValues
     .set("active", true);
 ```
 
-##### `append(name, value)` — merge
+##### `append(name, value)`: merge
 
 Appends a value, **merging** with any existing value. If the attribute does not yet exist, it is created:
 
@@ -423,7 +423,7 @@ attrValues
     .append("text", teacher.getName());
 ```
 
-##### `setIfAbsent(name, value)` — conditional
+##### `setIfAbsent(name, value)`: conditional
 
 Sets a value **only if the attribute does not already exist** in the map. Replaces the common `if (!attrValues.containsKey(...))` pattern:
 
@@ -431,7 +431,7 @@ Sets a value **only if the attribute does not already exist** in the map. Replac
 attrValues.setIfAbsent("abstract", description);
 ```
 
-##### `setAll(name, list)` / `appendAll(name, list)` — string collections
+##### `setAll(name, list)` / `appendAll(name, list)`: string collections
 
 ```java
 attrValues
@@ -439,13 +439,13 @@ attrValues
     .appendAll("categories", additionalCategories);
 ```
 
-##### `setAllDates(name, list)` / `appendAllDates(name, list)` — date collections
+##### `setAllDates(name, list)` / `appendAllDates(name, list)`: date collections
 
 ```java
 attrValues.setAllDates("eventDates", List.of(startDate, endDate));
 ```
 
-##### `of(name, value)` — static factory
+##### `of(name, value)`: static factory
 
 Creates a new map with a single attribute:
 
@@ -453,7 +453,7 @@ Creates a new map with a single attribute:
 return DumAemAttrMap.of("title", model.getTitle());
 ```
 
-#### Fluent API — Quick Reference
+#### Fluent API: Quick Reference
 
 | Method | Behavior | Returns |
 |---|---|---|
@@ -564,7 +564,7 @@ The AEM connector is configured via a JSON file that defines sources, attributes
 | `defaultLocale` | string | Fallback locale code (e.g., `en_US`) |
 | `localeClass` | string | Class for locale resolution |
 | `deltaClass` | string | Class implementing `DumAemExtDeltaDateInterface` |
-| `oncePattern` | string | Regex — matching paths are indexed only once (never re-indexed) |
+| `oncePattern` | string | Regex: matching paths are indexed only once (never re-indexed) |
 | `author` / `publish` | boolean | Enable indexing from author/publish environments |
 | `authorSNSite` / `publishSNSite` | string | Turing ES SN Site names for each environment |
 | `authorURLPrefix` / `publishURLPrefix` | string | Public URL prefixes for documents |
@@ -591,7 +591,7 @@ Content found under each path is tagged with the corresponding locale.
 | `description` | string | Human-readable description |
 | `facet` | boolean | Expose as a facet filter in search results |
 | `facetName` | object | Localized labels: `{ "default": "Tags", "pt_BR": "Etiquetas" }` |
-| `className` | string | Class implementing `DumAemExtAttributeInterface` — extracts the value instead of reading from JCR |
+| `className` | string | Class implementing `DumAemExtAttributeInterface`, extracts the value instead of reading from JCR |
 
 ### Model Fields
 
@@ -607,7 +607,7 @@ Content found under each path is tagged with the corresponding locale.
 
 ## Creating a Custom AEM Extension
 
-### Step 1 — Create a Maven project
+### Step 1: Create a Maven project
 
 ```xml
 <project>
@@ -625,7 +625,7 @@ Content found under each path is tagged with the corresponding locale.
 </project>
 ```
 
-### Step 2 — Implement your extension
+### Step 2: Implement your extension
 
 **Attribute extension** (for individual fields):
 
@@ -676,7 +676,7 @@ public class MyModelJson extends DumAemExtModelJsonBase<MyModel> {
 }
 ```
 
-### Step 3 — Build and deploy
+### Step 3: Build and deploy
 
 ```bash
 mvn clean package
@@ -685,7 +685,7 @@ cp target/my-aem-extensions-1.0.0.jar /appl/viglet/dumont/aem/libs/
 
 The `libs/` directory must contain both `aem-plugin.jar` and your extension JAR.
 
-### Step 4 — Reference in the JSON
+### Step 4: Reference in the JSON
 
 ```json
 {

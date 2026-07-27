@@ -9,14 +9,14 @@ description: Manage users, groups, roles, API tokens, global settings, and syste
 The **Administration** section (`/admin-settings`) manages users, access control, API credentials, global configuration, and system diagnostics. It is accessible from the main sidebar.
 
 :::info Keycloak mode
-When Keycloak is enabled (`turing.keycloak=true`), the **Users**, **Groups**, and **Roles** subsections are hidden — identity and access management is fully delegated to Keycloak. See [Security & Keycloak](./security-keycloak.md).
+When Keycloak is enabled (`turing.keycloak=true`), the **Users**, **Groups**, and **Roles** subsections are hidden: identity and access management is fully delegated to Keycloak. See [Security & Keycloak](./security-keycloak.md).
 :::
 
 ---
 
 ## Login
 
-When accessing Turing ES, a login page is displayed. The default username is `admin`. The password is defined at first startup via the `TURING_ADMIN_PASSWORD` environment variable — if not set, Turing ES will not create the admin account with a default password.
+When accessing Turing ES, a login page is displayed. The default username is `admin`. The password is defined at first startup via the `TURING_ADMIN_PASSWORD` environment variable: if not set, Turing ES will not create the admin account with a default password.
 
 Set the environment variable before starting Turing ES for the first time:
 
@@ -40,7 +40,7 @@ The Users page (`/admin/users`) lists all local user accounts. Click a user to e
 
 | Field | Description |
 |---|---|
-| Avatar | Profile picture using DiceBear — click to pick a style, or remove to use initials |
+| Avatar | Profile picture using DiceBear: click to pick a style, or remove to use initials |
 | Username | Unique login identifier (read-only for existing users) |
 | First Name | User's first name (required) |
 | Last Name | User's last name (required) |
@@ -99,7 +99,7 @@ The Roles page (`/admin/roles`) defines permissions that are assigned to groups.
 
 ### Privilege Matrix
 
-Each role has a **privilege matrix** — an interactive table where you toggle individual permissions per resource category. The matrix is organized into two sections:
+Each role has a **privilege matrix**, an interactive table where you toggle individual permissions per resource category. The matrix is organized into two sections:
 
 **Generative AI:**
 
@@ -126,7 +126,7 @@ Each role has a **privilege matrix** — an interactive table where you toggle i
 | CREATE | Create new resources |
 | EDIT | Modify existing resources |
 | DELETE | Remove resources |
-| ALL | Bulk toggle — enables or disables all four actions at once |
+| ALL | Bulk toggle: enables or disables all four actions at once |
 
 :::tip
 The `ROLE_ADMIN` role has full access to all resources regardless of the privilege matrix. The matrix applies to non-admin roles only.
@@ -152,7 +152,7 @@ The API Tokens page (`/admin/tokens`) manages tokens used to authenticate REST A
 | API Token | Read-only, monospace display with copy-to-clipboard button |
 
 :::info
-The token value is generated automatically on creation and displayed once. It cannot be retrieved again — store it securely.
+The token value is generated automatically on creation and displayed once. It cannot be retrieved again: store it securely.
 :::
 
 **Using the token in API requests:**
@@ -179,10 +179,10 @@ The Global Settings page (`/admin/settings`) is the central configuration panel 
 
 | Field | Description |
 |---|---|
-| Default LLM Instance | Dropdown of enabled LLM instances — the default used when no site-level instance is configured. Select "None" to require explicit per-site assignment. |
+| Default LLM Instance | Dropdown of enabled LLM instances: the default used when no site-level instance is configured. Select "None" to require explicit per-site assignment. |
 | LLM Cache | Toggle to enable caching of LLM responses |
-| Cache Duration | How long cached responses are retained (duration input with configurable time unit) — visible when cache is enabled |
-| Regenerate Cache | Toggle to force fresh LLM calls instead of serving cached responses — visible when cache is enabled |
+| Cache Duration | How long cached responses are retained (duration input with configurable time unit), visible when cache is enabled |
+| Regenerate Cache | Toggle to force fresh LLM calls instead of serving cached responses, visible when cache is enabled |
 
 :::warning
 Caching LLM responses improves performance but may return stale answers if the underlying content changes frequently. Tune the duration to match your content update cadence.
@@ -193,8 +193,8 @@ Caching LLM responses improves performance but may return stale answers if the u
 | Field | Description |
 |---|---|
 | Enable RAG Globally | Master switch for Retrieval-Augmented Generation across all sites |
-| Default Embedding Model | Dropdown of enabled embedding models — required when RAG is enabled |
-| Default Embedding Store | Dropdown of enabled embedding stores (ChromaDB, PgVector, or Milvus) — required when RAG is enabled |
+| Default Embedding Model | Dropdown of enabled embedding models: required when RAG is enabled |
+| Default Embedding Store | Dropdown of enabled embedding stores (ChromaDB, PgVector, or Milvus), required when RAG is enabled |
 
 :::warning
 Changing the Default Embedding Model invalidates all existing embeddings. All indexed content must be re-indexed after changing this setting.
@@ -238,7 +238,7 @@ The System Information page (`/admin/system-info`) is a diagnostic panel to moni
 
 | Item | Description |
 |---|---|
-| Status | UP (green) or DOWN (red) — connection health |
+| Status | UP (green) or DOWN (red): connection health |
 | Product | Database product name (e.g., H2, MariaDB) |
 | Version | Database server version |
 | Driver | JDBC driver name and version |
@@ -312,11 +312,11 @@ The User Account page (`/account`) allows the currently logged-in user to manage
 
 | Field | Description |
 |---|---|
-| Avatar | DiceBear avatar picker — choose a style or remove to use initials |
+| Avatar | DiceBear avatar picker: choose a style or remove to use initials |
 | First Name | User's first name |
 | Last Name | User's last name |
 | Email | User's email address |
-| Username | Read-only — cannot be changed |
+| Username | Read-only: cannot be changed |
 
 **Change Password:**
 

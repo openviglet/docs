@@ -14,10 +14,10 @@ Shio CMS renders websites using server-side JavaScript. This guide covers how to
 
 A **Page Layout** is the top-level template for rendering a page. Each page is associated with exactly one Page Layout, which defines:
 
-- **Regions** — sections of the page (header, navigation, content, footer)
-- **JavaScript Code** — server-side processing that returns a rendered view
-- **HTML Code** — the rendering template used by the JavaScript code
-- **JavaScript Libraries** — custom JavaScript files to include
+- **Regions**: sections of the page (header, navigation, content, footer)
+- **JavaScript Code**: server-side processing that returns a rendered view
+- **HTML Code**: the rendering template used by the JavaScript code
+- **JavaScript Libraries**: custom JavaScript files to include
 
 The same Page Layout can be applied to various folders and posts, greatly simplifying development and site management.
 
@@ -36,7 +36,7 @@ In the **Site Properties**, you map each Post Type to a Page Layout. This tells 
 
 ## Regions
 
-A **Region** is a section within a Page Layout. Regions are the building blocks of the page — each region renders a specific area (header, navigation, content, footer).
+A **Region** is a section within a Page Layout. Regions are the building blocks of the page: each region renders a specific area (header, navigation, content, footer).
 
 Each region can call one or more **Component APIs** to fetch and render content from the repository.
 
@@ -138,11 +138,11 @@ For the complete JavaScript API documentation, see the [JavaScript API reference
 
 ### Creating a Site Theme
 
-1. **Create Page Layouts** — define templates for different content types
-2. **Create Regions** — define reusable sections (header, footer, navigation, content)
-3. **Associate Components** — add Navigation and Query components to regions
-4. **Write JavaScript** — implement rendering logic using the `shObject` API
-5. **Configure Site** — associate Post Types with Page Layouts in site properties
+1. **Create Page Layouts**: define templates for different content types
+2. **Create Regions**: define reusable sections (header, footer, navigation, content)
+3. **Associate Components**: add Navigation and Query components to regions
+4. **Write JavaScript**: implement rendering logic using the `shObject` API
+5. **Configure Site**: associate Post Types with Page Layouts in site properties
 
 ### Preview
 
@@ -151,8 +151,8 @@ Use the **View Site** button in the admin console to preview the published site.
 ### Folder Views
 
 The admin console supports two folder views:
-- **List View** — table layout with columns
-- **Thumbnail View** — grid layout with thumbnails (useful for media folders)
+- **List View**: table layout with columns
+- **Thumbnail View**: grid layout with thumbnails (useful for media folders)
 
 ---
 

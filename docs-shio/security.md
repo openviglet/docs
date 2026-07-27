@@ -21,7 +21,7 @@ Shio CMS uses **session-based authentication** for the admin console and API. Us
 | **Method** | HTTP Basic Authentication |
 | **Session** | Server-side session with cookie |
 | **CSRF** | Cookie-based CSRF token (`XSRF-TOKEN`) |
-| **Frame Options** | `SAME_ORIGIN` — allows embedding within the same domain |
+| **Frame Options** | `SAME_ORIGIN`: allows embedding within the same domain |
 
 ### Auth Providers
 
@@ -30,7 +30,7 @@ Shio CMS supports multiple authentication providers:
 | Provider | Description |
 |---|---|
 | **Shio Native** | Built-in username/password authentication with BCrypt password encoding |
-| **OTDS** | OpenText Directory Service — enterprise directory integration |
+| **OTDS** | OpenText Directory Service: enterprise directory integration |
 
 Auth providers are configured in **Configuration Console > Auth Providers**.
 
@@ -51,8 +51,8 @@ Auth providers are configured in **Configuration Console > Auth Providers**.
 
 Users are assigned to **groups** which determine their permissions. The permission model supports:
 
-- **Console access** — who can log in to the admin console
-- **Page-level permissions** — who can view specific pages on the published site
+- **Console access**: who can log in to the admin console
+- **Page-level permissions**: who can view specific pages on the published site
 
 ### Protected Pages
 

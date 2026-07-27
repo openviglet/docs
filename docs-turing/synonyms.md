@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: Synonyms
-description: Author query-time synonyms once and Viglet Turing ES pushes them into Solr, Elasticsearch or Lucene with no reindex — plus a one-click import from Algolia and AI-assisted synonym suggestions mined from your search logs.
+description: Author query-time synonyms once and Viglet Turing ES pushes them into Solr, Elasticsearch or Lucene with no reindex, plus a one-click import from Algolia and AI-assisted synonym suggestions mined from your search logs.
 ---
 
 # Synonyms
 
-Synonyms make search forgiving: a shopper who types **tv** should still find products described as **television**, and **notebook** should match **laptop**. In **Viglet Turing ES** you author synonyms **once**, per Semantic Navigation Site and locale, and Turing pushes them into whichever search engine backs the site — Solr, Elasticsearch or the embedded Lucene store — as a **query-time** rule that takes effect **without reindexing**.
+Synonyms make search forgiving: a shopper who types **tv** should still find products described as **television**, and **notebook** should match **laptop**. In **Viglet Turing ES** you author synonyms **once**, per Semantic Navigation Site and locale, and Turing pushes them into whichever search engine backs the site (Solr, Elasticsearch or the embedded Lucene store) as a **query-time** rule that takes effect **without reindexing**.
 
 Manage synonyms from a Semantic Navigation Site: open the site and choose **Synonyms** from its settings.
 
@@ -16,7 +16,7 @@ Turing supports the five synonym kinds you may know from other engines:
 
 | Type | What it does | Example |
 |---|---|---|
-| **Regular (multi-way)** | A set of fully-equivalent terms — a query for any one matches records containing any other. | `tv`, `television`, `telly` |
+| **Regular (multi-way)** | A set of fully-equivalent terms: a query for any one matches records containing any other. | `tv`, `television`, `telly` |
 | **One-way** | An input term expands to alternatives, but not the reverse. | `tablet` → `ipad`, `galaxy tab` |
 | **Alternative correction (1 typo)** | A term treated as a one-typo variant of the targets. | `tshirt` ≈ `t-shirt` |
 | **Alternative correction (2 typos)** | Same, allowing a two-typo distance. | `colour` ≈ `color` |
@@ -28,9 +28,9 @@ Each rule belongs to one **locale** (synonyms rarely hold across languages) and 
 
 Synonyms are a Turing-owned, engine-neutral model; the engine plugin translates each rule into that engine's query-time mechanism:
 
-- **Solr** — written through the Managed Synonyms resource and applied by a query-time synonym graph filter; the core is reloaded so the change is live with no reindex.
-- **Elasticsearch** — pushed through the Synonyms API as a synonym set that a search-analyzer synonym-graph filter reads, updatable without reindex.
-- **Lucene** (embedded store) — compiled into an in-memory synonym map consulted by the query analyzer.
+- **Solr**: written through the Managed Synonyms resource and applied by a query-time synonym graph filter; the core is reloaded so the change is live with no reindex.
+- **Elasticsearch**: pushed through the Synonyms API as a synonym set that a search-analyzer synonym-graph filter reads, updatable without reindex.
+- **Lucene** (embedded store): compiled into an in-memory synonym map consulted by the query analyzer.
 
 Engines differ in what they can represent, and Turing is honest about it rather than dropping a rule silently:
 
@@ -41,17 +41,17 @@ The admin page shows a small **engine-support banner** for the site's engine so 
 
 ## Managing synonyms
 
-1. **Create or edit a rule** — pick a type and locale, add the equivalent terms (for one-way and correction types you also give the input term), and save.
+1. **Create or edit a rule**: pick a type and locale, add the equivalent terms (for one-way and correction types you also give the input term), and save.
 2. **Enable** the rules you want live.
-3. **Push to engine** — click **Push to engine** to apply the site's enabled synonyms to its search backend. Because this is a query-time change, results reflect it immediately with no reindex.
+3. **Push to engine**: click **Push to engine** to apply the site's enabled synonyms to its search backend. Because this is a query-time change, results reflect it immediately with no reindex.
 
 ## Import from Algolia
 
-Migrating from Algolia? Turing reads your index's synonyms and maps all five Algolia types onto the Turing model in one step. On the Synonyms page choose **Import from Algolia**, enter your **Application ID**, an **API key** with synonym access, the **index name** and the target **locale**, and run the import. The rules land in Turing ready to review and push — closing the last gap in the [migration path](./migration.md).
+Migrating from Algolia? Turing reads your index's synonyms and maps all five Algolia types onto the Turing model in one step. On the Synonyms page choose **Import from Algolia**, enter your **Application ID**, an **API key** with synonym access, the **index name** and the target **locale**, and run the import. The rules land in Turing ready to review and push, closing the last gap in the [migration path](./migration.md).
 
 ## AI-assisted suggestions
 
-Because Turing already computes embeddings for your content, it can **suggest** synonyms you haven't thought of. Click **Suggest from search logs**: Turing takes your most-searched terms, groups the ones that are semantically close, and adds each group as a **disabled** candidate rule. Nothing is ever applied automatically — you review the suggestions, keep the good ones, enable them, and push. This turns synonym upkeep from a chore into a suggested-and-approved workflow.
+Because Turing already computes embeddings for your content, it can **suggest** synonyms you haven't thought of. Click **Suggest from search logs**: Turing takes your most-searched terms, groups the ones that are semantically close, and adds each group as a **disabled** candidate rule. Nothing is ever applied automatically: you review the suggestions, keep the good ones, enable them, and push. This turns synonym upkeep from a chore into a suggested-and-approved workflow.
 
 > AI suggestions require a **default embedding model** to be configured (see [Embedding models](./embedding-models.md)). Without one, the suggestion action simply returns nothing.
 

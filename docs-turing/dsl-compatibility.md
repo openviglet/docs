@@ -8,13 +8,13 @@ export const N = () => (<span style={{backgroundColor: '#16a34a', color: '#fff',
 export const T = () => (<span style={{backgroundColor: '#2563eb', color: '#fff', borderRadius: '4px', padding: '1px 7px', fontSize: '0.78em', fontWeight: 700, letterSpacing: '0.5px'}}>T</span>);
 export const P = () => (<span style={{backgroundColor: '#d97706', color: '#fff', borderRadius: '4px', padding: '1px 7px', fontSize: '0.78em', fontWeight: 700, letterSpacing: '0.5px'}}>P</span>);
 export const F = () => (<span style={{backgroundColor: '#9333ea', color: '#fff', borderRadius: '4px', padding: '1px 7px', fontSize: '0.78em', fontWeight: 700, letterSpacing: '0.5px'}}>F</span>);
-export const X = () => (<span style={{backgroundColor: '#d1d5db', color: '#6b7280', borderRadius: '4px', padding: '1px 7px', fontSize: '0.78em', fontWeight: 700, letterSpacing: '0.5px'}}>—</span>);
+export const X = () => (<span style={{backgroundColor: '#d1d5db', color: '#6b7280', borderRadius: '4px', padding: '1px 7px', fontSize: '0.78em', fontWeight: 700, letterSpacing: '0.5px'}}>N/A</span>);
 
 # DSL Compatibility Matrix
 
 This page is the **support map** for the [DSL Query API](./dsl-query.md): for every query type, aggregation, and option, it shows how faithfully each search engine backend (Elasticsearch, Solr, Lucene) implements it. Because Turing ES exposes one Elasticsearch-compatible syntax over three different engines, a feature that's native on one may be translated or only partially supported on another.
 
-Reach for this table when you're choosing a backend for a site, or when a DSL query behaves differently than you expected across engines — the badge tells you whether that's a 1:1 mapping, a translation, or a best-effort approximation. Read it alongside the query examples on the [DSL Query API](./dsl-query.md) page.
+Reach for this table when you're choosing a backend for a site, or when a DSL query behaves differently than you expected across engines: the badge tells you whether that's a 1:1 mapping, a translation, or a best-effort approximation. Read it alongside the query examples on the [DSL Query API](./dsl-query.md) page.
 
 ### Legend
 
@@ -257,6 +257,6 @@ For **full DSL compatibility**, use Elasticsearch as the search engine backend. 
 
 ## Related Pages
 
-- [DSL Query API](./dsl-query.md) — the query syntax this matrix describes
-- [Search Engine](./search-engine.md) — configure the Solr / Elasticsearch / Lucene backend
-- [REST API Reference](./rest-api.md) — the simpler `/search` endpoint
+- [DSL Query API](./dsl-query.md): the query syntax this matrix describes
+- [Search Engine](./search-engine.md): configure the Solr / Elasticsearch / Lucene backend
+- [REST API Reference](./rest-api.md): the simpler `/search` endpoint

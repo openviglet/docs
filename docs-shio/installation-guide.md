@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: Installation Guide
-description: Viglet Shio CMS Installation Guide — Docker, JAR, build from source, database setup, and Linux service.
+description: "Viglet Shio CMS Installation Guide: Docker, JAR, build from source, database setup, and Linux service."
 ---
 
 # Viglet Shio CMS: Installation Guide
@@ -171,7 +171,7 @@ ALTER USER shio SET SEARCH_PATH = shio;
 
 ## Installing Shio CMS
 
-### Option 1 — Docker (fastest)
+### Option 1: Docker (fastest)
 
 Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) by the **Publish Docker Image** GitHub Action:
 
@@ -184,7 +184,7 @@ docker run -p 2710:2710 ghcr.io/openviglet/shio-ce:latest
 Besides `latest`, every run also publishes the project version and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
 :::
 
-### Option 2 — JAR download
+### Option 2: JAR download
 
 Go to [https://viglet.org/shio/download/](https://viglet.org/shio/download/) and click on "Download Shio CMS" button to download the `viglet-shio.jar` executable.
 
@@ -195,7 +195,7 @@ mkdir -p /appl/viglet/shio/server
 cp viglet-shio.jar /appl/viglet/shio/server
 ```
 
-### Option 3 — Build from source
+### Option 3: Build from source
 
 ```bash
 git clone https://github.com/openviglet/shio-ce.git
@@ -272,7 +272,7 @@ WantedBy=multi-user.target
 ```
 
 :::note Spring Boot 4
-Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-shio.jar`). You must launch Shio CMS using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported — use `--spring.config.additional-location` to load external properties instead.
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-shio.jar`). You must launch Shio CMS using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported: use `--spring.config.additional-location` to load external properties instead.
 :::
 
 Enable and start the service:
@@ -303,7 +303,7 @@ By default the login/password are: **admin/admin**
 
 ### Simple
 
-Minimal setup using an embedded H2 database. Suitable for local development and evaluation only — not for production.
+Minimal setup using an embedded H2 database. Suitable for local development and evaluation only, not for production.
 
 **Prerequisites:**
 1. Linux server
@@ -317,8 +317,8 @@ Minimal setup using an embedded H2 database. Suitable for local development and 
 
 Shio CMS and its dependencies installed via Docker Compose, including:
 
-- MariaDB — Shio CMS system tables
-- Nginx — reverse proxy on port 80
+- MariaDB: Shio CMS system tables
+- Nginx: reverse proxy on port 80
 - Shio CMS
 
 **Prerequisites:**
@@ -332,8 +332,8 @@ Shio CMS and its dependencies installed via Docker Compose, including:
 
 Shio CMS and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
 
-- MariaDB — Shio CMS system tables
-- Nginx — reverse proxy
+- MariaDB: Shio CMS system tables
+- Nginx: reverse proxy
 - Shio CMS
 
 **Prerequisites:**
@@ -347,7 +347,7 @@ Shio CMS and its dependencies deployed via Kubernetes manifests (available in th
 
 Each service installed individually following this guide:
 
-- MariaDB — Shio CMS system tables
+- MariaDB: Shio CMS system tables
 - Shio CMS
 
 **Prerequisites:**
@@ -367,7 +367,7 @@ docker-compose up
 ```
 
 :::tip Deploy with the pre-built image
-The commands above build Shio from source for local development. For deployment, replace the `build:` of the `shio` service with the published image instead — `image: ghcr.io/openviglet/shio-ce:latest` — so the stack pulls the image from `ghcr.io` rather than compiling it.
+The commands above build Shio from source for local development. For deployment, replace the `build:` of the `shio` service with the published image instead (`image: ghcr.io/openviglet/shio-ce:latest`) so the stack pulls the image from `ghcr.io` rather than compiling it.
 :::
 
 :::note

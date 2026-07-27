@@ -6,7 +6,7 @@ description: Install the Dumont AEM event listener bundle inside AEM as a Cloud 
 
 # AEM Event Listener Setup
 
-This guide explains how to install the Dumont AEM event listener bundle inside your AEM as a Cloud Service instance. Once installed, AEM automatically notifies the Dumont connector whenever content is published, modified, or deleted — enabling real-time search index synchronization.
+This guide explains how to install the Dumont AEM event listener bundle inside your AEM as a Cloud Service instance. Once installed, AEM automatically notifies the Dumont connector whenever content is published, modified, or deleted, enabling real-time search index synchronization.
 
 ---
 
@@ -39,7 +39,7 @@ AEM as a Cloud Service does not support direct bundle installation via the Felix
 
 If you already have an AEM as a Cloud Service project (created from the [AEM Project Archetype](https://experienceleague.adobe.com/docs/experience-manager-core-components/using/developing/archetype/overview.html)), you can integrate the Dumont event listeners into it.
 
-### Step 1 — Copy the Source Files
+### Step 1: Copy the Source Files
 
 From the [Dumont repository](https://github.com/openviglet/dumont-ce), copy these directories into your AEM project:
 
@@ -68,14 +68,14 @@ To: your-aem-project/core/src/main/java/com/viglet/dumont/aem/server/
 ```
 
 :::note What each listener does
-- `DumAemPageEventHandler` — subscribes to `PageEvent`; fires when pages are created or modified in author.
-- `DumAemPageReplicationEventHandler` — subscribes to `ReplicationAction`; handles **page** activate/deactivate (filters out any path under `/content/dam/`).
-- `DumAemContentFragmentReplicationEventHandler` — subscribes to the same `ReplicationAction` topic but only processes paths under `/content/dam/` — i.e., Content Fragments and DAM assets being published/unpublished.
-- `DumAemResourceEventHandler` — subscribes to Sling resource events; fires when a `dam:Asset` / `dam:AssetContent` under `/content` is created or modified (incremental asset indexing, independent of replication).
-- `DumAemAllComEventHandler` / `DumAemAllOrgEventHandler` — diagnostic listeners that log every event under `com/*` / `org/*`. They do **not** index anything. Useful during setup to confirm that AEM is firing the expected topics. You can omit them in production or silence via logger configuration.
+- `DumAemPageEventHandler`: subscribes to `PageEvent`; fires when pages are created or modified in author.
+- `DumAemPageReplicationEventHandler`: subscribes to `ReplicationAction`; handles **page** activate/deactivate (filters out any path under `/content/dam/`).
+- `DumAemContentFragmentReplicationEventHandler`: subscribes to the same `ReplicationAction` topic but only processes paths under `/content/dam/`, i.e., Content Fragments and DAM assets being published/unpublished.
+- `DumAemResourceEventHandler`: subscribes to Sling resource events; fires when a `dam:Asset` / `dam:AssetContent` under `/content` is created or modified (incremental asset indexing, independent of replication).
+- `DumAemAllComEventHandler` / `DumAemAllOrgEventHandler`: diagnostic listeners that log every event under `com/*` / `org/*`. They do **not** index anything. Useful during setup to confirm that AEM is firing the expected topics. You can omit them in production or silence via logger configuration.
 :::
 
-### Step 2 — Add Dependencies to Your Core Module
+### Step 2: Add Dependencies to Your Core Module
 
 Add these dependencies to your project's `core/pom.xml`:
 
@@ -99,7 +99,7 @@ Add these dependencies to your project's `core/pom.xml`:
 
 The following dependencies are already provided by AEM SDK and don't need to be added: Jackson, Apache HTTP Client, Sling API, OSGi annotations, AEM Replication API, AEM WCM API.
 
-### Step 3 — Add the OSGi Configuration
+### Step 3: Add the OSGi Configuration
 
 Create the configuration file for your AEM environment:
 
@@ -130,7 +130,7 @@ Use `$[env:VAR_NAME;default=value]` syntax to configure different values per env
 See [Adobe's environment variables documentation](https://experienceleague.adobe.com/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/environment-variables.html).
 :::
 
-### Step 4 — Configure the Service User
+### Step 4: Configure the Service User
 
 The replication event handler requires a service user mapping. Add this to your project's `ui.config`:
 
@@ -147,7 +147,7 @@ your-aem-project/ui.config/src/main/content/jcr_root/apps/<your-project>/osgicon
 }
 ```
 
-### Step 5 — Deploy via Cloud Manager
+### Step 5: Deploy via Cloud Manager
 
 1. Commit and push your changes to the Git repository
 2. In **Cloud Manager**, run the deployment pipeline for your target environment
@@ -219,8 +219,8 @@ For AEM as a Cloud Service, set these variables in Cloud Manager:
 
 ## Verifying the Installation
 
-1. **Check bundle status:** AEM → Tools → Operations → Web Console → Bundles → search "dumont" — should be **Active**
-2. **Check configuration:** Web Console → Configuration → search "TurAemIndexer" — verify host and configName
+1. **Check bundle status:** AEM → Tools → Operations → Web Console → Bundles → search "dumont": should be **Active**
+2. **Check configuration:** Web Console → Configuration → search "TurAemIndexer": verify host and configName
 3. **Test:** Publish a page in AEM and check the Dumont connector logs for incoming requests
 4. **Monitor:** In Turing ES → Integration → Monitoring, filter by your AEM source to see indexing events
 
@@ -233,4 +233,4 @@ For AEM as a Cloud Service, set these variables in Cloud Manager:
 | [AEM Connector](./connectors/aem.md) | How the connector processes AEM content (infinity.json, tags, model.json) |
 | [Extending the AEM Connector](./extending-aem.md) | Custom extensions, configuration JSON, and Maven dependencies |
 | [Installation Guide](./installation-guide.md) | Deploying Dumont connector with the AEM plugin |
-| [Turing ES — AEM Integration](/turing/integration-aem) | Managing AEM indexing via the Turing ES admin console |
+| [Turing ES: AEM Integration](/turing/integration-aem) | Managing AEM indexing via the Turing ES admin console |

@@ -1,5 +1,5 @@
 @import "tailwindcss" important;
-/* Design-system preset — brings Inter (--font-sans), Plus Jakarta (--font-brand),
+/* Design-system preset: brings Inter (--font-sans), Plus Jakarta (--font-brand),
    --vg-* tokens and the `dark` custom-variant configured for both `.dark`
    and `[data-theme="dark"]` (Docusaurus uses the latter). */
 @import "@viglet/viglet-design-system/preset";
@@ -143,7 +143,7 @@ a {
   --color-ring: #F97316;
 }
 
-/* ── Homepage section containers (vanilla CSS — avoids Tailwind layer vs Infima priority issues) ── */
+/* ── Homepage section containers (vanilla CSS, avoids Tailwind layer vs Infima priority issues) ── */
 .home-section {
   width: 100%;
   text-align: center;
@@ -185,7 +185,7 @@ a {
   margin-left: auto;
 }
 
-/* ── Search — Design-system tokens ── */
+/* ── Search: Design-system tokens ── */
 :root {
   --search-local-modal-background: #ffffff;
   --search-local-modal-shadow: 0 12px 40px -4px rgba(15, 23, 42, 0.12),
@@ -227,7 +227,7 @@ a {
   margin: 0;
 }
 
-/* ── Search input — pill shape ── */
+/* ── Search input: pill shape ── */
 .nav-search input[type="search"],
 .nav-search .navbar__search-input {
   font-family: inherit;
@@ -1234,7 +1234,7 @@ html {
 /* ── Print styles (browser Print → Save as PDF) ───────────────────────────── */
 @media print {
 
-  /* Hide chrome elements — sidebar, navbar, footer, pagination */
+  /* Hide chrome elements: sidebar, navbar, footer, pagination */
   .theme-doc-sidebar-container,
   .navbar,
   .footer,

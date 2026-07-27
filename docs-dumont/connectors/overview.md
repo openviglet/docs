@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: Connectors Overview
-description: Overview of all Dumont DEP connectors — web crawler, database, filesystem, AEM, and WordPress.
+description: "Overview of all Dumont DEP connectors: web crawler, database, filesystem, AEM, and WordPress."
 ---
 
 # Connectors Overview
@@ -14,11 +14,11 @@ Connectors are the components that extract content from external sources and fee
 
 | Connector | Source Type | Deployment | Artifact |
 |---|---|---|---|
-| [**Web Crawler**](./web-crawler.md) | Websites | **Java Plugin** — loaded via `-Dloader.path` | `web-crawler-plugin.jar` |
-| [**AEM**](./aem.md) | Adobe Experience Manager | **Java Plugin** — loaded via `-Dloader.path` | `aem-plugin.jar` |
-| [**Database**](./database.md) | JDBC databases | **Standalone Java CLI** — runs independently | `dumont-db-indexer.jar` |
-| [**FileSystem**](./filesystem.md) | Local/network directories | **Standalone Java CLI** — runs independently | `dumont-filesystem-indexer.jar` |
-| [**WordPress**](./wordpress.md) | WordPress sites | **PHP Plugin** — installed inside WordPress | `viglet-turing-for-wordpress/` |
+| [**Web Crawler**](./web-crawler.md) | Websites | **Java Plugin**: loaded via `-Dloader.path` | `web-crawler-plugin.jar` |
+| [**AEM**](./aem.md) | Adobe Experience Manager | **Java Plugin**: loaded via `-Dloader.path` | `aem-plugin.jar` |
+| [**Database**](./database.md) | JDBC databases | **Standalone Java CLI**: runs independently | `dumont-db-indexer.jar` |
+| [**FileSystem**](./filesystem.md) | Local/network directories | **Standalone Java CLI**: runs independently | `dumont-filesystem-indexer.jar` |
+| [**WordPress**](./wordpress.md) | WordPress sites | **PHP Plugin**: installed inside WordPress | `viglet-turing-for-wordpress/` |
 
 ---
 
@@ -48,12 +48,12 @@ graph TD
     class F,G green
 ```
 
-1. **Connect** — Establish a connection to the content source (HTTP, JDBC, file handle, JCR session)
-2. **Discover** — Find content to process (follow links, execute query, list files, traverse nodes)
-3. **Extract** — Pull field values from each content item (title, text, URL, date, custom fields)
-4. **Create** — Build a Job Item with the extracted fields, an action (INDEX/DELETE), and metadata
-5. **Submit** — Pass the Job Item into the processing pipeline (strategies → batch → queue)
-6. **Finish** — Flush any remaining items in the batch processor and signal completion
+1. **Connect**: Establish a connection to the content source (HTTP, JDBC, file handle, JCR session)
+2. **Discover**: Find content to process (follow links, execute query, list files, traverse nodes)
+3. **Extract**: Pull field values from each content item (title, text, URL, date, custom fields)
+4. **Create**: Build a Job Item with the extracted fields, an action (INDEX/DELETE), and metadata
+5. **Submit**: Pass the Job Item into the processing pipeline (strategies → batch → queue)
+6. **Finish**: Flush any remaining items in the batch processor and signal completion
 
 ---
 
@@ -63,7 +63,7 @@ All connectors implement the `DumConnectorPlugin` interface:
 
 | Method | Description |
 |---|---|
-| `crawl()` | Full extraction — discover and process all content from the source |
+| `crawl()` | Full extraction: discover and process all content from the source |
 | `indexAll(source)` | Re-index all content from a specific source |
 | `indexById(source, contentIds)` | Index specific documents by their IDs |
 | `getProviderName()` | Returns the connector's identifier (e.g., `web-crawler`, `database`) |
@@ -94,12 +94,12 @@ The connector JAR provides only the pipeline infrastructure (queue, strategies, 
 :::
 
 :::note One plugin per JVM instance
-Only **one connector plugin** can be loaded per JVM instance. To run multiple connectors (e.g., AEM and Web Crawler), start separate `dumont-connector.jar` instances — each with its own plugin and port.
+Only **one connector plugin** can be loaded per JVM instance. To run multiple connectors (e.g., AEM and Web Crawler), start separate `dumont-connector.jar` instances, each with its own plugin and port.
 :::
 
 ### Standalone CLI Tools (Database, FileSystem)
 
-The **Database** and **FileSystem** connectors are **standalone command-line tools** — separate JARs that run independently and connect to a running Dumont DEP instance via REST API:
+The **Database** and **FileSystem** connectors are **standalone command-line tools**, separate JARs that run independently and connect to a running Dumont DEP instance via REST API:
 
 ```bash
 # Database import (standalone JAR)
@@ -143,7 +143,7 @@ Once connected, the Turing ES console provides a graphical interface for:
 - Viewing indexing statistics and status
 - Running double-check consistency validation
 
-For full details on the Integration UI — including monitoring, indexing stats, and double-check — see the [Turing ES Integration documentation](/turing/integration).
+For full details on the Integration UI (including monitoring, indexing stats, and double-check) see the [Turing ES Integration documentation](/turing/integration).
 
 For AEM-specific configuration (sources, content types, author/publish, delta tracking, locales, indexing rules) see [Turing ES AEM Connector documentation](/turing/integration-aem).
 
@@ -169,8 +169,8 @@ Every connector needs at least these pieces of information:
 |---|---|---|
 | **Web Crawler** | Turing ES Admin Console | [Turing ES → Integration](/turing/integration) |
 | **AEM** | JSON file + Turing ES Admin Console | `export/` directory + [Turing ES → Integration](/turing/integration-aem) |
-| **Database** | CLI parameters | Command-line — see [Database Connector](./database.md) |
-| **FileSystem** | CLI parameters | Command-line — see [FileSystem Connector](./filesystem.md) |
+| **Database** | CLI parameters | Command-line: see [Database Connector](./database.md) |
+| **FileSystem** | CLI parameters | Command-line: see [FileSystem Connector](./filesystem.md) |
 | **WordPress** | WordPress Admin UI | WordPress → Settings → Viglet Dumont |
 
 ---

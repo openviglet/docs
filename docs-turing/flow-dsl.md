@@ -1,14 +1,14 @@
 ---
 sidebar_position: 9
 title: Flow DSL
-description: "@viglet/turing-flow-dsl — author Viglet Turing ES chat flows as typed TypeScript source, then transpile to the editor's JSON wire format. TypeScript catches enum typos (tone, guardrail, trigger) at compile time. Zero-dependency."
+description: "@viglet/turing-flow-dsl: author Viglet Turing ES chat flows as typed TypeScript source, then transpile to the editor's JSON wire format. TypeScript catches enum typos (tone, guardrail, trigger) at compile time. Zero-dependency."
 ---
 
 # Flow DSL
 
-**`@viglet/turing-flow-dsl`** lets you author Viglet Turing ES [chat flows](./chat-flow.md) as **typed TypeScript source** instead of drawing them in the visual editor. You write a flow as a plain object, and the DSL **transpiles** it to the exact JSON wire format the editor imports — `{ graph: { nodes, edges }, name, slots, personas, … }`. Because it's typed, the TypeScript compiler catches enum typos (a misspelled `tone`, `guardrailMethod`, `triggerMode` or an unknown node `type`) at **build time**, before the flow ever reaches a running instance. Zero runtime dependencies.
+**`@viglet/turing-flow-dsl`** lets you author Viglet Turing ES [chat flows](./chat-flow.md) as **typed TypeScript source** instead of drawing them in the visual editor. You write a flow as a plain object, and the DSL **transpiles** it to the exact JSON wire format the editor imports: `{ graph: { nodes, edges }, name, slots, personas, … }`. Because it's typed, the TypeScript compiler catches enum typos (a misspelled `tone`, `guardrailMethod`, `triggerMode` or an unknown node `type`) at **build time**, before the flow ever reaches a running instance. Zero runtime dependencies.
 
-**When you'd reach for it.** Use the DSL when you want **flows-as-code**: reviewable diffs, refactoring across many flows, sub-flow reuse, and CI validation — the things a visual editor can't give you. It's the natural authoring layer for a **[`@viglet/turing-cli`](./cli.md)** project (`flows/*.chat-flow.json`), but it's independent: you can also paste the compiled JSON into the editor's **Import JSON** button.
+**When you'd reach for it.** Use the DSL when you want **flows-as-code**: reviewable diffs, refactoring across many flows, sub-flow reuse, and CI validation: the things a visual editor can't give you. It's the natural authoring layer for a **[`@viglet/turing-cli`](./cli.md)** project (`flows/*.chat-flow.json`), but it's independent: you can also paste the compiled JSON into the editor's **Import JSON** button.
 
 > **The workflow.** `flow.ts` (you write) → **transpile** → `flow.chat-flow.json` (wire format) → **import/deploy** to an agent. The DSL owns the first arrow; the CLI (or the editor, or `turing-flow-dsl deploy`) owns the last.
 
@@ -26,7 +26,7 @@ This gives you the library (import in `.flow.ts` files) and a `turing-flow-dsl` 
 
 ## Your first flow
 
-Author a flow with `defineFlow` — an identity helper that preserves the literal-typed shape so `tsc` can check every enum:
+Author a flow with `defineFlow`, an identity helper that preserves the literal-typed shape so `tsc` can check every enum:
 
 ```ts
 // flows/lead-capture.flow.ts
@@ -35,7 +35,7 @@ import { defineFlow } from "@viglet/turing-flow-dsl";
 export default defineFlow({
   name: "Lead capture",
   description: "Collect name, email and area of interest.",
-  triggerMode: "ONCE",              // ✅ "ONCE" | "ALWAYS"  — "ONCEE" is a compile error
+  triggerMode: "ONCE",              // ✅ "ONCE" | "ALWAYS": "ONCEE" is a compile error
   triggerLanguage: "PT",
   guardrailMethod: "LLM_JUDGE",     // ✅ "HEURISTIC" | "LLM_JUDGE" | "STRUCTURED_OUTPUT"
   slots: [
@@ -82,7 +82,7 @@ Notice what you **don't** write: node positions, edge ids, and default labels. T
 
 ## Transpiling
 
-Two ways — CLI for a build pipeline, programmatic for scripts/tests.
+Two ways: CLI for a build pipeline, programmatic for scripts/tests.
 
 ### CLI
 
@@ -144,7 +144,7 @@ Build a node by adding an object to `nodes[]`, discriminated on `type`. The full
 | `humanApproval` | Park for a human decision (T119) | `humanApproval: { channel, target?, timeoutSeconds?, timeoutBehavior? }` |
 | `suspend` | Park the cursor until `POST …/chat/resume` (T121) | just `id`/`label` |
 
-`aiInstruction` and `slotValue` support `{{slotName}}` interpolation against captured slots. `continueOnFailure: true` routes failures to a `sourceHandle: "failure"` edge instead of aborting the turn — see [chat flow error handling](./chat-flow.md).
+`aiInstruction` and `slotValue` support `{{slotName}}` interpolation against captured slots. `continueOnFailure: true` routes failures to a `sourceHandle: "failure"` edge instead of aborting the turn: see [chat flow error handling](./chat-flow.md).
 
 ### Declaring slots and personas
 
@@ -162,7 +162,7 @@ personas: [{
 }],
 ```
 
-Then reference a persona from a `persona` node via `personaId: "advisor"`. Slot `type` is one of `STRING | INTEGER | BOOLEAN | FLOAT | TEXT` — note that `email`/`phone`/etc. are **validation rules** on the capturing node, not slot types.
+Then reference a persona from a `persona` node via `personaId: "advisor"`. Slot `type` is one of `STRING | INTEGER | BOOLEAN | FLOAT | TEXT`: note that `email`/`phone`/etc. are **validation rules** on the capturing node, not slot types.
 
 ---
 
@@ -204,9 +204,9 @@ export const flows = defineBundle([
 
 Three paths, easiest first:
 
-1. **CLI (recommended)** — put the compiled `*.chat-flow.json` in a project's `flows/` folder and run `turing deploy`. See **[Turing CLI](./cli.md)**.
-2. **`turing-flow-dsl deploy <dir>`** — the DSL's own deploy command uploads every `*.chat-flow.json` to a running instance (idempotent by name; `--mode bundle|single`, `--create-only`). Config resolves from a `turing` block in `package.json` → env vars (`TURING_URL`, `TURING_AGENT_ID`, `TURING_USERNAME`, `TURING_PASSWORD`) → flags → interactive password prompt.
-3. **Editor** — paste the JSON into the chat-flow editor's **Import JSON** button.
+1. **CLI (recommended)**: put the compiled `*.chat-flow.json` in a project's `flows/` folder and run `turing deploy`. See **[Turing CLI](./cli.md)**.
+2. **`turing-flow-dsl deploy <dir>`**: the DSL's own deploy command uploads every `*.chat-flow.json` to a running instance (idempotent by name; `--mode bundle|single`, `--create-only`). Config resolves from a `turing` block in `package.json` → env vars (`TURING_URL`, `TURING_AGENT_ID`, `TURING_USERNAME`, `TURING_PASSWORD`) → flags → interactive password prompt.
+3. **Editor**: paste the JSON into the chat-flow editor's **Import JSON** button.
 
 ```json
 // package.json
@@ -225,9 +225,9 @@ Three paths, easiest first:
 
 ## Related pages
 
-- **[Chat Flow](./chat-flow.md)** — the visual editor and the full node/slot/trigger semantics the DSL emits.
-- **[Turing CLI](./cli.md)** — the project workflow that deploys compiled flows.
-- **[Routines](./routines.md)** — the async tasks a `scheduleAgent` node dispatches.
-- **[Human-in-the-loop](./human-in-the-loop.md)** — the `humanApproval` node.
-- **[Custom Tools](./custom-tools.md)** — the NATIVE/MCP tools a `functionCall` node invokes.
-- **[Personas](./personas.md)** — persona declarations and the `persona` node.
+- **[Chat Flow](./chat-flow.md)**: the visual editor and the full node/slot/trigger semantics the DSL emits.
+- **[Turing CLI](./cli.md)**: the project workflow that deploys compiled flows.
+- **[Routines](./routines.md)**: the async tasks a `scheduleAgent` node dispatches.
+- **[Human-in-the-loop](./human-in-the-loop.md)**: the `humanApproval` node.
+- **[Custom Tools](./custom-tools.md)**: the NATIVE/MCP tools a `functionCall` node invokes.
+- **[Personas](./personas.md)**: persona declarations and the `persona` node.

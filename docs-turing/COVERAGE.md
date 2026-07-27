@@ -3,13 +3,13 @@
 > **Purpose.** Every shipped block / feature cluster in the Turing
 > [`CHANGELOG.md`](https://github.com/openviglet/turing/blob/main/docs/CHANGELOG.md)
 > maps here to **either** a documentation page (with anchor) **or** an explicit
-> "deliberately internal — no public page" row. A shipped user-facing subsystem
+> "deliberately internal, no public page" row. A shipped user-facing subsystem
 > with no page is an **orphan** (🔴) and a bug in the docs. This file is the
 > gate authored by Block AE T538; keep it in sync when a new block ships.
 >
 > **Legend:** ✅ documented · 🧩 folded into a broader page · 🔒 deliberately
-> internal (engineering / repo / marketing — no end-user page by design) ·
-> 🔴 orphan (missing — fix it).
+> internal (engineering / repo / marketing, no end-user page by design) ·
+> 🔴 orphan (missing, fix it).
 
 _Not rendered in the sidebar; this is a maintenance artifact._
 
@@ -21,65 +21,65 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 |---|---|---|
 | Search engine (Solr / ES / Lucene), cores | [search-engine](./search-engine.md) | ✅ |
 | Semantic Navigation sites, facets, spotlights, targeting | [semantic-navigation](./semantic-navigation.md) | ✅ |
-| **Block R** — field manifest, schema-as-code, derivation, hybrid ranking, field coverage | [manifest](./manifest.md) | ✅ |
+| **Block R**: field manifest, schema-as-code, derivation, hybrid ranking, field coverage | [manifest](./manifest.md) | ✅ |
 | DSL Query API + compatibility matrix | [dsl-query](./dsl-query.md) · [dsl-compatibility](./dsl-compatibility.md) | ✅ |
 | SPA / search-template pages | [spa-pages](./spa-pages.md) | ✅ |
 | Connectors (AEM, web crawler) | [integration](./integration.md) · [integration-aem](./integration-aem.md) | ✅ |
 | Import / export | [import-export](./import-export.md) | ✅ |
 | Migrating from Algolia / Elasticsearch (guide) | [migration](./migration.md) | ✅ |
-| **Block AO** — migration tooling: ES/Algolia importers + `turing migrate` CLI + field-mapping overrides + shadow-comparison (parity check) | [migration § fast path](./migration.md#the-fast-path-turing-migrate) · [cli](./cli.md#turing-migrate-elasticsearchalgolia--connection-flags) | 🧩 |
-| **Block AP** — native synonyms (5 types, query-time on Solr/ES/Lucene, no reindex) + admin UI + Import from Algolia + AI-assisted mining | [synonyms](./synonyms.md) | ✅ |
-| **Block AQ** — Thesaurus: hierarchical controlled-vocabulary microthesauri + index-time expansion (`microthesaurus_terms`) + concept/hierarchical facets + per-site opt-in + seed library + XML import + AI generation + related-term suggestions | [thesaurus](./thesaurus.md) | ✅ |
+| **Block AO**: migration tooling: ES/Algolia importers + `turing migrate` CLI + field-mapping overrides + shadow-comparison (parity check) | [migration § fast path](./migration.md#the-fast-path-turing-migrate) · [cli](./cli.md#turing-migrate-elasticsearchalgolia--connection-flags) | 🧩 |
+| **Block AP**: native synonyms (5 types, query-time on Solr/ES/Lucene, no reindex) + admin UI + Import from Algolia + AI-assisted mining | [synonyms](./synonyms.md) | ✅ |
+| **Block AQ**: Thesaurus: hierarchical controlled-vocabulary microthesauri + index-time expansion (`microthesaurus_terms`) + concept/hierarchical facets + per-site opt-in + seed library + XML import + AI generation + related-term suggestions | [thesaurus](./thesaurus.md) | ✅ |
 
 ## Ask it
 
 | Block / feature | Page | Status |
 |---|---|---|
 | RAG pipeline | [rag](./rag.md) | ✅ |
-| **Block M** — verifiable answers, native citations, citation-drift | [rag § Provenance & citations](./rag.md#provenance--citations) | 🧩 |
-| **Block AD** RAG bridges — managed backends, lanes, fallback, guardrail, second-opinion | [rag § Advanced RAG](./rag.md#advanced-rag-capabilities) | 🧩 |
-| **Block N** + T521 — pluggable & managed rerankers | [reranking](./reranking.md) | ✅ |
-| **Block AD** embeddings — Voyage/Cohere/Mistral, multimodal, contextual, Matryoshka, OCR | [embedding-models](./embedding-models.md) · [embedding-stores](./embedding-stores.md) | ✅ |
+| **Block M**: verifiable answers, native citations, citation-drift | [rag § Provenance & citations](./rag.md#provenance--citations) | 🧩 |
+| **Block AD** RAG bridges: managed backends, lanes, fallback, guardrail, second-opinion | [rag § Advanced RAG](./rag.md#advanced-rag-capabilities) | 🧩 |
+| **Block N** + T521: pluggable & managed rerankers | [reranking](./reranking.md) | ✅ |
+| **Block AD** embeddings: Voyage/Cohere/Mistral, multimodal, contextual, Matryoshka, OCR | [embedding-models](./embedding-models.md) · [embedding-stores](./embedding-stores.md) | ✅ |
 | Chat interface | [chat](./chat.md) | ✅ |
-| **E.6 / F.8** — chat memory, compaction, context editing | [chat-memory](./chat-memory.md) | ✅ |
+| **E.6 / F.8**: chat memory, compaction, context editing | [chat-memory](./chat-memory.md) | ✅ |
 | Intents / conversation starters | [intent](./intent.md) | ✅ |
-| **Block AA** — speaker + audience personas, content-fit, persona-from-audio, persona-suggest | [personas § Audience Personas & Content-Fit](./personas.md#audience-personas--content-fit), [§ Suggest the best-fit persona](./personas.md#suggest-the-best-fit-persona-for-content) | ✅ |
-| **Block AS** — pluggable/chunk-capable transcription: config-selectable backends (OpenAI / self-hosted OpenAI-compatible / none), ffmpeg chunking, async jobs, AUDIO-slot transcription, per-backend metrics, confidence fallback | [transcription](./transcription.md) | ✅ |
-| **Block AI / AG** — persona as an actionable surface (persona chat, bento dashboard + launchpad, content-fit launch action, persona dialogue, suggest persona; T619 re-added from-audio + suggest to bento) | [personas § Act on a Persona](./personas.md#act-on-a-persona-chat-validate-dialogue) | ✅ |
-| **Block AT** (T696–T703) — Persona Match: N×N persona↔content fit projects (project-scoped contents × personas → live fit heatmap + by-content/by-persona reports + PDF, scheduled re-analysis, validate-route folded into a single-persona project) | [personas § Persona Match](./personas.md#persona-match-nn-content-fit-projects) | 🧩 |
-| **Block AU** (T705–T706) — Persona Dialogue projects: saved multi-project dialogues (topic + ordered speaker roster + live-streamed & persisted transcript), reusing the round-robin engine | [personas § Personas in conversation](./personas.md#personas-in-conversation) | 🧩 |
-| **Block AW** (T717–T734) — Synthetic User Research: OCEAN persona facet + knowledge grounding, study aggregate (dynamic/scripted/concept-test protocols) + N-persona SSE interview runner, insights report (themes + verbatim quotes + saturation + theme graph + drift), interview-your-own-agent, per-stage model lanes, concept-fit + eval-dataset bridges, continuous-insight scheduling, audience cohort synthesis, Research Assistant, multi-study program rollup (PRISMA), `turing research` CLI | [personas § Synthetic User Research](./personas.md#synthetic-user-research) · [cli § turing research](./cli.md#turing-research--define-run--fetch-a-study) | 🧩 |
-| **Block AY** (T739) — Content ingestion: pluggable URL fetch mode (Simple / Auto / Headless) with a `browserless` headless-browser fallback so JS-rendered SPA pages extract text; Global Settings section + `browserless` compose service | [personas § Content ingestion](./personas.md#content-ingestion-fetching-js-rendered-pages) | 🧩 |
-| **Block AZ** (T740–T748) — Governed LLM Gateway: OpenAI-compatible `/v1/*` inbound API; virtual keys (`sk-turing-…`) with per-key allowed-models scope, monthly budget + auto-downgrade, hard cap, rate limit; `x-turing-cache` / `x-turing-guardrails` / `x-turing-rag-site` / `x-turing-tools` headers; `turing-agent:` / `turing-sn:` / `turing-local:` / `turing-router:` model-name routing; per-key spend dashboard + `/bento/gateway` admin; opt-in traffic → eval/distillation bridge | [Governed LLM Gateway](./llm-gateway.md) | ✅ |
-| **Block BA** (T749) — Multi-model LLM instance: select one or more models on an instance and mark one as the default (used everywhere the single-model platform points at the instance); dedicated Models card + `LlmModelMultiSelect` picker on the instance form | [llm-instances § Models](./llm-instances.md#3-models-violet) | 🧩 |
-| **Block BE** (T776–T789) — Catalog-driven model intelligence: rich `ModelEntry` metadata through the catalog boundary; auto-seed/refresh `TurLLMPrice` from catalog pricing + provenance/staleness/verify links; enriched model picker (price/context/capability/benchmark/tier badges + sort); auto-fill instance limits; capability/modality feature gating; deprecation warnings + suggested replacement; pre-flight batch cost estimate; cost/quality/latency gateway routing; **Model Advisor** wizard + one-click create; right-sizing savings; knowledge-cutoff disclosure toggle; catalog change-feed notifications; consumer-plan & provider-pricing reference | [llm-instances § Catalog-driven intelligence](./llm-instances.md#catalog-driven-intelligence) · [cost-governance § price table](./cost-governance.md#the-price-table) · [ai-agents § Settings](./ai-agents.md#settings) · [llm-gateway § Model-name routing](./llm-gateway.md#model-name-routing) | 🧩 |
-| **Block BF** (T790–T801) — Vectorless (Structured-Data) RAG: name & surface the catalog copilot as a first-class Knowledge Base Mode (Vector / Vectorless-Structured / Hybrid); NL→filter over the declared field schema → cited answer with **no embeddings**; scheduled JSON-feed pull ingester + startup auto-provisioning; React `useTuringCopilot` hook/widget; stuff-all mode for small catalogs; `turing-copilot:<site>` gateway route; T801 makes Vectorless mode fully suppress embedding indexing + ANN + hybrid ranking (decoupled from the default-agent RAG flag) with an explicit admin callout | [vectorless-structured-rag](./vectorless-structured-rag.md) | ✅ |
-| **Block BG** (T803–T807) — Batch / bulk structured-feed indexing: catalog-scale imports indexed in one bulk pass (batched queue consumer + one commit/group, schema convergence once per batch, true bulk Lucene write); scheduled feed chunked into bounded per-chunk imports (`turing.genai.structured-feed.batch-size`); opt-in direct bulk-index fast path (`POST /api/sn/import/bulk`, `turing.sn.import.bulk-direct.*`) bypassing the queue for very large vectorless reindexes. Mostly internal performance; the two ops config knobs + endpoint fold into the structured-feed page | [vectorless-structured-rag § Indexing large catalogs](./vectorless-structured-rag.md#indexing-large-catalogs-performance) | 🧩 |
-| **Block BI** (T811–T813) — Deterministic (LLM-independent) ranking for the copilot: superlative / comparative / "sorted by" questions ("cheapest", "highest intelligence index", "biggest context window") now resolve to a numeric sort on the field whose name/description matches the quality, while keeping the facet filter; prompts genericized to any catalog; regression sample. User-facing behaviour folds into the copilot page's "Ranking & superlative questions" section | [vectorless-structured-rag § Ranking & superlative questions](./vectorless-structured-rag.md#ranking--superlative-questions) | 🧩 |
-| **Block BK** (T818–T821) — Configurable copilot query-planning strategy, chosen per site (or deployment-wide via `turing.genai.copilot.planning.*`): `DETERMINISTIC` (default, today's cheap English-only path) / `LLM_ASSISTED` (multi-pass parse → audit → refine, understands any language) / `HYBRID` (deterministic fast-path, escalating to the LLM only on an empty or filter-less result), with a parametrizable analysis depth. Surfaced as the "Copilot Query Planning" card in the SN GenAI admin form, plus a **comparative eval** (Eval Studio → NL→Facet → *Compare planners*, `POST /api/sn/nl-facet-eval/planning-comparison`) that scores every strategy on quality / LLM cost / latency over your own pack — plan-only, so the caveat that Hybrid cannot be distinguished from Deterministic there is documented with it. Folds into the copilot page as a strategy-picking section next to the ranking behaviour it configures | [vectorless-structured-rag § Query-planning strategy](./vectorless-structured-rag.md#query-planning-strategy) · [§ Comparing the strategies](./vectorless-structured-rag.md#comparing-the-strategies-on-your-own-catalog) | 🧩 |
-| **Block BL** (T822–T823) — Stuff-all at catalog scale: whole-catalog grounding now degrades gracefully as a catalog grows (full description-labelled rows → a ~10× smaller compact projection over sortable/facet fields → filtered retrieval) instead of silently dropping to filtered retrieval, so advisory questions keep working past a few hundred rows; every request logs which retrieval mode it chose and why. Folds into the copilot page's stuff-all section | [vectorless-structured-rag § Stuff-all mode](./vectorless-structured-rag.md#stuff-all-mode-small-catalogs) | 🧩 |
+| **Block AA**: speaker + audience personas, content-fit, persona-from-audio, persona-suggest | [personas § Audience Personas & Content-Fit](./personas.md#audience-personas--content-fit), [§ Suggest the best-fit persona](./personas.md#suggest-the-best-fit-persona-for-content) | ✅ |
+| **Block AS**: pluggable/chunk-capable transcription: config-selectable backends (OpenAI / self-hosted OpenAI-compatible / none), ffmpeg chunking, async jobs, AUDIO-slot transcription, per-backend metrics, confidence fallback | [transcription](./transcription.md) | ✅ |
+| **Block AI / AG**: persona as an actionable surface (persona chat, bento dashboard + launchpad, content-fit launch action, persona dialogue, suggest persona; T619 re-added from-audio + suggest to bento) | [personas § Act on a Persona](./personas.md#act-on-a-persona-chat-validate-dialogue) | ✅ |
+| **Block AT** (T696–T703): Persona Match: N×N persona↔content fit projects (project-scoped contents × personas → live fit heatmap + by-content/by-persona reports + PDF, scheduled re-analysis, validate-route folded into a single-persona project) | [personas § Persona Match](./personas.md#persona-match-nn-content-fit-projects) | 🧩 |
+| **Block AU** (T705–T706): Persona Dialogue projects: saved multi-project dialogues (topic + ordered speaker roster + live-streamed & persisted transcript), reusing the round-robin engine | [personas § Personas in conversation](./personas.md#personas-in-conversation) | 🧩 |
+| **Block AW** (T717–T734): Synthetic User Research: OCEAN persona facet + knowledge grounding, study aggregate (dynamic/scripted/concept-test protocols) + N-persona SSE interview runner, insights report (themes + verbatim quotes + saturation + theme graph + drift), interview-your-own-agent, per-stage model lanes, concept-fit + eval-dataset bridges, continuous-insight scheduling, audience cohort synthesis, Research Assistant, multi-study program rollup (PRISMA), `turing research` CLI | [personas § Synthetic User Research](./personas.md#synthetic-user-research) · [cli § turing research](./cli.md#turing-research-define-run--fetch-a-study) | 🧩 |
+| **Block AY** (T739): Content ingestion: pluggable URL fetch mode (Simple / Auto / Headless) with a `browserless` headless-browser fallback so JS-rendered SPA pages extract text; Global Settings section + `browserless` compose service | [personas § Content ingestion](./personas.md#content-ingestion-fetching-js-rendered-pages) | 🧩 |
+| **Block AZ** (T740–T748): Governed LLM Gateway: OpenAI-compatible `/v1/*` inbound API; virtual keys (`sk-turing-…`) with per-key allowed-models scope, monthly budget + auto-downgrade, hard cap, rate limit; `x-turing-cache` / `x-turing-guardrails` / `x-turing-rag-site` / `x-turing-tools` headers; `turing-agent:` / `turing-sn:` / `turing-local:` / `turing-router:` model-name routing; per-key spend dashboard + `/bento/gateway` admin; opt-in traffic → eval/distillation bridge | [Governed LLM Gateway](./llm-gateway.md) | ✅ |
+| **Block BA** (T749): Multi-model LLM instance: select one or more models on an instance and mark one as the default (used everywhere the single-model platform points at the instance); dedicated Models card + `LlmModelMultiSelect` picker on the instance form | [llm-instances § Models](./llm-instances.md#3-models-violet) | 🧩 |
+| **Block BE** (T776–T789): Catalog-driven model intelligence: rich `ModelEntry` metadata through the catalog boundary; auto-seed/refresh `TurLLMPrice` from catalog pricing + provenance/staleness/verify links; enriched model picker (price/context/capability/benchmark/tier badges + sort); auto-fill instance limits; capability/modality feature gating; deprecation warnings + suggested replacement; pre-flight batch cost estimate; cost/quality/latency gateway routing; **Model Advisor** wizard + one-click create; right-sizing savings; knowledge-cutoff disclosure toggle; catalog change-feed notifications; consumer-plan & provider-pricing reference | [llm-instances § Catalog-driven intelligence](./llm-instances.md#catalog-driven-intelligence) · [cost-governance § price table](./cost-governance.md#the-price-table) · [ai-agents § Settings](./ai-agents.md#settings) · [llm-gateway § Model-name routing](./llm-gateway.md#model-name-routing) | 🧩 |
+| **Block BF** (T790–T801): Vectorless (Structured-Data) RAG: name & surface the catalog copilot as a first-class Knowledge Base Mode (Vector / Vectorless-Structured / Hybrid); NL→filter over the declared field schema → cited answer with **no embeddings**; scheduled JSON-feed pull ingester + startup auto-provisioning; React `useTuringCopilot` hook/widget; stuff-all mode for small catalogs; `turing-copilot:<site>` gateway route; T801 makes Vectorless mode fully suppress embedding indexing + ANN + hybrid ranking (decoupled from the default-agent RAG flag) with an explicit admin callout | [vectorless-structured-rag](./vectorless-structured-rag.md) | ✅ |
+| **Block BG** (T803–T807): Batch / bulk structured-feed indexing: catalog-scale imports indexed in one bulk pass (batched queue consumer + one commit/group, schema convergence once per batch, true bulk Lucene write); scheduled feed chunked into bounded per-chunk imports (`turing.genai.structured-feed.batch-size`); opt-in direct bulk-index fast path (`POST /api/sn/import/bulk`, `turing.sn.import.bulk-direct.*`) bypassing the queue for very large vectorless reindexes. Mostly internal performance; the two ops config knobs + endpoint fold into the structured-feed page | [vectorless-structured-rag § Indexing large catalogs](./vectorless-structured-rag.md#indexing-large-catalogs-performance) | 🧩 |
+| **Block BI** (T811–T813): Deterministic (LLM-independent) ranking for the copilot: superlative / comparative / "sorted by" questions ("cheapest", "highest intelligence index", "biggest context window") now resolve to a numeric sort on the field whose name/description matches the quality, while keeping the facet filter; prompts genericized to any catalog; regression sample. User-facing behaviour folds into the copilot page's "Ranking & superlative questions" section | [vectorless-structured-rag § Ranking & superlative questions](./vectorless-structured-rag.md#ranking--superlative-questions) | 🧩 |
+| **Block BK** (T818–T821): Configurable copilot query-planning strategy, chosen per site (or deployment-wide via `turing.genai.copilot.planning.*`): `DETERMINISTIC` (default, today's cheap English-only path) / `LLM_ASSISTED` (multi-pass parse → audit → refine, understands any language) / `HYBRID` (deterministic fast-path, escalating to the LLM only on an empty or filter-less result), with a parametrizable analysis depth. Surfaced as the "Copilot Query Planning" card in the SN GenAI admin form, plus a **comparative eval** (Eval Studio → NL→Facet → *Compare planners*, `POST /api/sn/nl-facet-eval/planning-comparison`) that scores every strategy on quality / LLM cost / latency over your own pack, plan-only, so the caveat that Hybrid cannot be distinguished from Deterministic there is documented with it. Folds into the copilot page as a strategy-picking section next to the ranking behaviour it configures | [vectorless-structured-rag § Query-planning strategy](./vectorless-structured-rag.md#query-planning-strategy) · [§ Comparing the strategies](./vectorless-structured-rag.md#comparing-the-strategies-on-your-own-catalog) | 🧩 |
+| **Block BL** (T822–T823): Stuff-all at catalog scale: whole-catalog grounding now degrades gracefully as a catalog grows (full description-labelled rows → a ~10× smaller compact projection over sortable/facet fields → filtered retrieval) instead of silently dropping to filtered retrieval, so advisory questions keep working past a few hundred rows; every request logs which retrieval mode it chose and why. Folds into the copilot page's stuff-all section | [vectorless-structured-rag § Stuff-all mode](./vectorless-structured-rag.md#stuff-all-mode-small-catalogs) | 🧩 |
 
 ## Automate it
 
 | Block / feature | Page | Status |
 |---|---|---|
 | AI Agents | [ai-agents](./ai-agents.md) | ✅ |
-| **Block AK** — Live Preview prompt diagnostics (flow-aware persona, token/cost metrics, inert-this-turn, cross-segment lint, node picker, replay a real conversation, verbatim capture of any past turn) | [ai-agents § Live Preview & prompt diagnostics](./ai-agents.md#live-preview--prompt-diagnostics) | 🧩 |
+| **Block AK**: Live Preview prompt diagnostics (flow-aware persona, token/cost metrics, inert-this-turn, cross-segment lint, node picker, replay a real conversation, verbatim capture of any past turn) | [ai-agents § Live Preview & prompt diagnostics](./ai-agents.md#live-preview--prompt-diagnostics) | 🧩 |
 | Tool calling (native + provider-native) | [tool-calling](./tool-calling.md) | ✅ |
-| **Block F.15** — capability registry + two-level gate | [capabilities](./capabilities.md) | ✅ |
-| **Block W** (AG-UI) — live tool activity, client tools, generative UI | [client-tools](./client-tools.md) | ✅ |
-| **Block X** — answer-as-app, co-browse, glass-box, proactive, handoff, skill UIs, action widget | [showcase](./showcase.md#creative-compositions) (opt-in features, demoed) | 🧩 |
+| **Block F.15**: capability registry + two-level gate | [capabilities](./capabilities.md) | ✅ |
+| **Block W** (AG-UI): live tool activity, client tools, generative UI | [client-tools](./client-tools.md) | ✅ |
+| **Block X**: answer-as-app, co-browse, glass-box, proactive, handoff, skill UIs, action widget | [showcase](./showcase.md#creative-compositions) (opt-in features, demoed) | 🧩 |
 | Custom (Groovy) tools | [custom-tools](./custom-tools.md) | ✅ |
-| **Block I** — MCP client + server | [mcp-servers](./mcp-servers.md) | ✅ |
-| **E.3** — skills (Anthropic folders, sandbox) | [skills](./skills.md) | ✅ |
-| **E.2** — agent workspace | [agent-workspace](./agent-workspace.md) | ✅ |
-| **D.3** — slots, chat-flow | [chat-flow](./chat-flow.md) | ✅ |
-| **E.4** — human-in-the-loop | [human-in-the-loop](./human-in-the-loop.md) | ✅ |
+| **Block I**: MCP client + server | [mcp-servers](./mcp-servers.md) | ✅ |
+| **E.3**: skills (Anthropic folders, sandbox) | [skills](./skills.md) | ✅ |
+| **E.2**: agent workspace | [agent-workspace](./agent-workspace.md) | ✅ |
+| **D.3**: slots, chat-flow | [chat-flow](./chat-flow.md) | ✅ |
+| **E.4**: human-in-the-loop | [human-in-the-loop](./human-in-the-loop.md) | ✅ |
 | Webhooks | [webhooks](./webhooks.md) | ✅ |
 | Routines (scheduled agents) | [routines](./routines.md) | ✅ |
-| **D.4** — A/B experiments | [experiments](./experiments.md) | ✅ |
-| **Block K** — agent eval / golden sets | [agent-eval](./agent-eval.md) | ✅ |
-| **Block AJ** — eval platform: pluggable graders (code/model/human) + datasets + grader stacks + versioning + Eval Studio + calibration/inter-annotator agreement + public eval API/CLI/SDK CI gate (`POST /api/eval/run`, `turing eval --dataset`, `runEval`) | [agent-eval](./agent-eval.md), [cli](./cli.md#turing-eval---dataset-idname---stack-idname---min-score-n) | 🧩 |
+| **D.4**: A/B experiments | [experiments](./experiments.md) | ✅ |
+| **Block K**: agent eval / golden sets | [agent-eval](./agent-eval.md) | ✅ |
+| **Block AJ**: eval platform: pluggable graders (code/model/human) + datasets + grader stacks + versioning + Eval Studio + calibration/inter-annotator agreement + public eval API/CLI/SDK CI gate (`POST /api/eval/run`, `turing eval --dataset`, `runEval`) | [agent-eval](./agent-eval.md), [cli](./cli.md#turing-eval---dataset-idname---stack-idname---min-score-n) | 🧩 |
 
 ## Run it
 
@@ -87,29 +87,29 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 |---|---|---|
 | Installation | [installation-guide](./installation-guide.md) | ✅ |
 | Configuration (`application.yaml`) | [configuration-reference](./configuration-reference.md) | ✅ |
-| **Block F / F.16** — GenAI overview + Gemini native primitives | [genai-llm](./genai-llm.md) | ✅ |
-| **Block AD** — 11 vendor types, per-vendor auth | [llm-instances](./llm-instances.md) | ✅ |
-| **T620** — startup LLM auto-provisioning from `OPENAI_API_KEY` | [llm-instances](./llm-instances.md#zero-config-provision-from-openai_api_key-at-startup) | 🧩 |
-| **T622** — local ONNX embeddings + zero-config local RAG at startup; global Default AI Agent fallback for agentless SN sites | [embedding-models § Zero-config local RAG](./embedding-models.md#zero-config-local-rag-at-startup) · [ai-agents § Default AI Agent](./ai-agents.md#default-ai-agent-global-fallback) | 🧩 |
-| **Block AM (T623–T629)** — HuggingFace embedding provider + provider-aware model picker (LLM-embedding / HuggingFace / manual local) + on-select dimension/reindex warning + ONNX variant/quantization picker + HF-repo-id startup seeding | [embedding-models § HuggingFace.co](./embedding-models.md#huggingfaceco) · [embedding-models § Provider](./embedding-models.md#provider) · [embedding-models § Zero-config local RAG](./embedding-models.md#zero-config-local-rag-at-startup) | 🧩 |
+| **Block F / F.16**: GenAI overview + Gemini native primitives | [genai-llm](./genai-llm.md) | ✅ |
+| **Block AD**: 11 vendor types, per-vendor auth | [llm-instances](./llm-instances.md) | ✅ |
+| **T620**: startup LLM auto-provisioning from `OPENAI_API_KEY` | [llm-instances](./llm-instances.md#zero-config-provision-from-openai_api_key-at-startup) | 🧩 |
+| **T622**: local ONNX embeddings + zero-config local RAG at startup; global Default AI Agent fallback for agentless SN sites | [embedding-models § Zero-config local RAG](./embedding-models.md#zero-config-local-rag-at-startup) · [ai-agents § Default AI Agent](./ai-agents.md#default-ai-agent-global-fallback) | 🧩 |
+| **Block AM (T623–T629)**: HuggingFace embedding provider + provider-aware model picker (LLM-embedding / HuggingFace / manual local) + on-select dimension/reindex warning + ONNX variant/quantization picker + HF-repo-id startup seeding | [embedding-models § HuggingFace.co](./embedding-models.md#huggingfaceco) · [embedding-models § Provider](./embedding-models.md#provider) · [embedding-models § Zero-config local RAG](./embedding-models.md#zero-config-local-rag-at-startup) | 🧩 |
 | Knowledge Base / Assets, pluggable storage | [assets](./assets.md) | ✅ |
-| **Block J** — multi-tenancy | [multi-tenancy](./multi-tenancy.md) | ✅ |
+| **Block J**: multi-tenancy | [multi-tenancy](./multi-tenancy.md) | ✅ |
 | Administration (users, roles, tokens, settings) | [administration-guide](./administration-guide.md) | ✅ |
 | Observability, logging | [observability](./observability.md) · [logging](./logging.md) | ✅ |
-| **D.6** — chat analytics (sentiment, tool latency, SSE) | [chat-analytics](./chat-analytics.md) | ✅ |
-| **Block L** — token usage + cost governance | [token-usage](./token-usage.md) · [cost-governance](./cost-governance.md) | ✅ |
+| **D.6**: chat analytics (sentiment, tool latency, SSE) | [chat-analytics](./chat-analytics.md) | ✅ |
+| **Block L**: token usage + cost governance | [token-usage](./token-usage.md) · [cost-governance](./cost-governance.md) | ✅ |
 
 ## Developers
 
 | Block / feature | Page | Status |
 |---|---|---|
 | Dev environment, contributing | [developer-guide](./developer-guide.md) | ✅ |
-| **Block S** — React SDK (hooks + headless UI) | [react-sdk](./react-sdk.md) | ✅ |
-| **Block S** — vanilla `@viglet/turing-sdk` (zero-dep, EDS) | [javascript-sdk](./javascript-sdk.md) | ✅ (T539) |
-| **E.7** — `@viglet/turing-cli` (`turing` command) | [cli](./cli.md) | ✅ (T539, was 🧩 folded into developer-guide) |
-| **`@viglet/turing-flow-dsl`** — flows-as-typed-TS | [flow-dsl](./flow-dsl.md) | ✅ (T539) |
-| **Block Y** — Atlas Store reference showcase | [showcase](./showcase.md) | ✅ |
-| **Block Z** — client-side conversion analytics / GA4 bridge | [conversion-analytics](./conversion-analytics.md) | ✅ |
+| **Block S**: React SDK (hooks + headless UI) | [react-sdk](./react-sdk.md) | ✅ |
+| **Block S**: vanilla `@viglet/turing-sdk` (zero-dep, EDS) | [javascript-sdk](./javascript-sdk.md) | ✅ (T539) |
+| **E.7**: `@viglet/turing-cli` (`turing` command) | [cli](./cli.md) | ✅ (T539, was 🧩 folded into developer-guide) |
+| **`@viglet/turing-flow-dsl`**: flows-as-typed-TS | [flow-dsl](./flow-dsl.md) | ✅ (T539) |
+| **Block Y**: Atlas Store reference showcase | [showcase](./showcase.md) | ✅ |
+| **Block Z**: client-side conversion analytics / GA4 bridge | [conversion-analytics](./conversion-analytics.md) | ✅ |
 | REST API + GraphQL | [rest-api](./rest-api.md) · [graphql](./graphql.md) | ✅ |
 
 ## Security
@@ -119,33 +119,33 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | API key + session auth | [security-authentication](./security-authentication.md) | ✅ |
 | Social login | [security-social-login](./security-social-login.md) | ✅ |
 | Keycloak OAuth2 / OIDC SSO | [security-keycloak](./security-keycloak.md) | ✅ |
-| **Block AN** — post-audit security hardening: prod-required crypto key, `permissions=true` default (authn ≠ admin), chat-analytics auth, dev-token header-only + expiry/revocation, anonymous-chat abuse controls (`turing.abuse.*`), RAG untrusted-content framing + tool trust boundary, SSRF egress guard, storage traversal/Zip-Slip caps, actuator restriction, MCP client guards (`turing.mcp-client.*`), MinIO-creds/H2 hardening, frontend XSS sanitisers, dependency-audit CI gate | [security-hardening](./security-hardening.md) · [configuration-reference § Abuse Controls](./configuration-reference.md#abuse-controls-turingabuse) | ✅ |
+| **Block AN**: post-audit security hardening: prod-required crypto key, `permissions=true` default (authn ≠ admin), chat-analytics auth, dev-token header-only + expiry/revocation, anonymous-chat abuse controls (`turing.abuse.*`), RAG untrusted-content framing + tool trust boundary, SSRF egress guard, storage traversal/Zip-Slip caps, actuator restriction, MCP client guards (`turing.mcp-client.*`), MinIO-creds/H2 hardening, frontend XSS sanitisers, dependency-audit CI gate | [security-hardening](./security-hardening.md) · [configuration-reference § Abuse Controls](./configuration-reference.md#abuse-controls-turingabuse) | ✅ |
 
 ---
 
-## Deliberately internal — no public page (not orphans)
+## Deliberately internal: no public page (not orphans)
 
 These shipped blocks are engineering, repository, or marketing concerns with no end-user documentation surface. Listed so they're accounted for, not silently missing.
 
 | Block | Why no page |
 |---|---|
-| **A, B, C** — test scaffolding, harness inversion, post-refactor capabilities | Internal engineering (chat-flow engine internals) |
+| **A, B, C**: test scaffolding, harness inversion, post-refactor capabilities | Internal engineering (chat-flow engine internals) |
 | **D.1/D.2/D.5/D.7/D.8/D.11**, **E.1/E.5/E.8/E.9**, **H.1/H.2** | Internal engine/DX/SDK-migration work; user-facing slices surface on the pages above |
-| **Block P** — open-core source split (`turing` → `turing-ce`) | Repository/licensing change; not a product feature |
-| **Block Q** — `viglet-core` shared backend platform | Cross-product internal library (separate repo); no Turing-user surface |
+| **Block P**: open-core source split (`turing` → `turing-ce`) | Repository/licensing change; not a product feature |
+| **Block Q**: `viglet-core` shared backend platform | Cross-product internal library (separate repo); no Turing-user surface |
 | **Multi-tenancy parity (`viglet-core-tenancy`)** | Internal shared-library lift; the Turing-facing feature is [multi-tenancy](./multi-tenancy.md) |
-| **Block AC** — JPA caching strategy | Internal architecture (documented in `agents.md`) |
-| **Block O** — GEO / LLM discoverability | Marketing-site + `llms.txt` concern (`turing.viglet.org`), not the product docs |
-| **Block AB** — public site & top-of-funnel | Marketing site (`turing.viglet.org`), separate app |
-| **Block AE** — this documentation round | Meta — produced the pages in this very matrix |
-| **Block AG** — Bento admin UI redesign + console retirement | UI/design change (frosted-glass admin reskin); no new capability, config, or API — the admin surfaces work the same, only re-skinned. Admin URLs moved `/admin/*` → `/bento/*` with transparent redirects, so bookmarks/deep-links still resolve. Doc screenshots refreshed opportunistically, not gated here |
-| **Block AL** — prompt-assembly pipeline (`TurPromptContributor` SPI, single-pass assembler, STABLE-first cache ordering) | Internal architecture — the assembled prompt is byte-identical to before; the observable change is a more faithful admin Live Preview (a fix) plus opt-in `turing.prompt.assembly.*` cache knobs not yet wired to provider caching |
-| **T656** — resilient ONNX embedding-model acquisition (`TurOnnxModelDownloader`: retry/backoff, persistent cache dir, integrity check, actionable diagnostics) | Internal reliability — hardens the existing local/HuggingFace ONNX embedding warm-up download (persistent cache survives an ephemeral-env reset + retry + clear error); no new capability or admin/API/SDK surface. The only knobs are ops-level (`turing.genai.embedding.local.cache-dir`, `…download.*`), covered by the [embedding-models](./embedding-models.md) provider docs where relevant |
-| **Block AR** — live-demo search & chat quality (Lucene parity: similar-documents/MoreLikeThis, spell-check/"did you mean", RAG source dedup, autocomplete hyphen, demo typing indicator) | Engine-parity bug fixes — "Similar documents" and "did you mean" already work on Solr/Elasticsearch and are covered by the search docs; Block AR makes the embedded **Lucene** engine behave the same (`/similar` + `/spell-check` endpoints, request/response shape and admin config all unchanged), so there's no new user-facing surface to document |
-| **Block BD** (T764–T770) — multi-source model-catalog regeneration pipeline | Maintainer tooling — a local, zero-dep Node pipeline (`scripts/catalog/`, `pnpm catalog:regen`) that regenerates the bundled `models-catalog.json` from live vendor APIs + the LiteLLM registry, propose-and-review (`--apply` only). No product surface: nothing in the admin UI, chat, search, or the API/SDK changes; the additive schema fields (`maxOutputTokens`/`modalities`/`status`/provenance) are optional and only enrich the public catalog reference (contract in `docs/references/model-catalog-api.md`). Maintainer workflow lives in `docs/references/model-catalog-pipeline.md` |
+| **Block AC**: JPA caching strategy | Internal architecture (documented in `agents.md`) |
+| **Block O**: GEO / LLM discoverability | Marketing-site + `llms.txt` concern (`turing.viglet.org`), not the product docs |
+| **Block AB**: public site & top-of-funnel | Marketing site (`turing.viglet.org`), separate app |
+| **Block AE**: this documentation round | Meta: produced the pages in this very matrix |
+| **Block AG**: Bento admin UI redesign + console retirement | UI/design change (frosted-glass admin reskin); no new capability, config, or API, the admin surfaces work the same, only re-skinned. Admin URLs moved `/admin/*` → `/bento/*` with transparent redirects, so bookmarks/deep-links still resolve. Doc screenshots refreshed opportunistically, not gated here |
+| **Block AL**: prompt-assembly pipeline (`TurPromptContributor` SPI, single-pass assembler, STABLE-first cache ordering) | Internal architecture: the assembled prompt is byte-identical to before; the observable change is a more faithful admin Live Preview (a fix) plus opt-in `turing.prompt.assembly.*` cache knobs not yet wired to provider caching |
+| **T656**: resilient ONNX embedding-model acquisition (`TurOnnxModelDownloader`: retry/backoff, persistent cache dir, integrity check, actionable diagnostics) | Internal reliability: hardens the existing local/HuggingFace ONNX embedding warm-up download (persistent cache survives an ephemeral-env reset + retry + clear error); no new capability or admin/API/SDK surface. The only knobs are ops-level (`turing.genai.embedding.local.cache-dir`, `…download.*`), covered by the [embedding-models](./embedding-models.md) provider docs where relevant |
+| **Block AR**: live-demo search & chat quality (Lucene parity: similar-documents/MoreLikeThis, spell-check/"did you mean", RAG source dedup, autocomplete hyphen, demo typing indicator) | Engine-parity bug fixes: "Similar documents" and "did you mean" already work on Solr/Elasticsearch and are covered by the search docs; Block AR makes the embedded **Lucene** engine behave the same (`/similar` + `/spell-check` endpoints, request/response shape and admin config all unchanged), so there's no new user-facing surface to document |
+| **Block BD** (T764–T770): multi-source model-catalog regeneration pipeline | Maintainer tooling: a local, zero-dep Node pipeline (`scripts/catalog/`, `pnpm catalog:regen`) that regenerates the bundled `models-catalog.json` from live vendor APIs + the LiteLLM registry, propose-and-review (`--apply` only). No product surface: nothing in the admin UI, chat, search, or the API/SDK changes; the additive schema fields (`maxOutputTokens`/`modalities`/`status`/provenance) are optional and only enrich the public catalog reference (contract in `docs/references/model-catalog-api.md`). Maintainer workflow lives in `docs/references/model-catalog-pipeline.md` |
 
 ---
 
 ## Orphans
 
-**None.** Every shipped user-facing subsystem resolves to a page above. If a new block ships without a row here, add it — and if it's user-facing without a page, that's a 🔴 to fix before the block is considered done.
+**None.** Every shipped user-facing subsystem resolves to a page above. If a new block ships without a row here, add it, and if it's user-facing without a page, that's a 🔴 to fix before the block is considered done.

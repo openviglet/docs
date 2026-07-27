@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: Security Hardening & Upgrade Notes
-description: Post-audit security hardening in Viglet Turing ES — the new production defaults, required environment variables, abuse controls, and breaking changes operators and integrators need to know.
+description: Post-audit security hardening in Viglet Turing ES, the new production defaults, required environment variables, abuse controls, and breaking changes operators and integrators need to know.
 ---
 
 # Security Hardening & Upgrade Notes
@@ -12,16 +12,16 @@ the credential/secret handling. This page is the operator- and
 integrator-facing summary: **what changed, what you must now configure, and
 which changes can break an existing deployment if you don't act.**
 
-:::warning Breaking changes — read before upgrading
+:::warning Breaking changes: read before upgrading
 Four changes can break an existing deployment or integration if you don't act:
 
-1. **`TURING_AI_CRYPTO_KEY` is now required in production** — the app fails to
+1. **`TURING_AI_CRYPTO_KEY` is now required in production**: the app fails to
    start on the `production` profile with a blank or known-sample key.
-2. **`turing.permissions` now defaults to `true`** — an authenticated principal
+2. **`turing.permissions` now defaults to `true`**: an authenticated principal
    is no longer automatically an admin.
-3. **`/api/system/chat-analytics/**` now requires authentication** — a Grafana /
+3. **`/api/system/chat-analytics/**` now requires authentication**, a Grafana /
    dashboard datasource pointed at it must send credentials.
-4. **The `?apiKey=` query-parameter for API keys was removed** — clients must
+4. **The `?apiKey=` query-parameter for API keys was removed**: clients must
    send the key in the `Key` HTTP header.
 
 Each is detailed below.
@@ -59,7 +59,7 @@ key.
 ## 2. `turing.permissions` defaults to `true` (authn ≠ admin)
 
 Previously the shipped default was `turing.permissions: false`, which granted
-**`ROLE_ADMIN` and every privilege to any authenticated principal** — making all
+**`ROLE_ADMIN` and every privilege to any authenticated principal**, making all
 method-level authorization checks inert. The default is now **`true`**: users
 get only their real, group-derived authorities.
 
@@ -83,14 +83,14 @@ Otherwise, assign users to groups/roles so they have the privileges they need.
 ## 3. Chat-analytics API requires authentication
 
 `GET /api/system/chat-analytics/**` (session enumeration, transcripts, router
-decisions, tool-call traces) is **no longer anonymous** — it exposed end-user
+decisions, tool-call traces) is **no longer anonymous**: it exposed end-user
 chat content. It now requires an authenticated admin (`ROLE_ADMIN` /
 `AI_AGENT_VIEW`).
 
 **What to do:** if you scrape it from Grafana via the Infinity datasource,
 configure HTTP Basic auth (a Turing admin account) on that datasource. The
 shipped Grafana provisioning (`containers/grafana/.../prometheus.yml`) has been
-updated to use Basic auth with placeholder credentials — replace them with a
+updated to use Basic auth with placeholder credentials: replace them with a
 real admin account. See [Chat Analytics](./chat-analytics.md).
 
 ---
@@ -118,7 +118,7 @@ were hardened:
   enabled / never-expire.
 
 - The admin token API is now admin-only, and token values are shown **once on
-  creation** — they are never returned again by list/get.
+  creation**: they are never returned again by list/get.
 
 Additionally, the admin user list no longer returns password hashes
 (`password` is write-only).
@@ -159,7 +159,7 @@ page/skill ZIPs.
 
 In RAG chat, retrieved website content is now wrapped in an explicit
 `<untrusted_website_content>` block with a standing instruction that everything
-inside is **data, not instructions** — so a crawled page or uploaded asset
+inside is **data, not instructions**, so a crawled page or uploaded asset
 carrying "ignore previous instructions / call tool X" can no longer hijack the
 system prompt on the next query. No configuration is needed; this is always on.
 
@@ -187,7 +187,7 @@ For the agent-as-MCP-**client** path (`turing.mcp-client.*`), see
 
 | Property | Default | Effect |
 |---|---|---|
-| `allowed-stdio-commands` | *(empty = any)* | When set, a stdio MCP server whose command base-name isn't listed is refused — blocks arbitrary local-process execution by configuration. |
+| `allowed-stdio-commands` | *(empty = any)* | When set, a stdio MCP server whose command base-name isn't listed is refused, blocks arbitrary local-process execution by configuration. |
 | `block-private-urls` | `false` | When `true`, an HTTP MCP-client URL that resolves to a private/loopback address is refused (via the SSRF guard). Leave `false` if your MCP servers live on an internal network. |
 
 The inbound `/mcp` server is off by default and, when enabled, restricted to the
@@ -199,8 +199,8 @@ reverse proxy, pair `loopback-only` with `require-auth`.
 ## 9. Actuator endpoints restricted
 
 `management.endpoints.web.exposure.include` is now `health,info,prometheus`
-(was `*`). `/actuator/env` and `/actuator/heapdump` — which could leak the
-crypto key, datasource credentials and provider keys — are **no longer exposed
+(was `*`). `/actuator/env` and `/actuator/heapdump` (which could leak the
+crypto key, datasource credentials and provider keys) are **no longer exposed
 over HTTP**. Re-add a specific endpoint only if you need it (it will require
 authentication).
 

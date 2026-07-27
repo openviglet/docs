@@ -1,14 +1,14 @@
 ---
 sidebar_position: 8
 title: Capabilities
-description: The capability registry and two-level gate in Viglet Turing ES — how provider-native server tools, request options, and Turing's own tools surface in one taxonomy and run in one tool loop.
+description: "The capability registry and two-level gate in Viglet Turing ES: how provider-native server tools, request options, and Turing's own tools surface in one taxonomy and run in one tool loop."
 ---
 
 # Capabilities
 
-A **capability** is anything a Large Language Model can *do beyond plain text generation* — search the web, run code, generate an image, return citations, or reason with a larger compute budget. Different vendors expose these as server-side primitives with different names and shapes; Turing ES collapses them into **one taxonomy** so the admin sees "web search" once, not "OpenAI `web_search` vs Anthropic `web_search_20250305` vs Gemini `google_search`."
+A **capability** is anything a Large Language Model can *do beyond plain text generation*: search the web, run code, generate an image, return citations, or reason with a larger compute budget. Different vendors expose these as server-side primitives with different names and shapes; Turing ES collapses them into **one taxonomy** so the admin sees "web search" once, not "OpenAI `web_search` vs Anthropic `web_search_20250305` vs Gemini `google_search`."
 
-You'd reach for this page when you want an agent to use a **provider-native** feature — Claude's web search, OpenAI's hosted code interpreter, Gemini's Google Search grounding — rather than (or alongside) Turing's own [native tools](./tool-calling.md). The key idea to internalize: a native capability only fires when it is switched on in **two** places. Miss either gate and the request silently falls back to the standard Spring AI path, as if the capability didn't exist.
+You'd reach for this page when you want an agent to use a **provider-native** feature (Claude's web search, OpenAI's hosted code interpreter, Gemini's Google Search grounding) rather than (or alongside) Turing's own [native tools](./tool-calling.md). The key idea to internalize: a native capability only fires when it is switched on in **two** places. Miss either gate and the request silently falls back to the standard Spring AI path, as if the capability didn't exist.
 
 ---
 
@@ -16,8 +16,8 @@ You'd reach for this page when you want an agent to use a **provider-native** fe
 
 A capability is gated **per LLM instance** *and* **per agent** on purpose:
 
-1. **The instance gate (admin/ops)** decides *whether this connection is even allowed* to use the feature — an operator question about cost, data residency, and contractual access. It lives in the `llm_instance_capability` matrix.
-2. **The agent gate (author)** decides *whether this particular assistant should* use it — a design question about what the agent is for. It lives in the agent's `nativeCapabilities` selection.
+1. **The instance gate (admin/ops)** decides *whether this connection is even allowed* to use the feature: an operator question about cost, data residency, and contractual access. It lives in the `llm_instance_capability` matrix.
+2. **The agent gate (author)** decides *whether this particular assistant should* use it, a design question about what the agent is for. It lives in the agent's `nativeCapabilities` selection.
 
 At runtime Turing intersects the two sets: **what the agent asked for ∩ what the instance is allowed to do**. Only capabilities in that intersection are wired into the provider request.
 
@@ -30,7 +30,7 @@ flowchart LR
 ```
 
 :::warning The most common gotcha
-The picker checks the bound instance's **vendor**, not its capability matrix — so you can select a capability that no instance actually has enabled and it will simply never fire. If a native capability "isn't working," confirm it is enabled in **both** the instance matrix and the agent picker.
+The picker checks the bound instance's **vendor**, not its capability matrix, so you can select a capability that no instance actually has enabled and it will simply never fire. If a native capability "isn't working," confirm it is enabled in **both** the instance matrix and the agent picker.
 :::
 
 ---
@@ -41,7 +41,7 @@ The picker checks the bound instance's **vendor**, not its capability matrix —
 2. **Select it on the agent.** Open the agent's **Tools & Capabilities** picker (`/capabilities`). Under the **Web** group, pick the Anthropic web-search option. (This writes the key to the agent's `nativeCapabilities`.)
 3. **Chat.** Ask a question that needs fresh information. Claude now runs web search server-side and the answer streams back with citation events.
 
-If nothing changed, re-check step 1 — the instance gate is the one most often forgotten.
+If nothing changed, re-check step 1: the instance gate is the one most often forgotten.
 
 ---
 
@@ -60,7 +60,7 @@ Each `TOOL`/`REQUEST_OPTION` descriptor also carries:
 | Field | Meaning |
 |---|---|
 | `key` | Stable identifier stored in the matrix / picker (e.g. `anthropic-web-search`) |
-| `function` | Abstract function the capability fulfils (e.g. `web_search`). Capabilities sharing a function are **mutually exclusive** in the picker — you pick *one* provider to fulfil a function. |
+| `function` | Abstract function the capability fulfils (e.g. `web_search`). Capabilities sharing a function are **mutually exclusive** in the picker, you pick *one* provider to fulfil a function. |
 | `provider` | The vendor that executes it (`OPENAI` / `ANTHROPIC` / `GEMINI` / `ANY`) |
 | `category` | Coarse grouping for visual layout (Web, Code, Media, Reasoning…) |
 | `ownsTurn` | When `true`, the capability takes the *whole* turn (e.g. Computer Use, Realtime Voice) |
@@ -77,25 +77,25 @@ These are the server-side tools a model invokes during a turn, grouped by abstra
 | Function | OpenAI | Anthropic | Gemini |
 |---|---|---|---|
 | **Web search** | `openai-web-search` | `anthropic-web-search` | `gemini-google-search` *(grounding)* |
-| **Web fetch / URL context** | — | `anthropic-web-fetch` | `gemini-url-context` |
+| **Web fetch / URL context** | n/a | `anthropic-web-fetch` | `gemini-url-context` |
 | **Code execution** | `openai-code-interpreter` | `anthropic-code-execution` | `gemini-code-execution` |
-| **Image generation** | `openai-image-generation` | — | `gemini-image-generation` |
+| **Image generation** | `openai-image-generation` | n/a | `gemini-image-generation` |
 | **Computer use** *(owns turn)* | `openai-computer-use` | `anthropic-computer-use` | `gemini-computer-use` |
-| **Remote MCP** | `openai-mcp` | `anthropic-mcp` | — |
-| **Text editor** | — | `anthropic-text-editor` | — |
-| **Bash** | — | `anthropic-bash` | — |
-| **Memory** | — | `anthropic-memory` | — |
-| **Realtime voice** *(owns turn)* | `openai-realtime-voice` | — | — |
+| **Remote MCP** | `openai-mcp` | `anthropic-mcp` | n/a |
+| **Text editor** | n/a | `anthropic-text-editor` | n/a |
+| **Bash** | n/a | `anthropic-bash` | n/a |
+| **Memory** | n/a | `anthropic-memory` | n/a |
+| **Realtime voice** *(owns turn)* | `openai-realtime-voice` | n/a | n/a |
 
 :::note Owns-turn capabilities
-**Computer Use** and **Realtime Voice** take the entire turn rather than coexisting with other tools. Computer Use across all three vendors runs through one vendor-neutral `TurComputerUseDriver` seam and ships against a **no-op driver** — it is matrix-selectable without bundling a browser, and only acts when a real driver bean is configured. See [Tool Calling](./tool-calling.md) and [AI Agents](./ai-agents.md).
+**Computer Use** and **Realtime Voice** take the entire turn rather than coexisting with other tools. Computer Use across all three vendors runs through one vendor-neutral `TurComputerUseDriver` seam and ships against a **no-op driver**: it is matrix-selectable without bundling a browser, and only acts when a real driver bean is configured. See [Tool Calling](./tool-calling.md) and [AI Agents](./ai-agents.md).
 :::
 
 ---
 
 ## REQUEST_OPTION capabilities
 
-Request options never appear in the tool picker — they tune *how* the call is made and render as toggles/dropdowns on the agent's **Request Options** page. They are stored per-agent as a JSON map (`requestOptionsJson`) keyed by capability key.
+Request options never appear in the tool picker: they tune *how* the call is made and render as toggles/dropdowns on the agent's **Request Options** page. They are stored per-agent as a JSON map (`requestOptionsJson`) keyed by capability key.
 
 | Key | Label | Provider | Type |
 |---|---|---|---|
@@ -128,11 +128,11 @@ Switching a request option on stores your choice; the *feature* engages when the
 When an agent mixes provider-native tools with Turing's own (DSL search, RAG, web crawler…) and MCP tools, they all run in **one** tool loop rather than competing. The resolver:
 
 - intersects the agent's selected capabilities with what the instance allows;
-- adds the agent's coexisting Turing/MCP/custom tools — **dropping** any Turing tool whose abstract `function` is already claimed by a selected provider-native pick (so you don't get both `search_images` and native `image_generation` fighting over the same function);
+- adds the agent's coexisting Turing/MCP/custom tools, **dropping** any Turing tool whose abstract `function` is already claimed by a selected provider-native pick (so you don't get both `search_images` and native `image_generation` fighting over the same function);
 - hands the combined set to the vendor's native chat path (OpenAI Responses `function` tools, Anthropic `tool_use`/`tool_result`).
 
 :::note Legacy agents are untouched
-An agent whose `nativeCapabilities` is **null** (never opened the picker) keeps the pre-capability behaviour exactly — all of the instance's enabled capabilities, zero Turing tools. The two-gate intersection only takes over once the picker writes a selection. Existing agents change nothing until you choose to.
+An agent whose `nativeCapabilities` is **null** (never opened the picker) keeps the pre-capability behaviour exactly, all of the instance's enabled capabilities, zero Turing tools. The two-gate intersection only takes over once the picker writes a selection. Existing agents change nothing until you choose to.
 :::
 
 ---
@@ -149,7 +149,7 @@ The admin gate, on the LLM instance edit form (existing instances only; rows are
 | `PUT` | `/api/llm/{instanceId}/capability/{key}` | Enable/disable a capability (body: `enabled`, optional `configJson`) |
 | `DELETE` | `/api/llm/{instanceId}/capability/{key}` | Remove a capability row |
 
-`configJson` carries per-capability settings — e.g. the Anthropic MCP connector's `serverUrl` / `serverLabel` / `authToken` / `allowedTools`.
+`configJson` carries per-capability settings, e.g. the Anthropic MCP connector's `serverUrl` / `serverLabel` / `authToken` / `allowedTools`.
 
 ### Registry
 
@@ -159,7 +159,7 @@ The admin gate, on the LLM instance edit form (existing instances only; rows are
 | `GET` | `/api/capability/matrix` | Per-instance capability rows (instance id, title, plugin type, enabled keys) |
 
 :::warning Don't confuse with "Supported Capabilities"
-The instance form's free-text **Supported Capabilities** field (e.g. `RESPONSE_FORMAT_JSON_SCHEMA`) is a different, unrelated thing — it is *not* the native-capability matrix. See [LLM Instances → Advanced Options](./llm-instances.md#4-advanced-options-amber).
+The instance form's free-text **Supported Capabilities** field (e.g. `RESPONSE_FORMAT_JSON_SCHEMA`) is a different, unrelated thing: it is *not* the native-capability matrix. See [LLM Instances → Advanced Options](./llm-instances.md#4-advanced-options-amber).
 :::
 
 ---

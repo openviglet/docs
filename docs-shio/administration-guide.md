@@ -6,7 +6,7 @@ description: Users, groups, roles, permissions, site properties and system setti
 
 # Administration Guide
 
-This guide covers the administration features of Shio CMS — user management, permissions, site configuration, and system settings.
+This guide covers the administration features of Shio CMS: user management, permissions, site configuration, and system settings.
 
 ---
 
@@ -109,11 +109,11 @@ Export a site as a package for backup or migration:
 
 ### Folder Management
 
-- **Create folders** — organize content hierarchically
-- **Reorder posts** — drag-and-drop reordering with instant results on site pages
-- **Change folder view** — switch between List and Thumbnail views
-- **Navigate via breadcrumb** — browse folders through the breadcrumb navigation
-- **Upload files** — upload multiple files into a folder at once
+- **Create folders**: organize content hierarchically
+- **Reorder posts**: drag-and-drop reordering with instant results on site pages
+- **Change folder view**: switch between List and Thumbnail views
+- **Navigate via breadcrumb**: browse folders through the breadcrumb navigation
+- **Upload files**: upload multiple files into a folder at once
 
 ### Spreadsheet Export
 
@@ -155,12 +155,12 @@ Configure content exchange providers for import/export:
 
 | Provider | Description |
 |---|---|
-| **OTCS** | OpenText Content Services — import documents |
-| **OTMM** | OpenText Media Management — import media files |
+| **OTCS** | OpenText Content Services: import documents |
+| **OTMM** | OpenText Media Management: import media files |
 
 ### Search Providers
 
-Configure how site search works — connect to Viglet Turing ES for advanced search capabilities.
+Configure how site search works: connect to Viglet Turing ES for advanced search capabilities.
 
 ### Email
 

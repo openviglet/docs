@@ -1,19 +1,19 @@
 ---
 sidebar_position: 6
 title: MCP Servers
-description: MCP works both ways in Turing ES — connect AI Agents to external tool servers (client), and expose Turing's own search/RAG/agent/analytics tools to Claude Desktop, Claude Code, or Cursor (server).
+description: "MCP works both ways in Turing ES: connect AI Agents to external tool servers (client), and expose Turing's own search/RAG/agent/analytics tools to Claude Desktop, Claude Code, or Cursor (server)."
 ---
 
 # MCP Servers
 
-The **Model Context Protocol (MCP)** is an open standard that lets AI models call tools hosted on external servers — turning any API, database, or internal system into a capability that an AI Agent can use autonomously. If you are an administrator looking to extend your agents beyond the 27 built-in tools, MCP Servers let you connect to virtually any external service without writing custom code inside Turing ES.
+The **Model Context Protocol (MCP)** is an open standard that lets AI models call tools hosted on external servers, turning any API, database, or internal system into a capability that an AI Agent can use autonomously. If you are an administrator looking to extend your agents beyond the 27 built-in tools, MCP Servers let you connect to virtually any external service without writing custom code inside Turing ES.
 
-An **MCP Server** extends the capabilities of an AI Agent by connecting it to any external server that implements the **Model Context Protocol (MCP)**. This allows Turing ES agents to use tools defined completely outside the platform — a company-internal knowledge system, a proprietary data API, a database query interface, or any of the growing ecosystem of public MCP servers.
+An **MCP Server** extends the capabilities of an AI Agent by connecting it to any external server that implements the **Model Context Protocol (MCP)**. This allows Turing ES agents to use tools defined completely outside the platform, a company-internal knowledge system, a proprietary data API, a database query interface, or any of the growing ecosystem of public MCP servers.
 
 MCP Servers are configured in **Administration → MCP Servers** and then selected per [AI Agent](./ai-agents.md).
 
 :::tip MCP works both ways
-This first part of the page is about Turing as an MCP **client** — your agents calling *out* to external tool servers. Turing can also be an MCP **server**, exposing its own search/RAG/agent/analytics tools *in* to clients like Claude Desktop, Claude Code, or Cursor. Jump to [Turing as an MCP Server](#turing-as-an-mcp-server).
+This first part of the page is about Turing as an MCP **client**, your agents calling *out* to external tool servers. Turing can also be an MCP **server**, exposing its own search/RAG/agent/analytics tools *in* to clients like Claude Desktop, Claude Code, or Cursor. Jump to [Turing as an MCP Server](#turing-as-an-mcp-server).
 :::
 
 ---
@@ -22,8 +22,8 @@ This first part of the page is about Turing as an MCP **client** — your agents
 
 | Field | Description |
 |---|---|
-| **Name** | Display name for the MCP server — shown when selecting it in an AI Agent |
-| **Transport type** | `HTTP` or `stdio` — how Turing ES communicates with the server |
+| **Name** | Display name for the MCP server: shown when selecting it in an AI Agent |
+| **Transport type** | `HTTP` or `stdio`: how Turing ES communicates with the server |
 | **Command** | For `stdio`: the executable to launch the MCP server process (e.g., `npx`) |
 | **Arguments** | For `stdio`: command-line arguments passed to the process (e.g., `@modelcontextprotocol/server-filesystem /data`) |
 | **URL** | For `HTTP`: the MCP server endpoint URL |
@@ -57,8 +57,8 @@ Use HTTP when the MCP server is a hosted service or when it runs on a different 
 :::note Client hardening (`turing.mcp-client.*`)
 Because an MCP client server is admin-configured, two optional guardrails let you lock the client path down (both default to the permissive/legacy behavior so internal-network MCP keeps working):
 
-- `turing.mcp-client.allowed-stdio-commands` — an allowlist of permitted stdio command base-names (e.g. `[npx, uvx]`). When set, any other `Command` is refused, blocking arbitrary local-process execution by configuration.
-- `turing.mcp-client.block-private-urls` — when `true`, an HTTP MCP-client URL that resolves to a private/loopback address is refused via the SSRF egress guard.
+- `turing.mcp-client.allowed-stdio-commands`: an allowlist of permitted stdio command base-names (e.g. `[npx, uvx]`). When set, any other `Command` is refused, blocking arbitrary local-process execution by configuration.
+- `turing.mcp-client.block-private-urls`: when `true`, an HTTP MCP-client URL that resolves to a private/loopback address is refused via the SSRF egress guard.
 
 See [Security Hardening § MCP client guards](./security-hardening.md#8-mcp-client-guards).
 :::
@@ -116,7 +116,7 @@ Once configured, MCP servers appear in the **MCP Servers** multi-select field of
 
 ## Turing as an MCP Server
 
-Everything above is Turing reaching *out*. The reverse is just as useful: Turing can **publish its own tools as an MCP server**, so an external AI client — **Claude Desktop**, **Claude Code**, **Cursor**, or OpenAI's Responses API — can search your indexes, ask grounded RAG questions, invoke your agents, and read your analytics, all over the standard `/mcp` Streamable HTTP endpoint.
+Everything above is Turing reaching *out*. The reverse is just as useful: Turing can **publish its own tools as an MCP server**, so an external AI client (**Claude Desktop**, **Claude Code**, **Cursor**, or OpenAI's Responses API) can search your indexes, ask grounded RAG questions, invoke your agents, and read your analytics, all over the standard `/mcp` Streamable HTTP endpoint.
 
 This is **off by default**. Enable it with:
 
@@ -125,7 +125,7 @@ spring:
   ai:
     mcp:
       server:
-        enabled: true   # default false — when off, none of the MCP-server beans exist
+        enabled: true   # default false: when off, none of the MCP-server beans exist
 ```
 
 When disabled, the deployment is byte-for-byte unchanged.
@@ -142,14 +142,14 @@ The MCP server exposes the same tool implementations the internal Semantic-Navig
 | **Analytics** | `search_metrics`, `content_gaps`, `top_failed_searches` | read |
 | **Write / ingestion** | `index_document`, `deindex_document`, `reindex_site` | **write (opt-in)** |
 
-Read tools are always published. The write/ingestion tools appear **only** when you opt in (`turing.mcp-server.write-enabled=true`) **and** the caller holds the write scope per call — see [scoping](#tool-scoping) below.
+Read tools are always published. The write/ingestion tools appear **only** when you opt in (`turing.mcp-server.write-enabled=true`) **and** the caller holds the write scope per call: see [scoping](#tool-scoping) below.
 
 ### Security: loopback-first, then OAuth
 
 Two layers protect the `/mcp` surface:
 
-1. **Loopback gate (default on).** `turing.mcp-server.loopback-only=true` rejects any non-loopback request with HTTP 403 *before* the security chain even runs — the safe default for a Claude Desktop/Code client on the same machine. Set it to `false` to allow remote access (then rely on OAuth below).
-2. **OAuth 2.1 resource server.** `turing.mcp-server.require-auth=true` turns `/mcp` into a JWT-bearer resource server (configure `spring.security.oauth2.resourceserver.jwt.*`). If you ask for auth but don't configure a decoder, the server **fails closed** — it denies all `/mcp` requests rather than running open.
+1. **Loopback gate (default on).** `turing.mcp-server.loopback-only=true` rejects any non-loopback request with HTTP 403 *before* the security chain even runs, the safe default for a Claude Desktop/Code client on the same machine. Set it to `false` to allow remote access (then rely on OAuth below).
+2. **OAuth 2.1 resource server.** `turing.mcp-server.require-auth=true` turns `/mcp` into a JWT-bearer resource server (configure `spring.security.oauth2.resourceserver.jwt.*`). If you ask for auth but don't configure a decoder, the server **fails closed**: it denies all `/mcp` requests rather than running open.
 
 ### Tool scoping
 

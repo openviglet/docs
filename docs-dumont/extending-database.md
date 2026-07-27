@@ -34,7 +34,7 @@ public interface DumDbExtCustomImpl {
 
 | Parameter | Description |
 |---|---|
-| `Connection connection` | The active JDBC connection — you can execute additional queries to enrich the row |
+| `Connection connection` | The active JDBC connection: you can execute additional queries to enrich the row |
 | `Map<String, Object> attributes` | Mutable map of column values from the current row (column aliases become keys) |
 
 **Return:** The modified attributes map. The returned map is what gets indexed.
@@ -158,7 +158,7 @@ Your extension JAR must be on the classpath (`-cp`). Add it alongside the `dumon
 
 ## Creating a Custom DB Extension
 
-### Step 1 — Create a Maven project
+### Step 1: Create a Maven project
 
 ```xml
 <project>
@@ -176,7 +176,7 @@ Your extension JAR must be on the classpath (`-cp`). Add it alongside the `dumon
 </project>
 ```
 
-### Step 2 — Implement the interface
+### Step 2: Implement the interface
 
 ```java
 package com.example.ext;
@@ -195,13 +195,13 @@ public class MyDbCustom implements DumDbExtCustomImpl {
 }
 ```
 
-### Step 3 — Build
+### Step 3: Build
 
 ```bash
 mvn clean package
 ```
 
-### Step 4 — Run with the extension
+### Step 4: Run with the extension
 
 ```bash
 java -cp dumont-db-indexer.jar:target/my-db-extensions-1.0.0.jar \
@@ -216,7 +216,7 @@ java -cp dumont-db-indexer.jar:target/my-db-extensions-1.0.0.jar \
 
 - **Public no-argument constructor**
 - **On the classpath** (via `-cp`)
-- **Thread-safe** — one instance processes all rows sequentially, but should avoid mutable shared state
+- **Thread-safe**: one instance processes all rows sequentially, but should avoid mutable shared state
 
 ---
 

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 5
 title: Indexing Plugins
-description: Configure where Dumont DEP delivers content — Turing ES (default), Apache Solr, or Elasticsearch.
+description: Configure where Dumont DEP delivers content, Turing ES (default), Apache Solr, or Elasticsearch.
 ---
 
 # Indexing Plugins
 
-An **Indexing Plugin** is the output adapter that delivers processed documents from the Dumont DEP pipeline to a search engine. Dumont DEP supports three targets — you choose one per deployment.
+An **Indexing Plugin** is the output adapter that delivers processed documents from the Dumont DEP pipeline to a search engine. Dumont DEP supports three targets: you choose one per deployment.
 
 ---
 
@@ -117,13 +117,13 @@ dumont:
 3. Submits the bulk request to Elasticsearch
 4. Logs any per-document errors from the bulk response
 
-Authentication is optional — leave `username` and `password` empty for unauthenticated clusters.
+Authentication is optional: leave `username` and `password` empty for unauthenticated clusters.
 
 ---
 
 ## Why Use Turing ES Instead of Solr or Elasticsearch Directly?
 
-The Solr and Elasticsearch plugins deliver raw documents to the search engine — your application is responsible for everything else: building queries, rendering facets, managing spotlights, handling locales, and building the search UI.
+The Solr and Elasticsearch plugins deliver raw documents to the search engine: your application is responsible for everything else: building queries, rendering facets, managing spotlights, handling locales, and building the search UI.
 
 **Turing ES adds an entire enterprise search platform on top of the search engine.** Here's what you get by choosing the Turing plugin over direct Solr or Elasticsearch indexing:
 
@@ -131,8 +131,8 @@ The Solr and Elasticsearch plugins deliver raw documents to the search engine �
 
 | Capability | With Turing ES | Direct Solr / Elasticsearch |
 |---|---|---|
-| **Faceted navigation** | Configured per site — facet types, sort, AND/OR operators, secondary facets, custom facets with ranges | Build manually with query params |
-| **Spotlights** | Curated results pinned to search terms, injected at configured positions | Not available — build from scratch |
+| **Faceted navigation** | Configured per site: facet types, sort, AND/OR operators, secondary facets, custom facets with ranges | Build manually with query params |
+| **Spotlights** | Curated results pinned to search terms, injected at configured positions | Not available: build from scratch |
 | **Targeting Rules** | Filter results by user profile (department, role, country) at query time | Not available |
 | **Merge Providers** | Combine documents from two connectors into one enriched result using a join key | Not available |
 | **Spell check** | Built-in with auto-correction mode | Configure Solr/ES suggester manually |
@@ -140,17 +140,17 @@ The Solr and Elasticsearch plugins deliver raw documents to the search engine �
 | **More Like This** | One toggle per site | Configure MLT handler manually |
 | **Result ranking** | Boost rules with conditions and weights via admin UI | Write boost queries manually |
 | **Highlighting** | Configurable HTML tags per site | Configure highlight params manually |
-| **Self-describing JSON** | Response includes pre-built links for pagination, facet filters, locale switching — the front-end is a pure rendering layer | Build all query logic client-side |
+| **Self-describing JSON** | Response includes pre-built links for pagination, facet filters, locale switching, the front-end is a pure rendering layer | Build all query logic client-side |
 
 ### Generative AI & RAG
 
 | Capability | With Turing ES | Direct Solr / Elasticsearch |
 |---|---|---|
-| **RAG (Retrieval-Augmented Generation)** | Documents are automatically embedded as vectors during indexing — users ask questions in natural language and get grounded answers | Not available |
+| **RAG (Retrieval-Augmented Generation)** | Documents are automatically embedded as vectors during indexing, users ask questions in natural language and get grounded answers | Not available |
 | **AI Agents** | Compose assistants that combine LLM + search + web browsing + code execution + MCP tools | Not available |
 | **Chat interface** | Built-in UI with direct LLM, Semantic Navigation, and AI Agent tabs | Not available |
-| **Knowledge Base** | Upload files to MinIO — automatically indexed as vector embeddings for RAG | Not available |
-| **LLM providers** | Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Ollama — configured via admin UI | Not available |
+| **Knowledge Base** | Upload files to MinIO: automatically indexed as vector embeddings for RAG | Not available |
+| **LLM providers** | Anthropic Claude, OpenAI, Azure OpenAI, Google Gemini, Ollama, configured via admin UI | Not available |
 | **Tool calling** | 27 native tools across 7 categories available to AI Agents | Not available |
 | **Token usage monitoring** | Dashboard showing LLM consumption by model, day, and month | Not available |
 
@@ -184,7 +184,7 @@ The Solr and Elasticsearch plugins are appropriate when:
 - You don't need the GenAI, faceted navigation, or admin console features
 - You're integrating with a third-party system that requires direct Solr/Elasticsearch access
 
-For all other cases — especially when building a new search experience — **Turing ES is the recommended target** because it provides a complete, ready-to-use enterprise search platform with GenAI capabilities on top of the same Apache Solr engine.
+For all other cases (especially when building a new search experience) **Turing ES is the recommended target** because it provides a complete, ready-to-use enterprise search platform with GenAI capabilities on top of the same Apache Solr engine.
 
 ---
 
@@ -211,9 +211,9 @@ Only one plugin is active per deployment. All connectors share the same output t
 |---|---|
 | [Configuration Reference](./configuration-reference.md) | All application.yaml properties |
 | [Architecture](./architecture.md) | Where indexing plugins fit in the pipeline |
-| [Turing ES — REST API](/turing/rest-api) | Turing ES indexing API reference |
-| [Turing ES — Semantic Navigation](/turing/semantic-navigation) | SN Sites, facets, spotlights, and search configuration |
-| [Turing ES — RAG](/turing/rag) | Retrieval-Augmented Generation and vector embeddings |
+| [Turing ES: REST API](/turing/rest-api) | Turing ES indexing API reference |
+| [Turing ES: Semantic Navigation](/turing/semantic-navigation) | SN Sites, facets, spotlights, and search configuration |
+| [Turing ES: RAG](/turing/rag) | Retrieval-Augmented Generation and vector embeddings |
 
 ---
 

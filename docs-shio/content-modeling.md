@@ -6,7 +6,7 @@ description: Post Types, custom fields, publishing workflow and content relation
 
 # Content Modeling
 
-Content modeling in Shio CMS revolves around **Post Types** — reusable templates that define the structure of content items. This guide covers how to create and configure Post Types, the available field types, the publishing workflow, and content relationships.
+Content modeling in Shio CMS revolves around **Post Types**: reusable templates that define the structure of content items. This guide covers how to create and configure Post Types, the available field types, the publishing workflow, and content relationships.
 
 ---
 
@@ -14,10 +14,10 @@ Content modeling in Shio CMS revolves around **Post Types** — reusable templat
 
 A **Post Type** defines:
 
-- **Name** — human-readable label
-- **Description** — purpose of the content type
-- **Identifier** — unique system key
-- **Publishing responsibility** — who can approve and publish
+- **Name**: human-readable label
+- **Description**: purpose of the content type
+- **Identifier**: unique system key
+- **Publishing responsibility**: who can approve and publish
 
 ### System Post Types
 
@@ -76,9 +76,9 @@ Fields are the building blocks of Post Types. Each field has a **name**, **descr
 For each field you can:
 
 - **Order** fields within the Post Type
-- **Set as Title** — marks the field as the Post Type's title
-- **Set as Description** — marks the field as the Post Type's description
-- **Configure search mapping** — define how the field is indexed in Viglet Turing ES
+- **Set as Title**: marks the field as the Post Type's title
+- **Set as Description**: marks the field as the Post Type's description
+- **Configure search mapping**: define how the field is indexed in Viglet Turing ES
 
 ---
 
@@ -101,7 +101,7 @@ stateDiagram-v2
 |---|---|---|
 | **Draft** | No | Newly created, only visible in management view |
 | **Published** | Yes | Live on the published site |
-| **Stale** | Yes (old version) | Published but modified — re-publish to update |
+| **Stale** | Yes (old version) | Published but modified: re-publish to update |
 | **Unpublished** | No | Removed from published site, still in repository |
 
 ### Workflow Tasks
@@ -116,8 +116,8 @@ Shio CMS supports **workflow tasks** for content approval. Administrators can co
 
 Posts can reference other posts using **Content Select** and **Relator** fields. References create navigable relationships between content items.
 
-- **Content Select** — references a single content item
-- **Relator** — references one or more content items with ordering
+- **Content Select**: references a single content item
+- **Relator**: references one or more content items with ordering
 
 ### Folder Hierarchy
 
@@ -148,8 +148,8 @@ Posts within a folder can be **reordered** via drag-and-drop in the admin consol
 
 Post Type fields can be mapped to **Viglet Turing ES** Semantic Navigation fields for precise search indexing:
 
-- **Search Field Association** — map a field to a default Turing SN field (title, description, text, date, URL, image)
-- **Create Additional Search Field** — map a field to a custom Turing SN field
+- **Search Field Association**: map a field to a default Turing SN field (title, description, text, date, URL, image)
+- **Create Additional Search Field**: map a field to a custom Turing SN field
 
 This allows you to control exactly what content is searchable and how it appears in search results. See [Search & Caching](./search-caching.md) for details.
 

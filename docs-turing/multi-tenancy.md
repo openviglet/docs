@@ -1,15 +1,15 @@
 ---
 sidebar_position: 4
 title: Multi-Tenancy
-description: Run one Turing ES JVM that serves many fully isolated tenants — discriminator-column data isolation, a single Keycloak realm with a tenant claim, tenant-owned infrastructure, plan quotas, and tenant lifecycle.
+description: "Run one Turing ES JVM that serves many fully isolated tenants: discriminator-column data isolation, a single Keycloak realm with a tenant claim, tenant-owned infrastructure, plan quotas, and tenant lifecycle."
 ---
 
 # Multi-Tenancy
 
-Turing ES can run as a **single JVM process that serves many isolated tenants** (a SaaS / shared-platform deployment), or as a classic **single-tenant install**. The same binary does both — the behavior is controlled by one flag.
+Turing ES can run as a **single JVM process that serves many isolated tenants** (a SaaS / shared-platform deployment), or as a classic **single-tenant install**. The same binary does both: the behavior is controlled by one flag.
 
 :::info One paragraph summary
-Tenant data isolation is a **discriminator column**: Hibernate's native `@TenantId` adds the partition column to every insert and a `WHERE tenantId = ?` to every read, driven by a request-scoped current-tenant holder. Identity is a **single Keycloak realm plus a `tenant` claim**; a tenant aggregate and a membership join let one user belong to many tenants. Shared infrastructure (LLM, embedding, store, search-engine, MCP, integration instances) is **tenant-owned — bring-your-own keys — with an optional shared pool**.
+Tenant data isolation is a **discriminator column**: Hibernate's native `@TenantId` adds the partition column to every insert and a `WHERE tenantId = ?` to every read, driven by a request-scoped current-tenant holder. Identity is a **single Keycloak realm plus a `tenant` claim**; a tenant aggregate and a membership join let one user belong to many tenants. Shared infrastructure (LLM, embedding, store, search-engine, MCP, integration instances) is **tenant-owned (bring-your-own keys) with an optional shared pool**.
 :::
 
 ---
@@ -30,14 +30,14 @@ This means you can upgrade to a multi-tenancy-capable build with **zero changes*
 ```yaml
 turing:
   tenancy:
-    enabled: false   # default — single-tenant. Set true for SaaS / shared platform.
+    enabled: false   # default: single-tenant. Set true for SaaS / shared platform.
 ```
 
 ---
 
 ## How isolation works
 
-The `@TenantId` discriminator column handles the bulk of isolation automatically: once a JPA entity carries it, Hibernate stamps the current tenant on writes and filters reads — application code never writes a tenant `WHERE` clause by hand.
+The `@TenantId` discriminator column handles the bulk of isolation automatically: once a JPA entity carries it, Hibernate stamps the current tenant on writes and filters reads: application code never writes a tenant `WHERE` clause by hand.
 
 The harder problem is every path that **bypasses the ORM**. Turing closes each one with a dedicated, tenant-aware component:
 
@@ -63,7 +63,7 @@ A continuous-integration **isolation suite** (`*Tenant*` tests) is the ship gate
 
 ## Tenants & memberships
 
-A **tenant** is the unit of isolation — it has a unique slug, a status (`ACTIVE` / `SUSPENDED`), and a plan. A **membership** joins a user to a tenant with a role:
+A **tenant** is the unit of isolation: it has a unique slug, a status (`ACTIVE` / `SUSPENDED`), and a plan. A **membership** joins a user to a tenant with a role:
 
 | Role | Capabilities |
 |---|---|
@@ -71,7 +71,7 @@ A **tenant** is the unit of isolation — it has a unique slug, a status (`ACTIV
 | `ADMIN` | Manage the tenant's content and members |
 | `MEMBER` | Use the tenant's content |
 
-One user can belong to **many tenants** and switch between them. The `DEFAULT` tenant is immutable and always present — it is the home of all data in single-tenant mode.
+One user can belong to **many tenants** and switch between them. The `DEFAULT` tenant is immutable and always present: it is the home of all data in single-tenant mode.
 
 ---
 
@@ -84,7 +84,7 @@ Multi-tenancy uses a **single Keycloak realm**. The tenant a request belongs to 
 3. The request subdomain (e.g. `acme.turing.example.com`)
 4. The `X-Turing-Tenant` request header
 
-A request for a **suspended** tenant, or from a user with **no active membership**, is rejected with **HTTP 403**. (Platform admins bypass this — see below.)
+A request for a **suspended** tenant, or from a user with **no active membership**, is rejected with **HTTP 403**. (Platform admins bypass this, see below.)
 
 On successful resolution, Turing grants per-membership authorities of the form `TENANT_<id>` and `TENANT_<id>_<ROLE>`, in both the OIDC and the session-login paths.
 
@@ -136,8 +136,8 @@ Per-tenant **cost attribution** rolls up token usage by tenant, feeding the live
 
 Tenant teardown is platform-admin only, **audited**, and **idempotent**:
 
-- **Suspend** — flips status to `SUSPENDED`. The resolution filter then blocks the tenant's members (403) without destroying any data, so suspension is fully reversible (**Activate** flips it back).
-- **Delete** — supports a `dryRun` mode that returns the deletion *plan* without mutating anything. A real delete purges the storage prefix, removes the Lucene vector directory, evicts caches, and removes the membership + tenant rows. The tenant's `@TenantId` content becomes **unreachable immediately**, because the resolver never again yields a deleted tenant id.
+- **Suspend**: flips status to `SUSPENDED`. The resolution filter then blocks the tenant's members (403) without destroying any data, so suspension is fully reversible (**Activate** flips it back).
+- **Delete**: supports a `dryRun` mode that returns the deletion *plan* without mutating anything. A real delete purges the storage prefix, removes the Lucene vector directory, evicts caches, and removes the membership + tenant rows. The tenant's `@TenantId` content becomes **unreachable immediately**, because the resolver never again yields a deleted tenant id.
 
 :::warning Engine-side cleanup is a runbook step
 A physical database row sweep, dropping external Solr/Elasticsearch cores, and Keycloak attribute cleanup require the live engines and are deployment-specific operational steps that run alongside the in-app delete.
@@ -149,7 +149,7 @@ A physical database row sweep, dropping external Solr/Elasticsearch cores, and K
 
 If you extend Turing with a new persistent entity, decide which kind it is:
 
-1. **Tenant-owned content** (a tenant's own data — like a site or an agent): add a `@TenantId` discriminator column. Add it to the schema as nullable with a `DEFAULT` default value, backfill existing NULLs to `DEFAULT`, then flip it `NOT NULL` in a follow-up migration. Hibernate handles stamping and filtering from there.
+1. **Tenant-owned content** (a tenant's own data, like a site or an agent): add a `@TenantId` discriminator column. Add it to the schema as nullable with a `DEFAULT` default value, backfill existing NULLs to `DEFAULT`, then flip it `NOT NULL` in a follow-up migration. Hibernate handles stamping and filtering from there.
 
 2. **Shared infrastructure** (BYO keys with a global pool): add a **plain** nullable tenant id (not `@TenantId`) and a `findVisibleToTenant` query that returns `tenantId = :t OR tenantId IS NULL`. Gate creation of `null`-tenant globals on `ROLE_PLATFORM_ADMIN`.
 
@@ -161,12 +161,12 @@ If you extend Turing with a new persistent entity, decide which kind it is:
 
 ## Escalation seam (shared → schema → database)
 
-Every tenant carries an `isolationMode` of `SHARED`, `SCHEMA`, or `DB` (default `SHARED`). This reserves a future migration path to move a heavy enterprise tenant onto a dedicated schema or database — via a pluggable Hibernate tenant connection provider — without changing the data model. **Only `SHARED` is implemented today**; the field exists so the escalation path requires no schema rewrite later.
+Every tenant carries an `isolationMode` of `SHARED`, `SCHEMA`, or `DB` (default `SHARED`). This reserves a future migration path to move a heavy enterprise tenant onto a dedicated schema or database (via a pluggable Hibernate tenant connection provider) without changing the data model. **Only `SHARED` is implemented today**; the field exists so the escalation path requires no schema rewrite later.
 
 ---
 
 ## Related Pages
 
-- [Configuration Reference](./configuration-reference.md) — the `turing.tenancy.enabled` flag.
-- [Security & Keycloak](./security-keycloak.md) — the single realm and the `tenant` claim.
-- [Token Usage](./token-usage.md) — per-tenant cost attribution and the AI-spend dashboard.
+- [Configuration Reference](./configuration-reference.md): the `turing.tenancy.enabled` flag.
+- [Security & Keycloak](./security-keycloak.md): the single realm and the `tenant` claim.
+- [Token Usage](./token-usage.md): per-tenant cost attribution and the AI-spend dashboard.

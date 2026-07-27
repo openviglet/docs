@@ -6,7 +6,7 @@ description: Manage content connectors that import and index content from extern
 
 # Integration
 
-The **Integration** page (`/admin/integration/instance`) manages connectors that import and index content from external sources — such as AEM, web crawlers, or other content repositories — into the Turing ES search engine. It is accessible from the **Enterprise Search** section of the sidebar.
+The **Integration** page (`/admin/integration/instance`) manages connectors that import and index content from external sources (such as AEM, web crawlers, or other content repositories) into the Turing ES search engine. It is accessible from the **Enterprise Search** section of the sidebar.
 
 Each **Integration instance** represents a configured connection to a content connector application. The connector runs as a separate process (for example, Viglet Dumont DEP) and communicates with Turing ES via REST. Turing ES acts as a proxy: the API path `/api/v2/integration/{integrationId}/**` forwards requests to the configured connector endpoint, with built-in SSRF protection.
 
@@ -33,13 +33,13 @@ The creation and edit form is divided into two sections.
 
 | Field | Description |
 |---|---|
-| Integration Type | Connector type — **AEM** or **Web Crawler** |
+| Integration Type | Connector type: **AEM** or **Web Crawler** |
 | Endpoint | URL of the connector application |
 | Enabled | Toggle to activate or deactivate this integration |
 
 ---
 
-## Integration Detail — Sections
+## Integration Detail: Sections
 
 After an integration is created, its detail page provides navigation to several sections. The sections below are common to all connector types. For AEM-specific configuration, see the [Turing ES AEM Connector](./integration-aem.md) overview and the full [Dumont DEP AEM Connector](/dumont/connectors/aem) documentation.
 
@@ -66,7 +66,7 @@ The Monitoring section is a real-time dashboard for tracking the indexing pipeli
 | Language | Locale code (for example, `en_US`) |
 | Sites | Filter by target SN Site |
 
-**Auto-refresh:** configurable intervals — Off, 1s, 5s, 10s, 30s, 1m, 5m.
+**Auto-refresh:** configurable intervals: Off, 1s, 5s, 10s, 30s, 1m, 5m.
 
 **Result columns:** Date, Object ID, Status, Environment, Language, Sites.
 
@@ -111,8 +111,8 @@ The Double Check section validates the consistency between the connector's conte
 
 - Select a **Source** to inspect
 - Results are shown in two views:
-  - **Missing** — content that exists in the connector but is not present in the index
-  - **Extra** — content that is present in the index but no longer exists in the connector
+  - **Missing**: content that exists in the connector but is not present in the index
+  - **Extra**: content that is present in the index but no longer exists in the connector
 - Results are grouped by Solr core in an accordion, listing the affected document paths
 
 Use Double Check after a partial failure, a forced reindex, or when users report missing or stale search results.
@@ -123,7 +123,7 @@ Use Double Check after a partial failure, a forced reindex, or when users report
 
 Displays live diagnostic information from the remote connector application.
 
-**Status badge:** UP (green) or DOWN (red) — indicates whether the connector endpoint is reachable.
+**Status badge:** UP (green) or DOWN (red): indicates whether the connector endpoint is reachable.
 
 **Application:**
 
@@ -148,7 +148,7 @@ Displays live diagnostic information from the remote connector application.
 
 ## Architecture
 
-Turing ES acts as a transparent proxy to the connector. The API path `/api/v2/integration/{integrationId}/**` forwards all requests to the configured connector endpoint, including authentication headers. This design keeps the connector application decoupled — it does not need to be publicly accessible, only reachable from the Turing ES server.
+Turing ES acts as a transparent proxy to the connector. The API path `/api/v2/integration/{integrationId}/**` forwards all requests to the configured connector endpoint, including authentication headers. This design keeps the connector application decoupled: it does not need to be publicly accessible, only reachable from the Turing ES server.
 
 Built-in SSRF protection validates the endpoint before forwarding. Requests to private IP ranges, loopback addresses, or disallowed schemes are rejected.
 
@@ -158,12 +158,12 @@ Built-in SSRF protection validates the endpoint before forwarding. Requests to p
 
 | Page | Description |
 |---|---|
-| [AEM Connector](./integration-aem.md) | AEM-specific configuration — sources, content types, environments, indexing rules, and the indexing manager |
+| [AEM Connector](./integration-aem.md) | AEM-specific configuration: sources, content types, environments, indexing rules, and the indexing manager |
 | [Semantic Navigation](./semantic-navigation.md) | Configure the SN Sites that receive indexed content |
 | [Architecture Overview](./architecture-overview.md) | End-to-end indexing flow from connector to Solr |
 | [REST API Reference](./rest-api.md) | API endpoints for programmatic indexing |
-| [Dumont DEP — Connectors](/dumont/connectors/overview) | Available connectors (Web Crawler, AEM, Database, FileSystem, WordPress) and how to deploy them |
-| [Dumont DEP — REST API](/dumont/rest-api) | Connector-side API for triggering indexing, monitoring, and source management |
+| [Dumont DEP: Connectors](/dumont/connectors/overview) | Available connectors (Web Crawler, AEM, Database, FileSystem, WordPress) and how to deploy them |
+| [Dumont DEP: REST API](/dumont/rest-api) | Connector-side API for triggering indexing, monitoring, and source management |
 
 ---
 

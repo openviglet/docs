@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: AEM Connector
-description: Index content from Adobe Experience Manager — event-driven indexing, infinity.json traversal, QueryBuilder discovery, tag facets, model.json attributes, and custom extensions.
+description: "Index content from Adobe Experience Manager: event-driven indexing, infinity.json traversal, QueryBuilder discovery, tag facets, model.json attributes, and custom extensions."
 ---
 
 # AEM Connector
@@ -43,9 +43,9 @@ sequenceDiagram
 
 | Method | How | When to use |
 |---|---|---|
-| **AEM Event Listeners** | Install the `aem-server` OSGi bundle inside AEM — it automatically sends indexing requests when content is published, modified, or deleted | Production — real-time content sync |
+| **AEM Event Listeners** | Install the `aem-server` OSGi bundle inside AEM, it automatically sends indexing requests when content is published, modified, or deleted | Production: real-time content sync |
 | **Manual API Call** | Send a POST request to `/api/v2/aem/index/{source}` with a JSON payload containing paths and event type | Development, testing, one-off re-indexing |
-| **Turing ES Admin Console** | Use **Enterprise Search → Integration → Indexing Manager** to select paths and trigger indexing/deindexing/publishing operations | Operations — selective re-indexing via UI |
+| **Turing ES Admin Console** | Use **Enterprise Search → Integration → Indexing Manager** to select paths and trigger indexing/deindexing/publishing operations | Operations: selective re-indexing via UI |
 
 ---
 
@@ -55,7 +55,7 @@ The AEM connector supports two strategies for discovering content during a full 
 
 | Strategy | Property | How it discovers content |
 |---|---|---|
-| **Tree Traversal** *(default)* | `dumont.aem.querybuilder=false` | Recursively walks the content tree from the root path using `infinity.json` — follows parent→child relationships |
+| **Tree Traversal** *(default)* | `dumont.aem.querybuilder=false` | Recursively walks the content tree from the root path using `infinity.json`, follows parent→child relationships |
 | **QueryBuilder** | `dumont.aem.querybuilder=true` | Uses AEM's native QueryBuilder API (`/bin/querybuilder.json`) to find all content matching the configured content type in paginated batches |
 
 ### QueryBuilder Discovery
@@ -66,7 +66,7 @@ When enabled, the connector queries the QueryBuilder endpoint instead of walking
 GET http://localhost:4502/bin/querybuilder.json?path=/content/wknd&type=cq:Page&p.hits=slim&p.limit=500&p.offset=0
 ```
 
-Each page of discovered paths is immediately processed in parallel using a configurable thread pool — the full path list is never held in memory.
+Each page of discovered paths is immediately processed in parallel using a configurable thread pool: the full path list is never held in memory.
 
 **Enable it** by adding the following properties to `application.yaml` or as JVM arguments:
 
@@ -104,7 +104,7 @@ The connector calls AEM's `infinity.json` endpoint to get the full JCR node tree
 GET http://localhost:4502/content/wknd/us/en/my-page.infinity.json
 ```
 
-This returns the complete node hierarchy as JSON — all properties, child nodes, and metadata. The connector filters out internal nodes (prefixed with `jcr:`, `rep:`, `cq:`).
+This returns the complete node hierarchy as JSON: all properties, child nodes, and metadata. The connector filters out internal nodes (prefixed with `jcr:`, `rep:`, `cq:`).
 
 ### 2. Extract Tags as Facets
 
@@ -114,9 +114,9 @@ For each page, the connector fetches tags:
 GET http://localhost:4502/content/wknd/us/en/my-page/jcr:content.tags.json
 ```
 
-Tags are **automatically converted to facets** in the search index — no manual configuration needed. Each tag becomes a filterable value in the Turing ES facet panel.
+Tags are **automatically converted to facets** in the search index, no manual configuration needed. Each tag becomes a filterable value in the Turing ES facet panel.
 
-### 3. Fetch Model JSON (Optional — Requires Configuration)
+### 3. Fetch Model JSON (Optional: Requires Configuration)
 
 The connector does **not** call `.model.json` by default. To enable it, you must configure a `DumAemExtContentInterface` implementation in the `models` section of the export JSON:
 
@@ -136,7 +136,7 @@ When this is configured, the extension class fetches the Sling Model exporter:
 GET http://localhost:4502/content/wknd/us/en/my-page.model.json
 ```
 
-This returns structured content from AEM's Sling Models — useful for extracting custom attributes like content fragment paths, component data, or experience fragment references. See [Extending the AEM Connector](../extending-aem.md) for how to implement `DumAemExtContentInterface` and the full JSON configuration reference.
+This returns structured content from AEM's Sling Models: useful for extracting custom attributes like content fragment paths, component data, or experience fragment references. See [Extending the AEM Connector](../extending-aem.md) for how to implement `DumAemExtContentInterface` and the full JSON configuration reference.
 
 ### 4. Traverse the Content Tree
 
@@ -158,13 +158,13 @@ When a page references other content (experience fragments, content fragments, s
 
 ### How Dependencies Are Discovered
 
-As each node's `.infinity.json` is fetched, the connector walks the JSON recursively and collects **every string value that starts with `/content`** — those paths become the document's dependency set. The extraction is completely automatic; no configuration on the AEM side is required.
+As each node's `.infinity.json` is fetched, the connector walks the JSON recursively and collects **every string value that starts with `/content`**: those paths become the document's dependency set. The extraction is completely automatic; no configuration on the AEM side is required.
 
 The dependency set is then attached to the `DumJobItemWithSession` and persisted alongside the indexing record (`dum_connector_dependency` table) whenever the record is saved or updated.
 
 ### When the Cascade Fires
 
-Dependency processing runs **only on standalone (incremental) indexing** — it is **not** triggered by `Index All`:
+Dependency processing runs **only on standalone (incremental) indexing**, it is **not** triggered by `Index All`:
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'actorBkg': '#dbeafe', 'actorBorder': '#4A90D9', 'actorTextColor': '#1a1a1a', 'activationBkgColor': '#ede9fe', 'activationBorderColor': '#9B6EC5', 'noteBkgColor': '#dcfce7', 'noteBorderColor': '#50B86C', 'noteTextColor': '#1a1a1a', 'signalColor': '#333', 'signalTextColor': '#333'}}}%%
@@ -212,11 +212,11 @@ When `false`:
 - New/updated indexing records are saved **without** a dependency set (the join table stays empty for those rows)
 - `DependencyHandler.processDependencies()` returns early and no cascade re-indexing happens
 
-After turning the flag on, previously indexed content still has no stored dependencies — run a **Reindex All** to populate the dependency table for existing records.
+After turning the flag on, previously indexed content still has no stored dependencies: run a **Reindex All** to populate the dependency table for existing records.
 :::
 
 :::tip Performance impact
-Every standalone index operation performs an extra lookup plus a second indexing pass for any dependents. On sources with heavily shared components (templates, headers/footers, fragments), a single page update can fan out into many re-indexations — budget accordingly, or leave the flag off and rely on scheduled full reindexing.
+Every standalone index operation performs an extra lookup plus a second indexing pass for any dependents. On sources with heavily shared components (templates, headers/footers, fragments), a single page update can fan out into many re-indexations: budget accordingly, or leave the flag off and rely on scheduled full reindexing.
 :::
 
 ---
@@ -229,19 +229,19 @@ The `aem-server` module is an **OSGi bundle installed inside AEM**. It provides 
 
 | Event Listener | OSGi Topic | Trigger | Path Filter | Dumont Action |
 |---|---|---|---|---|
-| `DumAemPageEventHandler` | `com/day/cq/wcm/api/page` | Page created / modified | — | `INDEXING` |
+| `DumAemPageEventHandler` | `com/day/cq/wcm/api/page` | Page created / modified | n/a | `INDEXING` |
 | `DumAemPageReplicationEventHandler` | `com/day/cq/replication` | Page **activated** (published) | excludes `/content/dam/*` | `PUBLISHING` |
 | `DumAemPageReplicationEventHandler` | `com/day/cq/replication` | Page **deactivated** (unpublished) | excludes `/content/dam/*` | `UNPUBLISHING` |
 | `DumAemContentFragmentReplicationEventHandler` | `com/day/cq/replication` | Content Fragment **activated** | only `/content/dam/*` | `PUBLISHING` |
 | `DumAemContentFragmentReplicationEventHandler` | `com/day/cq/replication` | Content Fragment **deactivated** | only `/content/dam/*` | `UNPUBLISHING` |
-| `DumAemResourceEventHandler` | `org/apache/sling/api/resource/Resource/*` | DAM asset created / modified (`dam:Asset`, `dam:AssetContent`) under `/content` | — | `INDEXING` |
+| `DumAemResourceEventHandler` | `org/apache/sling/api/resource/Resource/*` | DAM asset created / modified (`dam:Asset`, `dam:AssetContent`) under `/content` | n/a | `INDEXING` |
 
 :::note Page vs. Content Fragment replication
 Both replication handlers subscribe to the same OSGi topic, but each one inspects the paths in the `ReplicationAction` and skips anything outside its domain. The page handler ignores everything under `/content/dam/`; the Content Fragment handler only processes paths under `/content/dam/`. Replication types other than `ACTIVATE` / `DEACTIVATE` (e.g., `INTERNAL_POLL`, `TEST`) are logged at debug level and discarded.
 :::
 
 :::tip Diagnostic listeners
-The module also ships `DumAemAllComEventHandler` and `DumAemAllOrgEventHandler`, which log every event under `com/*` and `org/*` topics. They perform **no indexing** and exist only to help diagnose which topics AEM is actually firing — useful when event-driven indexing seems not to trigger. They can be left in place safely; log noise can be trimmed via the AEM logger configuration.
+The module also ships `DumAemAllComEventHandler` and `DumAemAllOrgEventHandler`, which log every event under `com/*` and `org/*` topics. They perform **no indexing** and exist only to help diagnose which topics AEM is actually firing: useful when event-driven indexing seems not to trigger. They can be left in place safely; log noise can be trimmed via the AEM logger configuration.
 :::
 
 ### OSGi Configuration
@@ -337,7 +337,7 @@ Defines the root content path within the AEM repository from which content is tr
 
 ### Delta Tracking
 
-Controls incremental indexing — how the connector detects which content has changed since the last run.
+Controls incremental indexing: how the connector detects which content has changed since the last run.
 
 | Field | Description |
 |---|---|
@@ -371,14 +371,14 @@ Maps content language codes to repository paths.
 
 Each source has two action buttons available in the Turing ES admin console:
 
-- **Index All** — triggers a full indexing run for all content in this source
-- **Reindex All** — forces a full reindexation, replacing all previously indexed content
+- **Index All**: triggers a full indexing run for all content in this source
+- **Reindex All**: forces a full reindexation, replacing all previously indexed content
 
 ---
 
 ## Indexing Rules
 
-Indexing Rules allow you to filter content during indexing — for example, to exclude error pages or draft content before it reaches the search index. Rules are configured in the **Turing ES Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Indexing Rules**.
+Indexing Rules allow you to filter content during indexing, for example, to exclude error pages or draft content before it reaches the search index. Rules are configured in the **Turing ES Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Indexing Rules**.
 
 | Field | Description |
 |---|---|
@@ -386,7 +386,7 @@ Indexing Rules allow you to filter content during indexing — for example, to e
 | Description | Purpose of this rule |
 | Source | The source this rule applies to |
 | Attribute | Document field to evaluate (e.g., `template`) |
-| Rule Type | How the rule is applied — currently supports **IGNORE** (skip documents that match) |
+| Rule Type | How the rule is applied: currently supports **IGNORE** (skip documents that match) |
 | Values | Dynamic list of values that trigger the rule (add or remove entries) |
 
 **Example:** A rule with `Attribute = template`, `Rule Type = IGNORE`, and `Values = [error-page]` will prevent any document with `template:error-page` from being indexed.
@@ -443,8 +443,8 @@ Need custom attribute extractors, delta date logic, or content processors? See [
 |---|---|
 | [AEM Event Listener](../aem-event-listener.md) | Install the OSGi event listener bundle inside AEM for real-time indexing |
 | [Extending the AEM Connector](../extending-aem.md) | Custom attribute extractors, content processors, and configuration JSON reference |
-| [Turing ES — Integration](/turing/integration) | General integration management — monitoring, indexing stats, and system information |
-| [Turing ES — AEM Connector](/turing/integration-aem) | AEM integration overview from the Turing ES perspective |
-| [Turing ES — Semantic Navigation](/turing/semantic-navigation) | Configure the SN Sites that receive indexed content |
+| [Turing ES: Integration](/turing/integration) | General integration management: monitoring, indexing stats, and system information |
+| [Turing ES: AEM Connector](/turing/integration-aem) | AEM integration overview from the Turing ES perspective |
+| [Turing ES: Semantic Navigation](/turing/semantic-navigation) | Configure the SN Sites that receive indexed content |
 
 ---

@@ -1,14 +1,14 @@
 ---
 sidebar_position: 10
 title: Next.js Starter
-description: "create-shio-app — scaffold a Next.js App Router site wired to the Shio Content Delivery API."
+description: "create-shio-app: scaffold a Next.js App Router site wired to the Shio Content Delivery API."
 ---
 
-# Next.js Starter — `create-shio-app`
+# Next.js Starter: `create-shio-app`
 
 Scaffold a **Next.js (App Router)** site wired to the Shio
 [Content Delivery API](./content-delivery-api.md) in seconds. This is the
-flagship "JS dev, zero Java" path — a JavaScript/TypeScript developer gets a
+flagship "JS dev, zero Java" path: a JavaScript/TypeScript developer gets a
 working, typed site without touching the Java backend.
 
 ## Create a project
@@ -69,7 +69,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 - `lib/shio.ts` creates a shared [`@viglet/shio-client`](./javascript-client.md) instance from the environment.
 - `app/page.tsx` lists the site's published posts (`shio.query`).
-- `app/[...slug]/page.tsx` resolves **any path** to a post via `shio.getPostByUrl(siteId, "/the/path")` — friendly-URL routing straight from the CDA, with `generateStaticParams` (SSG) and `revalidate` (ISR).
+- `app/[...slug]/page.tsx` resolves **any path** to a post via `shio.getPostByUrl(siteId, "/the/path")`: friendly-URL routing straight from the CDA, with `generateStaticParams` (SSG) and `revalidate` (ISR).
 
 ```tsx
 // app/[...slug]/page.tsx (simplified)
@@ -103,7 +103,7 @@ SHIO_CDA_TOKEN=<your CDA token>
 
 ## Customizing content rendering
 
-A post's fields arrive as `post.attrs` — a JSON object keyed by your post-type
+A post's fields arrive as `post.attrs`, a JSON object keyed by your post-type
 attribute names. The catch-all page renders a `content`/`body`/`text`/`html`
 field if present, and otherwise dumps `attrs` so you can see the shape. Adapt the
 rendering to your own post types, optionally using the

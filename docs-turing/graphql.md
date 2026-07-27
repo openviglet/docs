@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: GraphQL API
-description: Query Semantic Navigation sites using the Turing ES GraphQL endpoint — schema, queries, dynamic fields, and examples.
+description: "Query Semantic Navigation sites using the Turing ES GraphQL endpoint: schema, queries, dynamic fields, and examples."
 ---
 
 # GraphQL API
 
-Turing ES exposes a GraphQL endpoint that provides the same Semantic Navigation search capabilities as the REST API but using GraphQL queries. The endpoint is **public** — no authentication required.
+Turing ES exposes a GraphQL endpoint that provides the same Semantic Navigation search capabilities as the REST API but using GraphQL queries. The endpoint is **public**, no authentication required.
 
 ```
 POST http://localhost:2700/graphql
@@ -18,10 +18,10 @@ POST http://localhost:2700/graphql
 
 An interactive GraphQL IDE is available in the admin console and at `/graphiql`. It provides:
 
-- **Schema introspection** — browse all types, queries, and fields
-- **Auto-completion** — press Ctrl+Space for field suggestions
-- **Query validation** — syntax and type errors are highlighted in real time
-- **Query history** — previously executed queries are saved locally
+- **Schema introspection**: browse all types, queries, and fields
+- **Auto-completion**: press Ctrl+Space for field suggestions
+- **Query validation**: syntax and type errors are highlighted in real time
+- **Query history**: previously executed queries are saved locally
 
 The explorer synchronizes its theme (light/dark) with the Turing ES console.
 
@@ -51,7 +51,7 @@ query {
 
 ### siteSearch
 
-Performs a search against a Semantic Navigation site. This is the primary query — it mirrors the full capability of the REST search endpoint.
+Performs a search against a Semantic Navigation site. This is the primary query: it mirrors the full capability of the REST search endpoint.
 
 ```graphql
 query {
@@ -99,15 +99,15 @@ The enum always includes `UNKNOWN` as the first value. Use the `siteNames` query
 | `rows` | `Int` | Site default | Results per page (use `-1` for site default) |
 | `p` | `Int` | `1` | Page number |
 | `sort` | `String` | `relevance` | Sort field and direction (e.g., `relevance`, `date desc`) |
-| `group` | `String` | — | Group results by a field value |
+| `group` | `String` | n/a | Group results by a field value |
 | `nfpr` | `Int` | `1` | Number of facets per row in grouped results |
-| `fq` | `[String]` | — | Filter queries (e.g., `["type:article"]`) |
-| `fqAnd` | `[String]` | — | AND filter queries |
-| `fqOr` | `[String]` | — | OR filter queries |
+| `fq` | `[String]` | n/a | Filter queries (e.g., `["type:article"]`) |
+| `fqAnd` | `[String]` | n/a | AND filter queries |
+| `fqOr` | `[String]` | n/a | OR filter queries |
 | `fqOp` | `String` | `NONE` | Filter operator between facets: `AND`, `OR`, or `NONE` |
 | `fqiOp` | `String` | `NONE` | Filter operator within facet values: `AND`, `OR`, or `NONE` |
-| `locale` | `String` | — | Override locale (takes precedence over the top-level `locale` argument) |
-| `fl` | `[String]` | — | Field list — restrict which document fields are returned |
+| `locale` | `String` | n/a | Override locale (takes precedence over the top-level `locale` argument) |
+| `fl` | `[String]` | n/a | Field list: restrict which document fields are returned |
 
 ### Filter Operators
 
@@ -115,7 +115,7 @@ The `fqOp` and `fqiOp` parameters control how multiple filter queries are combin
 
 | Value | Behavior | Example |
 |---|---|---|
-| `NONE` | No filter logic applied | Default — filters are passed as-is |
+| `NONE` | No filter logic applied | Default: filters are passed as-is |
 | `AND` | All filters must match | `fq: ["type:article", "dept:HR"]` with `fqOp: "AND"` → documents must be type:article AND dept:HR |
 | `OR` | Any filter may match | `fqOr: ["type:article", "type:news"]` with `fqOp: "OR"` → documents matching either type |
 
@@ -249,7 +249,7 @@ The GraphQL schema is **dynamically extended** at runtime with custom fields fro
 3. Static fields (`id`, `title`, `text`, `url`, `date`, `description`, `image`) are excluded to avoid conflicts
 4. The schema is extended: `extend type SearchDocumentFields { category: JSON, author: JSON, ... }`
 
-Dynamic fields use the `JSON` scalar type, which can hold strings, numbers, arrays, or nested objects — matching the flexible nature of indexed document attributes.
+Dynamic fields use the `JSON` scalar type, which can hold strings, numbers, arrays, or nested objects, matching the flexible nature of indexed document attributes.
 
 :::tip Field list projection
 Use the `fl` parameter in `SearchParamsInput` to restrict which fields are returned. This reduces response size and can improve performance when you only need specific fields.
@@ -265,9 +265,9 @@ searchParams: { q: "report", fl: ["title", "url", "category"] }
 
 The locale for a search is resolved with the following precedence:
 
-1. **`searchParams.locale`** — if provided in the input, takes highest priority
-2. **Top-level `locale` argument** — the required `locale` parameter on `siteSearch`
-3. **Default** — falls back to `en` if neither is provided or the locale is not supported by the site
+1. **`searchParams.locale`**: if provided in the input, takes highest priority
+2. **Top-level `locale` argument**: the required `locale` parameter on `siteSearch`
+3. **Default**: falls back to `en` if neither is provided or the locale is not supported by the site
 
 If the resolved locale is not configured on the target SN Site, the search falls back to the site's first available locale.
 
@@ -456,10 +456,10 @@ For the full configuration reference, see [Configuration Reference → GraphQL](
 
 | Scenario | Behavior |
 |---|---|
-| Invalid site name | Returns `null` for `siteSearch` — the site is not found |
+| Invalid site name | Returns `null` for `siteSearch`: the site is not found |
 | Unsupported locale | Falls back to the site's first available locale |
 | Invalid filter operator | Falls back to `NONE` |
-| Invalid field in `fl` | Field is ignored — only valid fields are returned |
+| Invalid field in `fl` | Field is ignored: only valid fields are returned |
 | Empty query (`q: ""`) | Treated as `q: "*"` (match all) |
 
 GraphQL validation errors (missing required fields, wrong types) are returned as standard GraphQL error responses before the query reaches the resolver.
@@ -471,7 +471,7 @@ GraphQL validation errors (missing required fields, wrong types) are returned as
 | Page | Description |
 |---|---|
 | [REST API Reference](./rest-api.md) | REST search endpoint with the same capabilities |
-| [Semantic Navigation](./semantic-navigation.md) | SN Site configuration — fields, facets, and search behavior |
+| [Semantic Navigation](./semantic-navigation.md) | SN Site configuration: fields, facets, and search behavior |
 | [Configuration Reference](./configuration-reference.md) | Full `application.yaml` property reference |
 
 ---

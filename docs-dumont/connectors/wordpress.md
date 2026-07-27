@@ -6,15 +6,15 @@ description: A PHP plugin installed inside WordPress that automatically indexes 
 
 # WordPress Connector
 
-The WordPress Connector is a **PHP plugin installed directly inside WordPress** — not a Java connector plugin. It hooks into WordPress publish, update, and delete events to keep the search index synchronized with your content in real time.
+The WordPress Connector is a **PHP plugin installed directly inside WordPress**, not a Java connector plugin. It hooks into WordPress publish, update, and delete events to keep the search index synchronized with your content in real time.
 
 :::note This is a WordPress plugin, not a Java plugin
-Unlike the AEM and Web Crawler connectors (which are Java JARs loaded via `-Dloader.path`), the WordPress Connector is a **PHP plugin** that you install in your WordPress `wp-content/plugins/` directory. It communicates directly with Turing ES via HTTP — no `dumont-connector.jar` needed.
+Unlike the AEM and Web Crawler connectors (which are Java JARs loaded via `-Dloader.path`), the WordPress Connector is a **PHP plugin** that you install in your WordPress `wp-content/plugins/` directory. It communicates directly with Turing ES via HTTP, no `dumont-connector.jar` needed.
 :::
 
 ---
 
-Unlike the AEM and Web Crawler connectors, the WordPress plugin is **not part of the Dumont connector application** — it runs entirely inside WordPress and sends content directly to Turing ES via HTTP. No `dumont-connector.jar` is needed.
+Unlike the AEM and Web Crawler connectors, the WordPress plugin is **not part of the Dumont connector application**: it runs entirely inside WordPress and sends content directly to Turing ES via HTTP. No `dumont-connector.jar` is needed.
 
 ---
 
@@ -41,13 +41,13 @@ graph LR
 
 The plugin integrates with WordPress hooks to automatically push content to the search index:
 
-1. **On publish** — When a post or page is published, the plugin extracts its content and sends it to Turing ES
-2. **On update** — When published content is modified, the index is updated automatically
-3. **On delete** — When content is trashed or deleted, it is removed from the index
-4. **On status change** — When a published post is changed to draft or private, it is removed from the index
-5. **Manual bulk indexing** — The admin panel provides buttons to index all posts or all pages in batches of 250
+1. **On publish**: When a post or page is published, the plugin extracts its content and sends it to Turing ES
+2. **On update**: When published content is modified, the index is updated automatically
+3. **On delete**: When content is trashed or deleted, it is removed from the index
+4. **On status change**: When a published post is changed to draft or private, it is removed from the index
+5. **Manual bulk indexing**: The admin panel provides buttons to index all posts or all pages in batches of 250
 
-There is no scheduled or cron-based indexing — everything is **event-driven** or manually triggered.
+There is no scheduled or cron-based indexing, everything is **event-driven** or manually triggered.
 
 ---
 

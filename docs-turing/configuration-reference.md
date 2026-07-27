@@ -6,7 +6,7 @@ description: Complete reference for the Turing ES application.yaml configuration
 
 # Configuration Reference
 
-This page documents every significant property in the Turing ES `application.yaml` file. The file uses standard Spring Boot configuration — any property can be overridden via environment variables, JVM system properties (`-Dkey=value`), or a separate `application-production.yaml` file in the working directory.
+This page documents every significant property in the Turing ES `application.yaml` file. The file uses standard Spring Boot configuration: any property can be overridden via environment variables, JVM system properties (`-Dkey=value`), or a separate `application-production.yaml` file in the working directory.
 
 :::tip Override pattern
 To override a property at runtime without editing the file, use the environment variable convention: replace `.` and `-` with `_` and uppercase everything. For example, `turing.storage.type` becomes `TURING_STORAGE_TYPE=minio`.
@@ -221,7 +221,7 @@ logging:
 
 ### Database (Spring Datasource)
 
-The default database is **H2** (embedded, file-based) — suitable for development and simple deployments. For production, replace with MariaDB, MySQL, or PostgreSQL.
+The default database is **H2** (embedded, file-based): suitable for development and simple deployments. For production, replace with MariaDB, MySQL, or PostgreSQL.
 
 | Property | Default | Description |
 |---|---|---|
@@ -232,7 +232,7 @@ The default database is **H2** (embedded, file-based) — suitable for developme
 | `spring.datasource.hikari.maximum-pool-size` | `20` | Maximum connections in the HikariCP pool |
 | `spring.datasource.hikari.minimum-idle` | `5` | Minimum idle connections kept alive |
 | `spring.datasource.hikari.idle-timeout` | `600000` | Time (ms) a connection can remain idle before being removed |
-| `spring.h2.console.enabled` | `false` | Enable H2 web console — **do not enable in production** |
+| `spring.h2.console.enabled` | `false` | Enable H2 web console: **do not enable in production** |
 
 **Switching to MariaDB / MySQL:**
 
@@ -249,7 +249,7 @@ spring:
 
 ### Message Queue (Apache Artemis)
 
-Apache Artemis runs **embedded inside Turing ES** by default — no separate installation is required. For high-availability or multi-node deployments, you can switch to an external Artemis broker.
+Apache Artemis runs **embedded inside Turing ES** by default: no separate installation is required. For high-availability or multi-node deployments, you can switch to an external Artemis broker.
 
 | Property | Default | Description |
 |---|---|---|
@@ -293,7 +293,7 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 
 | Property | Default | Description |
 |---|---|---|
-| `spring.mvc.async.request-timeout` | `3600000` | Maximum time (ms) for async requests — 1 hour. Covers streaming LLM responses. |
+| `spring.mvc.async.request-timeout` | `3600000` | Maximum time (ms) for async requests: 1 hour. Covers streaming LLM responses. |
 
 ---
 
@@ -306,8 +306,8 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 | `turing.keycloak` | `false` | Set `true` to enable Keycloak OAuth2/OIDC. See [Security & Keycloak](./security-keycloak.md). |
 | `turing.tenancy.enabled` | `false` | Enable multi-tenant mode (one JVM, many isolated tenants). Default `false` = single-tenant, byte-for-byte legacy behavior. See [Multi-Tenancy](./multi-tenancy.md). |
 | `turing.open-browser` | `true` | Automatically open the admin console in the browser on startup |
-| `turing.permissions` | `true` | When `true`, users get only their real group/role authorities. When `false`, **any** authenticated principal is granted `ROLE_ADMIN` + all privileges (trusted single-user mode only — logs a `SECURITY` warning at startup). See [Security Hardening](./security-hardening.md#2-turingpermissions-defaults-to-true-authn--admin). |
-| `turing.ai.crypto.key` | *(blank → env `TURING_AI_CRYPTO_KEY`)* | AES/GCM key encrypting all stored provider credentials. **Required in production** — the app fails to start on the `production` profile with a blank or known-sample value. |
+| `turing.permissions` | `true` | When `true`, users get only their real group/role authorities. When `false`, **any** authenticated principal is granted `ROLE_ADMIN` + all privileges (trusted single-user mode only, logs a `SECURITY` warning at startup). See [Security Hardening](./security-hardening.md#2-turingpermissions-defaults-to-true-authn--admin). |
+| `turing.ai.crypto.key` | *(blank → env `TURING_AI_CRYPTO_KEY`)* | AES/GCM key encrypting all stored provider credentials. **Required in production**, the app fails to start on the `production` profile with a blank or known-sample value. |
 | `turing.code-interpreter.python-executable` | *(auto-detected)* | Absolute path to the Python 3 binary used by the Code Interpreter GenAI tool. When blank, Turing searches standard OS locations automatically. |
 
 :::warning Set the crypto key in production
@@ -316,14 +316,14 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 
 ### Model Catalog (`turing.model-catalog`) {#model-catalog}
 
-Turing enriches its LLM-instance model picker from a public, vendor-neutral [**model catalog**](https://openviglet.github.io/model-catalog/) ([openviglet/model-catalog](https://github.com/openviglet/model-catalog)) — pricing, context windows, capabilities, tiers and deprecations. The fetch is **remote-only** (no bundled copy), best-effort, runs off the boot path on a TTL, and never blocks startup; until the first successful fetch the picker falls back to live vendor listing only. See [LLM Instances § Catalog-driven intelligence](./llm-instances.md#catalog-driven-intelligence).
+Turing enriches its LLM-instance model picker from a public, vendor-neutral [**model catalog**](https://openviglet.github.io/model-catalog/) ([openviglet/model-catalog](https://github.com/openviglet/model-catalog)), pricing, context windows, capabilities, tiers and deprecations. The fetch is **remote-only** (no bundled copy), best-effort, runs off the boot path on a TTL, and never blocks startup; until the first successful fetch the picker falls back to live vendor listing only. See [LLM Instances § Catalog-driven intelligence](./llm-instances.md#catalog-driven-intelligence).
 
 | Property | Default | Description |
 |---|---|---|
 | `turing.model-catalog.url` | `https://openviglet.github.io/model-catalog/catalog.json` | Catalog endpoint the model picker reads. Override with `TURING_MODEL_CATALOG_URL` to pin a self-hosted or air-gapped copy. |
-| `turing.model-catalog.remote-enabled` | `true` | Set `false` to disable the remote fetch entirely — the picker then uses only models listed live by each vendor's API. |
+| `turing.model-catalog.remote-enabled` | `true` | Set `false` to disable the remote fetch entirely, the picker then uses only models listed live by each vendor's API. |
 | `turing.model-catalog.refresh-interval-ms` | `21600000` | Refresh cadence for the catalog (6h). A short initial delay (`refresh-initial-delay-ms`, default `8000`) keeps the fetch off the boot path. |
-| `turing.model-catalog.price-sync.enabled` | `true` | Auto-seed/refresh the per-model price table (`tur_llm_price`) from the catalog's indicative pricing on a TTL. Only CATALOG-sourced rows are written — an operator's MANUAL rate is never overwritten. `false` keeps the price table manual-only. See [Cost Governance](./cost-governance.md). |
+| `turing.model-catalog.price-sync.enabled` | `true` | Auto-seed/refresh the per-model price table (`tur_llm_price`) from the catalog's indicative pricing on a TTL. Only CATALOG-sourced rows are written, an operator's MANUAL rate is never overwritten. `false` keeps the price table manual-only. See [Cost Governance](./cost-governance.md). |
 | `turing.model-catalog.change-feed.email-enabled` | `false` | Opt-in: a daily job emails the Global Settings recipient a digest when the catalog change feed affects a model you use (removed / superseded / changed), deduped. The in-UI change-feed banner is always on regardless. |
 
 ### Abuse Controls (`turing.abuse`) {#abuse-controls-turingabuse}
@@ -350,7 +350,7 @@ Guardrails for the agent-as-MCP-client path. See [MCP Servers](./mcp-servers.md)
 
 | Property | Default | Description |
 |---|---|---|
-| `turing.mcp-client.allowed-stdio-commands` | *(empty = any)* | Allowlist of permitted stdio command base-names (e.g. `[npx, uvx]`). When set, other commands are refused — blocks arbitrary local-process execution by config. |
+| `turing.mcp-client.allowed-stdio-commands` | *(empty = any)* | Allowlist of permitted stdio command base-names (e.g. `[npx, uvx]`). When set, other commands are refused, blocks arbitrary local-process execution by config. |
 | `turing.mcp-client.block-private-urls` | `false` | When `true`, an HTTP MCP-client URL resolving to a private/loopback address is refused via the SSRF guard. Leave `false` for internal-network MCP servers. |
 
 ---
@@ -361,7 +361,7 @@ Guardrails for the agent-as-MCP-client path. See [MCP Servers](./mcp-servers.md)
 |---|---|---|
 | `turing.solr.timeout` | `30000` | Connection and read timeout (ms) for Solr requests |
 | `turing.solr.cloud` | `false` | Set `true` for SolrCloud mode with Zookeeper |
-| `turing.solr.commit.within` | `10000` | Soft commit time (ms) — Solr commits changes within this window |
+| `turing.solr.commit.within` | `10000` | Soft commit time (ms): Solr commits changes within this window |
 | `turing.solr.commit.enabled` | `false` | Enable explicit commits after indexing. Leave `false` to use Solr's auto-commit. |
 
 ---
@@ -380,7 +380,7 @@ Guardrails for the agent-as-MCP-client path. See [MCP Servers](./mcp-servers.md)
 |---|---|---|
 | `turing.search.metrics.enabled` | `true` | Record search metrics (query terms, result counts, timestamps) |
 | `turing.search.cache.enabled` | `false` | Enable server-side search result caching |
-| `turing.search.cache.ttl.seconds` | `86400000` | Cache TTL in seconds (default ~1000 days — effectively no expiry when enabled) |
+| `turing.search.cache.ttl.seconds` | `86400000` | Cache TTL in seconds (default ~1000 days: effectively no expiry when enabled) |
 
 ---
 
@@ -390,7 +390,7 @@ Storage powers the [Assets](./assets.md) file manager, the RAG Knowledge Base, a
 
 | Type | Description |
 |------|-------------|
-| `none` | Disabled — Assets and Pages are hidden from the sidebar |
+| `none` | Disabled: Assets and Pages are hidden from the sidebar |
 | `minio` | MinIO object storage (recommended for production) |
 | `filesystem` | Local filesystem directory (simple deployments, development) |
 
@@ -407,7 +407,7 @@ Storage powers the [Assets](./assets.md) file manager, the RAG Knowledge Base, a
 | `turing.storage.minio.endpoint` | `http://localhost:9000` | MinIO server URL |
 | `turing.storage.minio.access-key` | *(env `TURING_STORAGE_MINIO_ACCESS_KEY`)* | MinIO access key. Set via env for any real deployment. |
 | `turing.storage.minio.secret-key` | *(env `TURING_STORAGE_MINIO_SECRET_KEY`)* | MinIO secret key. Set via env for any real deployment. |
-| `turing.storage.minio.bucket` | `turing-assets` | Bucket name — created automatically on startup if it does not exist |
+| `turing.storage.minio.bucket` | `turing-assets` | Bucket name: created automatically on startup if it does not exist |
 
 #### Filesystem Backend
 
@@ -415,7 +415,7 @@ Storage powers the [Assets](./assets.md) file manager, the RAG Knowledge Base, a
 |---|---|---|
 | `turing.storage.filesystem.path` | `./store/assets` | Base directory for stored files. Created automatically if it does not exist. |
 
-The filesystem backend includes **path traversal protection** — all paths are resolved against the base directory and any attempt to escape it is blocked.
+The filesystem backend includes **path traversal protection**: all paths are resolved against the base directory and any attempt to escape it is blocked.
 
 :::note
 The **Assets** and **Pages** sections only appear in the sidebar when `turing.storage.type` is set to `minio` or `filesystem`.
@@ -423,7 +423,7 @@ The **Assets** and **Pages** sections only appear in the sidebar when `turing.st
 
 #### Agent Workspace & tool-result offload
 
-The same storage backend also powers the per-conversation [Agent Workspace](./agent-workspace.md). When storage is `none` the workspace is inert and the offload feature below stays off — the default deployment is unchanged.
+The same storage backend also powers the per-conversation [Agent Workspace](./agent-workspace.md). When storage is `none` the workspace is inert and the offload feature below stays off: the default deployment is unchanged.
 
 | Property | Default | Description |
 |---|---|---|
@@ -502,7 +502,7 @@ For full Keycloak setup instructions, see [Security & Keycloak](./security-keycl
 
 ### GenAI / LLM (Database Settings)
 
-LLM providers, models, and GenAI behavior are managed through the **Administration Console** and stored in the database — not in `application.yaml`. The following settings are available via **Settings > Global Settings** in the admin UI:
+LLM providers, models, and GenAI behavior are managed through the **Administration Console** and stored in the database, not in `application.yaml`. The following settings are available via **Settings > Global Settings** in the admin UI:
 
 | Setting | Default | Description |
 |---|---|---|
@@ -523,7 +523,7 @@ LLM instances are created under **GenAI > LLM** in the admin console, where you 
 
 ### RAG Reranker (Database Settings) {#rag-reranker-database-settings}
 
-The Semantic Navigation RAG path can run an optional **reranking** pass that re-orders retrieved chunks by relevance before they reach the model (see [Reranking](./rag.md#reranking--sharper-context-before-generation)). It is off by default; the reranker stage is a **pluggable strategy** and **fails open** (any error or missing configuration falls back to the original retrieval order). Configure it under **Settings > Global Settings** in the admin UI:
+The Semantic Navigation RAG path can run an optional **reranking** pass that re-orders retrieved chunks by relevance before they reach the model (see [Reranking](./rag.md#reranking-sharper-context-before-generation)). It is off by default; the reranker stage is a **pluggable strategy** and **fails open** (any error or missing configuration falls back to the original retrieval order). Configure it under **Settings > Global Settings** in the admin UI:
 
 | Setting | Default | Description |
 |---|---|---|
@@ -534,7 +534,7 @@ The Semantic Navigation RAG path can run an optional **reranking** pass that re-
 | Reranker Model | *(backend default)* | Rerank model name; for `COHERE` defaults to `rerank-v3.5` |
 | Reranker API Key | *(none)* | For `COHERE`: the Cohere API key. Stored **encrypted**; write-only (never returned by the API) |
 
-**Cross-encoder** is the recommended production choice — purpose-built reranker models (e.g. `BAAI/bge-reranker-v2-m3`) are cheaper, faster, and more precise than borrowing a generative model. **Cohere** is the zero-ops managed alternative. **LLM** needs no extra infrastructure and is the safe default.
+**Cross-encoder** is the recommended production choice: purpose-built reranker models (e.g. `BAAI/bge-reranker-v2-m3`) are cheaper, faster, and more precise than borrowing a generative model. **Cohere** is the zero-ops managed alternative. **LLM** needs no extra infrastructure and is the safe default.
 
 ---
 
@@ -585,7 +585,7 @@ The [MCP server](./mcp-servers.md#turing-as-an-mcp-server) is off by default. En
 
 | Property | Default | Purpose |
 |---|---|---|
-| `spring.ai.mcp.server.enabled` | `false` | Master switch — when off, no MCP-server beans exist |
+| `spring.ai.mcp.server.enabled` | `false` | Master switch: when off, no MCP-server beans exist |
 | `turing.mcp-server.loopback-only` | `true` | Reject non-loopback `/mcp` requests (the T245 trust boundary) |
 | `turing.mcp-server.require-auth` | `false` | Turn `/mcp` into an OAuth 2.1 JWT resource server (set with `spring.security.oauth2.resourceserver.jwt.*`); fails closed if no decoder |
 | `turing.mcp-server.write-enabled` | `false` | Register the write/ingestion tools (still require the `mcp:write` scope per call) |

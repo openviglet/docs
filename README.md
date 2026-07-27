@@ -22,5 +22,5 @@ There is no PDF build step. Readers who need an offline copy use the browser's
 block that hides the site chrome and keeps diagrams, tables and code blocks
 intact.
 
-Do not add manual page-break markup to MDX files — pagination is left to the
+Do not add manual page-break markup to MDX files: pagination is left to the
 browser.

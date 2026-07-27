@@ -3,18 +3,18 @@ import * as fs from "fs";
 import * as path from "path";
 
 /**
- * guides-json plugin — emits a machine-readable `/guides.json` endpoint of the
+ * guides-json plugin: emits a machine-readable `/guides.json` endpoint of the
  * PUBLISHED blog guides, consumed by the viglet.org marketing site (Block E /
  * W14 + W15) to cross-link into these posts dynamically.
  *
  * Why an endpoint: viglet.org must never hardcode this list (it would drift and
  * risk linking drafts that 404). Docusaurus excludes `draft: true` posts from the
- * production build, so `blogPosts` here already contains only live posts — this
+ * production build, so `blogPosts` here already contains only live posts: this
  * endpoint is the single source of truth. GitHub Pages serves it CORS-open
  * (`Access-Control-Allow-Origin: *`), so viglet.org can fetch it at runtime.
  *
  * Product mapping (`solutions`): explicit `viglet_products` frontmatter wins;
- * otherwise a conservative heuristic — every guide maps to Turing ES (the search
+ * otherwise a conservative heuristic, every guide maps to Turing ES (the search
  * platform), plus Dumont DEP when the post concerns a source connector (AEM /
  * WordPress). Override per-post with frontmatter when needed.
  */
@@ -30,7 +30,7 @@ type Guide = {
 };
 
 type PluginOptions = {
-  /** Products present in the ecosystem — used to validate frontmatter overrides. */
+  /** Products present in the ecosystem, used to validate frontmatter overrides. */
   knownProducts?: string[];
 };
 
@@ -109,7 +109,7 @@ export default function guidesJsonPlugin(
         }
       }
 
-      // Newest first — stable, deterministic output.
+      // Newest first: stable, deterministic output.
       guides.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
     },
 
