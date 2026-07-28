@@ -239,8 +239,10 @@ Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) 
 
 ```bash
 docker pull ghcr.io/openviglet/turing-ce:latest
-docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
+docker run -p 2700:2700 -e TURING_ADMIN_PASSWORD=your_password ghcr.io/openviglet/turing-ce:latest
 ```
+
+`TURING_ADMIN_PASSWORD` (minimum 6 characters) seeds the `admin` password while the container boots, so the console opens on the login page instead of the first-access setup screen. Omit it and you choose the password in the browser on first access — see [Login](./administration-guide.md#login).
 
 :::tip Image tags
 Besides `latest`, every run also publishes the project version (for example `2026.3.4`) and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
@@ -375,7 +377,7 @@ Configuration finished.
 
 Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing ES. The default port is **2700**.
 
-The default username is **admin**. The password is set via the `TURING_ADMIN_PASSWORD` environment variable before first startup: see the [Administration Guide](./administration-guide.md#login) for details.
+The default username is **admin**. Set its password either via the `TURING_ADMIN_PASSWORD` environment variable before the first startup, or in the first-access setup screen the console shows when that variable is not set: see the [Administration Guide](./administration-guide.md#login) for details.
 
 ## Appendix A: Installation Modes
 

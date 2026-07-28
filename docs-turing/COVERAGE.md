@@ -95,6 +95,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Knowledge Base / Assets, pluggable storage | [assets](./assets.md) | ✅ |
 | **Block J**: multi-tenancy | [multi-tenancy](./multi-tenancy.md) | ✅ |
 | Administration (users, roles, tokens, settings) | [administration-guide](./administration-guide.md) | ✅ |
+| **Block BM** (T824): headless admin bootstrap — `TURING_ADMIN_PASSWORD` really seeds the `admin` password at startup (minimum 6 characters, applied only while it is unset, never overwriting an existing one), so a `docker run` / CI deploy opens on the login page instead of the first-access setup screen. Folds into the Login section (both options documented) + the property reference | [administration-guide § Login](./administration-guide.md#login) · [configuration-reference § Turing ES Core](./configuration-reference.md#turing-es-core) | 🧩 |
 | Observability, logging | [observability](./observability.md) · [logging](./logging.md) | ✅ |
 | **D.6**: chat analytics (sentiment, tool latency, SSE) | [chat-analytics](./chat-analytics.md) | ✅ |
 | **Block L**: token usage + cost governance | [token-usage](./token-usage.md) · [cost-governance](./cost-governance.md) | ✅ |

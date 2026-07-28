@@ -307,6 +307,7 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 | `turing.tenancy.enabled` | `false` | Enable multi-tenant mode (one JVM, many isolated tenants). Default `false` = single-tenant, byte-for-byte legacy behavior. See [Multi-Tenancy](./multi-tenancy.md). |
 | `turing.open-browser` | `true` | Automatically open the admin console in the browser on startup |
 | `turing.permissions` | `true` | When `true`, users get only their real group/role authorities. When `false`, **any** authenticated principal is granted `ROLE_ADMIN` + all privileges (trusted single-user mode only, logs a `SECURITY` warning at startup). See [Security Hardening](./security-hardening.md#2-turingpermissions-defaults-to-true-authn--admin). |
+| `turing.admin.password` | *(blank → env `TURING_ADMIN_PASSWORD`)* | Seeds the local `admin` password at startup (minimum 6 characters) so a container/CI deploy skips the first-access setup screen. Applied only while the password is still unset — it never overwrites an existing one. See [Login](./administration-guide.md#login). |
 | `turing.ai.crypto.key` | *(blank → env `TURING_AI_CRYPTO_KEY`)* | AES/GCM key encrypting all stored provider credentials. **Required in production**, the app fails to start on the `production` profile with a blank or known-sample value. |
 | `turing.code-interpreter.python-executable` | *(auto-detected)* | Absolute path to the Python 3 binary used by the Code Interpreter GenAI tool. When blank, Turing searches standard OS locations automatically. |
 

@@ -146,7 +146,7 @@ The resulting JAR in `turing-app/target/` bundles both the backend and the compi
 | Solr | `http://localhost:8983` | Docker Compose |
 
 :::info Default credentials
-On first startup, set the admin password via the environment variable `TURING_ADMIN_PASSWORD`. See the [Installation Guide](./installation-guide.md) for details.
+On first startup, set the admin password via the environment variable `TURING_ADMIN_PASSWORD` (minimum 6 characters), or leave it unset and choose the password in the console's first-access setup screen. See [Login](./administration-guide.md#login) for details.
 :::
 
 ---

@@ -16,9 +16,11 @@ When Keycloak is enabled (`turing.keycloak=true`), the **Users**, **Groups**, an
 
 ## Login
 
-When accessing Turing ES, a login page is displayed. The default username is `admin`. The password is defined at first startup via the `TURING_ADMIN_PASSWORD` environment variable: if not set, Turing ES will not create the admin account with a default password.
+When accessing Turing ES, a login page is displayed. The default username is `admin`. Turing ES never ships a default password — you choose it in one of two ways on the first startup.
 
-Set the environment variable before starting Turing ES for the first time:
+### Option 1 — the `TURING_ADMIN_PASSWORD` environment variable
+
+Best for containers, unattended installs, and CI: the password is applied while the server boots, so the console goes straight to the login page. Set the variable before starting Turing ES for the first time:
 
 **Windows**
 ```bat
@@ -29,6 +31,16 @@ set TURING_ADMIN_PASSWORD=your_password
 ```bash
 export TURING_ADMIN_PASSWORD=your_password
 ```
+
+The password must be at least **6 characters** — a shorter value is ignored (a warning is logged) and Turing ES falls back to Option 2.
+
+:::info Applied once, never overwritten
+The variable is only applied while the `admin` password is still unset. Once a password exists — whether it came from this variable or from the setup screen — restarting with the variable still set changes nothing. To change the password afterwards, use the **Users** page in the console.
+:::
+
+### Option 2 — the first-access setup screen
+
+If the variable is not set, the console asks you to choose the `admin` password the first time it is opened (minimum 6 characters). After it is set, the setup screen is no longer reachable.
 
 ---
 
