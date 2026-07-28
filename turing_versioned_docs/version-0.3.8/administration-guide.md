@@ -124,19 +124,19 @@ Semantic Navigation uses Connectors to index the content from many sources.
 
 Plugin for Apache Nutch to index content using crawler.
 
-Learn more at [Connectors](./connectors#apache-nutch)
+Learn more at [Connectors](./connectors.md#apache-nutch)
 
 #### Database
 
 Command line that uses the same concept as sqoop ([https://sqoop.apache.org/](https://sqoop.apache.org/)), to create complex queries and map attributes to index based on the result.
 
-Learn more at [Connectors](./connectors#database)
+Learn more at [Connectors](./connectors.md#database)
 
 #### File System
 
 Command line to index files, extracting text from files such as Word, Excel, PDF, including images, through OCR.
 
-Learn more at [Connectors](./connectors#file-system)
+Learn more at [Connectors](./connectors.md#file-system)
 
 #### OpenText WEM Listener
 
@@ -146,7 +146,7 @@ OpenText WEM Listener to publish content to Viglet Turing.
 
 Wordpress plugin that allows you to index posts.
 
-Learn more at [Connectors](./connectors#wordpress)
+Learn more at [Connectors](./connectors.md#wordpress)
 
 ### Named Entity Recognition (NER)
 

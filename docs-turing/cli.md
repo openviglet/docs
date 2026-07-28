@@ -182,7 +182,7 @@ fixtures:
 |---|---|
 | `assistant.matches` / `not_matches` | Regex over the streamed reply. |
 | `assistant.contains` / `not_contains` | Substring over the reply. |
-| `slot.<name>` | A captured [slot](./chat-flow.md#slots) value. |
+| `slot.<name>` | A captured [slot](./chat-flow.md#slots-the-conversations-memory) value. |
 | `tool_called` / `tool_not_called` | Whether a tool ran (via the slot-audit `TOOL` trail). |
 | `persona.required` / `persona.forbidden` | Required / forbidden phrases (case-insensitive). |
 | `node` | The flow cursor position (via `/state`). |

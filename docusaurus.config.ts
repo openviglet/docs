@@ -263,11 +263,7 @@ const config: Config = {
 
   themeConfig: {
     image: "img/banner.jpg",
-    metadata: [
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@VigletTweet" },
-      { name: "twitter:creator", content: "@VigletTweet" },
-    ],
+    metadata: [{ name: "twitter:card", content: "summary_large_image" }],
     navbar: {
       title: "viglet",
       logo: {

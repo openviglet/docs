@@ -97,7 +97,7 @@ real admin account. See [Chat Analytics](./chat-analytics.md).
 
 ## 4. Developer tokens: header-only, with expiry & revocation
 
-[Developer / API-key tokens](./security-authentication.md#api-key-authentication)
+[Developer / API-key tokens](./security-authentication.md#rest-api-api-key)
 were hardened:
 
 - **The `?apiKey=` query-parameter is gone.** A secret in the URL leaks into

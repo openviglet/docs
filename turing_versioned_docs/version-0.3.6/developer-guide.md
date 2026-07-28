@@ -14,7 +14,7 @@ Viglet Turing ES ([https://viglet.org/turing](https://viglet.org/turing)) is an 
 
 ## More Documentation
 
-Technical documentation on Turing ES is available at [https://docs.viglet.org/turing](https://docs.viglet.org/docs/turing).
+Technical documentation on Turing ES is available at [https://docs.viglet.org/turing/](https://docs.viglet.org/turing/).
 
 ## Open Source Development
 

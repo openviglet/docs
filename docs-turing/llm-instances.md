@@ -94,7 +94,7 @@ To use the picker:
 At least one model is required to save. Selecting a vendor (or changing it) resets the list and seeds it with that vendor's default model. Instances created before this feature keep their single model as the default.
 
 :::info Multiple models, one default
-The extra models are recorded on the instance (as a comma-separated `modelNames` list) and surfaced where multi-model selection is useful, for example the [Governed LLM Gateway](./gateway.md) model picker. They do **not** change which model a given feature calls: that is always the **default** (`modelName`).
+The extra models are recorded on the instance (as a comma-separated `modelNames` list) and surfaced where multi-model selection is useful, for example the [Governed LLM Gateway](./llm-gateway.md) model picker. They do **not** change which model a given feature calls: that is always the **default** (`modelName`).
 :::
 
 ### 4. Generation Parameters (emerald)

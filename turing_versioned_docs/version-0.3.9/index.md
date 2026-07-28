@@ -20,8 +20,8 @@ slug: /
 
 | Guide | Description |
 |-------|-------------|
-| [Installation Guide](/turing/installation-guide) | How to install and configure Turing ES |
-| [Administration Guide](/turing/administration-guide) | How to administer Turing ES |
-| [Connectors](/turing/connectors) | Connectors for indexing content |
-| [Developer Guide](/turing/developer-guide) | How to develop with Turing ES |
-| [Release Notes](/turing/release-notes) | Release history and changelog |
+| [Installation Guide](./installation-guide.md) | How to install and configure Turing ES |
+| [Administration Guide](./administration-guide.md) | How to administer Turing ES |
+| [Connectors](./connectors.md) | Connectors for indexing content |
+| [Developer Guide](./developer-guide.md) | How to develop with Turing ES |
+| [Release Notes](./release-notes.md) | Release history and changelog |

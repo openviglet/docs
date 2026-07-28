@@ -1,4 +1,5 @@
 import type { Plugin, LoadContext } from "@docusaurus/types";
+import { applyTrailingSlash } from "@docusaurus/utils-common";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -114,13 +115,23 @@ export default function guidesJsonPlugin(
     },
 
     async postBuild({ outDir, siteConfig }) {
+      // `permalink` is the raw route and ignores `trailingSlash`. viglet.org
+      // renders these as real <a href>, so emitting the un-normalised form gives
+      // Google inbound links to URLs that 301 to their canonical twin. Match the
+      // sitemap / <link rel="canonical"> form instead.
+      const absoluteUrl = (permalink: string) =>
+        permalink.startsWith("http")
+          ? permalink
+          : siteConfig.url +
+            applyTrailingSlash(permalink, {
+              trailingSlash: siteConfig.trailingSlash,
+              baseUrl: siteConfig.baseUrl,
+            });
+
       const payload = {
         source: siteConfig.url,
         generatedFrom: "docusaurus-blog",
-        guides: guides.map((g) => ({
-          ...g,
-          url: g.url.startsWith("http") ? g.url : `${siteConfig.url}${g.url}`,
-        })),
+        guides: guides.map((g) => ({ ...g, url: absoluteUrl(g.url) })),
       };
       fs.writeFileSync(
         path.join(outDir, "guides.json"),

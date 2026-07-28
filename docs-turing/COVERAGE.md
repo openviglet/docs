@@ -68,7 +68,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Tool calling (native + provider-native) | [tool-calling](./tool-calling.md) | ✅ |
 | **Block F.15**: capability registry + two-level gate | [capabilities](./capabilities.md) | ✅ |
 | **Block W** (AG-UI): live tool activity, client tools, generative UI | [client-tools](./client-tools.md) | ✅ |
-| **Block X**: answer-as-app, co-browse, glass-box, proactive, handoff, skill UIs, action widget | [showcase](./showcase.md#creative-compositions) (opt-in features, demoed) | 🧩 |
+| **Block X**: answer-as-app, co-browse, glass-box, proactive, handoff, skill UIs, action widget | [showcase](./showcase.md#4-creative-compositions) (opt-in features, demoed) | 🧩 |
 | Custom (Groovy) tools | [custom-tools](./custom-tools.md) | ✅ |
 | **Block I**: MCP client + server | [mcp-servers](./mcp-servers.md) | ✅ |
 | **E.3**: skills (Anthropic folders, sandbox) | [skills](./skills.md) | ✅ |

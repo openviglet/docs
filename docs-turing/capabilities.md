@@ -159,7 +159,7 @@ The admin gate, on the LLM instance edit form (existing instances only; rows are
 | `GET` | `/api/capability/matrix` | Per-instance capability rows (instance id, title, plugin type, enabled keys) |
 
 :::warning Don't confuse with "Supported Capabilities"
-The instance form's free-text **Supported Capabilities** field (e.g. `RESPONSE_FORMAT_JSON_SCHEMA`) is a different, unrelated thing: it is *not* the native-capability matrix. See [LLM Instances → Advanced Options](./llm-instances.md#4-advanced-options-amber).
+The instance form's free-text **Supported Capabilities** field (e.g. `RESPONSE_FORMAT_JSON_SCHEMA`) is a different, unrelated thing: it is *not* the native-capability matrix. See [LLM Instances → Advanced Options](./llm-instances.md#5-advanced-options-amber).
 :::
 
 ---

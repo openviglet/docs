@@ -1,4 +1,5 @@
 import type { Plugin, LoadContext } from "@docusaurus/types";
+import { applyTrailingSlash } from "@docusaurus/utils-common";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -104,6 +105,17 @@ export default function llmsTxtPlugin(
     },
 
     async postBuild({ outDir, siteConfig }) {
+      // `permalink` is the raw route, which ignores `trailingSlash`. Emitting it
+      // as-is publishes URLs that 301 to their canonical form: Google then holds
+      // both variants and reports "duplicate, different canonical". Normalise to
+      // the same form the sitemap and <link rel="canonical"> use.
+      const absoluteUrl = (permalink: string) =>
+        siteConfig.url +
+        applyTrailingSlash(permalink, {
+          trailingSlash: siteConfig.trailingSlash,
+          baseUrl: siteConfig.baseUrl,
+        });
+
       const lines: string[] = [];
       lines.push(`# ${options.title}`);
       lines.push("");
@@ -117,7 +129,7 @@ export default function llmsTxtPlugin(
         lines.push(`## ${product.label}`);
         lines.push("");
         for (const doc of docs) {
-          lines.push(`- [${doc.title}](${siteConfig.url}${doc.permalink})`);
+          lines.push(`- [${doc.title}](${absoluteUrl(doc.permalink)})`);
         }
       }
 
@@ -126,7 +138,7 @@ export default function llmsTxtPlugin(
         lines.push("## Guides & Blog, Enterprise Search & AI");
         lines.push("");
         for (const post of blogPosts) {
-          lines.push(`- [${post.title}](${siteConfig.url}${post.permalink})`);
+          lines.push(`- [${post.title}](${absoluteUrl(post.permalink)})`);
         }
       }
 

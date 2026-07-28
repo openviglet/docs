@@ -502,7 +502,7 @@ function SearchPage() {
 - [GitHub Repository](https://github.com/openviglet/turing-ce)
 - [npm Package](https://www.npmjs.com/package/@viglet/turing-react-sdk)
 - [Storybook (Live Demos)](https://turing.viglet.org/react-sdk)
-- [REST API Reference](rest-api)
+- [REST API Reference](./rest-api.md)
 
 ---
 
