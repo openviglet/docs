@@ -336,9 +336,28 @@ Running the analysis evaluates every **(content × persona)** pair and stores th
 
 Both report lenses export to **PDF** (print-to-PDF, one document per lens).
 
-**Scheduled re-analysis.** A project set to `Daily` or `Weekly` is re-run automatically (cluster-wide-once): its sources are re-extracted (so a drifted URL is picked up) and only cells whose content changed are recomputed. `Manual` projects run only when you click **Rodar análise**. This is the "keep personas and content tuned to each other as content changes" loop.
+**Scheduled re-analysis.** A project set to `Daily` or `Weekly` is re-run automatically (cluster-wide-once): its sources are re-extracted (so a drifted URL is picked up) and only cells whose content changed are recomputed. `Manual` projects run only when you click **Run analysis**. This is the "keep personas and content tuned to each other as content changes" loop.
 
 Because a project can hold a **single** persona, it also **replaces the old per-persona validate notebook**: the persona **Validate content** action now spins up (or re-opens) a one-persona project and drops you in the studio.
+
+### The tuning loop: fit trend, drift & suggested adjustments
+
+Every run keeps a **history point per matrix cell**, so a project that re-runs on a schedule remembers how each `(content, persona)` pair moved — not just where it stands today. Once a project has at least one run, the studio adds a **Tuning loop** section:
+
+- **Average fit per run** — a line chart of the project's mean fit across runs, oldest to newest. Is the portfolio getting better or worse for these audiences?
+- **Dropped / Improved since last run** — the pairs that moved between the two most recent runs, sharpest movement first, with the before → after scores and a `±` delta. A pair that fell **below the 75% good-fit threshold** is flagged with a warning icon (*"this content dropped below fit for persona X since last run"*), and a pair whose text changed between runs is marked **content changed**, so you can tell an edit from a scoring shift.
+- Each heatmap cell also carries a small `±` caret, and the per-cell drawer shows a **sparkline** of that pair's whole series plus its movement since the last run.
+
+The trend and drift views are computed from the stored scores alone — no LLM call, so they work even on a project scored by readability only.
+
+**Suggested adjustments.** Click **Suggest adjustments** for concrete edits on **both sides** of the loop:
+
+- **Adjust the content** — how to edit a content so it serves the personas scoring it low.
+- **Adjust the persona** — how to correct a persona's audience description when the contents consistently miss it (a reading level or vocabulary ceiling set wrong, an empty description).
+
+Suggestions come from the project's LLM Instance (or the Global default) grounded on the matrix, the flagged phrases and the drift; anything naming a content or persona outside the project is discarded. With **no LLM configured** — or if the model's answer can't be read — you still get a **deterministic** list built from the rewrite suggestions the evaluator already grounded in verbatim phrases. **Adjustments are advisory**: nothing is ever written to a content or a persona automatically. Use **Regenerate** for a fresh set.
+
+Retention is bounded: each cell keeps its most recent points (24 by default, `turing.persona-match.history.max-points`), and a series is deleted along with its content, persona or project.
 
 ### Content ingestion: fetching JS-rendered pages
 
@@ -454,6 +473,10 @@ Without a Persona, an Agent still works, but its voice is the LLM's default voic
 | `POST` | `/api/persona/{id}/content-fit` | Run the audience-fit report (`?sourceId` for one source, else the whole notebook) |
 | `POST` | `/api/persona/derive-from-audio` | Draft a `BOTH` persona from an audio recording (multipart; never auto-saved) |
 | `POST` | `/api/v2/persona/{id}/chat` | Talk directly to a persona (SSE; JSON or multipart) |
+| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-match` | Persona Match **projects**: CRUD, `PUT .../{id}/personas`, contents (`POST .../{id}/sources`, `/sources/upload`, `/sources/{sourceId}/extract`), `GET .../{id}/matrix` and `.../report`, and the run — `POST .../{id}/run` or `.../run/stream` (SSE, live heatmap fill) |
+| `GET` | `/api/persona-match/{id}/trend` | Per-cell fit history across runs + the run-average series |
+| `GET` | `/api/persona-match/{id}/drift` | How fit moved between the last two runs (sharpest regression first) |
+| `POST` | `/api/persona-match/{id}/adjustments` | Suggested content/persona adjustments (`?regenerate=true` for a fresh set) |
 | `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-dialogue` | Persona Dialogue **projects**: CRUD, ordered `PUT .../{id}/speakers`, `GET .../{id}/transcript`, and `POST .../{id}/run/stream` (SSE, persists the transcript) |
 | `POST` | `/api/v2/persona-dialogue` | Run a bounded turn-by-turn dialogue between personas on a topic (ephemeral stream; kept for compatibility) |
 
