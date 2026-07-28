@@ -88,6 +88,69 @@ Switch back to **Vector** or **Hybrid** to re-enable embedding indexing.
    AI form.
 4. **Configure a default LLM** in Global Settings.
 
+## Rendering titles, descriptions and facet labels
+
+A structured feed carries **its own** field names — a model catalog indexes `label`,
+`vendor`, `kind`, `contextWindow`, … and has no `title` or `abstract`. Search results
+and facets are rendered through the site's *default field* mapping and its facet
+labels, so a feed-indexed site can return the right number of results while showing
+blank titles and label-less facet headers.
+
+**Safe defaults, out of the box.** A site that declares no mapping falls back to the
+conventional field names (`title`, `abstract`, `text`, `url`, `image`,
+`publication_date`), and a facet field with no label configured gets a **humanized
+field name** as its group header (`pricing_inputPer1M` renders as *"Pricing Input Per
+1M"*). Nothing is ever blank — but the fallback can only name conventional fields, so
+declare the mapping when your feed's names differ.
+
+**Declare it in the feed source.** When the scheduled ingester provisions the site,
+it can wire the mapping for you:
+
+```yaml
+turing:
+  genai:
+    structured-feed:
+      sources:
+        - id: model-catalog
+          site-name: model-catalog
+          feed-url: https://example.com/catalog.ndjson
+          manifest-url: https://example.com/query-manifest.json
+          provision: true
+          # which feed field renders as what
+          default-title-field: label
+          default-description-field: summary
+          default-url-field: url
+          # facet group headers, by field name
+          facet-labels:
+            kind: Model Type
+            vendor: Vendor
+            pricing_inputPer1M: Input price (per 1M tokens)
+```
+
+Both are applied only where the value is still **blank**: re-running provisioning is a
+no-op, and anything you later change on the site's admin forms is never overwritten.
+Declaring a label does not turn a field into a facet — that stays the field manifest's
+decision.
+
+**Or declare labels in the field manifest.** A field in the manifest may name its own
+facet header, either as a plain string or as a per-locale map:
+
+```json
+{
+  "fields": [
+    { "name": "kind", "type": "STRING", "facet": true, "facetName": "Model Type" },
+    {
+      "name": "vendor",
+      "type": "STRING",
+      "facet": true,
+      "facetName": { "default": "Vendor", "pt_BR": "Fornecedor" }
+    }
+  ]
+}
+```
+
+Locale-specific labels configured on the site always win over both of the above.
+
 ## Asking questions
 
 `POST /api/sn/{siteName}/copilot`
