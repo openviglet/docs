@@ -131,6 +131,17 @@ curl https://your-turing/api/genai/transcription/jobs/{jobId}
 
 A job moves `QUEUED → RUNNING → SUCCEEDED | FAILED`. Work runs on a **bounded worker pool** with a bounded queue: when both are saturated, a submission is rejected with **HTTP 429** (back-pressure) rather than growing memory without limit: retry shortly. Terminal results are retained for a configurable window, then evicted. Each job reuses the same chunk-aware pipeline, so multi-hour audio just works.
 
+### Watching the transcript arrive
+
+On a `gpt-transcribe` backend, a running job also streams the words it has heard so far as `partialTranscript` on each SSE snapshot — so a long recording shows text building instead of a spinner. The **persona from audio** flow renders this live.
+
+Two things to know:
+
+- It appears only for a recording that fits a **single chunk**. Chunks are transcribed in parallel, so relaying their text would show it out of order; a chunked recording keeps its `completedChunks / totalChunks` counter instead.
+- It is a **preview**, not the result. Always read the final `transcript` from the terminal snapshot (or a `GET` on the job) — `partialTranscript` is there to be shown, not stored.
+
+`whisper-1` does not stream; those jobs simply never carry the field. Set `turing.transcription.stream-partial-text: false` to turn the whole behaviour off.
+
 ---
 
 ## AUDIO chat slots
@@ -165,6 +176,7 @@ All keys live under `turing.transcription.*`. A non-blank value **wins** over th
 | `prompt` | n/a | Free-form context handed to the model (domain, speakers, expected style). Ignored by backends that don't accept it. |
 | `keywords` | n/a | Domain terms the model should spell correctly — product names, model ids, jargon. Used by the `gpt-transcribe` family; capped at 100. |
 | `keywords-from-thesaurus` | `false` | Top the keyword list up from your Thesaurus, so the vocabulary the search engine already expands also reaches the transcriber. Your own keywords come first. |
+| `stream-partial-text` | `true` | Stream a completed file's transcript as it is produced, so a running job carries `partialTranscript`. Only engages on a streaming-capable model and a single-chunk recording; any failure falls back to the ordinary call. |
 | `api-key` | n/a | API key for the endpoint (blank = no `Authorization` header). |
 | `max-upload-bytes` | `26214400` | Per-request upload limit (25 MiB); the chunker splits above this. |
 | `ffmpeg-path` | `ffmpeg` | `ffmpeg` executable used to split/re-encode large audio. |
