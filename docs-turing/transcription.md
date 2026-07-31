@@ -43,9 +43,23 @@ Transcription is a **selectable strategy** so you can match cost, privacy, and i
 
 | Strategy | What it is | Setup | Best for |
 |---|---|---|---|
-| **`OPENAI`** *(default)* | Cloud OpenAI-compatible `/audio/transcriptions` (`whisper-1`). With no dedicated config it reuses your default LLM instance's base URL + key. | Zero-config if you already run OpenAI | Managed cloud stacks |
-| **`OPENAI_COMPATIBLE`** | The **fully-local path**: a self-hosted server speaking the OpenAI transcription contract (e.g. [`faster-whisper-server`](https://github.com/fedirz/faster-whisper-server)). | Run the server, set a dedicated **Endpoint** | Cost-sensitive, on-prem, air-gapped, GPU-capable |
+| **`OPENAI`** *(default)* | Cloud OpenAI-compatible `/audio/transcriptions` (`gpt-transcribe`). With no dedicated config it reuses your default LLM instance's base URL + key. | Zero-config if you already run OpenAI | Managed cloud stacks |
+| **`OPENAI_COMPATIBLE`** | The **fully-local path**: a self-hosted server speaking the OpenAI transcription contract (e.g. [`faster-whisper-server`](https://github.com/fedirz/faster-whisper-server)), defaulting to `whisper-1`. | Run the server, set a dedicated **Endpoint** | Cost-sensitive, on-prem, air-gapped, GPU-capable |
 | **`NONE`** | Transcription disabled. Callers fail soft with a clear message. | n/a | Turning the feature off |
+
+### Choosing a model
+
+Leave **Model** blank and each backend uses the right default: `gpt-transcribe` for the cloud path, `whisper-1` for a self-hosted OpenAI-compatible server (which is what such servers actually serve). Turing adapts the request shape to whichever model you name, so you never have to think about the wire format.
+
+| Model | Use it for | Notes |
+|---|---|---|
+| **`gpt-transcribe`** | Completed files and batches. The cloud default. | Cheaper than `whisper-1` and markedly more accurate on accents, numbers, jargon and noisy audio. Accepts the **Context prompt** and **Domain keywords** hints. Returns no per-segment scores, so the confidence-based fallback reports "no signal" rather than a made-up number. |
+| **`gpt-live-transcribe`** | Low-latency live transcription in realtime voice. | Used automatically by voice sessions — the server picks it, the browser just follows. Not available on `/audio/transcriptions`. |
+| **`whisper-1`** | Timestamps, translation, subtitles. | Still fully supported and still the right pick when you need segment timestamps or a confidence score. The default for self-hosted servers. |
+
+:::note Nothing breaks
+If you already configured `whisper-1`, or left the model blank on a self-hosted server, your setup keeps behaving exactly as before. The new models are additive.
+:::
 
 :::note Running fully locally
 There is **no in-process transcription engine**: a fully-local / air-gapped deployment runs `OPENAI_COMPATIBLE` against a self-hosted server (e.g. faster-whisper-server) on your own network. This keeps audio on your infrastructure while reusing the exact same, battle-tested REST path as the cloud backend.
@@ -65,6 +79,21 @@ services:
 ```
 
 Then set the transcription **Endpoint** to `http://faster-whisper:8000/v1` (leave the API key blank, self-hosted servers usually need none; Turing omits the `Authorization` header when the key is blank). Only the URL differs from the cloud path, so it scales horizontally and can be GPU-backed.
+
+---
+
+## Context hints: stop transcribing your product names phonetically
+
+Speech models guess. Give one your vocabulary and it stops guessing. Global Settings → **Transcription** has two hints, both optional and both ignored by backends that can't use them:
+
+- **Context prompt** — free-form text describing the recording: the domain, who is speaking, the expected style. One or two sentences is plenty.
+- **Domain keywords** — a comma-separated list of terms that must come out spelled right: product names, model ids, SKUs, internal jargon. Capped at 100 terms; it is a hint, not a dictionary.
+
+Turing already curates exactly this vocabulary elsewhere — your **Thesaurus**. Turn on **Add Thesaurus terms** and the same terms the search engine expands at query time are handed to the transcriber, broadest descriptors first. Keywords you typed yourself always come first.
+
+:::tip
+The keyword hint is read by the `gpt-transcribe` family. The context prompt works more widely, including `whisper-1`.
+:::
 
 ---
 
@@ -132,7 +161,10 @@ All keys live under `turing.transcription.*`. A non-blank value **wins** over th
 |---|---|---|
 | `type` | `OPENAI` | Backend: `OPENAI` · `OPENAI_COMPATIBLE` · `NONE`. |
 | `endpoint` | n/a | Dedicated OpenAI-compatible base URL (e.g. `http://faster-whisper:8000/v1`). |
-| `model` | `whisper-1` | Transcription model name. |
+| `model` | per backend | Transcription model name. Blank = `gpt-transcribe` on `OPENAI`, `whisper-1` on `OPENAI_COMPATIBLE`. |
+| `prompt` | n/a | Free-form context handed to the model (domain, speakers, expected style). Ignored by backends that don't accept it. |
+| `keywords` | n/a | Domain terms the model should spell correctly — product names, model ids, jargon. Used by the `gpt-transcribe` family; capped at 100. |
+| `keywords-from-thesaurus` | `false` | Top the keyword list up from your Thesaurus, so the vocabulary the search engine already expands also reaches the transcriber. Your own keywords come first. |
 | `api-key` | n/a | API key for the endpoint (blank = no `Authorization` header). |
 | `max-upload-bytes` | `26214400` | Per-request upload limit (25 MiB); the chunker splits above this. |
 | `ffmpeg-path` | `ffmpeg` | `ffmpeg` executable used to split/re-encode large audio. |
