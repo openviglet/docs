@@ -326,7 +326,7 @@ A **project** groups three things:
 
 - **Contents**: added **once per project** (not per persona) as a **URL** (fetched behind the SSRF guard, see [Content ingestion](#content-ingestion-fetching-js-rendered-pages) if a URL is added but no text is extracted), an **indexed document** (picked from a Semantic Navigation site), or an **uploaded file** (PDF/DOC/… parsed to text). Each content's text is extracted and cached on add; a content hash lets re-runs skip work that hasn't changed.
 - **Personas**: any set of your existing personas, selected from the catalog.
-- A **schedule** (`Manual` / `Daily` / `Weekly`) and an optional **LLM Instance** (defaults to the Global default LLM).
+- A **schedule** (`Manual` / `Daily` / `Weekly`) and an optional **LLM Instance** (defaults to the Global default LLM). The instance you pick drives **both** halves of the project — the fit scores themselves and the suggested adjustments — so the numbers and the advice always come from the same model. Changing it re-scores on the next run rather than reusing the previous model's verdicts.
 
 Running the analysis evaluates every **(content × persona)** pair and stores the result as a **matrix cell**: the same fused *readability ⊕ grounded-LLM* fit score, *fits*, and flagged *misfits* with rewrite suggestions you get from the single-persona report. The studio shows it three ways:
 
