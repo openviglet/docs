@@ -144,6 +144,32 @@ Two things to know:
 
 ---
 
+## Identifying speakers
+
+Turn **Identify speakers** on (Global Settings → Transcription, or `turing.transcription.diarization-enabled`) and a transcription comes back as attributable turns — who said what, and when — instead of one flat text. Useful for interviews, calls and meeting recordings.
+
+Each turn carries a `speaker` label, the `text`, and `start`/`end` offsets in seconds:
+
+```json
+{
+  "transcript": "Tell me about your work. I have sold cars for twenty years.",
+  "segments": [
+    { "speaker": "A", "text": "Tell me about your work.", "startSeconds": 0.0, "endSeconds": 2.5 },
+    { "speaker": "B", "text": "I have sold cars for twenty years.", "startSeconds": 2.5, "endSeconds": 6.0 }
+  ]
+}
+```
+
+Three things to know:
+
+- **`transcript` is always authoritative.** `segments` annotates it; it never replaces it. Anything already reading `transcript` is unaffected whether diarization is on or off.
+- **A speaker label means "a distinct voice in this recording"** — not a person. Labels are assigned per request, so the same human gets no stable identity across two uploads.
+- **It applies to a recording that fits a single request.** A longer recording is split into chunks, and because labels are assigned per request there is no way to tell chunk 2's "A" from chunk 1's "B". Rather than guess, Turing returns the flat transcript with no segments. In practice a ~50-minute recording is still one chunk, so most interviews are covered.
+
+Needs a `gpt-transcribe` model — `whisper-1` ignores the setting (its segments are timing boundaries with no speaker). Diarization also takes precedence over the live partial transcript above, since the two response formats are mutually exclusive.
+
+---
+
 ## AUDIO chat slots
 
 When an [AI Agent](./ai-agents.md) has an **AUDIO** multi-modal slot, uploading a clip to it now **transcribes** the audio (through the configured backend, chunked if large) and writes the transcript into the agent's first target **text** slot, so a spoken answer becomes a filled slot value. If no transcription backend is configured, the upload falls back to Gemini native understanding (when the agent's LLM is a Gemini instance). A **VIDEO** slot continues to use Gemini understanding, which also describes the visual track.
@@ -177,6 +203,7 @@ All keys live under `turing.transcription.*`. A non-blank value **wins** over th
 | `keywords` | n/a | Domain terms the model should spell correctly — product names, model ids, jargon. Used by the `gpt-transcribe` family; capped at 100. |
 | `keywords-from-thesaurus` | `false` | Top the keyword list up from your Thesaurus, so the vocabulary the search engine already expands also reaches the transcriber. Your own keywords come first. |
 | `stream-partial-text` | `true` | Stream a completed file's transcript as it is produced, so a running job carries `partialTranscript`. Only engages on a streaming-capable model and a single-chunk recording; any failure falls back to the ordinary call. |
+| `diarization-enabled` | `false` | Return attributable per-speaker turns (`segments`) alongside the transcript. Needs a `gpt-transcribe` model and a single-chunk recording. |
 | `api-key` | n/a | API key for the endpoint (blank = no `Authorization` header). |
 | `max-upload-bytes` | `26214400` | Per-request upload limit (25 MiB); the chunker splits above this. |
 | `ffmpeg-path` | `ffmpeg` | `ffmpeg` executable used to split/re-encode large audio. |
