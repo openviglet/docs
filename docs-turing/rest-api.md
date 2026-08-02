@@ -325,6 +325,21 @@ Both JavaScript SDKs do this for you — see
 `clearAllFilters`, `goToPage`, `applySpellCheck`) and
 [`@viglet/turing-react-sdk`](./react-sdk.md).
 
+#### `responseFormat` on GET
+
+`responseFormat` is a plain request field, not an `Accept` header, so the GET
+search endpoint honours it too — handy for comparing the two shapes against one
+query, or for a server-rendered page that wants facet *data* without parsing
+links:
+
+```
+GET http://localhost:2700/api/sn/{siteName}/search?q=chat&responseFormat=STRUCTURED
+```
+
+The value is case-insensitive (`structured` works). Omitting it returns the
+regular link-bearing response, unchanged; an unrecognised value returns
+`400 Bad Request` rather than silently falling back.
+
 #### Autocomplete and select-list over POST
 
 The same body works on the other two read endpoints, so a whole search surface can
