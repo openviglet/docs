@@ -195,9 +195,16 @@ Each `facetGroup` contains:
     label: string;
     selected: boolean;
     toggle: () => void; // Toggle this facet
+    link?: string;      // Legacy mode only — see below
   }];
 }
 ```
+
+`link` is the server-rendered href for a facet value and exists **only** in
+legacy mode (`postNative: false`). The default POST-native mode returns a
+link-free response, so it is `undefined` there — use `toggle()`, and if you need
+a crawlable anchor, handle the absence explicitly rather than rendering
+`<a href={facet.link}>` (which would link to the current page).
 
 ### useTuringPagination
 
