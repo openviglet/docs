@@ -253,6 +253,7 @@ pages.
 | `targetingRules` | `string[]` | Targeting rules (no conditional maps — read-only) |
 | `autoCorrectionDisabled` | `boolean` | Skip spelling auto-correction (default `true`) |
 | `responseFormat` | `string` | `LINKS` (default) or `STRUCTURED` — see below |
+| `includeSortOptions` | `boolean` | `false`. When `true`, a `STRUCTURED` response also carries `sortOptions` |
 
 The endpoint is anonymous and **CSRF-exempt**, so a browser client needs no
 `/csrf` priming round-trip.
@@ -324,6 +325,25 @@ Both JavaScript SDKs do this for you — see
 [`@viglet/turing-sdk`](./javascript-sdk.md) (`toggleFacet`, `clearFacet`,
 `clearAllFilters`, `goToPage`, `applySpellCheck`) and
 [`@viglet/turing-react-sdk`](./react-sdk.md).
+
+#### Sort options in one round-trip
+
+The sort option list has its own endpoint
+(`GET /api/sn/{siteName}/search/sort-options`) and is **not** part of the
+response by default — the control is already rendered on every request after the
+first. To paint it on the *first* frame without a second call, ask for it:
+
+```json
+{ "q": "chat", "responseFormat": "STRUCTURED", "includeSortOptions": true }
+```
+
+The response then carries a `sortOptions` array of `{ "value", "label" }` —
+exactly what the dedicated endpoint serves. Put the chosen `value` on
+`request.sort`.
+
+The flag is **not** echoed back on `request`, so re-sending the echoed object
+asks for results without re-fetching the list. It has no effect on a `LINKS`
+response.
 
 #### `responseFormat` on GET
 
