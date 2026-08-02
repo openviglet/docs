@@ -152,8 +152,14 @@ search.subscribe((state) => {
 `state.params` is still kept in sync (handy for building a shareable GET URL), and
 `state.data` — the legacy link-bearing body — is `null` in this mode. Pass
 `{ postNative: false }` as a controller option to go back to the GET contract and
-`state.data`; `navigate(href)` remains for that path and for no-JS fallbacks, but
-it is deprecated.
+`state.data`.
+
+In that mode, render the response's hrefs as **real anchors** — that is what they
+are good for (deep-linking, SEO, no-JS). `navigate(href)` and `parseHrefToParams`
+still work, but they are deprecated, log a one-time console notice, and are
+**scheduled for removal in the next major**: parsing a server URL back into
+params is the round-trip that made reserved characters fragile in the first
+place. The server-rendered links themselves are not going anywhere.
 
 ### Chat controller
 

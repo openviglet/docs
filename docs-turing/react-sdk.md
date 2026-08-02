@@ -149,9 +149,11 @@ link-free response, so `structured` is authoritative and every action above is a
 change to `request` rather than a Turing href to parse. That is what makes a
 filter value containing `&`, `=`, `+`, `#`, `%` or a space safe.
 
-`data` (the legacy link-bearing body) is `null` in this mode, and the deprecated
-`navigate(href)` is kept only for the GET path. Pass `{ postNative: false }` to go
-back to the GET contract and `data`.
+`data` (the legacy link-bearing body) is `null` in this mode. Pass
+`{ postNative: false }` to go back to the GET contract and `data`, and render its
+hrefs as real anchors. The deprecated `navigate(href)` still works on that path
+but logs a one-time console notice and is **scheduled for removal in the next
+major**; the same applies to `onNavigate` on `TuringPagination`.
 
 ### useTuringAutoComplete
 
