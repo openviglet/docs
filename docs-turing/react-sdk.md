@@ -128,14 +128,30 @@ const {
   groups,        // Resolved groups (when group param used)
   error,         // Error message
   params,        // Current search params
+  structured,    // Link-free response (POST-native; authoritative)
+  request,       // The request that will be sent next
   search,        // Execute with given params
+  searchRequest, // Execute from an explicit structured request
   searchQuery,   // New text query (resets page to 1)
-  navigate,      // Navigate via Turing href (facet, pagination)
+  toggleFacet,   // Toggle a structured facet item
+  clearFacet,    // Clear one facet
+  clearAllFilters,
+  applySpellCheck, // Accept (or refuse) "did you mean"
   changeLocale,  // Change locale
   changeSort,    // Change sort
   goToPage,      // Go to specific page
 } = useTuringSearch(initialParams?);
 ```
+
+The hook is **POST-native** by default: it calls the
+[POST-native search endpoint](./rest-api.md#post-native-search) and asks for the
+link-free response, so `structured` is authoritative and every action above is a
+change to `request` rather than a Turing href to parse. That is what makes a
+filter value containing `&`, `=`, `+`, `#`, `%` or a space safe.
+
+`data` (the legacy link-bearing body) is `null` in this mode, and the deprecated
+`navigate(href)` is kept only for the GET path. Pass `{ postNative: false }` to go
+back to the GET contract and `data`.
 
 ### useTuringAutoComplete
 
@@ -369,8 +385,8 @@ Renders pagination items with navigation actions.
 
 ```tsx
 <TuringPagination
-  items={data.pagination}
-  onNavigate={(href) => navigate(href)}
+  items={structured?.pagination ?? []}
+  onSelectPage={(page) => goToPage(page)}
   itemComponent={({ item, isCurrent, isEllipsis, onClick, label }) => (
     <button
       onClick={onClick}
@@ -486,8 +502,8 @@ function SearchPage() {
         />
 
         <TuringPagination
-          items={store.data?.pagination ?? []}
-          onNavigate={store.navigate}
+          items={store.structured?.pagination ?? []}
+          onSelectPage={store.goToPage}
         />
       </main>
     </div>

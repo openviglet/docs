@@ -112,14 +112,48 @@ const search = createSearchController(
 );
 
 await search.searchQuery("laptops");       // run a query
-await search.navigate(facetHref);          // click a facet / pagination / "did you mean" link
+await search.toggleFacet(facetItem);       // click a facet value (applies its own action)
+await search.clearFacet(facet);            // clear one facet
+await search.clearAllFilters();            // clear every filter
 await search.goToPage(2);
+await search.applySpellCheck();            // accept "did you mean"
 await search.changeSort("relevance");
 await search.changeLocale("pt_BR");
 search.trackResultClick(doc.id, position); // CTR signal
 ```
 
-State: `{ status, data, chat, documents, groups, error, params }`. `documents` and `groups` are pre-resolved from the raw response so you can render them directly.
+State: `{ status, structured, data, chat, documents, groups, error, params, request }`. `documents` and `groups` are pre-resolved from the raw response so you can render them directly.
+
+#### POST-native by default
+
+The controller talks to the [POST-native search endpoint](./rest-api.md#post-native-search)
+and asks for the **link-free** response, so `state.structured` is authoritative:
+facets, pagination, locales and spell-check arrive as data, and every navigation
+above is a change to `state.request` rather than a URL to parse. That is what
+makes a filter value containing `&`, `=`, `+`, `#`, `%` or a space safe — there is
+no query string for it to break.
+
+Render facets straight from that state:
+
+```js
+search.subscribe((state) => {
+  for (const facet of state.structured?.facets ?? []) {
+    for (const item of facet.items) {
+      // item.selected drives the checkbox; the click just hands the item back.
+      renderChip(item.label, item.count, item.selected, () => search.toggleFacet(item));
+    }
+  }
+  for (const page of state.structured?.pagination ?? []) {
+    renderPage(page.text, page.current, () => search.goToPage(page.page));
+  }
+});
+```
+
+`state.params` is still kept in sync (handy for building a shareable GET URL), and
+`state.data` — the legacy link-bearing body — is `null` in this mode. Pass
+`{ postNative: false }` as a controller option to go back to the GET contract and
+`state.data`; `navigate(href)` remains for that path and for no-JS fallbacks, but
+it is deprecated.
 
 ### Chat controller
 
@@ -279,7 +313,7 @@ export default function decorate(block) {
 }
 ```
 
-The `examples/eds/` folder in the package ships ready-to-copy `turing-search`, `turing-chat` and `turing-analytics` blocks.
+The `examples/eds/` folder in the repository ships ready-to-copy `turing-search`, `turing-chat` and `turing-analytics` blocks. The `turing-search` block is the reference POST-native surface: it renders facets and pagination from `state.structured` and navigates with `toggleFacet` / `goToPage`, so no href is ever parsed.
 
 ---
 

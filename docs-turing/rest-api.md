@@ -37,8 +37,11 @@ Certain endpoints are publicly accessible, allowing client applications to perfo
 | Endpoint | Purpose |
 |---|---|
 | `GET /api/sn/*/search` | Semantic Navigation search |
+| `POST /api/sn/*/search/query` | Semantic Navigation search, JSON body ([POST-native search](#post-native-search)) |
+| `POST /api/sn/*/search/list/query` | Select-list projection, JSON body |
 | `GET /api/sn/*/chat` | GenAI chat on an SN Site |
 | `GET /api/sn/*/ac` | Autocomplete |
+| `POST /api/sn/*/ac/query` | Autocomplete, JSON body |
 | `POST /api/genai/chat` | Direct GenAI chat |
 | `POST /api/ocr/**` | OCR text extraction |
 | `POST /api/v2/integration/**` | External integration endpoints |
@@ -216,6 +219,132 @@ For the full Targeting Rules reference (rule types, Solr query generation, fallb
 
 ---
 
+### POST-native search {#post-native-search}
+
+`POST /api/sn/{siteName}/search` above is the **authenticated** endpoint: it accepts
+the impersonation fields (`userId`, `populateMetrics`, the conditional targeting
+maps) and returns `401` without a principal.
+
+For public, client-side search there is a second, **anonymous** POST endpoint that
+takes a clean read-only JSON body:
+
+```
+POST http://localhost:2700/api/sn/{siteName}/search/query
+```
+
+Use it when a filter value can contain a character that means something in a query
+string — `&`, `=`, `+`, `#`, `%` or a space. A JSON body has no query-string
+grammar, so a value like `section:RAG & Chat` cannot be mis-read as query
+structure. Nothing is deprecated: `GET /search` and its links stay, and are still
+the right choice for deep-linkable, bookmarkable, SEO-crawlable and no-JS search
+pages.
+
+| Field | Type | Description |
+|---|---|---|
+| `q` (alias `query`) | `string` | Search query (default `*`) |
+| `locale` | `string` | Locale code, e.g. `en_US` |
+| `page` (alias `p`) | `integer` | Page number (default `1`) |
+| `rows` | `integer` | Results per page |
+| `sort` | `string` | `relevance`, `newest`, `oldest` or a custom sort name |
+| `group` | `string` | Group results by field |
+| `fq` / `fqAnd` / `fqOr` | `string[]` | Filter queries, each a raw `field:value` |
+| `fqOperator` / `fqItemOperator` | `string` | Operators between / within facet groups |
+| `fieldList` (alias `fl`) | `string[]` | Restrict which fields are returned |
+| `targetingRules` | `string[]` | Targeting rules (no conditional maps — read-only) |
+| `autoCorrectionDisabled` | `boolean` | Skip spelling auto-correction (default `true`) |
+| `responseFormat` | `string` | `LINKS` (default) or `STRUCTURED` — see below |
+
+The endpoint is anonymous and **CSRF-exempt**, so a browser client needs no
+`/csrf` priming round-trip.
+
+```bash
+curl -X POST "http://localhost:2700/api/sn/Sample/search/query"   -H "Content-Type: application/json"   -d '{
+    "q": "chat",
+    "locale": "en_US",
+    "fq": ["section:RAG & Chat"],
+    "responseFormat": "STRUCTURED"
+  }'
+```
+
+#### The `STRUCTURED` response
+
+`responseFormat: "LINKS"` (the default) returns the same link-bearing body as the
+GET endpoint, so a client can move to POST without changing how it reads the
+response.
+
+`responseFormat: "STRUCTURED"` returns a **link-free** body instead. The contract
+is: *take the echoed `request`, apply one structured change, send it back.*
+
+```json
+{
+  "request": { "q": "chat", "page": 1, "locale": "en_US", "fq": ["section:RAG & Chat"] },
+  "queryContext": { "count": 42 },
+  "results": { "document": [] },
+  "pagination": [
+    { "type": "CURRENT", "text": "1", "page": 1, "current": true },
+    { "type": "NEXT",    "text": "Next", "page": 2, "current": false }
+  ],
+  "facets": [
+    {
+      "name": "section",
+      "label": "Section",
+      "multiValued": true,
+      "clearFilterQueries": ["section:RAG & Chat"],
+      "items": [
+        {
+          "field": "section",
+          "value": "RAG & Chat",
+          "filterQuery": "section:RAG & Chat",
+          "label": "RAG & Chat",
+          "count": 12,
+          "selected": true,
+          "action": "REMOVE"
+        }
+      ]
+    }
+  ],
+  "selectedFilterQueries": ["section:RAG & Chat"],
+  "spellCheck": { "correctedText": false, "usingCorrectedText": false },
+  "locales": [{ "locale": "en_US", "selected": true }]
+}
+```
+
+Every navigation that used to be a URL is now a value to put on the next request:
+
+| Instead of following… | Do this |
+|---|---|
+| a facet item's `link` | apply `item.action` (`ADD` / `REMOVE` / `REPLACE`) to `request.fq` using `item.filterQuery` |
+| a facet's `cleanUpLink` | remove `facet.clearFilterQueries` from `request.fq` |
+| the widget's `cleanUpFacets` | clear `request.fq` (see `selectedFilterQueries`) |
+| a pagination `href` | set `request.page = page.page` |
+| a locale `link` | set `request.locale` |
+| a spell-check `link` | set `request.q = spellCheck.correctedTextValue` |
+
+Both JavaScript SDKs do this for you — see
+[`@viglet/turing-sdk`](./javascript-sdk.md) (`toggleFacet`, `clearFacet`,
+`clearAllFilters`, `goToPage`, `applySpellCheck`) and
+[`@viglet/turing-react-sdk`](./react-sdk.md).
+
+#### Autocomplete and select-list over POST
+
+The same body works on the other two read endpoints, so a whole search surface can
+be POST-only:
+
+```
+POST http://localhost:2700/api/sn/{siteName}/ac/query
+POST http://localhost:2700/api/sn/{siteName}/search/list/query
+```
+
+Both return exactly what their GET counterparts return (a list of suggestions and
+a select-list projection). Neither carries links, so `responseFormat` does not
+apply to them.
+
+```bash
+curl -X POST "http://localhost:2700/api/sn/Sample/ac/query"   -H "Content-Type: application/json"   -d '{ "q": "enter", "locale": "en_US", "rows": 10 }'
+```
+
+---
+
 ### Auto Complete
 
 Returns suggestions for the given prefix. Ideal for search-as-you-type UIs.
@@ -241,6 +370,10 @@ curl "http://localhost:2700/api/sn/Sample/ac?q=enter&_setlocale=en_US"
 ```json
 ["enterprise", "enterprise search", "enterprise AI", "entries"]
 ```
+
+A `POST /api/sn/{siteName}/ac/query` variant takes the same JSON body as
+[POST-native search](#post-native-search) — use it when a filter narrowing the
+suggestions contains a query-string character.
 
 ---
 
