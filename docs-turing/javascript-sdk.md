@@ -113,6 +113,7 @@ const search = createSearchController(
 
 await search.searchQuery("laptops");       // run a query
 await search.toggleFacet(facetItem);       // click a facet value (applies its own action)
+await search.toggleFacet(doc.metadata[0]); // ...or a result's own facet chip
 await search.clearFacet(facet);            // clear one facet
 await search.clearAllFilters();            // clear every filter
 await search.goToPage(2);
@@ -147,6 +148,17 @@ search.subscribe((state) => {
     renderPage(page.text, page.current, () => search.goToPage(page.page));
   }
 });
+```
+
+A result's own facet chips (`document.metadata[]`) carry the same three fields the
+action needs — `field`, `filterQuery` and `action` — plus `selected`, so a chip can
+render as already-applied and be toggled *off* rather than only added. Hand it
+straight to the same call:
+
+```js
+for (const chip of doc.metadata ?? []) {
+  renderChip(chip.text, chip.selected, () => search.toggleFacet(chip));
+}
 ```
 
 `state.params` is still kept in sync (handy for building a shareable GET URL), and

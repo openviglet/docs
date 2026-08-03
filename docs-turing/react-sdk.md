@@ -133,7 +133,7 @@ const {
   search,        // Execute with given params
   searchRequest, // Execute from an explicit structured request
   searchQuery,   // New text query (resets page to 1)
-  toggleFacet,   // Toggle a structured facet item
+  toggleFacet,   // Toggle a structured facet item — or a result's own facet chip
   clearFacet,    // Clear one facet
   clearAllFilters,
   applySpellCheck, // Accept (or refuse) "did you mean"

@@ -279,8 +279,25 @@ is: *take the echoed `request`, apply one structured change, send it back.*
 ```json
 {
   "request": { "q": "chat", "page": 1, "locale": "en_US", "fq": ["section:RAG & Chat"] },
-  "queryContext": { "count": 42 },
-  "results": { "document": [] },
+  "queryContext": { "count": 42, "facetItemType": "OR" },
+  "results": {
+    "document": [
+      {
+        "elevate": false,
+        "fields": { "id": "doc-1", "title": "Grounding a chat on your own content" },
+        "metadata": [
+          {
+            "field": "author",
+            "value": "Ada",
+            "filterQuery": "author:Ada",
+            "text": "Ada",
+            "selected": false,
+            "action": "ADD"
+          }
+        ]
+      }
+    ]
+  },
   "pagination": [
     { "type": "CURRENT", "text": "1", "page": 1, "current": true },
     { "type": "NEXT",    "text": "Next", "page": 2, "current": false }
@@ -315,7 +332,7 @@ Every navigation that used to be a URL is now a value to put on the next request
 | Instead of following… | Do this |
 |---|---|
 | a facet item's `link` | apply `item.action` (`ADD` / `REMOVE` / `REPLACE`) to `request.fq` using `item.filterQuery` |
-| a document's `metadata[].href` | add that chip's `filterQuery` to `request.fq` (chips are `{field, value, filterQuery, text}` here) |
+| a document's `metadata[].href` | apply the chip's own `action` to `request.fq` using its `filterQuery` — exactly as for a facet item, because it is the same action (chips are `{field, value, filterQuery, text, selected, action}` here) |
 | a facet's `cleanUpLink` | remove `facet.clearFilterQueries` from `request.fq` |
 | the widget's `cleanUpFacets` | clear `request.fq` (see `selectedFilterQueries`) |
 | a pagination `href` | set `request.page = page.page` |
