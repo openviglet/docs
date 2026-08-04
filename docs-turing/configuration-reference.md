@@ -381,7 +381,13 @@ Guardrails for the agent-as-MCP-client path. See [MCP Servers](./mcp-servers.md)
 |---|---|---|
 | `turing.search.metrics.enabled` | `true` | Record search metrics (query terms, result counts, timestamps) |
 | `turing.search.cache.enabled` | `false` | Enable server-side search result caching |
-| `turing.search.cache.ttl.seconds` | `86400000` | Cache TTL in seconds (default ~1000 days: effectively no expiry when enabled) |
+| `turing.search.cache.ttl` | `24h` | Interval of the **backstop** sweep that clears the cache. Unit-bearing: `24h`, `PT1H`, `30m` (a bare number is milliseconds) |
+| `turing.search.cache.ttl.seconds` | — | **Deprecated** — despite its name the value was *milliseconds*, so `3600` meant a sweep every 3.6 seconds. Still honoured (as milliseconds) with a startup warning; use `turing.search.cache.ttl` |
+
+A cached answer does **not** wait for the sweep to become correct: indexing,
+deindexing and commit each evict the cache of the site they wrote, so a reindexed
+document shows up on the next search. `turing.search.cache.ttl` only bounds how
+long an entry may survive for a site that is never written again.
 
 ---
 
