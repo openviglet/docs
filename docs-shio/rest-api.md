@@ -282,8 +282,20 @@ These endpoints are publicly accessible (no authentication required):
 
 | Path | Description |
 |---|---|
-| `/sites/{siteName}/{path}` | Access the published website |
+| `/sites/{siteName}/default/{locale}/{path}` | Access the published website |
+| `/sites/{siteName}/` | The site's home page, with the segments omitted |
 | `/__tur/sn/{siteName}` | Turing ES search proxy |
+
+The third segment is the **format**, and `default` is the only value it takes. It is kept so the URL
+keeps the shape earlier Viglet Shio releases used, and it carries no behaviour — the page's layout
+comes from the site's post-type/layout binding. A URL naming any other format answers **404**, which
+is what makes a missing image a missing image: a page's own root-relative references (`<img
+src="/logo.png">`) are rewritten into `/sites/{siteName}/default/{locale}/` for you, so a request
+that arrives without that prefix is one nothing on the site published.
+
+Two variants are available. Send the `x-sh-site` header to name the site, and the URL then carries
+only the content path — which is how one host serves one site. The `sh-format` query parameter
+replaces the format segment; like the segment, `default` is the only value it takes.
 
 ---
 
