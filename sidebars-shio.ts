@@ -21,47 +21,55 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
-          label: "Installation & Configuration",
-          items: ["installation-guide", "configuration-reference"],
+          label: "The agent builds it",
+          link: {
+            type: "doc",
+            id: "agent-builds-it",
+          },
+          items: ["website-development"],
         },
         {
           type: "category",
-          label: "Content Management",
-          items: [
-            "content-modeling",
-            "website-development",
-            "search-caching",
-          ],
+          label: "The human curates it",
+          link: {
+            type: "doc",
+            id: "human-curates-it",
+          },
+          items: ["content-modeling", "administration-guide", "import-export"],
         },
         {
           type: "category",
-          label: "Management",
-          items: ["administration-guide"],
-        },
-        {
-          type: "category",
-          label: "Developers",
-          items: ["developer-guide", "rest-api", "graphql"],
-        },
-        {
-          type: "category",
-          label: "Headless & JavaScript SDK",
+          label: "The CDA delivers it",
+          link: {
+            type: "doc",
+            id: "cda-delivers-it",
+          },
           items: [
             "headless/content-delivery-api",
             "headless/javascript-client",
             "headless/react-sdk",
             "headless/nextjs-starter",
+            "graphql",
           ],
         },
         {
           type: "category",
-          label: "Security",
-          items: ["security"],
+          label: "Run it",
+          link: {
+            type: "doc",
+            id: "run-it",
+          },
+          items: [
+            "installation-guide",
+            "configuration-reference",
+            "search-caching",
+            "security",
+          ],
         },
         {
           type: "category",
-          label: "Integration",
-          items: ["import-export"],
+          label: "Developers",
+          items: ["developer-guide", "rest-api"],
         },
       ],
     },

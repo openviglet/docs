@@ -162,11 +162,11 @@ else.
 
 | Product | Config Location | Current Version | Has older versions? |
 |---|---|---|---|
-| Turing ES | `docusaurus.config.ts` preset `docs` | `2026.2` | Yes (0.3.5–0.3.9) |
-| Dumont DEP | `docusaurus.config.ts` plugin `dumont` | `2026.2` | No |
-| Shio CMS | `docusaurus.config.ts` plugin `shio` | `0.3.7` | No |
+| Turing ES | `docusaurus.config.ts` preset `docs` | `2026.3` | Yes (0.3.5–0.3.9) |
+| Dumont DEP | `docusaurus.config.ts` plugin `dumont` | `2026.3` | No |
+| Shio CMS | `docusaurus.config.ts` plugin `shio` | `2026.3` | No |
 
-Version labels are set via `lastVersion: "current"` + `versions: { current: { label: "2026.2" } }` to avoid showing "Next" in the navbar.
+Version labels are set via `lastVersion: "current"` + `versions: { current: { label: "2026.3" } }` to avoid showing "Next" in the navbar. **This table is read, not guessed** — check it against `docusaurus.config.ts` when a version rolls, because a stale row here is what let `docs-shio` sit at `0.3.7` while the product shipped 2026.3.
 
 ---
 
@@ -178,6 +178,8 @@ Version labels are set via `lastVersion: "current"` + `versions: { current: { la
 | CSS variables (brand colors, dark mode) | `src/css/custom.css` |
 | Turing sidebar | `sidebars-turing.ts` |
 | Dumont sidebar | `sidebars-dumont.ts` |
+| Shio sidebar | `sidebars-shio.ts` (four hubs: the agent builds it · the human curates it · the CDA delivers it · run it) |
+| Shio coverage gate | `docs-shio/COVERAGE.md` (every shipped block → a page, or an explicit internal verdict) |
 | Mermaid diagram sources | `diagrams/*.mmd` |
 | Pre-rendered SVGs | `static/img/diagrams/*.svg` |
 | Diagram render script | `scripts/render-diagrams.mjs` |

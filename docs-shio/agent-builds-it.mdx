@@ -1,0 +1,29 @@
+---
+title: The agent builds it
+description: "Shio's primary operator is a coding agent: one call to discover the instance, content as files on disk, addressed and idempotent writes, and errors that teach."
+slug: /category/agent-builds-it
+hide_table_of_contents: true
+---
+
+import DocCardList from '@theme/DocCardList';
+
+# The agent builds it
+
+Most CMSs are built for a person clicking. Shio is built for a **coding agent** —
+Claude Code, Cursor, or anything that speaks MCP — and the human stays in the loop
+as the curator, not the typist. The instance describes itself in **one call**
+(a manifest of every capability plus a context pack of the site as it stands), so an
+agent does not spend a session exploring before it can write. Content is addressed by
+path, not by id: `post:<site>/<friendly-url>`, `folder:<site>/<name-chain>`,
+`site:<name>` — and a site's home page is `post:<site>/`.
+
+Writes are a small, deterministic vocabulary. A batch is transactional, a
+desired-state document is planned before it is applied (`--dry-run` first, always),
+serialization is byte-identical run to run, and a 4xx never just says no: it carries
+`fix`, `allowed`, `didYouMean` and an `example`. For authoring, files beat APIs —
+project a site to disk and an agent's cheapest tools (`Edit`, `Write`, `Grep`) work
+on it directly, with a per-field three-way merge so a curator's console edit is never
+overwritten by a push. When a change lands, the agent verifies it without asking a
+human to look: content lint, route proof, render digest.
+
+<DocCardList />

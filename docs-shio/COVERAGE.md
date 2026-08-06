@@ -16,8 +16,9 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 
 > **Why these sections and not Turing's.** Shio's primary operator is a coding
 > agent, the human curates, and the CDA delivers — so the matrix is grouped by
-> **who does the job**, which is also the shape the sidebar is meant to grow
-> into (SH482). ⚠️ is a verdict `docs-turing/COVERAGE.md` does not need: every
+> **who does the job**, which since SH482 is also the sidebar: four hubs, each
+> with its own landing page, and every page below files into one of them.
+> ⚠️ is a verdict `docs-turing/COVERAGE.md` does not need: every
 > published Shio page predates the 2026.3 renderer, so "has a page" and "has a
 > correct page" are different questions here.
 
@@ -118,6 +119,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 | **Block N's internal halves** — SH120 (console reads adopt CDA shapes), SH162 (SDK type mirror), SH165 (paged listing), SH167/SH234 (CSRF narrowing), SH177 (`schemaJson` retired) | Behaviour-preserving realignments; where one is observable it is folded into the ⚠️ rows above |
 | **Block Q's capture internals** — `scanPage` block detection, token collision, CSS lifting, asset classification (SH424–SH432, SH449, SH452, SH455–SH456, SH461, SH465–SH476) | Fidelity mechanics of `clone`/`convert`. The user-facing surface is the three verbs and the two modes, documented as one row |
 | **Block P's engine internals** — the template graph, the render cache, the section registry | Renderer architecture (`docs/agents/renderer.md`); the authorable vocabulary is the user-facing half |
+| **Block R**: this documentation round — the coverage gate (SH479), the four sidebar hubs (SH482) and the pages the rest of the block files into them | Meta: it produced the pages in this very matrix. The hubs are navigation, so they change no verdict below; they are where a 🔴 becomes a page |
 
 ---
 
