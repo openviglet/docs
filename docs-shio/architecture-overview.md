@@ -8,7 +8,7 @@ description: High-level architecture, component diagram, request flow, and deplo
 
 ## Introduction
 
-Viglet Shio CMS is an open-source headless Content Management System built on **Java 21** and **Spring Boot 4**. It allows organizations to model content with custom Post Types, render websites using server-side JavaScript, and expose content via REST and GraphQL APIs.
+Viglet Shio CMS is an open-source headless Content Management System built on **Java 21** and **Spring Boot 4**. It allows organizations to model content with custom Post Types, render pages with Handlebars templates, and expose content via REST and GraphQL APIs.
 
 The system provides a modern **React** admin console, a **Hazelcast** distributed cache for website rendering, and integration with **Viglet Turing ES** for advanced search capabilities.
 
@@ -31,12 +31,12 @@ graph TD
         REST["📡 REST API\n/api/v2/*"]
         GQL["📊 GraphQL API\nGraphiQL Console"]
         ADMIN["🛠️ Admin Console\nReact + TypeScript"]
-        SITE["🌍 Website Rendering\nNashorn / Node.js"]
+        SITE["🌍 Page Rendering\nHandlebars templates"]
     end
 
     subgraph Core [" ⚙️ Core Modules "]
         CM["📋 Content Management\nPosts · Folders · Sites\nPost Types · Workflows"]
-        WEB["🎨 Website Engine\nPage Layouts · Regions\nComponent APIs · Cache"]
+        WEB["🎨 Render Engine\nPage Layouts · Regions\nThemes · Helpers"]
         SEARCH["🔍 Search Integration\nTuring ES · Elasticsearch"]
         EXCH["📦 Exchange\nImport · Export\nProvider Plugins"]
     end
@@ -76,7 +76,7 @@ graph TD
 | **REST API** | Controllers for posts, folders, sites, post types, users, groups, search, widgets, workflows, and file management (`/api/v2/*`) |
 | **GraphQL API** | Content query interface with built-in GraphiQL console |
 | **Admin Console** | React + TypeScript + Radix UI + TailwindCSS admin interface for content management |
-| **Website Rendering** | Server-side JavaScript engine (Nashorn/Node.js) renders Page Layouts and Regions into HTML |
+| **Page Rendering** | Handlebars templates over Page Layouts, Regions and Themes, served at `/preview/**` (drafts, authenticated) and `/sites/**` (published, public) |
 
 ---
 
@@ -85,7 +85,7 @@ graph TD
 | Module | Package | Responsibility |
 |---|---|---|
 | **Content Management** | `api`, `persistence` | CRUD for Posts, Folders, Sites, Post Types; publishing workflow; change history; references |
-| **Website Engine** | `website` | Page Layout rendering, Region evaluation, component API execution, Hazelcast cache integration |
+| **Render Engine** | `render` | Page Layout composition, Region slotting, Theme inlining, template helpers |
 | **Search Integration** | `turing` | Automatic content indexing, Turing ES REST API integration, search field mapping |
 | **Exchange** | `exchange`, `provider` | Import/export of sites, folders, and posts; provider plugins for Blogger, OTCS, OTMM |
 | **Security** | `spring/security` | User, role, and group management; Spring Security integration; CSRF protection |
@@ -105,7 +105,7 @@ graph TD
 
 ## Website Rendering Flow
 
-When a visitor requests a page, the website engine resolves the URL to a content object, loads the associated Page Layout, evaluates each Region with its Component APIs, and assembles the final HTML. Hazelcast caches the rendered output for subsequent requests.
+When a page is requested, the render engine resolves the URL to a post, finds the Page Layout bound to that post's type in the site's `postTypeLayout` map, fills each `sh-region` slot with its Region template, inlines the Theme's CSS, and resolves any helpers the templates call. The published route (`/sites/**`) is cacheable for five minutes; the preview route is `no-store`.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
@@ -122,8 +122,8 @@ sequenceDiagram
         Cache->>Engine: Resolve URL
         Engine->>DB: Load content + Page Layout
         DB-->>Engine: Content + regions
-        Engine->>Engine: Execute JavaScript (Nashorn/Node.js)
-        Engine->>Engine: Render regions with Component APIs
+        Engine->>Engine: Compose layout + regions (Handlebars)
+        Engine->>Engine: Resolve helpers (query, navigation, image)
         Engine-->>Cache: Store rendered HTML
         Cache-->>Browser: Rendered HTML
     end
@@ -165,7 +165,7 @@ sequenceDiagram
 | **Database** | H2 / MariaDB / MySQL / PostgreSQL / Oracle | H2 for development; MariaDB/MySQL recommended for production |
 | **Cache** | Hazelcast | Distributed cache for website rendering |
 | **Search** | Elasticsearch 9.3.3 via Viglet Turing SDK | Full-text search integration |
-| **JavaScript Engine** | Nashorn / Node.js | Server-side rendering of Page Layouts and Regions |
+| **Template Engine** | Handlebars.java | Page Layouts, Regions and Themes; no script engine on the classpath |
 | **Frontend** | React 19 + TypeScript + Radix UI + TailwindCSS + Vite | Admin console (`shio-react`) |
 | **Build** | Maven (backend) + npm (frontend) | Multi-module project |
 | **CI/CD** | GitHub Actions | Automated builds and code quality |

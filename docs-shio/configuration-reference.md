@@ -17,13 +17,18 @@ This document lists all configuration properties available in Shio CMS. Properti
 | `shio.mgmt.enabled` | `true` | Enable the management interface |
 | `shio.git.url` | n/a | Git repository URL for version control |
 | `shio.git.token` | n/a | Authentication token for Git repository |
-| `shio.website.nashorn` | `--persistent-code-cache,--optimistic-types=true,-pcc,--class-cache-size=50000` | Nashorn JavaScript engine options |
-| `shio.website.javascript.engine` | `nashorn` | JavaScript engine: `nashorn` or `nodejs` |
 | `shio.allowedOrigins` | `localhost` | CORS allowed origins |
 | `shio.plugin.blogger` | `com.viglet.shio.plugin.ShImporterBloggerPlugin` | Blogger import plugin class |
 | `shio.config.system` | `/system` | System configuration path |
 | `shio.config.auth` | `/provider/auth/%s` | Auth provider path pattern |
 | `shio.config.exchange` | `/provider/exchange/%s` | Exchange provider path pattern |
+
+:::info Removed: the JavaScript engine properties
+`shio.website.javascript.engine` and `shio.website.nashorn` **no longer exist**. Shio
+renders pages with Handlebars templates, and there is no server-side script engine to
+select or tune (the Nashorn dependency is explicitly excluded from the build). Setting
+either property has no effect. See [Pages, Layouts & Regions](./website-development.md).
+:::
 
 ---
 

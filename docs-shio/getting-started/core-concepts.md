@@ -101,7 +101,7 @@ The same Page Layout can be applied to multiple folders and posts, simplifying d
 
 ## Regions
 
-A **Region** is a section within a Page Layout. Each region can render content from the Shio CMS repository using one or more **Component APIs**.
+A **Region** is a reusable template slotted into a Page Layout by title, through a `sh-region` attribute. Each region can read content from the repository using the template **helpers**.
 
 Common region patterns:
 
@@ -112,18 +112,19 @@ Common region patterns:
 | **Content** | Query Component |
 | **Footer** | Navigation Component |
 
-Regions support caching, rendered output is cached by Hazelcast unless the TTL is set to zero.
+A region's template is Handlebars, and it renders against the **page's** model - so `{{TITLE}}` inside a region is the page's title.
 
 ---
 
-## Component APIs
+## Template helpers
 
-**Component APIs** are reusable content sources that regions use to render content. They abstract common content retrieval patterns:
+A template reads content through a small, closed set of **helpers** - the successors to the old Component APIs:
 
-- **Navigation Component**: renders folder hierarchies as menus
-- **Query Component**: filters and lists posts from a folder
+- `{{#navigation folder=}}`: renders a folder hierarchy as a menu
+- `{{#query type= limit= sort=}}`: filters and lists posts
+- `{{#menu title=}}`, `{{#translations}}`, `{{#image FIELD}}`, `{{#search q=}}`, `{{#getRelation FIELD}}`, `{{file_url FIELD}}`
 
-Components use the `shObject` JavaScript API to access content, generate URLs, and produce rendered HTML.
+A call to a helper that does not exist fails when the template is saved. The full list is in [Pages, Layouts & Regions](../website-development.md#the-helpers).
 
 ---
 

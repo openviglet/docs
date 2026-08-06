@@ -53,10 +53,10 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 
 | Block / feature | Page | Status |
 |---|---|---|
-| **Block P**: the renderer — `Page` → `PageLayout` → `Region`, `Theme`, Handlebars templates and helpers, the section vocabulary, `data-shio-*`, `/preview/**` and the `/sites/**` delivery grammar | [website-development](./website-development.md) documents the **Nashorn JavaScript engine and `shObject`**, which Shio does not have | ⚠️ (SH483) |
-| **Block P / Q**: the rest of the visible site — DTCG theme tokens, `SiteScripts`, the `{{#image}}` helper's intrinsic size + signed `srcset`, `Redirect` posts, `Menu`/`MenuItem`, `post.locale` + `{{#translations}}`, the paged/sorted `{{#query}}` | — | 🔴 (SH483) |
+| **Block P**: the renderer — `Page` → `PageLayout` → `Region`, `Theme`, Handlebars templates and helpers, the section vocabulary, `data-shio-*`, `/preview/**` and the `/sites/**` delivery grammar | [website-development](./website-development.md) | ✅ (SH483) |
+| **Block P / Q**: the rest of the visible site — DTCG theme tokens, Site Scripts, the `{{#image}}` helper's intrinsic size + signed `srcset`, `Redirect` posts, `Menu`/`MenuItem`, `post.locale` + `{{#translations}}`, the paged/sorted `{{#query}}` | [website-development § Themes and design tokens](./website-development.md#themes-and-design-tokens) · [§ Third-party scripts](./website-development.md#third-party-scripts) · [§ Redirects](./website-development.md#redirects) · [§ Menus and translations](./website-development.md#menus-and-translations) | 🧩 (SH483) |
 | **Block Q**: replication — `shio clone` (`--assets`, `--render`, `--scripts`), `shio propose`, `shio convert`, fidelity vs authorable mode, `snapshot --against`, the replication check group | — | 🔴 (SH492) |
-| **Block F (SH25 epic)**: static files and image transforms — the `file_source` upload/serve subsystem, `?w=&h=&format=&crop=` on the delivery path, the resize/crop pipeline, webp/avif negotiation, the result cache + ETag, limits and signed URLs | [website-development § Static Files](./website-development.md#static-files) covers uploads only | 🔴 (no Block R task names it) |
+| **Block F (SH25 epic)**: static files and image transforms — the `file_source` upload/serve subsystem, `?w=&h=&format=&crop=` on the delivery path, the resize/crop pipeline, webp/avif negotiation, the result cache + ETag, limits and signed URLs | [website-development § Static files and images](./website-development.md#static-files-and-images) documents both URL forms and the transform parameters; the result cache, the dimension/format limits and how to turn on signed URLs are still undocumented | 🧩 (no Block R task names the gap) |
 
 ## The CDA delivers it
 
@@ -78,13 +78,13 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Block / feature | Page | Status |
 |---|---|---|
 | Installation — Docker, JAR, source, databases, Linux service | [installation-guide](./installation-guide.md) | ✅ |
-| Configuration (`application.properties`) | [configuration-reference](./configuration-reference.md) — no `shio.cda.*`, render, agent or tenant keys; still lists the JS-engine keys | ⚠️ (SH495) |
+| Configuration (`application.properties`) | [configuration-reference](./configuration-reference.md) — the removed JS-engine keys are gone and called out (SH483); no `shio.cda.*`, render, agent or tenant keys yet | ⚠️ (SH495) |
 | **Block F (SH22)**: multi-tenancy / SaaS — `@TenantId` isolation, provisioning, membership, quota, suspension | — | 🔴 (SH493) |
 | Turing ES indexing — **opt-in**, reached only on publish | [search-caching § Viglet Turing ES Integration](./search-caching.md#viglet-turing-es-integration) | ⚠️ (SH494) |
-| Architecture — components, request flow, deployment topologies | [architecture-overview](./architecture-overview.md) diagrams Nashorn rendering, an Elasticsearch dependency and no agent surface | ⚠️ (SH491) |
-| The introduction a newcomer meets first | [intro](./getting-started/intro.md) · [core-concepts](./getting-started/core-concepts.md) teach Nashorn pages and `shObject` | ⚠️ (SH490) |
-| The landing page | [index](./index.mdx) sells "JavaScript rendering + native caching", pinned at v2026.1, and never mentions the agent | ⚠️ (SH480) |
-| Developer environment, tech stack, contributing | [developer-guide](./developer-guide.md) lists Nashorn and Elasticsearch 9.3.3 in the stack and names no agent surface or CLI | ⚠️ (unnamed by SH483/SH495) |
+| Architecture — components, request flow, deployment topologies | [architecture-overview](./architecture-overview.md) no longer diagrams a script engine (SH483), but still shows an Elasticsearch dependency and no agent surface | ⚠️ (SH491) |
+| The introduction a newcomer meets first | [intro](./getting-started/intro.md) · [core-concepts](./getting-started/core-concepts.md) no longer teach `shObject` (SH483), and still never reach addresses, drafts or the division of labour | ⚠️ (SH490) |
+| The landing page | [index](./index.mdx) is pinned at v2026.1 and never mentions the agent | ⚠️ (SH480) |
+| Developer environment, tech stack, contributing | [developer-guide](./developer-guide.md) names the template engine correctly now (SH483), and still lists Elasticsearch 9.3.3 and no agent surface or CLI | ⚠️ (unnamed by SH483/SH495) |
 
 ## Developers (reference)
 
@@ -125,10 +125,10 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 40 clusters, 33 are not documented correctly: 21 🔴 orphans and 12 ⚠️ misleading pages.** Seven are fine (5 ✅, 2 🧩) — and every one of those seven is a *delivery-side* page written for a JavaScript developer.
+**Of 40 clusters, 30 are not documented correctly: 19 🔴 orphans and 11 ⚠️ misleading pages.** Ten are fine (6 ✅, 4 🧩) — the five delivery-side pages a JavaScript developer reads, and the renderer, rewritten by SH483.
 
-- **21 🔴** — shipped, user-facing, and **no page at all**: the agent gateway · MCP + the Claude Code plugin · content as files · the `shio` CLI · blueprints · the perception loop · agent safety · token economy · the content console · the console's own curator surfaces · the curator's lifecycle tools · the Universal Editor · the visible site beyond the renderer · replication · static files + image transforms · type generation · the post-types DSL · webhooks · content i18n · multi-tenancy. *(Blocks H, I, J, K, L, M, O, P and Q — everything since the agent-native reorientation — reach a reader through none of the 19 published pages.)*
-- **12 ⚠️** — a page exists and describes a shape the product left: the landing page · the introduction · core concepts · the architecture · website development (Nashorn + `shObject`) · the developer guide · the configuration reference · the REST reference · content modelling · security · search & caching · the post-type surface.
-- **Six clusters no Block R task names**, found only by building this matrix: the console's own curator surfaces (Block E) · the curator's lifecycle tools (SH13–SH15, SH51, SH55) · static files + image transforms (the whole SH25 epic) · outbound webhooks (SH12) · content i18n (SH53) · the developer guide's own stale stack. File them before the block is called done.
+- **19 🔴** — shipped, user-facing, and **no page at all**: the agent gateway · MCP + the Claude Code plugin · content as files · the `shio` CLI · blueprints · the perception loop · agent safety · token economy · the content console · the console's own curator surfaces · the curator's lifecycle tools · the Universal Editor · replication · type generation · the post-types DSL · webhooks · content i18n · multi-tenancy. *(Blocks H, I, J, K, L, M, O and Q — everything since the agent-native reorientation except the renderer — reach a reader through none of the published pages.)*
+- **11 ⚠️** — a page exists and describes a shape the product left: the landing page · the introduction · core concepts · the architecture · the developer guide · the configuration reference · the REST reference · content modelling · security · search & caching · the post-type surface. SH483 corrected the *rendering* claim on five of these; each still misses the subject its own task names.
+- **Six clusters no Block R task names**, found only by building this matrix: the console's own curator surfaces (Block E) · the curator's lifecycle tools (SH13–SH15, SH51, SH55) · outbound webhooks (SH12) · content i18n (SH53) · the transform cache, limits and signed-URL config (the SH25 epic's operational half) · the developer guide's own stale stack. File them before the block is called done.
 
 This file lands **red on purpose**: it is the audit that scopes Block R, and the count above is the number the block is measured by. When a new block ships, add its row here — and if it is user-facing without a page, that 🔴 is a defect to fix before the block is considered done.

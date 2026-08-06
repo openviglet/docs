@@ -5,7 +5,7 @@ description: Viglet Shio CMS is an open-source headless CMS with custom Post Typ
 
 # What is Shio CMS?
 
-**Viglet Shio CMS** is an open-source headless Content Management System. It allows you to model content with custom Post Types, query it via GraphQL or REST API, and build websites using server-side JavaScript with native caching and integrated full-text search.
+**Viglet Shio CMS** is an open-source headless Content Management System. It allows you to model content with custom Post Types, query it via GraphQL or REST API, and render pages with Handlebars templates, with native caching and integrated full-text search.
 
 Whether you need a traditional CMS with page rendering, a headless API for a single-page application, or a hybrid approach, Shio CMS adapts to your architecture.
 
@@ -16,8 +16,8 @@ Whether you need a traditional CMS with page rendering, a headless API for a sin
 ### Model your content
 Define custom **Post Types** with flexible fields: text, HTML, file uploads, relationships, date pickers, code editors, and more. Each Post Type becomes a reusable content template that editors can populate through the admin console.
 
-### Build websites with JavaScript
-Create **Page Layouts** and **Regions** using server-side JavaScript. The Nashorn/Node.js engine renders pages dynamically, and the `shObject` API gives you access to content, navigation, and URL generation directly from your templates.
+### Build pages from layouts and regions
+Create **Page Layouts** and **Regions** as **Handlebars** templates. A layout slots named regions, a Theme supplies the CSS, and a small closed set of helpers reads your content: `{{#query}}`, `{{#navigation}}`, `{{#menu}}`, `{{#image}}`. See [Pages, Layouts & Regions](../website-development.md).
 
 ### Query content via GraphQL
 Use the built-in **GraphQL** endpoint with an interactive **GraphiQL** console to query posts, folders, and sites. Perfect for decoupled frontends and mobile applications.
@@ -73,8 +73,8 @@ These are the main building blocks you will work with in Shio CMS. You do not ne
 | **Post** | A content item: an instance of a Post Type with field values. | [Core Concepts](./core-concepts.md) |
 | **Post Type** | A content model that defines fields, labels, and publishing rules. | [Content Modeling](../content-modeling.md) |
 | **Page Layout** | A template that controls how a page is structured, defines regions and rendering logic. | [Website Development](../website-development.md) |
-| **Region** | A section within a Page Layout that renders content using component APIs. | [Website Development](../website-development.md) |
-| **Component API** | Reusable content source within a Region: Navigation Component, Query Component, etc. | [Website Development](../website-development.md) |
+| **Region** | A reusable template slotted into a Page Layout by title. | [Pages, Layouts & Regions](../website-development.md) |
+| **Helper** | What a template calls to read content: `{{#query}}`, `{{#navigation}}`, `{{#image}}`, and six more. | [Pages, Layouts & Regions](../website-development.md#the-helpers) |
 | **Publishing** | Content lifecycle: Draft, Published, Stale, Unpublished. | [Content Modeling](../content-modeling.md) |
 | **GraphQL** | Query interface for accessing content programmatically. | [GraphQL](../graphql.md) |
 | **Hazelcast Cache** | Distributed cache for rendered pages and objects. | [Search & Caching](../search-caching.md) |

@@ -20,7 +20,7 @@ Shio CMS is a fully open-source headless CMS with JavaScript-based website rende
 | **Database** | H2 (dev) · MariaDB / MySQL (prod) · PostgreSQL · Oracle |
 | **Cache** | Hazelcast |
 | **Search** | Elasticsearch 9.3.3 via Viglet Turing SDK |
-| **JavaScript Engine** | Nashorn · Node.js |
+| **Template Engine** | Handlebars.java (no server-side script engine) |
 | **Frontend** | React 19 · TypeScript · Radix UI · TailwindCSS · Vite |
 | **Build** | Maven (backend) · npm (frontend) |
 | **CI/CD** | GitHub Actions |
