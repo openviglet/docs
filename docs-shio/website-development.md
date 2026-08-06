@@ -196,6 +196,9 @@ tokens emits nothing at all, and a `TOKENS` field that is not valid JSON renders
 page on the CSS alone while recording the failure: the page must not break, and the
 degradation must not be silent.
 
+The format, every rule the compiler applies, and how a replicated site's stylesheet
+becomes tokens are on their own page: [Design Tokens (DTCG)](./design-tokens.md).
+
 ## Third-party scripts
 
 Browser JavaScript used to live in a `Theme` or a `Region`, both of which are

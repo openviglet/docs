@@ -33,6 +33,7 @@ const sidebars: SidebarsConfig = {
             "cli",
             "blueprints",
             "website-development",
+            "design-tokens",
             "replication",
             "token-economy",
           ],
