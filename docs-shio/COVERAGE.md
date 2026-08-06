@@ -83,7 +83,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Turing ES indexing — **opt-in**, reached only on publish | [search-caching § Viglet Turing ES Integration](./search-caching.md#viglet-turing-es-integration) | ⚠️ (SH494) |
 | Architecture — components, request flow, deployment topologies | [architecture-overview](./architecture-overview.md) no longer diagrams a script engine (SH483), but still shows an Elasticsearch dependency and no agent surface | ⚠️ (SH491) |
 | The introduction a newcomer meets first | [intro](./getting-started/intro.md) · [core-concepts](./getting-started/core-concepts.md) no longer teach `shObject` (SH483), and still never reach addresses, drafts or the division of labour | ⚠️ (SH490) |
-| The landing page | [index](./index.mdx) is pinned at v2026.1 and never mentions the agent | ⚠️ (SH480) |
+| The landing page | [index](./index.mdx) | ✅ (SH480) |
 | Developer environment, tech stack, contributing | [developer-guide](./developer-guide.md) names the template engine correctly now (SH483), and still lists Elasticsearch 9.3.3 and no agent surface or CLI | ⚠️ (unnamed by SH483/SH495) |
 
 ## Developers (reference)
@@ -125,10 +125,10 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 40 clusters, 30 are not documented correctly: 19 🔴 orphans and 11 ⚠️ misleading pages.** Ten are fine (6 ✅, 4 🧩) — the five delivery-side pages a JavaScript developer reads, and the renderer, rewritten by SH483.
+**Of 40 clusters, 29 are not documented correctly: 19 🔴 orphans and 10 ⚠️ misleading pages.** Eleven are fine (7 ✅, 4 🧩) — the five delivery-side pages a JavaScript developer reads, plus the renderer (SH483) and the landing page (SH480).
 
 - **19 🔴** — shipped, user-facing, and **no page at all**: the agent gateway · MCP + the Claude Code plugin · content as files · the `shio` CLI · blueprints · the perception loop · agent safety · token economy · the content console · the console's own curator surfaces · the curator's lifecycle tools · the Universal Editor · replication · type generation · the post-types DSL · webhooks · content i18n · multi-tenancy. *(Blocks H, I, J, K, L, M, O and Q — everything since the agent-native reorientation except the renderer — reach a reader through none of the published pages.)*
-- **11 ⚠️** — a page exists and describes a shape the product left: the landing page · the introduction · core concepts · the architecture · the developer guide · the configuration reference · the REST reference · content modelling · security · search & caching · the post-type surface. SH483 corrected the *rendering* claim on five of these; each still misses the subject its own task names.
+- **10 ⚠️** — a page exists and describes a shape the product left: the introduction · core concepts · the architecture · the developer guide · the configuration reference · the REST reference · content modelling · security · search & caching · the post-type surface. SH483 corrected the *rendering* claim on five of these; each still misses the subject its own task names.
 - **Six clusters no Block R task names**, found only by building this matrix: the console's own curator surfaces (Block E) · the curator's lifecycle tools (SH13–SH15, SH51, SH55) · outbound webhooks (SH12) · content i18n (SH53) · the transform cache, limits and signed-URL config (the SH25 epic's operational half) · the developer guide's own stale stack. File them before the block is called done.
 
 This file lands **red on purpose**: it is the audit that scopes Block R, and the count above is the number the block is measured by. When a new block ships, add its row here — and if it is user-facing without a page, that 🔴 is a defect to fix before the block is considered done.

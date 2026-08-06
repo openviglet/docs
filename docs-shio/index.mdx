@@ -1,13 +1,13 @@
 ---
 sidebar_position: 1
 title: Shio CMS
-description: "Viglet Shio CMS: Headless Content Management System with GraphQL, JavaScript rendering and native caching"
+description: "Viglet Shio CMS: an agent-native headless CMS. A coding agent builds the site over MCP, a human curates it, and the Content Delivery API serves it."
 slug: /
 ---
 
 import Link from '@docusaurus/Link';
 
-export const VERSION = "2026.1";
+export const VERSION = "2026.3";
 
 export const Pill = ({ children, color = "var(--color-brand)" }) => (
   <span style={{
@@ -75,32 +75,57 @@ export const SectionLabel = ({ children }) => (
   <Pill>v{VERSION}</Pill>
   <Pill>Open Source</Pill>
   <Pill>GPL v3</Pill>
+  <Pill>Headless</Pill>
+  <Pill>MCP</Pill>
 </div>
 
 # Viglet Shio CMS
 
-**Viglet Shio CMS** is an open-source headless Content Management System that lets you **model content**, query it via **GraphQL**, and build websites using **JavaScript** with native **Hazelcast caching** and integrated **full-text search** powered by Viglet Turing ES.
+**Viglet Shio CMS** is an open-source headless CMS built for a different operator. **A
+coding agent builds the site** — over MCP, a REST surface designed for one call instead
+of a session, or content projected to files on disk. **A human curates it** —
+approving, correcting and publishing in the console or straight on the rendered page.
+**The Content Delivery API serves it** — REST and GraphQL, with a TypeScript client,
+React hooks and a Next.js starter.
+
+Shio hosts **no model and no prompts**. It is the substrate your agent drives, running
+on your own infrastructure, and what it competes on is the quality of that protocol:
+discoverable, deterministic, verifiable, and cheap in tokens.
 
 {/* -- Feature highlights -- */}
 
-<SectionLabel>Key Capabilities</SectionLabel>
+<SectionLabel>What makes it different</SectionLabel>
 
 <div style={{
   display: "grid", gap: "12px",
   gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
   marginBottom: "0.5rem",
 }}>
-  <FeatureCard icon="📝" title="Content Modeling">
-    Flexible Post Types with custom fields, relationships, and publishing workflows: Draft, Published, Stale, Unpublished.
+  <FeatureCard icon="🧭" title="One call, not a session">
+    The instance describes itself: a manifest of every capability, plus a context pack of
+    the site as it stands. An agent does not have to explore before it can write.
   </FeatureCard>
-  <FeatureCard icon="🌐" title="Website Rendering">
-    Handlebars templates over Page Layouts, Regions and Themes, with a preview route for drafts and a public route for published pages.
+  <FeatureCard icon="📁" title="Content is also files">
+    Project a site to disk and author it with the cheapest tools an agent has — edit,
+    write, grep — then push it back, with a per-field three-way merge so a curator's own
+    edit is never overwritten.
   </FeatureCard>
-  <FeatureCard icon="📊" title="GraphQL & REST API">
-    Query content via GraphQL with GraphiQL console, or use the full REST API for CRUD operations, search, and administration.
+  <FeatureCard icon="🛡️" title="Nothing surprises the human">
+    Agent writes land as drafts, plans can run dry first, destructive operations need a
+    confirm token naming what they remove, and a delete is a trash you can undo.
   </FeatureCard>
-  <FeatureCard icon="⚡" title="Native Caching">
-    Hazelcast distributed cache for rendered pages and objects: fast delivery with automatic invalidation on content changes.
+  <FeatureCard icon="📐" title="Addressed, not id-shuffled">
+    Content is reached by path — <code>post:mysite/about</code>,
+    <code>folder:mysite/blog</code> — so no UUID has to survive between two calls, and
+    the same write twice is the same result.
+  </FeatureCard>
+  <FeatureCard icon="✅" title="Proof without a screenshot">
+    A content lint, a route check and a render digest give an agent cheap textual
+    evidence that what it built actually works, instead of a human round trip.
+  </FeatureCard>
+  <FeatureCard icon="📉" title="Tokens are a budget">
+    Responses carry measured size budgets and a benchmark runs in CI, so a token
+    regression fails the build the same way a broken test does.
   </FeatureCard>
 </div>
 
@@ -114,10 +139,10 @@ export const SectionLabel = ({ children }) => (
   marginBottom: "0.5rem",
 }}>
   {[
-    { step: "01", title: "Install", desc: "Docker, standalone JAR or from source", href: "/shio/installation-guide" },
-    { step: "02", title: "Configure", desc: "application.properties reference", href: "/shio/configuration-reference" },
-    { step: "03", title: "Understand", desc: "Sites, Post Types, Page Layouts and Regions", href: "/shio/getting-started/core-concepts" },
-    { step: "04", title: "Develop", desc: "JavaScript API, components, and themes", href: "/shio/website-development" },
+    { step: "01", title: "Run it", desc: "Docker, standalone JAR or from source", href: "/shio/installation-guide" },
+    { step: "02", title: "Point an agent at it", desc: "MCP, the agent surface, content as files, the CLI", href: "/shio/category/agent-builds-it" },
+    { step: "03", title: "Curate what it built", desc: "The console, drafts, publishing, the Universal Editor", href: "/shio/category/human-curates-it" },
+    { step: "04", title: "Serve it", desc: "The CDA, GraphQL, the TypeScript client and the Next.js starter", href: "/shio/category/cda-delivers-it" },
   ].map(({ step, title, desc, href }) => (
     <Link key={step} to={href} style={{ textDecoration: "none" }}>
       <div style={{
@@ -138,29 +163,33 @@ export const SectionLabel = ({ children }) => (
   ))}
 </div>
 
-{/* -- Navigation cards -- */}
+{/* -- The four hubs -- */}
 
-<SectionLabel>Administration & Development</SectionLabel>
+<SectionLabel>Who does which job</SectionLabel>
 
 <div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
-  <NavCard icon="⚙️" title="Administration Guide" description="Users, groups, roles, permissions, site properties and system settings" href="/shio/administration-guide" />
-  <NavCard icon="🛠️" title="Developer Guide" description="Tech stack, dev environment, build from source and contribution guide" href="/shio/developer-guide" />
-  <NavCard icon="📡" title="REST API Reference" description="Post, folder, site, search, user, and widget endpoints" href="/shio/rest-api" />
+  <NavCard icon="🤖" title="The agent builds it" description="MCP, the agent surface, content as files, the CLI, blueprints and the verification loop" href="/shio/category/agent-builds-it" />
+  <NavCard icon="👤" title="The human curates it" description="The console, drafts and publishing, the Universal Editor, preview and the trash" href="/shio/category/human-curates-it" />
+  <NavCard icon="📡" title="The CDA delivers it" description="The read contract, GraphQL, the TypeScript client, React hooks and the Next.js starter" href="/shio/category/cda-delivers-it" />
+  <NavCard icon="⚙️" title="Run it" description="Install, configure, multi-tenancy, search indexing and security on your own infrastructure" href="/shio/category/run-it" />
 </div>
 
-<SectionLabel>Content Management</SectionLabel>
+<SectionLabel>Learn the model</SectionLabel>
 
 <div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+  <NavCard icon="🧩" title="Core Concepts" description="Sites, Folders, Posts, Post Types and the publishing workflow" href="/shio/getting-started/core-concepts" />
   <NavCard icon="📋" title="Content Modeling" description="Post Types, custom fields, publishing workflow and content relationships" href="/shio/content-modeling" />
   <NavCard icon="🎨" title="Pages, Layouts & Regions" description="Handlebars templates, Themes, design tokens, helpers, preview and public delivery" href="/shio/website-development" />
-  <NavCard icon="🔍" title="Search & Caching" description="Turing ES integration, Hazelcast distributed cache and full-text search" href="/shio/search-caching" />
+  <NavCard icon="🏗️" title="Architecture Overview" description="Component diagram, request flow, technology stack and deployment topologies" href="/shio/architecture-overview" />
 </div>
 
-<SectionLabel>Technical Reference</SectionLabel>
+<SectionLabel>Reference</SectionLabel>
 
 <div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
-  <NavCard icon="🏗️" title="Architecture Overview" description="Component diagram, request flow, technology stack and deployment topologies" href="/shio/architecture-overview" />
+  <NavCard icon="📡" title="REST API Reference" description="Post, folder, site, search, user, and widget endpoints" href="/shio/rest-api" />
   <NavCard icon="📊" title="GraphQL" description="Query content using GraphQL with the built-in GraphiQL console" href="/shio/graphql" />
+  <NavCard icon="⚙️" title="Administration Guide" description="Users, groups, roles, permissions, site properties and system settings" href="/shio/administration-guide" />
   <NavCard icon="🔑" title="Security" description="Authentication, authorization, user and group management" href="/shio/security" />
-  <NavCard icon="📦" title="Import & Export" description="Exchange providers for OpenText, Blogger and Shio package backup/restore" href="/shio/import-export" />
+  <NavCard icon="📦" title="Import & Export" description="Exchange providers and Shio package backup/restore" href="/shio/import-export" />
+  <NavCard icon="🛠️" title="Developer Guide" description="Tech stack, dev environment, build from source and contribution guide" href="/shio/developer-guide" />
 </div>
