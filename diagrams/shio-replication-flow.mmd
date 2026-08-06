@@ -1,0 +1,33 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    SOURCE["🌍 Existing site\nsomebody else built it"]
+    CLONE["📥 shio clone\ninventory · assets · markup"]
+    PROPOSE["📝 shio propose\nblocks to sections, and the loss"]
+    CHOICE{"Accept blocks?"}
+    FIDELITY["🖼️ Fidelity\nverbatim markup, not editable"]
+    AUTHORABLE["🧱 Authorable\nsections, annotated, unstyled"]
+    CONVERT["🔧 shio convert\nDRAFT pages · theme · scripts"]
+    PUBLISH["👤 Curator publishes"]
+    SERVE["🚀 /sites/site/…\nanonymous · cacheable"]
+    JUDGE["✅ verify · snapshot --against"]
+
+    SOURCE --> CLONE
+    CLONE --> PROPOSE
+    PROPOSE --> CHOICE
+    CHOICE -- "accept nothing" --> FIDELITY
+    CHOICE -- "accept all" --> AUTHORABLE
+    FIDELITY --> CONVERT
+    AUTHORABLE --> CONVERT
+    CONVERT --> PUBLISH
+    PUBLISH --> SERVE
+    SERVE --> JUDGE
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class SOURCE blue
+    class CLONE,PROPOSE,CONVERT purple
+    class CHOICE,FIDELITY,AUTHORABLE amber
+    class PUBLISH,SERVE,JUDGE green

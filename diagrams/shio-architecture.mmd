@@ -1,0 +1,41 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    AGENT["🤖 Coding agent\nMCP · REST · CLI"]
+    CURATOR["👤 Curator\nReact console"]
+    FRONTEND["📡 Front end\nNext.js · any framework"]
+    READER["🌍 Reader\npublished pages"]
+
+    AGENTAPI["🔌 Agent surface\nPOST /mcp · /api/v2/agent/**"]
+    CONSOLEAPI["🛠️ Console API\n/api/v2/**"]
+    CDA["📤 Delivery API\n/api/v2/cda/** · /graphql"]
+    RENDER["🎨 Renderer\n/preview/** · /sites/**"]
+
+    CORE["⚙️ Core services\nwrite · read · verify · files"]
+
+    DB["🗄️ Database\nPostgreSQL · MariaDB · H2"]
+    STORE["📦 store/\nfile bytes · logs"]
+    TURING["🔍 Viglet Turing ES\nopt-in indexing"]
+
+    AGENT --> AGENTAPI
+    CURATOR --> CONSOLEAPI
+    FRONTEND --> CDA
+    READER --> RENDER
+
+    AGENTAPI --> CORE
+    CONSOLEAPI --> CORE
+    CDA --> CORE
+    RENDER --> CORE
+
+    CORE --> DB
+    CORE --> STORE
+    CORE -. on publish .-> TURING
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class AGENT,CURATOR,FRONTEND,READER blue
+    class AGENTAPI,CONSOLEAPI,CDA,RENDER purple
+    class CORE amber
+    class DB,STORE,TURING green

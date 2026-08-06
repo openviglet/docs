@@ -1,0 +1,30 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    AGENTWRITE["🤖 Agent write\nlands as DRAFT"]
+    PREVIEW["👁️ Preview\nauthenticated · no-store · noindex"]
+    EDITOR["✏️ Universal Editor\nclick the page, fix the wording"]
+    QUEUE["📋 Review queue\nthe run, grouped by session"]
+    APPROVE["✅ Approve\npublish the run's drafts"]
+    REVERT["↩️ Revert\nrestore, or untrash"]
+    PUBLISHED["🌍 PUBLISHED\nwhat readers get"]
+    TRASH["🗑️ Trash\nrecoverable"]
+
+    AGENTWRITE --> PREVIEW
+    PREVIEW --> EDITOR
+    EDITOR --> AGENTWRITE
+    AGENTWRITE --> QUEUE
+    QUEUE --> APPROVE
+    QUEUE --> REVERT
+    APPROVE --> PUBLISHED
+    REVERT --> TRASH
+    TRASH --> AGENTWRITE
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class AGENTWRITE blue
+    class PREVIEW,EDITOR purple
+    class QUEUE,APPROVE,REVERT amber
+    class PUBLISHED,TRASH green

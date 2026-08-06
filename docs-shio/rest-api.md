@@ -1,301 +1,164 @@
 ---
-sidebar_position: 6
 title: REST API Reference
-description: REST API endpoints for Posts, Folders, Sites, Search, Users, and more in Viglet Shio CMS.
+description: "The console REST API: unified posts, folders, sites, post types, static files, the trash, review sessions and tokens, plus the endpoints that deliberately do not exist."
 ---
 
 # REST API Reference
 
-Shio CMS exposes a comprehensive REST API for content management, search, and administration. All endpoints use **JSON** for request and response bodies.
+Shio has **four** HTTP surfaces, and picking the right one is most of the work:
+
+| Surface | Path | Use it when |
+|---|---|---|
+| **Delivery (CDA)** | `/api/v2/cda/**`, `/graphql` | You are building a front end. Read-only, cacheable, [documented here](./headless/content-delivery-api.md) |
+| **Agent** | `/api/v2/agent/**` | You are building an agent. Addressed, atomic, self-describing, [documented here](./agent-surface.md) |
+| **MCP** | `POST /mcp` | Your client speaks MCP, [documented here](./mcp.md) |
+| **Console** | `/api/v2/**` | **This page.** What the React console calls: id-keyed CRUD, administration |
+
+If you are writing a script or an integration, the agent surface is almost always the
+better target: it addresses content by path, it is transactional, and its errors tell you
+how to fix them. The console API is here because the console uses it and because some
+administrative capabilities live only here.
 
 ---
 
 ## Authentication
 
-Most API endpoints require authentication. Shio CMS uses **session-based authentication** with CSRF token protection.
-
-### Login
-
-```
-POST /api/v2/auth/login
-Content-Type: application/json
-
-{
-  "username": "admin",
-  "password": "admin"
-}
-```
-
-### CSRF Token
-
-For write operations (POST, PUT, DELETE), include the CSRF token in the `X-XSRF-TOKEN` header. The token is returned as a cookie (`XSRF-TOKEN`) after successful authentication.
-
----
-
-## API Base Path
-
-All endpoints are prefixed with `/api/v2`.
-
-:::tip Building a website or app?
-The endpoints below are the **authoring** API (used by the admin console, with
-session + CSRF auth). To **serve published content** to a front-end, use the
-read-only, token-authenticated [Content Delivery API (CDA)](./headless/content-delivery-api.md)
-under `/api/v2/cda/**`, or the typed [`@viglet/shio-client`](./headless/javascript-client.md).
-:::
-
----
-
-## Content Endpoints
-
-### Posts
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/post/{id}` | Get a post by ID |
-| `POST` | `/api/v2/post` | Create a new post |
-| `PUT` | `/api/v2/post/{id}` | Update a post |
-| `DELETE` | `/api/v2/post/{id}` | Delete a post |
-
-#### Get Post
-
-```
-GET /api/v2/post/{id}
-```
-
-**Response:**
-
-```json
-{
-  "id": "post-uuid",
-  "title": "My Post",
-  "summary": "Post summary",
-  "postType": "Text",
-  "folder": "folder-uuid",
-  "attributes": {
-    "title": "My Post",
-    "description": "Post content..."
-  },
-  "publishStatus": "PUBLISHED",
-  "date": "2026-03-27T10:00:00"
-}
-```
-
-### Post Types
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/post-type` | List all Post Types |
-| `GET` | `/api/v2/post-type/{id}` | Get a Post Type by ID |
-| `POST` | `/api/v2/post-type` | Create a new Post Type |
-| `PUT` | `/api/v2/post-type/{id}` | Update a Post Type |
-| `DELETE` | `/api/v2/post-type/{id}` | Delete a Post Type |
-
-### Post Type Attributes
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/post-type/{id}/attr` | List attributes for a Post Type |
-| `POST` | `/api/v2/post-type/{id}/attr` | Add an attribute to a Post Type |
-| `PUT` | `/api/v2/post-type/{id}/attr/{attrId}` | Update an attribute |
-| `DELETE` | `/api/v2/post-type/{id}/attr/{attrId}` | Delete an attribute |
-
----
-
-## Folder Endpoints
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/folder/{id}` | Get a folder by ID |
-| `POST` | `/api/v2/folder` | Create a new folder |
-| `PUT` | `/api/v2/folder/{id}` | Update a folder |
-| `DELETE` | `/api/v2/folder/{id}` | Delete a folder |
-
----
-
-## Site Endpoints
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/site` | List all sites |
-| `GET` | `/api/v2/site/{id}` | Get a site by ID |
-| `POST` | `/api/v2/site` | Create a new site |
-| `PUT` | `/api/v2/site/{id}` | Update a site |
-| `DELETE` | `/api/v2/site/{id}` | Delete a site |
-
----
-
-## Search Endpoint
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/search` | Full-text search across content |
-
-**Query Parameters:**
-
-| Parameter | Description |
+| Caller | How |
 |---|---|
-| `q` | Search query string |
-| `site` | Site ID to scope the search |
+| The console | Session cookie + CSRF token (`POST /api/v2/login`) |
+| A script | HTTP Basic against the same endpoints |
+| A non-browser caller on the **agent** or **delivery** surfaces | A `Key` header, no cookie and no CSRF: see [Security](./security.md) |
+
+The console API is session-shaped: it expects a cookie and a CSRF token on writes. That is
+deliberate, and it is the reason the agent surface exists as a **stateless** alternative
+rather than as a convenience wrapper.
 
 ---
 
-## User Management Endpoints
+## Posts
 
-### Users
+One controller owns posts, in both states, at `/api/v2/post-unified`:
 
-| Method | Path | Description |
+| Method | Path | Does |
 |---|---|---|
-| `GET` | `/api/v2/user` | List all users |
-| `GET` | `/api/v2/user/{username}` | Get a user |
-| `POST` | `/api/v2/user` | Create a new user |
-| `PUT` | `/api/v2/user/{username}` | Update a user |
-| `DELETE` | `/api/v2/user/{username}` | Delete a user |
+| `POST` | `/api/v2/post-unified` | Create |
+| `GET` | `/{id}` | Read one |
+| `PUT` | `/{id}` | Update |
+| `DELETE` | `/{id}` | Move to the trash |
+| `GET` | `/folder/{folderId}` | List a folder's posts (paged) |
+| `POST` | `/{id}/publish` | Publish the draft |
+| `POST` | `/{id}/unpublish` | Withdraw the published row |
+| `POST` | `/{id}/schedule` | Publish (or unpublish) at a timestamp |
+| `GET` | `/{id}/versions` | Version history |
+| `POST` | `/{id}/restore` | Restore an earlier version |
+| `GET` | `/trash` | What is in the trash |
+| `POST` | `/{id}/untrash` | Take it back out |
+| `DELETE` | `/{id}/purge` | Remove permanently |
+| `GET` | `/{id}/translations` | Sibling pages in other locales |
+| `POST` | `/{id}/translate` | Create a translation sibling |
 
-### Groups
+## Objects: listings, copy, move, ACL
 
-| Method | Path | Description |
+`/api/v2/object` handles the operations that apply to *anything* addressable: a post, a
+folder, a site:
+
+| Method | Path | Does |
 |---|---|---|
-| `GET` | `/api/v2/group` | List all groups |
-| `GET` | `/api/v2/group/{id}` | Get a group |
-| `POST` | `/api/v2/group` | Create a new group |
-| `PUT` | `/api/v2/group/{id}` | Update a group |
-| `DELETE` | `/api/v2/group/{id}` | Delete a group |
+| `GET` | `/{id}/list` | The console listing for a container (paged) |
+| `GET` | `/{id}/path` | Breadcrumb |
+| `PUT` | `/copyto/{destId}` | Copy the given objects into a destination |
+| `PUT` | `/moveto/{destId}` | Move them |
+| `GET` `PUT` | `/{id}/acl` | Read and set content permissions |
+| `GET` | `/{id}/clear-cache` | Drop cached renders for an object |
 
-### Roles
+Copy and move **authorize both ends** (the source and the destination) and a copy takes
+names that are free rather than overwriting.
 
-| Method | Path | Description |
+## Folders
+
+| Method | Path | Does |
 |---|---|---|
-| `GET` | `/api/v2/role` | List all roles |
-| `GET` | `/api/v2/role/{id}` | Get a role |
-| `POST` | `/api/v2/role` | Create a new role |
-| `PUT` | `/api/v2/role/{id}` | Update a role |
-| `DELETE` | `/api/v2/role/{id}` | Delete a role |
+| `GET` | `/api/v2/folder/{id}` | Read one |
+| `POST` | `/{parentFolderId}` | Create beneath a parent |
+| `PUT` | `/{id}` | Rename or update |
+| `DELETE` | `/{id}` | Move the subtree to the trash |
+| `GET` | `/{id}/path` | Breadcrumb |
+| `GET` | `/trash` · `POST /{id}/untrash` · `DELETE /{id}/purge` | The trash, for folders |
 
----
+## Sites
 
-## Widget Endpoints
-
-| Method | Path | Description |
+| Method | Path | Does |
 |---|---|---|
-| `GET` | `/api/v2/widget` | List all widgets |
-| `GET` | `/api/v2/widget/{id}` | Get a widget |
-| `POST` | `/api/v2/widget` | Create a widget |
-| `PUT` | `/api/v2/widget/{id}` | Update a widget |
-| `DELETE` | `/api/v2/widget/{id}` | Delete a widget |
+| `GET` | `/api/v2/site` | List |
+| `GET` | `/{id}` | Read one, accepts an id, a friendly URL or a name |
+| `POST` | `/api/v2/site` | Create (seeded from the bootstrap template) |
+| `PUT` | `/{id}` | Update, including the post-type → layout bindings |
+| `DELETE` | `/{id}` | Delete the site and everything in it |
+| `GET` | `/{id}/export` | Download the site as an exchange package (`application/zip`) |
 
----
+`POST /api/v2/import` accepts one of those packages back.
 
-## Workflow Endpoints
+## Post types
 
-| Method | Path | Description |
+**One name-keyed surface.** There is no id-keyed twin:
+
+| Method | Path | Does |
 |---|---|---|
-| `GET` | `/api/v2/workflow` | List workflow tasks |
-| `GET` | `/api/v2/workflow/{id}` | Get a workflow task |
-| `POST` | `/api/v2/workflow` | Create a workflow task |
-| `PUT` | `/api/v2/workflow/{id}` | Update a workflow task |
+| `GET` | `/api/v2/post-type` | List every type |
+| `GET` | `/{name}` | One type and its fields |
+| `POST` | `/api/v2/post-type` | Create |
+| `PUT` | `/{name}` | Replace the definition |
+| `POST` | `/{name}/rename` | **Rename**: a move, keeping the type's content |
+| `DELETE` | `/{name}` | Delete; a type content points at answers a teaching `409` |
 
----
+A type marked *managed by code* refuses a console `PUT` with a `409`: it is owned by
+`shio push`, and the console shows it read-only rather than letting two writers race.
 
-## File Upload Endpoints
+## Static files
 
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/api/v2/static-file/{folderId}` | Upload a static file to a folder |
+`/api/v2/staticfile/**` uploads and manages file bytes. An upload creates a `File` post,
+and the bytes are then reachable two ways:
 
-**Request:** `multipart/form-data` with file attachment.
-
-:::note
-Maximum file upload size is 1024 MB (configurable via `spring.servlet.multipart.max-file-size`).
-:::
-
----
-
-## History Endpoint
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/history/{objectId}` | Get change history for an object |
-
----
-
-## Reference Endpoints
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/reference/{id}` | Get references for an object |
-
----
-
-## Object Endpoints
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/object/{id}` | Get any object by ID (folder, post, or file) |
-
----
-
-## Preview Endpoint
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/preview/{id}` | Preview content rendering |
-
----
-
-## Import / Export Endpoints
-
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/api/v2/import` | Import a site or content package |
-
----
-
-## Provider Endpoints
-
-### Exchange Providers
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/provider/exchange` | List exchange providers |
-| `GET` | `/api/v2/provider/exchange/{id}` | Get an exchange provider |
-
-### Auth Providers
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/provider/auth` | List auth providers |
-| `GET` | `/api/v2/provider/auth/{id}` | Get an auth provider |
-
----
-
-## Stock Photo Endpoint
-
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v2/stock-photo` | Search stock photos |
-
----
-
-## Website Endpoints
-
-These endpoints are publicly accessible (no authentication required):
-
-| Path | Description |
+| URL | For |
 |---|---|
-| `/sites/{siteName}/default/{locale}/{path}` | Access the published website |
-| `/sites/{siteName}/` | The site's home page, with the segments omitted |
-| `/__tur/sn/{siteName}` | Turing ES search proxy |
+| `/file_source/{postId}/{fileName}` | The canonical, id-keyed path |
+| `/sites/{site}/{folder-chain}/{fileName}` | The same bytes at the path the site's own structure implies |
 
-The third segment is the **format**, and `default` is the only value it takes. It is kept so the URL
-keeps the shape earlier Viglet Shio releases used, and it carries no behaviour — the page's layout
-comes from the site's post-type/layout binding. A URL naming any other format answers **404**, which
-is what makes a missing image a missing image: a page's own root-relative references (`<img
-src="/logo.png">`) are rewritten into `/sites/{siteName}/default/{locale}/` for you, so a request
-that arrives without that prefix is one nothing on the site published.
+Both accept transform parameters, `?w=`, `?h=`, `?format=`, `?crop=`.
 
-Two variants are available. Send the `x-sh-site` header to name the site, and the URL then carries
-only the content path — which is how one host serves one site. The `sh-format` query parameter
-replaces the format segment; like the segment, `default` is the only value it takes.
+## The rest
+
+| Root | Owns |
+|---|---|
+| `/api/v2/render/post-types` | Provision the render model; `/drift` and `/reconcile` |
+| `/api/v2/review` | Review sessions: list, read, `approve`, `revert` |
+| `/api/v2/history` | The audit trail |
+| `/api/v2/api-token` · `/preview-token` | API keys and short-lived preview tokens |
+| `/api/v2/site-webhook` | Per-site webhook subscriptions |
+| `/api/v2/widget` | The widget catalogue a post type's fields reference |
+| `/api/v2/group` · `/role` | Users, groups and roles |
+| `/api/v2/locale` | The locale axis |
+| `/api/v2/tenant` | Tenants (admin): see [Multi-Tenancy](./multi-tenancy.md) |
+| `/api/v2/provider/auth` · `/provider/exchange` · `/config/email` | Configuration providers |
+| `/api/v2/discovery` · `/system/info` · `/ping` | Instance metadata and health |
+| `/api/v2/setup` | First-run setup |
+
+Interactive documentation for every endpoint above is served by the instance itself at
+`/swagger-ui.html`, generated from the controllers, which makes it the authority when this
+page and the tree disagree.
+
+---
+
+## Three endpoints that do not exist
+
+An absence cannot be discovered by reading, so it is worth stating. Inventing one of these
+is the most common wrong turn:
+
+| Does **not** exist | Use instead |
+|---|---|
+| `POST /api/v2/post` | `POST /api/v2/post-unified`, or `post.upsert` on the agent surface |
+| `DELETE /api/v2/object/{id}` | Delete by type: `DELETE /api/v2/post-unified/{id}` or `DELETE /api/v2/folder/{id}` |
+| A console post-type controller at `/api/v2/post/type` | `/api/v2/post-type/**`: the id-keyed twin was retired |
 
 ---
 
@@ -303,8 +166,7 @@ replaces the format segment; like the segment, `default` is the only value it ta
 
 | Page | Description |
 |---|---|
-| [GraphQL](./graphql.md) | Query content using GraphQL |
-| [Developer Guide](./developer-guide.md) | Dev environment and API usage |
-| [Security](./security.md) | Authentication and authorization |
-
----
+| [The Agent Surface](./agent-surface.md) | The addressed, transactional alternative |
+| [Content Delivery API](./headless/content-delivery-api.md) | The read-only delivery contract |
+| [Security](./security.md) | Sessions, tokens, scopes, CSRF and CORS |
+| [Administration Guide](./administration-guide.md) | What these endpoints look like in the console |

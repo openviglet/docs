@@ -1,0 +1,33 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    SERVER["🗄️ Instance\nDRAFT content"]
+    PULL["⬇️ shio pull --content"]
+    TREE["📁 shio/content/**\nMarkdown + sidecars + assets"]
+    EDIT["✏️ Edit · Write · Grep"]
+    PUSH["⬆️ shio push --content"]
+    DOC["📋 Desired-state document\none per site"]
+    APPLY["🔌 /agent/plan then /agent/apply"]
+    BASE["🔒 .shio/content-base.json\nper-field fingerprints"]
+    MERGE["🔀 Three-way merge\nboth sides changed = conflict"]
+
+    SERVER --> PULL
+    PULL --> MERGE
+    BASE --> MERGE
+    MERGE --> TREE
+    TREE --> EDIT
+    EDIT --> PUSH
+    PUSH --> DOC
+    DOC --> APPLY
+    APPLY --> SERVER
+    PUSH --> BASE
+    PULL --> BASE
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class SERVER,APPLY green
+    class PULL,PUSH,DOC purple
+    class TREE,EDIT blue
+    class BASE,MERGE amber

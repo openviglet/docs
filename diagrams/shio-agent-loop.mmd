@@ -1,0 +1,28 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+sequenceDiagram
+    autonumber
+    participant A as 🤖 Agent
+    participant S as Shio
+    participant H as 👤 Curator
+
+    Note over A,S: Discover
+    A->>S: GET /agent/manifest
+    S-->>A: capabilities, limits, endpoints
+    A->>S: GET /agent/context
+    S-->>A: model, sitemap by path, conventions
+
+    Note over A,S: Plan
+    A->>S: POST /agent/batch (dryRun)
+    S-->>A: change set, nothing written
+
+    Note over A,S: Write
+    A->>S: POST /agent/batch (?verify&digest)
+    S-->>A: DRAFT rows, findings, digests
+
+    Note over A,S: Verify
+    A->>S: GET /agent/verify (since cursor)
+    S-->>A: report, a fix per finding
+
+    Note over A,H: Hand over
+    A->>H: preview link, open questions
+    H->>S: publish

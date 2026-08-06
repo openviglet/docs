@@ -10,15 +10,15 @@ import DocCardList from '@theme/DocCardList';
 # The CDA delivers it
 
 Shio is headless: your front end owns the markup, and Shio serves the content. The
-**Content Delivery API** is a versioned, read-only contract at `/api/v2/cda/**` —
+**Content Delivery API** is a versioned, read-only contract at `/api/v2/cda/**`, 
 sites, folder listings, breadcrumbs, a post by id **or by its friendly URL** (the one
-a `[...slug]` route needs), and a filtered query — returning frozen DTOs that never
+a `[...slug]` route needs), and a filtered query, returning frozen DTOs that never
 leak authoring fields. The same contract is available as **GraphQL**, whose schema is
 built from your own post types, so it is a second *shape* over one contract rather
 than a second contract to keep in sync.
 
 Access is by API key, and the key carries its own limits: a scope (read, preview or
-write), an optional per-site allow-list, and an **environment** — a `PROD` key sees
+write), an optional per-site allow-list, and an **environment**: a `PROD` key sees
 published content, a `PREVIEW` key reads drafts, which is what makes live preview work
 without a second deployment. ETags, `Cache-Control` and per-token rate limiting are on
 by default. On top of that sit three packages: `@viglet/shio-client` (zero runtime

@@ -1,0 +1,33 @@
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
+graph TB
+    REQ["🌐 Request\n/preview/site/path · /sites/site/…"]
+    POST["📄 Post\nresolved by friendly URL"]
+    BIND["🔗 site.postTypeLayout\nbinds post type to layout"]
+    LAYOUT["🧩 PageLayout\nHandlebars template"]
+    REGION["🧱 Region\nslotted by sh-region"]
+    THEME["🎨 Theme\nCSS + design tokens"]
+    HELPERS["⚙️ Helpers\nquery · navigation · image · menu"]
+    HTML["📃 HTML\nsh-* annotations preserved"]
+    DIGEST["✅ Digest\nstructure + appearance hashes"]
+
+    REQ --> POST
+    POST --> BIND
+    BIND --> LAYOUT
+    LAYOUT --> REGION
+    LAYOUT --> THEME
+    REGION --> HELPERS
+    LAYOUT --> HTML
+    REGION --> HTML
+    THEME --> HTML
+    HELPERS --> HTML
+    HTML --> DIGEST
+
+    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
+    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
+    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
+    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
+
+    class REQ,POST blue
+    class BIND,LAYOUT,REGION,THEME purple
+    class HELPERS amber
+    class HTML,DIGEST green

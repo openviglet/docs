@@ -7,7 +7,7 @@ description: "How Viglet Shio composes a page: Handlebars templates over Page La
 # Pages, Layouts & Regions
 
 Shio composes a page out of content it already holds. A **Page** finds its **Page
-Layout**, the layout slots one or more **Regions**, and a **Theme** supplies the CSS —
+Layout**, the layout slots one or more **Regions**, and a **Theme** supplies the CSS, 
 all four are ordinary content, so everything you can do to a post (write it over the
 API, project it to a file, export it in a package, lint it) works on your templates
 too.
@@ -19,7 +19,7 @@ fixed set of helpers.
 :::info What changed since the JavaScript engine
 Older versions of Shio rendered pages by **executing server-side JavaScript**
 (Nashorn or an external Node.js runtime) and exposed an `shObject` API to that code.
-That engine was removed, and it is not coming back — running arbitrary JavaScript
+That engine was removed, and it is not coming back, running arbitrary JavaScript
 inside the CMS was a sandboxing liability, and a template that can do anything is a
 template nothing can verify.
 
@@ -27,18 +27,20 @@ If you are moving from those docs:
 
 | You used to write | You write now |
 |---|---|
-| `shio.website.javascript.engine` / `shio.website.nashorn` | **nothing** — the properties no longer exist |
+| `shio.website.javascript.engine` / `shio.website.nashorn` | **nothing**: the properties no longer exist |
 | JavaScript in a layout's `JAVASCRIPT` field that built an HTML string | Handlebars in the layout's `HTML` field |
-| `shObject.post.title` | `{{TITLE}}` — a page's own fields are named at the **root** of the model |
+| `shObject.post.title` | `{{TITLE}}`: a page's own fields are named at the **root** of the model |
 | `shObject.generatePostLink(id)` / `generateFolderLink(id)` | `{{link}}` on a row inside `{{#query}}` / `{{#navigation}}` |
 | A Navigation or Query **Component API** attached to a region | the `{{#navigation}}` and `{{#query}}` **helpers**, called from the region's own template |
 
-The model — pages, layouts, regions, themes, and `sh-region` — is unchanged. A site
+The model (pages, layouts, regions, themes, and `sh-region`) is unchanged. A site
 exported from a 2018-era Shio renders with **no migration**; only the template
 language changed.
 :::
 
 ---
+
+![The render pipeline: page, layout, region, theme, helpers, HTML, digest](/img/diagrams/shio-render-pipeline.svg)
 
 ## The five content types
 
@@ -61,7 +63,7 @@ run on every deploy. Two companions answer the state of an existing instance:
 |---|---|---|
 | `PageLayout` | `TITLE`, `HTML`, `THEME`, `JAVASCRIPT` | The page-level template. `HTML` holds the Handlebars; `THEME` names the theme to inline. |
 | `Region` | `TITLE`, `HTML`, `JAVASCRIPT` | A reusable fragment slotted into a layout. `JAVASCRIPT` here is **browser** JavaScript, emitted inline once per region name. |
-| `Theme` | `TITLE`, `CSS`, `JAVASCRIPT`, `TOKENS` | Styling. `TOKENS` holds W3C Design Tokens (DTCG) — see below. |
+| `Theme` | `TITLE`, `CSS`, `JAVASCRIPT`, `TOKENS` | Styling. `TOKENS` holds W3C Design Tokens (DTCG): see below. |
 | `Redirect` | `TITLE`, `TO`, `PERMANENT` | Its own friendly URL **is** the path it answers; `TO` is where the reader goes. |
 | `SiteScripts` | `TITLE`, `SCRIPTS` | One ordered list of third-party scripts per site, as JSON. |
 
@@ -77,7 +79,7 @@ A page does not name its layout. The **site** does, in its `postTypeLayout` map:
 ```
 
 Every page of a type resolves to the same layout, which is why a thousand articles
-cost one resolution — and why a template lint reports at the layout, the artefact you
+cost one resolution, and why a template lint reports at the layout, the artefact you
 actually edit.
 
 ## Slotting a region
@@ -105,29 +107,29 @@ Three things in that snippet are worth naming:
   `data-shio-region-post`. Do not strip it: the rendered DOM is the only place the
   [Universal Editor](#editing-the-rendered-page) can learn which node maps to which
   post. A slot whose Region post does not exist is **flagged**
-  (`data-shio-region-missing`) rather than silently left empty — a missing region and
+  (`data-shio-region-missing`) rather than silently left empty: a missing region and
   an empty one are different mistakes.
 - **`{{theme.css}}` is raw** and inlined by the layout, not linked. (It has to be raw:
   CSS decodes no HTML entities, so an escaped `url("/fonts/inter.woff2")` is an invalid
   `@font-face` rule.)
 - **A region renders against the page's model.** `{{TEXT}}` inside a region is the
   *page's* `TEXT`; inside a `{{#query}}` block, `{{title}}` is the listed post's. The
-  engine never infers ownership — the template decides it.
+  engine never infers ownership: the template decides it.
 
 ## The model a template sees
 
-A page's own fields are at the **root**: `{{TITLE}}`, `{{HTML}}`, `{{ABSTRACT}}` —
+A page's own fields are at the **root**: `{{TITLE}}`, `{{HTML}}`, `{{ABSTRACT}}`, 
 whatever the post type declares. Five named frames sit beside them:
 
 | Frame | Holds |
 |---|---|
 | `post` | `id`, `title`, `summary`, `url`, `type`, `folder`, `locale`, and `canonical` (an absolute URL that is never blank) |
 | `site` | `name`, `url` (your deployed front end, blank until you have one), `baseUrl` (always resolvable), `scripts` |
-| `theme` | `css`, `javascript`, and `tokens` as a dotted map — `{{theme.tokens.color.accent}}` |
+| `theme` | `css`, `javascript`, and `tokens` as a dotted map, `{{theme.tokens.color.accent}}` |
 | `render` | the renderer's own facts, including `defaultLocale` |
 | `param` | **query-string values only**, as strings, sorted, read-only |
 
-`param` is deliberately narrow: no headers, no cookies, no request object — a layout
+`param` is deliberately narrow: no headers, no cookies, no request object: a layout
 is content, and content must not have the servlet request in scope. `state` and
 `editor` are excluded because they are the renderer's own, and `{{{param.q}}}` (the
 unescaped form) is **refused when you save the template**, since that value comes
@@ -136,7 +138,7 @@ from whoever holds the URL.
 ## The helpers
 
 Nine helpers, and the list is closed. A call to a helper that does not exist fails when
-the template is compiled **on save**, not at render time — with one deliberate gap: a
+the template is compiled **on save**, not at render time, with one deliberate gap: a
 parameterless `{{#thing}}` is read as an ordinary iteration rather than a helper call,
 so only the three historically-missing names (`search`, `form`, `getRelation`) are
 reported in that form.
@@ -165,7 +167,7 @@ old `generatePostLink` is now just `{{link}}`:
 ```
 
 `{{#image}}` exists because a template cannot know two things: an image's intrinsic
-width, and the HMAC a signed transform URL needs. It emits whole URLs — `{{url}}` plus
+width, and the HMAC a signed transform URL needs. It emits whole URLs, `{{url}}` plus
 a `{{srcset}}` whose candidates are **filtered below the intrinsic width**, so nothing
 ever upscales. An image nothing measured (an SVG, say) yields the plain URL and an
 empty `srcset`, which in HTML means "use `src`".
@@ -178,7 +180,7 @@ empty `srcset`, which in HTML means "use `src`".
 
 ## Themes and design tokens
 
-A `Theme`'s `TOKENS` field takes **W3C Design Tokens (DTCG)** — the shape Style
+A `Theme`'s `TOKENS` field takes **W3C Design Tokens (DTCG)**: the shape Style
 Dictionary, Figma and Tokens Studio already export, so a designer's file pastes in
 with no dialect to learn:
 
@@ -191,13 +193,13 @@ Shio compiles it to custom properties on `:root` (`color.accent` →
 layouts get tokens without being edited. The same values are readable as
 `{{theme.tokens.color.accent}}` for the places `var()` cannot reach. A theme with no
 tokens emits nothing at all, and a `TOKENS` field that is not valid JSON renders the
-page on the CSS alone while recording the failure — the page must not break, and the
+page on the CSS alone while recording the failure: the page must not break, and the
 degradation must not be silent.
 
 ## Third-party scripts
 
 Browser JavaScript used to live in a `Theme` or a `Region`, both of which are
-per-layout — so a site with four layouts held four copies, each with its own load
+per-layout, so a site with four layouts held four copies, each with its own load
 order. Since consent has to load *before* what it gates, that was a compliance
 problem, not just duplication.
 
@@ -223,7 +225,7 @@ empty, so a layout's loop is never an expression resolving to nothing:
 reads the same post through the CDA. Nothing behaves one way in preview and another in
 production, because there is no injection path to diverge. An entry with neither `src`
 nor `inline` is skipped (and reported as `site-scripts-entry-empty`), and an
-unrecognised position falls back to `bodyEnd` — never `head`, because a typo must not
+unrecognised position falls back to `bodyEnd`: never `head`, because a typo must not
 move a script *earlier* than its author wrote it. `category` is carried for a layout
 that gates its own emission; Shio itself never acts on it.
 
@@ -232,7 +234,7 @@ that gates its own emission; Shio itself never acts on it.
 For pages assembled from blocks rather than written as one document, the
 `@viglet/shio-sections` package ships a shared vocabulary: a `Page` type plus
 `SectionHero`, `SectionFeatureGrid`, `SectionCta`, `SectionLogoWall`,
-`SectionTestimonial`, `SectionFaq` and `SectionRichText` — with matching unstyled,
+`SectionTestimonial`, `SectionFaq` and `SectionRichText`, with matching unstyled,
 semantic React components behind stable `shio-*` class names.
 
 A `Page` names its sections **by friendly URL, in order**, in a `Multi Select` whose
@@ -244,8 +246,8 @@ settings declare what it holds:
 
 That declaration is what makes the composition verifiable: `shio verify` resolves each
 URL and reports the ones that are not there. A `Multi Select` without the key stays
-tags. Sections are content a template reads — a region iterates them through
-`{{#getRelation}}` — so a section-composed page renders through the ordinary path.
+tags. Sections are content a template reads: a region iterates them through
+`{{#getRelation}}`, so a section-composed page renders through the ordinary path.
 
 ## Menus and translations
 
@@ -263,11 +265,11 @@ A `Redirect` post's **friendly URL is the path it answers**; `TO` is a friendly 
 the same site or an absolute URL, and `PERMANENT` opts into a 301. The default is
 **302**, deliberately: a permanent redirect is cached by browsers effectively for
 ever, and a wrong one is the hardest routing mistake to take back. It is not a rewrite
-engine — one exact path in, one address out, no patterns — which is what makes a
+engine (one exact path in, one address out, no patterns) which is what makes a
 site's URL space checkable without issuing requests.
 
 Both spellings of a path answer: if `/docs/` is stored and a reader asks for `/docs`,
-Shio redirects to the stored form (permanently — two spellings of one path will not
+Shio redirects to the stored form (permanently: two spellings of one path will not
 stop meaning the same page), keeping the reader's query string.
 
 ## Seeing the page
@@ -280,7 +282,7 @@ Two routes, one renderer, opposite guards.
 GET /preview/{site}/{path}
 ```
 
-Authenticated, `no-store`, `X-Robots-Tag: noindex`, and it shows **drafts** — plus a
+Authenticated, `no-store`, `X-Robots-Tag: noindex`, and it shows **drafts**, plus a
 banner the page's own stylesheet cannot hide. This is how a site an agent just built
 is visible with no front end and no client setup. It is preview-grade on purpose: a
 freshness lifetime is how a preview quietly becomes infrastructure.
@@ -296,7 +298,7 @@ banner and no editor bridge. `/sites/mysite/` is the home page. Two variants: th
 `x-sh-site` header names the site so the URL carries only the content path, and
 `sh-format` replaces the format segment.
 
-`{format}` is vestigial — it must be `default`, and anything else is a **404**. That
+`{format}` is vestigial: it must be `default`, and anything else is a **404**. That
 strictness is load-bearing: a page served from `/sites/mysite/` carrying
 `<img src="/logo.png">` requests `/sites/mysite/logo.png`, which is exactly this
 three-segment shape, and a lenient format slot answered those with the *home page* at
@@ -305,7 +307,7 @@ something an author could see. `{locale}` is checked the same way: accepted when
 site has published content in that locale, or when it is the default.
 
 Root-relative `href`s are rebased into whichever space is serving the page, so a link
-that is wrong 404s **inside** the site — where the route lint already reports it —
+that is wrong 404s **inside** the site , where the route lint already reports it ,
 instead of silently walking the reader out of it.
 
 ## Static files and images
@@ -315,10 +317,10 @@ A file uploaded to Shio is a `File` post, and its bytes are reachable two ways:
 | URL | Use |
 |---|---|
 | `/file_source/{postId}/{fileName}` | The canonical, id-keyed path. `{{file_url FIELD}}` points here. |
-| `/sites/{site}/{folder-chain}/{fileName}` | The same bytes at the path a site's own structure implies — what a replicated site's verbatim `<img src="/img/hero.png">` needs. |
+| `/sites/{site}/{folder-chain}/{fileName}` | The same bytes at the path a site's own structure implies: what a replicated site's verbatim `<img src="/img/hero.png">` needs. |
 
-Either can be transformed on the way out with query parameters — `?w=`, `?h=`,
-`?format=`, `?crop=` — which is the pipeline `{{#image}}` writes URLs for.
+Either can be transformed on the way out with query parameters, `?w=`, `?h=`,
+`?format=`, `?crop=`, which is the pipeline `{{#image}}` writes URLs for.
 
 ## Editing the rendered page
 
@@ -361,7 +363,7 @@ And a page's structure can be compared without a screenshot:
 GET /api/v2/agent/render
 ```
 
-returns two digests — `d:` over the page's structure and `a:` over its appearance —
+returns two digests , `d:` over the page's structure and `a:` over its appearance ,
 kept separate so a restyle and a structural break are never confused for each other.
 
 ---

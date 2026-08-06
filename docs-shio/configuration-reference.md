@@ -1,27 +1,38 @@
 ---
 sidebar_position: 2
 title: Configuration Reference
-description: Complete reference for Viglet Shio CMS application.properties configuration.
+description: "Every Viglet Shio configuration property, read from the tree: the instance, the delivery API, the agent surface, files and images, Turing indexing, and the schema."
 ---
 
 # Configuration Reference
 
-This document lists all configuration properties available in Shio CMS. Properties are set in `application.properties` (embedded) or in an external properties file loaded via `--spring.config.additional-location`.
+Properties are set in `application.properties` (embedded in the JAR) or in an external file
+loaded with `--spring.config.additional-location`. Environment variables and command-line
+arguments override both, in the usual Spring Boot order.
+
+Every property below exists in the current release. If a property you remember is missing
+from this page, check the two notes: it may have been removed.
 
 ---
 
-## Shio CMS Properties
+## The instance
 
 | Property | Default | Description |
 |---|---|---|
-| `shio.mgmt.enabled` | `true` | Enable the management interface |
-| `shio.git.url` | n/a | Git repository URL for version control |
-| `shio.git.token` | n/a | Authentication token for Git repository |
+| `server.port` | `2710` | HTTP listening port |
+| `shio.url` | `http://localhost:2710` | The instance's own base URL, used wherever an absolute URL is composed |
 | `shio.allowedOrigins` | `localhost` | CORS allowed origins |
+| `shio.mgmt.enabled` | `true` | Enable the management interface |
+| `shio.keycloak` | `false` | Authenticate against a Keycloak realm |
+| `shio.keycloak-admin-id` | *(empty)* | The realm's admin identifier |
+| `shio.multi-tenant` | `false` | Tenant isolation: see [Multi-Tenancy](./multi-tenancy.md) |
+| `server.compression.enabled` | `true` | Response compression |
+| `server.compression.mime-types` | `application/json,text/css,application/javascript` | What to compress |
+| `server.compression.min-response-size` | `2048` | Minimum size, in bytes |
+| `server.tomcat.use-relative-redirects` | `true` | Emit relative redirects |
+| `shio.git.url` · `shio.git.token` | *(unset)* | Git repository for the content-versioning integration |
 | `shio.plugin.blogger` | `com.viglet.shio.plugin.ShImporterBloggerPlugin` | Blogger import plugin class |
-| `shio.config.system` | `/system` | System configuration path |
-| `shio.config.auth` | `/provider/auth/%s` | Auth provider path pattern |
-| `shio.config.exchange` | `/provider/exchange/%s` | Exchange provider path pattern |
+| `shio.config.system` · `.auth` · `.exchange` | `/system` · `/provider/auth/%s` · `/provider/exchange/%s` | Configuration paths |
 
 :::info Removed: the JavaScript engine properties
 `shio.website.javascript.engine` and `shio.website.nashorn` **no longer exist**. Shio
@@ -32,135 +43,211 @@ either property has no effect. See [Pages, Layouts & Regions](./website-developm
 
 ---
 
-## Server Properties
+## Content delivery (`shio.cda.*`)
 
 | Property | Default | Description |
 |---|---|---|
-| `server.port` | `2710` | HTTP listening port (overridable via `PORT` env var) |
-| `server.compression.enabled` | `true` | Enable HTTP response compression |
-| `server.compression.mime-types` | `application/json,text/css,application/javascript` | MIME types to compress |
-| `server.compression.min-response-size` | `2048` | Minimum response size (bytes) to compress |
-| `server.tomcat.use-relative-redirects` | `true` | Use relative redirects in Tomcat |
+| `shio.cda.cache.max-age-seconds` | `60` | `Cache-Control: max-age` on delivery responses; `0` sends `no-cache` |
+| `shio.cda.rate-limit.enabled` | `true` | The per-token limiter |
+| `shio.cda.rate-limit.capacity` | `120` | Burst a single token may spend at once |
+| `shio.cda.rate-limit.refill-tokens` | `120` | Tokens replenished per period |
+| `shio.cda.rate-limit.refill-period-seconds` | `60` | Refill cadence |
+| `shio.cda.preview.enabled` | `true` | Whether preview tokens can be minted at all |
+
+The limiter is **per JVM**, on a multi-node deployment each token's effective budget is
+multiplied by the node count.
 
 ---
 
-## Database Properties
+## The agent surface (`shio.agent.*`)
 
-### H2 (Default: Development)
+Every limit here exists so a caller cannot ask for an unbounded response. A request over the
+maximum is clamped, and the response says so.
 
 | Property | Default | Description |
 |---|---|---|
-| `spring.datasource.url` | `jdbc:h2:file:./store/db/turingDB` | H2 file-based database URL |
-| `spring.datasource.username` | `sa` | Database username |
-| `spring.datasource.password` | *(empty)* | Database password |
-| `spring.datasource.driver-class-name` | `org.h2.Driver` | JDBC driver class |
-| `spring.jpa.properties.hibernate.dialect` | `org.hibernate.dialect.H2Dialect` | Hibernate dialect |
-| `spring.h2.console.enabled` | `false` | Enable H2 web console |
-| `spring.h2.console.path` | `/h2` | H2 console URL path |
+| `shio.agent.context.default-budget-tokens` | `4000` | Context-pack size when no `budget` is given |
+| `shio.agent.context.max-budget-tokens` | `40000` | Ceiling for `budget=` |
+| `shio.agent.context.default-depth` | `3` | Folder-tree depth walked |
+| `shio.agent.context.max-nodes` | `1000` | Sitemap rows |
+| `shio.agent.batch.max-ops` | `200` | Ops in one `POST /agent/batch` |
+| `shio.agent.batch.max-document-ops` | `2000` | Compiled ops in one `apply` |
+| `shio.agent.read.default-limit` · `.max-limit` | `25` · `200` | `find` / `read` rows |
+| `shio.agent.verify.default-limit` · `.max-limit` | `200` · `2000` | Findings per report |
+| `shio.agent.verify.max-fetches` | `50` | Requests the delivery check may issue |
+| `shio.agent.verify.fetch-budget-millis` | `15000` | Time budget for those fetches |
+| `shio.agent.render.allow-fetch` | **`false`** | Whether `/agent/render?url=` may fetch a live URL. Off by default: an endpoint that fetches on the server's behalf needs an operator's consent, not a caller's |
+| `shio.agent.render.timeout-millis` | `5000` | Per-fetch timeout |
+| `shio.agent.render.max-bytes` | `524288` | Maximum fetched page size |
+| `shio.agent.render.write-digests` | `10` | Pages digested when a write asks for `?digest=true` |
+| `shio.agent.render.max-write-digests` | `100` | Ceiling for `?digest=<n>` |
+| `shio.agent.changes.default-limit` · `.max-limit` | `50` · `500` | Change-feed rows |
+| `shio.agent.changes.lag-millis` | `0` | Deliberate lag, for a multi-node install |
+| `shio.agent.memory.default-limit` · `.max-limit` | `50` · `500` | Notes returned |
+| `shio.agent.memory.max-key-length` · `.max-note-length` | `120` · `2000` | Note size |
+| `shio.agent.diagnostics.max-rows` | `500` | Size of the in-memory failure window |
+| `shio.agent.diagnostics.default-limit` · `.max-limit` | `25` · `200` | Rows returned |
 
-### MariaDB / MySQL (Production)
+---
+
+## Files and images
+
+| Property | Default | Description |
+|---|---|---|
+| `shio.file-source.path` | `store/file_source` | Where uploaded bytes live. With tenancy on, the tenant id prefixes this layout |
+| `shio.image-cache.enabled` | `true` | Cache transformed images |
+| `shio.image-cache.path` | `store/image_cache` | Where transform results are kept |
+| `shio.image-cache.max-memory-entries` | `200` | In-memory entries before falling back to disk |
+| `shio.image-transform.max-width` · `.max-height` | `5000` · `5000` | Refuse a transform larger than this |
+| `shio.image-transform.max-source-pixels` | `40000000` | Refuse a *source* image larger than this |
+| `shio.image-transform.allowed-formats` | `jpg,jpeg,png,gif,webp,avif` | Output formats `?format=` may ask for |
+| `shio.image-transform.signing.enabled` | `false` | Require an HMAC on transform URLs |
+| `shio.image-transform.signing.secret` | *(empty)* | The signing secret; set it before enabling signing |
+| `spring.servlet.multipart.max-file-size` | `1024MB` | Maximum upload |
+| `spring.servlet.multipart.max-request-size` | `1024MB` | Maximum request |
+| `spring.mvc.async.request-timeout` | `3600000` | Async timeout (1 hour) |
+
+---
+
+## Scheduling and blueprints
+
+| Property | Default | Description |
+|---|---|---|
+| `shio.schedule.enabled` | `true` | The sweep that fires scheduled publishes and unpublishes |
+| `shio.schedule.sweep-interval-millis` | `60000` | How often it looks |
+| `shio.blueprint.path` | *(unset)* | An extra directory of blueprint packages, beside the built-in ones |
+
+---
+
+## Turing indexing (`shio.turing.*`)
+
+**Off by default.** See [Search & Caching](./search-caching.md).
+
+| Property | Default | Description |
+|---|---|---|
+| `shio.turing.enabled` | **`false`** | Index published content into Turing ES |
+| `shio.turing.url` | *(unset)* | The Turing instance |
+| `shio.turing.api-key` | *(unset)* | Its API key |
+| `shio.turing.default-site` | *(unset)* | Turing SN site for any Shio site not mapped below |
+| `shio.turing.sites.<ShioSite>` | *(unset)* | Explicit Shio site → Turing SN site mapping (case-insensitive) |
+| `shio.turing.source-app` | `shio` | The `source_apps` stamp on indexed documents |
+| `shio.turing.de-index-on-unpublish` | `true` | De-index when a post is unpublished |
+
+A site with neither a mapping nor a `default-site` is simply not indexed, and that is not an
+error.
+
+---
+
+## Database
+
+### H2 (development default)
 
 ```properties
-spring.datasource.url=jdbc:mariadb://localhost:3306/shio
-spring.datasource.username=shio
-spring.datasource.password=shio
-spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+spring.datasource.url=jdbc:h2:file:./store/db/shioDB;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=true
+spring.datasource.username=sa
+spring.datasource.password=
+spring.datasource.driver-class-name=org.h2.Driver
 ```
 
-### PostgreSQL (Production)
+:::warning Those two H2 URL parameters are load-bearing
+`DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=true` must stay. The schema uses
+lowercase identifiers (including the tenant discriminator column) and without them H2
+folds names to upper case, which surfaces as `Column "..." not found` at startup.
+:::
+
+### PostgreSQL
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/shio
 spring.datasource.username=shio
 spring.datasource.password=shio
 spring.datasource.driver-class-name=org.postgresql.Driver
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 ```
 
-### Oracle (Enterprise)
+### MariaDB / MySQL
 
 ```properties
-spring.datasource.url=jdbc:oracle:thin:@localhost:1521/shio
+spring.datasource.url=jdbc:mariadb://localhost:3306/shio
 spring.datasource.username=shio
 spring.datasource.password=shio
-spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
 ```
 
+The dialect is inferred from the URL; set `spring.jpa.properties.hibernate.dialect` only if
+you have a reason to override it. Shio ships no Oracle driver: the schema is verified on
+PostgreSQL, MariaDB and H2 by integration tests.
+
 ---
 
-## JPA Properties
+## Schema and JPA
 
-| Property | Default | Description |
+| Property | Value | Description |
 |---|---|---|
-| `spring.jpa.hibernate.ddl-auto` | `update` | Schema management strategy: `update`, `validate`, `create`, `none` |
-| `spring.jpa.show-sql` | `false` | Log SQL statements |
-| `spring.jpa.properties.hibernate.format_sql` | `false` | Format logged SQL for readability |
-| `spring.jpa.properties.hibernate.enable_lazy_load_no_trans` | `true` | Allow lazy loading outside transactions |
-| `spring.jpa.properties.jakarta.persistence.sharedCache.mode` | `ALL` | JPA shared cache mode |
+| `spring.jpa.hibernate.ddl-auto` | **`none`** | **The schema belongs to Liquibase.** Do not change this |
+| `spring.liquibase.enabled` | `true` | Run migrations at startup |
+| `spring.liquibase.change-log` | `classpath:db/changelog/db.changelog-master.yaml` | The master changelog |
+| `spring.jpa.show-sql` | `false` | Log SQL |
+| `spring.jpa.properties.hibernate.format_sql` | `false` | Format logged SQL |
 | `spring.jpa.properties.hibernate.generate_statistics` | `false` | Hibernate statistics |
-| `spring.jpa.properties.hibernate.globally_quoted_identifiers` | `true` | Quote all identifiers in generated SQL |
+| `spring.jpa.properties.jakarta.persistence.sharedCache.mode` | `ALL` | JPA shared cache mode |
+
+An upgrade is a restart: migrations run on boot, so a rolling restart *is* a migration.
+Never work around a schema problem by setting `ddl-auto` to `update`: that produces a
+database which no longer matches the changelogs, and the next real migration fails.
 
 ---
 
-## Logging Properties
+## Logging
 
 | Property | Default | Description |
 |---|---|---|
-| `logging.level.org.springframework` | `INFO` | Spring Framework log level |
-| `logging.level.com.viglet` | `INFO` | Viglet application log level |
-| `logging.level.org.hibernate.stat` | `INFO` | Hibernate statistics log level |
-| `logging.level.org.hibernate.SQL` | `INFO` | Hibernate SQL log level |
-| `logging.file.name` | `store/logs/shio.log` | Log file path |
-| `logging.logback.rollingpolicy.max-file-size` | `25MB` | Maximum log file size before rotation |
-| `logging.logback.rollingpolicy.max-history` | `10` | Number of rotated log files to keep |
+| `logging.level.com.viglet` | `INFO` | Application log level |
+| `logging.level.org.springframework` | `INFO` | Spring log level |
+| `logging.level.org.hibernate.SQL` | `INFO` | SQL logging |
+| `logging.file.name` | `store/logs/shio.log` | Log file |
+| `logging.logback.rollingpolicy.max-file-size` | `25MB` | Rotation size |
+| `logging.logback.rollingpolicy.max-history` | `10` | Files kept |
+
+Asynchronous failures , webhook deliveries, image transforms, scheduled publishes, 5xx ,
+are also readable at `GET /api/v2/agent/diagnostics`, which is usually faster than grepping
+the log.
 
 ---
 
-## File Upload Properties
+## Static resources
 
 | Property | Default | Description |
 |---|---|---|
-| `spring.servlet.multipart.max-file-size` | `1024MB` | Maximum file upload size |
-| `spring.servlet.multipart.max-request-size` | `1024MB` | Maximum request size |
-| `spring.mvc.async.request-timeout` | `3600000` | Async request timeout (ms): 1 hour |
+| `spring.web.resources.static-locations` | `classpath:/public/` | Where the built console is served from |
+| `spring.h2.console.enabled` | `false` | The H2 web console |
+| `spring.h2.console.path` | `/h2` | Its path |
+| `spring.output.ansi.enabled` | `always` | Coloured console output |
 
 ---
 
-## UI Properties
+## Mail
 
 | Property | Default | Description |
 |---|---|---|
-| `spring.web.resources.static-locations` | `classpath:/ui/public/` | Static resource locations |
-| `spring.thymeleaf.prefix` | `classpath:/ui/templates/` | Thymeleaf template prefix |
-| `spring.output.ansi.enabled` | `always` | ANSI color output in console |
-| `spring.web.resources.chain.strategy.content.enabled` | `true` | Content-based versioning for static resources |
-| `spring.web.resources.chain.strategy.content.paths` | `/js/**,/css/**,/img/**,/*.png` | Paths for content versioning |
-
----
-
-## Mail Properties
-
-| Property | Default | Description |
-|---|---|---|
-| `spring.mail.host` | `localhost` | SMTP server hostname |
+| `spring.mail.host` | `localhost` | SMTP host |
 | `spring.mail.port` | `587` | SMTP port |
 | `spring.mail.username` | `localhost@localhost` | SMTP username |
 | `spring.mail.password` | `password` | SMTP password |
-| `spring.mail.properties.mail.smtp.auth` | `true` | Enable SMTP authentication |
-| `spring.mail.properties.mail.smtp.starttls.enable` | `true` | Enable STARTTLS |
+| `spring.mail.properties.mail.smtp.auth` | `true` | SMTP authentication |
+| `spring.mail.properties.mail.smtp.starttls.enable` | `true` | STARTTLS |
 | `spring.mail.properties.mail.smtp.starttls.required` | `true` | Require STARTTLS |
-| `spring.mail.properties.mail.smtp.ssl.enable` | `false` | Enable SSL |
-| `spring.mail.test-connection` | `false` | Test mail connection on startup |
+| `spring.mail.properties.mail.smtp.ssl.enable` | `false` | SSL |
+| `spring.mail.test-connection` | `false` | Test the connection at startup |
+
+SMTP can also be configured in the console, which writes the same settings.
 
 ---
 
-## Management Properties
+## Management
 
 | Property | Default | Description |
 |---|---|---|
-| `management.endpoints.web.exposure.include` | `*` | Exposed Spring Boot Actuator endpoints |
+| `management.endpoints.web.exposure.include` | `*` | Exposed Actuator endpoints, narrow this in production |
 
 ---
 
@@ -168,11 +255,9 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
 
 | Profile | Purpose |
 |---|---|
-| `production` | Default profile: optimized for production |
-| `development` | Development mode with additional logging |
-| `ui-dev` | Headless mode for frontend development with separate Vite dev server |
-
-Set the active profile:
+| `production` | The default |
+| `development` | Extra logging |
+| `ui-dev` | Serve the API only, with the console running under a separate Vite dev server |
 
 ```properties
 spring.profiles.active=production
@@ -184,8 +269,8 @@ spring.profiles.active=production
 
 | Page | Description |
 |---|---|
-| [Installation Guide](./installation-guide.md) | Setup with Docker, JAR, or build from source |
-| [Architecture Overview](./architecture-overview.md) | Component diagram and deployment topologies |
-| [Developer Guide](./developer-guide.md) | Dev environment setup and contribution guide |
-
----
+| [Installation Guide](./installation-guide.md) | Docker, JAR, or build from source |
+| [Multi-Tenancy](./multi-tenancy.md) | `shio.multi-tenant` and what it turns on |
+| [Search & Caching](./search-caching.md) | The `shio.turing.*` block in context |
+| [Security](./security.md) | Origins, tokens, CSRF |
+| [Architecture Overview](./architecture-overview.md) | Deployment topologies |

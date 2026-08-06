@@ -11,15 +11,15 @@ import DocCardList from '@theme/DocCardList';
 
 Shio is a **Spring Boot 4 / Java 21** application you run yourself. Start it as a
 container or a JAR, point it at PostgreSQL, MariaDB/MySQL or the bundled H2, and the
-schema is migrated for you — Liquibase owns it, so an upgrade is a restart, not a
+schema is migrated for you: Liquibase owns it, so an upgrade is a restart, not a
 hand-written `ALTER`. Nothing calls out to a hosted service: Shio holds no model and
 no prompts, so the content, the files and the keys stay on your infrastructure.
 
 From there it is configuration and access. One JVM can serve **many isolated tenants**,
 each with its own content, users and quota. Authentication covers session login for the
-console, OAuth2/OIDC, and API keys for everything headless — with CSRF, CORS and the
+console, OAuth2/OIDC, and API keys for everything headless, with CSRF, CORS and the
 HTTP firewall configured out of the box. Full-text search works with no extra
 infrastructure, and indexing into **Viglet Turing ES** is available when you want
-faceted enterprise search — opt-in, reached when content is published.
+faceted enterprise search, opt-in, reached when content is published.
 
 <DocCardList />

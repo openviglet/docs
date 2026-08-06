@@ -1,104 +1,175 @@
 ---
 sidebar_position: 1
-description: Viglet Shio CMS is an open-source headless CMS with custom Post Types, GraphQL and REST APIs, server-side rendering, caching, and full-text search.
+description: Viglet Shio CMS is an open-source, agent-native headless CMS. A coding agent builds the site, a human curates it, and the Content Delivery API serves it.
 ---
 
 # What is Shio CMS?
 
-**Viglet Shio CMS** is an open-source headless Content Management System. It allows you to model content with custom Post Types, query it via GraphQL or REST API, and render pages with Handlebars templates, with native caching and integrated full-text search.
+**Viglet Shio CMS** is an open-source headless Content Management System, with one
+difference that shapes everything else: its primary operator is a **coding agent**.
 
-Whether you need a traditional CMS with page rendering, a headless API for a single-page application, or a hybrid approach, Shio CMS adapts to your architecture.
+Most CMSs are designed for a person clicking through forms, with an API added afterwards
+for developers. Shio is designed the other way round. An agent, Claude Code, Cursor,
+anything that speaks MCP, builds and maintains the site. A human **curates**: approving,
+correcting, publishing. And the Content Delivery API serves the result to whatever front
+end you like.
+
+Shio hosts **no model and no prompts**. It is not an AI product; it is the substrate an
+external agent drives, running on your own infrastructure with your content in your own
+database.
 
 ---
 
-## What can you do with Shio CMS?
+## The problem it solves
+
+Building a site with a conventional CMS through an API is a long conversation. What post
+types exist? What fields does this one have? What is this page's id? Which endpoint
+creates a folder? Every question is a round trip, and every answer is a UUID that has to
+survive to the next call.
+
+Shio's answer is to make the instance **describe itself in one call**, to address content
+by **path instead of id**, and to make every write **idempotent**, so an agent can plan
+work, do it, and check it without a human in the loop for anything except the decisions
+that are genuinely a person's.
+
+---
+
+## Who does what
+
+| | Does | Through |
+|---|---|---|
+| **The agent** | Builds the model, writes the pages, wires the templates, checks its own work | MCP, the REST agent surface, content projected to files, the `shio` CLI |
+| **The human** | Reviews, corrects wording, decides what goes live | The console, the Universal Editor, preview links |
+| **The delivery API** | Serves published content to readers | REST + GraphQL, a TypeScript client, React hooks, a Next.js starter |
+
+The division is enforced, not suggested: **an agent's writes land as drafts**, and
+publishing is a permission an agent may not even have. See
+[Letting an agent in](../agent-safety.md).
+
+---
+
+## What you can do with it
 
 ### Model your content
-Define custom **Post Types** with flexible fields: text, HTML, file uploads, relationships, date pickers, code editors, and more. Each Post Type becomes a reusable content template that editors can populate through the admin console.
+Define **post types** with the fields you need, text, rich text, files, relationships,
+dates, code. A post type is a reusable shape that both a curator's form and an agent's
+write are validated against.
 
-### Build pages from layouts and regions
-Create **Page Layouts** and **Regions** as **Handlebars** templates. A layout slots named regions, a Theme supplies the CSS, and a small closed set of helpers reads your content: `{{#query}}`, `{{#navigation}}`, `{{#menu}}`, `{{#image}}`. See [Pages, Layouts & Regions](../website-development.md).
+### Build pages, or don't
+Shio can render pages itself, from **Handlebars** templates over page layouts, regions and
+themes, which is how a site an agent just built is visible with no front end at all. Or
+serve nothing but JSON and let your own front end own the markup. Both are first-class;
+see [what "headless" means here](#what-headless-means-here).
 
-### Query content via GraphQL
-Use the built-in **GraphQL** endpoint with an interactive **GraphiQL** console to query posts, folders, and sites. Perfect for decoupled frontends and mobile applications.
+### Author content as files
+Project a whole site to disk as Markdown, edit it with the tools you already use, and push
+it back, with a three-way merge that never silently overwrites a curator's edit.
 
-### Integrate with any stack
-Consume Shio CMS from your application via **REST API** or **GraphQL**. All content operations (CRUD, search, file upload, user management) are available as JSON endpoints.
+### Adopt a site that already exists
+Point Shio at a live website and it will capture it, propose which blocks could become
+editable content, and convert it into a site a human can curate.
 
-### Search your content
-Contents are indexed automatically and searchable through the embedded search engine. For advanced search, Shio integrates with **Viglet Turing ES** for faceted search, semantic navigation, and generative AI.
-
-### Cache for performance
-**Hazelcast** distributed caching ensures your rendered pages and content objects are served fast. Cache invalidation happens automatically when content is updated.
-
----
-
-## How it works at a glance
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
-graph LR
-    A["📝 Content Authors\n(Admin Console)"]
-    B["📋 Shio CMS\n(Content + Rendering)"]
-    C["🌐 Websites\n(Page Layouts + JS)"]
-    D["📱 APIs\n(REST + GraphQL)"]
-
-    A --> B
-    B --> C
-    B --> D
-
-    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
-    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
-    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
-    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
-
-    class A amber
-    class B purple
-    class C blue
-    class D green
-```
-
-Content authors create and manage content through the admin console. Shio CMS stores it, renders websites using JavaScript templates, and exposes it via REST and GraphQL APIs.
+### Query it from anywhere
+REST and GraphQL, with per-site and per-environment API keys, ETags and rate limiting
+included.
 
 ---
 
-## Key concepts
+## The vocabulary, in the order you need it
 
-These are the main building blocks you will work with in Shio CMS. You do not need to understand all of them before getting started: come back to each one as you need it.
+### Sites, folders, posts
 
-| Concept | What it is | Learn more |
+A **site** is one website's worth of content. Inside it, **folders** organise content into
+a tree, sections, categories, whatever structure suits you. A **post** is a single piece
+of content: a page, an article, an image, a template.
+
+Two things about that tree are worth knowing early:
+
+- A post's **friendly URL** is unique within its site, and it is *not* its folder path.
+  Folders organise; URLs address. Moving a post between folders does not have to change
+  its URL.
+- **A file is a post too.** An uploaded image is a `File` post with fields of its own.
+
+### Post types
+
+A **post type** declares the fields a post may have. It is Shio's **one name-keyed
+surface**: types are referenced by name (`Article`, `Page`, `PageLayout`) everywhere, in
+the API, in the CLI, in the files on disk, and never by id. That is deliberate, and it is
+what lets a content model live in git as `shio/post-types/Article.json`.
+
+Some post types are **system types**, created by Shio itself: `PageLayout`, `Region`,
+`Theme`, `Redirect`, `SiteScripts`. They are ordinary content, which is why your
+templates can be exported, diffed and linted like anything else.
+
+### Addresses
+
+Everything is reached by an **address**:
+
+| Form | Names |
+|---|---|
+| `post:mysite/blog/hello-world` | one post |
+| `folder:mysite/blog` | one folder |
+| `site:mysite` | a site |
+| `id:9f8c…` | anything, by raw id |
+
+Three rules that save an afternoon:
+
+1. **Writes take only `post:` and `folder:`** (plus `site:` for the two site operations).
+2. **A site's home page is `post:mysite/`**: the trailing slash with nothing after it.
+3. An `id:` is a read convenience. Addressing writes by path is what removes the "which
+   UUID was that?" problem entirely.
+
+### Draft and published
+
+A post can exist in two states at once: a **draft** and a **published** version. Readers
+see the published one. The draft is where work happens.
+
+- Every write from an agent, and every save in the Universal Editor, goes to the **draft**.
+- **Publishing is an explicit act**, and it can be scheduled.
+- A **preview** shows the draft exactly as it will look, before anyone else can see it.
+- **Unpublishing** withdraws the live version and keeps the draft.
+- A **delete** goes to the trash, not away.
+
+### Page layouts, regions and themes
+
+If Shio is rendering your pages, three system types do the work:
+
+- A **Page Layout** is the page-level Handlebars template.
+- A **Region** is a reusable fragment the layout slots by name, through a `sh-region`
+  attribute.
+- A **Theme** supplies the CSS, and design tokens, if you use them.
+
+A page does not name its own layout: the **site** binds a post type to a layout, so every
+`Article` renders through the same one. See
+[Pages, Layouts & Regions](../website-development.md).
+
+### What "headless" means here
+
+Headless normally means "no rendering". Shio renders, so the honest description is that
+**presentation is never coupled to content**:
+
+| Route | Serves | Guards |
 |---|---|---|
-| **Site** | The top-level container for a website. Defines URL, theme, and Post Type associations. | [Core Concepts](./core-concepts.md) |
-| **Folder** | Organizes content hierarchically within a site. Folders can be nested. | [Core Concepts](./core-concepts.md) |
-| **Post** | A content item: an instance of a Post Type with field values. | [Core Concepts](./core-concepts.md) |
-| **Post Type** | A content model that defines fields, labels, and publishing rules. | [Content Modeling](../content-modeling.md) |
-| **Page Layout** | A template that controls how a page is structured, defines regions and rendering logic. | [Website Development](../website-development.md) |
-| **Region** | A reusable template slotted into a Page Layout by title. | [Pages, Layouts & Regions](../website-development.md) |
-| **Helper** | What a template calls to read content: `{{#query}}`, `{{#navigation}}`, `{{#image}}`, and six more. | [Pages, Layouts & Regions](../website-development.md#the-helpers) |
-| **Publishing** | Content lifecycle: Draft, Published, Stale, Unpublished. | [Content Modeling](../content-modeling.md) |
-| **GraphQL** | Query interface for accessing content programmatically. | [GraphQL](../graphql.md) |
-| **Hazelcast Cache** | Distributed cache for rendered pages and objects. | [Search & Caching](../search-caching.md) |
+| `/api/v2/cda/**` + `/graphql` | JSON, for your own front end | API key, per-site and per-environment scoping |
+| `/sites/{site}/…` | Published pages, rendered by Shio | Anonymous, cacheable, indexable |
+| `/preview/{site}/…` | **Drafts**, rendered by Shio | Authenticated, never cached, never indexed |
+
+Nothing forces you to pick one. A site can be delivered by a Next.js app over the API
+while a curator uses the preview route to check a draft, and a replicated site can be
+served straight from Shio while you decide what to do with it.
 
 ---
 
 ## Where to go next
 
-**I want to understand how Shio CMS works**
-> Read [Core Concepts](./core-concepts.md) first, then [Architecture Overview](../architecture-overview.md).
+The documentation is organised the way the work is:
 
-**I want to set up Shio CMS**
-> Go to the [Installation Guide](../installation-guide.md).
+| Hub | Start here if you want to |
+|---|---|
+| **[The agent builds it](/shio/category/agent-builds-it)** | Connect an agent, drive the API, author content as files, use the CLI |
+| **[The human curates it](/shio/category/human-curates-it)** | Understand the rails, curate content, edit a rendered page |
+| **[The CDA delivers it](/shio/category/cda-delivers-it)** | Build a front end against the delivery API |
+| **[Run it](/shio/category/run-it)** | Install, configure, secure and operate an instance |
 
-**I want to model content**
-> Start with [Core Concepts](./core-concepts.md) then go to [Content Modeling](../content-modeling.md).
-
-**I want to build a website**
-> Go to [Website Development](../website-development.md) for Page Layouts, Regions, and JavaScript API.
-
-**I want to query content from an external app**
-> See [GraphQL](../graphql.md) or [REST API](../rest-api.md).
-
-**I want to manage users and permissions**
-> Go to [Administration Guide](../administration-guide.md).
-
----
+Or read [Core Concepts](./core-concepts.md) next, which takes the vocabulary above one
+level deeper.

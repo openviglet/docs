@@ -1,231 +1,174 @@
 ---
-sidebar_position: 1
 title: Architecture Overview
-description: High-level architecture, component diagram, request flow, and deployment topologies for Viglet Shio CMS.
+description: "How Viglet Shio is put together: Spring Boot 4 on Java 21, one content model behind four surfaces, the Handlebars renderer, and the flows that connect them."
 ---
 
-# Shio CMS: Architecture Overview
+# Architecture Overview
 
 ## Introduction
 
-Viglet Shio CMS is an open-source headless Content Management System built on **Java 21** and **Spring Boot 4**. It allows organizations to model content with custom Post Types, render pages with Handlebars templates, and expose content via REST and GraphQL APIs.
+Viglet Shio is a single **Spring Boot 4 / Java 21** application over a relational
+database. It holds one content model and exposes it through four surfaces: an agent
+protocol, a console API, a delivery API, and a page renderer, and every one of those is a
+*shape* over the same services rather than its own contract.
 
-The system provides a modern **React** admin console, a **Hazelcast** distributed cache for website rendering, and integration with **Viglet Turing ES** for advanced search capabilities.
+That constraint is the architecture's main idea. There is no separate agent backend, no
+second serialization, no third way to write a post. Adding a capability means adding it
+once, in the service, and projecting it where callers need it.
 
-This document describes the system's components, internal modules, and the core data flows.
-
----
-
-## High-Level Component Diagram
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
-graph TD
-    subgraph Clients [" 💻 Clients "]
-        CL1["🌐 Web Browser"]
-        CL2["📱 Mobile / SPA"]
-        CL3["🔌 External Apps"]
-    end
-
-    subgraph API [" 🌐 API Layer "]
-        REST["📡 REST API\n/api/v2/*"]
-        GQL["📊 GraphQL API\nGraphiQL Console"]
-        ADMIN["🛠️ Admin Console\nReact + TypeScript"]
-        SITE["🌍 Page Rendering\nHandlebars templates"]
-    end
-
-    subgraph Core [" ⚙️ Core Modules "]
-        CM["📋 Content Management\nPosts · Folders · Sites\nPost Types · Workflows"]
-        WEB["🎨 Render Engine\nPage Layouts · Regions\nThemes · Helpers"]
-        SEARCH["🔍 Search Integration\nTuring ES · Elasticsearch"]
-        EXCH["📦 Exchange\nImport · Export\nProvider Plugins"]
-    end
-
-    subgraph Storage [" 💾 Backends "]
-        DB["🗄️ Database\nH2 (dev) · MariaDB\nMySQL · PostgreSQL · Oracle"]
-        HZ["⚡ Hazelcast\nDistributed Cache"]
-        FS["📁 File Storage\nStatic Files"]
-    end
-
-    Clients --> API
-    API --> Core
-    Core --> Storage
-
-    classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
-    classDef purple fill:#ede9fe,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a
-    classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a
-    classDef amber fill:#fef3c7,stroke:#E8A838,stroke-width:2px,color:#1a1a1a
-
-    class CL1,CL2,CL3 amber
-    class REST,GQL,ADMIN,SITE blue
-    class CM,WEB,SEARCH,EXCH purple
-    class DB,HZ,FS green
-
-    style Clients fill:#E8A83820,stroke:#E8A838,stroke-width:2px,color:#1a1a1a,font-weight:700
-    style API fill:#4A90D920,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a,font-weight:700
-    style Core fill:#9B6EC520,stroke:#9B6EC5,stroke-width:2px,color:#1a1a1a,font-weight:700
-    style Storage fill:#50B86C20,stroke:#50B86C,stroke-width:2px,color:#1a1a1a,font-weight:700
-```
+Nothing calls out to a hosted service: Shio holds **no model and no prompts**, and the
+content, the files and the keys stay on your infrastructure.
 
 ---
 
-### API Layer
+## Component diagram
 
-| Component | Description |
+![Shio architecture: callers, surfaces, core services and persistence](/img/diagrams/shio-architecture.svg)
+
+Two edges in that picture are the ones worth reading twice:
+
+- **MCP delegates to the agent surface, which delegates to the same write services the
+  console uses.** An agent is not a privileged path into the data; it is a different
+  spelling of the same operations, with its own guards on top.
+- **Turing indexing is a dotted line.** It is an opt-in integration reached on publish, not
+  a component the system needs to run.
+
+---
+
+## The surfaces
+
+| Surface | Path | Auth | For |
+|---|---|---|---|
+| **MCP** | `POST /mcp` | API key (`AGENT` scope) | An agent's client: 13 tools, 6 resources, 4 prompts |
+| **Agent REST** | `/api/v2/agent/**` | API key (`AGENT` scope), stateless | Discovery, addressed reads, atomic writes, verification |
+| **Console API** | `/api/v2/**` | Session + CSRF | The React console |
+| **Delivery (CDA)** | `/api/v2/cda/**`, `/graphql` | API key (read / preview / write scope) | Your own front end |
+| **Renderer** | `/preview/**`, `/sites/**` | authenticated / anonymous | Pages Shio serves itself |
+
+## Core modules
+
+| Module | Owns |
 |---|---|
-| **REST API** | Controllers for posts, folders, sites, post types, users, groups, search, widgets, workflows, and file management (`/api/v2/*`) |
-| **GraphQL API** | Content query interface with built-in GraphiQL console |
-| **Admin Console** | React + TypeScript + Radix UI + TailwindCSS admin interface for content management |
-| **Page Rendering** | Handlebars templates over Page Layouts, Regions and Themes, served at `/preview/**` (drafts, authenticated) and `/sites/**` (published, public) |
+| **Content** | The unified post model, folders, sites, post types, the trash, versions |
+| **Agent** | The manifest, context pack, address resolution, the op vocabulary, plan/apply, memory, diagnostics |
+| **Verify** | The content lint, route proof, structural and appearance digests |
+| **Render** | Template composition, the helper set, themes and tokens, link rewriting |
+| **Static files** | Uploads, the image transform pipeline, byte delivery by id and by site path |
+| **Exchange** | Site export/import packages, tenant provisioning |
+| **Security** | API-token scopes, session auth, tenant resolution, CSRF and CORS |
+
+## Persistence
+
+| Concern | How |
+|---|---|
+| **Schema** | **Liquibase owns it.** `ddl-auto` is `none`; an upgrade is a restart, not a hand-written `ALTER` |
+| **Databases** | PostgreSQL, MariaDB/MySQL, or embedded H2 for development |
+| **Content model** | One unified post row per state (`DRAFT`, `PUBLISHED`), over a JOINED inheritance hierarchy whose root carries the tenant discriminator |
+| **Multi-tenancy** | A discriminator column on the shared schema, applied by a Hibernate filter: see [Multi-Tenancy](./multi-tenancy.md) |
+| **File bytes** | Under `store/`, addressed by post id and, for a site's own assets, by folder path |
 
 ---
 
-### Core Modules
+## The flows
 
-| Module | Package | Responsibility |
-|---|---|---|
-| **Content Management** | `api`, `persistence` | CRUD for Posts, Folders, Sites, Post Types; publishing workflow; change history; references |
-| **Render Engine** | `render` | Page Layout composition, Region slotting, Theme inlining, template helpers |
-| **Search Integration** | `turing` | Automatic content indexing, Turing ES REST API integration, search field mapping |
-| **Exchange** | `exchange`, `provider` | Import/export of sites, folders, and posts; provider plugins for Blogger, OTCS, OTMM |
-| **Security** | `spring/security` | User, role, and group management; Spring Security integration; CSRF protection |
-| **Webhook** | `webhook` | Incoming webhook handling for external integrations |
+### The agent loop: discover, plan, write, verify
 
----
+![The agent loop: discover, plan, write, verify, then hand over to a curator](/img/diagrams/shio-agent-loop.svg)
 
-### Backends & Storage
+The plan step writes nothing, and the write step carries its own proof (`?verify&digest`),
+so a task that would be a dozen round trips is three or four calls.
 
-| Backend | Purpose | Notes |
-|---|---|---|
-| **Database** | Content, metadata, configuration, users | H2 for dev; MariaDB/MySQL recommended for production |
-| **Hazelcast** | Distributed page and object cache | TTL-based expiration (24h default); automatic invalidation on content change |
-| **File Storage** | Static files and uploads | Local filesystem with configurable paths; max upload 1 GB |
+### A curator's correction
 
----
+![Curation: a draft, the review queue, the Universal Editor, publishing, the trash](/img/diagrams/shio-curation-flow.svg)
 
-## Website Rendering Flow
+Every arrow into `PUBLISHED` passes through a person. See
+[Letting an agent in](./agent-safety.md).
 
-When a page is requested, the render engine resolves the URL to a post, finds the Page Layout bound to that post's type in the site's `postTypeLayout` map, fills each `sh-region` slot with its Region template, inlines the Theme's CSS, and resolves any helpers the templates call. The published route (`/sites/**`) is cacheable for five minutes; the preview route is `no-store`.
+### A delivery read
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 sequenceDiagram
-    participant Browser
-    participant Cache as Hazelcast Cache
-    participant Engine as Website Engine
-    participant DB as Database
-
-    Browser->>Cache: GET /sites/mysite/page
-    alt Cache hit
-        Cache-->>Browser: Cached HTML
-    else Cache miss
-        Cache->>Engine: Resolve URL
-        Engine->>DB: Load content + Page Layout
-        DB-->>Engine: Content + regions
-        Engine->>Engine: Compose layout + regions (Handlebars)
-        Engine->>Engine: Resolve helpers (query, navigation, image)
-        Engine-->>Cache: Store rendered HTML
-        Cache-->>Browser: Rendered HTML
-    end
+    participant F as Front end
+    participant K as Token filter
+    participant S as CDA service
+    F->>K: GET /api/v2/cda/post-by-url + Key
+    K->>K: scope · site allow-list · rate limit
+    K->>S: env = PROD (or PREVIEW for drafts)
+    S-->>F: frozen DTO + ETag + Cache-Control
+    F->>K: repeat with If-None-Match, get 304
 ```
+
+### The content-as-files round trip
+
+![Pull, edit, push, with the three-way merge against a fingerprint base](/img/diagrams/shio-content-files.svg)
+
+### The render pipeline
+
+![Page, layout, region, theme, helpers, HTML, digest](/img/diagrams/shio-render-pipeline.svg)
+
+### A replicated site being served
+
+![Clone, propose, convert, publish, serve, judge](/img/diagrams/shio-replication-flow.svg)
 
 ---
 
-## Content API Flow
-
-External applications access content through the REST API or GraphQL endpoint. Both require authentication (except public site endpoints).
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
-sequenceDiagram
-    participant Client
-    participant API as REST / GraphQL
-    participant Security
-    participant Service as Content Service
-    participant DB as Database
-
-    Client->>API: Request (JSON)
-    API->>Security: Authenticate
-    Security-->>API: Authorized
-    API->>Service: Process request
-    Service->>DB: Query / Mutate
-    DB-->>Service: Result
-    Service-->>API: Response DTO
-    API-->>Client: JSON Response
-```
-
----
-
-## Technology Stack
+## Technology stack
 
 | Layer | Technology | Notes |
 |---|---|---|
 | **Runtime** | Java 21 | Minimum supported version |
-| **Framework** | Spring Boot 4.0.4 | Application container with auto-configuration |
-| **Database** | H2 / MariaDB / MySQL / PostgreSQL / Oracle | H2 for development; MariaDB/MySQL recommended for production |
-| **Cache** | Hazelcast | Distributed cache for website rendering |
-| **Search** | Elasticsearch 9.3.3 via Viglet Turing SDK | Full-text search integration |
-| **Template Engine** | Handlebars.java | Page Layouts, Regions and Themes; no script engine on the classpath |
-| **Frontend** | React 19 + TypeScript + Radix UI + TailwindCSS + Vite | Admin console (`shio-react`) |
-| **Build** | Maven (backend) + npm (frontend) | Multi-module project |
-| **CI/CD** | GitHub Actions | Automated builds and code quality |
-| **Containerization** | Docker / Docker Compose | Available in project root and `containers/` directory |
-| **Orchestration** | Kubernetes | Manifests available in `k8s/` directory |
-| **API Protocols** | REST + GraphQL | GraphiQL console available in development mode |
+| **Framework** | Spring Boot 4 | Application container, security, MVC, GraphQL |
+| **Database** | PostgreSQL · MariaDB/MySQL · H2 | H2 for development; the schema is DB-agnostic and Liquibase-managed |
+| **Schema** | Liquibase | `ddl-auto=none`; migrations are the source of truth |
+| **Template engine** | Handlebars.java | No script engine on the classpath |
+| **Search** | In-database full text; **optional** Viglet Turing ES client | Turing is off by default (`shio.turing.enabled=false`) |
+| **Cache** | Hazelcast (embedded), HTTP `ETag` / `Cache-Control`, per-transaction render caches | |
+| **File extraction** | Apache Tika | Text extraction from uploads |
+| **Console** | React 19 + TypeScript + Radix UI + Tailwind + Vite | Built into the JAR |
+| **Packages** | `@viglet/shio-client`, `@viglet/shio-react-sdk`, `@viglet/shio`, `@viglet/shio-model`, `@viglet/shio-sections`, `@viglet/shio-editor-cors` | pnpm workspace |
+| **Ops** | Actuator, OpenAPI, Docker / Compose | |
+
+:::info Not dependencies
+Two things earlier documentation listed as part of the stack are **not**: there is no
+server-side JavaScript engine (the Nashorn artifact is explicitly excluded from the build),
+and **Elasticsearch is not a dependency**: search runs in your database, and Turing ES is
+an optional client you enable if you want faceted enterprise search.
+:::
 
 ---
 
-## Deployment Topologies
+## Deployment topologies
 
 ### Development
 
-Minimal setup for local development and evaluation.
+One process, embedded H2, `store/` on local disk. `npx @viglet/shio` and an agent client
+against `http://localhost:2710`. The console is served by the same JAR; run Vite
+separately only if you are changing the console itself.
 
-```
-Shio CMS (H2 embedded)
-```
+### Single node
 
-Shio CMS starts with an embedded H2 database. No external services are needed. Not suitable for production.
+Shio + PostgreSQL (or MariaDB/MySQL). This is the shape most installations want:
 
----
+- **What must be co-located with the process:** `store/`: the file bytes and logs. Put it
+  on a volume that survives a redeploy.
+- **What must not be:** the database. The schema is migrated at startup, so a rolling
+  restart is a migration.
+- **What is optional:** a reverse proxy for TLS, and a CDN in front of `/sites/**` (five
+  minutes of cacheability, so a purge hook is worth wiring if you publish often).
 
-### Simple Production
+### Containers
 
-Recommended baseline for production environments.
+`docker compose` with Shio, a database, and a volume for `store/`. Turing ES is a separate
+compose service only if you enabled indexing.
 
-```
-Shio CMS + MariaDB / MySQL
-```
+### Multiple nodes
 
-MariaDB or MySQL provides durable persistence for content, users, and configuration. Hazelcast runs embedded within Shio CMS.
-
----
-
-### Docker Compose
-
-Complete environment with all dependencies.
-
-```
-Nginx (reverse proxy, ports 80/443)
-    └── Shio CMS (port 2710)
-    └── MariaDB (port 3306)
-```
-
-All services are defined in the project's `docker-compose.yaml`. Volume mounts provide persistent storage for the database and Shio CMS store directory.
-
----
-
-### Kubernetes
-
-For cloud deployments requiring horizontal scaling.
-
-```
-Nginx (reverse proxy)
-    └── Shio CMS (1..N replicas)
-MariaDB
-```
-
-Kubernetes manifests are available in the `k8s/` directory.
+Shio runs multi-node, with two things to know before you scale out: the CDA's rate limiter
+is **per JVM**, so a per-token budget is multiplied by your node count; and the change feed
+is commit-ordered per node, so a consumer walking it across a cluster is told when it has
+met a write the node it asked did not stamp.
 
 ---
 
@@ -233,9 +176,8 @@ Kubernetes manifests are available in the `k8s/` directory.
 
 | Page | Description |
 |---|---|
-| [Installation Guide](./installation-guide.md) | Setup with Docker, JAR, or build from source |
-| [Configuration Reference](./configuration-reference.md) | All application.properties settings |
-| [Developer Guide](./developer-guide.md) | Tech stack, dev environment, and contribution guide |
-| [Website Development](./website-development.md) | Page Layouts, Regions, and JavaScript API |
-
----
+| [Core Concepts](./getting-started/core-concepts.md) | The vocabulary this diagram uses |
+| [The Agent Surface](./agent-surface.md) | The protocol the agent edge speaks |
+| [Pages, Layouts & Regions](./website-development.md) | The renderer, in full |
+| [Multi-Tenancy](./multi-tenancy.md) | One JVM, many isolated tenants |
+| [Installation Guide](./installation-guide.md) | Getting the topologies above running |

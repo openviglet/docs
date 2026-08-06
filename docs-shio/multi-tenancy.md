@@ -1,0 +1,134 @@
+---
+title: Multi-Tenancy
+sidebar_label: Multi-Tenancy
+description: "Run one Viglet Shio instance that serves many isolated tenants: discriminator-based data isolation, provisioning, membership, plan quotas and suspension."
+---
+
+# Multi-Tenancy
+
+One Shio process can serve many fully isolated **tenants**: separate content, separate
+users, separate files, separate API tokens, out of one schema and one JVM.
+
+It is **off by default**. A single-instance installation behaves exactly as it always did,
+and everything below is inert until you turn it on:
+
+```properties
+shio.multi-tenant=true
+```
+
+---
+
+## How isolation works
+
+Isolation is a **discriminator column**, not a schema or a database per tenant. Every row
+of the active content tree carries a `tenant_id`, and Hibernate adds `tenant_id = ?` to
+every query it issues, so a tenant's content is invisible to another tenant at the level
+of the SQL, not at the level of a service remembering to filter.
+
+Three consequences worth understanding before you deploy it:
+
+- **You get one schema and one connection pool.** Adding a tenant is a row, not a
+  migration, so provisioning is fast and cheap.
+- **The filter is applied by the persistence layer.** A query written without thinking
+  about tenancy is still tenant-scoped. This is why the isolation holds across surfaces, 
+  console, delivery API, agent protocol and renderer all read through the same layer.
+- **The tenant catalogue itself is global.** The table that lists tenants is deliberately
+  *not* tenant-scoped, because something has to be able to see all of them.
+
+:::warning For contributors
+The discriminator column must be lowercase `tenant_id`, and a new column on a populated
+table must be added nullable and backfilled. Both rules are load-bearing and both are
+enforced by tests. If you are adding a table, read `docs/agents/database.md` in the
+repository first.
+:::
+
+---
+
+## Resolving the tenant
+
+Which tenant a request belongs to is decided per request, from whichever of these applies:
+
+| Caller | Resolved from |
+|---|---|
+| A logged-in console user | The identity provider's workspace claim → the user |
+| An API key (delivery, agent, MCP) | **The token's own tenant**: looked up across tenants, then pinned for the request |
+| Anything else | The default tenant, `shio` |
+
+The token path matters more than it looks: it means **delivery is scoped to the tenant that
+owns the content**, not to whoever is asking. A front end with a key for tenant B cannot
+see tenant A's posts even if it guesses an id, and CDA responses vary on the key so a
+shared cache cannot leak across tenants.
+
+The reserved `shio` tenant is seeded at startup and cannot be deleted: it is the default,
+and the source the provisioner copies from.
+
+---
+
+## Lifecycle
+
+### Provisioning
+
+Creating a tenant copies the **default content model** into it, so a new tenant starts with
+the post types a working instance needs rather than an empty schema. The copy preserves
+which types are system-owned, so a tenant cannot end up with an editable copy of something
+that should be read-only.
+
+Tenant administration is `ROLE_ADMIN`-gated, in the console's Tenants page or over the
+tenant API.
+
+### Membership
+
+A user belongs to one or more tenants. Membership is what the console's tenant switch
+reads, and what an identity provider's claim maps onto.
+
+### Plan quotas
+
+A tenant carries a **plan**, and a plan carries limits. They are enforced at creation time
+and answer **HTTP 402** when there is no room:
+
+| Plan | Sites | Posts |
+|---|---|---|
+| `free` | 2 | 200 |
+| unlimited | , | , |
+
+The check runs before a site or a post is created, so a tenant at its ceiling gets a clear
+refusal rather than a partially-created site.
+
+### Suspension and teardown
+
+A tenant can be **suspended** (kept intact but not served) and torn down, which removes
+its content, its files and its tokens. Both are administrative operations, not something a
+tenant's own credential can reach.
+
+---
+
+## Files
+
+File bytes are stored per tenant: the tenant id prefixes the storage layout under
+`shio.file-source.path`. Two tenants uploading `hero.png` never share a path, and a tenant
+teardown removes its own bytes and nothing else.
+
+---
+
+## What to check before enabling it
+
+1. **Back up first, then start once.** Enabling tenancy backfills the discriminator on
+   existing rows.
+2. **Decide where the tenant claim comes from.** With an OIDC provider it is a claim on the
+   token; without one, everything lands in the default tenant, which is the single-instance
+   behaviour.
+3. **Re-issue API tokens per tenant.** A token belongs to exactly one tenant, and that is
+   what scopes delivery.
+4. **Know the per-node limits.** The delivery rate limiter is per JVM, so a per-token budget
+   multiplies by your node count.
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [Installation Guide](./installation-guide.md) | Getting an instance running first |
+| [Configuration Reference](./configuration-reference.md) | `shio.multi-tenant` and the file-source path |
+| [Security](./security.md) | Token scopes, authentication and CSRF |
+| [Architecture Overview](./architecture-overview.md) | Where tenant resolution sits |

@@ -26,7 +26,16 @@ const sidebars: SidebarsConfig = {
             type: "doc",
             id: "agent-builds-it",
           },
-          items: ["website-development"],
+          items: [
+            "mcp",
+            "agent-surface",
+            "content-as-files",
+            "cli",
+            "blueprints",
+            "website-development",
+            "replication",
+            "token-economy",
+          ],
         },
         {
           type: "category",
@@ -35,7 +44,13 @@ const sidebars: SidebarsConfig = {
             type: "doc",
             id: "human-curates-it",
           },
-          items: ["content-modeling", "administration-guide", "import-export"],
+          items: [
+            "agent-safety",
+            "universal-editor",
+            "content-modeling",
+            "administration-guide",
+            "import-export",
+          ],
         },
         {
           type: "category",
@@ -62,6 +77,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "installation-guide",
             "configuration-reference",
+            "multi-tenancy",
             "search-caching",
             "security",
           ],

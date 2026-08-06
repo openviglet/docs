@@ -1,0 +1,142 @@
+---
+title: Blueprints
+sidebar_label: Blueprints
+description: "Appliable starting points: a blueprint installs a content model, a folder tree, sample pages and a front end in one call, with a plan you can read first."
+---
+
+# Blueprints
+
+A recipe tells you what to do. A **blueprint** does it.
+
+A blueprint is a section of a site the instance can **apply**: a content model, a folder
+tree, sample pages, the parameters that make it yours, and a promise about what exists
+afterwards. One call produces a working, verifiable starting point, which is the
+difference between "here are eleven steps" and "here is a blog".
+
+```bash
+shio blueprints                     # what this instance carries
+shio blueprints blog                # one package's parameters
+shio apply --blueprint blog --site mysite --param title="My Blog"
+```
+
+Over MCP that is `shio_blueprint`; over REST:
+
+```http
+GET  /api/v2/agent/blueprints
+GET  /api/v2/agent/blueprints/{name}
+POST /api/v2/agent/blueprints/{name}/apply
+```
+
+Reading the catalogue is deliberately cheap: a name, a version, what applying it gives
+you, and the parameter names. The full schema of the one you pick is a second call, so
+choosing between six packages does not cost six schemas.
+
+---
+
+## The first-party set
+
+| Blueprint | Gives you |
+|---|---|
+| `blog` | An `Article` type, a `/blog` section, published samples |
+| `docs` | A documentation section with a navigable tree |
+| `product-catalog` | A catalogue type and a listing |
+| `marketing-site` | A section-composed site, **plus** the Next.js front end |
+| `landing` | A single section-composed page, **plus** the front end |
+| `nextjs-starter` | The Next.js starter project itself, as a package |
+
+Three of them carry front-end **files**: `nextjs-starter` gets the starter tree, and
+`marketing-site` and `landing` get the same tree plus a small section-aware overlay. The
+other three deliberately do not: they compose no sections, so the overlay would ship a
+dependency they never import.
+
+---
+
+## Applying one
+
+`apply` is a two-step by default, because looking before writing is the whole safety
+story:
+
+```bash
+shio apply --blueprint marketing-site --site mysite --dry-run
+```
+
+A plan **writes nothing and needs no write transaction**: it can run on a read-only
+credential or a replica. It declares what it *would* create: the site, each post type
+with the fields it would carry, every folder and every page. Then:
+
+```bash
+shio apply --blueprint marketing-site --site mysite --create-site \
+  --param title="Northwind" --param tagline="Tools that last"
+```
+
+Everything lands as **drafts**. Publishing is yours.
+
+| Flag | Effect |
+|---|---|
+| `--param k=v` | Repeatable |
+| `--params <file>` | The same values as JSON |
+| `--site <site>` | Which site to apply into, always the caller's choice |
+| `--create-site` | Make the site if it is not there |
+| `--merge-post-types` | Add fields an existing type is missing |
+| `--force` | Overwrite carried files that already exist on disk |
+
+---
+
+## The rules that protect you
+
+A blueprint is code you did not write, applied to content you care about. Five rules
+follow from that, and each is a refusal rather than a convention:
+
+- **A package may not name its own site, and may not prune.** The site is always the
+  caller's; a `site` key inside a package is *refused at load*, not ignored: an ignored
+  key looks like it worked. Prune's blast radius depends on what the author forgot to
+  mention, and that author is not you.
+- **The model is provisioned, never overwritten.** A post type that already exists is left
+  exactly as it is (including a field a human added) and the response **names the fields
+  it lacks** so you can decide. `--merge-post-types` adds them; nothing silently replaces
+  your model.
+- **Substitution is `{{name}}` and nothing else.** No conditionals, no expressions: the
+  same parameters always produce the same site. `site` is reserved and always available.
+  An unknown parameter is a teaching error, never quietly dropped.
+- **A malformed package is the package's fault, and says so.** Everything is validated when
+  the package loads: a missing referenced file, a path that escapes the package, an
+  unknown manifest key, a placeholder with no declared parameter, a promise the content
+  never fulfils. That is a `409`, not a `400`: nothing you sent caused it.
+- **The server never writes a project file.** Carried files come back on the response and
+  the CLI writes them, never over an existing file without `--force`. A client that cannot
+  write files is told what it has *not* got, and each row names the placeholders standing
+  in that file, read from the **bytes**, with the resolved value beside it.
+
+---
+
+## What a package looks like
+
+A directory with a `blueprint.json` and the files it references:
+
+```
+blog/
+├── blueprint.json
+├── post-types/Article.json     # the same bytes `shio pull` writes
+├── content/blog.json           # a desired-state document
+└── files/…                     # optional front-end sources
+```
+
+Nothing in that format is a new serialization: the post types are what the CLI already
+writes, the content is a desired-state document, and `verify` is the promise the package
+keeps. A blueprint is therefore something you can read, diff and author with the tools you
+already have.
+
+`blueprint.json` declares the name, the version, the parameters with their defaults, the
+files, and a `verify` block naming what must exist when the apply is done, which is what
+makes "it worked" checkable instead of asserted.
+
+---
+
+## Related Pages
+
+| Page | Description |
+|---|---|
+| [The `shio` CLI](./cli.md) | `blueprints`, `apply --blueprint`, `init --blueprint` |
+| [The Agent Surface](./agent-surface.md) | The desired-state document a package compiles into |
+| [MCP Server](./mcp.md) | `shio_blueprint` and the `shio://blueprints` resources |
+| [Content Modeling](./content-modeling.md) | The post types a package provisions |

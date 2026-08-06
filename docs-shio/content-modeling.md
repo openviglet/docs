@@ -1,163 +1,202 @@
 ---
 sidebar_position: 1
 title: Content Modeling
-description: Post Types, custom fields, publishing workflow and content relationships in Viglet Shio CMS.
+description: "Post types in Viglet Shio: one name-keyed surface, the widget catalogue, relationships, the model as code in TypeScript or JSON, and renaming without losing content."
 ---
 
 # Content Modeling
 
-Content modeling in Shio CMS revolves around **Post Types**: reusable templates that define the structure of content items. This guide covers how to create and configure Post Types, the available field types, the publishing workflow, and content relationships.
+A **post type** declares the fields a post may have. It is what a curator's form is
+generated from, what an agent's write is validated against, and what a generated TypeScript
+type is derived from: one declaration, three consumers.
 
 ---
 
-## Post Types
+## One name-keyed surface
 
-A **Post Type** defines:
+Post types are referenced **by name** (`Article`, `Page`, `PageLayout`) everywhere: the
+REST API, MCP calls, the CLI, and the files on disk. There is no id-keyed twin; the one that
+used to exist was retired.
 
-- **Name**: human-readable label
-- **Description**: purpose of the content type
-- **Identifier**: unique system key
-- **Publishing responsibility**: who can approve and publish
+```http
+GET    /api/v2/post-type            # every type
+GET    /api/v2/post-type/Article    # one type and its fields
+POST   /api/v2/post-type            # create
+PUT    /api/v2/post-type/Article    # replace the definition
+POST   /api/v2/post-type/Article/rename
+DELETE /api/v2/post-type/Article
+```
 
-### System Post Types
+That choice is what makes a content model versionable: a type is a file called
+`Article.json`, and a diff of two revisions is readable.
 
-Shio CMS ships with built-in Post Types for common content patterns:
+**Renaming is a move, not a create-plus-delete.** `POST /{name}/rename` keeps the type's
+identity and its content. Deleting a type that content still points at answers a teaching
+`409` naming what is in the way, rather than orphaning posts.
 
-| Post Type | Purpose |
+---
+
+## Fields and widgets
+
+Every field has a **name**, a label, and a **widget**. The widget decides three things at
+once: how a curator edits the value, how the value is stored, and how it projects to a file
+on disk.
+
+| Widget | For |
 |---|---|
-| **Text** | General-purpose text content |
-| **Photo** | Image content with metadata |
-| **Video** | Video content |
-| **Quote** | Quoted text |
-| **Link** | External URL reference |
-| **File** | Downloadable file |
-| **Region** | Reusable page section |
-| **Theme** | Site theme definition |
-| **Page Layout** | Page template |
-| **Alias** | URL redirect to another object |
-| **Folder Index** | Default content for a folder |
+| `Text` | A single line |
+| `Text Area` | Plain multi-line text |
+| `HTML Editor` | Rich text. The **first** one on a type becomes the document body when the post projects to a Markdown file |
+| `Ace Editor - HTML` · `- CSS` · `- Javascript` | Code. These project to **sidecar files** beside the Markdown, so a template is editable with real tooling |
+| `Check Box` | A boolean |
+| `Combo Box` | One of a declared list of choices |
+| `Multi Select` | Several values, tags, or a list of references (see below) |
+| `Date` | A date or timestamp |
+| `File` | An uploaded file, referenced by the `File` post it creates |
+| `Content Select` | A reference to another post |
+| `Relator` | A repeating group of sub-fields |
+| `Tab` | Layout only: groups fields in the console form |
+| `Hidden` | Stored, not shown |
 
-### Custom Post Types
+Two fields can be marked as the type's **title** and **summary**, which is what listings,
+search results and the `{{#query}}` helper's rows read.
 
-You can create **custom Post Types** with any combination of fields. To create a new Post Type:
+### Widget settings
 
-1. Navigate to **Administration > Post Types** in the admin console
-2. Click **New Post Type**
-3. Define the Name, Description, and Identifier
-4. Add fields (see [Field Types](#field-types) below)
-5. Configure publishing responsibility
+Some widgets need configuration, and it travels as `widgetSettings` on the field: a JSON
+string. A `Combo Box` needs its choices; a `Multi Select` needs to say whether it holds tags
+or references:
+
+```json
+{ "multiselect": { "references": "post" } }
+```
+
+That declaration is not cosmetic. It is what makes a composition **verifiable**, with it,
+`shio verify` resolves each value as an address and reports the ones that do not exist. A
+`Multi Select` without it stays a tag list, because reading every tag as a URL would report
+a defect for every tag on every post.
 
 ---
 
-## Field Types
+## Relationships
 
-Fields are the building blocks of Post Types. Each field has a **name**, **description**, **identifier**, and **type**. You can configure whether a field serves as the **title** and/or **description** of the Post Type.
-
-| Field Type | Description |
+| You want | Use |
 |---|---|
-| **Text** | Single-line text input |
-| **Text Area** | Multi-line plain text |
-| **HTML Editor** | Rich text editor with formatting |
-| **Ace Editor (HTML)** | Code editor with HTML syntax highlighting |
-| **Ace Editor (Javascript)** | Code editor with JavaScript syntax highlighting |
-| **Content Select** | Reference to another content item |
-| **Relator** | Relationship to one or more content items |
-| **Combo Box** | Dropdown selection |
-| **Multi Select** | Multi-value selection |
-| **Check Box** | Boolean checkbox |
-| **Date** | Date picker |
-| **Hidden** | Hidden field (not shown in editor) |
-| **Tab** | Visual tab separator for organizing fields |
-| **Recaptcha** | CAPTCHA verification field |
-| **Form Configuration** | Form submission settings |
+| One post to point at another | `Content Select` |
+| An ordered list of other posts (a page composed of sections, say) | `Multi Select` with `references: "post"` |
+| Repeating structured rows inside one post | `Relator`, with its own sub-fields |
+| A file | `File`, which creates a `File` post you can address like anything else |
 
-### Field Configuration
-
-For each field you can:
-
-- **Order** fields within the Post Type
-- **Set as Title**: marks the field as the Post Type's title
-- **Set as Description**: marks the field as the Post Type's description
-- **Configure search mapping**: define how the field is indexed in Viglet Turing ES
+Sections are the ordered-list case: a `Page` names its sections **by friendly URL, in
+order**, and a region's template walks them with `{{#getRelation}}`. See
+[Blueprints](./blueprints.md) for the shipped section vocabulary.
 
 ---
 
-## Publishing Workflow
+## System post types
 
-Every post follows a lifecycle from creation to publication:
+Some types are created by Shio itself and are read-only in the console:
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
-stateDiagram-v2
-    [*] --> Draft: Create post
-    Draft --> Published: Publish
-    Published --> Stale: Edit published post
-    Stale --> Published: Re-publish
-    Published --> Unpublished: Unpublish
-    Unpublished --> Published: Re-publish
+| Type | For |
+|---|---|
+| `Text` | General-purpose content |
+| `File` | An uploaded asset, with its own dimension and checksum fields |
+| `PageLayout` · `Region` · `Theme` | The render model |
+| `Redirect` | One old path in, one address out |
+| `SiteScripts` | A site's third-party script list, in load order |
+
+The render types are created **on demand**: `POST /api/v2/render/post-types`, or the
+`render.provision` op, rather than at install time, so provision them once before writing
+a layout. They are otherwise ordinary content: exportable, projectable, lintable.
+
+---
+
+## The model as code
+
+A content model is a deployable artefact, not console state.
+
+```bash
+shio pull                 # the live model → shio/post-types/*.json
+shio push --dry-run       # what would change
+shio push                 # apply
+shio push --check         # exit non-zero if git and the server disagree (CI)
 ```
 
-| Status | Visible on site? | Description |
-|---|---|---|
-| **Draft** | No | Newly created, only visible in management view |
-| **Published** | Yes | Live on the published site |
-| **Stale** | Yes (old version) | Published but modified: re-publish to update |
-| **Unpublished** | No | Removed from published site, still in repository |
+Serialization is **canonical and byte-identical**: pull twice and nothing changes, so a
+diff means a real difference.
 
-### Workflow Tasks
+### Authoring in TypeScript
 
-Shio CMS supports **workflow tasks** for content approval. Administrators can configure workflows that require approval before content is published.
+`shio/post-types/` also accepts `.ts` and `.mjs` modules written with
+`@viglet/shio-model`, and the CLI compiles them to exactly the same canonical JSON:
 
----
+```ts
+import { postType, text, htmlEditor, comboBox, multiSelect } from "@viglet/shio-model";
 
-## Content Relationships
-
-### References
-
-Posts can reference other posts using **Content Select** and **Relator** fields. References create navigable relationships between content items.
-
-- **Content Select**: references a single content item
-- **Relator**: references one or more content items with ordering
-
-### Folder Hierarchy
-
-Content is organized in a hierarchical folder structure within each site. Folders can be nested to create a tree. Posts live inside folders.
-
-```
-Site
-├── Home (Folder)
-│   ├── About (Post)
-│   └── Contact (Post)
-├── Blog (Folder)
-│   ├── Post 1
-│   └── Post 2
-└── Products (Folder)
-    ├── Category A (Folder)
-    │   ├── Product 1
-    │   └── Product 2
-    └── Category B (Folder)
+export default postType("Article", {
+  fields: [
+    text("TITLE", { title: true, required: true }),
+    htmlEditor("TEXT"),
+    comboBox("CATEGORY", { choices: { tech: "Technology", biz: "Business" } }),
+    multiSelect("SECTIONS", { references: "post" }),
+  ],
+});
 ```
 
-### Content Ordering
+The point is compile-time validation: `comboBox` *requires* its choices, so a missing one is
+a TypeScript error in your editor rather than a `400` from a push. `shio build` compiles
+without touching the server, if you want to inspect the output.
 
-Posts within a folder can be **reordered** via drag-and-drop in the admin console. The order is reflected immediately on the published site pages.
+### Managed by code
+
+Any push marks the types it wrote as **managed by code**. The console then shows them
+read-only, badge, disabled form, and a `409` on a console `PUT` as the server-side
+backstop. That is deliberate: it makes the boundary between "owned by git" and "edited by
+hand" explicit instead of a last-writer-wins race.
+
+### Generated TypeScript for a front end
+
+```bash
+shio types --out types/shio.d.ts
+```
+
+Produces one interface per post type from the live model, so `post.attrs.TITLE` has
+autocomplete in your front end. See [JavaScript Client](./headless/javascript-client.md).
 
 ---
 
-## Search Navigation Integration
+## Addressing content
 
-Post Type fields can be mapped to **Viglet Turing ES** Semantic Navigation fields for precise search indexing:
+A model is only useful if you can name what it produced:
 
-- **Search Field Association**: map a field to a default Turing SN field (title, description, text, date, URL, image)
-- **Create Additional Search Field**: map a field to a custom Turing SN field
+| Form | Names |
+|---|---|
+| `post:mysite/blog/hello-world` | one post |
+| `folder:mysite/blog` | one folder |
+| `site:mysite` | a site |
+| `id:9f8c…` | anything, by raw id |
 
-This allows you to control exactly what content is searchable and how it appears in search results. See [Search & Caching](./search-caching.md) for details.
+Writes take only `post:` and `folder:` (plus `site:`), and a site's home page is
+`post:mysite/`. A post's friendly URL is its own field (**not** its folder path) so
+reorganising folders does not rewrite URLs.
 
 ---
 
-## Spreadsheet Export
+## Publishing
 
-You can generate a **spreadsheet** of a folder's contents. Each Post Type in the folder becomes a separate sheet, with columns for each field. This is useful for bulk content review and reporting.
+A post has two states, `DRAFT` and `PUBLISHED`, and can be in both at once. Editing a
+published post updates its draft and leaves the live version alone until something publishes
+it. Publishing can be scheduled. Deleting moves the post to the trash. See
+[Core Concepts](./getting-started/core-concepts.md#draft-and-published).
+
+---
+
+## Search fields
+
+A field can be mapped to a Turing Semantic Navigation field, title, description, text,
+date, URL, image, or to a custom field for facets. That mapping only matters if you have
+enabled Turing indexing, which is **off by default**; see
+[Search & Caching](./search-caching.md).
 
 ---
 
@@ -165,9 +204,8 @@ You can generate a **spreadsheet** of a folder's contents. Each Post Type in the
 
 | Page | Description |
 |---|---|
-| [Core Concepts](./getting-started/core-concepts.md) | Sites, Folders, Posts, and Page Layouts |
-| [Website Development](./website-development.md) | Page Layouts, Regions, and JavaScript API |
-| [Search & Caching](./search-caching.md) | Turing ES integration and Hazelcast cache |
-| [REST API](./rest-api.md) | Post, Post Type, and folder API endpoints |
-
----
+| [Core Concepts](./getting-started/core-concepts.md) | Sites, folders, posts, states |
+| [The `shio` CLI](./cli.md) | `pull`, `push`, `build`, `types` |
+| [Content as Files](./content-as-files.md) | How posts and code fields project to disk |
+| [The Agent Surface](./agent-surface.md) | `post.upsert` and the field validation it applies |
+| [Pages, Layouts & Regions](./website-development.md) | The render types in use |
