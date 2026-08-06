@@ -120,6 +120,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 | **Block Q's capture internals**: `scanPage` block detection, token collision, CSS lifting, asset classification (SH424–SH432, SH449, SH452, SH455–SH456, SH461, SH465–SH476) | Fidelity mechanics of `clone`/`convert`. The user-facing surface is the three verbs and the two modes, documented as one row |
 | **Block P's engine internals**: the template graph, the render cache, the section registry | Renderer architecture (`docs/agents/renderer.md`); the authorable vocabulary is the user-facing half |
 | **Block R**: this documentation round: the coverage gate (SH479), the four sidebar hubs (SH482) and the pages the rest of the block files into them | Meta: it produced the pages in this very matrix. The hubs are navigation, so they change no verdict below; they are where a 🔴 becomes a page |
+| **Block S**: the public site at [shio.viglet.org](https://shio.viglet.org/) (SH530 and the Block S backlog), its `shio-site/` app, prerender and Pages deploy | Marketing, and it is the *entrance* to this documentation rather than part of it. Every claim it makes is a page here or in `docs/agents/**`, so a row of its own would duplicate a verdict already recorded above; what it owes those pages is a correct link, not coverage |
 
 ---
 
