@@ -69,6 +69,18 @@ would carry, the markup it would keep, and **what each conversion would lose**. 
 column is why this is a separate step and not a flag, you are approving a lossy
 transformation, so you get to see the loss.
 
+Every candidate also carries **`keeps N%`** — how much of that block's own text the fields
+would actually hold. The rest has no field to live in, so it is what a converted page loses
+even when the section type is right. A block that would keep less than half its text is
+walked into rather than accepted whole, and the ones that cannot be improved on are named in
+a note before anything is written.
+
+`--accept all` **declines a candidate whose derivation cannot fill a field the section type
+requires**, and says which and why. Those blocks stay verbatim markup, which keeps their
+content, instead of becoming a section `shio verify` would refuse with
+`required-field-empty`. Naming an id accepts it anyway — that is your call — and the command
+tells you what the gate will say about it.
+
 It also proposes the captured stylesheet as **design tokens plus CSS**, and the captured
 third-party scripts as a Site Scripts list: every entry for the head, with a consent
 category where the host declared one and a blank where it did not. A guess presented as a
