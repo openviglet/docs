@@ -232,7 +232,16 @@ than replacing it, so list only what is missing:
 
 Leave it empty to rank with the shipped vocabulary alone. A bundle that does not
 parse is ignored at ranking time — a typo costs you the extra words, never the
-sort — so check the application log if a word you added has no effect.
+sort.
+
+Which is exactly why the field has a **Check vocabulary** button next to it. Type
+a question your users would ask, press it, and Turing answers with three things:
+whether the bundle parsed, which words it added that the shipped vocabulary did
+not already have, and the sort your sample question actually resolves to. That
+last one is the answer you cannot get any other way — a bundle can parse, add a
+real word, and still resolve nothing because the word bridges to no numeric field
+in your schema. The check works on what is in the box, so you can try a bundle
+before saving it.
 
 To add a whole language, or the same vocabulary to every site at once, point
 `turing.genai.copilot.ranking.lexicon-dir` at a directory of
@@ -249,8 +258,15 @@ turing:
         lexicon-dir: /etc/turing/lexicons
 ```
 
-The directory is read at startup, so restart the application after editing a file
-there.
+After editing a file there, reload the lexicons — no restart needed:
+
+```bash
+curl -X POST https://your-turing/api/system/cache/ranking-lexicons/reload
+```
+
+Clearing all application caches (`POST /api/system/cache/clear`) does it too. The
+next question rebuilds from the resources and the directory as they are then,
+including for any site whose own vocabulary was merged on top.
 
 ### Query-planning strategy
 
