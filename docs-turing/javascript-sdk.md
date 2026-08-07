@@ -173,6 +173,40 @@ still work, but they are deprecated, log a one-time console notice, and are
 params is the round-trip that made reserved characters fragile in the first
 place. The server-rendered links themselves are not going anywhere.
 
+#### `toSearchView` — reading either shape {#tosearchview}
+
+Supporting both transports means every component has to ask which one arrived.
+`toSearchView(store)` answers it once, for the parts of the response the facet and
+pagination examples above do not cover — and it resolves the **actions** with the
+state, so the component that renders an applied-filter chip never learns whether
+removing it subtracts a filter query or follows an href:
+
+```js
+import { toSearchView } from "@viglet/turing-sdk";
+
+search.subscribe((state) => {
+  const view = toSearchView({ ...state, ...search });
+  if (!view.ready) return;
+
+  renderBrand(view.siteIcon);            // the site's Iconify name, or null
+  renderLocales(view.locales);           // [{ locale }]
+  view.appliedFilters.forEach((filter) =>
+    renderAppliedChip(filter.label, filter.remove),   // one call, either shape
+  );
+  if (view.spellCheck?.correctedText) {
+    offerCorrection(view.spellCheck.correctedTextValue, view.spellCheck.applyCorrection);
+  }
+  // `facetItemType: OR` — draw checkboxes rather than radio buttons.
+  setMultiSelect(view.multiSelectFacetItems);
+});
+```
+
+`view.source` tells you which shape backed the projection (`"structured"`,
+`"legacy"` or `"none"` before the first response), and `view.ready` is the render
+gate — gating on `state.data` alone renders nothing in the default mode.
+
+The React SDK re-exports the same function, and `useSearchView()` wraps it.
+
 ### Chat controller
 
 The chat controller streams the assistant's reply **token by token**, every token pushes a new state, so your subscriber repaints a growing bubble. It works in two modes:

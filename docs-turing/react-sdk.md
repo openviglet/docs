@@ -304,9 +304,58 @@ Returns the shared search store from TuringProvider when `urlSync` is configured
 ```tsx
 const store = useTuringUrlSearch();
 // Same shape as TuringProvider's internal store:
-// status, data, documents, groups, params, inputValue,
-// submitSearch, navigate, setLocale, setSort, showAll, etc.
+// status, structured, data, documents, groups, params, inputValue,
+// submitSearch, toggleFacet, goToPage, navigate, setLocale, setSort, showAll, etc.
 ```
+
+`structured` holds the link-free response — the default. `data` holds the legacy
+link-bearing one and is `null` unless you set `urlSync.postNative: false`. Prefer
+the derived hooks above (and `useSearchView` below) over reading either directly.
+
+### useSearchView
+
+Projects whichever response arrived onto one view model, so a component never
+learns which shape it got. It covers the parts the other hooks do not — the site
+icon, the locales, the applied-filter row and the spell-check offer — and resolves
+each **action** with its state: removing an applied filter subtracts a filter query
+in the default mode and follows an href on the legacy transport, through the same
+`remove()` call.
+
+```tsx
+const view = useSearchView();
+if (!view.ready) return <Spinner />;   // the render gate, either shape
+
+return (
+  <>
+    {view.siteIcon ? <Icon icon={view.siteIcon} /> : <YourLogo />}
+    {view.appliedFilters.map((filter) => (
+      <button key={filter.key} onClick={filter.remove}>{filter.label} ✕</button>
+    ))}
+    {view.spellCheck?.correctedText && (
+      <button onClick={view.spellCheck.applyCorrection}>
+        Did you mean {view.spellCheck.correctedTextValue}?
+      </button>
+    )}
+    <FacetRail multiSelect={view.multiSelectFacetItems} />
+  </>
+);
+```
+
+| Field | Description |
+|---|---|
+| `source` | `"structured"` \| `"legacy"` \| `"none"` — which shape backed the view |
+| `ready` | `true` once a response of either shape arrived |
+| `siteIcon` | The site's Iconify name, or `null` — fall back to your own logo |
+| `locales` | `[{ locale }]` the site can be searched in |
+| `queryContext` | Counts, paging and default field names |
+| `appliedFilters` | `[{ key, label, remove() }]` — the "applied filters" row |
+| `spellCheck` | `{ correctedTextValue, applyCorrection(), applyOriginal() }` or `null` |
+| `multiSelectFacetItems` | `true` when the site's facets multi-select (draw checkboxes) |
+
+The projection itself is `toSearchView(store)` in
+[`@viglet/turing-sdk`](./javascript-sdk.md#tosearchview) — the same function, so a
+plain-JS host and a React one resolve a response identically. This hook is the
+React wrapper.
 
 ---
 
@@ -387,6 +436,47 @@ Renders search results using the slot/render-prop pattern.
 | `emptyComponent` | `() => ReactNode` | No-results state |
 | `loadingComponent` | `() => ReactNode` | Loading state |
 | `isLoading` | `boolean` | Show loading component |
+| `onResultClick` | `(document, index) => void` | Fires on a row click — wire it to `trackResultClick` |
+| `onToggleFacet` | `(target) => void` | Toggles a result's facet chip; forwarded to `itemComponent` |
+| `onNavigate` | `(href) => void` | Legacy: follows a chip's href; forwarded the same way |
+
+### TuringDocumentChips
+
+Renders a result's facet chips (`document.raw.metadata`) as **actions**. A chip
+arrives in one of two shapes — a legacy `href` or a link-free `filterQuery` — and
+this narrows that for you: a filter query becomes an `aria-pressed` button, an
+href becomes an anchor that still carries the URL (for middle-click and crawlers)
+but calls your handler, and a chip you gave no handler for renders as plain text
+rather than as a control that does nothing.
+
+```tsx
+<TuringResultList
+  documents={documents}
+  onToggleFacet={toggleFacet}
+  itemComponent={({ document, raw, onToggleFacet }) => (
+    <article>
+      <h3>{document.title}</h3>
+      <TuringDocumentChips
+        chips={raw.metadata}
+        onToggleFacet={onToggleFacet}
+        chipClassName="chip"
+        selectedChipClassName="chip--on"
+      />
+    </article>
+  )}
+/>
+```
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `chips` | `TuringDocumentChip[]` | The document's `metadata` array, either shape |
+| `onToggleFacet` | `(target) => void` | Omit it and every chip renders inert |
+| `onNavigate` | `(href) => void` | Legacy chips only |
+| `itemComponent` | `(props) => ReactNode` | Own markup; receives `chip`, `isActionable`, `isSelected`, `onClick` |
+| `chipClassName` / `selectedChipClassName` | `string` | Skin the default renderer |
+
+Also exported from `@viglet/turing-react-ui` for hosts that consume the headless
+package directly.
 
 ### TuringPagination
 

@@ -279,6 +279,7 @@ is: *take the echoed `request`, apply one structured change, send it back.*
 ```json
 {
   "request": { "q": "chat", "page": 1, "locale": "en_US", "fq": ["section:RAG & Chat"] },
+  "icon": "tabler:building-store",
   "queryContext": { "count": 42, "facetItemType": "OR" },
   "results": {
     "document": [
@@ -323,11 +324,25 @@ is: *take the echoed `request`, apply one structured change, send it back.*
   ],
   "selectedFilterQueries": ["section:RAG & Chat"],
   "spellCheck": { "correctedText": false, "usingCorrectedText": false },
-  "locales": [{ "locale": "en_US", "selected": true }]
+  "locales": [{ "locale": "en_US", "selected": true }],
+  "similar": [{ "id": "doc-2", "title": "Tuning your retrieval", "url": "/tuning" }],
+  "spotlights": [{ "id": "sp-1", "position": 1, "title": "Start here", "link": "/start" }]
 }
 ```
 
-Every navigation that used to be a URL is now a value to put on the next request:
+A few fields carry state rather than navigation, and are present only when the
+site or the request produced them:
+
+| Field | When it appears |
+|---|---|
+| `icon` | the site configured an icon. A plain [Iconify](https://icon-sets.iconify.design/) name (`tabler:building-store`) — render it as the search header's brand mark, falling back to your own logo when absent |
+| `similar` | the request named a seed document — the "more like this" neighbours, each `{ id, title, type, url }` |
+| `spotlights` | the site pinned documents for this query — each `{ id, position, title, type, referenceId, content, link }`, `position` being the 1-based slot to inject it at |
+| `sortOptions` | the request asked for `includeSortOptions` (see below) |
+
+`url` and `link` above are the **documents' own destinations**, the same kind of
+value `results[].fields.url` carries — not search actions. Every *navigation*
+that used to be a URL is a value to put on the next request:
 
 | Instead of following… | Do this |
 |---|---|
