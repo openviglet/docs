@@ -190,6 +190,68 @@ fields' **names and descriptions**, so a clear description
 "cheapest" or "biggest context" to the right field. Give each ranking field a
 descriptive `description` in its manifest and superlative questions just work.
 
+Matching is done with a language analyzer rather than a word list, so inflections
+collapse on their own: a field named `pricing_inputPer1M` is reached by "price",
+"prices" or "priced" without any of them being configured.
+
+#### Ranking languages
+
+The ranking vocabulary follows the **request locale**. English (`en`), Portuguese
+(`pt`) and Spanish (`es`) ship, so "modelo **mais barato**", "**maior** janela de
+contexto", "modelos **ordenados por** preco" and "el modelo **mas barato**" resolve
+the same sorts their English equivalents do. Any other locale ranks with the
+English vocabulary, which is what every locale did before.
+
+#### Teaching Turing your catalog's own ranking words
+
+If your catalog has a quality of its own — "the **torquiest** engine", "the
+**lightest** frame" — you can teach it, per site, under **Semantic Navigation →
+your site → GenAI → Copilot Query Planning → Ranking vocabulary**.
+
+The field takes a small JSON bundle. It **extends** the shipped vocabulary rather
+than replacing it, so list only what is missing:
+
+```json
+{
+  "ascWords": ["lightest"],
+  "descWords": ["torquiest"],
+  "synonyms": {
+    "lightest": ["weight", "mass"],
+    "torquiest": ["torque"]
+  }
+}
+```
+
+| Key | What it declares |
+| --- | --- |
+| `ascWords` | Words that mean *smallest first* — the sort is ascending |
+| `descWords` | Words that mean *largest first* — the sort is descending |
+| `synonyms` | Which of your fields a word is about: the word on the left, tokens from the target field's name or description on the right |
+| `sortTriggers` | Extra "sorted by" phrasings, e.g. `["ranked on"]` |
+| `stopwords` | Words to ignore when matching a field |
+
+Leave it empty to rank with the shipped vocabulary alone. A bundle that does not
+parse is ignored at ranking time — a typo costs you the extra words, never the
+sort — so check the application log if a word you added has no effect.
+
+To add a whole language, or the same vocabulary to every site at once, point
+`turing.genai.copilot.ranking.lexicon-dir` at a directory of
+`lexicon-<language>.json` files in the same shape. Each is merged over the shipped
+bundle for that language, and a file for a language Turing does not ship (say
+`lexicon-fr.json`) adds it — name its `stemmer` after the Snowball language
+(`French`, `Italian`, `German`, …) so inflections still collapse:
+
+```yaml
+turing:
+  genai:
+    copilot:
+      ranking:
+        lexicon-dir: /etc/turing/lexicons
+```
+
+The directory is read at startup, so restart the application after editing a file
+there.
+
 ### Query-planning strategy
 
 Turning a question into a structured search is a step you can choose a strategy
@@ -198,15 +260,17 @@ Planning**:
 
 | Strategy | What it does | Cost per question |
 | --- | --- | --- |
-| **Deterministic** (default) | Ranking phrases are resolved without an LLM (as described above), and one LLM call maps the rest of the question onto your facets. Fully reproducible. The ranking vocabulary it understands is **English only**. | 1 LLM call |
+| **Deterministic** (default) | Ranking phrases are resolved without an LLM (as described above), and one LLM call maps the rest of the question onto your facets. Fully reproducible. Ranking phrases are understood in English, Portuguese and Spanish; any other language ranks with the English vocabulary unless you add one. | 1 LLM call |
 | **LLM-assisted** | Multi-pass: parse, then an LLM pass audits the query against the question (dropped filter? missing sort? undeclared field?), then a refine pass restates it. Understands questions in **any language** with no per-language configuration, and recovers when the first parse comes back empty. | up to 3 LLM calls |
 | **Hybrid** | Runs the deterministic plan first and only escalates to the audit/refine passes when it returned nothing, or produced no filter and no ordering. Common questions stay instant and free. | 1 LLM call, 3 only on a failed search |
 | **Default** | Pins nothing on the site: inherits the deployment setting below. | n/a |
 
-Pick **Hybrid** if your users ask questions in more than one language, or you have
-seen a question return no results that clearly should have matched. Pick
-**LLM-assisted** if most of your traffic is non-English. **Deterministic** (the
-default) is the cheapest and needs no LLM budget beyond the single parse.
+Pick **Hybrid** if you have seen a question return no results that clearly should
+have matched, or your users ask in a language with no ranking vocabulary. Pick
+**LLM-assisted** if most of your traffic is in such a language. **Deterministic**
+(the default) is the cheapest and needs no LLM budget beyond the single parse — and
+since it understands English, Portuguese and Spanish ranking phrases, a
+multilingual audience is no longer a reason on its own to leave it.
 
 **Analysis depth** bounds how many passes the LLM strategies may spend after the
 initial parse: `0` = parse only, `1` = + the audit pass, `2` = + the refine pass.
