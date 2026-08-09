@@ -119,7 +119,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 | **Block N's internal halves**: SH120 (console reads adopt CDA shapes), SH162 (SDK type mirror), SH165 (paged listing), SH167/SH234 (CSRF narrowing), SH177 (`schemaJson` retired) | Behaviour-preserving realignments; where one is observable it is folded into the ⚠️ rows above |
 | **Block Q's capture internals**: `scanPage` block detection, token collision, CSS lifting, asset classification (SH424–SH432, SH449, SH452, SH455–SH456, SH461, SH465–SH476) | Fidelity mechanics of `clone`/`convert`. The user-facing surface is the three verbs and the two modes, documented as one row |
 | **Block P's engine internals**: the template graph, the render cache, the section registry | Renderer architecture (`docs/agents/renderer.md`); the authorable vocabulary is the user-facing half |
-| **Block R**: this documentation round: the coverage gate (SH479), the four sidebar hubs (SH482) and the pages the rest of the block files into them | Meta: it produced the pages in this very matrix. The hubs are navigation, so they change no verdict below; they are where a 🔴 becomes a page |
+| **Block R**: this documentation round: the coverage gate (SH479), the four sidebar hubs (SH482), the pages the rest of the block files into them, and the two instruments that execute their examples (SH499) | Meta: it produced the pages in this very matrix. The hubs are navigation, so they change no verdict below; they are where a 🔴 becomes a page. SH499 closed the block by making these pages *checkable*: `cli/conformance/docs-vocabulary.conformance.mjs` holds every `shio` verb, REST path, `shio_*` tool and `shio.*` key written here against what the product declares, and `docs-examples.conformance.mjs` issues the read-only requests against a running instance — so a renamed verb or a moved endpoint fails a Shio build instead of misleading a reader here |
 | **Block S**: the public site at [shio.viglet.org](https://shio.viglet.org/) (SH530 and the Block S backlog), its `shio-site/` app, prerender and Pages deploy | Marketing, and it is the *entrance* to this documentation rather than part of it. Every claim it makes is a page here or in `docs/agents/**`, so a row of its own would duplicate a verdict already recorded above; what it owes those pages is a correct link, not coverage |
 
 ---
@@ -137,3 +137,13 @@ Block R took this from **33 wrong of 40** to **6**. What is left is what the blo
 Every item above is worth a task. Four of them are curator-facing, which is the half this block reached last: the agent's surface is now the best-documented part of the product and the console is the least.
 
 This file lands **red on purpose**: it is the audit that scopes Block R, and the count above is the number the block is measured by. When a new block ships, add its row here, and if it is user-facing without a page, that 🔴 is a defect to fix before the block is considered done.
+
+---
+
+## Block R is complete, and what it left
+
+Block R's last task shipped on 2026-08-09 and the block is withdrawn from Shio's roadmap. It ends at **6 wrong of 40**, from 33 — and the six are the finding, not the remainder of the work: every one is a cluster no Block R task ever named, which is why they survived a block that fixed twenty-seven others. They are now filed as Shio tasks of their own rather than left in this file's prose, because a gap recorded only in an audit is one nobody is assigned.
+
+One thing changed about *how* these pages are maintained, and it is the reason the block could be called done. Until SH499 nothing here was ever executed, which is precisely how the pre-2026.3 pages came to describe a product that had moved: written once, never compared. Two instruments now compare them on every Shio conformance run — the **names** (verbs, routes, tool names, configuration keys, read from the product's own declarations) and the **requests** (the read-only invocations, issued against a live instance). A count comes with them: **57 executable blocks over 18 pages, 65 assertable subjects**.
+
+So the rule for the next round is stronger than "add a row". A page that publishes a command, an endpoint or a configuration key is now making a claim a build can falsify. Write the example so it can be run.
