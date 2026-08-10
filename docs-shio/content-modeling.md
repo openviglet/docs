@@ -111,6 +111,42 @@ a layout. They are otherwise ordinary content: exportable, projectable, lintable
 
 ---
 
+## Asking what a model change would cost
+
+A post type change is a decision with alternatives, not a yes/no: making a field required
+is either a data cleanup or a mistake, and only the number of posts that would violate it
+tells you which. Send the definition you are considering with `?dryRun=true` and get the
+cost instead of the change:
+
+```http
+PUT /api/v2/post-type/Article?dryRun=true
+```
+
+| Finding | What it tells you |
+|---|---|
+| `required-field-violated` | how many published posts have no value for a field you are making required, with a sample |
+| `removed-field-still-read` | a template interpolates a field this change removes, so those pages would render nothing there |
+| `declared-field-unread` | fields no template reads. Not a defect — a field can be delivered over the CDA — but it is the list to check before adding another |
+| `stored-key-undeclared` | keys the content stores that no field declares, so nothing validates them and the console cannot edit them |
+
+The last two are true of the model as it stands, so sending a type back to itself is a
+way to review one nobody is currently changing.
+
+## Modelling from content you already have
+
+Writing a post type from nothing means naming fields before you know what they hold. If
+three pages of the shape already exist, ask what they have in common instead:
+
+```bash
+shio propose --from post:mysite/products/one --from post:mysite/products/two              --from post:mysite/products/three --name Product
+```
+
+Every proposed field says how many of the instances carry it and names the ones that do
+not — a field two of three share is a different proposal from one all three do. A field
+only a minority carries is reported separately rather than folded in, because it is more
+likely another type's field than an optional one. The report ends by saying it is
+evidence about the instances it read, which is the honest limit of the method.
+
 ## The model as code
 
 A content model is a deployable artefact, not console state.

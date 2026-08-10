@@ -76,12 +76,27 @@ bridge:
 npm install @viglet/shio-editor-cors
 ```
 
-Then write the `data-sh-*` attributes yourself on the elements you want editable, and tell
-the page which origin is allowed to frame it:
+Then write the annotations on the elements you want editable, and tell the page which
+origin is allowed to frame it:
 
 ```html
 <meta name="urn:shio:system:editor-origin" content="https://shio.example.com">
 ```
+
+If you compose pages from `@viglet/shio-sections`, the components already emit the
+annotations — pass the section post's id and they become editable:
+
+```jsx
+<Hero data={section.data} postId={section.id} />
+```
+
+`postId` is optional and that is deliberate: only the host knows the id, because it
+fetched the section over the delivery API and React drew it. Omit it on a public page and
+the markup is byte-identical, so nothing carries editing metadata where it is not wanted.
+Two things are not editable in place today and are documented rather than left to be
+discovered: **the rows of a collection field** (each row is its own post and the payload
+carries no id for it, so the editor would have nowhere to save), and `SectionHero.align`,
+which is rendered as a CSS class rather than as a value an attribute carries.
 
 That meta tag is not optional: **the package is inert without it.** A framed page cannot
 work out who framed it, `document.referrer` is empty on some navigations and reading the

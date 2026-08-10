@@ -58,6 +58,30 @@ shio.turing.source-app=shio
 shio.turing.de-index-on-unpublish=true
 ```
 
+### Indexing what was already published
+
+Because indexing happens on publish, switching it on for a site that **already has
+content** leaves the index empty — nothing is republished just because you changed a
+setting, and there is no error to tell you.
+
+Back-fill it with `data.reindex` on a `site.upsert`:
+
+```json
+{ "ops": [ { "op": "site.upsert", "address": "site:mysite",
+             "data": { "reindex": true, "limit": 200 } } ] }
+```
+
+It sends the site's already-published posts through the same mapping a publish uses, so a
+back-filled document and a freshly-published one are identical. One call does one page:
+`data.limit` (200, max 1000) bounds it and `data.from` resumes, because a site of ten
+thousand posts turned into ten thousand queued jobs at once would be an outage of the
+publish path rather than a slow back-fill. The reply says how many were sent, how many
+were not accepted, and how many are left with the offset to continue from.
+
+Run it with `dryRun` first to see the count without sending anything. On an instance
+where indexing is off it is a no-op that says so, rather than a failure — so it is safe
+in a build sequence that runs against instances of both kinds.
+
 There are **three independent conditions**, each answering a different question, and all
 three must hold before anything is sent:
 

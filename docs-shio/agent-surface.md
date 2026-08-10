@@ -90,6 +90,19 @@ including what it *cannot*, which is the half a caller otherwise discovers by ge
 
 An unknown `format` is a teaching `400`, not a silent fallback.
 
+`startHere` in the manifest does not list everything — it **routes**. Two facts that are
+true whatever you came to do, then a line per intent, so you match your own situation
+instead of mapping it onto a catalogue:
+
+```
+picking up where a previous session left off → GET /api/v2/agent/changes?site=<site>&format=terse
+before deriving a convention, check this instance already worked it out → GET /api/v2/agent/context?format=terse
+building a section — check something already applies it → GET /api/v2/agent/blueprints?format=terse
+creating or changing content without holding a UUID → POST /api/v2/agent/batch with dryRun:true
+proving what you just wrote is correct without asking a human → GET /api/v2/agent/verify?site=<site>&format=terse
+a call answered 5xx and you need to know what failed → GET /api/v2/agent/diagnostics?format=terse
+```
+
 ### The context pack
 
 ```http
@@ -109,6 +122,19 @@ optional: the single-site case is a bare `GET`.
 | `from=` | Resume cursor: the `budget.truncatedAfter` of a previous call |
 | `format=` | `json` (default), `terse`, or **`agents-md`**: the same pack rendered as project agent instructions, for a harness that loads a file instead of making a call |
 | `ids=true` | Put the raw UUID back on every row. Off by default: rows are addressable without one, and an id is the most expensive field a row can carry |
+
+A narrowed pack tells you what it left out. `include=instance` returns four scalars and
+an `omitted` list naming the sections it dropped — because narrowing a *discovery*
+response is done by a caller who does not yet know what is there, and a silent `200` is
+worse than an error they would have read. It is separate from `budget.truncated`: one is
+your own doing and the remedy is to ask for the section, the other is the instance
+hitting its ceiling and the remedy is a bigger budget or the `from=` cursor.
+
+Each post in the sitemap carries `published: true` when it is also live. The pack prefers
+the draft row, so without it every page of a fully published site read as `DRAFT` — and a
+session that opens with the pack would have been misinformed about all of them. Absent
+rather than `false` when a page is not live, so a site with no published page pays
+nothing for the field.
 
 ---
 
@@ -263,6 +289,21 @@ Every 4xx is an RFC 9457 problem document, and it carries what to do next:
 
 `fix`, `allowed`, `didYouMean` and `example` are not decoration: they are what lets an
 agent recover on the next call instead of asking a human what the API wanted.
+
+**This is not only the agent surface.** Two kinds of refusal used to answer with nothing
+useful, and both are ones a caller meets *before* any other:
+
+- **A rejected credential.** `401` and `403` are written by the security chain, which
+  runs before any controller, so they used to carry Spring's own
+  `{timestamp, status, error, path}`. They are now problem documents whose `fix` names
+  the credential *that path* wants — a `FORM` token for `/cda/form`, an `AGENT` token
+  for the agent surface and MCP, a CDA token for the CDA and GraphQL, a console session
+  elsewhere — and the call that mints one. `401` and `403` mean different things: no
+  usable credential, versus one that authenticated and does not reach here.
+- **An unknown post-type name.** `GET /api/v2/post-type/Nope` answered `404` with an
+  empty body, so a renamed type and one that never existed were the same answer. It now
+  carries `allowed`, `didYouMean` and a `fix` naming both next moves — post-types are
+  the one name-keyed surface, so a typo is the likeliest way to arrive.
 
 ---
 
