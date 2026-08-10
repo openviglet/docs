@@ -143,10 +143,20 @@ nothing for the field.
 | Call | Returns |
 |---|---|
 | `GET /agent/find` | Posts as **addresses and titles, never bodies**: filter by `site`, `type`, `folder` (matches beneath it too), `q` full-text, `limit`; walk past the cap with `after=<cursor>` |
-| `GET /agent/read` | Whole documents by address. `address` is **repeatable**, so several posts cost one call; `fields=a,b` projects to named fields; `include=impact` attaches a template's blast radius |
+| `GET /agent/read` | Whole documents by address. `address` is **repeatable**, so several posts cost one call; `fields=a,b` projects to named fields; `include=impact` attaches a template's blast radius; `state=published` reads what is **live** instead of the draft |
 | `GET /agent/changes` | What changed, resumably. Without `since` you get a window and a starting cursor; with it, everything after that position, oldest first. The response's `cursor` is always the next `since`, which makes "what did the human change while I was away" one call rather than a guess at a window |
 | `GET /agent/memory` | What earlier sessions worked out. `PUT` remembers one note idempotently by `(scope, key)`; `DELETE` forgets one |
 | `GET /agent/diagnostics` | Recent **asynchronous** failures (webhook deliveries, image transforms, scheduled publishes, 5xx) instead of grepping the logs. The window is bounded and the response says when it started collecting, because "nothing since then" is a different claim from "nothing ever" |
+
+Reads are **draft-preferred**, so you always see your own unpublished edits. `state=`
+overrides that: `state=published` returns the live row and `state=draft` the editable one.
+Two reads of the same address — one with `state=published`, one without — are the answer to
+"what will change when I publish this", and `shio diff --against published` is that pair as
+one command.
+
+A `state=` naming a row the post has not got is a **404 that says which**, never a quiet
+fall back to the draft: a caller comparing a draft against what is live would otherwise be
+handed the draft twice and read it as "nothing changed".
 
 `PUT /agent/memory` takes the author from the credential, never from the body, and
 re-using a key **rewrites** that note rather than adding a second one: the next

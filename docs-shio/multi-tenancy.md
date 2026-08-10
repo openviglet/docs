@@ -110,6 +110,27 @@ teardown removes its own bytes and nothing else.
 
 ---
 
+## Background work runs per tenant
+
+Anything the instance does **on a timer or off the request thread** has no tenant of its
+own, and tenant isolation is resolved per thread — so background work has to be told which
+tenant it is acting for, or it acts for the default one.
+
+Two places this matters, and both behave the way you would want:
+
+- **Scheduled publishes and unpublishes** sweep **once per tenant**. A suspended tenant is
+  skipped: publishing on behalf of an account the platform has stopped is worse than
+  publishing late, and the request path already refuses it. A tenant provisioned while a
+  sweep is running is picked up on the next one.
+- **Failures recorded asynchronously** — a webhook that gave up, a search index push that
+  did not land — are filed under the tenant whose site they belong to, so they appear in
+  that tenant's `/agent/diagnostics` and not in the platform's.
+
+Nothing here needs configuring. It is listed because "the timer fired for everyone" is the
+assumption an operator would otherwise carry, and on a single-tenant install it is true.
+
+---
+
 ## What to check before enabling it
 
 1. **Back up first, then start once.** Enabling tenancy backfills the discriminator on

@@ -83,6 +83,7 @@ See [Content as Files](./content-as-files.md) for the tree, the sidecars and the
 | `shio audit <page>` | What is wrong with a rendered page, as text with a selector each |
 | `shio snapshot <page>` | A PNG for a human, plus whether the page looks different |
 | `shio report` | The human handoff: what changed, a preview link each, and the warnings as open questions, Markdown, for a PR body |
+| `shio diff --against published` | What a publish would change: which **fields** differ between each draft and the live row, per post. `--address` narrows it. **Exits non-zero when anything would change**, so a pipeline can gate on it |
 
 Two things about `verify` that matter in a pipeline: the report's `notes` are printed,
 because a run that quietly covered less than you think reads exactly like a clean pass;

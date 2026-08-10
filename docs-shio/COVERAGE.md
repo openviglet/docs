@@ -38,6 +38,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block I / C / Q**: the `shio` CLI, `pull`, `push` (`--content`, `--check`, `--prune`, `--accept`), `apply`, `verify`, `report`, `remember`, `context`, `changes`, `dev --content`, `build`, `init --blueprint`, `snapshot`, `audit`, `digest`, `clone`, `propose`, `convert` | [cli](./cli.md) | ✅ (SH487) |
 | **Block J**: blueprints: the package format, `GET /agent/blueprints`, `POST /agent/blueprints/{name}/apply`, the first-party `blog` / `docs` / `nextjs-starter` set, `@viglet/shio-sections` | [blueprints](./blueprints.md) | ✅ (SH488) |
 | **Block K**: the perception loop, content lint `/agent/verify` (+ scoped runs, accepted findings), route/link proof, render digest `/agent/render`, `/agent/diagnostics`, the durable incident feed, visual snapshot + diff, the handoff report | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-a-human) covers verify, render and diagnostics; the incident feed, snapshot diff and handoff report are the CLI half | 🧩 (SH487 for the CLI half) |
+| **Block K, closing**: `state=` on `/agent/read` so a draft can be compared with what is live, and `shio diff --against published` as that pair in one command | [agent-surface § Reading](./agent-surface.md#reading) · [cli](./cli.md) | ✅ (SH619, SH640) |
 | **Block L**: agent safety: the `AGENT` token scope + session identity, draft-by-default + the publish gate, destructive-op confirm tokens, the review queue, the folder trace/undo, attribution | [agent-safety](./agent-safety.md) | ✅ (SH485) |
 | **Block M**: token economy, measured , response budgets, terse mode, the build-a-site benchmark, the instance memory / conventions store `/agent/memory`, the `AGENTS.md` generator, conditional agent reads (ETag) | [token-economy](./token-economy.md) | ✅ (SH497) |
 | **Block N**: the realignment: one **name-keyed** post-type surface (the id-keyed `/api/v2/post/type` twin is gone), console reads on the CDA shapes, post-type rename as a move, a teaching 409 for a post-type content points at | [content-modeling § One name-keyed surface](./content-modeling.md#one-name-keyed-surface) · [rest-api § Post types](./rest-api.md#post-types) | ✅ (SH495, SH496) |
@@ -133,11 +134,13 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 40 clusters, 6 are still not documented correctly: 5 🔴 orphans and 1 ⚠️ misleading page.** Thirty-four are covered (27 ✅, 7 🧩).
+**Of 42 clusters, 7 are still not documented correctly: 6 🔴 orphans and 1 ⚠️ misleading page.** Thirty-five are covered (28 ✅, 7 🧩).
 
-Block R took this from **33 wrong of 40** to **6**. What is left is what the block's own tasks never named, which is the finding the matrix existed to produce:
+> The orphan count moved from 5 to 6 without a row changing: the tables have listed `shio audit`'s rules as 🔴 since this file shipped and this summary never counted it. The ✅ and 🧩 figures are the previous ones plus this block's one new row, not an independent recount — a count of every status-bearing row comes to 48, which does not reconcile with the 40 this summary was authored against, and reconciling the two is its own task rather than something to guess at inside a block sweep.
 
-- **5 🔴**, none of them named by a Block R task: the content console itself (Block O) · the console's own curator surfaces (Block E: dashboard, Media Library, static-file manager, webhooks UI, the `config/` pages) · the curator's lifecycle tools (SH13–SH15, SH51, SH55: preview tokens, version diff and restore, scheduled publish, the activity view) · outbound webhooks (SH12) · content i18n (SH53).
+Block R took this from **33 wrong of 40** to **7**. What is left is what the block's own tasks never named, which is the finding the matrix existed to produce:
+
+- **6 🔴**, none of them named by a Block R task: the content console itself (Block O) · the console's own curator surfaces (Block E: dashboard, Media Library, static-file manager, webhooks UI, the `config/` pages) · the curator's lifecycle tools (SH13–SH15, SH51, SH55: preview tokens, version diff and restore, scheduled publish, the activity view) · outbound webhooks (SH12) · content i18n (SH53) · **`shio audit`'s eleven rules**, which the table has listed as an orphan since this file shipped and this summary did not count.
 - **1 ⚠️**: the developer guide still lists Elasticsearch 9.3.3 in its stack and names no agent surface or CLI.
 - **Also unclosed**: the transform cache, the dimension and format limits and the signed-URL configuration are the operational half of the SH25 image epic, folded into the render page but not documented as operations.
 
