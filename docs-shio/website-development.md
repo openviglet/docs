@@ -299,15 +299,36 @@ input type, widget and whether it is required — so a contact form is the post 
 already modelled rather than a second form builder:
 
 ```handlebars
-<form method="post" action="/api/v2/cda/form/acme">
+<form id="contact" action="{{site.formAction}}">
   {{#form type="Contact"}}
     <label for="{{name}}">{{label}}</label>
     <input type="{{input}}" name="{{name}}" {{#if required}}required{{/if}}>
   {{/form}}
-  <input type="hidden" name="shio_hp" value="" tabindex="-1" autocomplete="off"
-         style="position:absolute;left:-9999px">
+  <input type="hidden" name="{{site.formHoneypot}}" value="" tabindex="-1"
+         autocomplete="off" style="position:absolute;left:-9999px">
   <button type="submit">Send</button>
 </form>
+```
+
+`site.formAction` is this site's submission endpoint and `site.formHoneypot` is the field name the
+server checks — so neither the URL nor the honeypot's name is a literal you keep in step by hand.
+
+The endpoint takes JSON and reads the token from a `Key` header, so submit with `fetch` rather than
+letting the browser post the form natively:
+
+```html
+<script>
+document.getElementById("contact").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const data = Object.fromEntries(new FormData(form).entries());
+  await fetch(form.action, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Key": "YOUR_FORM_TOKEN" },
+    body: JSON.stringify({ type: "Contact", data }),
+  });
+});
+</script>
 ```
 
 A submission becomes a **draft post**. It is visible to a curator in the console and
