@@ -166,6 +166,38 @@ old `generatePostLink` is now just `{{link}}`:
 </ul>
 ```
 
+### Paging a listing
+
+`{{#query}}` takes `page=` alongside `limit=`, and publishes the pager's facts as
+Handlebars data variables you read inside the block: `@page`, `@pages`, `@total`,
+`@hasPrev`, `@hasNext`, `@prevPage`, `@nextPage`, plus `@index`, `@first` and `@last`
+per row. The counts are real totals, not a "has more" flag.
+
+They are data variables rather than row values because the pager is a property of the
+*listing*, not of any one post — and `{{#if @last}}` is how you draw it **once**, since
+the block body repeats per row:
+
+```handlebars
+{{#query type="Article" limit=10 page=param.page sort="newest"}}
+  <li><a href="{{link}}">{{title}}</a></li>
+  {{#if @last}}
+    <nav>
+      {{#if @hasPrev}}<a href="?page={{@prevPage}}">Previous</a>{{/if}}
+      page {{@page}} of {{@pages}} ({{@total}} articles)
+      {{#if @hasNext}}<a href="?page={{@nextPage}}">Next</a>{{/if}}
+    </nav>
+  {{/if}}
+{{/query}}
+```
+
+`page=` reads whatever the template gives it — `param.page` for a request-driven
+archive, a literal for a fixed second page, or a field on the page itself.
+
+A listing may contain a listing: each block keeps its own `@index`, `@last` and pager
+counts, so an archive whose cards list their own children still draws the outer pager
+once. Outside any `{{#query}}` block these variables are simply absent, so an
+`{{#if @last}}` written after `{{/query}}` renders nothing.
+
 `{{#image}}` exists because a template cannot know two things: an image's intrinsic
 width, and the HMAC a signed transform URL needs. It emits whole URLs, `{{url}}` plus
 a `{{srcset}}` whose candidates are **filtered below the intrinsic width**, so nothing
@@ -232,6 +264,14 @@ unrecognised position falls back to `bodyEnd`: never `head`, because a typo must
 move a script *earlier* than its author wrote it. `category` is carried for a layout
 that gates its own emission; Shio itself never acts on it.
 
+Because a layout has to emit them, `verify` reports a bound layout that never does —
+that is `site-scripts-dropped`, and for a public site with a consent banner it is a
+compliance defect that renders perfectly. Some layouts leave them out **on purpose**:
+a transactional email template, a print stylesheet, an AMP variant, an embed a partner
+puts in an iframe. Tick **Omits site scripts on purpose** on the `PageLayout` and the
+check stops asking about that one, while every other layout in the site keeps being
+checked.
+
 ## Sections
 
 For pages assembled from blocks rather than written as one document, the
@@ -251,6 +291,66 @@ That declaration is what makes the composition verifiable: `shio verify` resolve
 URL and reports the ones that are not there. A `Multi Select` without the key stays
 tags. Sections are content a template reads: a region iterates them through
 `{{#getRelation}}`, so a section-composed page renders through the ordinary path.
+
+## Forms
+
+`{{#form type="Contact"}}` renders the fields of a post type — each with its label,
+input type, widget and whether it is required — so a contact form is the post type you
+already modelled rather than a second form builder:
+
+```handlebars
+<form method="post" action="/api/v2/cda/form/acme">
+  {{#form type="Contact"}}
+    <label for="{{name}}">{{label}}</label>
+    <input type="{{input}}" name="{{name}}" {{#if required}}required{{/if}}>
+  {{/form}}
+  <input type="hidden" name="shio_hp" value="" tabindex="-1" autocomplete="off"
+         style="position:absolute;left:-9999px">
+  <button type="submit">Send</button>
+</form>
+```
+
+A submission becomes a **draft post**. It is visible to a curator in the console and
+invisible to visitors until somebody publishes it, so moderation is the review queue
+you already have — there is no separate submissions inbox, and a submission is an
+ordinary post for the trash, export, permissions and the agent API.
+
+### Letting a site accept submissions
+
+Two things, and neither lives in the template — a folder chosen in a template is a
+folder anyone who can edit a template can choose:
+
+1. **Configure the site.** `POST /api/v2/site-form` with the site, the folder
+   submissions land in, the post types it invites (comma-separated), and `enabled`.
+   Creating the configuration does **not** turn it on; set `enabled` when you are ready.
+   The folder must already exist — a submission never creates one.
+2. **Issue a `FORM` API token** for that site and put it in the page. It is public by
+   construction, and that is safe because of what the scope cannot do: it cannot read
+   the delivery API, cannot publish, cannot touch another site, and cannot post
+   anywhere but this endpoint.
+
+`PageLayout`, `Region`, `Theme`, `SiteScripts`, `Redirect` and `File` can **never** be
+submitted, whatever the allow-list says — the first three are templates the renderer
+executes.
+
+Send the token as the `Key` header:
+
+```bash
+curl -X POST https://cms.example.com/api/v2/cda/form/acme   -H "Key: $SHIO_FORM_TOKEN" -H "Content-Type: application/json"   -d '{"type":"Contact","data":{"TITLE":"Hello","MESSAGE":"Please call"}}'
+```
+
+A success answers `{"received": true, "id": "...", "state": "DRAFT"}`. A refusal
+answers `received: false` with a `title` and a `fix` — the site is not accepting, the
+type is not invited, the configured folder is missing. Submissions are rate-limited per
+token by the same budget as the rest of the delivery API.
+
+`shio_hp` is a honeypot: render it hidden, and a submission that fills it in is
+discarded. It answers exactly as a success does, deliberately, so a bot cannot tell.
+
+:::note
+A form on your own domain posting to the CMS is a cross-origin request, which needs
+CORS configured on the instance.
+:::
 
 ## Menus and translations
 
@@ -357,7 +457,8 @@ slots it:
 | `missing-theme` | a layout names a `THEME` that is not there |
 | `duplicate-template-title` | two layouts or regions share a title, so a binding is ambiguous |
 | `dangling-reference` | a section or file reference that resolves to nothing |
-| `site-scripts-dropped` | a bound layout whose HTML never emits `site.scripts` |
+| `site-scripts-dropped` | a bound layout whose HTML never emits `site.scripts` — tick **Omits site scripts on purpose** on the layout if that is deliberate |
+| `dangling-relation` | a `{{#getRelation "/some/url"}}` naming an address the site has no post at, so the block silently renders its `{{else}}` on every page |
 | `redirect-target-missing` | a `Redirect` pointing at a page that is not there |
 
 And a page's structure can be compared without a screenshot:
