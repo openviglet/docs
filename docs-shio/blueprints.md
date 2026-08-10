@@ -84,7 +84,7 @@ Everything lands as **drafts**. Publishing is yours.
 
 ## The rules that protect you
 
-A blueprint is code you did not write, applied to content you care about. Five rules
+A blueprint is code you did not write, applied to content you care about. Seven rules
 follow from that, and each is a refusal rather than a convention:
 
 - **A package may not name its own site, and may not prune.** The site is always the
@@ -97,11 +97,28 @@ follow from that, and each is a refusal rather than a convention:
   your model.
 - **Substitution is `{{name}}` and nothing else.** No conditionals, no expressions: the
   same parameters always produce the same site. `site` is reserved and always available.
-  An unknown parameter is a teaching error, never quietly dropped.
+  An unknown parameter is a teaching error, never quietly dropped — **except inside a
+  template field** (`HTML`, `CSS`, `JAVASCRIPT`), where an unknown name belongs to the
+  page renderer and passes through untouched. A package that ships a layout writes
+  `{{post.title}}` there and means the renderer's, not yours; the trade is that a
+  mistyped parameter *inside a template* is not caught, because in that field an
+  undeclared name is the normal case.
 - **A malformed package is the package's fault, and says so.** Everything is validated when
   the package loads: a missing referenced file, a path that escapes the package, an
   unknown manifest key, a placeholder with no declared parameter, a promise the content
   never fulfils. That is a `409`, not a `400`: nothing you sent caused it.
+- **One package's failure is not the catalogue's.** A package you added to your own
+  blueprint directory that will not load is refused **on its own** and reported in
+  `GET /api/v2/agent/diagnostics`, with the reason. The packages that shipped with the
+  instance keep working, so a package somebody else wrote cannot take your catalogue
+  down. It is also how you validate one before publishing it: point an instance at the
+  directory, reload, and read the refusal.
+- **A package cannot come from a URL.** The only sources are the instance's own classpath
+  and one directory an operator names. Whoever set that path is vouching for what is in
+  it, and there is no fetch-by-URL — a blueprint writes pages under *your* credentials,
+  so moving that decision from a person to a network is the shape of every supply-chain
+  incident. The `shio-blueprint-` name prefix is reserved for packages that did not ship
+  with the instance, so the name tells you where something came from.
 - **The server never writes a project file.** Carried files come back on the response and
   the CLI writes them, never over an existing file without `--force`. A client that cannot
   write files is told what it has *not* got, and each row names the placeholders standing
