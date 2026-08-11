@@ -447,6 +447,10 @@ A file uploaded to Shio is a `File` post, and its bytes are reachable two ways:
 Either can be transformed on the way out with query parameters, `?w=`, `?h=`,
 `?format=`, `?crop=`, which is the pipeline `{{#image}}` writes URLs for.
 
+Running the instance rather than writing the template? The result cache, the dimension
+and format ceilings, and how to require signed transform URLs are in
+[Search & Caching § Image transforms](./search-caching.md#image-transforms-the-operators-half).
+
 ## Editing the rendered page
 
 Add `?editor=true` to a preview URL and Shio injects `/preview/_shio/editor.js`; an

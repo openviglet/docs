@@ -160,11 +160,104 @@ Two rules that follow from the table:
 
 ---
 
+## Image transforms: the operator's half
+
+Templates resize images by adding `?w=`, `?h=`, `?format=` and `?crop=` to a file's URL —
+that half is on
+[Pages, Layouts & Regions § Static files and images](./website-development.md#static-files-and-images).
+This section is the other half: what it costs, what already stops it being abused, and
+what you would change.
+
+**Start here: the defaults already protect you.** A stock instance rejects an oversized
+request, refuses to decode a decompression bomb, and caches every result. If you read this
+section and change nothing, that is a correct outcome.
+
+### The result cache
+
+A given *source + parameters* always produces the same bytes, so the result is memoised: a
+bounded in-memory LRU in front of a disk cache.
+
+```properties
+shio.image-cache.enabled=true
+shio.image-cache.path=store/image_cache
+shio.image-cache.max-memory-entries=200
+```
+
+- A relative `path` resolves against the process working directory. On disk the layout is
+  `<root>/<tenant>/<hash>`, two files per entry: the bytes, and a small one carrying the
+  content type.
+- **The tenant is part of the key**, so two tenants never share an entry or an `ETag` even
+  for an identical source path and parameters.
+- `enabled=false` recomputes on every request. It is a diagnostic setting, not a tuning one.
+
+**Invalidation is by key, not by eviction.** The key is a hash of
+`tenant | filename | lastModified | length | w | h | format | crop`, and the same hash is
+the `ETag` served to the browser. So replacing an image changes its `lastModified` and its
+length, which lands every transform of it on a **fresh key** — there is nothing to purge and
+no window in which a stale image is served.
+
+The consequence to plan for: **old entries are orphaned, not deleted.** Disk use grows with
+every edit to a transformed image. Pruning `store/image_cache` is an operations job — a
+scheduled delete of files older than your rebuild cadence is enough, and removing a live
+entry only costs one recomputation.
+
+`max-memory-entries` bounds memory only; the disk cache is unbounded by design.
+
+### The limits
+
+Every transform request passes a guard, on both delivery routes.
+
+```properties
+shio.image-transform.max-width=5000
+shio.image-transform.max-height=5000
+shio.image-transform.max-source-pixels=40000000
+shio.image-transform.allowed-formats=jpg,jpeg,png,gif,webp,avif
+```
+
+| Setting | What it stops | Response when exceeded |
+|---|---|---|
+| `max-width` / `max-height` | One URL asking for a 50000×50000 re-encode and pinning a CPU | **400** |
+| `max-source-pixels` | A decompression bomb: a small upload with enormous dimensions exhausting the heap. The source's pixel count is probed **before** decoding. | Serves the **original bytes** — it declines rather than failing |
+| `allowed-formats` | Output formats this install does not want to emit. Narrows the syntactic list; matched case-insensitively. | **400** |
+
+The default source ceiling is 40 megapixels, roughly 8000×5000.
+
+Note the deliberate asymmetry: an oversized *request* is the caller's mistake and gets a
+`400`, while an oversized *source* is your own content and gets the original image. A
+`500` on somebody's product photo would be the worst of the three outcomes.
+
+### Signed transform URLs
+
+By default the transform surface is open: anyone who can reach a public image can request
+any allowed combination of parameters, which is a way to fill your cache with entries no
+page will ever serve.
+
+Turn on signing to accept only URLs your own templates minted:
+
+```properties
+shio.image-transform.signing.enabled=true
+shio.image-transform.signing.secret=<a long random string>
+```
+
+- Every transform request must then carry a `sig` parameter. A missing or invalid one is a
+  **403**.
+- The signature is **HMAC-SHA256** over a canonical descriptor — the file's id plus `w`,
+  `h`, `format` and `crop` — rendered as URL-safe base64 without padding, and verified in
+  constant time. Because the id is part of it, a signature minted for one image **cannot be
+  replayed against another**.
+- **Plain downloads are unaffected.** Only the transform surface is gated; the original
+  bytes stay reachable as before.
+- **It fails closed.** With signing on and the secret blank, nothing can be minted and
+  everything is rejected. Set the secret in the same change that enables the switch.
+
+---
+
 ## Related Pages
 
 | Page | Description |
 |---|---|
 | [Content Modeling](./content-modeling.md) | Mapping post-type fields to search fields |
+| [Pages, Layouts & Regions](./website-development.md) | The transform parameters a template writes |
 | [Content Delivery API](./headless/content-delivery-api.md) | The query endpoint, ETags and cache headers |
 | [Configuration Reference](./configuration-reference.md) | Every `shio.turing.*` and `shio.cda.*` property |
 | [The Agent Surface](./agent-surface.md) | `find`, and the diagnostics an index failure lands in |
