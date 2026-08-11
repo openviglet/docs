@@ -51,6 +51,7 @@ const sidebars: SidebarsConfig = {
             "agent-safety",
             "universal-editor",
             "content-modeling",
+            "content-i18n",
             "administration-guide",
             "import-export",
           ],

@@ -428,7 +428,8 @@ strictness is load-bearing: a page served from `/sites/mysite/` carrying
 three-segment shape, and a lenient format slot answered those with the *home page* at
 200. A browser expecting an image got HTML, and a missing asset stopped being
 something an author could see. `{locale}` is checked the same way: accepted when the
-site has published content in that locale, or when it is the default.
+site has published content in that locale, or when it is the default — see
+[Content in several languages](./content-i18n.md) for what fills that segment.
 
 Root-relative `href`s are rebased into whichever space is serving the page, so a link
 that is wrong 404s **inside** the site , where the route lint already reports it ,

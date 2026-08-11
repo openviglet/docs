@@ -227,6 +227,10 @@ it. Publishing can be scheduled. Deleting moves the post to the trash. See
 [Preview, history and scheduling](./content-lifecycle.md) for the curator's tools that
 act on those states.
 
+A post also carries a **locale**, and a translation is a linked sibling post rather than a
+field on this one — which decides your URL structure, so read
+[Content in several languages](./content-i18n.md) before writing the second language.
+
 ---
 
 ## Search fields
