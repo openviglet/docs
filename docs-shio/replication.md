@@ -52,10 +52,33 @@ worth knowing:
 | `--render` | Ask a browser to render the page first, for a source whose content is built by JavaScript |
 | `--scripts` | Inventory the third-party scripts, so `propose` can offer them as a Site Scripts list instead of silently dropping them |
 | `--depth N` | How far to walk |
+| `--refresh` | Re-check a capture you already have, paying only for what actually moved |
 
 The capture separates what a replica **needs to render** from what merely exists, and a
 downloaded byte no post references is reported as its own finding: a replica whose images
 are all present but unreferenced is not a replica.
+
+#### Re-capturing without paying for it again
+
+A capture of a real site is the expensive step — a few hundred pages and a few hundred
+files can take minutes and tens of megabytes, while everything after it reads the
+inventory off disk and runs in seconds. `--refresh` re-checks a capture you already have:
+
+```bash
+shio clone --refresh --assets --markup --site mysite
+```
+
+Pass no URL. The existing capture says where the site is, so a mistyped origin cannot
+refresh against a different host. Every page **and every asset** is asked for
+conditionally, using what the last capture recorded about it, and anything the server
+reports as unchanged costs one request and no download. The report says what it did:
+how many pages and assets were unchanged, how many were re-read, and — when it happens —
+which files it had to fetch in full because they were no longer in the tree.
+
+Two things to know. A refresh re-checks **what was captured**; it does not walk for pages
+that have appeared since, though it counts and names any it saw linked from a page that
+changed. And a capture made before this existed carries nothing to be conditional about,
+so its first refresh fetches in full and every later one is cheap.
 
 ### 2. Propose
 
