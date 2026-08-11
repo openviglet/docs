@@ -22,7 +22,6 @@ from this page, check the two notes: it may have been removed.
 | `server.port` | `2710` | HTTP listening port |
 | `shio.url` | `http://localhost:2710` | The instance's own base URL, used wherever an absolute URL is composed |
 | `shio.allowedOrigins` | `localhost` | CORS allowed origins |
-| `shio.mgmt.enabled` | `true` | Enable the management interface |
 | `shio.keycloak` | `false` | Authenticate against a Keycloak realm |
 | `shio.keycloak-admin-id` | *(empty)* | The realm's admin identifier |
 | `shio.multi-tenant` | `false` | Tenant isolation: see [Multi-Tenancy](./multi-tenancy.md) |
@@ -30,8 +29,6 @@ from this page, check the two notes: it may have been removed.
 | `server.compression.mime-types` | `application/json,text/css,application/javascript` | What to compress |
 | `server.compression.min-response-size` | `2048` | Minimum size, in bytes |
 | `server.tomcat.use-relative-redirects` | `true` | Emit relative redirects |
-| `shio.git.url` · `shio.git.token` | *(unset)* | Git repository for the content-versioning integration |
-| `shio.plugin.blogger` | `com.viglet.shio.plugin.ShImporterBloggerPlugin` | Blogger import plugin class |
 | `shio.config.system` · `.auth` · `.exchange` | `/system` · `/provider/auth/%s` · `/provider/exchange/%s` | Configuration paths |
 
 :::info Removed: the JavaScript engine properties
