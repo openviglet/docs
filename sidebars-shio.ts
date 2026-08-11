@@ -68,6 +68,7 @@ const sidebars: SidebarsConfig = {
             "headless/react-sdk",
             "headless/nextjs-starter",
             "graphql",
+            "webhooks",
           ],
         },
         {

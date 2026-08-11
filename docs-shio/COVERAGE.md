@@ -76,7 +76,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block B**: `create-shio-app`: the Next.js starter, SSG/ISR/SSR recipes, Draft Mode preview, on-demand revalidation | [nextjs-starter](./headless/nextjs-starter.md) | ✅ |
 | **Block B (SH11)**: TypeScript type generation from post-types , `GET /api/v2/cda/post-type`, `generateShioTypes`, the `shio-types` CLI | [content-modeling § Generated TypeScript for a front end](./content-modeling.md#generated-typescript-for-a-front-end) · [cli](./cli.md) | 🧩 (SH496) |
 | **Block B (SH62 epic)**: post-types as code , `@viglet/shio-model` DSL, the CLI compile step, `push --check` drift guard, the console "managed by code" lock | [content-modeling § Authoring in TypeScript](./content-modeling.md#authoring-in-typescript) · [§ Managed by code](./content-modeling.md#managed-by-code) | ✅ (SH496) |
-| **Block C (SH12)**: outbound webhooks on publish/unpublish/delete, per-site subscriptions, the signed payload | the consumer half appears in [nextjs-starter § Environment](./headless/nextjs-starter.md#environment); nothing documents the subscription, payload or signature | 🔴 (no Block R task names it) |
+| **Block C (SH12)**: outbound webhooks on publish/unpublish/delete, per-site subscriptions, the signed payload | [webhooks](./webhooks.md) — subscription, payload, HMAC verification, and the delivery guarantees (no ordering, no exactly-once, no DLQ) written down as answers rather than omissions | ✅ (SH626) |
 | **Block C (SH52 / SH240)**: content full-text search: the in-DB index, the CDA search endpoint, the console search box | [search-caching § Full-text search](./search-caching.md#full-text-search) | ✅ (SH494) |
 | **Block C (SH53)**: content i18n , the locale axis, linked translations, CDA `?locale`, the checked locale segment | n/a | 🔴 (no Block R task names it) |
 | **Block G**: content portability: the exchange package format (SH68), site export → zip, site import / clone, the default bootstrap-site template | [import-export](./import-export.md) (predates SH68's format and SH71's template) | 🧩 |
@@ -134,7 +134,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 42 clusters, 4 are still not documented correctly: 3 🔴 orphans and 1 ⚠️ misleading page.** Thirty-eight are covered (31 ✅, 7 🧩).
+**Of 42 clusters, 3 are still not documented correctly: 2 🔴 orphans and 1 ⚠️ misleading page.** Thirty-nine are covered (32 ✅, 7 🧩).
 
 > **Block T is the block that closes these.** It exists because the list below is what Block R's own audit found and no Block R task named — the curator's half. Each task in it flips exactly one row, and this count moves with it.
 
@@ -142,7 +142,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 Block R took this from **33 wrong of 40** to **7**. What is left is what the block's own tasks never named, which is the finding the matrix existed to produce:
 
-- **3 🔴**, none of them named by a Block R task: ~~the content console itself (Block O)~~ — closed by **SH625**, [content-console](./content-console.md) · ~~the console's own curator surfaces (Block E: dashboard, Media Library, static-file manager, webhooks UI, the `config/` pages)~~ — closed by **SH623**, which rewrote [administration-guide](./administration-guide.md) against the React console · ~~the curator's lifecycle tools (SH13–SH15, SH51, SH55: preview tokens, version diff and restore, scheduled publish, the activity view)~~ — closed by **SH624**, [content-lifecycle](./content-lifecycle.md) · outbound webhooks (SH12) · content i18n (SH53) · **`shio audit`'s eleven rules**, which the table has listed as an orphan since this file shipped and this summary did not count.
+- **2 🔴**, none of them named by a Block R task: ~~the content console itself (Block O)~~ — closed by **SH625**, [content-console](./content-console.md) · ~~the console's own curator surfaces (Block E: dashboard, Media Library, static-file manager, webhooks UI, the `config/` pages)~~ — closed by **SH623**, which rewrote [administration-guide](./administration-guide.md) against the React console · ~~the curator's lifecycle tools (SH13–SH15, SH51, SH55: preview tokens, version diff and restore, scheduled publish, the activity view)~~ — closed by **SH624**, [content-lifecycle](./content-lifecycle.md) · ~~outbound webhooks (SH12)~~ — closed by **SH626**, [webhooks](./webhooks.md) · content i18n (SH53) · **`shio audit`'s eleven rules**, which the table has listed as an orphan since this file shipped and this summary did not count.
 - **1 ⚠️**: the developer guide still lists Elasticsearch 9.3.3 in its stack and names no agent surface or CLI.
 - **Also unclosed**: the transform cache, the dimension and format limits and the signed-URL configuration are the operational half of the SH25 image epic, folded into the render page but not documented as operations.
 

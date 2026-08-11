@@ -189,6 +189,9 @@ is **published**, **unpublished** or **deleted**. A subscription belongs to a si
 static-site rebuild can be triggered by the one site that changed rather than by all of
 them.
 
+The subscription form, the payload each event carries, how to verify its signature and
+what delivery does and does not guarantee are on [Webhooks](./webhooks.md).
+
 ---
 
 ## Activity
