@@ -62,6 +62,31 @@ Saving writes a **draft**. Publishing is a separate act with its own permission 
 
 ---
 
+## The Media Library
+
+**Content → Media Library** is where every file lives: images, video, audio, documents,
+archives. It is one screen, not two — the media browser and the static-file manager are
+the same thing.
+
+- **Upload** by dragging files onto the page or clicking **Upload**. Pick the site to
+  upload into first. A file added through a **File** field on a post lands here too.
+- **Browse** as a grid or a list, filter by category (Images, Videos, Audio, Documents,
+  Archives, Other), or search by name.
+- Each file shows its type, size, folder, upload date and — for images — its dimensions.
+- **Copy URL** puts the file's public URL on the clipboard; **Download** fetches it.
+- Select several files to **move**, **copy** or delete them in one go. A media delete is
+  **not** the reversible trash — the confirmation says so.
+
+Selecting a file opens its details, where you can set:
+
+- **Alt text** — describes the image for accessibility and search engines.
+- **Caption** — optional.
+- **Tags** — type and press Enter.
+- **Used in** — the content that references this file, or *"Not referenced by any
+  content"*. Check it before deleting.
+
+---
+
 ## Copy and move
 
 Both start the same way: pick one or more items, choose **Copy** or **Move**, and a
