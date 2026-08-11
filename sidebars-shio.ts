@@ -47,6 +47,7 @@ const sidebars: SidebarsConfig = {
           },
           items: [
             "content-console",
+            "content-lifecycle",
             "agent-safety",
             "universal-editor",
             "content-modeling",

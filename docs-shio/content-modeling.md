@@ -223,7 +223,9 @@ reorganising folders does not rewrite URLs.
 A post has two states, `DRAFT` and `PUBLISHED`, and can be in both at once. Editing a
 published post updates its draft and leaves the live version alone until something publishes
 it. Publishing can be scheduled. Deleting moves the post to the trash. See
-[Core Concepts](./getting-started/core-concepts.md#draft-and-published).
+[Core Concepts](./getting-started/core-concepts.md#draft-and-published), and
+[Preview, history and scheduling](./content-lifecycle.md) for the curator's tools that
+act on those states.
 
 ---
 
