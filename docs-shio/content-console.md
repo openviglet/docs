@@ -85,6 +85,12 @@ Selecting a file opens its details, where you can set:
 - **Used in** — the content that references this file, or *"Not referenced by any
   content"*. Check it before deleting.
 
+Those three values are declared fields on the **File** content type, alongside the path,
+checksum, size and image dimensions Shio stamps on upload. So they are not only a dialog:
+they appear when you open the file as a post, they are part of the type's schema for
+anything reading it over the API, and `shio verify` treats them as known fields rather
+than reporting a captioned image as carrying data its model does not describe.
+
 ---
 
 ## Copy and move
