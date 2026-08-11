@@ -98,6 +98,44 @@ change you just made, and a gate there is one people wrap in `|| true`. A site w
 front end is photographed through the instance's own preview, and the output says the
 picture is a draft, because the image cannot.
 
+#### What `shio audit` reports
+
+Ten rules, and two lines the report prints whether or not anything is wrong. An **error**
+exits non-zero; a **warning** does not, so a pipeline can gate on the first without being
+stopped by the second.
+
+| Rule | Severity | Fires when | What to do |
+|---|---|---|---|
+| `request-failed` | error | The page asked for something — an image, a stylesheet, a script — and the server did not give it | Fix the URL or publish the asset. A missing stylesheet is why the rest of the report looks strange |
+| `console-error` | error | The page threw in the browser | Read the message: it *is* the finding, so this one carries no extra detail |
+| `region-script` | error | A region's `JAVASCRIPT` does not parse | The only field whose value is a program. It is shipped to the browser and never run in the JVM, so a region whose script is broken still renders, hashes, lints and verifies clean — this is the one check that runs it |
+| `overflow` | warn | A box is wider than the viewport at one of the tested widths | Usually a fixed width, a long unbroken string, or a table. Reported at the width where it is worst |
+| `contrast` | warn | Text fails the WCAG AA ratio against its own background | Darken the text or lighten the background. Large and bold text has a lower floor, and `--contrast` overrides it |
+| `zero-size` | warn | An element occupies no space | Either it should not be in the markup, or something it depends on did not load |
+| `collapsed` | warn | A box has children and no height | Usually a float or grid container that lost its layout |
+| `font-fallback` | warn | A declared font was not available, so the browser substituted one | Ship the font or accept the substitute. What you see locally is not what a reader sees |
+| `no-landmark` | warn | The page has no `main`, `nav`, `header` or `footer` at all | Almost always a page that lost its regions rather than a page that never had them |
+| `no-heading` | warn | The page has no heading of any level | Same reading as `no-landmark`, and the two usually arrive together |
+
+The last two exist because the other eight measure what **is** there: a page that has lost
+most of itself has no overflow, perfect contrast, no collapsed box and nothing that fails
+to load. Emptiness scored clean.
+
+Two lines are printed on every run, findings or not, for that same reason — a number
+nobody prints is a fact nobody joins:
+
+- **`shape:`** — the landmarks and the heading count, read once because they do not change
+  with the viewport. An intact page reads `main, navigation, contentinfo · 3 headings`;
+  the same page emptied reads `no landmark · 2 headings`. That difference is the whole
+  answer to *did this page keep its regions*.
+- **`scripts:`** — how many region scripts were parsed. `0 region scripts` is an answer:
+  without it, a page carrying no script at all and a page where every script is fine would
+  print the same nothing.
+
+Each rule stops after a fixed number of findings per page load, and the report says so in
+a `note:` line naming the rule and how many it did not examine — a truncated run must not
+read as a clean one.
+
 ### Replicate an existing site
 
 | Command | Does |
