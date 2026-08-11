@@ -134,11 +134,19 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 42 clusters, 1 is still not documented correctly: 1 🔴 orphan and no ⚠️ page.** Forty-one are covered (34 ✅, 7 🧩).
+**Of 48 clusters, none is undocumented: no 🔴 orphan and no ⚠️ page.** 48 are covered (43 ✅, 5 🧩).
+
+> **This sentence is derived, and a check fails when it drifts (SH653).** Every figure in it used
+> to be typed, and it drifted in the direction that hides work: the `shio audit` row was 🔴 in the
+> tables from the day this file shipped and absent from this count for just as long, so the one
+> number anybody scans said the product was better documented than it was. **A cluster is one table
+> row** — the unit that already carries its own verdict. The alternative, one row per block label,
+> comes to 33 and would need an aggregation rule nobody has written, since `Block H` spans five rows
+> and `Block K` two with different verdicts. Neither reproduced the 42 this summary used to claim.
+> `cli/conformance/docs-coverage.conformance.mjs` recomputes it from the tables above and prints the
+> sentence to write when the two disagree.
 
 > **Block T is the block that closes these.** It exists because the list below is what Block R's own audit found and no Block R task named — the curator's half. Each task in it flips exactly one row, and this count moves with it.
-
-> The orphan count moved from 5 to 6 without a row changing: the tables have listed `shio audit`'s rules as 🔴 since this file shipped and this summary never counted it. The ✅ and 🧩 figures are the previous ones plus this block's one new row, not an independent recount — a count of every status-bearing row comes to 48, which does not reconcile with the 40 this summary was authored against, and reconciling the two is its own task rather than something to guess at inside a block sweep.
 
 Block R took this from **33 wrong of 40** to **7**. What is left is what the block's own tasks never named, which is the finding the matrix existed to produce:
 
