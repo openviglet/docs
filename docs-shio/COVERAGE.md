@@ -92,7 +92,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Architecture, components, request flow, deployment topologies | [architecture-overview](./architecture-overview.md) | ✅ (SH491) |
 | The introduction a newcomer meets first | [intro](./getting-started/intro.md) · [core-concepts](./getting-started/core-concepts.md) | ✅ (SH490) |
 | The landing page | [index](./index.mdx) | ✅ (SH480) |
-| Developer environment, tech stack, contributing | [developer-guide](./developer-guide.md) still lists Elasticsearch 9.3.3 and names no agent surface or CLI | ⚠️ (unnamed by any Block R task) |
+| Developer environment, tech stack, contributing | [developer-guide](./developer-guide.md), rewritten: the six surfaces, the real stack, the build and test commands, and the ten design laws a contribution is judged by | ✅ (SH628 — and the stack table is now checked against this repo's build files by `cli/conformance/docs-stack.conformance.mjs`, so a version that drifts fails a build instead of misleading a reader) |
 
 ## Developers (reference)
 
@@ -134,7 +134,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 42 clusters, 2 are still not documented correctly: 1 🔴 orphan and 1 ⚠️ misleading page.** Forty are covered (33 ✅, 7 🧩).
+**Of 42 clusters, 1 is still not documented correctly: 1 🔴 orphan and no ⚠️ page.** Forty-one are covered (34 ✅, 7 🧩).
 
 > **Block T is the block that closes these.** It exists because the list below is what Block R's own audit found and no Block R task named — the curator's half. Each task in it flips exactly one row, and this count moves with it.
 
@@ -143,7 +143,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 Block R took this from **33 wrong of 40** to **7**. What is left is what the block's own tasks never named, which is the finding the matrix existed to produce:
 
 - **1 🔴**, not named by a Block R task: ~~the content console itself (Block O)~~ — closed by **SH625**, [content-console](./content-console.md) · ~~the console's own curator surfaces (Block E: dashboard, Media Library, static-file manager, webhooks UI, the `config/` pages)~~ — closed by **SH623**, which rewrote [administration-guide](./administration-guide.md) against the React console · ~~the curator's lifecycle tools (SH13–SH15, SH51, SH55: preview tokens, version diff and restore, scheduled publish, the activity view)~~ — closed by **SH624**, [content-lifecycle](./content-lifecycle.md) · ~~outbound webhooks (SH12)~~ — closed by **SH626**, [webhooks](./webhooks.md) · ~~content i18n (SH53)~~ — closed by **SH627**, [content-i18n](./content-i18n.md) · **`shio audit`'s eleven rules**, which the table has listed as an orphan since this file shipped and this summary did not count.
-- **1 ⚠️**: the developer guide still lists Elasticsearch 9.3.3 in its stack and names no agent surface or CLI.
+- **0 ⚠️**: ~~the developer guide still lists Elasticsearch 9.3.3 in its stack and names no agent surface or CLI~~ — closed by **SH628**, which rewrote it and landed the instrument first: `cli/conformance/docs-stack.conformance.mjs` derives every stated Java / Spring Boot / Node / pnpm version from this repo's build files and refuses a retired dependency presented as part of the stack.
 - **Also unclosed**: the transform cache, the dimension and format limits and the signed-URL configuration are the operational half of the SH25 image epic, folded into the render page but not documented as operations.
 
 Every item above is worth a task. Four of them are curator-facing, which is the half this block reached last: the agent's surface is now the best-documented part of the product and the console is the least.
