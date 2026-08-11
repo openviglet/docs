@@ -47,7 +47,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 
 | Block / feature | Page | Status |
 |---|---|---|
-| **Block O**: the content console , the browser and its paged listing, the post form built from the post-type, copy/move with both ends authorized and free names, "select everything", the trash | n/a | 🔴 (SH485 covers the rails, not the console) |
+| **Block O**: the content console , the browser and its paged listing, the post form built from the post-type, copy/move with both ends authorized and free names, "select everything", the trash | [content-console](./content-console.md) | ✅ (SH625) |
 | **Block E**: the React console's own surfaces, dashboard, **Media Library**, static-file manager, webhooks UI, and the `config/` pages (auth providers, exchange providers, email/SMTP, search) | [administration-guide](./administration-guide.md) describes the legacy AngularJS screens these replaced | 🔴 (no Block R task names them) |
 | Users, groups, roles, site properties, and **SH54** content-level ACL (folder/post grants, inherited, default-allow) | [administration-guide § Permissions](./administration-guide.md#permissions) | 🧩 |
 | **Block C**: the curator's lifecycle tools, **SH13** short-lived preview tokens + console preview, **SH14** draft↔published diff + restore, **SH15** scheduled publish/unpublish, **SH51** audit history + Activity viewer, **SH55** trash / restore | [content-modeling § Publishing](./content-modeling.md#publishing) covers none of them | 🔴 (no Block R task names them) |
@@ -134,13 +134,15 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 42 clusters, 7 are still not documented correctly: 6 🔴 orphans and 1 ⚠️ misleading page.** Thirty-five are covered (28 ✅, 7 🧩).
+**Of 42 clusters, 6 are still not documented correctly: 5 🔴 orphans and 1 ⚠️ misleading page.** Thirty-six are covered (29 ✅, 7 🧩).
+
+> **Block T is the block that closes these.** It exists because the list below is what Block R's own audit found and no Block R task named — the curator's half. Each task in it flips exactly one row, and this count moves with it.
 
 > The orphan count moved from 5 to 6 without a row changing: the tables have listed `shio audit`'s rules as 🔴 since this file shipped and this summary never counted it. The ✅ and 🧩 figures are the previous ones plus this block's one new row, not an independent recount — a count of every status-bearing row comes to 48, which does not reconcile with the 40 this summary was authored against, and reconciling the two is its own task rather than something to guess at inside a block sweep.
 
 Block R took this from **33 wrong of 40** to **7**. What is left is what the block's own tasks never named, which is the finding the matrix existed to produce:
 
-- **6 🔴**, none of them named by a Block R task: the content console itself (Block O) · the console's own curator surfaces (Block E: dashboard, Media Library, static-file manager, webhooks UI, the `config/` pages) · the curator's lifecycle tools (SH13–SH15, SH51, SH55: preview tokens, version diff and restore, scheduled publish, the activity view) · outbound webhooks (SH12) · content i18n (SH53) · **`shio audit`'s eleven rules**, which the table has listed as an orphan since this file shipped and this summary did not count.
+- **5 🔴**, none of them named by a Block R task: ~~the content console itself (Block O)~~ — closed by **SH625**, [content-console](./content-console.md) · the console's own curator surfaces (Block E: dashboard, Media Library, static-file manager, webhooks UI, the `config/` pages) · the curator's lifecycle tools (SH13–SH15, SH51, SH55: preview tokens, version diff and restore, scheduled publish, the activity view) · outbound webhooks (SH12) · content i18n (SH53) · **`shio audit`'s eleven rules**, which the table has listed as an orphan since this file shipped and this summary did not count.
 - **1 ⚠️**: the developer guide still lists Elasticsearch 9.3.3 in its stack and names no agent surface or CLI.
 - **Also unclosed**: the transform cache, the dimension and format limits and the signed-URL configuration are the operational half of the SH25 image epic, folded into the render page but not documented as operations.
 

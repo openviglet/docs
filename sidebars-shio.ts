@@ -46,6 +46,7 @@ const sidebars: SidebarsConfig = {
             id: "human-curates-it",
           },
           items: [
+            "content-console",
             "agent-safety",
             "universal-editor",
             "content-modeling",
