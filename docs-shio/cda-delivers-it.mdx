@@ -26,4 +26,11 @@ dependencies, works in Node, the browser, edge and SSR), `@viglet/shio-react-sdk
 (hooks and render components), and `create-shio-app`, which scaffolds a Next.js App
 Router site with SSG, ISR and on-demand revalidation already wired.
 
+Pulling on a schedule is the fallback, not the design. **[Webhooks](./webhooks.md)** push
+a small signed JSON body the moment content is published, unpublished or deleted, so a
+static front end rebuilds the route that changed instead of all of them. That page is
+deliberately blunt about what delivery does **not** promise, no ordering, not
+exactly-once, no dead-letter queue, because a consumer that assumes otherwise breaks in
+production rather than in review.
+
 <DocCardList />
