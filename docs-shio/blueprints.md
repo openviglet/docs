@@ -51,6 +51,59 @@ dependency they never import.
 
 ---
 
+## Where more packages come from
+
+Those six ship with the instance. A **marketplace** catalogue adds more, and it is off
+until an operator turns it on:
+
+```properties
+shio.marketplace.enabled=true
+shio.marketplace.url=https://shio.viglet.org/marketplace/marketplace.json
+shio.marketplace.timeout-millis=5000
+```
+
+With it off, listing the marketplace still answers — with the six built-ins and a
+`source` of `builtin-only`. That is deliberate: "the feature is off" and "this build has
+no packages" are different facts, and the listing says which. When a catalogue is
+configured but cannot be reached, the source reads `unreachable` and carries the reason,
+so a list that quietly shrank cannot be mistaken for a catalogue that shrank.
+
+### From a terminal
+
+```bash
+shio marketplace list                        # what is available, and where the list came from
+shio marketplace show shio-blueprint-blog    # one entry, with its README
+shio marketplace install shio-blueprint-blog
+shio apply --blueprint shio-blueprint-blog --site mysite
+```
+
+**Installing is not applying.** `install` downloads the package and puts it where the
+registry can see it, and stops there — applying it to a site stays `shio apply
+--blueprint`. The separation is the point: you can read what you installed before
+anything writes to your content. `install --dry-run` goes further and does everything
+except the move into place, so an archive that is malformed, or that disagrees with the
+catalogue about its own name, is caught before it lands.
+
+### From the console and from an agent
+
+The console has the same catalogue under **Admin → Marketplace**. An agent reads it with
+the `shio_marketplace` MCP tool, which lists and describes — it does **not** install.
+That is a deliberate boundary, not an omission: installing a stranger's package is the
+operator's act, so it stays with a credential the operator holds.
+
+### Who may install
+
+Browsing is open to anyone signed in. **Installing and uninstalling require an
+administrator**, over every surface — the console, the CLI and the REST API alike.
+The reasoning is that merely re-reading the package directory already needs an
+administrator, because it changes what every later apply can do; installing is that act
+plus a download, so it cannot be gated more weakly than what it contains.
+
+Uninstall only removes a package that came from a catalogue. The six built-ins are part
+of the instance, so "uninstalled" would be a claim the next restart contradicts.
+
+---
+
 ## Applying one
 
 `apply` is a two-step by default, because looking before writing is the whole safety

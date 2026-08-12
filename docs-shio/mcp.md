@@ -1,7 +1,7 @@
 ---
 title: MCP Server
 sidebar_label: MCP Server
-description: "Drive Viglet Shio from Claude Code, Cursor or any MCP client: POST /mcp, thirteen tools, six resources, four prompts, and the Claude Code plugin."
+description: "Drive Viglet Shio from Claude Code, Cursor or any MCP client: POST /mcp, twelve tools, six resources, four prompts, and the Claude Code plugin."
 ---
 
 # MCP Server
@@ -80,10 +80,11 @@ drafts by definition, and publishing needs `mayPublish` on the token. See
 
 ## The tools
 
-Thirteen, and the number is the point: **the tool list is a measured budget, not an open
+Twelve, and the number is the point: **the tool list is a measured budget, not an open
 catalogue.** `tools/list` is paid for on every turn of every conversation, so its total
-estimated token size is asserted in CI against a declared ceiling. Adding a fourteenth
-tool means either fitting the budget or raising it deliberately and saying why. That is
+estimated token size is asserted in CI against a declared ceiling, and the count itself is
+capped by a test. Adding a thirteenth tool means either fitting the budget or raising it
+deliberately and saying why. That is
 also why some capabilities are a *parameter* on an existing tool rather than a tool of
 their own.
 
@@ -98,9 +99,15 @@ their own.
 | `shio_verify` | Lint content and routes; a fix per finding |
 | `shio_digest` | A page's structural digest: the cheap proof a render still looks right |
 | `shio_changes` | What changed since a cursor: what the human did while you were away |
-| `shio_remember` / `shio_forget` | Write and drop the conventions the next session should inherit |
-| `shio_blueprint` | List and apply the appliable starting points |
+| `shio_remember` | Write the conventions the next session should inherit — and drop one, with `forget` |
 | `shio_assets` | The files a site holds |
+| `shio_marketplace` | The packages this instance could install. Lists and describes; it does not install — see [Blueprints § Who may install](./blueprints.md#who-may-install) |
+
+Two capabilities you might expect as tools are **parameters** instead, and that is the
+budget above being spent deliberately rather than an omission. Applying a starting point
+is `shio_apply`'s `blueprint` parameter, not a `shio_blueprint` tool; forgetting a
+convention is `shio_remember`'s `forget`, not a tool of its own. Both are rare operations
+whose schema would otherwise be paid for on every turn of every session.
 
 ### A call, and what comes back
 

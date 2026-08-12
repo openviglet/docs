@@ -36,6 +36,7 @@ shio verify --help          # or: shio help verify
 |---|---|
 | `shio init [name]` | Scaffold a Next.js site wired to the delivery API. `--blueprint <name>` takes the starter from the instance instead; add `--site <site>` to apply its content in the same command |
 | `shio blueprints` | List the appliable starting points; `shio blueprints <name>` prints one package's parameters |
+| `shio marketplace <list\|show\|install\|uninstall>` | The package catalogue: what this instance could install, and installing it. `install` needs an administrator. See [Blueprints § Where more packages come from](./blueprints.md#where-more-packages-come-from) |
 | `shio import <file.zip>` | Clone an exchange package into this instance: how you accept a site somebody hands you |
 
 ### Discover

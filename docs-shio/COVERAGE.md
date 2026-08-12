@@ -37,6 +37,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block I**: content as files: the `shio/content/**` · `shio/folders/**` · `shio/assets/**` projection, sidecars, asset bytes + fingerprints, the per-field three-way merge, `movedFrom`, the commit-ordered change feed `/agent/changes` | [content-as-files](./content-as-files.md) | ✅ (SH486) |
 | **Block I / C / Q**: the `shio` CLI, `pull`, `push` (`--content`, `--check`, `--prune`, `--accept`), `apply`, `verify`, `report`, `remember`, `context`, `changes`, `dev --content`, `build`, `init --blueprint`, `snapshot`, `audit`, `digest`, `clone`, `propose`, `convert` | [cli](./cli.md) | ✅ (SH487) |
 | **Block J**: blueprints: the package format, `GET /agent/blueprints`, `POST /agent/blueprints/{name}/apply`, the first-party `blog` / `docs` / `nextjs-starter` set, `@viglet/shio-sections` | [blueprints](./blueprints.md) | ✅ (SH488) |
+| **Block J**: the package marketplace: the catalogue and its `builtin-only` / `remote` / `unreachable` source, `shio.marketplace.*`, install and uninstall over REST, `shio marketplace`, the `shio_marketplace` tool, the console page, and the administrator gate on the writes | [blueprints § Where more packages come from](./blueprints.md#where-more-packages-come-from) · [cli](./cli.md) · [mcp](./mcp.md) | ✅ (SH646, SH675, SH677, SH678, SH682) |
 | **Block K**: the perception loop, content lint `/agent/verify` (+ scoped runs, accepted findings), route/link proof, render digest `/agent/render`, `/agent/diagnostics`, the durable incident feed, visual snapshot + diff, the handoff report | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-a-human) covers verify, render and diagnostics; the incident feed, snapshot diff and handoff report are the CLI half | 🧩 (SH487 for the CLI half) |
 | **Block K, closing**: `state=` on `/agent/read` so a draft can be compared with what is live, and `shio diff --against published` as that pair in one command | [agent-surface § Reading](./agent-surface.md#reading) · [cli](./cli.md) | ✅ (SH619, SH640) |
 | **Block L**: agent safety: the `AGENT` token scope + session identity, draft-by-default + the publish gate, destructive-op confirm tokens, the review queue, the folder trace/undo, attribution | [agent-safety](./agent-safety.md) | ✅ (SH485) |
@@ -135,7 +136,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 48 clusters, none is undocumented: no 🔴 orphan and no ⚠️ page.** 48 are covered (43 ✅, 5 🧩).
+**Of 49 clusters, none is undocumented: no 🔴 orphan and no ⚠️ page.** 49 are covered (44 ✅, 5 🧩).
 
 > **This sentence is derived, and a check fails when it drifts (SH653).** Every figure in it used
 > to be typed, and it drifted in the direction that hides work: the `shio audit` row was 🔴 in the

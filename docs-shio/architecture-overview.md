@@ -39,7 +39,7 @@ Two edges in that picture are the ones worth reading twice:
 
 | Surface | Path | Auth | For |
 |---|---|---|---|
-| **MCP** | `POST /mcp` | API key (`AGENT` scope) | An agent's client: 13 tools, 6 resources, 4 prompts |
+| **MCP** | `POST /mcp` | API key (`AGENT` scope) | An agent's client: 12 tools, 6 resources, 4 prompts |
 | **Agent REST** | `/api/v2/agent/**` | API key (`AGENT` scope), stateless | Discovery, addressed reads, atomic writes, verification |
 | **Console API** | `/api/v2/**` | Session + CSRF | The React console |
 | **Delivery (CDA)** | `/api/v2/cda/**`, `/graphql` | API key (read / preview / write scope) | Your own front end |
