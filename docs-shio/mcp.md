@@ -80,7 +80,7 @@ drafts by definition, and publishing needs `mayPublish` on the token. See
 
 ## The tools
 
-Twelve, and the number is the point: **the tool list is a measured budget, not an open
+Twelve tools, and the number is the point: **the tool list is a measured budget, not an open
 catalogue.** `tools/list` is paid for on every turn of every conversation, so its total
 estimated token size is asserted in CI against a declared ceiling, and the count itself is
 capped by a test. Adding a thirteenth tool means either fitting the budget or raising it
