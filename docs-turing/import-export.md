@@ -47,6 +47,61 @@ The `export.json` inside the ZIP archive contains:
 | `store` | Embedding store instance references |
 | `se` | Search engine instance references |
 
+Instance references never carry an owning tenant. When [multi-tenancy](./multi-tenancy.md) is enabled, a tenant id only identifies the installation that created it, so it is left out of the archive — an imported instance is claimed by whoever imports it, and one imported with no tenant bound stays shared (GLOBAL).
+
+---
+
+## Seeding a fresh installation
+
+On the **first** startup against an empty database, Turing ES imports every `.zip` it finds in the `export/` directory of its working directory (alphabetical order). Use this to open a new environment with your sites, LLM instances, search engines and embedding stores already configured — no admin clicks, no API calls.
+
+```
+/app/export/           # in the Docker image
+  defaults.zip
+  my-sites.zip
+```
+
+A bundle may contain **only** instance configuration, with no site at all. That is the normal shape of a defaults bundle:
+
+```json
+{
+  "se": [ { "id": "…", "title": "Default Search Engine", "enabled": 1,
+            "endpointUrl": "./store/lucene-se",
+            "turSEVendor": { "id": "LUCENE" } } ]
+}
+```
+
+### What the Docker image already seeds
+
+The official image ships `/app/export/defaults.zip` with two shared instances, both embedded and requiring no external service or credential:
+
+| Instance | Vendor | Path |
+|---|---|---|
+| Default Search Engine | `LUCENE` | `./store/lucene-se` |
+| Default Vector Store | `LUCENE` | `./store/lucene-vector` |
+
+Both live under `/app/store`, which the image declares as a volume, and both are shared: with multi-tenancy enabled, every tenant can use them without configuring anything of their own.
+
+No LLM instance is seeded — an exported LLM carries its API key encrypted with the key of the installation that exported it. Set `OPENAI_API_KEY` or `GEMINI_API_KEY` instead and Turing ES provisions a default LLM at startup (see [LLM instances](./llm-instances.md)).
+
+### Seeding your own defaults
+
+Mount your bundle into `export/` before the first startup:
+
+```bash
+docker run -v ./my-defaults.zip:/app/export/my-defaults.zip \
+  -e TURING_TENANCY_ENABLED=true \
+  viglet/turing
+```
+
+Export from a configured environment to produce the bundle — the archive an admin export gives you is exactly the format this reads.
+
+:::caution One shot per database
+After the first import Turing ES records an `EXPORT_AUTO_IMPORT` marker and never scans `export/` again, so changing a bundle later has no effect on an existing database. Adding a ZIP still works if the directory was **absent or empty** at first startup, because nothing was recorded then.
+:::
+
+If your deployment runs more than one container, give them all the same encryption key — otherwise the API keys inside a seeded bundle cannot be decrypted. See [Security & authentication](./security-authentication.md).
+
 ---
 
 ## Import
