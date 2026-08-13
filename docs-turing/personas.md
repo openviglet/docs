@@ -355,7 +355,24 @@ The trend and drift views are computed from the stored scores alone — no LLM c
 - **Adjust the content** — how to edit a content so it serves the personas scoring it low.
 - **Adjust the persona** — how to correct a persona's audience description when the contents consistently miss it (a reading level or vocabulary ceiling set wrong, an empty description).
 
-Suggestions come from the project's LLM Instance (or the Global default) grounded on the matrix, the flagged phrases and the drift; anything naming a content or persona outside the project is discarded. With **no LLM configured** — or if the model's answer can't be read — you still get a **deterministic** list built from the rewrite suggestions the evaluator already grounded in verbatim phrases. **Adjustments are advisory**: nothing is ever written to a content or a persona automatically. Use **Regenerate** for a fresh set.
+Suggestions come from the project's LLM Instance (or the Global default) grounded on the matrix, the flagged phrases and the drift; anything naming a content or persona outside the project is discarded. With **no LLM configured** — or if the model's answer can't be read — you still get a **deterministic** list built from the rewrite suggestions the evaluator already grounded in verbatim phrases. Use **Regenerate** for a fresh set.
+
+**Adjustments stay advisory.** Nothing is written to a content or a persona automatically. For a **content** that is the end of it: Turing does not own the CMS the page lives in, so the edit is yours to make there.
+
+#### Applying a persona adjustment
+
+A **persona**, though, is a Turing entity — so when a suggestion names a specific audience field that is set wrong, the card offers **Apply to this persona**: the suggestion is shown as a diff of the current value → the proposed one, with the reason, for each field it wants to change.
+
+You tick the fields you agree with and press **Apply**. Nothing is pre-ticked and there is no *accept all*:
+
+- Only the fields you tick are written. The rest of the audience profile is left exactly as it was — including the fields no suggestion may ever touch (**Accessibility notes** and **Primary language**).
+- Four fields are eligible: **Reading level**, **Domain expertise**, **Vocabulary ceiling** and **Comprehension notes**.
+- A field that can't be applied (a value outside the allowed set, or one already in place) is reported next to the panel and the rest of your ticks still go through.
+- Applying needs the same permission as editing a persona directly (`ROLE_ADMIN` or `AI_AGENT_EDIT`).
+
+The Apply button appears only when the suggestion actually names a field and a value. A deterministic suggestion (no LLM) can tell you a persona's reading level looks wrong but not which value is right, so it stays read-only — configure an LLM Instance on the project to get applicable suggestions.
+
+**Every applied field is recorded** with the value it replaced, the suggestion's reason, which project proposed it, whether the LLM or the deterministic fallback produced it, and who confirmed it. That is what makes a later run's drift explainable: when a persona's scores move, the record says whether someone changed its audience definition and why.
 
 Retention is bounded: each cell keeps its most recent points (24 by default, `turing.persona-match.history.max-points`), and a series is deleted along with its content, persona or project.
 
