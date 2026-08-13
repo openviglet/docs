@@ -259,6 +259,24 @@ const config: Config = {
         ],
       },
     ],
+    [
+      // SH715 — a URL is the one part of a page other people's documents point at, so renaming a
+      // slug without this converts their link into a 404 rather than into different wording. The
+      // plugin is the FIRST deliverable and the rename the second; in the other order the rename
+      // ships a defect that only shows up in somebody else's bookmark.
+      "@docusaurus/plugin-client-redirects",
+      {
+        redirects: [
+          // SH705 rewrote the curator hub's every sentence and deliberately left its address
+          // alone. SH715 moves the address to match the copy, and this is what keeps the old one
+          // answering.
+          {
+            from: "/shio/category/human-curates-it",
+            to: "/shio/category/curator-approves-it",
+          },
+        ],
+      },
+    ],
   ],
 
   themeConfig: {

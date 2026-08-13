@@ -43,7 +43,7 @@ const sidebars: SidebarsConfig = {
           label: "The human curates it",
           link: {
             type: "doc",
-            id: "human-curates-it",
+            id: "curator-approves-it",
           },
           items: [
             "content-console",

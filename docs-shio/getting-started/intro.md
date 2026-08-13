@@ -167,7 +167,7 @@ The documentation is organised the way the work is:
 | Hub | Start here if you want to |
 |---|---|
 | **[The agent builds it](/shio/category/agent-builds-it)** | Connect an agent, drive the API, author content as files, use the CLI |
-| **[The curator approves it](/shio/category/human-curates-it)** | Understand the rails, curate content, edit a rendered page |
+| **[The curator approves it](/shio/category/curator-approves-it)** | Understand the rails, curate content, edit a rendered page |
 | **[The CDA delivers it](/shio/category/cda-delivers-it)** | Build a front end against the delivery API |
 | **[Run it](/shio/category/run-it)** | Install, configure, secure and operate an instance |
 
