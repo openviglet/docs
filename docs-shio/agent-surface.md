@@ -1,7 +1,7 @@
 ---
 title: The Agent Surface
 sidebar_label: The Agent Surface (REST)
-description: "/api/v2/agent/**: one call to discover the instance, addressed reads, an atomic op vocabulary, desired-state apply, and a verification loop that needs no human."
+description: "/api/v2/agent/**: one call to discover the instance, addressed reads, an atomic op vocabulary, desired-state apply, and a verification loop that needs nobody to look."
 ---
 
 # The Agent Surface
@@ -99,7 +99,7 @@ picking up where a previous session left off → GET /api/v2/agent/changes?site=
 before deriving a convention, check this instance already worked it out → GET /api/v2/agent/context?format=terse
 building a section — check something already applies it → GET /api/v2/agent/blueprints?format=terse
 creating or changing content without holding a UUID → POST /api/v2/agent/batch with dryRun:true
-proving what you just wrote is correct without asking a human → GET /api/v2/agent/verify?site=<site>&format=terse
+proving what you just wrote is correct without asking anyone → GET /api/v2/agent/verify?site=<site>&format=terse
 a call answered 5xx and you need to know what failed → GET /api/v2/agent/diagnostics?format=terse
 ```
 
@@ -144,7 +144,7 @@ nothing for the field.
 |---|---|
 | `GET /agent/find` | Posts as **addresses and titles, never bodies**: filter by `site`, `type`, `folder` (matches beneath it too), `q` full-text, `limit`; walk past the cap with `after=<cursor>` |
 | `GET /agent/read` | Whole documents by address. `address` is **repeatable**, so several posts cost one call; `fields=a,b` projects to named fields; `include=impact` attaches a template's blast radius; `state=published` reads what is **live** instead of the draft |
-| `GET /agent/changes` | What changed, resumably. Without `since` you get a window and a starting cursor; with it, everything after that position, oldest first. The response's `cursor` is always the next `since`, which makes "what did the human change while I was away" one call rather than a guess at a window |
+| `GET /agent/changes` | What changed, resumably. Without `since` you get a window and a starting cursor; with it, everything after that position, oldest first. The response's `cursor` is always the next `since`, which makes "what did the curator change while I was away" one call rather than a guess at a window |
 | `GET /agent/memory` | What earlier sessions worked out. `PUT` remembers one note idempotently by `(scope, key)`; `DELETE` forgets one |
 | `GET /agent/diagnostics` | Recent **asynchronous** failures (webhook deliveries, image transforms, scheduled publishes, 5xx) instead of grepping the logs. The window is bounded and the response says when it started collecting, because "nothing since then" is a different claim from "nothing ever" |
 
@@ -245,7 +245,7 @@ recorded as a move rather than inferred as a delete plus a create.
 
 ---
 
-## Closing the loop without a human
+## Closing the loop without asking anyone
 
 An agent that writes and then asks a person "does it look right?" has not automated
 anything. Two mechanisms answer that question in text.
@@ -298,7 +298,7 @@ Every 4xx is an RFC 9457 problem document, and it carries what to do next:
 ```
 
 `fix`, `allowed`, `didYouMean` and `example` are not decoration: they are what lets an
-agent recover on the next call instead of asking a human what the API wanted.
+agent recover on the next call instead of asking a curator what the API wanted.
 
 **This is not only the agent surface.** Two kinds of refusal used to answer with nothing
 useful, and both are ones a caller meets *before* any other:

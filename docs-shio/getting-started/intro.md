@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-description: Viglet Shio CMS is an open-source, agent-native headless CMS. A coding agent builds the site, a human curates it, and the Content Delivery API serves it.
+description: Viglet Shio CMS is an open-source, agent-native headless CMS. A coding agent builds the site, a curator approves it, and the Content Delivery API serves it.
 ---
 
 # What is Shio CMS?
@@ -10,7 +10,7 @@ difference that shapes everything else: its primary operator is a **coding agent
 
 Most CMSs are designed for a person clicking through forms, with an API added afterwards
 for developers. Shio is designed the other way round. An agent, Claude Code, Cursor,
-anything that speaks MCP, builds and maintains the site. A human **curates**: approving,
+anything that speaks MCP, builds and maintains the site. A curator **approves**: reviewing,
 correcting, publishing. And the Content Delivery API serves the result to whatever front
 end you like.
 
@@ -29,7 +29,7 @@ survive to the next call.
 
 Shio's answer is to make the instance **describe itself in one call**, to address content
 by **path instead of id**, and to make every write **idempotent**, so an agent can plan
-work, do it, and check it without a human in the loop for anything except the decisions
+work, do it, and check it without interrupting anyone for anything except the decisions
 that are genuinely a person's.
 
 ---
@@ -39,7 +39,7 @@ that are genuinely a person's.
 | | Does | Through |
 |---|---|---|
 | **The agent** | Builds the model, writes the pages, wires the templates, checks its own work | MCP, the REST agent surface, content projected to files, the `shio` CLI |
-| **The human** | Reviews, corrects wording, decides what goes live | The console, the Universal Editor, preview links |
+| **The curator** | Reviews, corrects wording, decides what goes live | The console, the Universal Editor, preview links |
 | **The delivery API** | Serves published content to readers | REST + GraphQL, a TypeScript client, React hooks, a Next.js starter |
 
 The division is enforced, not suggested: **an agent's writes land as drafts**, and
@@ -67,7 +67,7 @@ it back, with a three-way merge that never silently overwrites a curator's edit.
 
 ### Adopt a site that already exists
 Point Shio at a live website and it will capture it, propose which blocks could become
-editable content, and convert it into a site a human can curate.
+editable content, and convert it into a site a curator can maintain.
 
 ### Query it from anywhere
 REST and GraphQL, with per-site and per-environment API keys, ETags and rate limiting
@@ -167,7 +167,7 @@ The documentation is organised the way the work is:
 | Hub | Start here if you want to |
 |---|---|
 | **[The agent builds it](/shio/category/agent-builds-it)** | Connect an agent, drive the API, author content as files, use the CLI |
-| **[The human curates it](/shio/category/human-curates-it)** | Understand the rails, curate content, edit a rendered page |
+| **[The curator approves it](/shio/category/human-curates-it)** | Understand the rails, curate content, edit a rendered page |
 | **[The CDA delivers it](/shio/category/cda-delivers-it)** | Build a front end against the delivery API |
 | **[Run it](/shio/category/run-it)** | Install, configure, secure and operate an instance |
 

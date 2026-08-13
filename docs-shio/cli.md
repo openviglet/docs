@@ -82,8 +82,8 @@ See [Content as Files](./content-as-files.md) for the tree, the sidecars and the
 | `shio verify` | The content and route lint. **Exits non-zero on an error**: this is the CI gate. `--strict` fails on warnings too; `--folder` / `--address` / `--since` scope it; `--baseline` / `--accept` subtract findings you have accepted; `--delivery` adds the stronger proof that a published page is really served |
 | `shio digest <page>` | One page's structure: outline, landmarks, links, images |
 | `shio audit <page>` | What is wrong with a rendered page, as text with a selector each |
-| `shio snapshot <page>` | A PNG for a human, plus whether the page looks different |
-| `shio report` | The human handoff: what changed, a preview link each, and the warnings as open questions, Markdown, for a PR body |
+| `shio snapshot <page>` | A PNG for a person, plus whether the page looks different |
+| `shio report` | The curator handoff: what changed, a preview link each, and the warnings as open questions, Markdown, for a PR body |
 | `shio diff --against published` | What a publish would change: which **fields** differ between each draft and the live row, per post. `--address` narrows it. **Exits non-zero when anything would change**, so a pipeline can gate on it |
 
 Two things about `verify` that matter in a pipeline: the report's `notes` are printed,

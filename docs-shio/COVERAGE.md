@@ -15,7 +15,7 @@
 _Not rendered in the sidebar; this is a maintenance artifact._
 
 > **Why these sections and not Turing's.** Shio's primary operator is a coding
-> agent, the human curates, and the CDA delivers, so the matrix is grouped by
+> agent, the curator approves, and the CDA delivers, so the matrix is grouped by
 > **who does the job**, which since SH482 is also the sidebar: four hubs, each
 > with its own landing page, and every page below files into one of them.
 > ⚠️ is a verdict `docs-turing/COVERAGE.md` does not need: every
@@ -38,13 +38,13 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block I / C / Q**: the `shio` CLI, `pull`, `push` (`--content`, `--check`, `--prune`, `--accept`), `apply`, `verify`, `report`, `remember`, `context`, `changes`, `dev --content`, `build`, `init --blueprint`, `snapshot`, `audit`, `digest`, `clone`, `propose`, `convert` | [cli](./cli.md) | ✅ (SH487) |
 | **Block J**: blueprints: the package format, `GET /agent/blueprints`, `POST /agent/blueprints/{name}/apply`, the first-party `blog` / `docs` / `nextjs-starter` set, `@viglet/shio-sections` | [blueprints](./blueprints.md) | ✅ (SH488) |
 | **Block J**: the package marketplace: the catalogue and its `builtin-only` / `remote` / `unreachable` source, `shio.marketplace.*`, install and uninstall over REST, `shio marketplace`, the `shio_marketplace` tool, the console page, and the administrator gate on the writes | [blueprints § Where more packages come from](./blueprints.md#where-more-packages-come-from) · [cli](./cli.md) · [mcp](./mcp.md) | ✅ (SH646, SH675, SH677, SH678, SH682) |
-| **Block K**: the perception loop, content lint `/agent/verify` (+ scoped runs, accepted findings), route/link proof, render digest `/agent/render`, `/agent/diagnostics`, the durable incident feed, visual snapshot + diff, the handoff report | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-a-human) covers verify, render and diagnostics; the incident feed, snapshot diff and handoff report are the CLI half | 🧩 (SH487 for the CLI half) |
+| **Block K**: the perception loop, content lint `/agent/verify` (+ scoped runs, accepted findings), route/link proof, render digest `/agent/render`, `/agent/diagnostics`, the durable incident feed, visual snapshot + diff, the handoff report | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-asking-anyone) covers verify, render and diagnostics; the incident feed, snapshot diff and handoff report are the CLI half | 🧩 (SH487 for the CLI half) |
 | **Block K, closing**: `state=` on `/agent/read` so a draft can be compared with what is live, and `shio diff --against published` as that pair in one command | [agent-surface § Reading](./agent-surface.md#reading) · [cli](./cli.md) | ✅ (SH619, SH640) |
 | **Block L**: agent safety: the `AGENT` token scope + session identity, draft-by-default + the publish gate, destructive-op confirm tokens, the review queue, the folder trace/undo, attribution | [agent-safety](./agent-safety.md) | ✅ (SH485) |
 | **Block M**: token economy, measured , response budgets, terse mode, the build-a-site benchmark, the instance memory / conventions store `/agent/memory`, the `AGENTS.md` generator, conditional agent reads (ETag) | [token-economy](./token-economy.md) | ✅ (SH497) |
 | **Block N**: the realignment: one **name-keyed** post-type surface (the id-keyed `/api/v2/post/type` twin is gone), console reads on the CDA shapes, post-type rename as a move, a teaching 409 for a post-type content points at | [content-modeling § One name-keyed surface](./content-modeling.md#one-name-keyed-surface) · [rest-api § Post types](./rest-api.md#post-types) | ✅ (SH495, SH496) |
 
-## The human curates it
+## The curator approves it
 
 | Block / feature | Page | Status |
 |---|---|---|

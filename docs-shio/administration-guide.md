@@ -115,7 +115,7 @@ A token carries a **scope**, and the scope is the whole of what it may do:
 | **Agent** | Write through the agent surface (`/api/v2/agent`, `/mcp`) and read drafts. It is **not** a CDA write key: it cannot patch published content directly. |
 
 An Agent token also has a **May publish** switch, **off by default**. An agent token
-without it writes drafts that a human then approves in Agent Review.
+without it writes drafts that a curator then approves in Agent Review.
 
 A token is additionally tagged as a **Production** or **Preview** environment key —
 production reads published content, preview reads draft-preferred — so the same front end

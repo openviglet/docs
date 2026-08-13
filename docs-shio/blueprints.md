@@ -145,7 +145,7 @@ follow from that, and each is a refusal rather than a convention:
   key looks like it worked. Prune's blast radius depends on what the author forgot to
   mention, and that author is not you.
 - **The model is provisioned, never overwritten.** A post type that already exists is left
-  exactly as it is (including a field a human added) and the response **names the fields
+  exactly as it is (including a field a curator added) and the response **names the fields
   it lacks** so you can decide. `--merge-post-types` adds them; nothing silently replaces
   your model.
 - **Substitution is `{{name}}` and nothing else.** No conditionals, no expressions: the

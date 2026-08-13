@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: Shio CMS
-description: "Viglet Shio CMS: an agent-native headless CMS. A coding agent builds the site over MCP, a human curates it, and the Content Delivery API serves it."
+description: "Viglet Shio CMS: an agent-native headless CMS. A coding agent builds the site over MCP, a curator approves it, and the Content Delivery API serves it."
 slug: /
 ---
 
@@ -83,7 +83,7 @@ export const SectionLabel = ({ children }) => (
 
 **Viglet Shio CMS** is an open-source headless CMS built for a different operator. **A
 coding agent builds the site**: over MCP, a REST surface designed for one call instead
-of a session, or content projected to files on disk. **A human curates it**: 
+of a session, or content projected to files on disk. **A curator approves it**: 
 approving, correcting and publishing in the console or straight on the rendered page.
 **The Content Delivery API serves it**: REST and GraphQL, with a TypeScript client,
 React hooks and a Next.js starter.
@@ -110,7 +110,7 @@ discoverable, deterministic, verifiable, and cheap in tokens.
     write, grep, then push it back, with a per-field three-way merge so a curator's own
     edit is never overwritten.
   </FeatureCard>
-  <FeatureCard icon="🛡️" title="Nothing surprises the human">
+  <FeatureCard icon="🛡️" title="Nothing surprises the curator">
     Agent writes land as drafts, plans can run dry first, destructive operations need a
     confirm token naming what they remove, and a delete is a trash you can undo.
   </FeatureCard>
@@ -121,7 +121,7 @@ discoverable, deterministic, verifiable, and cheap in tokens.
   </FeatureCard>
   <FeatureCard icon="✅" title="Proof without a screenshot">
     A content lint, a route check and a render digest give an agent cheap textual
-    evidence that what it built actually works, instead of a human round trip.
+    evidence that what it built actually works, instead of asking someone to look.
   </FeatureCard>
   <FeatureCard icon="📉" title="Tokens are a budget">
     Responses carry measured size budgets and a benchmark runs in CI, so a token
@@ -169,7 +169,7 @@ discoverable, deterministic, verifiable, and cheap in tokens.
 
 <div style={{ display: "grid", gap: "10px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
   <NavCard icon="🤖" title="The agent builds it" description="MCP, the agent surface, content as files, the CLI, blueprints and the verification loop" href="/shio/category/agent-builds-it" />
-  <NavCard icon="👤" title="The human curates it" description="The console, drafts and publishing, the Universal Editor, preview and the trash" href="/shio/category/human-curates-it" />
+  <NavCard icon="👤" title="The curator approves it" description="The console, drafts and publishing, the Universal Editor, preview and the trash" href="/shio/category/human-curates-it" />
   <NavCard icon="📡" title="The CDA delivers it" description="The read contract, GraphQL, the TypeScript client, React hooks and the Next.js starter" href="/shio/category/cda-delivers-it" />
   <NavCard icon="⚙️" title="Run it" description="Install, configure, multi-tenancy, search indexing and security on your own infrastructure" href="/shio/category/run-it" />
 </div>

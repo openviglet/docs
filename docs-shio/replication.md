@@ -21,7 +21,7 @@ That is three commands (`clone`, `propose`, `convert`) and one decision you shou
 |---|---|---|
 | What `convert` writes | The source's markup, verbatim, behind a Theme + Page Layout + Page | The captured blocks as **sections**: real fields, in a generated layout that annotates each one |
 | How close it looks | Pixel-identical is achievable and has been achieved | The pixels have moved: captured CSS classes are dropped, so the theme styles nothing yet |
-| Can a human edit it? | **No.** Verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit | **Yes.** Every field is annotated and editable |
+| Can a curator edit it? | **No.** Verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit | **Yes.** Every field is annotated and editable |
 | Use it for | Proving the capture is faithful; archiving a site as-is | Actually adopting the site into a CMS |
 
 You choose by what you accept in the `propose` step: **accept nothing and you get
@@ -108,7 +108,7 @@ It also proposes the captured stylesheet as **design tokens plus CSS**, and the 
 third-party scripts as a Site Scripts list: every entry for the head, with a consent
 category where the host declared one and a blank where it did not. A guess presented as a
 fact would be worse than a blank on a consent gate, and the report counts how many need a
-human.
+curator.
 
 ### 3. Convert
 

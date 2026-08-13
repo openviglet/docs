@@ -123,7 +123,7 @@ number, because an aggregate mixes savings and names none:
 |---|---|---|
 | Discovery (the context pack vs exploring) | ≥ 40× | ≥ 11× |
 | Path addressing instead of id round trips | ≥ 20× | ≥ 500× at scale |
-| The lint instead of a human round trip | ≥ 50× | ≥ 150× |
+| The lint instead of a round trip to a person | ≥ 50× | ≥ 150× |
 
 Those are **floors** asserted in CI against a console-shaped baseline, and the scale rows are
 required to *rise* with fixture size rather than being asserted at one size: a claim that a

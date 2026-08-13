@@ -98,7 +98,7 @@ their own.
 | `shio_publish` | Publish or unpublish, or schedule it |
 | `shio_verify` | Lint content and routes; a fix per finding |
 | `shio_digest` | A page's structural digest: the cheap proof a render still looks right |
-| `shio_changes` | What changed since a cursor: what the human did while you were away |
+| `shio_changes` | What changed since a cursor: what the curator did while you were away |
 | `shio_remember` | Write the conventions the next session should inherit — and drop one, with `forget` |
 | `shio_assets` | The files a site holds |
 | `shio_marketplace` | The packages this instance could install. Lists and describes; it does not install — see [Blueprints § Who may install](./blueprints.md#who-may-install) |
@@ -188,7 +188,7 @@ Six read-only resources, for a client that prefers attaching context to calling 
 
 Four, each a workflow rather than a sentence: they expand into the ordered tool calls
 that get the job done, with the safety defaults already in place (everything is left in
-`DRAFT` for a human to publish):
+`DRAFT` for a curator to publish):
 
 | Prompt | Arguments | Does |
 |---|---|---|

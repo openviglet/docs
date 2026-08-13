@@ -113,7 +113,7 @@ queue** at `/console/admin/review` turns that into the curator's view:
 Two design decisions worth knowing. It is a **view over the audit history grouped by
 session**, not a separate proposal table: the draft row *is* the proposal, which is why
 there is nothing to sync and nothing to expire. And it is **console-authenticated and
-deliberately not on the agent namespace**: the human's veto is not something the agent
+deliberately not on the agent namespace**: the curator's veto is not something the agent
 can reach.
 
 Reverting reports what it **cannot** honestly undo rather than guessing. If an entry
@@ -138,7 +138,7 @@ A reader who discovers a gap after trusting this page loses more than one who wa
 about it. Three, as of 2026.3:
 
 - **The trash is console-only.** An agent can fill it and **cannot list or restore it**: 
-  there is no agent read, MCP tool or CLI command for the trash. Undo is a human at a
+  there is no agent read, MCP tool or CLI command for the trash. Undo is a curator at a
   keyboard.
 - **`site.delete` purges.** Deleting a whole site removes it and everything in it
   outright: it takes a confirm token like any destructive op, but unlike a folder delete

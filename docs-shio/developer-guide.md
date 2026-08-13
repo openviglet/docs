@@ -9,7 +9,7 @@ description: "Build with and contribute to Viglet Shio: the stack, the six surfa
 Whether you are **building against Shio** or **contributing to it**, start here.
 
 Shio is an open-source, **agent-native** CMS. A coding agent builds and maintains the
-site; a human curates what it produced; a headless delivery layer serves it. That order
+site; a curator approves what it produced; a headless delivery layer serves it. That order
 is the product, not a description of it — every capability lands on an agent-drivable
 surface first, and a feature reachable only from the console is considered incomplete.
 
@@ -30,7 +30,7 @@ drive:
 | **Content as files** (`shio/content/**`) | The whole site projected to front-mattered Markdown on disk, with a three-way merge back. See [Content as files](./content-as-files.md). |
 | **CLI** (`@viglet/shio`) | `pull`, `push`, `apply`, `publish`, `verify`, `clone`, `convert`, `types`, `dev`, `deploy`, and more. See [The `shio` CLI](./cli.md). |
 | **Content Delivery API** (`/api/v2/cda/**`) | Stable REST + GraphQL reads, token-scoped, with TypeScript SDKs. See [Content Delivery API](./headless/content-delivery-api.md). |
-| **React console** | The human's half: content browser, form widgets, Universal Editor, review queue, preview links. See [The content console](./content-console.md). |
+| **React console** | The curator's half: content browser, form widgets, Universal Editor, review queue, preview links. See [The content console](./content-console.md). |
 
 If you are adding a feature, the order to land it in is **MCP → files/CLI → REST →
 console**.
@@ -239,9 +239,9 @@ These are binding, and a change that breaks one is wrong even if it was asked fo
 4. **Files beat APIs for authoring** — `Edit`, `Write` and `Grep` are an agent's cheapest tools.
 5. **Determinism over cleverness** — stable ordering, path addressing, idempotent writes, byte-identical serialization.
 6. **Errors are instructions** — every 4xx carries `fix` / `allowed` / `didYouMean` / `example`.
-7. **Never surprise the human** — draft-default, dry runs, explicit publish, confirm tokens, attribution, a review queue.
+7. **Never surprise the curator** — draft-default, dry runs, explicit publish, confirm tokens, attribution, a review queue.
 8. **Skipping steps needs appliable units** — blueprints, not prose recipes.
-9. **Close the perception loop** — cheap textual proof (lint, routes, render digest) instead of a human round trip.
+9. **Close the perception loop** — cheap textual proof (lint, routes, render digest) instead of asking someone to look.
 10. **Compose, don't fork** — MCP is a *shape* over the delivery API and console services, never a third contract.
 
 Three things Shio deliberately does **not** do: host a model or run prompts, replace the

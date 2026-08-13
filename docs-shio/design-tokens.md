@@ -64,7 +64,7 @@ Three parts of the spec matter here:
 |---|---|
 | `$value` | The token's value. A node that has one **is** a token, and the walk stops there |
 | `$type` | What kind of value it is (`color`, `dimension`, `fontFamily`, `fontWeight`, `shadow`, …) |
-| `$description` | Prose for a human. Carried, never rendered |
+| `$description` | Prose for a reader. Carried, never rendered |
 
 The `$` prefix is the spec's, not a Shio convention. Any other `$`-prefixed key at group
 level is spec metadata and is skipped.
