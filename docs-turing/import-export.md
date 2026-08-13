@@ -97,8 +97,26 @@ docker run -v ./my-defaults.zip:/app/export/my-defaults.zip \
 Export from a configured environment to produce the bundle — the archive an admin export gives you is exactly the format this reads.
 
 :::caution One shot per database
-After the first import Turing ES records an `EXPORT_AUTO_IMPORT` marker and never scans `export/` again, so changing a bundle later has no effect on an existing database. Adding a ZIP still works if the directory was **absent or empty** at first startup, because nothing was recorded then.
+Once every ZIP in `export/` has imported, Turing ES records an `EXPORT_AUTO_IMPORT` marker and never scans the directory again, so changing a bundle later has no effect on an existing database. Adding a ZIP still works if the directory was **absent or empty** at first startup, because nothing was recorded then.
 :::
+
+### When a seed ZIP fails
+
+A ZIP that fails to import — a truncated file, a missing `export.json`, a malformed archive — is **retried on the next startup**. The "done" marker is written only when every ZIP in the directory succeeded, so a bad seed does not quietly disable seeding for that database.
+
+Archives that did import are recorded individually and are **not** imported a second time on that retry. This matters: re-importing a bundle that contains a site *replaces* that site, discarding changes made to it since, so only the failures are re-run.
+
+The startup log says which is which:
+
+```
+Successfully auto-imported 'defaults.zip'.
+Failed to auto-import 'my-sites.zip': Missing required export.json in ZIP
+Auto-import from 'export' incomplete — 1 of 2 ZIP file(s) failed. The successful
+ones are recorded and will not be re-imported; the failures will be retried on
+the next start.
+```
+
+Fix the archive and restart. To force a completed directory to be imported again, delete the `EXPORT_AUTO_IMPORT*` rows from the `config_var` table — but read the replacement warning above first.
 
 If your deployment runs more than one container, give them all the same encryption key — otherwise the API keys inside a seeded bundle cannot be decrypted. See [Security & authentication](./security-authentication.md).
 
