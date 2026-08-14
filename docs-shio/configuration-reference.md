@@ -19,7 +19,8 @@ from this page, check the two notes: it may have been removed.
 
 | Property | Default | Description |
 |---|---|---|
-| `server.port` | `2710` | HTTP listening port |
+| `server.port` | `2710` | HTTP listening port. Also accepted on the command line — `java -jar viglet-shio.jar --server.port=8099` |
+| `shio.admin.password` | *(unset)* | Sets the `admin` password on startup, skipping the first-access screen. Environment form `SHIO_ADMIN_PASSWORD`; minimum six characters. Never overwrites a password already configured and never prevents startup — see [Installation § Setting the admin password without the console](./installation-guide.md#setting-the-admin-password-without-the-console) |
 | `shio.url` | `http://localhost:2710` | The instance's own base URL, used wherever an absolute URL is composed |
 | `shio.allowedOrigins` | `localhost` | CORS allowed origins |
 | `shio.keycloak` | `false` | Authenticate against a Keycloak realm |

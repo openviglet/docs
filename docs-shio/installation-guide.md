@@ -177,8 +177,13 @@ Pull the pre-built image published to the GitHub Container Registry (`ghcr.io`) 
 
 ```bash
 docker pull ghcr.io/openviglet/shio-ce:latest
-docker run -p 2710:2710 ghcr.io/openviglet/shio-ce:latest
+docker run -p 2710:2710 -e SHIO_ADMIN_PASSWORD=change-me-please ghcr.io/openviglet/shio-ce:latest
 ```
+
+`SHIO_ADMIN_PASSWORD` (minimum six characters) gives the container a usable `admin` login on its
+first start, instead of waiting for someone to open the console and set one. Leave it out and the
+console asks on first access instead — see
+[Setting the admin password without the console](#setting-the-admin-password-without-the-console).
 
 :::tip Image tags
 Besides `latest`, every run also publishes the project version and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
@@ -295,7 +300,46 @@ systemctl status shio.service
 
 Shio provides remote access through its Web application interfaces at: [http://localhost:2710](http://localhost:2710).
 
-By default the login/password are: **admin/admin**
+The administrator user is **`admin`**. Viglet Shio ships **no default password** — the `admin`
+user is created without one, so there is no shipped credential to change or to forget to change.
+You choose the password on first access, in one of two ways:
+
+- **The first-access screen.** Open the console and Shio asks you to set the `admin` password
+  before anything else. This is the right path for an installation someone is sitting in front of.
+- **`SHIO_ADMIN_PASSWORD`.** Set it before the first start and Shio applies it for you, skipping
+  the screen. This is the path for a container, a Compose file or an automated deploy — see
+  [Setting the admin password without the console](#setting-the-admin-password-without-the-console).
+
+:::note Every surface answers 401 until a password exists
+This is deliberate, not a startup delay. Until the `admin` password is set, the REST API, the CDA
+and the MCP server all refuse — so an instance can never be reachable with a credential nobody
+chose.
+:::
+
+### Setting the admin password without the console
+
+Set `SHIO_ADMIN_PASSWORD` (or the equivalent property `shio.admin.password`) and Shio applies it
+to the `admin` user at startup:
+
+```bash
+docker run -p 2710:2710 -e SHIO_ADMIN_PASSWORD=change-me-please ghcr.io/openviglet/shio-ce:latest
+```
+
+```bash
+java -Xmx1g -Xms1g -jar viglet-shio.jar --shio.admin.password=change-me-please
+```
+
+Three properties make it safe to leave in a Compose file or a systemd unit permanently:
+
+- **It never overwrites a password that is already set.** A restart is a no-op, and a password an
+  administrator changed in the console is not reverted by their next deployment.
+- **It never prevents startup.** Unset, blank, or shorter than the six-character minimum is a log
+  line and nothing more — a typo in an environment variable does not become an outage.
+- **It is stored encoded**, so the value in your Compose file is not sitting in the database in
+  clear text.
+
+If the variable is ignored, the reason is in the startup log: either a password was already
+configured, or the value was under six characters.
 
 ---
 
