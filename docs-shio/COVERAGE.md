@@ -139,7 +139,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 
 ## Orphans
 
-**Of 49 clusters, none is undocumented: no 🔴 orphan and no ⚠️ page.** 49 are covered (44 ✅, 5 🧩).
+**Of 51 clusters, none is undocumented: no 🔴 orphan and no ⚠️ page.** 51 are covered (45 ✅, 6 🧩).
 
 > **This sentence is derived, and a check fails when it drifts (SH653).** Every figure in it used
 > to be typed, and it drifted in the direction that hides work: the `shio audit` row was 🔴 in the
