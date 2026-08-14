@@ -112,6 +112,12 @@ unique within its folder, a **URL** is unique within the site. Copy `Home` into 
 different folder of the same site and it keeps the title `Home`, and only the URL gets
 a number.
 
+### Copying a folder copies its files
+
+A folder full of images copies as a folder full of images: each copied file gets its own
+stored bytes, not a pointer at the original's. That matters when you later delete one of
+them — removing an image from the original section leaves the copy's image working.
+
 ### What a move does to names
 
 A move **relocates and changes nothing else**. The post keeps its URL — which is the

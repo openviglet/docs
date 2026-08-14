@@ -187,24 +187,36 @@ N addressed ops, applied **atomically**: either all of them or none. `dryRun: tr
 reports exactly what would change and writes nothing; it is also how you obtain the
 `confirm` token a destructive op requires.
 
-The vocabulary is closed. Eleven ops:
+The vocabulary is closed. Fifteen ops:
 
 | Op | What it does |
 |---|---|
-| `site.upsert` | Create a blank site, or fill an empty `url`/`description`/`furl` on one that exists. `data.postTypeLayout` binds a post type to a Page Layout title, per key. **Never replaces a value somebody set.** |
-| `site.delete` | Remove a site and everything in it. Needs `confirm`, and unlike `folder.delete` it is **purged, not trashed**: there is no undo |
+| `site.upsert` | Create a blank site, or fill an empty `url`/`description`/`furl` on one that exists. `data.postTypeLayout` binds a post type to a Page Layout title, per key. `data.reindex: true` back-fills the search index. **Never replaces a value somebody set.** |
+| `site.delete` | Trash a site and every folder and post in it. Needs `confirm` |
+| `site.restore` | Undo a site trash, with its content. Addressed `site:<name>` — a trashed site keeps its name |
 | `folder.upsert` | Create a folder at that whole name chain, or confirm it is there |
 | `folder.move` | Rename or relocate a section. `to` is the whole new name chain, so its last segment is the new name. **No post's URL changes** |
+| `folder.copy` | Duplicate a section and everything under it, **as drafts**. `to` is the copy's own name chain; an occupied one is refused rather than numbered. Unlike a move, it may cross sites |
 | `folder.delete` | Trash a folder and everything beneath it. Needs `confirm`; use `folder.move` to rename |
-| `post.upsert` | Declare a post's whole state at that address. Keys the post type does not declare are **refused**; use `post.move` to change the address |
+| `folder.restore` | Undo a folder trash, with its posts. Addressed `id:` |
+| `post.upsert` | Declare a post's whole state at that address. Keys the post type does not declare are **refused**; use `post.move` to change the address. `expect` makes the write conditional on the digest you read |
 | `post.move` | Change a post's URL, its folder, or both, keeping its id and history. A published post's live URL changes immediately |
 | `post.publish` | Publish the draft, or schedule it with an ISO-8601 `when`. Needs a credential with `mayPublish` |
 | `post.unpublish` | Withdraw the published row; the draft stays |
 | `post.delete` | Trash a post. Needs `confirm` |
-| `render.provision` | Create the `PageLayout`/`Region`/`Theme` post types this instance renders with, idempotently. **Takes no address**: it acts on the instance's model. `data.reconcile: true` also adds fields an older instance is missing |
+| `post.restore` | Undo a trash. Addressed `id:`, from `find?trash=true` |
+| `render.provision` | Create the `PageLayout`/`Region`/`Theme` post types this instance renders with, idempotently. **Takes no address**: it acts on the instance's model. `data.reconcile: true` also adds fields an older instance is missing; `data.types` installs vocabulary types by name |
+
+Every delete goes to the **trash** and has a restore beside it. On any of the three,
+`data.purge: true` removes instead of trashing — it frees the file bytes, fires the
+`DELETE` webhook, and there is no undo.
 
 Do `render.provision` **once before writing a layout**: `post.upsert` cannot create a
 system post type, and until those types exist the preview route has nothing to compose.
+
+The instance publishes this table itself, so it can never go stale on you:
+`GET /api/v2/agent/context?include=ops` returns the same vocabulary the server enforces,
+one line per op with the keys each one takes.
 
 ### Destructive ops need a confirm token
 
