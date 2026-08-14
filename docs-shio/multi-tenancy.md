@@ -74,7 +74,8 @@ which types are system-owned, so a tenant cannot end up with an editable copy of
 that should be read-only.
 
 Tenant administration is `ROLE_ADMIN`-gated, in the console's Tenants page or over the
-tenant API.
+tenant API. The console only shows that page when multi-tenancy is switched on: on a
+single-tenant install there are no tenants to administer, so the navigation does not offer it.
 
 ### Membership
 
@@ -86,13 +87,21 @@ reads, and what an identity provider's claim maps onto.
 A tenant carries a **plan**, and a plan carries limits. They are enforced at creation time
 and answer **HTTP 402** when there is no room:
 
-| Plan | Sites | Posts |
-|---|---|---|
-| `free` | 2 | 200 |
-| unlimited | , | , |
+| Plan | Sites | Posts | Storage |
+|---|---|---|---|
+| `free` | 2 | 200 | 512 MB |
+| unlimited | — | — | — |
 
 The check runs before a site or a post is created, so a tenant at its ceiling gets a clear
 refusal rather than a partially-created site.
+
+**Storage is reported, not yet enforced.** A tenant's stored bytes are metered — the figure is
+kept as files arrive and leave, so reading it costs nothing — and the plan's byte limit is
+published alongside the other two. What does not happen yet is a refusal: the quota check compares
+a *current total*, which is exact for sites and posts because each write adds one, and would let a
+single large upload through under any limit. Rather than advertise a ceiling that a big enough file
+walks past, Shio reports the number and leaves the refusal for when the check can weigh the
+incoming size too.
 
 ### Suspension and teardown
 
