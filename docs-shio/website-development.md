@@ -277,8 +277,14 @@ checked.
 For pages assembled from blocks rather than written as one document, the
 `@viglet/shio-sections` package ships a shared vocabulary: a `Page` type plus
 `SectionHero`, `SectionFeatureGrid`, `SectionCta`, `SectionLogoWall`,
-`SectionTestimonial`, `SectionFaq` and `SectionRichText`, with matching unstyled,
-semantic React components behind stable `shio-*` class names.
+`SectionTestimonial`, `SectionFaq`, `SectionRichText` and `SectionMarkup`, with matching
+unstyled, semantic React components behind stable `shio-*` class names.
+
+`SectionMarkup` is the odd one and is worth knowing about even if you never write one by
+hand: it declares a single `html` field and holds markup kept exactly as a captured page
+wrote it. A replication puts one in the list for each run of markup nobody made
+authorable, which is what lets a curator move or replace a raw block instead of meeting it
+as a field they cannot reach.
 
 A `Page` names its sections **by friendly URL, in order**, in a `Multi Select` whose
 settings declare what it holds:
@@ -289,7 +295,9 @@ settings declare what it holds:
 
 That declaration is what makes the composition verifiable: `shio verify` resolves each
 URL and reports the ones that are not there. A `Multi Select` without the key stays
-tags. Sections are content a template reads: a region iterates them through
+tags — and if a type from this shipped vocabulary has lost the key on your instance,
+`verify` reports that too (`vocabulary-drift`), because a page naming a section that does
+not exist would otherwise report nothing at all. Sections are content a template reads: a region iterates them through
 `{{#getRelation}}`, so a section-composed page renders through the ordinary path.
 
 ## Forms

@@ -22,10 +22,32 @@ That is three commands (`clone`, `propose`, `convert`) and one decision you shou
 | What `convert` writes | The source's markup, verbatim, behind a Theme + Page Layout + Page | The captured blocks as **sections**: real fields, in a generated layout that annotates each one |
 | How close it looks | Pixel-identical is achievable and has been achieved | The pixels have moved: captured CSS classes are dropped, so the theme styles nothing yet |
 | Can a curator edit it? | **No.** Verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit | **Yes.** Every field is annotated and editable |
+| On a page that mixes them | The kept markup is a section of its own, movable and replaceable — see below | The accepted blocks, in the same list, in source order |
 | Use it for | Proving the capture is faithful; archiving a site as-is | Actually adopting the site into a CMS |
 
 You choose by what you accept in the `propose` step: **accept nothing and you get
 fidelity; accept the blocks and you get authorable content.**
+
+### Most pages are both, and that is the point
+
+The table above is honest about a **block**. A *page* has three shapes, and the third is
+the ordinary one: accept the hero, leave the source's header and footer, and the page is
+**mixed**.
+
+The kept markup on such a page is not a leftover you have to live with. Each run of it is
+a **`SectionMarkup` post in the page's own `sections` list**, in the place it stood — so a
+curator can move it, replace it with a real section, or delete it, from the same control
+they compose the rest of the page with. That is how a replica becomes authorable one block
+at a time instead of all at once.
+
+Two things follow, and both are visible on the page:
+
+- **A mixed page keeps the source's stylesheet** for as long as any of its markup is still
+  there. An authorable page does not receive it, deliberately: it draws `shio-*` names and
+  the captured CSS defines none of them.
+- **The page's own title is editable on a mixed page too.** It is annotated whether or not
+  Shio drew it, so the Universal Editor reaches it even where the visible heading is the
+  one the capture recorded.
 
 Authorable is the mode that makes the replica a *CMS site* rather than a copy. Fidelity is
 the pleasant one to test (it reaches 0.00% difference and looks finished) which is
