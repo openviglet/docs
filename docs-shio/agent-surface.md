@@ -293,6 +293,47 @@ consent, not the caller's.
 
 ---
 
+## What a curator could change
+
+Building a page is half the job. The other half is whether the person who approves it can
+*edit* it afterwards — a page that renders correctly and exposes nothing to change is a
+screenshot with extra steps.
+
+```http
+GET /api/v2/agent/editable?address=post:mysite/blog/hello-world
+```
+
+```json
+{
+  "address": "post:mysite/blog/hello-world",
+  "source": "rendered",
+  "fields": [
+    { "post": "post:mysite/blog/hello-world", "field": "title", "region": "main" },
+    { "post": "post:mysite/blog/hello-world", "field": "html",  "region": "main" }
+  ],
+  "regions": ["main", "sidebar"]
+}
+```
+
+Each entry is an address a write already takes and a field name, so the answer goes
+straight into `post.upsert` with no second call.
+
+It reads the **rendered page**, not the content model. The two are different questions:
+the model says what a field *could* hold, the page says what somebody can actually click,
+and only the second one is what a curator experiences. The annotations it reads are the
+same ones the Universal Editor uses in the browser, so a front end of your own that emits
+them answers this call too.
+
+`source` matters when the list is empty. `rendered` means the page composed and genuinely
+has nothing annotated; `content` means it does not render yet — no layout bound, or no
+friendly URL — which is the normal state of a site mid-build and not the same answer at
+all.
+
+`regions` lists every region the page declares, including empty ones, because an empty
+region is where content *can* go.
+
+---
+
 ## Errors are instructions
 
 Every 4xx is an RFC 9457 problem document, and it carries what to do next:
