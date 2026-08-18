@@ -308,8 +308,8 @@ GET /api/v2/agent/editable?address=post:mysite/blog/hello-world
   "address": "post:mysite/blog/hello-world",
   "source": "rendered",
   "fields": [
-    { "post": "post:mysite/blog/hello-world", "field": "title", "region": "main" },
-    { "post": "post:mysite/blog/hello-world", "field": "html",  "region": "main" }
+    { "address": "post:mysite/blog/hello-world", "field": "title", "region": "main" },
+    { "address": "post:mysite/blog/hello-world", "field": "html",  "region": "main" }
   ],
   "regions": ["main", "sidebar"]
 }
