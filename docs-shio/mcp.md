@@ -97,17 +97,19 @@ their own.
 | `shio_apply` | Make a desired-state document true |
 | `shio_publish` | Publish or unpublish, or schedule it |
 | `shio_verify` | Lint content and routes; a fix per finding |
-| `shio_digest` | A page's structural digest: the cheap proof a render still looks right |
+| `shio_digest` | A page's structural digest: the cheap proof a render still looks right. `include=editable` also lists the fields a curator could edit |
 | `shio_changes` | What changed since a cursor: what the curator did while you were away |
 | `shio_remember` | Write the conventions the next session should inherit — and drop one, with `forget` |
 | `shio_assets` | The files a site holds |
 | `shio_marketplace` | The packages this instance could install. Lists and describes; it does not install — see [Blueprints § Who may install](./blueprints.md#who-may-install) |
 
-Two capabilities you might expect as tools are **parameters** instead, and that is the
+Three capabilities you might expect as tools are **parameters** instead, and that is the
 budget above being spent deliberately rather than an omission. Applying a starting point
 is `shio_apply`'s `blueprint` parameter, not a `shio_blueprint` tool; forgetting a
-convention is `shio_remember`'s `forget`, not a tool of its own. Both are rare operations
-whose schema would otherwise be paid for on every turn of every session.
+convention is `shio_remember`'s `forget`; asking which fields a curator could edit is
+`shio_digest`'s `include=editable`, because it is another reading of a render that tool
+already takes. Each would otherwise be a schema paid for on every turn of every session —
+the third was measured at 24 tokens as a parameter against 146 as a tool of its own.
 
 ### A call, and what comes back
 
