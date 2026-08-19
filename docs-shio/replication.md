@@ -178,7 +178,9 @@ What is taken depends on what the source can be said to have *stated*, and the r
 by the kind of value:
 
 - **Colour** needs a page-level statement, because the same colour is text in one rule and a
-  background in another — only `body { color: … }` says which is the page's.
+  background in another — only `body { color: … }` says which is the page's. A colour the
+  stylesheet repeats more often does not outrank it; it falls to the next slot, so a card
+  colour used five times becomes the muted one rather than the body copy.
 - **A corner radius or a font stack** is taken from the value the stylesheet uses most: there
   is only one thing a `border-radius` can mean, so there is nothing to disambiguate.
 - **A type scale is refused.** The theme has five text sizes ordered by size, and a stylesheet
