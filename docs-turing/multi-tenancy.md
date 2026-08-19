@@ -144,7 +144,7 @@ The limit applies to bulk creation too. Importing an archive — or installing a
 - The refusal says how much the archive would have added, so you know how much to trim.
 - The first-boot seed is **exempt**: a fresh installation provisioning itself is never refused, because it runs before any tenant exists.
 
-The paid-plan link appears only when this install can produce a signed one; an install that cannot simply gets the banner without it, rather than a link that goes nowhere. (The managed Viglet AI service is not live yet, so today that link is absent and your own API key is the working path — see the note on [LLM Instances](./llm-instances.md#viglet-ai-start-without-a-key-of-your-own).)
+The paid-plan link appears only when this install can produce a signed one; an install that cannot simply gets the banner without it, rather than a link that goes nowhere.
 
 Per-tenant **cost attribution** rolls up token usage by tenant, feeding the live AI-spend dashboard (see [Token Usage](./token-usage.md)).
 
