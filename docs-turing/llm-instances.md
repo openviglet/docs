@@ -52,6 +52,43 @@ You can override the model, disable auto-provisioning, or add more instances in 
 
 ---
 
+## Viglet AI: start without a key of your own
+
+Both routes above assume you already have a provider account. **Viglet AI** is the third way in: a managed endpoint Viglet runs, which you pair with in a couple of clicks and use immediately, with no account, card or API key.
+
+On a fresh install the bento home shows a **Turn on AI** card offering two equally weighted paths, *Activate Viglet AI* and *Use my own API key*. They are equivalent afterwards, every GenAI feature works the same either way, and bringing your own key stays free and fully featured. The card states plainly what differs: **Viglet AI runs on Viglet's endpoint, so prompts and retrieved content leave your install**, while your own key keeps that traffic between you and your provider.
+
+### Pairing this install
+
+1. On the bento home, click **Activate Viglet AI**.
+2. The dialog shows a short **user code** and a verification URL.
+3. Open the URL, sign in, and approve the code.
+4. The install finishes on its own: it creates an LLM instance called **Viglet AI** and, if you had no default yet, sets it as the [Default LLM Instance](./genai-llm.md#global-settings).
+
+An install that already has a default keeps it, pairing adds an instance rather than taking your choice away, and re-pairing refreshes the existing managed instance instead of stacking a second one beside it.
+
+The managed instance serves a single opaque model id (`viglet-fast`); the endpoint and model are fixed and any URL or model name on the instance is ignored. Chat and embeddings both ride that alias. Provider-native tools and computer use are not available on it, which is a good reason to bring your own key.
+
+### Rotating the install key
+
+Pairing also generates an **Ed25519 signing key** that stays on this install and never leaves it. Every call to the managed endpoint is signed with it, so a credential copied out of your database is not usable elsewhere.
+
+If that key may have leaked, rotate it: **Administration → Settings → Rotate key**, in the section beside the URL-signing secret. It appears only on a paired install.
+
+The new key is registered with Viglet *before* it replaces the old one. If the registration is refused or the endpoint cannot be reached, nothing changes and the action reports **Unchanged**, your current key keeps working. The private half is never displayed.
+
+| Setting | Env var | Default |
+|---|---|---|
+| Managed endpoint | `TURING_VIGLETAI_BASEURL` | `https://llm.viglet.cloud/v1` |
+| Pairing endpoint | `TURING_VIGLETAI_PAIRINGBASEURL` | `https://llm.viglet.cloud/pair` |
+| Model alias | `TURING_VIGLETAI_MODELALIAS` | `viglet-fast` |
+
+:::note Running out of the free credit
+The managed credit is capped. When you reach the cap, Turing shows a banner naming what ran out and when it resets, with two ways forward: continue on a paid plan, or paste your own API key. See [Plans & quotas](./multi-tenancy.md#plans--quotas).
+:::
+
+---
+
 ## Instance Listing
 
 The page displays all configured instances as a grid of cards (title and description). Use the **"New language model instance"** button to create a new one. The vendor dropdown is populated from `/api/llm/vendor`: the list is database-driven, not hard-coded, so the vendors you see are exactly the ones seeded into your install.

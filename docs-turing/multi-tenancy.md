@@ -125,8 +125,18 @@ Enforcement points:
 
 | Limit hit at | Response |
 |---|---|
-| Resource creation over quota | **HTTP 402** Payment Required |
-| LLM call admission over quota | **HTTP 429** Too Many Requests |
+| Creating an AI Agent or a Semantic Navigation site over quota | **HTTP 402** Payment Required |
+| A chat or completion over the monthly token budget | **HTTP 429** Too Many Requests |
+
+The `FREE` plan allows **3 AI Agents, 2 Semantic Navigation sites and 100,000 tokens per calendar month**. Only the token budget resets on its own; a resource count frees up when you delete an agent or a site, or move to a bigger plan.
+
+Embeddings are deliberately **not** metered against the token budget, so an exhausted chat credit never turns into a search outage or a half-indexed corpus.
+
+### What you see when a limit is reached
+
+The refusal is not a bare error. Its body names the resource, how much of the limit is used, and when the window resets, and the console turns that into a banner offering two ways forward: **continue on a paid plan**, or **use your own API key**. Bringing your own key is never hidden or presented as a downgrade, it is free and fully featured (see [Viglet AI](./llm-instances.md#viglet-ai-start-without-a-key-of-your-own)).
+
+The paid-plan link appears only when this install can produce a signed one; an install that cannot simply gets the banner without it, rather than a link that goes nowhere.
 
 Per-tenant **cost attribution** rolls up token usage by tenant, feeding the live AI-spend dashboard (see [Token Usage](./token-usage.md)).
 
