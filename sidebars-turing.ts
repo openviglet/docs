@@ -58,6 +58,7 @@ const sidebars: SidebarsConfig = {
           },
           items: [
             "rag",
+            "answer",
             "vectorless-structured-rag",
             "embedding-stores",
             "embedding-models",
