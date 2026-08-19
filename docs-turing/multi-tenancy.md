@@ -136,6 +136,14 @@ Embeddings are deliberately **not** metered against the token budget, so an exha
 
 The refusal is not a bare error. Its body names the resource, how much of the limit is used, and when the window resets, and the console turns that into a banner offering two ways forward: **continue on a paid plan**, or **use your own API key**. Bringing your own key is never hidden or presented as a downgrade, it is free and fully featured (see [Viglet AI](./llm-instances.md#viglet-ai-start-without-a-key-of-your-own)).
 
+### Importing when a limit is close
+
+The limit applies to bulk creation too. Importing an archive — or installing a marketplace app — is refused when what it would **add** crosses your plan, and it is refused **whole**: nothing is written, rather than importing up to the cap and stopping halfway.
+
+- Entries that match something you already have are **updates, not additions**. An archive that refreshes three agents you own is not refused on a three-agent plan.
+- The refusal says how much the archive would have added, so you know how much to trim.
+- The first-boot seed is **exempt**: a fresh installation provisioning itself is never refused, because it runs before any tenant exists.
+
 The paid-plan link appears only when this install can produce a signed one; an install that cannot simply gets the banner without it, rather than a link that goes nowhere. (The managed Viglet AI service is not live yet, so today that link is absent and your own API key is the working path — see the note on [LLM Instances](./llm-instances.md#viglet-ai-start-without-a-key-of-your-own).)
 
 Per-tenant **cost attribution** rolls up token usage by tenant, feeding the live AI-spend dashboard (see [Token Usage](./token-usage.md)).
