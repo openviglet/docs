@@ -20,7 +20,7 @@ That is three commands (`clone`, `propose`, `convert`) and one decision you shou
 | | **Fidelity** | **Authorable** |
 |---|---|---|
 | What `convert` writes | The source's markup, verbatim, behind a Theme + Page Layout + Page | The captured blocks as **sections**: real fields, in a generated layout that annotates each one |
-| How close it looks | Pixel-identical is achievable and has been achieved | The pixels have moved: captured CSS classes are dropped, so the theme styles nothing yet |
+| How close it looks | Pixel-identical is achievable and has been achieved | The pixels have moved: the captured CSS classes are dropped and the page is drawn with Shio's own vocabulary, styled by a theme whose colours are taken from the source |
 | Can a curator edit it? | **No.** Verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit | **Yes.** Every field is annotated and editable |
 | On a page that mixes them | The kept markup is a section of its own, movable and replaceable — see below | The accepted blocks, in the same list, in source order |
 | Use it for | Proving the capture is faithful; archiving a site as-is | Actually adopting the site into a CMS |
@@ -145,6 +145,33 @@ at **the paths their source used**.
 
 Everything lands as **drafts**.
 
+#### The theme an authorable replica is presented with
+
+An authorable page is drawn with Shio's own `shio-*` vocabulary — a container, a stack, a
+grid, a card — and the `Theme` `convert` writes styles every one of those roles. Its
+**colours come from the source**: `convert` reads the palette `propose` extracted and fills
+the theme's six colour tokens from it, matching each one by the role the source uses it in
+rather than by the name the source gave it.
+
+The run says which colour came from where, and which kept a default:
+
+```
+presented by mysite (Shio) — the one stylesheet the layout names
+palette: 4 of 6 colour(s) from the captured tokens, under this theme's own names
+  --color-ink #10243a — ink (text#1)
+  --color-surface #eef3f8 — wash (background#1)
+  --color-accent #ff6600 — color.accent-1 (accent#1)
+  --color-line #d9e2ec — color.border-1 (border#1)
+  --color-ink-muted #5a6373 — the source's palette has no text#2, so this theme's
+    default stands. Edit the Theme post's TOKENS to set it
+```
+
+A colour is only taken where the source states it plainly — `body { color: … }` for the
+page's text, or a value the stylesheet repeats often enough to be its palette. Where it does
+not, the default stands and is **named**, because a colour that was never looked for and one
+that was matched are otherwise indistinguishable. Every one of the six is a field on the
+`Theme` post, so changing any of them is a console edit rather than a stylesheet rewrite.
+
 ### 4. Publish, then look at the public route
 
 ```bash
@@ -212,8 +239,12 @@ annotation.
   as the DOM looked at capture time.
 - **Fidelity mode is not editable**, by construction. If you need both, capture once and
   convert twice into different sites.
-- **Authorable mode arrives unstyled.** The captured classes are dropped, so the theme's CSS
-  matches nothing until you style the sections. This is the trade you accepted at `propose`.
+- **Authorable mode arrives styled, but not as the source.** The captured classes are dropped
+  and the page is redrawn with Shio's own vocabulary, so the layout, the spacing and the type
+  are the theme's rather than the source's — the colours are the source's where its stylesheet
+  states them plainly ([the theme an authorable replica is presented
+  with](#the-theme-an-authorable-replica-is-presented-with)). This is the trade you accepted
+  at `propose`.
 - **A captured page carries residues.** Real-world markup is strange, and each strange case
   is found by running the chain rather than by reasoning about it. That is why the repository
   ships a conformance suite (`pnpm -C cli run conformance`) that drives capture → propose →
