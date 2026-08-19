@@ -120,6 +120,13 @@ even when the section type is right. A block that would keep less than half its 
 walked into rather than accepted whole, and the ones that cannot be improved on are named in
 a note before anything is written.
 
+Each candidate names the **evidence** that proposed its type, so you can check the claim against
+the page instead of taking the type name on trust — *two or more `<details>`, which is a disclosure
+list*, *3 `<dt>`/`<dd>` pairs, which is a definition list*, *4 repeated units, each with text*. A
+block whose shape matches no rule is proposed as a post-type of its own rather than forced into the
+nearest one: the classifier answers "I do not know" instead of guessing, and that answer is the one
+worth trusting the others by.
+
 `--accept all` **declines a candidate whose derivation cannot fill a field the section type
 requires**, and says which and why. Those blocks stay verbatim markup, which keeps their
 content, instead of becoming a section `shio verify` would refuse with
@@ -149,28 +156,40 @@ Everything lands as **drafts**.
 
 An authorable page is drawn with Shio's own `shio-*` vocabulary — a container, a stack, a
 grid, a card — and the `Theme` `convert` writes styles every one of those roles. Its
-**colours come from the source**: `convert` reads the palette `propose` extracted and fills
-the theme's six colour tokens from it, matching each one by the role the source uses it in
-rather than by the name the source gave it.
+**values come from the source**: `convert` reads the palette `propose` extracted and fills
+the theme's tokens from it, matching each one by the role the source uses it in rather than
+by the name the source gave it.
 
-The run says which colour came from where, and which kept a default:
+The run says what came from where, and what kept a default:
 
 ```
 presented by mysite (Shio) — the one stylesheet the layout names
-palette: 4 of 6 colour(s) from the captured tokens, under this theme's own names
+palette: 5 of 9 token(s) from the captured stylesheet, under this theme's own names
   --color-ink #10243a — ink (text#1)
-  --color-surface #eef3f8 — wash (background#1)
   --color-accent #ff6600 — color.accent-1 (accent#1)
   --color-line #d9e2ec — color.border-1 (border#1)
-  --color-ink-muted #5a6373 — the source's palette has no text#2, so this theme's
-    default stands. Edit the Theme post's TOKENS to set it
+  --size-radius 6px — radius (radius#1)
+  --text-family "Fixture Sans", system-ui, sans-serif — font.body (font.family#1)
+  --color-ink-muted #5a6373 — the source states no text#2, so this theme's default
+    stands. Edit the Theme post's TOKENS to set it
 ```
 
-A colour is only taken where the source states it plainly — `body { color: … }` for the
-page's text, or a value the stylesheet repeats often enough to be its palette. Where it does
-not, the default stands and is **named**, because a colour that was never looked for and one
-that was matched are otherwise indistinguishable. Every one of the six is a field on the
-`Theme` post, so changing any of them is a console edit rather than a stylesheet rewrite.
+What is taken depends on what the source can be said to have *stated*, and the rule differs
+by the kind of value:
+
+- **Colour** needs a page-level statement, because the same colour is text in one rule and a
+  background in another — only `body { color: … }` says which is the page's.
+- **A corner radius or a font stack** is taken from the value the stylesheet uses most: there
+  is only one thing a `border-radius` can mean, so there is nothing to disambiguate.
+- **A type scale is refused.** The theme has five text sizes ordered by size, and a stylesheet
+  ranks its font sizes by how often it uses them — those are not the same order, so only the
+  step the page states outright (`body { font-size: … }`) is taken and the rest keep their
+  defaults.
+
+Where a value is not taken the default stands and is **named**, because one that was never
+looked for and one that was matched are otherwise indistinguishable. Every token is a field
+on the `Theme` post, so changing any of them is a console edit rather than a stylesheet
+rewrite.
 
 ### 4. Publish, then look at the public route
 
@@ -241,10 +260,10 @@ annotation.
   convert twice into different sites.
 - **Authorable mode arrives styled, but not as the source.** The captured classes are dropped
   and the page is redrawn with Shio's own vocabulary, so the layout, the spacing and the type
-  are the theme's rather than the source's — the colours are the source's where its stylesheet
-  states them plainly ([the theme an authorable replica is presented
-  with](#the-theme-an-authorable-replica-is-presented-with)). This is the trade you accepted
-  at `propose`.
+  are the theme's rather than the source's — the colours, the corner radius and the font stack
+  are the source's where its stylesheet states them plainly ([the theme an authorable replica
+  is presented with](#the-theme-an-authorable-replica-is-presented-with)). This is the trade you
+  accepted at `propose`.
 - **A captured page carries residues.** Real-world markup is strange, and each strange case
   is found by running the chain rather than by reasoning about it. That is why the repository
   ships a conformance suite (`pnpm -C cli run conformance`) that drives capture → propose →
