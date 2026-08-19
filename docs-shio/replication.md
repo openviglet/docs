@@ -187,11 +187,46 @@ by the kind of value:
   ranks its font sizes by how often it uses them — those are not the same order, so only the
   step the page states outright (`body { font-size: … }`) is taken and the rest keep their
   defaults.
+- **The accent is read off your buttons.** A rule that sets a background *and* sets its text
+  to the page's own background colour is an element turned inside out — a button, a badge, a
+  call-to-action — and that background is your accent. It is found this way because it is
+  rarely stated anywhere else: an accent is almost never a `fill` or a `caret-color`, and a
+  name like `--brand` is a word rather than evidence. A band painted in the page's own text
+  colour, such as a dark footer, is the page inverted rather than an accent, and is not taken.
+
+Two things the palette will **not** do, whatever the source says:
+
+- **A colour that paints nothing is refused.** A fully transparent value is a reset rather than
+  a palette entry, and a page background taken from one shows whatever happens to sit behind
+  it — which looks correct on a light layout and breaks on a dark one.
+- **A pair you could not read is refused.** The text colour and the page it sits on are checked
+  together, and where there is no contrast between them the source's half gives way to the
+  theme's default. This catches the case where nothing about the source is wrong: a source that
+  states a dark page and never states a text colour would otherwise leave near-black body copy
+  on it.
+
+A refusal is printed with the reason and, for contrast, the ratio:
+
+```
+palette: 1 of 9 token(s) from the captured stylesheet, under this theme's own names, 2 refused
+  --color-surface #ffffff — REFUSED: the source's background#1 is #0000, which paints nothing.
+    This theme's default stands; fix it in the source, or edit the Theme post's TOKENS
+  --color-ink #12151a — REFUSED: #f9fafb from vg.foreground reads at 1.05:1 against
+    --color-surface #ffffff, under the 1.5:1 floor. …
+```
 
 Where a value is not taken the default stands and is **named**, because one that was never
-looked for and one that was matched are otherwise indistinguishable. Every token is a field
-on the `Theme` post, so changing any of them is a console edit rather than a stylesheet
-rewrite.
+looked for, one that was refused and one that was matched are otherwise indistinguishable.
+Every token is a field on the `Theme` post, so changing any of them is a console edit rather
+than a stylesheet rewrite.
+
+:::note Palettes declared inside `@layer`
+A stylesheet built by a modern toolchain usually declares its custom properties inside
+`@layer theme { :root, :host { … } }`. That is read as the source declaring its palette — a
+layer only orders the cascade. A palette declared under `@media (prefers-color-scheme: dark)`
+or under a `.dark` class is a *variant*, has two values and no default, and is reported rather
+than written: picking one of them would choose a theme nobody asked for.
+:::
 
 ### 4. Publish, then look at the public route
 
