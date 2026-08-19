@@ -136,7 +136,7 @@ Embeddings are deliberately **not** metered against the token budget, so an exha
 
 The refusal is not a bare error. Its body names the resource, how much of the limit is used, and when the window resets, and the console turns that into a banner offering two ways forward: **continue on a paid plan**, or **use your own API key**. Bringing your own key is never hidden or presented as a downgrade, it is free and fully featured (see [Viglet AI](./llm-instances.md#viglet-ai-start-without-a-key-of-your-own)).
 
-The paid-plan link appears only when this install can produce a signed one; an install that cannot simply gets the banner without it, rather than a link that goes nowhere.
+The paid-plan link appears only when this install can produce a signed one; an install that cannot simply gets the banner without it, rather than a link that goes nowhere. (The managed Viglet AI service is not live yet, so today that link is absent and your own API key is the working path — see the note on [LLM Instances](./llm-instances.md#viglet-ai-start-without-a-key-of-your-own).)
 
 Per-tenant **cost attribution** rolls up token usage by tenant, feeding the live AI-spend dashboard (see [Token Usage](./token-usage.md)).
 

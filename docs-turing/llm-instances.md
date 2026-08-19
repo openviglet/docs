@@ -54,6 +54,12 @@ You can override the model, disable auto-provisioning, or add more instances in 
 
 ## Viglet AI: start without a key of your own
 
+:::caution Not generally available yet
+The managed endpoint is not live. Everything below is shipped and working on the
+Turing side, and pairing will report a failure until the service answers — so
+**use your own API key** to turn AI on today. This note goes when the endpoint does.
+:::
+
 Both routes above assume you already have a provider account. **Viglet AI** is the third way in: a managed endpoint Viglet runs, which you pair with in a couple of clicks and use immediately, with no account, card or API key.
 
 On a fresh install the bento home shows a **Turn on AI** card offering two equally weighted paths, *Activate Viglet AI* and *Use my own API key*. They are equivalent afterwards, every GenAI feature works the same either way, and bringing your own key stays free and fully featured. The card states plainly what differs: **Viglet AI runs on Viglet's endpoint, so prompts and retrieved content leave your install**, while your own key keeps that traffic between you and your provider.
