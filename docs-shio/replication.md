@@ -344,6 +344,12 @@ collection-shaped (features, questions, logos, quotes), so a page that looks ful
 annotated can be five props over a grid whose cards carry none. Rendering is not
 annotation.
 
+`shio annotations post:mysite/` does that count for you, and it reports the one finding that
+matters: a field whose **value is on the page** with nothing making it editable. A field the
+template simply does not draw is listed apart and does not fail the check — including on a
+page converted with `--annotate`, which declares the vocabulary's fields and draws the
+source's own markup instead.
+
 ### One verdict, against a written bar
 
 The checks above tell you what is wrong. `shio judge` tells you whether the round is
