@@ -21,7 +21,7 @@ That is three commands (`clone`, `propose`, `convert`) and one decision you shou
 |---|---|---|
 | What `convert` writes | The source's markup, verbatim, behind a Theme + Page Layout + Page | The captured blocks as **sections**: real fields, in a generated layout that annotates each one |
 | How close it looks | Pixel-identical is achievable and has been achieved | The pixels have moved: the captured CSS classes are dropped and the page is drawn with Shio's own vocabulary, styled by a theme whose colours are taken from the source |
-| Can a curator edit it? | **No.** Verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit | **Yes.** Every field is annotated and editable |
+| Can a curator edit it? | **Not on its own** — verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit. `convert --annotate` adds them without touching the pixels: see [Fidelity with editable blocks](#fidelity-with-editable-blocks) | **Yes.** Every field is annotated and editable |
 | On a page that mixes them | The kept markup is a section of its own, movable and replaceable — see below | The accepted blocks, in the same list, in source order |
 | Use it for | Proving the capture is faithful; archiving a site as-is | Actually adopting the site into a CMS |
 
@@ -53,6 +53,38 @@ Authorable is the mode that makes the replica a *CMS site* rather than a copy. F
 the pleasant one to test (it reaches 0.00% difference and looks finished) which is
 exactly why a run that only tested fidelity has proved nothing about the path you probably
 care about.
+
+### Fidelity with editable blocks
+
+`--annotate` is the third shape, and it is the one to reach for when the source's own
+markup is what you want to keep *and* somebody still has to be able to change the words.
+
+```bash
+shio convert --site mysite --create-site --annotate
+```
+
+`propose` already worked out which node on a captured page is a heading and which is an
+intro; the authorable mode spends that mapping one way — read the values out, write them
+into section posts, redraw the page with Shio's vocabulary. `--annotate` spends it the
+other way: the mapping is **stamped onto the source's own markup** as editable fields, and
+nothing else about the page changes. Strip the annotations back out and the bytes are the
+source's body exactly.
+
+Measured on a real site: **2.02% pixel difference** for a page carrying 14 editable fields,
+against **6.76%** for the authorable rebuild of the same page. The page keeps its own
+classes, its own stylesheet and its own layout, and a curator can open it in the Universal
+Editor and fix a headline.
+
+Three things worth knowing before you use it:
+
+- **You ask for it.** Plain fidelity is defined by having no editable field, and a flag is
+  what keeps that definition true. Without `--annotate`, nothing changes.
+- **Wholly verbatim pages only.** On a mixed page the kept markup is split into
+  `SectionMarkup` posts, and a field has to live on the post holding the bytes it
+  annotates — so the run annotates the pages nobody accepted a block on.
+- **Nothing is stored until somebody edits it.** The text is already in the markup, so an
+  untouched annotation costs no field, no post-type change and no bytes. Edit one and the
+  page shows your value in place of the source's; the rest of the page is untouched.
 
 ---
 
@@ -151,6 +183,10 @@ captured page at the source's own URL, the sections it composes, a `Theme`, a
 at **the paths their source used**.
 
 Everything lands as **drafts**.
+
+Add `--annotate` to keep the source's bytes *and* get editable fields on the pages that
+kept all of their markup — see [Fidelity with editable
+blocks](#fidelity-with-editable-blocks).
 
 #### The theme an authorable replica is presented with
 
@@ -285,6 +321,38 @@ collection-shaped (features, questions, logos, quotes), so a page that looks ful
 annotated can be five props over a grid whose cards carry none. Rendering is not
 annotation.
 
+### One verdict, against a written bar
+
+The checks above tell you what is wrong. `shio judge` tells you whether the round is
+**done**:
+
+```bash
+shio judge --site mysite
+```
+
+`verify`, `diff` and `audit` run; `snapshot` is opt-in (`--against <origin>`). A skipped
+instrument reads **NOT RUN**, never green. Every finding is graded against a bar written
+down in `acceptance.properties`: at or below it, the round is **ACCEPTED** and the finding
+prints as a task for later; above it, or of a kind the bar does not name, it **HOLDS** and
+the command exits 1. **INCONCLUSIVE** is the third answer, and it is the one that matters —
+an instrument the bar rests on did not run, so there is nothing to conclude.
+
+The mode is read from the plan rather than assumed, so a fidelity site is graded by the
+fidelity bar. What the bar deliberately leaves out is as much of the point as what it
+includes: looking like the source is not a test an *authorable* replica has to pass, and a
+verdict that demanded it would never be reachable.
+
+Keep the round and compare the next one against it:
+
+```bash
+shio judge --site mysite --since --record
+```
+
+`--record` appends the round to `shio/judge-rounds.json`; `--since` reports what moved
+against the last one. A count that **rose** holds the round, graded by the same bar as any
+other finding; a count that fell is reported and never held — a replica that got better is
+not a reason to stop.
+
 ---
 
 ## Boundaries, stated up front
@@ -293,8 +361,10 @@ annotation.
   drives a browser on *your* machine at capture time, and it is an optional dependency. A
   source that builds its content client-side is capturable only through that flag, and only
   as the DOM looked at capture time.
-- **Fidelity mode is not editable**, by construction. If you need both, capture once and
-  convert twice into different sites.
+- **Fidelity mode is not editable unless you ask for it.** `convert --annotate` is how you
+  ask ([Fidelity with editable blocks](#fidelity-with-editable-blocks)), and it annotates
+  the pages that kept all of their markup. For a mixed page, the authorable half is the
+  editable half.
 - **Authorable mode arrives styled, but not as the source.** The captured classes are dropped
   and the page is redrawn with Shio's own vocabulary, so the layout, the spacing and the type
   are the theme's rather than the source's — the colours, the corner radius and the font stack
