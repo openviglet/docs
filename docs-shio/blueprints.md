@@ -124,6 +124,11 @@ shio apply --blueprint marketing-site --site mysite --create-site \
 
 Everything lands as **drafts**. Publishing is yours.
 
+The two section packages — `marketing-site` and `landing` — arrive **editable on the page**:
+open one in the Universal Editor and every section's fields are there, plus the page's own
+title and description. A curator changes the words without opening the console form, and
+without anybody having built a template first.
+
 | Flag | Effect |
 |---|---|
 | `--param k=v` | Repeatable |
