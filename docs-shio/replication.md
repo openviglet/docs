@@ -188,6 +188,29 @@ Add `--annotate` to keep the source's bytes *and* get editable fields on the pag
 kept all of their markup — see [Fidelity with editable
 blocks](#fidelity-with-editable-blocks).
 
+#### The replica's navigation is the one the source stated
+
+An authorable page is redrawn with Shio's vocabulary, and the source's own `<nav>` is part
+of what that drops. `convert` puts one back, from what the capture recorded rather than
+from the content model: `clone` reads `<nav>` and `[role=navigation]` — a footer's links
+are links — keeps the entries **in source order**, and counts how many pages each appears
+on. An entry that appears on every page is a menu item; one that appears on a single page
+is a link, and is left out.
+
+Those become a `Menu` post and a `MenuItem` each, in their own `/menu` folder, and the
+generated layout renders them. They are ordinary content, so a curator relabels, reorders
+or deletes one from the console like anything else.
+
+The run says what it took and what it saw:
+
+```
+menu: 2 entry(ies) from the source's own navigation, in ITS order, of 4 link(s) it recorded
+```
+
+Both numbers, because the difference is what you check — the two that did not become
+entries were considered. **A source that states no navigation** gets the previous
+behaviour: the layout lists the site's pages by title.
+
 #### The theme an authorable replica is presented with
 
 An authorable page is drawn with Shio's own `shio-*` vocabulary — a container, a stack, a
