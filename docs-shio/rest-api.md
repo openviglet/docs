@@ -147,6 +147,16 @@ Interactive documentation for every endpoint above is served by the instance its
 `/swagger-ui.html`, generated from the controllers, which makes it the authority when this
 page and the tree disagree.
 
+### Ids are the server's to assign
+
+On a `POST`, leave the id out. The instance mints one and returns it, and a blank string is treated
+as "not set" rather than stored — a row keyed on an empty string is listed by the collection
+endpoint and reachable by nothing, since `/api/v2/thing/` does not match `/api/v2/thing/{id}`. If
+you deliberately assign your own key, send a non-empty one and it is kept.
+
+On a `PUT`, the id in the **path** is the row you are updating. A different id in the body does not
+redirect the write.
+
 ---
 
 ## Three endpoints that do not exist
