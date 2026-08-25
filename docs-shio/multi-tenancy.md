@@ -82,13 +82,19 @@ single-tenant install there are no tenants to administer, so the navigation does
 A user belongs to one or more tenants, and an identity provider's claim maps onto that
 membership.
 
-:::caution No tenant switcher in the console right now
-Which tenant you are working in comes from your session, and the console currently has no
-control that changes it — the switcher lived in the old sidebar and did not survive the
-move to the new shell. `POST /api/v2/tenant/{name}/switch` still does the job, and an
-identity provider's `workspace_id` claim still selects a tenant at sign-in. A curator who
-belongs to two tenants otherwise stays in whichever one their session already holds.
-:::
+### Switching tenant
+
+Which tenant you are working in is a property of your session, not of the URL. The control
+is in the console header, next to your account menu: it lists the tenants you belong to,
+marks the one you are in, and switching reloads the console so everything on screen is
+re-read under the new one.
+
+It appears only when there is somewhere to go — the instance runs multi-tenancy **and** you
+belong to more than one tenant. On a single-tenant install, or if you are a member of one
+tenant, there is no control and nothing to choose.
+
+`POST /api/v2/tenant/{name}/switch` is the same operation for a script, and an identity
+provider's `workspace_id` claim selects a tenant at sign-in.
 
 ### Plan quotas
 
