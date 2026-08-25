@@ -143,8 +143,30 @@ cd dumont-react
 pnpm install
 pnpm run dev          # Vite dev server
 pnpm test             # Vitest
+pnpm run lint         # ESLint
 pnpm run lint:ds      # see "Shared components" below
+pnpm run census       # which surfaces are on which chrome
 ```
+
+### What CI checks
+
+Two workflows gate every push and pull request:
+
+| Workflow | Checks |
+|---|---|
+| `validate` | The Maven build, which also builds the console, and a SonarCloud analysis on pushes |
+| `design-system` | That no component re-declares a design system export, and ESLint |
+
+Two details worth knowing before a build surprises you:
+
+- **ESLint carries the project's existing debt as named files**, not as a count. Two rules —
+  `react-hooks/set-state-in-effect` and `@typescript-eslint/no-explicit-any` — are warnings in the
+  files listed in `eslint.config.js` and errors everywhere else. Clearing a file means deleting
+  its line from that list; adding a new violation fails the build.
+- **The console build ends by checking that the federated remotes declared their types.** The
+  generator reports failure badly — it has printed an error and exited 0, and it has silently
+  written the wrong layout and exited 0 — so `scripts/check-mf-types.mjs` inspects the artefact
+  instead of trusting the exit code.
 
 The console runs in two places. Standalone it is served by the connector itself; inside
 Viglet Turing ES it is mounted as a Module Federation remote, and Turing supplies the surrounding
