@@ -183,6 +183,40 @@ trees read one navigation declaration (`src/app/nav.const.ts`), which is also wh
 palette searches — so the sidebar, the rail and the palette can never disagree about which
 surfaces exist.
 
+**Every source surface has moved.** All six connector types — AEM, database, web crawler,
+filesystem assets, catalog bridge and Edge Delivery Services — list and edit under `/bento`, so
+configuring a source end to end never leaves the new shell. The remaining console surfaces
+(indexing rules, monitoring, statistics, coverage, plugins, system information) are reached from
+the rail's section hubs or `⌘K`, which link out to `/admin` until they move too.
+
+### Migrating a page
+
+Run `pnpm run census` to see which surfaces are on which era, then:
+
+**A list page** is one `BentoSourceList` call — the shape is shared, so a new one supplies its
+service, two field accessors and a translation prefix. Its path, icon and tone come from the
+navigation declaration by surface id, so a page cannot disagree with the rail about what it is
+called.
+
+**A detail page** does not get rewritten. Its form is hundreds of lines of field logic whose only
+era-specific parts are the header and the section cards, so those read the chrome instead:
+
+```tsx
+// The page: the console page under a chrome declaration.
+<SectionCardChromeProvider chrome="bento">
+  <IntegrationInstanceDbSourcePage />
+</SectionCardChromeProvider>
+```
+
+Inside the form, `AdaptiveFormHeader` renders the console's sticky header or the bento hero and
+its save-bar morph, and `AdaptiveSectionCard` renders a collapsible card or a frosted section.
+Both default to console chrome, so a form that knows nothing about this behaves exactly as it
+always did — and one form serves both eras rather than being forked into two that drift.
+
+Finally set `migrated: true` on the surface in `nav.const.ts`. That is what gives it a
+`bentoRoute`, which is how the palette and the hubs know to stay inside the shell instead of
+linking out.
+
 ---
 
 ## REST API
