@@ -10,18 +10,40 @@ This is the screen you spend your day in. An agent builds the site through files
 API calls; you open the console to look at what it built, fix a sentence, move a page
 into the right folder, and put things away.
 
-The console is at `/console/content` on your Shio instance. Everything below is
+The console is at `/bento/content` on your Shio instance. Everything below is
 reachable from that first screen.
+
+:::note The console moved from `/console` to `/bento`
+Older bookmarks still work. Every `/console/**` address redirects to the same surface
+under `/bento`, keeping any query string and anchor — so a saved search still arrives
+searched. The redirect replaces the entry in your history rather than adding to it,
+so **Back** goes where you expect instead of bouncing forward again.
+:::
+
+## Finding your way
+
+Down the left is the **navigation rail**, with **Home** and the two areas: **Content**
+and **Administration**. It carries the areas rather than every screen, because the
+fastest route to a named screen is not a menu:
+
+- **The command palette** — <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere,
+  or just <kbd>/</kbd> when you are not typing in a field. It lists every surface in the
+  console and searches their descriptions as well as their names, so *restorable* finds
+  the Trash and *credentials* finds API Tokens.
+- **Each page names itself** in a hero at the top, which carries the page's title and its
+  way back. There is no breadcrumb bar across the console; the one place a path is worth
+  showing continuously — the content browser — draws its own, below.
 
 ---
 
 ## The content browser
 
 A site is a tree of **folders** holding **posts**. The browser walks it the way a file
-browser does: click a folder to go in, use the breadcrumb to come back out.
+browser does: click a folder to go in, use the path to come back out.
 
-- **Breadcrumb** — the path from the site down to where you are. Every segment is
-  clickable.
+- **The path** — from the site down to where you are, in the browser's own toolbar.
+  Every segment is clickable. This is the one trail the console still draws, because it
+  is the one place you move up and down a tree all day.
 - **New \[Post Type]** — creates a post of the type you used last, remembered per
   browser. The grid icon beside it opens the full post-type picker if you want a
   different one.

@@ -79,8 +79,16 @@ single-tenant install there are no tenants to administer, so the navigation does
 
 ### Membership
 
-A user belongs to one or more tenants. Membership is what the console's tenant switch
-reads, and what an identity provider's claim maps onto.
+A user belongs to one or more tenants, and an identity provider's claim maps onto that
+membership.
+
+:::caution No tenant switcher in the console right now
+Which tenant you are working in comes from your session, and the console currently has no
+control that changes it — the switcher lived in the old sidebar and did not survive the
+move to the new shell. `POST /api/v2/tenant/{name}/switch` still does the job, and an
+identity provider's `workspace_id` claim still selects a tenant at sign-in. A curator who
+belongs to two tenants otherwise stays in whichever one their session already holds.
+:::
 
 ### Plan quotas
 

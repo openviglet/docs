@@ -1,13 +1,13 @@
 ---
 sidebar_position: 1
 title: Administration
-description: "The operator's half of the Viglet Shio console: the dashboard, users, groups, roles, permissions, API tokens, tenants, providers, email, webhooks, activity and the agent review queue."
+description: "The operator's half of the Viglet Shio console: home, users, groups, roles, permissions, API tokens, tenants, providers, email, webhooks, activity and the agent review queue."
 ---
 
 # Administration
 
-Everything an operator configures lives in the Shio console under **Administration**.
-This page walks the screens in the order the console's own sidebar lists them.
+Everything an operator configures lives in the Shio console under **Administration**,
+at `/bento/admin` on your instance. This page walks those screens in order.
 
 The curator's half — the content browser, the post form, copy and move, the trash — is on
 [The content console](./content-console.md).
@@ -16,19 +16,34 @@ The curator's half — the content browser, the post form, copy and move, the tr
 
 ## Finding your way around
 
-The console sidebar has three groups:
+The **navigation rail** down the left carries **Home** and two areas — **Content** and
+**Administration** — rather than a list of every screen. To reach a named screen, use the
+**command palette**: <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere, or
+<kbd>/</kbd> when you are not typing in a field. It searches descriptions as well as
+titles, so *credentials* finds API Tokens.
 
-| Group | Screens |
+| Area | Screens |
 |---|---|
-| *(top)* | **Dashboard** |
 | **Content** | Sites · Search · Post Types · Media Library · Trash · Universal Editor |
 | **Administration** | Administration (users, groups, roles) · API Tokens · Tenants · Authentication Providers · Exchange Providers · Email · Webhooks · Activity · Agent Review · GraphQL |
 
-## The dashboard
+**Tenants appears only on a multi-tenant instance.** `shio.multi-tenant` is off by
+default, and a single-tenant install is not offered a screen for managing tenants it
+does not have.
 
-The console's landing screen. It shows how many sites and post types this instance has,
-a list of recent content changes, and shortcuts to the things you do most: create a site,
-browse content, search, model a post type, manage webhooks, open the activity log.
+:::note Addresses moved from `/console` to `/bento`
+`/console/admin/tokens` is now `/bento/admin/tokens`, and so on. Old addresses redirect,
+carrying any query string and anchor. If your instance is multi-tenant, note that the
+`/{tenant}/console/…` prefix is gone: which tenant you are in comes from your session,
+not from the URL.
+:::
+
+## Home
+
+The console's landing screen, at `/bento`. It shows how many sites and post types this
+instance has, a list of recent content changes, and shortcuts to the things you do most:
+create a site, browse content, search, model a post type, manage webhooks, open the
+activity log.
 
 Every number on it is a link into the screen it counts.
 
@@ -206,8 +221,15 @@ surface — console, CLI, CDA, agent — is recorded here under the name of whoe
 
 **Administration → Agent Review** groups an agent's writes into **runs** and shows what
 each one changed. **Approve** publishes the drafts that run wrote; **revert** puts things
-back. The sidebar carries a badge when runs are waiting, and the badge is absent — not
-zero — when there is nothing to decide.
+back.
+
+:::caution Check the queue yourself
+The old console showed a badge on its sidebar when runs were waiting. The navigation rail
+carries the two areas rather than individual screens, so there is nowhere for that badge
+to sit and **nothing currently tells you a run is pending** — you have to open the screen.
+Until that signal returns, make Agent Review a habit rather than something you react to,
+particularly on an instance where an agent writes unattended.
+:::
 
 This is the moderation step for content that arrives from anywhere you did not type it
 yourself, including visitor form submissions, which land as drafts of a post type you

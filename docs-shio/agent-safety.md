@@ -102,7 +102,7 @@ requested. Three consequences, all of them the point:
 ## Everything is attributed, and grouped into runs
 
 Every write records who did it and which run it belonged to. The console's **review
-queue** at `/console/admin/review` turns that into the curator's view:
+queue** at `/bento/admin/review` turns that into the curator's view:
 
 | Action | Effect |
 |---|---|
