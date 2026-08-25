@@ -223,13 +223,12 @@ surface — console, CLI, CDA, agent — is recorded here under the name of whoe
 each one changed. **Approve** publishes the drafts that run wrote; **revert** puts things
 back.
 
-:::caution Check the queue yourself
-The old console showed a badge on its sidebar when runs were waiting. The navigation rail
-carries the two areas rather than individual screens, so there is nowhere for that badge
-to sit and **nothing currently tells you a run is pending** — you have to open the screen.
-Until that signal returns, make Agent Review a habit rather than something you react to,
-particularly on an instance where an agent writes unattended.
-:::
+**You are told when a run is waiting.** The console header shows a count next to your account
+menu whenever agent runs are pending; it links straight here, and it disappears when there is
+nothing to decide — an absent marker means an empty queue, not a zero you have to read. The
+count updates as you approve or revert, so it never disagrees with the page below it.
+
+If you do not see it, there is nothing waiting, or your account cannot open this screen.
 
 This is the moderation step for content that arrives from anywhere you did not type it
 yourself, including visitor form submissions, which land as drafts of a post type you
