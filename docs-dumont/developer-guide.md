@@ -22,7 +22,9 @@ Dumont DEP is fully open-source at [github.com/openviglet/dumont-ce](https://git
 | **HTML Parsing** | JSoup 1.22.1 |
 | **Text Extraction** | Apache Tika 3.2.3 |
 | **Search Clients** | Turing Java SDK · SolrJ · ES Client |
-| **Build** | Apache Maven |
+| **Console** | React 19 · TypeScript · Vite · Tailwind CSS v4 |
+| **Console components** | `@viglet/viglet-design-system` |
+| **Build** | Apache Maven (backend) · pnpm (console) |
 | **CI/CD** | GitHub Actions |
 
 ---
@@ -35,6 +37,7 @@ Dumont DEP is fully open-source at [github.com/openviglet/dumont-ce](https://git
 - Maven 3.9+
 - Git
 - Turing ES running at `http://localhost:2700` (for end-to-end testing)
+- Node.js 26 and pnpm 11, to work on the console (the Maven build invokes them for you)
 
 ### Clone, Build, and Run
 
@@ -72,6 +75,7 @@ dumont/
 │   ├── aem-plugin/             # AEM connector plugin (loaded via -Dloader.path)
 │   ├── aem-server/             # AEM server-side integration
 │   └── aem-plugin-sample/      # Example custom AEM extensions (WKND site)
+├── dumont-react/               # The console: React app, built into connector-app's static resources
 └── wordpress/                  # WordPress PHP plugin
 ```
 
@@ -125,6 +129,59 @@ Strategies are evaluated in priority order for each Job Item:
 ![Dumont DEP, Processing Strategy Flow](/img/diagrams/dumont-strategy-flow.svg)
 
 To add a custom strategy, implement the strategy interface and assign a priority between the existing ones.
+
+---
+
+## Working on the Console
+
+The console lives in `dumont-react/`. Maven builds it as part of `mvn clean install` and copies
+the output into `connector-app`'s static resources, so a normal backend build already produces a
+working UI. Work on it directly when you want hot reload:
+
+```bash
+cd dumont-react
+pnpm install
+pnpm run dev          # Vite dev server
+pnpm test             # Vitest
+pnpm run lint:ds      # see "Shared components" below
+```
+
+The console runs in two places. Standalone it is served by the connector itself; inside
+Viglet Turing ES it is mounted as a Module Federation remote, and Turing supplies the surrounding
+chrome. Pages are written once and work in both — a fixed `local` integration id stands in for the
+one Turing would pass, and an axios interceptor strips it from API calls.
+
+### Shared components
+
+Buttons, dialogs, tables, form controls and page chrome come from
+`@viglet/viglet-design-system`, the component library Dumont shares with Viglet Turing ES and
+Viglet Shio. Import from it rather than writing a local copy: a copy drifts, and the three
+products stop looking like one.
+
+CI enforces this. `pnpm run lint:ds` fails the build when a component is declared here under a
+name the design system already exports, and each finding names the import that replaces it. Where
+a collision is deliberate — Dumont's `AppFooter` renders Dumont's own version and links, and
+merely shares a name — annotate the declaration with the reason:
+
+```ts
+// viglet-ds-allow-duplicate AppFooter -- renders Dumont's own logo, connector version and links
+```
+
+### Two generations of chrome
+
+Console surfaces are being moved to *bento* — the design system's newer visual language, the same
+one Turing uses — one page at a time. Both generations serve at once:
+
+| Tree | Path | Chrome |
+|---|---|---|
+| Console | `/admin/integration/instance/:id/…` | Collapsible sidebar |
+| Bento | `/bento/integration/instance/:id/…` | Fixed nav rail, `⌘K` command palette |
+
+A page appears under `/bento` only once it has actually moved; its `/admin` route keeps working
+either way, so nothing breaks while the migration is in progress and a page can move back. Both
+trees read one navigation declaration (`src/app/nav.const.ts`), which is also what the command
+palette searches — so the sidebar, the rail and the palette can never disagree about which
+surfaces exist.
 
 ---
 

@@ -82,6 +82,7 @@ The complete sequence from content source to search engine:
 | **Commons** | `commons` | Shared models, interfaces, utilities |
 | **AEM Commons** | `aem-commons` | AEM extension interfaces (published to Maven Central) |
 | **DB Commons** | `db-commons` | DB extension interface (published to Maven Central) |
+| **Console** | `dumont-react` | The web interface: React 19 + Vite, served by the connector and also mountable inside Turing |
 
 ---
 
@@ -97,6 +98,8 @@ The complete sequence from content source to search engine:
 | **Text Extraction** | Apache Tika 3.2.3 | FileSystem: PDF, DOCX, images (OCR) |
 | **Search Clients** | Turing Java SDK, SolrJ 10.0.0, ES Client 9.3.2 | One active per deployment |
 | **Build** | Apache Maven | Multi-module project |
+| **Console** | React 19, Vite, Tailwind CSS v4 | Built into the connector's static resources |
+| **Console components** | `@viglet/viglet-design-system` | Shared with Viglet Turing ES and Shio, so the three look like one product |
 
 ---
 
