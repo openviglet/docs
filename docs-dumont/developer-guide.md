@@ -159,10 +159,12 @@ Two workflows gate every push and pull request:
 
 Two details worth knowing before a build surprises you:
 
-- **ESLint carries the project's existing debt as named files**, not as a count. Two rules —
-  `react-hooks/set-state-in-effect` and `@typescript-eslint/no-explicit-any` — are warnings in the
-  files listed in `eslint.config.js` and errors everywhere else. Clearing a file means deleting
-  its line from that list; adding a new violation fails the build.
+- **ESLint has no exemptions.** It arrived on a console that had never been linted, so two rules —
+  `react-hooks/set-state-in-effect` and `@typescript-eslint/no-explicit-any` — were held for a
+  while as a list of named files rather than a tolerated count. Both lists are now empty and
+  deleted, and both rules are errors everywhere. If a rule ever needs that treatment again, name
+  the files in `eslint.config.js` and say why at each one; never raise a ceiling, because a
+  ceiling lets one change pay for another.
 - **The console build ends by checking that the federated remotes declared their types.** The
   generator reports failure badly — it has printed an error and exited 0, and it has silently
   written the wrong layout and exited 0 — so `scripts/check-mf-types.mjs` inspects the artefact
