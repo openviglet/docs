@@ -86,6 +86,29 @@ The complete sequence from content source to search engine:
 
 ---
 
+## Console: two interfaces, both live
+
+The console serves every screen at two addresses, and you can use either:
+
+| Address | Interface |
+|---|---|
+| `/bento/integration/instance/{id}/…` | A fixed navigation rail, a hub per section, and a `⌘K` (`Ctrl+K`) command palette that jumps to any screen by name |
+| `/admin/integration/instance/{id}/…` | The original interface: a collapsible sidebar |
+
+Every screen that configures or monitors a connector answers at both — the six source
+types and their detail forms, AI source inference, indexing rules, the indexing manager,
+monitoring, indexing statistics, field coverage, double-check, plugins, system
+information and AI insights. Nothing was removed from `/admin`; a bookmark or a
+deep link into it keeps working.
+
+The screens around the connector — sign-in, first-run setup, users, groups and roles, and
+your own profile — are served from `/admin` only.
+
+Both interfaces read the same REST API and show the same data, so switching between them
+mid-task loses nothing.
+
+---
+
 ## Technology Stack
 
 | Layer | Technology | Notes |
