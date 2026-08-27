@@ -149,6 +149,43 @@ For AEM-specific configuration (sources, content types, author/publish, delta tr
 
 ---
 
+## Onboarding a New Source
+
+Writing a source configuration by hand means reading the site's markup, picking selectors and
+guessing at field types. The console does that first pass for you and then lets you check it before
+anything is indexed.
+
+**1. Propose.** Give the **AI Source Inference** wizard a URL. Dumont fetches a sample, works out
+what shape the source is — a `sitemap.xml`, a listing page whose links go to detail pages, or a
+table where each row is a record — and proposes a draft: the extraction strategy plus a field
+manifest with a type per field.
+
+It proposes *structure*, never content. Selectors and types, not values. When the sample gives it
+nothing to go on it reports `UNKNOWN` and proposes nothing, rather than inventing a shape.
+
+**2. Edit.** The draft is yours to correct in the wizard. A field the inference named badly, a type
+it read as text that should be a date, a selector that caught one element too many — fix them
+before going further. Nothing has been written yet.
+
+**3. Dry run.** The **Dry-run preview** action extracts a small sample through exactly the path a
+real run uses, and reports what indexing *would* do:
+
+- per-field coverage, so a selector that matches nothing shows as 0% now rather than after a run;
+- records that would be skipped for a missing mandatory field;
+- a diff against the last full index — added, changed, removed, and fields that would go newly
+  empty — plus a schema diff.
+
+It writes nothing. On a source's first onboarding there is no baseline, so everything reads as
+added.
+
+**4. Index.** Only when you confirm the draft does Dumont materialise it into a live source and
+index it. A proposal is never published on its own.
+
+The same three steps are available over HTTP; see the
+[Source Inference API](../rest-api.md#source-inference-api).
+
+---
+
 ## Common Configuration Pattern
 
 Every connector needs at least these pieces of information:

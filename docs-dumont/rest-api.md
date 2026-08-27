@@ -106,6 +106,68 @@ Validates content differences between the source and the search index. Used by t
 
 ---
 
+## Source Inference API
+
+Base path: `/api/v2/connector/source/infer`
+
+Proposes a structured source from a URL, previews what indexing it would produce, and indexes the
+draft a human has confirmed. Nothing here publishes on its own: `infer` and `preview` write
+nothing, and `infer/index` runs only on a draft you send back.
+
+### Propose a Source
+
+```
+POST /api/v2/connector/source/infer
+```
+
+Fetches a sample of the URL, classifies its shape (`SITEMAP`, `HTML_LISTING`,
+`TABULAR_LISTING`, or `UNKNOWN`) and proposes an editable draft: the strategy configuration plus a
+field manifest with a type per field.
+
+**Body:** `{ "url": "https://example.com/courses" }`
+
+**Response:** `DumSourceDraft`: the shape, the strategy configuration, and the inferred fields.
+
+It proposes *structure* — selectors and field types — never content, and returns `UNKNOWN` rather
+than guessing when the sample gives it nothing to go on.
+
+### Dry-Run Preview
+
+```
+POST /api/v2/connector/source/infer/preview?sampleSize=20
+```
+
+Extracts a bounded sample through the same discover → extract → enrich path a real run uses, and
+reports what would happen: per-field coverage, records that would be skipped for a missing
+mandatory field, and a diff against the last full index — added, changed, removed, and fields that
+would go newly empty — plus a schema diff. **Writes nothing.**
+
+| Parameter | Location | Default | Description |
+|---|---|---|---|
+| `sampleSize` | Query | `20` | Records to extract for the preview |
+
+**Body:** the confirmed draft, as sent to `infer/index` below.
+
+**Response:** `{ success, preview, message }`.
+
+On a source's first onboarding there is no baseline, so everything reads as added.
+
+### Index a Confirmed Draft
+
+```
+POST /api/v2/connector/source/infer/index
+```
+
+Materialises the draft into a live structured source and indexes it. This is the only endpoint of
+the three that writes, and it acts on the draft in the request body — a proposal is never indexed
+without being sent back.
+
+**Body:** `{ "url", "sourceName", "siteNames": [...], "locale", "draft" }`
+
+**Response:** `{ success, source, message }`.
+
+---
+
 ## Monitoring API
 
 Base path: `/api/v2/connector/monitoring`
