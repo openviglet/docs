@@ -8,7 +8,9 @@ description: Configure and manage Search Engine instances in Viglet Turing ES.
 
 The **Search Engine** page (`/admin/se/instance`) manages the search backends that power Semantic Navigation Sites. It is accessible from the **Enterprise Search** section of the sidebar.
 
-Each **Search Engine instance** is a configured connection to a search backend. Semantic Navigation Sites bind to a specific instance when their cores (collections) are created. Turing ES supports three backends via a plugin architecture: **Apache Solr** (recommended), **Apache Lucene** (embedded), and **Elasticsearch**.
+Each **Search Engine instance** is a configured connection to a search backend. Semantic Navigation Sites bind to a specific instance when their cores (collections) are created. Turing ES supports four backends via a plugin architecture: **Apache Solr** (recommended), **Apache Lucene** (embedded), **Elasticsearch**, and **Adobe AEM Content AI**.
+
+The first three are indexes Turing ES owns and writes to. Content AI is different: it queries an index **Adobe** owns and fills, so it is read-only — see [Adobe AEM Content AI](#content-ai) below before choosing it.
 
 ---
 
@@ -31,7 +33,7 @@ The page displays all configured instances as a grid of cards (title and descrip
 
 | Field | Required | Description |
 |---|---|---|
-| **Vendor** | ✅ | Backend type: `SOLR`, `LUCENE`, or `ES` |
+| **Vendor** | ✅ | Backend type: `SOLR`, `LUCENE`, `ES`, or `CONTENTAI` |
 | **Endpoint URL** | ✅ | Connection URL for the backend service |
 
 Default endpoint URLs per vendor:
@@ -41,6 +43,12 @@ Default endpoint URLs per vendor:
 | **SOLR** (Apache Solr) | `http://localhost:8983/solr` |
 | **LUCENE** (embedded Apache Lucene) | `/data/turing/lucene` |
 | **ES** (Elasticsearch) | `http://localhost:9200` |
+| **CONTENTAI** (Adobe AEM Content AI) | none — paste the Content AI base URL Adobe gave you, e.g. `https://author-p1234-e5678.adobeaemcloud.com/adobe/experimental/aemcontentai-expires-20261231/contentAI` |
+
+:::note
+The Content AI base URL carries both a version and an expiry date, so paste it
+exactly as Adobe's developer portal shows it rather than assembling it by hand.
+:::
 
 ---
 
@@ -109,6 +117,61 @@ Live monitoring panel for the connected backend:
 
 ---
 
+## Adobe AEM Content AI {#content-ai}
+
+If you already run **Adobe AEM Content AI**, you are already paying for a vector index
+over your published AEM content. The `CONTENTAI` vendor lets Turing ES query that index
+directly, so you do not embed the same content a second time. You keep the index you
+already pay for, and Turing ES adds the layer above it: multi-turn chat, AI agents,
+skills, facets, its own analytics, and every non-AEM source Content AI does not reach.
+
+### What it can and cannot do
+
+Turing ES does not own this index — Adobe fills it, using Adobe's embedding model and
+the schema declared in Adobe's IndexConfig. So the backend is **read-only**, and that
+is deliberate rather than unfinished:
+
+| Works | Does not |
+|---|---|
+| Search, including semantic + keyword together | Indexing content from Turing ES or a connector |
+| Facets (from the source's filterable fields) | Creating, clearing or deleting a core |
+| Sorting and paging | Adding or changing fields in the schema |
+| Document count and live status | Deleting documents |
+
+A write attempt fails with a message saying so rather than silently doing nothing, so
+you cannot end up believing a document was published when it was not. **Do not point a
+connector at an SN Site backed by Content AI** — publish that content in Adobe (AEM
+publish, or Content AI's own acquisition service) and let Turing ES query it.
+
+### Setting one up
+
+1. In the **Adobe Developer Console**, add the "AEM Content AI" card to your project
+   and note the base URL and the credential it issues.
+2. Create a Search Engine instance here with **Vendor** `CONTENTAI` and that base URL.
+3. Set the credential and switch the backend on — `turing.content-ai.enabled` plus
+   `turing.content-ai.token` (or `api-key`). See
+   [Configuration Reference → Adobe AEM Content AI](./configuration-reference.md#content-ai).
+4. Tell Turing ES which Adobe content source each site queries:
+   `turing.content-ai.sources.<site-name>`. Without a mapping, the site's core name is
+   used as the source name.
+5. Bind an SN Site to the instance and search.
+
+### What to expect
+
+- **Relevance is Adobe's.** The embedding model and the ranking are theirs, so Turing
+  ES's own hybrid ranking and reranker settings do not apply. `hybrid`,
+  `vector-boost` and `fulltext-boost` are the whole of the tuning available.
+- **Pages are shallower.** Adobe returns at most 50 results per page and offers no way
+  to jump to a page, so deep pagination is bounded by `max-page-walk`; beyond it a page
+  comes back empty (the total is still correct).
+- **Facets need filterable fields.** A facet field the Adobe source does not carry as
+  filterable simply returns no values.
+- **It is a hard dependency of the answer.** Search on that site stops working if the
+  Content AI subscription lapses or the credential is revoked. **System Information**
+  reports `DOWN` when no credential is configured.
+
+---
+
 ## Plugin Architecture
 
 Turing ES uses a plugin architecture to support multiple search backends behind a unified interface. The active plugin is resolved at runtime based on the vendor configured per instance. If a vendor is unrecognised, the factory falls back to Solr.
@@ -137,6 +200,8 @@ Repository-level **caching** is enabled for search engine instances to avoid rep
 | [Semantic Navigation](./semantic-navigation.md) | How SN Sites use cores and search engines |
 | [Architecture Overview](./architecture-overview.md) | Solr, Elasticsearch, and Lucene in the system architecture |
 | [Configuration Reference](./configuration-reference.md#solr) | Solr and Elasticsearch timeout settings in `application.yaml` |
+| [Configuration Reference → Adobe AEM Content AI](./configuration-reference.md#content-ai) | Credential, source mapping and query settings for the `CONTENTAI` vendor |
+| [AEM Connector](./integration-aem.md) | Indexing AEM content **into** Turing ES, the alternative to federating to Content AI |
 
 ---
 

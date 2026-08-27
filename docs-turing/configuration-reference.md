@@ -375,6 +375,44 @@ Guardrails for the agent-as-MCP-client path. See [MCP Servers](./mcp-servers.md)
 
 ---
 
+### Adobe AEM Content AI (`turing.content-ai`) {#content-ai}
+
+Settings for a Search Engine instance whose vendor is `CONTENTAI` — a **federated,
+read-only** backend that queries an Adobe AEM Content AI index instead of one Turing
+ES filled. See [Search Engine → Adobe AEM Content AI](./search-engine.md#content-ai)
+for what the backend can and cannot do.
+
+The **endpoint URL is not here**: it is the Search Engine instance's own Endpoint
+URL, so each instance can point at a different Adobe bucket.
+
+| Property | Default | Description |
+|---|---|---|
+| `turing.content-ai.enabled` | `false` | Master switch. With `false` the backend refuses every query and reports `DOWN` in System Information |
+| `turing.content-ai.token` | — | Bearer token from the Adobe Developer Console ("AEM Content AI" card) |
+| `turing.content-ai.api-key` | — | `x-api-key` credential, the alternative the search endpoints accept. Used only when `token` is blank |
+| `turing.content-ai.source-type` | `ACQUISITION` | Type of the Adobe content source: `ACQUISITION`, `AEM_AUTHOR`, `AEM_PUBLISH` or `CUSTOM` |
+| `turing.content-ai.sources.<site>` | — | Adobe content source name for one SN Site. Unmapped sites fall back to the site's core name |
+| `turing.content-ai.hybrid` | `true` | Query semantically **and** lexically (Adobe's own hybrid shape). `false` sends the keyword query alone |
+| `turing.content-ai.vector-boost` | `1.0` | Relevance weight of the semantic half |
+| `turing.content-ai.fulltext-boost` | `1.0` | Relevance weight of the keyword half |
+| `turing.content-ai.vector-space` | — | Vector space name from the Adobe source's IndexConfig. Blank uses Adobe's default |
+| `turing.content-ai.lexical-space` | — | Lexical space name. Blank uses Adobe's default |
+| `turing.content-ai.facet-size` | `10` | Facet values requested per field |
+| `turing.content-ai.max-page-walk` | `10` | How deep a result page may be reached. Adobe pages by cursor with no offset, so page *N* costs *N* requests; past this the page comes back empty with the total intact |
+| `turing.content-ai.timeout-seconds` | `10` | Per-request timeout |
+| `turing.content-ai.include-chunks` | `false` | Ask Adobe for the matched passages alongside each document. Currently increases response size without changing results |
+
+Two limits come from Adobe's API rather than from Turing ES, and you will see them:
+a page can hold **at most 50 results** (a larger row count is reduced to 50), and
+there is no way to jump to a page — hence `max-page-walk`.
+
+:::warning
+Never commit the token to `application.yaml`. Pass it as the environment variable
+`TURING_CONTENTAI_TOKEN` (or `TURING_CONTENTAI_APIKEY`).
+:::
+
+---
+
 ### Search Cache
 
 | Property | Default | Description |

@@ -22,6 +22,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | Search engine (Solr / ES / Lucene), cores | [search-engine](./search-engine.md) | ✅ |
 | Semantic Navigation sites, facets, spotlights, targeting | [semantic-navigation](./semantic-navigation.md) | ✅ |
 | **Block R**: field manifest, schema-as-code, derivation, hybrid ranking, field coverage | [manifest](./manifest.md) | ✅ |
+| **Block R.1**: event-driven ingestion from enterprise CMS platforms — index inventory/audit for a connector (T1029/T1042), authenticated remote MCP (T1032), and the `CONTENTAI` search-engine vendor federating to an Adobe AEM Content AI index Turing does not own (T1031) | [search-engine § Content AI](./search-engine.md#content-ai) · [configuration-reference § Content AI](./configuration-reference.md#content-ai) · [integration-aem](./integration-aem.md) | 🧩 |
 | DSL Query API + compatibility matrix | [dsl-query](./dsl-query.md) · [dsl-compatibility](./dsl-compatibility.md) | ✅ |
 | SPA / search-template pages | [spa-pages](./spa-pages.md) | ✅ |
 | Connectors (AEM, web crawler) | [integration](./integration.md) · [integration-aem](./integration-aem.md) | ✅ |

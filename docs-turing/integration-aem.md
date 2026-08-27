@@ -10,6 +10,14 @@ The **Adobe Experience Manager (AEM)** connector allows Turing ES to index conte
 
 For general integration management (creating instances, monitoring, statistics, and system information) see [Integration](./integration.md).
 
+:::tip Already running Adobe AEM Content AI?
+Then you have a second option and do not need this connector for search. The
+[`CONTENTAI` search-engine vendor](./search-engine.md#content-ai) queries the Content AI
+index Adobe already built over your published content, so you index it once instead of
+twice. The trade-off is that relevance becomes Adobe's and the index is read-only —
+compare the two before choosing.
+:::
+
 ---
 
 ## Overview
