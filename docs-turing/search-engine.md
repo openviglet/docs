@@ -170,6 +170,36 @@ publish, or Content AI's own acquisition service) and let Turing ES query it.
   Content AI subscription lapses or the credential is revoked. **System Information**
   reports `DOWN` when no credential is configured.
 
+### "My Content AI site returns nothing"
+
+Adobe answers a query naming a source it does not have with **zero results** — the same
+answer as a source that exists and matched nothing. Turing ES therefore checks your
+configuration against Adobe rather than letting you guess:
+
+- **Instance detail → System Information** lists the content sources your Adobe tenant
+  actually has, next to the mapping you configured. A source name that does not resolve
+  is marked `(NOT FOUND)`. Start here.
+- **The first empty result** on a site logs a warning naming the source you asked for
+  and the ones available, so the answer is in the log even if nobody opens the console.
+- **Cores (Collections)** lists the real source names, so you can copy one instead of
+  typing it. Document counts read `-1` there: Turing ES does not own these indexes, and
+  a `0` would look like "this source is empty".
+
+Three more settings fail the same quiet way, and are reported in the same warning:
+
+| Setting | If it is wrong |
+|---|---|
+| `source-type` | The search names the type, so it resolves against the wrong index |
+| `vector-space` / `lexical-space` | Adobe silently falls back to its default space, so relevance is not what you configured |
+| A facet field | If the Adobe source does not mark that field filterable, the facet renders with no values |
+
+:::tip
+If **System Information** says `sources: unavailable`, the credential or the endpoint URL
+is the problem, not the source name.
+:::
+
+---
+
 ### Grounding an AI answer on a Content AI site
 
 Adobe holds the embeddings, so Turing ES's own vector store is empty on such a site and
