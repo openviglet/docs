@@ -214,7 +214,12 @@ GET /api/v2/connector/logging/indexing
 | `sort` | `desc` (default) or `asc`, by date |
 
 Filters combine, and any you omit is simply not applied. **Response:**
-`{ content, page, pageSize, totalElements, totalPages }`.
+`{ content, page, pageSize, totalElements, totalPages, unreadable }`.
+
+`unreadable` counts rows the engine skipped because it could not read them. It is normally `0`.
+On a Redis log carrying rows written before **2026.3.6** it will not be — those rows are not valid
+JSON, and they are skipped one at a time rather than failing the query. They clear as the list
+rolls past its `maxEntries`, or immediately if you delete the key.
 
 Rows written by a connector older than 2026.3.6 carry no source or transaction id. They still
 appear in an unfiltered listing — an unattributed row is a fact about an old message, not

@@ -16,6 +16,14 @@ This page is the **support map** for the [DSL Query API](./dsl-query.md): for ev
 
 Reach for this table when you're choosing a backend for a site, or when a DSL query behaves differently than you expected across engines: the badge tells you whether that's a 1:1 mapping, a translation, or a best-effort approximation. Read it alongside the query examples on the [DSL Query API](./dsl-query.md) page.
 
+:::info Content AI is not in this matrix
+A fourth engine — [Adobe AEM Content AI](./search-engine.md#content-ai) — serves the DSL
+API over a small, explicitly listed subset rather than a translation of the whole
+syntax, so it has its own section: [Adobe AEM Content
+AI](#adobe-aem-content-ai-a-listed-subset) at the bottom of this page. The three
+columns below are Elasticsearch, Solr and Lucene.
+:::
+
 ### Legend
 
 | Badge | Level | Description |
