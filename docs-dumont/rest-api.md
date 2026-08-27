@@ -221,8 +221,8 @@ appear in an unfiltered listing — an unattributed row is a fact about an old m
 something to hide — but they cannot answer a query that names a source.
 
 :::note
-On the Redis engine only `contentId`, `source` and `transactionId` are applied; the date, status,
-result-status and url filters are MongoDB-only.
+Both engines honour every filter above. The Redis engine applies them in memory after reading the
+whole list, so it slows as the log grows — pick MongoDB when you intend to query rather than tail.
 :::
 
 ---
