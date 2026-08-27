@@ -1,7 +1,7 @@
 ---
 sidebar_position: 5
 title: AEM Connector
-description: "Index content from Adobe Experience Manager: event-driven indexing, infinity.json traversal, QueryBuilder discovery, tag facets, model.json attributes, and custom extensions."
+description: "Index content from Adobe Experience Manager: event-driven indexing, infinity.json traversal, QueryBuilder discovery, publish-tier delivery APIs for Cloud Service, tag facets, model.json attributes, and custom extensions."
 ---
 
 # AEM Connector
@@ -51,12 +51,16 @@ sequenceDiagram
 
 ## Content Discovery Strategies
 
-The AEM connector supports two strategies for discovering content during a full **Index All** operation:
+How the connector discovers content during a full **Index All** operation depends first on the source's **Fetch Strategy**, which decides *which tier* is asked.
+
+With the default **Author servlets** strategy, two discovery mechanisms are available, selected globally:
 
 | Strategy | Property | How it discovers content |
 |---|---|---|
 | **Tree Traversal** *(default)* | `dumont.aem.querybuilder=false` | Recursively walks the content tree from the root path using `infinity.json`, follows parent→child relationships |
 | **QueryBuilder** | `dumont.aem.querybuilder=true` | Uses AEM's native QueryBuilder API (`/bin/querybuilder.json`) to find all content matching the configured content type in paginated batches |
+
+Both read author-tier Sling servlets. With the **Publish delivery APIs** strategy the connector uses `.model.json` on the publish tier instead: see [Publish-Tier Discovery](#publish-tier-discovery-aem-as-a-cloud-service) below.
 
 ### QueryBuilder Discovery
 
@@ -90,6 +94,29 @@ QueryBuilder discovery requires a **Content Type** (e.g., `cq:Page`) configured 
 QueryBuilder is recommended for **large content trees** where recursive traversal is slow. It reduces the number of HTTP round-trips to AEM by discovering all paths in bulk, then fetching content in parallel. For small sites (< 1 000 pages), the default tree traversal is typically sufficient.
 :::
 
+### Publish-Tier Discovery (AEM as a Cloud Service)
+
+Neither `infinity.json` nor `/bin/querybuilder.json` is served by an AEM as a Cloud Service publish tier: `infinity.json` is a dispatcher-blocked pattern by default, and QueryBuilder is not exposed on publish at all. Pointing the connector at author instead means holding an authoring credential and reading unpublished content for a job that only ever needed published pages.
+
+Set the source's **Fetch Strategy** to *Publish delivery APIs* and the connector reads the published delivery surface instead:
+
+```
+GET https://delivery-p12345-e67890.adobeaemcloud.com/content/wknd/us/en.model.json
+```
+
+`.model.json` is served by Core Components, is CDN-fronted, and needs no author access. The connector uses it for both jobs the author servlets were doing:
+
+- **Discovery and traversal** — the page model's `:children` lists the pages below it. When the root is a hierarchy root, that is the whole sub-tree in one request; otherwise the connector descends child by child.
+- **Page metadata** — title, template and last-modified date come from the same response. Content the delivery tier serves is published by definition, so every discovered page is treated as delivered.
+
+Attribute extraction already read `.model.json`, so an extension written for the author strategy needs no change.
+
+:::warning Requires Core Components
+The delivery strategy depends on `.model.json` being served for the pages you index, which means Core Components (the Sling Model exporter) on the templates in scope. Content Fragments and Assets are not yet reached through their own delivery endpoints — index those through the author strategy.
+:::
+
+QueryBuilder is ignored for a delivery source even when `dumont.aem.querybuilder=true` is set globally.
+
 ---
 
 ## The Indexing Flow (Step by Step)
@@ -105,6 +132,8 @@ GET http://localhost:4502/content/wknd/us/en/my-page.infinity.json
 ```
 
 This returns the complete node hierarchy as JSON: all properties, child nodes, and metadata. The connector filters out internal nodes (prefixed with `jcr:`, `rep:`, `cq:`).
+
+A source on the *Publish delivery APIs* fetch strategy reads `.model.json` on the delivery host at this step instead: the remaining steps are unchanged.
 
 ### 2. Extract Tags as Facets
 
@@ -334,6 +363,15 @@ Defines the root content path within the AEM repository from which content is tr
 |---|---|
 | Content Type | Primary content type to be indexed (e.g., `cq:Page`) |
 | Sub Type | Optional sub-type filter within the content type |
+
+### Fetch Strategy
+
+Chooses which AEM tier the connector reads, per source: see [Publish-Tier Discovery](#publish-tier-discovery-aem-as-a-cloud-service) for what changes.
+
+| Field | Description |
+|---|---|
+| Fetch Strategy | `Author servlets (infinity.json)` — the default, for on-premise and AMS — or `Publish delivery APIs (model.json)`, for AEM as a Cloud Service |
+| Delivery URL Prefix | Host the delivery requests are sent to, e.g. `https://delivery-p12345-e67890.adobeaemcloud.com`. Shown only for the delivery strategy; leave blank to reuse the publish URL prefix |
 
 ### Delta Tracking
 

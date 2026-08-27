@@ -77,10 +77,10 @@ The complete sequence from content source to search engine:
 | **Web Crawler** | `web-crawler` | JSoup, URL filtering, authentication, locale detection |
 | **Database** | `db` | JDBC queries, batch chunking, multi-database support |
 | **FileSystem** | `filesystem` | Apache Tika text extraction, OCR, metadata mapping |
-| **AEM** | `aem` | infinity.json, tags, model.json, delta tracking, custom extensions |
+| **AEM** | `aem` | Author servlets (infinity.json, QueryBuilder) or publish delivery APIs (model.json), tags, delta tracking, custom extensions |
 | **WordPress** | `wordpress` | PHP plugin: event-driven indexing inside WordPress |
 | **Commons** | `commons` | Shared models, interfaces, utilities |
-| **AEM Commons** | `aem-commons` | AEM extension interfaces (published to Maven Central) |
+| **AEM Commons** | `aem-commons` | AEM extension interfaces, component extractors, content types and versioned recipes (published to Maven Central) |
 | **DB Commons** | `db-commons` | DB extension interface (published to Maven Central) |
 | **Console** | `dumont-react` | The web interface: React 19 + Vite, served by the connector and also mountable inside Turing |
 

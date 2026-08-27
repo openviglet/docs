@@ -164,12 +164,14 @@ When your extension extracts data from `.model.json`, you can use `DumAemExtMode
 
 ### DumAemExtModelJsonBase
 
-An abstract class that handles the entire fetch → parse → error-handling lifecycle. Subclasses implement only **two methods**:
+An abstract class that handles the entire fetch → parse → error-handling lifecycle. Subclasses declare the model class and then choose how extraction is expressed:
 
 | Method | Purpose |
 |---|---|
 | `getModelClass()` | Returns the root bean class for Jackson deserialization |
-| `extractAttributes(model, query, aemObject, attrValues)` | Extracts data from the parsed model and populates the attribute map |
+| `extractAttributes(model, query, aemObject, attrValues)` | Extracts data from the parsed model and populates the attribute map — the direct style, shown below |
+| `componentExtractors()` | Registers small single-concern extractors the base composes per page, instead of overriding `extractAttributes` — see [Composing Extractors](#composing-extractors) |
+| `contentTypes()` | Declares one schema and one extractor composition per content type, routed by template — see [Content Types and Recipes](#content-types-and-recipes) |
 
 **Minimal example:**
 
@@ -194,6 +196,102 @@ public class MyModelJsonExtractor extends DumAemExtModelJsonBase<MyModel> {
 ```
 
 This replaces all the boilerplate of building the URL, calling `DumAemCommonsUtils.getResponseBody()`, creating the `ObjectMapper`, handling `IOException`, and wrapping results in `Optional`.
+
+### Composing Extractors
+
+One `extractAttributes` per source grows into a single method that knows every component on every template. Register `DumAemComponentExtractor`s instead and the base runs them in order, each one covering a single component and testable on its own:
+
+```java
+public class MyModelJsonExtractor extends DumAemExtModelJsonBase<MyModel> {
+
+    @Override
+    protected Class<MyModel> getModelClass() {
+        return MyModel.class;
+    }
+
+    @Override
+    protected List<DumAemComponentExtractor<MyModel>> componentExtractors() {
+        return List.of(new MyPageExtractor(), new MyBannerExtractor(), new MyNewsExtractor());
+    }
+}
+```
+
+A `DumAemComponentExtractor` is a functional interface with the same signature as `extractAttributes`:
+
+```java
+public class MyNewsExtractor implements DumAemComponentExtractor<MyModel> {
+
+    @Override
+    public void contribute(MyModel model, DumAemModelJsonQuery query,
+            DumAemObject aemObject, DumAemAttrMap attrValues) {
+        query.component("my-app/components/news", MyNews.class)
+             .first()
+             .attr("newsDate", MyNews::getDate)
+             .into(attrValues);
+    }
+}
+```
+
+Overriding `extractAttributes` directly still works and is unchanged; the two styles are alternatives, not layers.
+
+:::warning Extractors must be stateless during extraction
+Your extension is resolved once and cached, then reused across threads — with `dumont.reactive.indexing=true` several pages are extracted in parallel through the *same* instance. Keep per-page data in local variables and in the `DumAemAttrMap` you are handed; an extractor holding per-page mutable instance state will produce corrupted attributes under load. This applies to both styles.
+:::
+
+### Content Types and Recipes
+
+One source often indexes several kinds of page — an article, an event, a course — that share little. `contentTypes()` replaces "one source, one schema" with one schema *and* one extractor composition per type, and `templateName()` says which AEM template a page came from so the base can route it:
+
+```java
+@Override
+protected List<DumAemContentType<MyModel>> contentTypes() {
+    return List.of(
+        DumAemContentType.<MyModel>builder("article")
+            .fields(DumAemContentTypeField.text("headline"), DumAemContentTypeField.facet("topic"))
+            .extractors(new MyArticleExtractor())
+            .build(),
+        DumAemContentType.<MyModel>builder("event")
+            .fields(DumAemContentTypeField.text("venue"), DumAemContentTypeField.string("startsAt"))
+            .extractors(new MyEventExtractor())
+            .build());
+}
+
+@Override
+protected String templateName(MyModel model, DumAemObject aemObject) {
+    return model.getTemplateName();
+}
+```
+
+Only the resolved type's extractors run for a given page, and the connector reports field coverage per content type rather than only per source. Pages whose template resolves to no declared type fall back to the flat `componentExtractors()`. `templateNameAliases()` collapses several template names onto one canonical type.
+
+When the *same* content type is indexed by several institutions or sites, declare it once as a **recipe** — a versioned, parameterized content type applied by reference instead of copied:
+
+```java
+// Shared, registered once: name@version, e.g. course-offer@2
+DumAemRecipeLibrary library = new DumAemRecipeLibrary().register(courseOfferRecipe());
+
+public class MySiteExtractor extends DumAemExtModelJsonBase<MyModel> {
+
+    private final DumAemRecipeContentTypes<MyModel> recipes =
+        DumAemRecipeContentTypes.<MyModel>builder(library)
+            .bind(DumAemRecipeRef.latest("course-offer"),
+                  DumAemRecipeParameters.builder("my-site").template("curso")
+                      .param("componentBasePath", "my-app/components").build())
+            .build();
+
+    @Override
+    protected List<DumAemContentType<MyModel>> contentTypes() {
+        return recipes.contentTypes();
+    }
+
+    @Override
+    protected Map<String, String> templateNameAliases() {
+        return recipes.templateNameAliases();
+    }
+}
+```
+
+Each site supplies its own `DumAemRecipeParameters` — its template names, its component resource-type prefix — and both methods resolve the recipe from the library fresh on every call. Registering a higher version therefore re-applies the new fields and extractors to every site that bound the recipe by `latest`, on the next extraction and without touching any extension; a site that pinned `course-offer@1` stays on it. A binding whose recipe is not registered is skipped, so one missing recipe never breaks the others.
 
 ### DumAemModelJsonQuery
 
