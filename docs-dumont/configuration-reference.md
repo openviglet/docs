@@ -216,6 +216,29 @@ Configured per source in the console, not by property: see [AEM Connector → Fe
 | `logging.file.name` | `store/logs/dum-connector.log` | Log file path |
 | `logging.level.com.viglet` | `INFO` | Log level for Dumont DEP application code |
 
+### Indexing Log
+
+Separate from the application log above. Every document Dumont processes leaves a row per status
+it passes through — prepared, sent to the queue, delivered to the search engine — each naming the
+document, the source that produced it and the run it belonged to. Queried through
+[the Logging API](rest-api.md#logging-api).
+
+It is **off by default**: with no engine configured, the endpoint answers with an empty page and
+nothing is written. Pick MongoDB when you intend to query the log, and Redis when you mostly want
+to tail it — the Redis engine filters and sorts in memory after reading the whole list, so it
+degrades as the log grows.
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.logging.engine` | `none` | `none`, `mongodb` or `redis` |
+| `dumont.logging.database` | `dumontLog` | MongoDB database name |
+| `dumont.logging.collection.indexing` | `indexing` | MongoDB collection holding the indexing rows |
+| `dumont.mongodb.enabled` | `false` | Must also be `true` for the `mongodb` engine to activate |
+| `dumont.mongodb.uri` | `mongodb://localhost:27017` | MongoDB connection string |
+| `dumont.redis.enabled` | `false` | Must also be `true` for the `redis` engine to activate |
+| `dumont.redis.uri` | `redis://localhost:6379/0` | Redis connection string |
+| `dumont.redis.key.indexing` | `dumontLog:indexing` | Redis list key holding the indexing rows |
+
 ---
 
 ## Common Production Overrides

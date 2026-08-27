@@ -175,6 +175,58 @@ during the pass that produced it. **Response:** `{ "status": "discarded" }`.
 
 ---
 
+## Logging API
+
+Base path: `/api/v2/connector/logging`
+
+The **indexing log** records every status a document passes through — prepared, sent to the queue,
+delivered to the search engine. Each row names the document, the source that produced it and the
+transaction id of the run it belonged to, so you can ask what one source did or replay a single
+run end to end.
+
+It needs a store: see [Indexing Log configuration](configuration-reference.md#indexing-log). With
+no engine configured the endpoints below answer with an empty page.
+
+### Is It On?
+
+```
+GET /api/v2/connector/logging/status
+```
+
+**Response:** `{ "engine": "mongodb", "enabled": true }`.
+
+### Read the Log
+
+```
+GET /api/v2/connector/logging/indexing
+```
+
+| Parameter | Description |
+|---|---|
+| `source` | Everything one source did |
+| `transactionId` | Everything that happened in one run |
+| `contentId` | One document's whole history |
+| `status` | `PREPARE_INDEX`, `SENT_TO_QUEUE`, `RECEIVED_AND_SENT_TO_TURING`, `DEINDEXED`, … |
+| `resultStatus` | `SUCCESS` or `ERROR` |
+| `url` | Case-insensitive substring match on the document URL |
+| `dateFrom`, `dateTo` | `YYYY-MM-DD`, inclusive |
+| `page`, `pageSize` | Default `0` and `100` |
+| `sort` | `desc` (default) or `asc`, by date |
+
+Filters combine, and any you omit is simply not applied. **Response:**
+`{ content, page, pageSize, totalElements, totalPages }`.
+
+Rows written by a connector older than 2026.3.6 carry no source or transaction id. They still
+appear in an unfiltered listing — an unattributed row is a fact about an old message, not
+something to hide — but they cannot answer a query that names a source.
+
+:::note
+On the Redis engine only `contentId`, `source` and `transactionId` are applied; the date, status,
+result-status and url filters are MongoDB-only.
+:::
+
+---
+
 ## Source Inference API
 
 Base path: `/api/v2/connector/source/infer`
