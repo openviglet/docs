@@ -24,6 +24,28 @@ GET  /api/sn/{siteName}/_search?locale=en
 
 The `GET` method performs a `match_all` search. The `POST` method accepts a JSON request body following the Elasticsearch `_search` format.
 
+### Engines that serve this API
+
+Solr, Elasticsearch and Lucene. Each translates the DSL into its own native query
+language, so an engine is either implemented or it is not — there is no partial
+fallback.
+
+A site bound to any other engine (today, [Adobe AEM Content
+AI](./search-engine.md#content-ai)) gets **`501 Not Implemented`**, naming the engine
+and the ones that do work:
+
+```json
+{
+  "type": "tag:viglet.com,2026:errors/unsupported-engine",
+  "title": "Not Implemented",
+  "status": 501,
+  "detail": "The DSL query API is not implemented for the 'contentai' search engine. Engines that serve it: elasticsearch, lucene, solr.",
+  "engine": "contentai"
+}
+```
+
+`404` still means what it always did: no such site, or no such locale on that site.
+
 ---
 
 ## Quick Start

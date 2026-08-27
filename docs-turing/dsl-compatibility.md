@@ -253,6 +253,11 @@ For **full DSL compatibility**, use Elasticsearch as the search engine backend. 
 | Advanced aggregations (composite, nested, geo) | <N/> Elasticsearch |
 | Simple faceted search with metric aggs | <T/> Solr or <T/> Lucene |
 
+Only these three serve the DSL API. A site on another engine — today [Adobe AEM
+Content AI](./search-engine.md#content-ai) — gets `501 Not Implemented` naming the
+engine, rather than a silently empty result: see [DSL Query API → Engines that serve
+this API](./dsl-query.md#engines-that-serve-this-api).
+
 ---
 
 ## Related Pages
