@@ -120,6 +120,11 @@ report, decide whether it describes content that genuinely went away, and then a
 it. Applying goes through the connector's own de-index path, so the indexing ledger and the search
 index stay in step.
 
+The console has an **Orphan Reports** screen over these endpoints, which is the easier way to do
+the review — it shows each report's id count against how many documents the site indexes, so a
+report naming most of the index reads as a failed discovery pass rather than a cleanup. The
+endpoints below are for scripting it.
+
 A report is per source and per site, and only the newest one stands: a later pass supersedes the
 report it replaces, and a pass that finds no orphan retracts it. A report also expires — see
 [`dumont.audit.index.orphanTtl`](configuration-reference.md#content-audit) — because applying

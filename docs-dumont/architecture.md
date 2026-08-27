@@ -122,8 +122,8 @@ The console serves every screen at two addresses, and you can use either:
 
 Every screen that configures or monitors a connector answers at both — the six source
 types and their detail forms, AI source inference, indexing rules, the indexing manager,
-monitoring, indexing statistics, field coverage, double-check, plugins, system
-information and AI insights. Nothing was removed from `/admin`; a bookmark or a
+monitoring, indexing statistics, field coverage, double-check, orphan reports, plugins,
+system information and AI insights. Nothing was removed from `/admin`; a bookmark or a
 deep link into it keeps working.
 
 The screens around the connector — sign-in, first-run setup, users, groups and roles, and
