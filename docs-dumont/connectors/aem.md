@@ -39,11 +39,12 @@ sequenceDiagram
     API->>SE: Index documents (via pipeline)
 ```
 
-### Three Ways to Trigger Indexing
+### Ways to Trigger Indexing
 
 | Method | How | When to use |
 |---|---|---|
 | **AEM Event Listeners** | Install the `aem-server` OSGi bundle inside AEM, it automatically sends indexing requests when content is published, modified, or deleted | Production: real-time content sync |
+| **Adobe I/O Events** | Register a webhook in Adobe Developer Console, optionally with the [journal consumer](#adobe-io-events) as its recovery path | Production on AEM as a Cloud Service, where you cannot install a bundle |
 | **Manual API Call** | Send a POST request to `/api/v2/aem/index/{source}` with a JSON payload containing paths and event type | Development, testing, one-off re-indexing |
 | **Turing ES Admin Console** | Use **Enterprise Search → Integration → Indexing Manager** to select paths and trigger indexing/deindexing/publishing operations | Operations: selective re-indexing via UI |
 
@@ -298,6 +299,84 @@ Content-Type: application/json
 ```
 
 Event types: `INDEXING`, `DEINDEXING`, `PUBLISHING`, `UNPUBLISHING`.
+
+---
+
+## Adobe I/O Events
+
+On AEM as a Cloud Service you cannot install the OSGi bundle above. Adobe I/O Events is the route
+instead: register the connector as a consumer in Adobe Developer Console and AEM emits the same
+publish/modify/unpublish/delete events as CloudEvents.
+
+Adobe delivers them two ways, and the connector reads both through one handler, so an event means
+the same thing whichever way it arrives.
+
+### The webhook (push)
+
+Register this URL as the webhook of an event registration, one per source:
+
+```
+POST https://dumont-server:30130/api/v2/aem/webhook/{source}
+```
+
+Adobe verifies the registration with a `GET` carrying a `challenge` query parameter, which the same
+endpoint echoes back. Set `dumont.aem.webhook.adobe-io.client-id` to the credential's **API Key
+(Client ID)** and the connector rejects any payload whose `recipient_client_id` does not match with
+`401`. Left unset, the endpoint is open and logs a warning at startup: development only.
+
+Event types ending in `.published`, `.modified`, `.unpublished` and `.deleted` are acted on; anything
+else is answered `200` and ignored. The path indexed is the event's `data.resource_path`.
+
+### The journal (pull, recovery)
+
+A pushed webhook has no recovery. One lost to a `502`, a rolling restart, a network partition or an
+expired certificate is gone — Adobe retries for a bounded window and then drops it, and the content
+it described stays at whatever version the index last saw. The scheduled audit eventually notices,
+but it is a full re-discovery on a cron most deployments set to hours.
+
+The journal is the same ordered event stream, pulled at your own cadence behind a cursor:
+
+```yaml
+dumont:
+  aem:
+    journal:
+      enabled: true
+      poll-ms: 60000
+      client-id: <API Key (Client ID)>
+      client-secret: <Client Secret>
+      sources:
+        wknd: https://events-va6.adobe.io/events/organizations/1/integrations/2/3
+```
+
+The journal URL is shown on the event registration in Adobe Developer Console. Journalling is
+enabled automatically on every registration, so this costs no extra Adobe-side setup.
+
+Each poll reads a page of events, dispatches them, and only then persists the page's position. That
+ordering is what makes recovery exact: after downtime, a failed page or a crash mid-page, the next
+poll resumes from the last committed position instead of skipping ahead. Re-dispatching an event you
+already indexed is harmless — indexing a path is idempotent — while skipping one is not.
+
+| Property | Default | Purpose |
+|---|---|---|
+| `dumont.aem.journal.enabled` | `false` | Master switch. Off means the webhook alone, exactly as before |
+| `dumont.aem.journal.poll-ms` | `60000` | Delay between the end of one poll and the start of the next |
+| `dumont.aem.journal.batch-size` | `100` | Events requested per page |
+| `dumont.aem.journal.max-pages-per-poll` | `20` | Pages followed in one poll, so a large backlog drains across polls |
+| `dumont.aem.journal.client-id` | – | OAuth Server-to-Server API Key (Client ID) |
+| `dumont.aem.journal.client-secret` | – | OAuth Server-to-Server Client Secret |
+| `dumont.aem.journal.sources.<source>` | – | Journal URL for that Dumont source |
+
+:::tip Run both
+The webhook stays the low-latency route — an editor publishes and the page is indexed within
+seconds. The journal is the floor under it, catching what a push drops. Enabling the journal does
+not disable or change the webhook.
+:::
+
+:::note Replaying deliberately
+To re-consume from a point in the journal, clear the stored position: the cursor lives in the
+connector's `aem_system` table under the key `{source}/journal-position`. Removing it makes the next
+poll start from the beginning of the journal's retention window.
+:::
 
 ---
 

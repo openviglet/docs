@@ -149,6 +149,27 @@ logging:
 | `dumont.aem.querybuilder` | `false` | Enable QueryBuilder-based content discovery instead of tree traversal during full indexing |
 | `dumont.aem.querybuilder.parallelism` | `10` | Number of parallel threads for processing discovered paths |
 
+### AEM Adobe I/O Events
+
+See [AEM Connector → Adobe I/O Events](./connectors/aem.md#adobe-io-events).
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.aem.webhook.adobe-io.client-id` | – | API Key (Client ID) of the OAuth Server-to-Server credential. When set, an incoming webhook payload whose `recipient_client_id` does not match is rejected with `401`; unset leaves the endpoint open and logs a warning at startup |
+| `dumont.aem.journal.enabled` | `false` | Pull the same events from the Adobe I/O journal, recovering any the webhook dropped. Does not affect the webhook |
+| `dumont.aem.journal.poll-ms` | `60000` | Delay between the end of one journal poll and the start of the next |
+| `dumont.aem.journal.batch-size` | `100` | Events requested per journal page |
+| `dumont.aem.journal.max-pages-per-poll` | `20` | Journal pages followed in one poll, so a large backlog drains across polls rather than in one burst |
+| `dumont.aem.journal.client-id` | – | OAuth Server-to-Server API Key (Client ID) used for the journal |
+| `dumont.aem.journal.client-secret` | – | OAuth Server-to-Server Client Secret used for the journal |
+| `dumont.aem.journal.ims-url` | `https://ims-na1.adobelogin.com/ims/token/v3` | Adobe IMS token endpoint |
+| `dumont.aem.journal.scopes` | `openid,AdobeID,adobeio_api,event_receiver_api` | Scopes requested for the token |
+| `dumont.aem.journal.sources.<source>` | – | Journal URL of the event registration, per Dumont source name |
+
+### AEM Fetch Strategy
+
+Configured per source in the console, not by property: see [AEM Connector → Fetch Strategy](./connectors/aem.md#fetch-strategy).
+
 ### Dependency Tracking
 
 | Property | Default | Description |
