@@ -218,6 +218,20 @@ Two details worth knowing before a build surprises you:
   say why at each one; never raise a ceiling, because a ceiling lets one change pay for another.
   A genuine one-off exception is an `eslint-disable-next-line` with its reason on the line — there
   is exactly one, in `use-grid-adapter.ts`.
+- **`set-state-in-effect` almost always means the value is not state.** Clearing that rule across
+  the console took twenty-five fixes and produced two shapes, both of which delete the write rather
+  than move it:
+  - **Derive it.** Most of them were facts, not state: whether the route is a new record, a blank
+    entity the render can compute, which tab the URL names.
+  - **Store the answer against the question.** A result kept together with the query that produced
+    it makes "loading" derivable — you are waiting while the answer in hand is not the answer to
+    what is being asked now — and the resets unnecessary. It also removes stale renders, which is
+    how it found two real bugs: an answer to a *previous* query can no longer be read as this
+    one's.
+
+  Do not wrap a synchronous write in `void (async () => { … })()`. The rule cannot see through it,
+  the write is still synchronous, and that is a loophole rather than a fix. Calling an async
+  loader that way *is* accepted — `void (async () => { await load() })()`.
 - **The console build ends by checking that the federated remotes declared their types.** The
   generator reports failure badly — it has printed an error and exited 0, and it has silently
   written the wrong layout and exited 0 — so `scripts/check-mf-types.mjs` inspects the artefact
