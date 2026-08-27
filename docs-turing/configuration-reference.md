@@ -400,7 +400,7 @@ URL, so each instance can point at a different Adobe bucket.
 | `turing.content-ai.facet-size` | `10` | Facet values requested per field |
 | `turing.content-ai.max-page-walk` | `10` | How deep a result page may be reached. Adobe pages by cursor with no offset, so page *N* costs *N* requests; past this the page comes back empty with the total intact |
 | `turing.content-ai.timeout-seconds` | `10` | Per-request timeout |
-| `turing.content-ai.include-chunks` | `false` | Ask Adobe for the matched passages alongside each document. Currently increases response size without changing results |
+| `turing.content-ai.include-chunks` | `false` | Ask Adobe for the matched passages alongside each document, and expose the best one to an agent as `hit.content` (see [Custom Tools → `turingSearch`](./custom-tools.md#turingsearch-what-a-hit-gives-you)). Off by default: it increases response size, and a script already reading `hit.content` will start seeing a passage |
 
 Two limits come from Adobe's API rather than from Turing ES, and you will see them:
 a page can hold **at most 50 results** (a larger row count is reduced to 50), and

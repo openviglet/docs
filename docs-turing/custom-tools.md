@@ -141,6 +141,31 @@ Besides the parameters you declare, every script receives a set of pre-wired hel
 | `turingSearch` | High-level access to the Turing search surfaces (semantic navigation, vector store) |
 | `agent` | Delegate to another [AI Agent](./ai-agents.md) and use its reply |
 
+### `turingSearch`: what a hit gives you
+
+Both surfaces return a list of hit maps, and every field of the document is lifted to
+the top level so a script reads `hit.title`, `hit.price` directly. Three keys are
+always the same on both:
+
+| Key | Meaning |
+|---|---|
+| `hit.id` | Document id |
+| `hit.score` | Relevance score (`null` for browse-all) |
+| `hit.content` | The matched **passage** — the piece of the document that matched, not the whole thing |
+
+`turingSearch.ann(...)` searches the vector store and always fills `content` with the
+matched chunk. `turingSearch.sn(...)` searches the site index; there `content` appears
+only when the search engine returns passages of its own, which today means an
+[Adobe AEM Content AI](./search-engine.md#content-ai) index with
+`turing.content-ai.include-chunks` enabled. On Solr, Lucene and Elasticsearch the key
+is **absent** — Turing indexed that content itself, so the document's own `abstract`
+and `text` fields are what you ground on:
+
+```groovy
+// Works on every engine: prefer a passage, fall back to the document body.
+def grounding = hit.content ?: hit.abstract ?: hit.text
+```
+
 ### `workspace`: keep and hand back files
 
 A tool that builds something (a CSV, a PDF, a chart) shouldn't cram it into the reply. Write it to the workspace and return a link instead, the bytes never bloat the prompt, and the file survives to later turns:

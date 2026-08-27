@@ -170,6 +170,24 @@ publish, or Content AI's own acquisition service) and let Turing ES query it.
   Content AI subscription lapses or the credential is revoked. **System Information**
   reports `DOWN` when no credential is configured.
 
+### Grounding an AI answer on a Content AI site
+
+Adobe holds the embeddings, so Turing ES's own vector store is empty on such a site and
+the **RAG chat** reports itself unavailable — correctly, rather than answering from
+nothing.
+
+What does work is a [Custom Tool](./custom-tools.md) calling `turingSearch.sn(...)`: it
+queries the Content AI index and, with `turing.content-ai.include-chunks` enabled, each
+hit's `content` is the **passage Adobe matched** rather than the whole AEM page. That is
+better grounding than a truncated page body, and it is the only sub-document grounding
+available on a federated site, since Turing ES cannot re-chunk an index it does not own.
+
+:::note
+The **vectorless copilot**, which would suit a federated index (it needs no embeddings
+at all), is not yet available on Content AI sites. Grounded answers there currently
+require a Custom Tool.
+:::
+
 ---
 
 ## Plugin Architecture
