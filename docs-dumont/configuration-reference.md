@@ -140,15 +140,17 @@ The audit runs on a cron, re-enumerates every source, and files a record for any
 connector never queued. With `dumont.audit.index.enabled` it also compares against the search
 index itself and reports three differences: **missing** (in the source, never landed),
 **stale** (landed, but a later write failed), and **orphaned** (in the index, gone from the
-source). Missing and stale ids are requeued through the normal pipeline. Orphans are reported
-and never deleted — a discovery pass that under-reports ids would otherwise take live content
-out of the index; deindex the listed ids deliberately once you have confirmed they are gone.
+source). Missing and stale ids are requeued through the normal pipeline. Orphans are never
+deleted by the audit — a discovery pass that under-reports ids would otherwise take live content
+out of the index. Instead each pass writes the ids it found into a dated **orphan report** you
+review and apply yourself, through [the orphan endpoints](rest-api.md#orphan-reports).
 
 | Property | Default | Description |
 |---|---|---|
 | `dumont.audit.cron` | `0 0 3 * * *` | Cron for the scheduled content audit. `-` disables it |
 | `dumont.audit.cron.zone` | `UTC` | Timezone the cron is evaluated in |
 | `dumont.audit.index.enabled` | `true` | Also compare against the search index. Requires a backend that can enumerate what it holds — Turing can; Solr and Elasticsearch report nothing and the comparison is skipped |
+| `dumont.audit.index.orphanTtl` | `PT24H` | How long an orphan report stays applicable (ISO-8601 duration). Past it, applying is refused and a fresh audit must re-establish the report. `PT0S` or below switches expiry off |
 
 ### Turing ES Connection
 

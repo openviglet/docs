@@ -106,6 +106,70 @@ Validates content differences between the source and the search index. Used by t
 
 ---
 
+## Orphan Reports
+
+Base path: `/api/v2/connector/orphans`
+
+An **orphan** is a document the search index still holds after it left the source. The content
+audit never deletes one, because an orphan is only an orphan if the discovery pass that failed to
+mention it was complete — a gateway that timed out, or a listing that paginated short, makes every
+unlisted id look like a ghost. Deleting on that evidence would take live content out of the index.
+
+So each audit pass writes the ids it found into a dated report and stops there. You read the
+report, decide whether it describes content that genuinely went away, and then apply or discard
+it. Applying goes through the connector's own de-index path, so the indexing ledger and the search
+index stay in step.
+
+A report is per source and per site, and only the newest one stands: a later pass supersedes the
+report it replaces, and a pass that finds no orphan retracts it. A report also expires — see
+[`dumont.audit.index.orphanTtl`](configuration-reference.md#content-audit) — because applying
+evidence that a reindex has since overtaken would delete live documents.
+
+To produce a report on demand rather than waiting for the cron, run the audit:
+
+```
+GET /api/v2/connector/audit/{source}
+```
+
+### List Reports
+
+```
+GET /api/v2/connector/orphans
+GET /api/v2/connector/orphans?source={source}
+GET /api/v2/connector/orphans/{id}
+```
+
+Newest evidence first. Each report carries its `source`, `provider`, `site`, the `objectIds` it
+found, `discoveredAt`, `expiresAt`, whether it has already `expired`, and a `status` of `pending`,
+`applied` or `discarded`.
+
+### Apply a Report
+
+```
+POST /api/v2/connector/orphans/{id}/apply
+```
+
+De-indexes every id in the report from its site and drops the matching ledger rows, then closes
+the report. **Response:** `{ "status": "applied", "deindexed": 12 }`.
+
+| Status | Meaning |
+|---|---|
+| `200` | Applied — `deindexed` says how many delete jobs were queued |
+| `404` | No report carries that id, or a later pass superseded it |
+| `409` | Already applied or discarded — a decision is made once |
+| `410` | The evidence aged past `dumont.audit.index.orphanTtl`; re-run the audit |
+
+### Discard a Report
+
+```
+POST /api/v2/connector/orphans/{id}/discard
+```
+
+Closes the report without deleting anything — the right answer when the source was unreachable
+during the pass that produced it. **Response:** `{ "status": "discarded" }`.
+
+---
+
 ## Source Inference API
 
 Base path: `/api/v2/connector/source/infer`

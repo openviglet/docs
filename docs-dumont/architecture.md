@@ -65,6 +65,31 @@ The complete sequence from content source to search engine:
 
 ---
 
+## ④ Keeping the Index Honest
+
+A pipeline that finished without error is not proof the index is right. A write can fail after the
+ledger recorded it, a delete can be lost, and a run cut short can make content that was never read
+look like content that was removed. Dumont treats both halves of that as first-class: it checks its
+own work, and it refuses to delete on weak evidence.
+
+| Mechanism | What it protects against |
+|---|---|
+| **Content audit** | Re-enumerates each source on a cron and files a record for anything never queued |
+| **Index audit** | Compares source, ledger and index, and requeues documents that never landed or whose later write failed |
+| **Orphan reports** | Documents left in the index after leaving the source are written into a dated report you approve — never deleted by the audit itself |
+| **Safe finish** | A run that was interrupted, or where too large a share of extractions failed, finishes *standalone*: the previously indexed documents are preserved rather than swept |
+| **Coverage & drift** | Per-field fill rates per run, with a warning when a field's coverage drops between runs — the signal of a layout or selector break |
+| **Field provenance** | Every published field records the strategy and selector it came from, so a value can be traced instead of trusted |
+
+The common rule is that removal is always the conservative branch. A pass that reports nothing, or
+much less than it should, never becomes a mass de-index — and the one case where deletion is right
+is routed through a report a human applies.
+
+See [Content Audit configuration](./configuration-reference.md#content-audit) and the
+[orphan report endpoints](./rest-api.md#orphan-reports).
+
+---
+
 ## Internal Module Structure
 
 | Module | Package | Responsibility |
