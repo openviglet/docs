@@ -120,6 +120,20 @@ logging:
 | `dumont.indexing.job.batch-size` | `50` | Number of Job Items per batch before queue delivery |
 | `dumont.indexing.provision` | `true` | Send each source's declared field schema to the backend before its first document, so fields are created as declared rather than inferred from whichever value arrives first. A rejected schema is logged and indexing continues with the site's current schema. Turing only — other backends have no declarative schema endpoint |
 
+### Extraction Resilience
+
+An incomplete indexing run must not de-index what it never reached. Skipping that sweep is
+unconditional; these tune *when* a run is judged incomplete, and are read by the AEM connector,
+whose extraction is one HTTP fetch per page. See
+[Core Concepts → Data Quality](./getting-started/core-concepts.md#data-quality).
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.reactive.indexing` | `false` | Extract on a bounded pool instead of sequentially |
+| `dumont.reactive.parallelism` | `10` | Threads used for parallel extraction |
+| `dumont.reactive.extractTimeoutMs` | `0` | Per-extract wall-clock bound in milliseconds; the overrun is cancelled and counted as one failed extraction. `0` disables it — no extraction is ever cancelled for time |
+| `dumont.reactive.failureRatioThreshold` | `0.5` | Finish standalone (skip the de-index sweep) when this fraction of a run's extractions fail. `0` disables the guard |
+
 ### Content Audit
 
 The audit runs on a cron, re-enumerates every source, and files a record for anything the

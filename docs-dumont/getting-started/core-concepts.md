@@ -122,6 +122,54 @@ This mechanism enables efficient **incremental indexing**, only changed content 
 
 ---
 
+## Data Quality
+
+An indexing run that reports success is not the same thing as an index you can trust. A selector
+that stops matching, a write that fails after the ledger recorded it, a run killed halfway — each
+leaves the pipeline reporting nothing wrong. Dumont DEP surfaces all three.
+
+### Field coverage and drift
+
+At the end of every full index, the connector records what percentage of documents carried each
+declared field, and appends that to the source's history. Comparing two runs turns a silent
+extraction failure into a **drift flag** naming the field: a template change that stops populating
+`workload` shows up as its coverage dropping from 100% to 0%, on the next run rather than months
+later. Coverage is reported per source and, for a source with declared content types, per type.
+
+See it under **Enterprise Search → Integration → [your instance] → Coverage**.
+
+### Field provenance
+
+Every published field is tagged with where its value came from — the source, or the named enricher
+that derived it — and the tags travel with the document as a compact `dum_provenance` attribute.
+So "why does this document say that" is answerable from the index itself, and a field that stops
+being produced stays auditable: the connector keeps a per-source record of when each field was
+last seen.
+
+### Interrupted runs do not delete your index
+
+A full index normally ends by de-indexing whatever it did not see, which is how content removed at
+the source leaves the index. That is exactly the wrong thing to do when the run itself failed: the
+ids it never reached look identical to ids that were removed.
+
+So a run that does not complete — an exception, an interruption, or a **wave of extraction
+failures** past a set ratio — finishes *standalone*: the de-index sweep is skipped and the
+previously indexed documents survive. A single hung fetch cannot stall the whole run either; a
+per-extract timeout cancels the overrun and counts it as one failed extraction.
+
+Skipping the sweep on an incomplete run is how every structured source behaves. The two thresholds
+are wired for the AEM connector, whose extraction is one HTTP fetch per page and therefore the one
+that hangs; see [Extraction Resilience](../configuration-reference.md#extraction-resilience).
+
+### The audit finds what the run missed
+
+A scheduled audit re-enumerates each source and, where the backend can report what it holds,
+compares against the search index itself — finding documents that never landed, landed and then
+went stale, or linger in the index after leaving the source. See
+[Content Audit](../configuration-reference.md#content-audit).
+
+---
+
 ## Indexing Status Values
 
 Every document's journey through the pipeline is tracked with a status code:
