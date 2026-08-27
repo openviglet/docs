@@ -26,13 +26,14 @@ The `GET` method performs a `match_all` search. The `POST` method accepts a JSON
 
 ### Engines that serve this API
 
-Solr, Elasticsearch and Lucene. Each translates the DSL into its own native query
-language, so an engine is either implemented or it is not — there is no partial
-fallback.
+Solr, Elasticsearch and Lucene translate the whole syntax. [Adobe AEM Content
+AI](./search-engine.md#content-ai) serves a **defined subset** and refuses the rest —
+see [Compatibility Matrix → Adobe AEM Content
+AI](./dsl-compatibility.md#adobe-aem-content-ai-a-listed-subset).
 
-A site bound to any other engine (today, [Adobe AEM Content
-AI](./search-engine.md#content-ai)) gets **`501 Not Implemented`**, naming the engine
-and the ones that do work:
+A site bound to an engine with no DSL implementation at all gets **`501 Not
+Implemented`**, naming the engine and the ones that do work; so does a clause Content AI
+cannot express:
 
 ```json
 {

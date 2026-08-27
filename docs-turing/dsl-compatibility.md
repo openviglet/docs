@@ -261,10 +261,38 @@ For **full DSL compatibility**, use Elasticsearch as the search engine backend. 
 | Advanced aggregations (composite, nested, geo) | <N/> Elasticsearch |
 | Simple faceted search with metric aggs | <T/> Solr or <T/> Lucene |
 
-Only these three serve the DSL API. A site on another engine — today [Adobe AEM
-Content AI](./search-engine.md#content-ai) — gets `501 Not Implemented` naming the
-engine, rather than a silently empty result: see [DSL Query API → Engines that serve
-this API](./dsl-query.md#engines-that-serve-this-api).
+---
+
+## Adobe AEM Content AI: a listed subset
+
+Content AI is a [federated, read-only index](./search-engine.md#content-ai) whose query
+language is Adobe's own — a filter DSL plus semantic and keyword queries, not Lucene
+syntax. So rather than approximate the whole Elasticsearch surface, Turing ES translates
+a defined subset and **refuses the rest by name**, with `501 Not Implemented`:
+
+| Query / feature | Content AI | Notes |
+|---|:---:|---|
+| `match_all` | <T/> | `NOT exists(...)` over a reserved field name — an empty filter group is invalid in Adobe's schema |
+| `match` | <T/> | A scoring `fulltext` query |
+| `term` | <T/> | `StringFilter`, `NumberFilter` or `BooleanFilter`, chosen from the value's type |
+| `terms` | <T/> | `InFilter` |
+| `range` | <T/> | An `AND` of one-sided `NumberFilter` / `DateFilter` bounds |
+| `exists` | <N/> | `ExistsFilter` |
+| `prefix` | <N/> | `PrefixFilter` |
+| `bool` | <P/> | Text clauses become the arms of a `composite`; the rest becomes one filter group used as their pre-filter. `minimum_should_match > 1` and a `must_not` over a text query are refused |
+| `terms` aggregation | <T/> | `termBuckets` |
+| Sorting | <T/> | `orderBy`; `_score` is dropped, since Adobe already sorts by descending score |
+| `size` | <P/> | Capped at 50 by the API |
+| `from` (offset) | <X/> | Adobe paginates by opaque cursor; a non-zero `from` is refused rather than answered with page one |
+| Everything else | <X/> | `knn`, `nested`, geo, `function_score`, span, join queries, other aggregations |
+
+**Why refuse rather than approximate.** A clause quietly dropped because it could not be
+translated would leave a query that still runs — and answers confidently from the wrong
+set of documents. A `501` naming the clause is a worse response and a better answer.
+
+This subset is what the **vectorless copilot** needs, which is the point: that surface
+needs no embeddings, so it is the grounded-answer path that suits a federated index, and
+it runs entirely through this API.
 
 ---
 

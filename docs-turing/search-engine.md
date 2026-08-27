@@ -212,10 +212,12 @@ hit's `content` is the **passage Adobe matched** rather than the whole AEM page.
 better grounding than a truncated page body, and it is the only sub-document grounding
 available on a federated site, since Turing ES cannot re-chunk an index it does not own.
 
-:::note
-The **vectorless copilot**, which would suit a federated index (it needs no embeddings
-at all), is not yet available on Content AI sites. Grounded answers there currently
-require a Custom Tool.
+:::tip The vectorless copilot works here
+The [vectorless copilot](./rag.md) needs no embeddings — it turns prose into a grounded
+query over the site's declared fields and answers strictly from the matched rows — which
+makes it the grounded-answer path that suits a federated index. It runs through the [DSL
+API](./dsl-compatibility.md#adobe-aem-content-ai-a-listed-subset), which serves a defined
+subset of the query syntax on Content AI.
 :::
 
 ---
