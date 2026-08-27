@@ -62,6 +62,7 @@ dumont/
 ├── aem-commons/                # AEM extension interfaces (published to Maven Central)
 ├── spring/                     # Spring Boot configuration and JPA persistence
 ├── connector/
+│   ├── connector-commons/      # Connector SPI: structured sources, schema, grounding, enrichment
 │   └── connector-app/          # Main pipeline: strategies, batch, queue, indexing plugins, API
 ├── web-crawler/
 │   └── wc-plugin/              # Web Crawler connector plugin
@@ -96,7 +97,46 @@ Dumont DEP provides extension points at multiple levels:
 
 #### Creating a Custom Connector
 
-Implement the `DumConnectorPlugin` interface:
+Most sources are worth modelling for their **structure** — a listing plus per-item detail pages
+with a typed schema — rather than as a link spider. For those, implement `DumStructuredSource`:
+its identity, its schema, and the two methods that read the source.
+
+```java
+public class CourseCatalog implements DumStructuredSource {
+
+    private final DumStructuredSchema schema = DumStructuredSchema.builder()
+            .field(DumStructuredField.builder("title").type(TurSEFieldType.TEXT)
+                    .mandatory(true).build())
+            .field(DumStructuredField.builder("campus").type(TurSEFieldType.STRING)
+                    .facet(true).build())
+            .build();
+
+    @Override public String getSourceName()            { return "courses"; }
+    @Override public String getProviderName()          { return "CATALOG"; }
+    @Override public Collection<String> getSiteNames() { return List.of("Sample"); }
+    @Override public DumStructuredSchema schema()      { return schema; }
+
+    @Override public List<String> discover()           { /* every content id */ }
+    @Override public Optional<DumStructuredRecord> extract(String id) { /* one record */ }
+    // getLocale() defaults; override it when the source is not en-US.
+}
+```
+
+Then extend `DumStructuredSourcePlugin`, which supplies the whole
+discover → extract → enrich → publish loop, and with it everything the framework already does
+for every structured source:
+
+| You get | What it does |
+|---|---|
+| **Schema as code** | The schema is the single declaration of every field. It becomes the attribute specs published with each document, and it is sent to the backend *before* the first document so fields exist as declared instead of being inferred from the first value seen |
+| **Conservative grounding** | A null, blank or empty value is dropped at the record boundary rather than indexed. A field is absent or it has a value — never `""` in a facet |
+| **Enrichment** | A chain of `DumEnricher`s runs between extract and publish, merging through the schema-bound builder so enrichment cannot break grounding, and a failing enricher is isolated |
+| **Safe partial runs** | An interrupted or failing run finishes *standalone*, skipping the deindex sweep, so the previous index survives instead of the un-visited ids being treated as removed |
+| **Coverage and drift** | Per-field coverage is recorded per run, so a layout change that silently stops extracting a field is reported instead of discovered months later |
+| **Dry-run preview** | A run can be previewed against the last full index's fingerprint before anything is published |
+
+If your source genuinely is not structured — an event-driven push, a protocol of its own — the
+low-level interface is still there:
 
 ```java
 public interface DumConnectorPlugin {
@@ -115,6 +155,17 @@ Implement the `DumIndexingPlugin` interface:
 public interface DumIndexingPlugin {
     void index(TurSNJobItems turSNJobItems);
     String getProviderName();
+
+    // Both default to doing nothing, so a backend that cannot do them is unchanged.
+
+    /** Declare a source's field schema before its documents. */
+    default void provision(DumIndexingSchema schema) { }
+
+    /** Report what the index holds for a source, for the content audit's comparison.
+     *  Empty means "cannot answer" — distinct from a present, empty list. */
+    default Optional<List<DumIndexInventoryEntry>> inventory(String siteName, String source) {
+        return Optional.empty();
+    }
 }
 ```
 
