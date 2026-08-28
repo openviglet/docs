@@ -210,14 +210,14 @@ Read them together:
 |---|---|---|
 | `configured: false` | The log is not part of this deployment | Nothing, unless you wanted it |
 | `enabled: false` | The store is named but unreachable | Check the URI and the credentials |
-| `writing: false` | The store answers, but nothing writes to it | Set `logging.config` to the matching logback profile |
+| `writing: false` | The store answers, but nothing writes to it | Remove any `logging.config` override; it is derived from the engine |
 | all three `true` | The log is on, reachable and being written | — |
 
 `writing` exists because the first two describe only the **reader** — this endpoint's own client.
-Rows are written by a Logback appender selected separately with `logging.config`, so a deployment
-that set the engine and left that at its default reported a perfectly healthy log over a history
-that was empty and always would be. Gate a screen on `enabled`, and use `writing` to tell an empty
-history apart from one nothing is filling.
+Rows are written by a Logback appender, and since **2026.3.7** the profile that declares it is
+derived from `dumont.logging.engine`, so the two cannot drift apart unless you override
+`logging.config` yourself. Gate a screen on `enabled`, and use `writing` to tell an empty history
+apart from one that nothing is filling.
 
 :::note
 `writing` is absent on connectors older than 2026.3.7. Absent is not `false` — those versions

@@ -228,12 +228,9 @@ nothing is written. Pick MongoDB when you intend to query the log, and Redis whe
 to tail it — the Redis engine filters and sorts in memory after reading the whole list, so it
 degrades as the log grows.
 
-:::warning Turning it on takes two settings, not one
-`dumont.logging.engine` configures the side that **reads** the log. The side that **writes** it is
-a Logback appender, selected separately by `logging.config`, which defaults to
-`classpath:logback-spring.xml` — a configuration that declares no store appender at all.
-
-Set both, and match them to the same engine:
+Turning it on is one setting. `dumont.logging.engine` selects both the side that reads the log and
+the Logback profile that writes it — `logging.config` is derived from it, so `mongodb` selects
+`logback-spring-mongo.xml` and `redis` selects `logback-spring-redis.xml`:
 
 ```yaml
 dumont:
@@ -242,14 +239,17 @@ dumont:
   mongodb:
     enabled: true
     uri: mongodb://mongo:27017
-logging:
-  config: classpath:logback-spring-mongo.xml   # or logback-spring-redis.xml
 ```
 
-Set only the first and the reader can reach the store perfectly well, while nothing writes to it —
-so the history is empty and stays empty. [`logging/status`](rest-api.md#is-it-on) names this
-directly: `enabled: true` with `writing: false`, and the console's History tab says so instead of
-showing an empty table.
+:::note Overriding the Logback profile
+Set `logging.config` yourself only to point at a Logback file of your own; it takes precedence over
+the derived value and its contents are your business.
+
+Setting it to one of the **shipped** profiles for a *different* engine is refused at startup, with
+both settings quoted. That combination has no useful meaning — one engine would be read and another
+written — and before **2026.3.7** it was accepted, which produced a log the API reported as healthy
+and permanently empty. If you have that in an existing configuration, delete the `logging.config`
+line.
 :::
 
 | Property | Default | Description |
