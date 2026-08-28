@@ -238,6 +238,18 @@ degrades as the log grows.
 | `dumont.redis.enabled` | `false` | Must also be `true` for the `redis` engine to activate |
 | `dumont.redis.uri` | `redis://localhost:6379/0` | Redis connection string |
 | `dumont.redis.key.indexing` | `dumontLog:indexing` | Redis list key holding the indexing rows |
+| `dumont.redis.maxEntries.indexing` | `50000` | Trim the indexing list to this length on write |
+
+Setting an engine also persists the **server log** — the connector's own WARN and ERROR lines — to
+the same store, in a second collection or list. It is written by the same machinery and fails the
+same way, but it is not exposed through the Logging API; read it in the store, or in
+`store/logs/dum-connector.log`.
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.logging.collection.server` | `server` | MongoDB collection holding the server-log rows |
+| `dumont.redis.key.server` | `dumontLog:server` | Redis list key holding the server-log rows |
+| `dumont.redis.maxEntries.server` | `10000` | Trim the server list to this length on write |
 
 Each store is connected once and the connection is held for the lifetime of the connector — a
 MongoDB client, or a Redis pool — rather than dialled again per request. Tune either through its
@@ -245,17 +257,24 @@ connection string; the usual options apply.
 
 **When the store refuses a write**, the row is lost — the connector will not stall an indexing run
 waiting for its own log. It says so instead, at `WARN` in the application log
-(`store/logs/dum-connector.log`), naming the engine:
+(`store/logs/dum-connector.log`), naming both which log is losing rows and which store refused
+them:
 
 ```
 Indexing log: a row could not be written to MongoDB. Rows are being lost while this lasts,
 so the history will read short rather than empty.
+
+Server log: a row could not be written to Redis. Rows are being lost while this lasts,
+so the history will read short rather than empty.
 ```
 
 An outage reports once rather than once per row, with a running count while it lasts and a final
-tally when writes resume — so the number of rows missing from the history is a number you can read
-rather than infer. Grep for `Indexing log:` after an outage before concluding that a short history
-means a quiet connector.
+tally when writes resume — so the number of rows missing is a number you can read rather than
+infer. Grep for `Indexing log:` and `Server log:` after an outage before concluding that a short
+history means a quiet connector.
+
+These warnings always reach the file and the console, never the store being complained about — so
+a MongoDB outage does not swallow the notice that MongoDB is down.
 
 One default is Dumont's rather than the driver's. Where `dumont.mongodb.uri` does not set
 `serverSelectionTimeoutMS`, the indexing log applies **5000 ms** in place of the driver's 30 s, so

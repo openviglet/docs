@@ -92,6 +92,12 @@ parsed costs its own row and is counted in `unreadable`, rather than emptying th
 log's `status` endpoint reports `configured` and `enabled` separately, so "someone set the flag"
 and "the store answers" cannot be mistaken for each other.
 
+It holds on the way in as well. A row the store refuses to accept is reported at `WARN` — once per
+outage, with a count of what was lost and a line when writes resume — rather than dropped in
+silence, so a history that reads short can be told from a connector that was quiet. Those warnings
+are deliberately written to the file and the console rather than to the store being complained
+about, which is what stops an outage from swallowing the notice of itself.
+
 See [Content Audit configuration](./configuration-reference.md#content-audit), the
 [orphan report endpoints](./rest-api.md#orphan-reports) and the
 [Logging API](./rest-api.md#logging-api).
