@@ -117,6 +117,9 @@ export const SectionLabel = ({ children }) => (
   <FeatureCard icon="🔍" title="Data Quality & Trust">
     A scheduled audit compares source, ledger and index, requeues what never landed, and shows where each field came from. A run cut short finishes without de-indexing, and a document to be deleted waits in a report you approve.
   </FeatureCard>
+  <FeatureCard icon="🧾" title="Queryable Indexing Log">
+    Every status a document passes through, filterable by source, run or document, so you can replay one run end to end. A log that cannot be read says so — a store that is down answers 503 rather than looking like a connector that indexed nothing.
+  </FeatureCard>
 </div>
 
 {/* ── Quick Start ─────────────────────────────────────────────────────────── */}

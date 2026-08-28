@@ -80,13 +80,21 @@ own work, and it refuses to delete on weak evidence.
 | **Safe finish** | A run that was interrupted, or where too large a share of extractions failed, finishes *standalone*: the previously indexed documents are preserved rather than swept |
 | **Coverage & drift** | Per-field fill rates per run, with a warning when a field's coverage drops between runs — the signal of a layout or selector break |
 | **Field provenance** | Every published field records the strategy and selector it came from, so a value can be traced instead of trusted |
+| **Indexing log** | Every status a document passed through, attributed to the source and run that caused it, so a claim about what happened can be checked rather than believed |
 
 The common rule is that removal is always the conservative branch. A pass that reports nothing, or
 much less than it should, never becomes a mass de-index — and the one case where deletion is right
 is routed through a report a human applies.
 
-See [Content Audit configuration](./configuration-reference.md#content-audit) and the
-[orphan report endpoints](./rest-api.md#orphan-reports).
+The same rule governs how these mechanisms *report*: a failure must never be readable as an
+absence. An unreachable indexing log answers `503`, not an empty page; a log row that cannot be
+parsed costs its own row and is counted in `unreadable`, rather than emptying the query; and the
+log's `status` endpoint reports `configured` and `enabled` separately, so "someone set the flag"
+and "the store answers" cannot be mistaken for each other.
+
+See [Content Audit configuration](./configuration-reference.md#content-audit), the
+[orphan report endpoints](./rest-api.md#orphan-reports) and the
+[Logging API](./rest-api.md#logging-api).
 
 ---
 

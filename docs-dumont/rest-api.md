@@ -193,7 +193,19 @@ no engine configured the endpoints below answer with an empty page.
 GET /api/v2/connector/logging/status
 ```
 
-**Response:** `{ "engine": "mongodb", "enabled": true }`.
+**Response:** `{ "engine": "mongodb", "configured": true, "enabled": true }`.
+
+The two flags answer different questions, and a store that is switched on but down is exactly
+where they disagree:
+
+| Field | Answers | Read from |
+|---|---|---|
+| `configured` | Is an engine named and switched on? | `dumont.logging.*` properties |
+| `enabled` | Does that engine actually answer? | a ping, at request time |
+
+So `configured: true, enabled: false` means the log is on and its store is unreachable — check the
+URI and the credentials. Gate a screen on `enabled`; use `configured` to decide whether the log is
+part of this deployment at all.
 
 ### Read the Log
 
@@ -228,6 +240,13 @@ something to hide — but they cannot answer a query that names a source.
 :::note
 Both engines honour every filter above. The Redis engine applies them in memory after reading the
 whole list, so it slows as the log grows — pick MongoDB when you intend to query rather than tail.
+:::
+
+:::warning A store that is down is not an empty log
+If the endpoint cannot reach its store it answers **503 Service Unavailable**, naming the engine —
+never `200` with an empty page. The distinction matters: an empty page means the connector logged
+nothing, a 503 means the log cannot be read and the connector may well have indexed everything.
+Earlier releases returned the empty page for both, so an outage read as an idle connector.
 :::
 
 ---
