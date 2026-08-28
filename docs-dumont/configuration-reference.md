@@ -246,9 +246,10 @@ logging:
   config: classpath:logback-spring-mongo.xml   # or logback-spring-redis.xml
 ```
 
-Set only the first and the endpoints answer `configured: true`, `enabled: true` — the reader can
-reach the store perfectly well — over a history that is empty and stays empty, because nothing is
-writing to it. An empty history with a healthy status is the signature of this mistake.
+Set only the first and the reader can reach the store perfectly well, while nothing writes to it —
+so the history is empty and stays empty. [`logging/status`](rest-api.md#is-it-on) names this
+directly: `enabled: true` with `writing: false`, and the console's History tab says so instead of
+showing an empty table.
 :::
 
 | Property | Default | Description |

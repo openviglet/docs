@@ -98,6 +98,11 @@ silence, so a history that reads short can be told from a connector that was qui
 are deliberately written to the file and the console rather than to the store being complained
 about, which is what stops an outage from swallowing the notice of itself.
 
+And it holds for the log that was never switched on. Reading the log and writing it are configured
+by separate settings, so the status endpoint reports them separately: whether the store is
+reachable, and whether an appender is attached that would accept a row. A log nothing is writing
+says so, rather than presenting an empty history as a quiet one.
+
 See [Content Audit configuration](./configuration-reference.md#content-audit), the
 [orphan report endpoints](./rest-api.md#orphan-reports) and the
 [Logging API](./rest-api.md#logging-api).

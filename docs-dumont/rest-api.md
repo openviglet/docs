@@ -193,25 +193,35 @@ no engine configured the endpoints below answer with an empty page.
 GET /api/v2/connector/logging/status
 ```
 
-**Response:** `{ "engine": "mongodb", "configured": true, "enabled": true }`.
+**Response:** `{ "engine": "mongodb", "configured": true, "enabled": true, "writing": true }`.
 
-The two flags answer different questions, and a store that is switched on but down is exactly
-where they disagree:
+The three flags answer different questions, and the ways a log goes wrong are exactly where they
+disagree:
 
 | Field | Answers | Read from |
 |---|---|---|
 | `configured` | Is an engine named and switched on? | `dumont.logging.*` properties |
 | `enabled` | Does that engine actually answer? | a ping, at request time |
+| `writing` | Is an appender attached that would accept a row? | the live Logback configuration |
 
-So `configured: true, enabled: false` means the log is on and its store is unreachable — check the
-URI and the credentials. Gate a screen on `enabled`; use `configured` to decide whether the log is
-part of this deployment at all.
+Read them together:
 
-:::note Both flags describe the reader
-They are answered by this endpoint's own client. The rows are written by a Logback appender chosen
-separately with `logging.config`, so `enabled: true` over a permanently empty history usually means
-that setting was left at its default and nothing is writing. See
-[Turning it on takes two settings](configuration-reference.md#indexing-log).
+| State | Means | Fix |
+|---|---|---|
+| `configured: false` | The log is not part of this deployment | Nothing, unless you wanted it |
+| `enabled: false` | The store is named but unreachable | Check the URI and the credentials |
+| `writing: false` | The store answers, but nothing writes to it | Set `logging.config` to the matching logback profile |
+| all three `true` | The log is on, reachable and being written | — |
+
+`writing` exists because the first two describe only the **reader** — this endpoint's own client.
+Rows are written by a Logback appender selected separately with `logging.config`, so a deployment
+that set the engine and left that at its default reported a perfectly healthy log over a history
+that was empty and always would be. Gate a screen on `enabled`, and use `writing` to tell an empty
+history apart from one nothing is filling.
+
+:::note
+`writing` is absent on connectors older than 2026.3.7. Absent is not `false` — those versions
+cannot answer the question at all.
 :::
 
 ### Read the Log
