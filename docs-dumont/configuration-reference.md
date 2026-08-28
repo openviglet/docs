@@ -239,6 +239,19 @@ degrades as the log grows.
 | `dumont.redis.uri` | `redis://localhost:6379/0` | Redis connection string |
 | `dumont.redis.key.indexing` | `dumontLog:indexing` | Redis list key holding the indexing rows |
 
+Each store is connected once and the connection is held for the lifetime of the connector — a
+MongoDB client, or a Redis pool — rather than dialled again per request. Tune either through its
+connection string; the usual options apply.
+
+One default is Dumont's rather than the driver's. Where `dumont.mongodb.uri` does not set
+`serverSelectionTimeoutMS`, the indexing log applies **5000 ms** in place of the driver's 30 s, so
+that a MongoDB which is down makes `logging/status` answer in five seconds rather than holding the
+request open for half a minute. Set the option explicitly in the URI to choose your own:
+
+```
+dumont.mongodb.uri: mongodb://mongo:27017/?serverSelectionTimeoutMS=2000
+```
+
 ---
 
 ## Common Production Overrides
