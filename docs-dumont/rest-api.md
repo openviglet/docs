@@ -210,7 +210,7 @@ Read them together:
 |---|---|---|
 | `configured: false` | The log is not part of this deployment | Nothing, unless you wanted it |
 | `enabled: false` | The store is named but unreachable | Check the URI and the credentials |
-| `writing: false` | The store answers, but nothing writes to it | Remove any `logging.config` override; it is derived from the engine |
+| `writing: false` | The store answers, but nothing writes to it | Remove any `logging.config` override; the engine derives it (before 2026.3.7 the Docker image pinned one) |
 | all three `true` | The log is on, reachable and being written | — |
 
 `writing` exists because the first two describe only the **reader** — this endpoint's own client.

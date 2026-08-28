@@ -241,15 +241,27 @@ dumont:
     uri: mongodb://mongo:27017
 ```
 
+Every profile writes to the console **and** the log file as well as its store, so choosing an engine
+does not cost you either. In particular there is no separate console-only profile to select in a
+container: the Docker image writes to stdout out of the box and the engine still applies.
+
 :::note Overriding the Logback profile
 Set `logging.config` yourself only to point at a Logback file of your own; it takes precedence over
 the derived value and its contents are your business.
 
-Setting it to one of the **shipped** profiles for a *different* engine is refused at startup, with
-both settings quoted. That combination has no useful meaning — one engine would be read and another
-written — and before **2026.3.7** it was accepted, which produced a log the API reported as healthy
-and permanently empty. If you have that in an existing configuration, delete the `logging.config`
-line.
+Setting it to one of the **shipped** profiles that writes a different store — including
+`logback-spring-console.xml`, which writes none — is refused at startup, with both settings quoted.
+That combination has no useful meaning: one store would be read and another, or none, written.
+Before **2026.3.7** it was accepted and produced a log the API reported as healthy and permanently
+empty. If an existing configuration has it, delete the `logging.config` line.
+:::
+
+:::warning Upgrading from before 2026.3.7 in Docker
+The images used to pin `-Dlogging.config=classpath:logback-spring-console.xml`, which switched the
+indexing log off no matter what else you set — so the log could not be enabled in a container at
+all. That pin is gone. If you added `logging.config` to your own compose file or entrypoint to work
+around it, remove it: the engine now selects the profile, and keeping the override will be refused
+at startup.
 :::
 
 | Property | Default | Description |
