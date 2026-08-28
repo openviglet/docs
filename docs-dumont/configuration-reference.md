@@ -243,6 +243,20 @@ Each store is connected once and the connection is held for the lifetime of the 
 MongoDB client, or a Redis pool — rather than dialled again per request. Tune either through its
 connection string; the usual options apply.
 
+**When the store refuses a write**, the row is lost — the connector will not stall an indexing run
+waiting for its own log. It says so instead, at `WARN` in the application log
+(`store/logs/dum-connector.log`), naming the engine:
+
+```
+Indexing log: a row could not be written to MongoDB. Rows are being lost while this lasts,
+so the history will read short rather than empty.
+```
+
+An outage reports once rather than once per row, with a running count while it lasts and a final
+tally when writes resume — so the number of rows missing from the history is a number you can read
+rather than infer. Grep for `Indexing log:` after an outage before concluding that a short history
+means a quiet connector.
+
 One default is Dumont's rather than the driver's. Where `dumont.mongodb.uri` does not set
 `serverSelectionTimeoutMS`, the indexing log applies **5000 ms** in place of the driver's 30 s, so
 that a MongoDB which is down makes `logging/status` answer in five seconds rather than holding the
