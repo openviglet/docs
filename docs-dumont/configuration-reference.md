@@ -228,6 +228,29 @@ nothing is written. Pick MongoDB when you intend to query the log, and Redis whe
 to tail it — the Redis engine filters and sorts in memory after reading the whole list, so it
 degrades as the log grows.
 
+:::warning Turning it on takes two settings, not one
+`dumont.logging.engine` configures the side that **reads** the log. The side that **writes** it is
+a Logback appender, selected separately by `logging.config`, which defaults to
+`classpath:logback-spring.xml` — a configuration that declares no store appender at all.
+
+Set both, and match them to the same engine:
+
+```yaml
+dumont:
+  logging:
+    engine: mongodb
+  mongodb:
+    enabled: true
+    uri: mongodb://mongo:27017
+logging:
+  config: classpath:logback-spring-mongo.xml   # or logback-spring-redis.xml
+```
+
+Set only the first and the endpoints answer `configured: true`, `enabled: true` — the reader can
+reach the store perfectly well — over a history that is empty and stays empty, because nothing is
+writing to it. An empty history with a healthy status is the signature of this mistake.
+:::
+
 | Property | Default | Description |
 |---|---|---|
 | `dumont.logging.engine` | `none` | `none`, `mongodb` or `redis` |
@@ -240,9 +263,9 @@ degrades as the log grows.
 | `dumont.redis.key.indexing` | `dumontLog:indexing` | Redis list key holding the indexing rows |
 | `dumont.redis.maxEntries.indexing` | `50000` | Trim the indexing list to this length on write |
 
-Setting an engine also persists the **server log** — the connector's own WARN and ERROR lines — to
-the same store, in a second collection or list. It is written by the same machinery and fails the
-same way, but it is not exposed through the Logging API; read it in the store, or in
+The same `logging.config` also persists the **server log** — the connector's own WARN and ERROR
+lines — to that store, in a second collection or list. It is written by the same machinery and
+fails the same way, but it is not exposed through the Logging API; read it in the store, or in
 `store/logs/dum-connector.log`.
 
 | Property | Default | Description |

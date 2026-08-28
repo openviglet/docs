@@ -207,6 +207,13 @@ So `configured: true, enabled: false` means the log is on and its store is unrea
 URI and the credentials. Gate a screen on `enabled`; use `configured` to decide whether the log is
 part of this deployment at all.
 
+:::note Both flags describe the reader
+They are answered by this endpoint's own client. The rows are written by a Logback appender chosen
+separately with `logging.config`, so `enabled: true` over a permanently empty history usually means
+that setting was left at its default and nothing is writing. See
+[Turning it on takes two settings](configuration-reference.md#indexing-log).
+:::
+
 ### Read the Log
 
 ```
