@@ -41,7 +41,7 @@ console**.
 
 | Layer | Technology |
 |---|---|
-| **Backend** | Java 21 · Spring Boot 4.1.0 |
+| **Backend** | Java 21 · Spring Boot 4.1.1 |
 | **Database** | H2 (dev) · PostgreSQL · MariaDB / MySQL · Oracle — schema owned by Liquibase |
 | **Cache** | Hazelcast |
 | **Search** | In the database by default. Viglet Turing indexing is **optional and off by default** — see [Search & Caching](./search-caching.md). |
