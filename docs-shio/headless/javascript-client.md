@@ -46,6 +46,12 @@ console.log(post?.attrs.title);
 | `getPostByUrl(siteId, url)` | `GET /post/by-url` | `ShioPost \| null` |
 | `query({ siteId, folderId, postType, page, size })` | `GET /query` | `ShioListing` |
 
+- **Language and version.** `listChildren`, `query` and `getPostByUrl` take `locale` (only
+  posts in that language, paged by the server; see
+  [Content in several languages](../content-i18n.md#reading-a-locale-through-the-cda)).
+  `getPost`, `getPostByUrl`, `listChildren` and `query` take `state`: `published`, or `draft`
+  and `rev:<n>` with a preview token, which is how a front end renders a draft preview. A
+  refused state throws `ShioHttpError` with status `403`.
 - Single-resource getters return `null` on `404`.
 - Any other non-OK status throws `ShioHttpError` (`{ status, url, body }`).
 - Every method accepts a final `{ signal }` option for cancellation (`AbortSignal`).

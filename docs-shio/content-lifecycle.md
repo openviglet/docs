@@ -74,33 +74,115 @@ If preview is switched off, the button is quietly unavailable rather than failin
 
 ---
 
-## History: what changed since the last publish
+## History: compare any two versions
 
-**History** on the post's edit screen compares the **draft (working copy)** against the
-**published (live)** version, field by field.
+**History** on the post's edit screen opens the version dialog. On the left is the list of
+versions, newest first: the **draft (working copy)**, the **published (live)** page, and every
+revision kept since (see below), each showing who made it and when. A revision written by an
+agent is marked as one, so you can tell a colleague's change from an agent's before you read
+it.
 
-The dialog opens with the answer in its header:
+Pick two and the dialog compares them. It opens on the question you usually have, what
+changed between the live page and the draft:
 
-- *"N field(s) changed since last publish"*
-- *"No changes since last publish"*
-- *"Not yet published — nothing to compare"*
+- The header says *"N field(s) changed since last publish"*, *"No changes since last
+  publish"*, or *"Not yet published — nothing to compare"*.
+- Each changed field is shown with the change inside it, word by word for text and block by
+  block for rich text. A sentence that moved in a long body is marked where it moved, not left
+  for you to find in two copies of the whole field.
+- Fields that did not change are folded behind a count, so a post type with forty fields and
+  two edits shows two.
 
-Below it, each field is listed with its draft value, its published value, and a status:
-**changed**, **added** or **removed**. **Only changes** hides the fields that are the same
-in both, which is what you want on a post type with forty fields and two edits.
+The comparison comes from the server, so the console and every other caller see the same
+answer. On the REST API it is
+`GET /api/v2/post-unified/{id}/diff?from=published&to=draft`, where each side is `draft`,
+`published` or `rev:<n>`.
 
-It also tells you **who** — the draft's last modifier, and who published the live version.
+### A page that was never published
 
-### Restore the published version
+A page that has never gone live has nothing to compare against, and the dialog says so. It
+still shows the whole page as new, every field an addition, and above that a short summary of
+what the page renders: its word count, its headings, its links and images, and its heading
+outline. **Preview** opens it with a private preview link, so you can see it before anyone
+else does. The review queue shows the same thing for a page an agent created.
 
-**Restore published version** throws away the draft's changes and makes the draft match
-what is live again. It is the undo for "I edited this and it was worse."
+### Restore a version, or one field
 
-It asks twice: the first click arms it (*"Discard draft changes — click again to
-confirm"*), the second does it.
+**Restore** puts the older of the two versions you picked back into the draft: **Restore
+published version** when you are comparing against the live page, **Restore revision N**
+when you picked a revision. It is the undo for "I edited this and it was worse."
 
-It does **not** touch the live page. Restore is about the working copy; the published
-version was never in danger.
+When the newer side is the draft, each changed field also has its own **Restore \<field\>**
+button, which puts just that field's older value back and leaves every other edit alone.
+
+Every restore asks twice: the first click arms it, the second does it. None of them touches
+the live page. A restore changes the working copy, and you publish it when you are ready. If
+somebody saved the page after you opened the dialog, the restore is refused rather than
+applied over their work (see
+[When two people save the same page](#when-two-people-save-the-same-page)).
+
+### Every version that went live is kept
+
+Publishing replaces what visitors see, and the version it replaces is not lost: each time a
+post goes live, Viglet Shio keeps a **revision** of it, numbered in order. A post keeps its
+last fifty; `shio.versions.keep` changes that. Saving a draft is not captured unless
+`shio.versions.capture-on-save=true`, because the question a history answers is usually
+"what was live on Tuesday", not every keystroke.
+
+From a terminal:
+
+```bash
+shio versions post:Blog/blog/hello-world                  # one line per revision
+shio rollback post:Blog/blog/hello-world --to 3            # shows what would change
+shio rollback post:Blog/blog/hello-world --to 3 --apply    # puts revision 3 back
+```
+
+A rollback puts the revision back **into the draft** and publishes nothing, so you can look
+at it before anyone else does, then publish it as usual. It is itself recorded as a
+revision, so going back to 3 and changing your mind leaves the version you left to come
+forward to.
+
+The same history is on the REST API as `GET /api/v2/post-unified/{id}/revisions`, one
+revision as `GET /api/v2/post-unified/{id}/revisions/{version}`, and a rollback as
+`POST /api/v2/post-unified/{id}/revisions/{version}/restore`.
+
+### When two people save the same page
+
+If somebody else saved the page after you opened it, including an agent working on the same
+content, your save is **not** applied over theirs. The editor shows each field that differs,
+their stored value beside yours, and keeps theirs unless you choose yours. Nothing is lost
+silently in either direction.
+
+A client doing the same over REST reads the `ETag` a post comes back with and sends it as
+`If-Match` on the next `PUT`, `PATCH`, publish or delete. A stale one is refused with
+`409 Conflict`, and the refusal says how to re-read.
+
+---
+
+## Keeping an old address answering
+
+When a page's address changes (you renamed `/pricing` to `/plans`, or moved it to another
+site), the old address stops answering. Every bookmark, search result and link from somebody
+else's site then gets a 404, and nothing tells you. A **redirect** keeps the old address
+answering by sending visitors to the new one.
+
+- **When you publish the rename**, the publish dialog notices that the page's address is about
+  to change and offers *Keep \<old address\> answering, as a permanent (301) redirect*, already
+  ticked. Leave it ticked and the redirect is published at the old address with the page. If the redirect cannot be written
+  (another page already answers there), you are told the page was published and the redirect
+  was not.
+- **An agent** writes one with `post.redirect`. The address is the old path, and `to` is where
+  it sends people (an address, a site path or a full URL). It is a `302` unless
+  `data.permanent: true` asks for a `301`. It is published at once, because a draft redirect
+  routes nobody. It is refused where a page still answers at that path.
+- **A move reports what visitors lost.** A move answers with the published addresses it
+  retired and the ones it created, so you know which old addresses need a redirect without
+  running anything else.
+- **Finding the ones you missed.** `shio verify` reports `url-orphaned` for an address that
+  used to be a page here, no longer answers, and is still linked from a published page. Each
+  finding comes with the `post.redirect` that fixes it. `shio redirects` lists every redirect
+  a site has, where each one sends and whether it is a 301 or a 302, and the orphans under it.
+  It exits `1` when there is one, so a pipeline can stop on it.
 
 ---
 
@@ -119,6 +201,27 @@ Either can be set without the other, and leaving a field empty means no schedule
 A scheduled post shows *"Scheduled for …"* so the state is visible without opening the
 dialog.
 
+To see everything that is scheduled at once, in the order it will happen, open
+**Content → Scheduled**: each row is a post going live or coming down, linked to its editor.
+The page and the schedule dialog both say which timezone their times are in, which is your
+browser's. From a terminal, `shio schedule` lists the same (add a site name, or `--from` and
+`--to` with ISO-8601 instants for a range), in UTC.
+
+An agent sets the same schedule with `shio_publish` and a `when`, and calls one off with
+`cancel`. From a terminal:
+
+```bash
+shio publish --unpublish --when 2026-12-01T09:00:00Z post:Acme/promo   # comes down in December
+shio publish --cancel post:Acme/launch                                  # calls off a scheduled launch
+```
+
+Setting one of the two instants leaves the other as it was, so dating a takedown does not
+cancel the launch already scheduled for the same page.
+
+When the scheduler publishes or unpublishes a post, the audit trail records it as the
+scheduler's and names the person who set the schedule: *"Published "Launch" (scheduled by
+ana)"*.
+
 **The transition fires within a minute of the chosen time.** A background sweep runs
 every 60 seconds and applies whatever has come due, so nobody has to be at a keyboard at
 midnight — but do not schedule against a deadline finer than a minute.
@@ -133,6 +236,11 @@ unpublish, delete and restore, with the name of whoever made it and when.
 It covers **every** surface — the console, the CLI, the delivery API and an agent — so a
 change made by something that never opened a browser is attributed the same way as one
 you typed yourself.
+
+An update, a publish and a restore also name **which fields** they changed, under the row's
+description: *"Fields: body, title"*. That is how you can still tell what an approved run did
+after the approval, when the draft and the live version have become the same. From a
+terminal, `shio changes --fields` prints the same names.
 
 For an agent's work specifically, **Agent Review** is the better screen: it groups a run's
 changes together so you can approve or revert the run rather than reading it one row at a

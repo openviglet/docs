@@ -158,6 +158,50 @@ A `state=` naming a row the post has not got is a **404 that says which**, never
 fall back to the draft: a caller comparing a draft against what is live would otherwise be
 handed the draft twice and read it as "nothing changed".
 
+### Which version a read returns
+
+`state` is one grammar on every read that returns a page: `draft`, `published`, or `rev:<n>`
+for a revision by the number `shio versions` shows. `GET /agent/find` and `GET /agent/verify`
+take `draft` or `published`, which lists or lints just those rows: `/agent/verify?state=draft`
+is the report to read before a publish. `GET /agent/render`, `GET /agent/editable` and
+`/preview/<site>/<url>` take all three, and a revision is rendered through the page's present
+layout, under a banner that says which revision it is. `shio_find`, `shio_verify` and
+`shio_digest` take the same `state`; `shio digest --state` and `shio verify --state` pass it
+from a terminal. A value outside the grammar is refused with the three spellings, and a list
+asked for a revision is refused with the read that serves one.
+
+`GET /agent/find?scheduled=any` lists only posts with a publish or unpublish schedule, and
+those rows carry the instants, so a schedule you set can be confirmed; a range such as
+`scheduled=2026-09-15T00:00:00Z..2026-09-22T00:00:00Z` narrows it. `include=schedule` on
+`GET /agent/read` attaches the schedule to one post. `include=fields` on `GET /agent/changes`,
+or `fields` on `shio_changes`, names the fields each update and publish changed.
+
+The delivery API reads the same `state`, within what its token may already see: `published`
+works with any token, while `draft` and `rev:<n>` need a **preview** token and are refused
+with `403` for a production one rather than answered with the published version.
+
+### When you want to be told instead of asking
+
+`GET /api/v2/events` is the same change feed, held open as [Server-Sent
+Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events). Each event is one
+page of the feed, and its event `id` is the cursor after it, so a connection that drops and
+reconnects with `Last-Event-ID` resumes exactly where it stopped — nothing written in between is
+lost. `since=` does the same for a client that cannot set the header, `site=` scopes it, and with
+neither you are told about what happens from now on rather than about everything that already did.
+
+The stream reads with **your** rights: an entry you may not read is withheld from your connection
+and sent to one whose credentials allow it. Scheduled publishes report their outcome on the same
+feed — a failure arrives with the command that retries it — and a form submission arrives marked as
+one, with the title and summary its form collected.
+
+On the command line this is `shio changes --follow`: it holds the connection open, prints each
+change as it happens, reconnects on its own if the connection drops, and stops if the server
+refuses it. Add `--json` for one line per event. `include=fields` on the stream, or
+`--fields` on the command, names the fields each write changed, the same as on the feed.
+
+An agent walking the feed with a cursor does not need any of this; a screen that is already open
+does.
+
 `PUT /agent/memory` takes the author from the credential, never from the body, and
 re-using a key **rewrites** that note rather than adding a second one: the next
 session pays for every near-duplicate it has to reconcile.
@@ -201,8 +245,8 @@ The vocabulary is closed. Fifteen ops:
 | `folder.restore` | Undo a folder trash, with its posts. Addressed `id:` |
 | `post.upsert` | Declare a post's whole state at that address. Keys the post type does not declare are **refused**; use `post.move` to change the address. `expect` makes the write conditional on the digest you read |
 | `post.move` | Change a post's URL, its folder, or both, keeping its id and history. A published post's live URL changes immediately |
-| `post.publish` | Publish the draft, or schedule it with an ISO-8601 `when`. Needs a credential with `mayPublish` |
-| `post.unpublish` | Withdraw the published row; the draft stays |
+| `post.publish` | Publish the draft, or schedule it with an ISO-8601 `when`; `cancel: true` calls off a pending one. Needs a credential with `mayPublish` |
+| `post.unpublish` | Withdraw the published row; the draft stays. Takes `when` and `cancel` the same way, so a takedown can be dated and a live page stays up until then |
 | `post.delete` | Trash a post. Needs `confirm` |
 | `post.restore` | Undo a trash. Addressed `id:`, from `find?trash=true` |
 | `render.provision` | Create the `PageLayout`/`Region`/`Theme` post types this instance renders with, idempotently. **Takes no address**: it acts on the instance's model. `data.reconcile: true` also adds fields an older instance is missing; `data.types` installs vocabulary types by name |
@@ -277,11 +321,27 @@ GET /api/v2/agent/verify?site=mysite&checks=content,routes
 GET /api/v2/agent/render?address=post:mysite/blog/hello-world
 ```
 
-`verify` returns a machine-readable report with a **fix per finding**. Four check
+`verify` returns a machine-readable report with a **fix per finding**. Five check
 groups: `content` (fields, references, assets, friendly URLs are internally consistent),
 `routes` (every published URL resolves and links land), `diagnostics` (the asynchronous
-failures above), and `delivery`, which *fetches* the published pages to prove they are
-really served, and is therefore opt-in by an operator setting, not by a caller. Scope a
+failures above), `a11y`, and `delivery`, which *fetches* the published pages to prove they
+are really served, and is therefore opt-in by an operator setting, not by a caller.
+
+- **`a11y`** reads the rendered pages the way someone who is not looking at them receives
+  them: `heading-skip`, `lang-missing`, `link-no-text`, `landmark-missing` and
+  `form-label-missing`. It renders, so it is its own group, asked for by name.
+- **`routes`** also reports `url-orphaned`, an error: an address that was a page here, no
+  longer answers, and is still linked from a published page. Its fix is the `post.redirect`
+  op that keeps the old address answering (see
+  [Keeping an old address answering](./content-lifecycle.md#keeping-an-old-address-answering)).
+  With search indexing on, `index-unroutable` warns about a site whose published content is
+  routed to no search index, so every push it would make is never made.
+
+Whether a page is findable has its own read: `include=index` on `/agent/read` says whether
+indexing is on, which search site the page belongs in, whether it is indexed, and the last
+indexing failure recorded against it. `GET /api/v2/agent/index` (`shio://index`, and a card
+in the console) is the whole routing table: every site, the search site it feeds, and how
+many published pages it has. Scope a
 run with `site`, `folder`, `address`, `checks`, `limit` or `since=<cursor>` so a loop
 re-checks only what changed. `render` returns a page's structural digest, 
 heading outline, landmarks, link and image inventory with alt text, word count, plus an
@@ -332,6 +392,58 @@ all.
 `regions` lists every region the page declares, including empty ones, because an empty
 region is where content *can* go.
 
+### Which console screen is which call
+
+The console's own navigation is built from a declaration you can read, so "is there an
+agent way to do what that screen does" is a command rather than a question for whoever
+wrote the screen:
+
+```
+shio surfaces
+```
+
+```
+shio surfaces: 17
+content:
+  sites                /bento/content
+    browse a site's folders and posts
+    → tool shio_find
+administration:
+  admin                /bento/admin
+    the administration hub
+    ✗ navigation: a landing page listing the surfaces below it, which is a way of getting
+      somewhere rather than a capability
+```
+
+Every screen is either answered — by a `tool`, an `endpoint` or an `op` — or carries a
+reason it is not, from a closed vocabulary: `navigation`, `operator-only`, `rest-only`,
+`chrome`, `accessibility`, `cache`, `preference`, `contract-leg`, and `gap` for the ones
+that are simply missing. A screen with neither fails the build, so the list cannot quietly
+fall behind the rail, and an invented reason fails it too. The same declaration is
+`include=surfaces` on the manifest and `shio://surfaces` over MCP.
+
+### Handing a page to a person
+
+A read can carry the two links a handoff needs, and does so only when asked, because they
+cost about 26 tokens a row:
+
+```http
+GET /api/v2/agent/read?address=post:mysite/blog/hello-world&include=links
+```
+
+```json
+{
+  "address": "post:mysite/blog/hello-world",
+  "curatorUrl": "http://localhost:2710/bento/content/post/4f1c…",
+  "previewUrl": "http://localhost:2710/mysite/blog/hello-world"
+}
+```
+
+`shio_read` takes `links`, a batch takes `links: true` for the whole run, and a publish
+answers with `curatorUrl` on each change. The URLs are built from the same declaration the
+rail is, so a console route that moves moves here too rather than in a string somebody
+wrote down once.
+
 ---
 
 ## Errors are instructions
@@ -352,6 +464,11 @@ Every 4xx is an RFC 9457 problem document, and it carries what to do next:
 
 `fix`, `allowed`, `didYouMean` and `example` are not decoration: they are what lets an
 agent recover on the next call instead of asking a curator what the API wanted.
+
+**A field an op does not have is refused, not ignored.** An op in `POST /agent/batch` that
+carries a key the op does not take (a misspelled `cancel`, say) is refused with
+`undeclared-op-field`, the op's index and the nearest valid name. Before, the unknown key was
+dropped and the op ran without it, so a misspelled cancel published now.
 
 **This is not only the agent surface.** Two kinds of refusal used to answer with nothing
 useful, and both are ones a caller meets *before* any other:

@@ -1,7 +1,7 @@
 ---
 title: The content console
 sidebar_label: The content console
-description: "The surface a curator is in every day in Viglet Shio: the content browser, the post form, copy and move, selecting more than one thing, and the trash."
+description: "The surface a curator is in every day in Viglet Shio: the assistant dock, the content browser and its filters, the post form, copy and move, selecting more than one thing, and the trash."
 ---
 
 # The content console
@@ -36,6 +36,63 @@ fastest route to a named screen is not a menu:
 
 ---
 
+## The assistant dock
+
+In the bottom-right corner is the **assistant dock**: the Viglet mascot and, beside it, a
+one-line caption. It is where the console tells you how things ended. You do not have to go
+looking for the outcome on another screen.
+
+- **Your own saves and actions.** A save, a publish or a delete moves the mascot and writes
+  the result as the caption. The caption is announced to screen readers once, and the mascot
+  itself is decorative.
+- **A refused save.** When the server refuses something, the dock keeps a report with the
+  server's own explanation and what to do about it. If the refusal is about one field, the
+  report offers **Go to \<field\>**. If the server suggests a correction, it also offers
+  **Use "\<suggestion\>"**, which puts that value into the field for you. Nothing is saved
+  until you save.
+- **Agent runs.** When an agent starts writing, the mascot shows it working, with the agent's
+  name and the site in the caption. When the run goes quiet, the dock reports what it did:
+  changes waiting for your review, or a summary when there were none. Two buttons follow:
+  **Open in review**, for that run, and **See the activity**. If runs were already waiting
+  for review when you signed in, the dock says so once.
+- **Scheduled publishing.** A scheduled publish that fails becomes an error report with the
+  reason, **Open the page** and **Retry now**. One that works names the page and when it went
+  live. A failure that happened while you had no console open is reported the next time you
+  open one, so a launch that did not happen is not left for a visitor to discover.
+- **Form submissions.** A submission from one of your site's forms arrives as a report
+  captioned with its title and summary, with **Open the submission** and **Move to trash**.
+  Several that arrive together are one report, which opens the newest; nothing in the corner
+  discards a whole batch in one click.
+
+Click the mascot to open the dock and read its reports. Each one can be dismissed, and the
+count on the collapsed dock is what you have not read yet.
+
+### Choosing what the dock reports
+
+The bell icon in the header opens **What the dock reports**, with one switch per kind: your
+own saves, agent runs, scheduled publishing, and form submissions. Turn off what you do not
+need. The choice is kept on your account, so it follows you to another browser.
+
+Failures are not a switch. A report about something that went wrong always reaches the dock,
+whatever you turned off. Nothing here hides a record either: the Activity trail keeps every
+event.
+
+### Asking the connected agent
+
+Viglet Shio does not run a model of its own. When an agent is connected to your instance (a
+run has started in the last few hours) and you are on a page or a folder, the dock opens into
+a chat. What you type there reaches that agent as a request about the page you are on, and
+its answer appears in the dock. While you wait the dock shows it is waiting, and an answer
+that arrives while the dock is closed counts as unread. With no agent connected, or no page
+open, the dock stays a status light.
+
+When the agent answers by changing the page, for example by drafting a new hero, the answer
+comes with **Open the change**, which opens that run in the review queue, and **Approve and
+publish**. Approving here is the same approval as in the review queue, with the same
+permissions. To reject a change, open it in the review queue, where you can say why.
+
+---
+
 ## The content browser
 
 A site is a tree of **folders** holding **posts**. The browser walks it the way a file
@@ -52,6 +109,24 @@ browser does: click a folder to go in, use the path to come back out.
 
 Each row shows the item's name, when it changed, its type, and — on hover — the
 actions for that one item: view, edit, clone, copy, move, delete.
+
+### Filtering the list
+
+Above the list is the **filter bar**. Type in its search field to narrow the folder to items
+whose text matches, or press <kbd>/</kbd> anywhere on the page to jump to it. Beside it:
+
+- **Content type** and **State** (draft or published), as menus of what this instance has.
+- **Language**, shown only when the folder holds more than one.
+- **Changed**, a date range.
+
+Each active filter shows as a chip under the bar; remove the chip to remove the filter.
+**More filters** holds the rest: who created or last changed an item, and whether to include
+the folders below this one.
+
+Every filter is part of the page's address, so a filtered view is a link you can send.
+Whoever opens it, or reloads the page, sees the same rows. The filters are the ones the
+agent and the CLI use (`shio find` takes the same words), so the link is also the request
+an agent would make.
 
 ### The listing is paged, and folders are not
 
@@ -78,6 +153,32 @@ JSON; you are filling in the fields somebody modelled, in the order they modelle
   carries the post's title, its type, its field count, and whether you have permission to
   publish it.
 - **Save** keeps you on the form. **Save & Close** returns you to the folder.
+
+Every field in the form has a name a screen reader announces, says what it requires, and can
+be reached from the keyboard. Clicking a field's label puts the cursor in it.
+
+### Asking the agent for a value
+
+When an agent is connected, text fields in the post form (titles, summaries, body text) show
+**Ask the agent**. It opens a short prompt, filled in from the field's name and yours to
+edit, and sends it to the agent as a request about that field. The agent reads the field, what
+it accepts and the page, and answers in the [assistant dock](#the-assistant-dock) with a
+value. **Apply to \<field\>** puts the value into the form as an unsaved edit. You see it in
+the field, the page counts as changed, and nothing is stored until you save, exactly as if you
+had typed it.
+
+### When a save is refused
+
+A refused save says **why**, in the server's own words, with what to do about it: the reason,
+then the fix, the name you probably meant, or the values that are allowed. Where the refusal is
+about one field — a URL another live post already uses, say — that field is marked in red with
+the message under it, and the mark clears on your next save. The same refusal an agent receives
+over the API is what a curator reads here.
+
+On the post form the refusal is kept in the [assistant dock](#the-assistant-dock) rather than
+shown as a message that disappears, so it waits until you have read it. From there, **Go to
+\<field\>** takes you to the field it is about, and **Use "\<suggestion\>"** puts in the
+correction the server proposed.
 
 Saving writes a **draft**. Publishing is a separate act with its own permission — see
 [Letting an agent in](./agent-safety.md) for the full draft-and-publish model.
@@ -201,6 +302,11 @@ in the confirmation dialog is always the number that will actually be acted on.
 
 **Action in batch** is enabled only while something is selected, and applies the action to
 the selection.
+
+A batch delete reports **what was deleted**, not what was selected. If the server refuses some
+items, the message gives the count that went and lists the refusals with their reasons, and the
+refused rows **stay selected** so you can deal with them and try again. The list stays on the
+page you were on rather than jumping back to the top.
 
 ---
 

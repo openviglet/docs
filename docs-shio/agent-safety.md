@@ -106,7 +106,7 @@ queue** at `/bento/admin/review` turns that into the curator's view:
 
 | Action | Effect |
 |---|---|
-| Read a session | Every entry the run produced, in order, with what changed |
+| Read a session | Every entry the run produced, in order; **Diff** opens what changed under the entry itself, including a page the run created |
 | **Approve** | Publish the run's drafts |
 | **Revert** | Undo it, entry by entry, restoring an earlier version or pulling something back out of the trash |
 
@@ -115,6 +115,12 @@ session**, not a separate proposal table: the draft row *is* the proposal, which
 there is nothing to sync and nothing to expire. And it is **console-authenticated and
 deliberately not on the agent namespace**: the curator's veto is not something the agent
 can reach.
+
+Each entry that still exists can show its change inline, compared the way the version
+dialog compares, so a long run is read top to bottom without opening a window per page. A page
+the run created has no earlier version, so it shows as new, with a summary of what it renders
+and a preview link. Once an entry is approved there is no draft left to compare, so the entry
+lists the fields the change touched instead.
 
 Reverting reports what it **cannot** honestly undo rather than guessing. If an entry
 names a deleted folder, reverting it restores the whole section, which is what a person

@@ -1,6 +1,6 @@
 ---
 title: Security
-description: "Authentication in Viglet Shio: sessions for the console, API-key scopes for everything else, what an AGENT key may not do, CSRF on cookie callers only, and CORS."
+description: "Authentication in Viglet Shio: sessions for the console, API-key scopes for everything else, what an AGENT key may not do, CSRF on cookie callers only, CORS, and how uploaded files and rich text are kept from running as script."
 ---
 
 # Security
@@ -138,6 +138,76 @@ shio.allowedOrigins=localhost
 Set it to the origins your front end and your console are actually served from. A delivery
 API called from a browser needs the browser's origin listed here; a server-side front end
 (the usual case for Next.js) does not, because the request never leaves your infrastructure.
+
+---
+
+## Uploaded files and rich text
+
+Content is written by curators, by agents and by whatever a curator pastes, so Shio treats two
+kinds of content as potentially hostile: the **files** that get uploaded, and the **HTML** in a
+rich-text field.
+
+### Uploaded files are served as files
+
+Every response carrying uploaded bytes — `/file_source/**`, the static-file API and a site's
+assets — sends three headers:
+
+| Header | What it does |
+|---|---|
+| `X-Content-Type-Options: nosniff` | A browser may not treat the bytes as a type the server did not declare |
+| `Content-Disposition` | `inline` only for raster images (PNG, JPEG, GIF, WebP, AVIF, BMP, ICO). Everything else, **SVG included**, is an `attachment` |
+| `Content-Security-Policy: default-src 'none'; sandbox` | An asset opened directly runs nothing, in an origin of its own |
+
+An uploaded SVG or HTML file therefore downloads instead of running as a page on the console's
+own origin. **A delivered site is unaffected**: a browser honours the disposition when you
+navigate to a file and ignores it for an `<img>`, a stylesheet or a script, so pages load
+exactly as before.
+
+The download name is the file's own name, quoted so that nothing in it can break the header: a
+quote or a control character is escaped or dropped, and a name outside ASCII (`relatório.pdf`)
+downloads as itself.
+
+### What may be uploaded
+
+An upload meets a policy before it is stored:
+
+```properties
+shio.upload.policy.text/html=deny
+shio.upload.policy.image/svg+xml=sanitize
+shio.upload.default-verdict=allow
+```
+
+Each media type takes `allow`, `deny` or `sanitize`; an exact type beats a `family/*` entry,
+which beats the default. Out of the box:
+
+- **HTML, XHTML and JavaScript are denied.** The refusal is a 400 that names the property that
+  re-allows the type. `shio clone --scripts` uploads a site's own JavaScript on purpose, so set
+  `shio.upload.policy.text/javascript=allow` on an instance you replicate that way.
+- **SVG is sanitized, not refused**, because a site's logo is very often one. Scripts, event
+  handlers, `foreignObject` and external links are removed and everything else is kept; the
+  stored file carries `SANITIZED: true`.
+- The verdict is taken on the file name as well as the declared type, and the stricter wins.
+
+An agent can see files stored before the policy existed: `shio_assets` flags them `unsafe`, and
+`shio verify` reports `asset-unsafe-type` for a denied type in a content tree before a push
+meets the refusal.
+
+### Rich text is cleaned when it is saved
+
+A field using the **HTML Editor** widget is cleaned against an allow-list on every save —
+from the console, the REST API, an agent's batch or the Universal Editor. Scripts, event
+handlers and `javascript:`/`data:` URLs are removed; ordinary formatting, links, relative URLs,
+images and HTML5 sections (`header`, `main`, `section`, `footer`) stay, and clean markup is
+stored exactly as written.
+
+**Layout templates are not touched.** `PageLayout` and `Region` use the **Ace Editor - HTML**
+widget, where writing markup — scripts included — is the point.
+
+Two ways to find out before a visitor does:
+
+- An agent's `dryRun` names what a write would strip, per field.
+- `shio verify` reports `html-unsafe` on published rich text that was stored before the cleaning
+  existed. Saving the post again cleans it.
 
 ---
 

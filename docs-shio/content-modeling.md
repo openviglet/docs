@@ -231,6 +231,29 @@ A post also carries a **locale**, and a translation is a linked sibling post rat
 field on this one — which decides your URL structure, so read
 [Content in several languages](./content-i18n.md) before writing the second language.
 
+### Required fields are checked when you publish, not when you save
+
+A draft may be incomplete — that is what a draft is for, and a page you have half written
+saves like any other. **Publishing refuses** while a field the post type declares required
+is empty, from every writer: the console's Publish, the REST call, the agent's
+`post.publish`, a scheduled transition, approving a run in the review queue, a `PATCH` that
+publishes, and the delivery API's publish alike. Every one of those paths runs the same
+checks, so there is no door around them. The refusal names the fields, and in the
+console it marks the input you have to fill.
+
+You find out before you press it. The publish preview and the agent's dry run both say
+which fields would stop the publish, beside anything a publish gate would stop it for.
+
+One way past it, and it is the same door a gate has: a curator can **waive** the check with
+a reason, which is recorded on the page's history and on the version that goes live. An
+agent cannot — waiving is a person's decision, and this is one of the things that stays
+that way.
+
+:::note A container field is never "empty"
+A Tab holds no value, and a Relator's rows live in the rows rather than on the post, so
+neither refuses a publish even when the type marks it required.
+:::
+
 ---
 
 ## Search fields

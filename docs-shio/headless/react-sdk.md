@@ -52,8 +52,8 @@ on unmount or dependency change.
 | `useShioSite(siteId)` | `ShioSite \| null` |
 | `useShioChildren(folderId, { page, size })` | `ShioListing \| null` |
 | `useShioBreadcrumb(objectId)` | `ShioPath \| null` |
-| `useShioPost(postId)` | `ShioPost \| null` |
-| `useShioPostByUrl(siteId, url)` | `ShioPost \| null` |
+| `useShioPost(postId, state?)` | `ShioPost \| null` |
+| `useShioPostByUrl(siteId, url, { locale, state })` | `ShioPost \| null` |
 | `useShioQuery({ siteId, folderId, postType, page, size })` | `ShioListing` |
 
 ```tsx
@@ -69,6 +69,9 @@ function Page({ siteId, url }) {
   return <h1>{post.title}</h1>;
 }
 ```
+
+`useShioQuery` and `useShioChildren` refetch when their `locale` or `state` changes, so a
+language switcher or a preview toggle re-reads without remounting.
 
 ## Render components
 

@@ -131,6 +131,11 @@ POST  /api/v2/cda/post/{id}/publish    # publish it
 annotate, so the editor's panel can offer every field the post type declares, including
 the ones no template exposed.
 
+The editor has its own [assistant dock](./content-console.md#the-assistant-dock), at the foot
+of the properties panel so it never covers the page you are editing. While a save is in
+flight it shows the save working. When it lands it names the fields that were saved, and a
+refused save shows the server's explanation there.
+
 Writes need a token of **write** scope, and the console uses a credential-less request for
 them: the token authenticates, not your session cookie.
 

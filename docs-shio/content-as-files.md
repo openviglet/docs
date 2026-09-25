@@ -150,6 +150,28 @@ equal hashes with unequal lengths cannot be the same value. When that happens th
 is different from an ordinary conflict: the base cannot describe the value it indexes, so
 the base is what has to be rebuilt.
 
+### What is projected but never merged
+
+Not everything `shio pull` writes takes part in that merge, and the difference matters:
+an artefact outside the base has no conflict to report, so whoever is authoritative wins
+silently. Each one names that side.
+
+| File | In the base | Who wins |
+|---|---|---|
+| A post's `.md`, and its sidecars | per field | neither: a field both sides changed is a conflict |
+| `shio/assets/**` bytes | whole | neither: half an image is not a merge |
+| A folder marker | no | the server: that a folder exists is the server's fact |
+| `.memory.yaml` (site notes) | per key | neither: neither copy is written |
+| `.memory.yaml` (instance notes) | no | the server; push back only with `--adopt-memory` |
+| `.notes.yaml` (open notes) | no | the server, always: never parsed, never pushed |
+
+The last row is the sharpest case, and the reason the rule is written rather than assumed.
+An open note is the instance's record of what somebody asked for, and it is the one
+projected file a curator edits in the console *while* your tree holds a copy — so the tree
+reads it and never writes it. A site with nothing open **loses** the file rather than
+keeping an empty one, because a stale file listing a closed request reads exactly like a
+clean site.
+
 ### Pushing back
 
 `shio push --content` compiles the tree into **one desired-state document per site** and

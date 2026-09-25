@@ -92,13 +92,13 @@ their own.
 |---|---|
 | `shio_context` | The one call that replaces a session: content model, sitemap by path, conventions. `format=agents-md` returns the same pack as project instructions, to write to a file |
 | `shio_find` | Find posts by site / type / folder / text, addresses and titles, never bodies |
-| `shio_read` | Read posts by address, optionally projected to named fields |
+| `shio_read` | Read posts by address, optionally projected to named fields. `digest` adds each post's state digest, the value `shio_write`'s `expect` takes |
 | `shio_write` | A batch of addressed ops, applied atomically; `dryRun` reports without writing |
 | `shio_apply` | Make a desired-state document true |
-| `shio_publish` | Publish or unpublish, or schedule it |
+| `shio_publish` | Publish or unpublish, now or at `when`; `cancel` calls off what is pending |
 | `shio_verify` | Lint content and routes; a fix per finding |
 | `shio_digest` | A page's structural digest: the cheap proof a render still looks right. `include=editable` also lists the fields a curator could edit |
-| `shio_changes` | What changed since a cursor: what the curator did while you were away |
+| `shio_changes` | What changed since a cursor: what the curator did while you were away. `address` narrows it to one page |
 | `shio_remember` | Write the conventions the next session should inherit — and drop one, with `forget` |
 | `shio_assets` | The files a site holds |
 | `shio_marketplace` | The packages this instance could install. Lists and describes; it does not install — see [Blueprints § Who may install](./blueprints.md#who-may-install) |
@@ -142,6 +142,17 @@ write it to was the one that could not ask for it.
 and `folder` only when the op creates a post. `dryRun: true` reports what would change
 and writes nothing, and is how you obtain the `confirm` token a delete needs.
 
+Four more fields on an op, each optional:
+
+| Field | What it does |
+|---|---|
+| `locale` | The locale a created post is in. On create only: an upsert that finds the post ignores it |
+| `translationOf` | The address of the post a created one translates. On create only |
+| `url` | The friendly URL exactly as the source spells it, trailing slash included. On create only |
+| `expect` | A digest from `shio_read` with `digest: true`. The op is refused if the post changed since that read, instead of overwriting whatever changed it |
+
+`when` on `post.publish` schedules the publish instead of doing it now.
+
 ### When the arguments are wrong
 
 An error is not a refusal, it is instructions. The same problem document the REST surface
@@ -180,7 +191,7 @@ keeping open:
 
 ## Resources
 
-Six read-only resources, for a client that prefers attaching context to calling a tool:
+Read-only resources, for a client that prefers attaching context to calling a tool:
 
 | URI | Contents |
 |---|---|
@@ -190,6 +201,30 @@ Six read-only resources, for a client that prefers attaching context to calling 
 | `shio://schema/{postType}` | One post type's fields |
 | `shio://blueprints` | The blueprint catalogue |
 | `shio://blueprint/{name}` | One blueprint's full schema |
+| `shio://requests` | Questions curators sent from the console's dock, waiting for an answer |
+
+### Answering a curator's question
+
+A curator can ask the connected agent something from the console's
+[assistant dock](./content-console.md#the-assistant-dock), or from a field of the post form.
+Each question is a note of kind `request` on the page it is about, and `shio://requests` lists
+the open ones, newest first, one line each: the note id, the page, who asked, and the question.
+A line with `field=<name>` asks for a value for that field.
+
+Answer on the same thread with `shio_write`, then mark the request done:
+
+```json
+{"op": "note.add", "address": "id:<page>",
+ "data": {"kind": "reply", "parent": "<note>", "body": "Done: the intro is two sentences now."}}
+{"op": "note.resolve", "address": "id:<page>", "data": {"note": "<note>"}}
+```
+
+- **A field request wants the value itself.** Put only the value in `body`. The curator gets
+  an **Apply** button that writes it into the form as an unsaved edit.
+- **If your answer changes the page, make the change first and reply in the same session.**
+  The reply then names your run, and the curator can open the change or approve it from the
+  dock. The approval is still theirs: it goes through the same review queue your runs always
+  do.
 
 ---
 

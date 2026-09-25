@@ -37,7 +37,17 @@ shio verify --help          # or: shio help verify
 | `shio init [name]` | Scaffold a Next.js site wired to the delivery API. `--blueprint <name>` takes the starter from the instance instead; add `--site <site>` to apply its content in the same command |
 | `shio blueprints` | List the appliable starting points; `shio blueprints <name>` prints one package's parameters |
 | `shio marketplace <list\|show\|install\|uninstall>` | The package catalogue: what this instance could install, and installing it. `install` needs an administrator. See [Blueprints § Where more packages come from](./blueprints.md#where-more-packages-come-from) |
-| `shio import <file.zip>` | Clone an exchange package into this instance: how you accept a site somebody hands you |
+| `shio import <file.zip>` | Clone an exchange package into this instance: how you accept a site somebody hands you. It prints what arrived and a line for each thing it could not bring |
+| `shio export site:<name>` | Download a site as an exchange package (`--out <file.zip>`); the same file the console's **Download** saves |
+
+**Handing a site over.** An export carries the site, its folders, every post in both states,
+the post types those posts use, and the site's notes. It does not carry users, tokens,
+permissions, revisions, releases, schedules, or the bytes of uploaded files: a `File` post
+arrives pointing at bytes the other instance does not have. That makes it a hand-over, not a
+backup and not a way to promote between environments. On import, the report says how many
+sites, folders, posts and post types arrived, and names each problem: a post skipped because
+its folder was not in the package, a post type neither the package nor this instance defines,
+and the files an import never brings.
 
 ### Discover
 
@@ -84,7 +94,8 @@ See [Content as Files](./content-as-files.md) for the tree, the sidecars and the
 | `shio audit <page>` | What is wrong with a rendered page, as text with a selector each |
 | `shio snapshot <page>` | A PNG for a person, plus whether the page looks different |
 | `shio report` | The curator handoff: what changed, a preview link each, and the warnings as open questions, Markdown, for a PR body |
-| `shio diff --against published` | What a publish would change: which **fields** differ between each draft and the live row, per post. `--address` narrows it. **Exits non-zero when anything would change**, so a pipeline can gate on it |
+| `shio diff --against published` | What a publish would change: which **fields** differ between each draft and the live row, per post. `--address` narrows it. **Exits non-zero when anything would change**, so a pipeline can gate on it. It agrees with the console's version dialog on what counts as a change: an object whose keys only moved is not one |
+| `shio redirects` | The site's redirects (where each sends, 301 or 302) and, under them, the addresses it used to serve that no longer answer, each with the `post.redirect` that fixes it. **Exits `1` when there is one.** `--no-check` skips the second half. See [Keeping an old address answering](./content-lifecycle.md#keeping-an-old-address-answering) |
 
 Two things about `verify` that matter in a pipeline: the report's `notes` are printed,
 because a run that quietly covered less than you think reads exactly like a clean pass;
