@@ -171,6 +171,14 @@ JSON; you are filling in the fields somebody modelled, in the order they modelle
 Every field in the form has a name a screen reader announces, says what it requires, and can
 be reached from the keyboard. Clicking a field's label puts the cursor in it.
 
+### Leaving with unsaved work
+
+While the form holds changes you have not saved, the console asks before they are lost: closing
+the tab, reloading or leaving the site gets the browser's own question, and moving anywhere inside
+the console (the rail, the command palette, a link, Back, or **Cancel**) gets one from the console.
+Changing a filter or a view on a list is not leaving, so it never asks. The Universal Editor does
+the same, naming how many edits are pending.
+
 ### Asking the agent for a value
 
 When an agent is connected, text fields in the post form (titles, summaries, body text) show
