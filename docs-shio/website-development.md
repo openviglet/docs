@@ -340,19 +340,25 @@ document.getElementById("contact").addEventListener("submit", async (event) => {
 ```
 
 A submission becomes a **draft post**. It is visible to a curator in the console and
-invisible to visitors until somebody publishes it, so moderation is the review queue
-you already have — there is no separate submissions inbox, and a submission is an
-ordinary post for the trash, export, permissions and the agent API.
+invisible to visitors until somebody publishes it, and it is an ordinary post for the
+trash, export, permissions and the agent API. What arrived through a form is still
+told apart from what a curator wrote: the console's **Forms** page lists one site's
+submissions, with a **Move to trash** on each row for the ones dealt with, and the same
+question is the `submission=true` filter on every content listing — `/agent/find`,
+`shio_find`, `shio find` and the console search (`submission=false` leaves them out).
 
 ### Letting a site accept submissions
 
 Two things, and neither lives in the template — a folder chosen in a template is a
 folder anyone who can edit a template can choose:
 
-1. **Configure the site.** `POST /api/v2/site-form` with the site, the folder
-   submissions land in, the post types it invites (comma-separated), and `enabled`.
-   Creating the configuration does **not** turn it on; set `enabled` when you are ready.
-   The folder must already exist — a submission never creates one.
+1. **Configure the site**, on the Forms page's settings panel or with
+   `POST /api/v2/site-form`: the site, the folder submissions land in, the post types it
+   invites (comma-separated), the browser origins it accepts, and `enabled`. Creating the
+   configuration does **not** turn it on; set `enabled` when you are ready. The folder
+   must already exist — a submission never creates one — and `shio verify` reports
+   `form-destination-missing` for an enabled form whose folder is gone, which the
+   endpoint otherwise answers with an error only the visitor sees.
 2. **Issue a `FORM` API token** for that site and put it in the page. It is public by
    construction, and that is safe because of what the scope cannot do: it cannot read
    the delivery API, cannot publish, cannot touch another site, and cannot post

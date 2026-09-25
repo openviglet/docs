@@ -140,6 +140,14 @@ narrowing it to what is already translated would stop it ever gaining a second.
   `GET /api/v2/site/{id}/coverage` for one site, and the `missingLocale` filter on every content
   listing (`?missingLocale=pt-br` on `/agent/find`, `shio find`, and the console) for one
   language at a time.
+- **Asking the agent for it.** Shio runs no model, but while an agent is connected the board
+  can hand it the work. The robot button on a missing cell creates the translation's draft and
+  asks the agent to write it; on a stale one it asks for the translation to be brought up to
+  date. A row's button asks for that page in every language it is missing or behind in, and a
+  column's for every page on screen in that language. The translation workspace has the same
+  **Ask the agent**. Each request is a note on the draft, which already says which language to
+  write and which page it comes from; the cell reads **Requested** until the agent answers in
+  the dock, and nothing is published by asking.
 
 ---
 

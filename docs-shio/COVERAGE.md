@@ -71,7 +71,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block AX, the assistant dock**: the console reports how things ended in one corner instead of in toasts that leave — your own saves; a refused save with the server's explanation, a go-to-field action and the suggested correction (**SH966**); agent runs as they work and what they left for review, replacing the header count (**SH968**); scheduled publishing that failed or went live, including failures while no console was open (**SH969**, dock half); form submissions arriving, several at once as one report (**SH970**, dock half); a per-user choice of what the dock reports, where failures always arrive (**SH971**, kinds half); and the same dock inside the Universal Editor (**SH972**) | [content-console § The assistant dock](./content-console.md#the-assistant-dock), [universal-editor § What saving does](./universal-editor.md#what-saving-does) | ✅ (SH964) |
 | **Block AZ, comparing versions**: the version dialog compares any two versions, word by word inside a field with unchanged fields folded, from a server-side diff (`GET /api/v2/post-unified/{id}/diff`); a page never published shows as new with its rendered outline and a preview link; a version or a single field can be restored into the draft; the review queue shows each entry's change inline, created pages included (**SH988**) | [content-lifecycle § History: compare any two versions](./content-lifecycle.md#history-compare-any-two-versions), [agent-safety § Everything is attributed, and grouped into runs](./agent-safety.md#everything-is-attributed-and-grouped-into-runs) | ✅ (SH988) |
 | **Block BB/BC, the conversation with the agent**: the dock opens into a chat with the connected agent when one is active and a page is open, relayed as request notes the agent reads from `shio://requests` (**SH1006**); an answer that changed the page carries "open the change" and "approve and publish" (**SH1007**); a text field can ask the agent for a value and apply the answer as an unsaved edit (**SH1019**) | [content-console § Asking the connected agent](./content-console.md#asking-the-connected-agent), [content-console § Asking the agent for a value](./content-console.md#asking-the-agent-for-a-value), [mcp § Answering a curator's question](./mcp.md#answering-a-curators-question) | ✅ (SH1006) |
-| **Block BD, the filter bar**: the content browser's filters are a filter bar over the same words its address holds, with chips, a language facet only where there is more than one, and the search behind `/` (**SH1024**, the browser; search, trash and the review queue are still to come) | [content-console § Filtering the list](./content-console.md#filtering-the-list) | ✅ (SH1024) |
+| **Block BD, the filter bar and the views**: the content browser's filters are a filter bar over the same words its address holds, with chips, a language facet only where there is more than one, and the search behind `/`; search draws it with a site facet and runs on a filter alone, and the trash filters what it holds (**SH1024**; the review queue is still to come); and the list, grid and table views, the table sortable, virtualised and with an inline title edit guarded by the page's version (**SH1026**) | [content-console § Filtering the list](./content-console.md#filtering-the-list) · [§ Three ways to look at a folder](./content-console.md#three-ways-to-look-at-a-folder) | ✅ (SH1024, SH1026) |
 | **Addresses that move, and sites that travel**: a rename keeps its old address answering with `post.redirect`, offered ticked in the publish dialog and listed by `shio redirects`, with `verify`'s `url-orphaned` for the ones missed (**SH1064**); a move reports the published addresses it retired and created (**SH1078**); `shio export site:<name>` and what a package carries (**SH1065**); an import reports what arrived and what it could not bring (**SH1079**) | [content-lifecycle § Keeping an old address answering](./content-lifecycle.md#keeping-an-old-address-answering), [cli § Start something](./cli.md#start-something) | ✅ (SH1064) |
 | **Every door to publishing runs the same checks**: approving a run, a `PATCH` that publishes and the delivery API's publish evaluate the required fields and the publish gate like every other publish (**SH1084**); every field of the post form has a name, its requirements and keyboard reach (**SH1052**) | [content-modeling § Required fields are checked when you publish](./content-modeling.md#required-fields-are-checked-when-you-publish-not-when-you-save), [content-console § The post form](./content-console.md#the-post-form) | ✅ (SH1084) |
 
@@ -81,7 +81,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 |---|---|---|
 | **Block P**: the renderer, `Page` → `PageLayout` → `Region`, `Theme`, Handlebars templates and helpers, the section vocabulary, `data-shio-*`, `/preview/**` and the `/sites/**` delivery grammar | [website-development](./website-development.md) | ✅ (SH483) |
 | **Block P / Q**: the rest of the visible site, DTCG theme tokens, Site Scripts, the `{{#image}}` helper's intrinsic size + signed `srcset`, `Redirect` posts, `Menu`/`MenuItem`, `post.locale` + `{{#translations}}`, the paged/sorted `{{#query}}` | [design-tokens](./design-tokens.md) · [website-development § Themes and design tokens](./website-development.md#themes-and-design-tokens) · [§ Third-party scripts](./website-development.md#third-party-scripts) · [§ Redirects](./website-development.md#redirects) · [§ Menus and translations](./website-development.md#menus-and-translations) · [§ Paging a listing](./website-development.md#paging-a-listing) | ✅ (SH483, SH420) |
-| **Block P**: form submissions — `{{#form}}` rendering a post type's fields, the per-site destination (`POST /api/v2/site-form`: folder, invited types, `enabled`), the `FORM` token scope, `POST /api/v2/cda/form/{site}` writing one DRAFT post, the honeypot, and the system-type refusal | [website-development § Forms](./website-development.md#forms) | ✅ (SH633) |
+| **Block P**: form submissions — `{{#form}}` rendering a post type's fields, the per-site destination (`POST /api/v2/site-form`: folder, invited types, `enabled`), the `FORM` token scope, `POST /api/v2/cda/form/{site}` writing one DRAFT post, the honeypot, and the system-type refusal — and where the submissions are read: the console's Forms page with the site's form settings, `submission=true` on every content listing, and `verify`'s `form-destination-missing` (**SH1066**) | [website-development § Forms](./website-development.md#forms) · [content-console § Form submissions](./content-console.md#form-submissions) | ✅ (SH633, SH1066) |
 | **Block P**: `{{#query}}`'s pager — `@page`/`@pages`/`@total`/`@hasPrev`/`@hasNext`/`@index`/`@last`, drawing a pager once with `{{#if @last}}`, and a listing nested in a listing keeping its own position | [website-development § Paging a listing](./website-development.md#paging-a-listing) | ✅ (SH420) |
 | **Block P**: `verify`'s `dangling-relation`, and the `PageLayout` opt-out from `site-scripts-dropped` | [website-development § Proving it renders](./website-development.md#proving-it-renders) · [§ Third-party scripts](./website-development.md#third-party-scripts) | ✅ (SH421, SH572) |
 | **`shio audit`'s rules**: the eleven checks (`overflow`, `contrast`, `zero-size`, `collapsed`, `font-fallback`, `request-failed`, `console-error`, `no-landmark`, `no-heading`, the shape line, `region-script`) and what each means | [cli § What `shio audit` reports](./cli.md#what-shio-audit-reports) — a row per rule with what fires it and what to do, plus the two always-printed lines. `docs-vocabulary` reads `AUDIT_RULES` and fails when a rule this page does not name is added | ✅ (SH652) |
@@ -102,7 +102,7 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 | **Block C (SH12)**: outbound webhooks on publish/unpublish/delete, per-site subscriptions, the signed payload | [webhooks](./webhooks.md) — subscription, payload, HMAC verification, and the delivery guarantees (no ordering, no exactly-once, no DLQ) written down as answers rather than omissions | ✅ (SH626) |
 | **Block C (SH52 / SH240)**: content full-text search: the in-DB index, the CDA search endpoint, the console search box | [search-caching § Full-text search](./search-caching.md#full-text-search) | ✅ (SH494) |
 | **Block C (SH53)**: content i18n , the locale axis, linked translations, CDA `?locale`, the checked locale segment | [content-i18n](./content-i18n.md), with the URL half pointed at from [website-development § Public delivery](./website-development.md#public-delivery) and the modelling half from [content-modeling](./content-modeling.md) | ✅ (SH627) |
-| **Content i18n, the second language as a decision**: a site declares its languages, default and fallbacks, in the console, over REST and on `site.upsert` (**SH1056**), and the delivery API reports them (**SH1123**); the locale segment selects the translation and follows the fallbacks, and a declared site is addressed in its own language (**SH1057**), with `locale` on every CDA listing (**SH1127**) and on GraphQL (**SH1129**); a translation whose source moved is marked (**SH1058**); each browser row shows its language (**SH1059**); the Languages board and the coverage read show what is still to translate (**SH1060**, **SH1131**); and the side-by-side translation workspace with per-field review (**SH1061**) | [content-i18n § Declaring a site's languages](./content-i18n.md#declaring-a-sites-languages), [§ Working on a translation](./content-i18n.md#working-on-a-translation), [§ Reading a locale through the CDA](./content-i18n.md#reading-a-locale-through-the-cda), [§ The locale segment in delivery URLs](./content-i18n.md#the-locale-segment-in-delivery-urls) | ✅ (SH1056) |
+| **Content i18n, the second language as a decision**: a site declares its languages, default and fallbacks, in the console, over REST and on `site.upsert` (**SH1056**), and the delivery API reports them (**SH1123**); the locale segment selects the translation and follows the fallbacks, and a declared site is addressed in its own language (**SH1057**), with `locale` on every CDA listing (**SH1127**) and on GraphQL (**SH1129**); a translation whose source moved is marked (**SH1058**); each browser row shows its language (**SH1059**); the Languages board and the coverage read show what is still to translate (**SH1060**, **SH1131**); the side-by-side translation workspace with per-field review (**SH1061**); and the connected agent asked for a translation from a cell, a row, a column or the workspace, the cell reading *Requested* until it answers (**SH1062**) | [content-i18n § Declaring a site's languages](./content-i18n.md#declaring-a-sites-languages), [§ Working on a translation](./content-i18n.md#working-on-a-translation), [§ Reading a locale through the CDA](./content-i18n.md#reading-a-locale-through-the-cda), [§ The locale segment in delivery URLs](./content-i18n.md#the-locale-segment-in-delivery-urls) | ✅ (SH1056) |
 | **Block G**: content portability: the exchange package format (SH68), site export → zip, site import / clone, the default bootstrap-site template | [import-export](./import-export.md) (predates SH68's format and SH71's template) | 🧩 |
 
 ## Run it
@@ -136,6 +136,81 @@ _Not rendered in the sidebar; this is a maintenance artifact._
 The `AGENT` token scope, session identity and the Universal Editor's save-back
 auth (SH106, SH233) are the **Block L** row in *The agent builds it*, counted
 there, not twice.
+
+---
+
+## The manifest's feature keys
+
+The manifest's `features` map is the one list of capabilities the product publishes to every agent,
+so each key is a row here: what it says, and the page a reader finds it on. `docs-coverage`
+(SH1069) counts the keys this table does not spell and fails when a new one arrives without a row.
+The coverage column is the page's verdict and matches the cluster row above that owns the capability. It is not headed Status, so these rows are not counted as clusters by the summary below: a key is a capability, and its cluster is already a row.
+
+| Key | What it says | Page | Coverage |
+|---|---|---|---|
+| `multiTenant` | this instance serves more than one tenant | [multi-tenancy](./multi-tenancy.md) | ✅ |
+| `oidc` | sign-in goes through an OpenID Connect provider | [security](./security.md) | ✅ |
+| `webhooks` | publishes, unpublishes and deletes are sent to subscribers | [webhooks](./webhooks.md) | ✅ |
+| `scheduledPublish` | a publish or unpublish can be set for a time | [content-lifecycle](./content-lifecycle.md) | ✅ |
+| `previewTokens` | short-lived preview keys can be minted | [content-lifecycle](./content-lifecycle.md) | ✅ |
+| `rateLimit` | delivery keys are rate limited | [security](./security.md) | 🧩 |
+| `signedImageUrls` | image transform URLs must carry a signature | [search-caching § Image transforms](./search-caching.md#image-transforms-the-operators-half) | ✅ |
+| `searchIndexing` | publishing sends pages to a search index | [search-caching](./search-caching.md) | ✅ |
+| `marketplace` | the instance reads a remote package catalogue | [blueprints § Where more packages come from](./blueprints.md#where-more-packages-come-from) | ✅ |
+| `graphql` | delivery answers GraphQL | [graphql](./graphql.md) | ✅ |
+| `search` | content full-text search | [search-caching § Full-text search](./search-caching.md#full-text-search) | ✅ |
+| `locales` | content carries a language and linked translations | [content-i18n](./content-i18n.md) | ✅ |
+| `contentAcl` | folder and post permissions | [administration-guide § Permissions](./administration-guide.md#permissions) | 🧩 |
+| `trash` | deletes go to a trash they can be restored from | [content-console § The trash](./content-console.md#the-trash) | ✅ |
+| `exchange` | a site exports to a package and imports from one | [import-export](./import-export.md) | 🧩 |
+| `imageTransforms` | `?w=&h=&format=&crop=` on delivery | [website-development § Static files and images](./website-development.md#static-files-and-images) | ✅ |
+| `assetMetadata` | an asset's alt, caption and tags, and `asset.meta` | [content-console § The Media Library](./content-console.md#the-media-library) | ✅ |
+| `assetUsage` | where an asset is referenced | [content-console § The Media Library](./content-console.md#the-media-library) | ✅ |
+| `postTypesAsCode` | post types authored in TypeScript | [content-modeling § Authoring in TypeScript](./content-modeling.md#authoring-in-typescript) | ✅ |
+| `serverRender` | the instance renders pages itself | [website-development](./website-development.md) | ✅ |
+| `universalEditor` | a rendered page is editable in place | [universal-editor](./universal-editor.md) | ✅ |
+| `teachingErrors` | a refusal carries `fix`, `allowed`, `didYouMean` and `example` | [agent-surface § Errors are instructions](./agent-surface.md#errors-are-instructions) | ✅ |
+| `agentContext` | the context pack, one call instead of a session | [agent-surface § One call instead of a session](./agent-surface.md#one-call-instead-of-a-session) | ✅ |
+| `terseResponses` | `format=terse` | [token-economy](./token-economy.md) | ✅ |
+| `pathAddressing` | `post:`, `folder:` and `site:` addresses | [agent-surface](./agent-surface.md) | ✅ |
+| `batchWrites` | `POST /agent/batch` and its op vocabulary | [agent-surface § Writing](./agent-surface.md#writing) | ✅ |
+| `desiredState` | `/agent/plan` and `/agent/apply` | [agent-surface](./agent-surface.md) | ✅ |
+| `mcp` | the `POST /mcp` server and its `shio_*` tools | [mcp](./mcp.md) | ✅ |
+| `fieldProjection` | `fields=` on a read | [agent-surface § Reading](./agent-surface.md#reading) | ✅ |
+| `postMove` | `post.move` | [agent-surface § Writing](./agent-surface.md#writing) | ✅ |
+| `folderPrune` | removing what a folder no longer declares | [content-as-files](./content-as-files.md) | 🧩 |
+| `folderMove` | `folder.move` | [agent-surface § Writing](./agent-surface.md#writing) | ✅ |
+| `siteUpsert` | `site.upsert` | [agent-surface § Writing](./agent-surface.md#writing) | ✅ |
+| `siteDelete` | `site.delete` | [agent-surface § Writing](./agent-surface.md#writing) | ✅ |
+| `postTypeMerge` | an apply may add the fields an existing post type lacks | [blueprints](./blueprints.md) | 🧩 |
+| `contentLint` | `/agent/verify` | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-asking-anyone) | ✅ |
+| `routeCheck` | route and link proof | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-asking-anyone) | ✅ |
+| `renderDigest` | `/agent/render` | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-asking-anyone) | ✅ |
+| `diagnostics` | `/agent/diagnostics` | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-asking-anyone) | ✅ |
+| `usageMeter` | what the caller has spent | [mcp](./mcp.md) | 🧩 |
+| `durableIncidents` | the incident record survives a restart | [cli](./cli.md), the CLI half of Block K's row | 🧩 |
+| `changeCursor` | "everything since I last looked" on `/agent/changes` | [agent-surface § When you want to be told instead of asking](./agent-surface.md#when-you-want-to-be-told-instead-of-asking) | ✅ |
+| `renderFetch` | `?url=` may fetch a delivery URL | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-asking-anyone) | 🧩 |
+| `deliveryProof` | verify proves a route from the delivery side | [agent-surface § Closing the loop](./agent-surface.md#closing-the-loop-without-asking-anyone) | 🧩 |
+| `blueprints` | appliable starting points | [blueprints](./blueprints.md) | ✅ |
+| `instanceMemory` | `/agent/memory`, the conventions store | [token-economy](./token-economy.md) | ✅ |
+| `conditionalReads` | ETag on agent reads | [token-economy](./token-economy.md) | ✅ |
+| `agentsMd` | the `AGENTS.md` generator | [token-economy](./token-economy.md) · [mcp § The tools](./mcp.md#the-tools) | ✅ |
+| `manifestProjection` | the manifest asked for in pieces | [token-economy](./token-economy.md) | ✅ |
+| `contextCapabilities` | the pack reports what this caller can do | [agent-surface § One call instead of a session](./agent-surface.md#one-call-instead-of-a-session) | 🧩 |
+| `writeProof` | the proof a write returns | [token-economy](./token-economy.md) | ✅ |
+| `agentTokenScope` | the `AGENT` token scope | [agent-safety](./agent-safety.md) | ✅ |
+| `publishGate` | drafts by default, and the gates a site declares | [agent-safety](./agent-safety.md) | ✅ |
+| `confirmTokens` | a destructive op needs a confirm token | [agent-safety](./agent-safety.md) | ✅ |
+| `reviewQueue` | a curator reviews what a run changed | [agent-safety](./agent-safety.md) | ✅ |
+| `reviewVerdicts` | a credential reads the verdicts about its own work | [agent-safety](./agent-safety.md) | ✅ |
+| `visualSnapshot` | `shio snapshot`, CLI only, so `false` on the manifest | [cli](./cli.md) | 🧩 |
+| `appearanceDigest` | the class inventory and which classes a stylesheet styles | [agent-surface](./agent-surface.md) | 🧩 |
+| `pageAudit` | `shio audit`, CLI only, so `false` on the manifest | [cli § What `shio audit` reports](./cli.md#what-shio-audit-reports) | ✅ |
+| `siteCapture` | `shio clone`, CLI only, so `false` on the manifest | [replication](./replication.md) | ✅ |
+| `conversionProposal` | `shio propose`, CLI only, so `false` on the manifest | [replication § 2. Propose](./replication.md#2-propose) | ✅ |
+| `siteConversion` | `shio convert`, CLI only, so `false` on the manifest | [replication](./replication.md) | ✅ |
+| `contentAsFiles` | content projected to files and synced both ways | [content-as-files](./content-as-files.md) | ✅ |
 
 ---
 
@@ -173,7 +248,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 | **Block AU**, the design system's consumer contract — how this repository stays a well-behaved consumer of `@viglet/viglet-design-system`, none of which a curator or an agent driving an instance can see: **SH940** (the floor raised to 2026.3.10, the first release carrying the page-reference bins, their docs payload and the assistant exports — a bin is not in `exports`, so the reader checks the manifest and the files instead of resolving), **SH941** (the bento authoring contract, its boundary document and nine artboards vendored into `.claude/skills/viglet-ds-pages/` and `docs/design/`, where a session and a person both trip over them, rather than living in a repository nobody browses), **SH942** (drift in those thirteen surfaces fails `pnpm test` and names the file — broken on purpose, with each kind of drift planted in a throwaway root, and `canvas.json` compared as parsed JSON so reindenting it is not a build failure), **SH945** (the five surfaces this round invents drawn before their layout gets decided in review — revision history, the translation workspace, release bundles, the agent inbox and the asset browser — each stating what it decides, with the rejected direction kept as its own artboard), **SH949** (this repository enables the `shio@openviglet` marketplace it publishes, so a breakage in the four plugin skills arrives as a session here behaving oddly rather than as somebody else's report; the two skill sets are split by whether a session *drives an instance* or *changes this source tree*, and a shared name fails the build) | Contributor-facing. The contract is authored in the design system and vendored here; `agents.md`, `docs/agents/console-ui.md` and the vendored skill are its home, and the artboards open from the file tree |
 | **SH947, SH965**: the console's own test run enforces the design system's page rules, and requires every console write to report how it ended on both paths, with the gaps it found held as a named list | Instruments over the console's source; they change what a contributor may write, not what a curator or a caller can do |
 | **SH943, SH946, SH963, SH1088**: the console as a consumer of the design system: its register of entries, the shell that owns the reading column, the chrome switch removed, and the 2026.3.12 upgrade | How the console is built; a curator sees the same screens laid out once instead of per page |
-| **SH1067, SH1068, SH1070, SH1074, SH1075, SH1077, SH1085, SH1087**: the census classifying site conversion, the docs gate's vocabulary, a corrected Spring Boot version, the ARIA and console lints, the change stream's read cost, locale-independent casing, and the Activity page's delivery check | Instruments, measurements and corrections over the repository; none changes what a curator or a caller does |
+| **SH1067, SH1068, SH1070, SH1072, SH1074, SH1075, SH1077, SH1085, SH1087, SH1141**: the census classifying site conversion, the docs gate's vocabulary, a corrected Spring Boot version, the docs matrix brought up to the recent ships, the ARIA and console lints, the change stream's read cost, locale-independent casing, the Activity page's delivery check, and a benchmark counting authoring through the content files against the API | Instruments, measurements and corrections over the repository; none changes what a curator or a caller does |
 
 ---
 

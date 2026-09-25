@@ -128,6 +128,20 @@ Whoever opens it, or reloads the page, sees the same rows. The filters are the o
 agent and the CLI use (`shio find` takes the same words), so the link is also the request
 an agent would make.
 
+**Search** has the same bar, with a **Site** menu when there is more than one site, and a
+filter alone is a search: choosing *Draft* on a site with no text typed lists every draft
+there. **The trash** has it too, narrowing what is in the trash by name and by post type.
+
+### Three ways to look at a folder
+
+The buttons at the right of the toolbar switch the list between a **list**, a **grid** of
+cards, and a **table**. The choice is part of the address, like the filters. The table
+sorts by any column header, hides columns you do not need (remembered for you in this
+browser), and only draws the rows on screen, so a long folder stays quick. A post's title
+can be edited right in the table: the pencil opens it on the title as it is now, and if
+somebody else changed the page while you typed, the save is refused and asks you to reload
+rather than overwriting their change.
+
 ### The listing is paged, and folders are not
 
 Posts arrive **50 at a time**. Folders do not: a folder's children folders are all
@@ -309,6 +323,14 @@ refused rows **stay selected** so you can deal with them and try again. The list
 page you were on rather than jumping back to the top.
 
 ---
+
+## Form submissions
+
+**Forms**, in the rail, lists what arrived through one site's form, newest first, with a
+**Move to trash** on each row for the ones dealt with. Above the list is where that site's form
+sends things: the folder, the post types it invites, the browser origins it accepts, and the
+switch that turns it on. How a site renders a form and issues its token is in
+[website-development § Forms](./website-development.md#forms).
 
 ## The trash
 
