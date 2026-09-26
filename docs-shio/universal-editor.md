@@ -89,6 +89,31 @@ A type the layout names but this instance has not provisioned is shown, not offe
 that composes a type its layout does not accept still renders; `shio verify` reports it as
 `section-not-accepted` (see [Proving it renders](./website-development.md#proving-it-renders)).
 
+### Patterns: a block that works, placed again
+
+A **pattern** is a set of sections captured from a page into your project as
+`shio/patterns/<name>.json`. To offer one in the editor, push it to the instance (an
+administrator does this):
+
+```bash
+shio patterns save pricing-block --from post:Acme/pricing
+shio patterns push pricing-block
+shio patterns list --remote     # pushed, stale (edited since the push), or not pushed
+```
+
+The panel lists pushed patterns under **Patterns**. **Insert pattern** places all of its
+sections where **Below** would place one, as drafts, and writes the same page that
+`shio patterns apply` would. The file in your project stays the one you edit: the editor
+holds a copy and says when it was pushed. If a pattern has a `{{placeholder}}` with no default,
+the editor names it and you place it from the CLI with `--param`.
+
+### What a save tells you
+
+After a save, the assistant dock says what the save changed: the fields it wrote, and whether
+the page's **structure** and **appearance** changed. If you only edited text and the appearance
+changed anyway, the line asks you to look at the page, since that is usually a layout that
+reflowed without anyone meaning it to.
+
 ---
 
 ## On your own front end

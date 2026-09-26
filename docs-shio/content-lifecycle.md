@@ -72,6 +72,28 @@ shio.cda.preview.max-ttl-seconds=3600
 
 If preview is switched off, the button is quietly unavailable rather than failing.
 
+### Send a draft to someone without an account
+
+When Shio renders the site itself, **Preview Draft** can also give you a **share link**: a link a
+stakeholder with no login can open. The link is exchanged once for a cookie, so the credential
+leaves the address bar, and the page still carries the banner saying it is a draft.
+
+A share link opens **only the page it was made for**. A link to the pricing page shows the pricing
+page, with its images and styles, and answers *not found* for every other page of the site and for
+every other site. It expires like any preview link.
+
+A link you sent is a link you may want to stop before it expires. List the live ones, then revoke
+by id. The link is refused from the reader's next request:
+
+```bash
+shio share post:Acme/pricing        # prints a link to that one page
+shio share --list                   # the live links: id, page, expiry, who made it
+shio share --revoke <id>            # stop one
+```
+
+The same list and revoke are `GET /api/v2/preview-token` and `DELETE /api/v2/preview-token/{id}`.
+The list shows links on sites you can read, by id, and never the link itself.
+
 ---
 
 ## History: compare any two versions
