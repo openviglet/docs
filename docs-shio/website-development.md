@@ -497,6 +497,7 @@ slots it:
 | `missing-theme` | a layout names a `THEME` that is not there |
 | `duplicate-template-title` | two layouts or regions share a title, so a binding is ambiguous |
 | `dangling-reference` | a section or file reference that resolves to nothing |
+| `section-not-accepted` | a warning: a page composes a section of a type its layout's `sh-accepts` does not name. The finding lists the types the layout does accept; replace the section, or add its type to `sh-accepts`. A layout that declares nothing reports nothing |
 | `site-scripts-dropped` | a bound layout whose HTML never emits `site.scripts` — tick **Omits site scripts on purpose** on the layout if that is deliberate |
 | `dangling-relation` | a `{{#getRelation "/some/url"}}` naming an address the site has no post at, so the block silently renders its `{{else}}` on every page |
 | `redirect-target-missing` | a `Redirect` pointing at a page that is not there |

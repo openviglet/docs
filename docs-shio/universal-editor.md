@@ -67,6 +67,30 @@ Behind the scenes, a preview URL with `?editor=true` gets a small bridge script 
 
 ---
 
+## Composing a page from sections
+
+On a page built from sections, click a section, not one of its fields, to select it. A
+toolbar drawn over it moves it up or down, removes it, or duplicates it.
+
+- **Duplicate** places an independent copy right after the original: a new section post in
+  the same folder, with its own friendly URL. Editing the copy's heading leaves the original
+  alone.
+- **Add a section** from the panel. It offers the types the page's layout accepts in its
+  `sh-accepts` declaration, each drawn as a **thumbnail**: that type rendered through this
+  page's own layout and theme, with each field's label as placeholder text. The thumbnail is
+  HTML in a sandboxed frame, so it runs nothing and cannot restyle the console.
+- Press **Above** or **Below** to place it beside the selection, or **At end** when nothing
+  is selected. Or **drag a type onto the page**: a line marks the gap between the two sections
+  it will land between. Dragging needs a section selected, because the selection is what
+  tells the console where each section is on screen. A drop writes exactly what the matching
+  button would.
+
+A type the layout names but this instance has not provisioned is shown, not offered. A page
+that composes a type its layout does not accept still renders; `shio verify` reports it as
+`section-not-accepted` (see [Proving it renders](./website-development.md#proving-it-renders)).
+
+---
+
 ## On your own front end
 
 If your site is a Next.js app (or anything else) over the delivery API, add the published
