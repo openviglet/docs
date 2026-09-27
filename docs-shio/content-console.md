@@ -33,6 +33,10 @@ fastest route to a named screen is not a menu:
 - **Each page names itself** in a hero at the top, which carries the page's title and its
   way back. There is no breadcrumb bar across the console; the one place a path is worth
   showing continuously — the content browser — draws its own, below.
+- **From the keyboard**, the first <kbd>Tab</kbd> on any page reaches **Skip to content**,
+  which jumps past the rail and the header to the page itself. After you move to another
+  page, focus lands on that page's title, so a screen reader announces where you arrived.
+  A button that is working keeps its focus and is announced as busy until it finishes.
 
 ---
 
