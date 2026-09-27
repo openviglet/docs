@@ -171,6 +171,19 @@ JSON; you are filling in the fields somebody modelled, in the order they modelle
 Every field in the form has a name a screen reader announces, says what it requires, and can
 be reached from the keyboard. Clicking a field's label puts the cursor in it.
 
+### Previewing before you save
+
+The **Preview** card renders the page from the values in the form, including ones you have not
+saved, so you can see a change before you commit to it. Nothing in the preview is saved. It refreshes
+when you open the post, when you save, and when you press **Refresh**. Turn on **Live** to have it
+re-render after each pause in your typing. It is off by default, because each render composes the
+whole page on the server. Buttons above the frame show it at phone, tablet and desktop widths.
+
+Only a post type the site renders as a page can be previewed. That means one bound to a layout in the
+site's post-type layouts (`postTypeLayout`). A menu, a section or a theme is content that other pages
+use, so its preview card says the type has no page layout on this site and does not try to render.
+To preview such a type, bind a layout to it on the site.
+
 ### Leaving with unsaved work
 
 While the form holds changes you have not saved, the console asks before they are lost: closing
