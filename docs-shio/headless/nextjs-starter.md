@@ -47,6 +47,8 @@ my-site/
     page.tsx              # lists published posts (shio.query)
     [...slug]/page.tsx    # CDA path → post (shio.getPostByUrl) + SSG/ISR
   lib/shio.ts             # shared @viglet/shio-client instance
+  lib/redirects.ts        # the site's redirect table, matched and cached
+  middleware.ts           # answers a moved path with its 301 or 302
   next.config.mjs
   tsconfig.json
   .env.local              # filled from your answers/flags
@@ -92,6 +94,18 @@ export default async function Page({ params }) {
   return <article dangerouslySetInnerHTML={{ __html: String(post.attrs.content ?? "") }} />;
 }
 ```
+
+### Redirects
+
+Redirects you write in Viglet Shio, a `Redirect` post or the offer to keep an old address working
+when you rename a page, work on this site too. `middleware.ts` reads the site's
+[redirect table](./content-delivery-api.md#redirects-on-a-site-with-its-own-front-end) and answers a
+moved path with its `301` or `302` before any page is looked up.
+
+- The table is fetched once a minute, not on every request. A new redirect takes effect within a
+  minute of being published.
+- If Shio cannot be reached, the last table fetched keeps working.
+- A Shio instance too old to have the table answers `404`, and the site simply has no redirects.
 
 ## Environment
 
