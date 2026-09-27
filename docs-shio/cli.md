@@ -41,13 +41,13 @@ shio verify --help          # or: shio help verify
 | `shio export site:<name>` | Download a site as an exchange package (`--out <file.zip>`); the same file the console's **Download** saves |
 
 **Handing a site over.** An export carries the site, its folders, every post in both states,
-the post types those posts use, and the site's notes. It does not carry users, tokens,
-permissions, revisions, releases, schedules, or the bytes of uploaded files: a `File` post
-arrives pointing at bytes the other instance does not have. That makes it a hand-over, not a
-backup and not a way to promote between environments. On import, the report says how many
-sites, folders, posts and post types arrived, and names each problem: a post skipped because
-its folder was not in the package, a post type neither the package nor this instance defines,
-and the files an import never brings.
+the post types those posts use, the site's notes, and the bytes of its uploaded files, so its
+images and downloads work on the other instance. It does not carry users, tokens, permissions,
+revisions, releases or schedules. That makes it a hand-over, not a backup and not a way to
+promote between environments. On import, the report says how many sites, folders, posts, post
+types and files arrived, and names each problem: a post skipped because its folder was not in
+the package, a post type neither the package nor this instance defines, and a file the package
+lists without its bytes.
 
 ### Discover
 
