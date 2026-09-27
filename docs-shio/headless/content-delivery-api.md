@@ -68,6 +68,7 @@ All endpoints are under `/api/v2/cda`, return `application/json`, and are `GET` 
 |---|---|---|
 | GET | `/cda/site` | List published sites |
 | GET | `/cda/site/{siteId}` | One site (with root folder id) |
+| GET | `/cda/site/{siteId}/redirects` | The site's redirects, ordered by `from` |
 | GET | `/cda/object/{folderId}/list?page&size` | A folder's children (subfolders + posts) |
 | GET | `/cda/object/{id}/path` | Breadcrumb path for a folder or post |
 | GET | `/cda/post/{id}` | One published post (attributes expanded) |
@@ -85,6 +86,30 @@ The `by-url` endpoint powers catch-all routing (e.g. Next.js `[...slug]`):
 curl "https://cms.example.com/api/v2/cda/post/by-url?siteId=SITE_ID&url=/blog/hello-world" \
   -H "Key: <your-cda-token>"
 ```
+
+### Redirects on a site with its own front end
+
+A redirect you create in Viglet Shio (a `Redirect` post, or the offer to keep an old address
+working when you rename a page) is served by Shio's own `/sites/**` delivery. If your site is
+rendered by its own front end, such as Next.js, visitors never pass through that delivery, so
+the front end has to do the redirecting itself. This endpoint gives it the table:
+
+```bash
+curl "https://cms.example.com/api/v2/cda/site/SITE_ID/redirects" -H "Key: <your-cda-token>"
+```
+
+```json
+[
+  { "from": "/about", "to": "https://example.org/about", "permanent": false },
+  { "from": "/pricing", "to": "/plans", "permanent": true }
+]
+```
+
+- `from` is the path that moved and `to` is where it went: a path on the same site, or a full URL.
+- `permanent: true` means answer with a `301`; `false` means a `302`, which is the default.
+- A production token sees published redirects only. A preview token also sees drafts.
+- The table is small and changes rarely, so fetch it once and cache it rather than asking on every
+  request. Consult it before answering `404`.
 
 ---
 

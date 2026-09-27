@@ -40,6 +40,7 @@ console.log(post?.attrs.title);
 |---|---|---|
 | `getSites()` | `GET /site` | `ShioSite[]` |
 | `getSite(siteId)` | `GET /site/{id}` | `ShioSite \| null` |
+| `getRedirects(siteId)` | `GET /site/{id}/redirects` | `ShioRedirect[] \| null` |
 | `listChildren(folderId, { page, size })` | `GET /object/{id}/list` | `ShioListing \| null` |
 | `getPath(objectId)` | `GET /object/{id}/path` | `ShioPath \| null` |
 | `getPost(postId)` | `GET /post/{id}` | `ShioPost \| null` |
