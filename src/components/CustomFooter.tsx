@@ -56,7 +56,7 @@ const resources: FooterLink[] = [
 ];
 
 const company: FooterLink[] = [
-  { label: "Website", href: "https://viglet.org" },
+  { label: "Website", href: "https://www.viglet.org" },
   
   { label: "LinkedIn", href: "https://www.linkedin.com/company/viglet.com" },
 ];

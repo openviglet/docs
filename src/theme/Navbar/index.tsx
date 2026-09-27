@@ -179,7 +179,7 @@ function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         </div>
         <hr className="nav-mobile-hr" />
         <a
-          href="https://viglet.org"
+          href="https://www.viglet.org"
           target="_blank"
           rel="noopener noreferrer"
           className="nav-mobile-cta"
@@ -231,7 +231,7 @@ export default function Navbar(): JSX.Element {
             )}
             <ColorModeToggle value={colorMode} onChange={setColorMode} />
             <Button variant="default" size="sm" asChild>
-              <a href="https://viglet.org" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.viglet.org" target="_blank" rel="noopener noreferrer">
                 viglet.org
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="nav-external-icon">
                   <path d="M3.5 1.5H10.5V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

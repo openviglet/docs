@@ -6,7 +6,7 @@ description: Viglet Turing ES Installation Guide
 
 # Viglet Turing ES: Installation Guide
 
-Viglet Turing ES ([https://viglet.org/turing](https://viglet.org/turing)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
+Viglet Turing ES ([https://www.viglet.org/turing/](https://www.viglet.org/turing/)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
 
 ## Installing Java
 
@@ -203,7 +203,7 @@ ALTER USER turing SET SEARCH_PATH = turing;
 
 ## Turing Utils
 
-First you need install Turing Utils, that contains sample configurations and script to facilitate the use of Turing ES, so go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Integration > Utils" link to download it.
+First you need install Turing Utils, that contains sample configurations and script to facilitate the use of Turing ES, so go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Integration > Utils" link to download it.
 
 Extract the turing-utils.zip to `/appl/viglet/turing/utils`:
 
@@ -250,7 +250,7 @@ Besides `latest`, every run also publishes the project version (for example `202
 
 #### Option 2: JAR download
 
-Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Download Turing ES" button to download `viglet-turing.jar`.
+Go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Download Turing ES" button to download `viglet-turing.jar`.
 
 Copy the `viglet-turing.jar` to `/appl/viglet/turing/server`:
 

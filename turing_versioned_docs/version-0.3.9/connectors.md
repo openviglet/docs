@@ -20,7 +20,7 @@ Apache Nutch is a highly extensible and scalable open source web crawler softwar
 
 #### Nutch 1.18 and 1.20
 
-1. Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Integration > Apache Nutch 1.18 Plugin" or "Integration > Apache Nutch 1.20 Plugin" link to download it.
+1. Go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Integration > Apache Nutch 1.18 Plugin" or "Integration > Apache Nutch 1.20 Plugin" link to download it.
 
 2. Extract the plugin to `<APACHE_NUTCH>/plugins/indexer-viglet-turing`
 
@@ -69,7 +69,7 @@ JDBC Connector that uses the same concept as [sqoop](https://sqoop.apache.org/),
 
 ### Installation
 
-Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Integration > Database Connector" link to download the `turing-jdbc.jar`.
+Go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Integration > Database Connector" link to download the `turing-jdbc.jar`.
 
 ### Usage
 
@@ -116,7 +116,7 @@ FileSystem connector for indexing files with text extraction from Word, Excel, P
 
 ### Installation
 
-Go to [https://viglet.org/turing/download/](https://viglet.org/turing/download/) and click on "Integration > FileSystem Connector" link to download the `turing-filesystem.jar`.
+Go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Integration > FileSystem Connector" link to download the `turing-filesystem.jar`.
 
 ### Usage
 
