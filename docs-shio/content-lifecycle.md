@@ -248,6 +248,13 @@ ana)"*.
 every 60 seconds and applies whatever has come due, so nobody has to be at a keyboard at
 midnight — but do not schedule against a deadline finer than a minute.
 
+**A scheduled publish checks the site's publish gates when it fires, not when you schedule
+it.** If a gate stops the page at that moment, because the draft changed since or a gate was
+added, the page stays a draft and keeps its schedule. The change feed and the dock report which
+gate stopped it and why, with a button to try again. Fix what the gate names and the page goes
+live on the next sweep, or publish it now past the gate with a reason. A scheduled release is
+checked the same way for every page it holds, and it goes live whole or not at all.
+
 ---
 
 ## The audit trail
