@@ -188,6 +188,18 @@ Add `--annotate` to keep the source's bytes *and* get editable fields on the pag
 kept all of their markup — see [Fidelity with editable
 blocks](#fidelity-with-editable-blocks).
 
+#### The site remembers where it came from
+
+The capture, the proposal and the plan stay on the machine that ran them. What the instance
+keeps is a note: after a real conversion (not `--dry-run`, `--check` or `--out`), `convert`
+records in the site's memory, under the key `replication`, the source URL, the date, how many
+pages and sections were written, a short digest of the plan, and the `shio clone` command that
+runs the round again.
+
+A curator opening the site in the console sees it on the site's settings page, under **Where
+this site came from**. An agent reads it with `shio_memory`, or `shio memory --site mysite`. It
+travels with `shio export`, and a later conversion replaces it.
+
 #### The replica's navigation is the one the source stated
 
 An authorable page is redrawn with Shio's vocabulary, and the source's own `<nav>` is part
