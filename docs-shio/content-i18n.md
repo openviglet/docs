@@ -217,6 +217,21 @@ it, before deciding whether they want translations at all.
 The check is not cosmetic. Without it, `/sites/mysite/default/xx-yy/` answered the home
 page with a `200`, so a mistyped locale looked like a working page.
 
+**What the fallback hides, `shio verify` reports.** A site that declares a language and has
+published nothing in it answers every URL in that language with `200` and another language's
+page, because that is what the fallback is for. So `shio verify` warns about it:
+
+- `locale-declared-unwritten`: the site declares a language no published page is written in.
+  The message names the language a reader is actually served. Publish the translations, or
+  take the language out of the site's `locales.enabled` until they exist.
+- `locale-undeclared-content`: published content in a language the site does not declare. No
+  switcher links to it and no locale segment reaches it. Declare the language, or move the
+  content.
+
+Only published pages count, since those are what a reader is served. Layouts, regions, themes
+and files are not counted, because they are not written in a language. A site that has not
+declared a policy never gets either warning, because its languages are the ones its content is in.
+
 See [Pages, Layouts & Regions § Public delivery](./website-development.md#public-delivery).
 
 ---
