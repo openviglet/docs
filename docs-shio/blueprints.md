@@ -152,7 +152,11 @@ follow from that, and each is a refusal rather than a convention:
 - **The model is provisioned, never overwritten.** A post type that already exists is left
   exactly as it is (including a field a curator added) and the response **names the fields
   it lacks** so you can decide. `--merge-post-types` adds them; nothing silently replaces
-  your model.
+  your model. If the package's content needs one of those missing fields and you did not
+  pass the flag, the apply stops with `blueprint-needs-merge`, which lists each type and
+  the fields it lacks. This is common on a fresh instance, whose seeded `Page` has only a
+  title and content. Apply again with `--merge-post-types` (or `"mergePostTypes": true`
+  over REST).
 - **Substitution is `{{name}}` and nothing else.** No conditionals, no expressions: the
   same parameters always produce the same site. `site` is reserved and always available.
   An unknown parameter is a teaching error, never quietly dropped — **except inside a
