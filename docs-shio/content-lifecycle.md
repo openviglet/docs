@@ -229,6 +229,13 @@ The page and the schedule dialog both say which timezone their times are in, whi
 browser's. From a terminal, `shio schedule` lists the same (add a site name, or `--from` and
 `--to` with ISO-8601 instants for a range), in UTC.
 
+Switch the page from **List** to **Calendar** to see the same schedule as a month or a week.
+To reschedule, drag an entry onto another day. It keeps its time of day, and a post's other
+instant stays as it was. From the keyboard, move to the entry, press <kbd>Space</kbd> to pick
+it up, use the arrow keys to choose a day, and press <kbd>Enter</kbd> to drop it. Press
+<kbd>Enter</kbd> on an entry to open its post instead. A move is the same change as
+editing the post's schedule, so it is recorded with your name.
+
 An agent sets the same schedule with `shio_publish` and a `when`, and calls one off with
 `cancel`. From a terminal:
 
