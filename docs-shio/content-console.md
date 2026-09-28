@@ -81,6 +81,11 @@ Failures are not a switch. A report about something that went wrong always reach
 whatever you turned off. Nothing here hides a record either: the Activity trail keeps every
 event.
 
+The last switch, **Animate the mascot**, keeps the dock's mascot moving. Turn it off when
+you are presenting your screen or find the motion distracting. Only the motion stops: each
+report still appears in the dock, all at once instead of being typed out, and a screen
+reader still announces it. Like the other switches, the choice is kept on your account.
+
 ### Asking the connected agent
 
 Viglet Shio does not run a model of its own. When an agent is connected to your instance (a
