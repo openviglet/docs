@@ -23,16 +23,21 @@ so **Back** goes where you expect instead of bouncing forward again.
 ## Finding your way
 
 Down the left is the **navigation rail**, with **Home** and the two areas: **Content**
-and **Administration**. It carries the areas rather than every screen, because the
-fastest route to a named screen is not a menu:
+and **Administration**, each an icon with its name under it. Choosing an area opens its
+**hub**: every screen of that area as a tile, in small labelled groups (Content's
+*Library*, *Publishing* and *Content model*; Administration's *Access*, *Agent and audit*,
+*Integrations* and *This instance*), so the Trash, the Media Library or API Tokens are
+one click from the rail. The rail carries the areas rather than every screen, because
+the fastest route to a named screen is not a menu:
 
 - **The command palette** — <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere,
   or just <kbd>/</kbd> when you are not typing in a field. It lists every surface in the
   console and searches their descriptions as well as their names, so *restorable* finds
   the Trash and *credentials* finds API Tokens.
 - **Each page names itself** in a hero at the top, which carries the page's title and its
-  way back. There is no breadcrumb bar across the console; the one place a path is worth
-  showing continuously — the content browser — draws its own, below.
+  way back. A folder or a post shows its whole location there instead, as a **trail** of
+  links above the title (*Sites › VigR3 › Home*), and the title is the folder or the post
+  itself. There is no breadcrumb bar across the console.
 - **From the keyboard**, the first <kbd>Tab</kbd> on any page reaches **Skip to content**,
   which jumps past the rail and the header to the page itself. After you move to another
   page, focus lands on that page's title, so a screen reader announces where you arrived.
@@ -143,8 +148,11 @@ there. **The trash** has it too, narrowing what is in the trash by name and by p
 
 ### Three ways to look at a folder
 
-The buttons at the right of the toolbar switch the list between a **list**, a **grid** of
-cards, and a **table**. The choice is part of the address, like the filters. The table
+A folder opens as a **table**, and the buttons at the right of the toolbar switch it to a
+**list** or a **grid** of cards. The choice is part of the address, like the filters. On a
+wide screen, the folders around the one you are in sit beside the listing: its ancestors
+down to it, and its own sub-folders under it, each one a link. The table shows each item's
+type, state (*Draft* or *Published*), language and when it last changed, and it
 sorts by any column header, hides columns you do not need (remembered for you in this
 browser), and only draws the rows on screen, so a long folder stays quick. A post's title
 can be edited right in the table: the pencil opens it on the title as it is now, and if
@@ -167,9 +175,14 @@ distinction that decides what "select all" means, below.
 Opening a post gives you a form **generated from its post type**. You are not editing
 JSON; you are filling in the fields somebody modelled, in the order they modelled them.
 
-- Each field is a card, colour-coded by its widget (text, rich text, date, a reference
-  to another post, a repeating group, and so on). See
-  [Content Modeling](./content-modeling.md) for what each widget does.
+- The header is the post itself: its title, the trail of folders it sits in, and one
+  line saying its type, its language and whether you are editing the draft or the
+  published row. **Actions** holds every verb that commits or leaves; Preview and the
+  language menu sit beside it.
+- Each field is its label, its control and a help line. Which widget draws it (text,
+  rich text, date, a reference to another post, a repeating group, and so on) is shown
+  when you hover the label. See [Content Modeling](./content-modeling.md) for what each
+  widget does.
 - A field marked with `*` is required and the form will not save without it.
 - Fields can be grouped into **tabs** by whoever modelled the type.
 - The **save bar is sticky** at the top: it stays visible however long the form is, and
@@ -392,7 +405,8 @@ remove it.
   the deletion**, not one row per folder inside it, because the deletion is what you would
   undo.
 
-Each row offers two things:
+Each row offers two things, **Restore** as its button and **Purge** in the row's **⋯**
+menu:
 
 - **Restore** puts back exactly what *that* deletion removed. Something that was already
   in the trash before that delete stays in the trash — restoring a folder does not

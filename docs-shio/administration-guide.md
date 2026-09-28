@@ -17,15 +17,23 @@ The curator's half — the content browser, the post form, copy and move, the tr
 ## Finding your way around
 
 The **navigation rail** down the left carries **Home** and two areas — **Content** and
-**Administration** — rather than a list of every screen. To reach a named screen, use the
-**command palette**: <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere, or
+**Administration** — rather than a list of every screen. Each area opens its **hub**, which
+lists every screen of the area as a tile in small labelled groups; Administration's are
+*Access*, *Agent and audit*, *Integrations* and *This instance*, and `/bento/admin` lands
+there. To reach a named screen directly, use the **command palette**: <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere, or
 <kbd>/</kbd> when you are not typing in a field. It searches descriptions as well as
 titles, so *credentials* finds API Tokens.
 
 | Area | Screens |
 |---|---|
 | **Content** | Sites · Search · Post Types · Media Library · Trash · Universal Editor |
-| **Administration** | Administration (users, groups, roles) · API Tokens · Tenants · Authentication Providers · Exchange Providers · Email · Webhooks · Activity · Agent Review · GraphQL |
+| **Administration** | Users (users, groups, roles) · API Tokens · Tenants · Authentication Providers · Exchange Providers · Email · Webhooks · Activity · Agent Review · GraphQL |
+
+Every list of records here — users, groups, roles, tokens, providers, webhooks, tenants,
+and Content's sites — is a **table** you can sort by its column headers, with the create
+action at the top right. Every editor keeps **Save** in its header, and a bar with Save
+fades in once you scroll the header away; it tells you when a field has an **unsaved
+change**. Delete, and a tenant's Suspend, are in the header's **⋯** menu.
 
 **Tenants appears only on a multi-tenant instance.** `shio.multi-tenant` is off by
 default, and a single-tenant install is not offered a screen for managing tenants it
@@ -85,6 +93,10 @@ managed on the same Administration screen.
 A permission grant accepts a **user**, a **group** or a **role** as its subject, so which
 of the three you use is a question of how you want to maintain it, not of what it can
 express.
+
+A **group's page lists its members**. Add one by choosing a user who is not yet a member,
+and remove one from its row; each change is saved at once. Each member's name links to
+their user page.
 
 ---
 
@@ -223,12 +235,15 @@ surface — console, CLI, CDA, agent — is recorded here under the name of whoe
 each one changed. **Approve** publishes the drafts that run wrote; **revert** puts things
 back.
 
-**You are told when a run is waiting.** The console header shows a count next to your account
-menu whenever agent runs are pending; it links straight here, and it disappears when there is
-nothing to decide — an absent marker means an empty queue, not a zero you have to read. The
-count updates as you approve or revert, so it never disagrees with the page below it.
+**The queue opens on what is waiting.** *Waiting* lists the runs with changes still to
+decide, and *All runs* lists every run the agent made. When nothing is waiting the page
+says so and offers the full list, which is a different fact from a filter that matched
+nothing. The assistant dock at the foot of the rail tells you when an agent run finishes.
 
-If you do not see it, there is nothing waiting, or your account cannot open this screen.
+A run is named by the intent it declared; one that declared none shows its short id and
+*no intent declared*. Each row shows what the run created, updated, published or
+deleted. **Approve** and **Revert** on a row decide that run; tick several rows and the
+bar that appears decides all of them at once with **Approve and publish**.
 
 This is the moderation step for content that arrives from anywhere you did not type it
 yourself, including visitor form submissions, which land as drafts of a post type you
