@@ -347,6 +347,10 @@ Two consequences worth having in mind:
 - **"Invert" is about the screen.** Inverting a set that includes rows nobody has looked
   at is not a gesture anyone means, so it does not.
 
+The menu works the same in every view, the table included: what you choose from it is what
+the table's checkboxes show, and the table's own count and **Clear selection** act on that same
+selection.
+
 There is a ceiling of **1000 items**. Past it, the selection stops and tells you how many
 of how many it took, rather than pulling an unbounded folder into your browser. The number
 in the confirmation dialog is always the number that will actually be acted on.
