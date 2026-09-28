@@ -180,6 +180,12 @@ POST  /api/v2/cda/post/{id}/publish    # publish it
 annotate, so the editor's panel can offer every field the post type declares, including
 the ones no template exposed.
 
+The merge can be made conditional. `editable` answers an `ETag` for the post as it is now.
+Send it back as `If-Match` on the `PATCH`, and if someone else changed the post in between, the
+merge is refused with `412 Precondition Failed` and nothing is written. Every successful merge
+answers the post's new `ETag`, so a second change can be pinned to the first. Without
+`If-Match`, a merge is applied unconditionally, as before.
+
 The editor has its own [assistant dock](./content-console.md#the-assistant-dock), at the foot
 of the properties panel so it never covers the page you are editing. While a save is in
 flight it shows the save working. When it lands it names the fields that were saved, and a

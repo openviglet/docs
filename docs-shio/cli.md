@@ -25,6 +25,7 @@ shio verify --help          # or: shio help verify
 | `--url <baseUrl>` | `SHIO_URL` (default `http://localhost:2710`) | everything |
 | `--user` / `--password` | `SHIO_USER` / `SHIO_PASSWORD` | `pull`, `push`, `deploy` (console Basic auth) |
 | `--token <token>` | `SHIO_CDA_TOKEN` | `types`, `dev` (a delivery token) |
+| `--token <token>` | `SHIO_WRITE_TOKEN` | `post set` (a token of **write** scope) |
 
 ---
 
@@ -82,8 +83,23 @@ removes a system type.
 | `shio push --content` | Compile the tree into a desired-state document and apply it |
 | `shio apply [file]` | Plan/apply a desired-state document, `--dry-run`, `--check`, `-` for stdin. `--blueprint <name> --site <site>` applies a package instead; `--create-site` makes the site in either mode |
 | `shio dev --content` | Watch `shio/content/**` and sync both ways, logging events |
+| `shio post set <address> <field>=<value>…` | Change some fields of one post's draft and leave the rest as they are. `field:=json` sets a number, `true`, a list or an object; `--publish` publishes after the change |
 
 See [Content as Files](./content-as-files.md) for the tree, the sidecars and the merge.
+
+**Changing one field.** `shio post set` needs a token of write scope (`--token`, or
+`SHIO_WRITE_TOKEN`) as well as the console user that resolves the address; an agent token
+cannot write this way. It is safe to run while someone else is editing: if the post changed
+between the moment the command read it and the moment it writes, the change is refused and
+nothing is written. Each write prints the post's new tag, and `--if-match <tag>` refuses the
+write unless the post is still at that tag. So a script that reads, decides and writes can be
+sure it is writing over what it read:
+
+```bash
+shio post set post:Blog/hello title="Hello again"
+# post:Blog/hello set title (draft) etag="3a22…"
+shio post set post:Blog/hello summary="Shorter" --if-match '"3a22…"'
+```
 
 ### Prove it works
 
