@@ -358,6 +358,12 @@ in the confirmation dialog is always the number that will actually be acted on.
 **Action in batch** is enabled only while something is selected, and applies the action to
 the selection.
 
+Publishing, unpublishing or deleting a selection first shows the plan: one row per item, saying
+what would happen before anything does. Each row carries the same mark a comparison uses:
+**added**, **removed**, **changed** or **unchanged**. A changed row also names the change, such
+as *published* or *moved*. An item the server would refuse is marked **refused**, with the reason
+and the fix beside it. **Apply** runs the plan as shown.
+
 A batch delete reports **what was deleted**, not what was selected. If the server refuses some
 items, the message gives the count that went and lists the refusals with their reasons, and the
 refused rows **stay selected** so you can deal with them and try again. The list stays on the
