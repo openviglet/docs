@@ -182,7 +182,8 @@ the ones no template exposed.
 
 The merge can be made conditional. `editable` answers an `ETag` for the post as it is now.
 Send it back as `If-Match` on the `PATCH`, and if someone else changed the post in between, the
-merge is refused with `412 Precondition Failed` and nothing is written. Every successful merge
+merge is refused with `409 Conflict` (a `stale-expectation` problem saying what changed) and nothing
+is written. Every successful merge
 answers the post's new `ETag`, so a second change can be pinned to the first. Without
 `If-Match`, a merge is applied unconditionally, as before.
 
