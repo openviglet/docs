@@ -182,6 +182,13 @@ be reached from the keyboard. Clicking a field's label puts the cursor in it.
 
 ### Previewing before you save
 
+The editor has two panes. The left one holds the fields and the post's history. The right one
+holds what you read while you write: the live preview, the page's insights, and the notes on
+the page. Each pane scrolls on its own, so the preview stays beside the field you are changing.
+Drag the divider between them to change the width; the console remembers the width you choose,
+in this browser. On a phone the panes become one, with a switch at the top between **Fields**
+and **Live preview**, and switching keeps whatever you have typed.
+
 The **Preview** card renders the page from the values in the form, including ones you have not
 saved, so you can see a change before you commit to it. Nothing in the preview is saved. It refreshes
 when you open the post, when you save, and when you press **Refresh**. Turn on **Live** to have it

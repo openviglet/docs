@@ -124,7 +124,9 @@ narrowing it to what is already translated would stop it ever gaining a second.
   in the post type's own order. The source side is text, not a form, so you cannot edit the
   English believing it is the Portuguese. Each field can copy its value from the source, for
   the things a translation keeps verbatim (a product name, a URL, a number), and can be marked
-  **reviewed**. On a narrow screen the two panes stack behind a toggle. Saving writes the
+  **reviewed**. Drag the divider to give either side more room; the console remembers the width
+  in this browser. On a phone the two panes become one, with a switch between the source and
+  the translation, and switching keeps what you have typed. Saving writes the
   translation's draft; publishing is the usual separate step.
 - **When the source moved on.** If the page a translation was made from has changed since, the
   Translations menu marks that language, and marks the menu itself, so you see it before
