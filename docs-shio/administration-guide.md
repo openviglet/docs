@@ -96,7 +96,8 @@ express.
 
 A **group's page lists its members**. Add one by choosing a user who is not yet a member,
 and remove one from its row; each change is saved at once. Each member's name links to
-their user page.
+their user page. Below the members, the page lists the **roles** that name the group, which
+is what its members may do; each links to the role, where that relation is changed.
 
 ---
 
