@@ -185,6 +185,9 @@ JSON; you are filling in the fields somebody modelled, in the order they modelle
   when you hover the label. See [Content Modeling](./content-modeling.md) for what each
   widget does.
 - A field marked with `*` is required and the form will not save without it.
+- A page's **Sections** are listed by title, in the order the page renders them. Move one
+  with its arrows, remove it with its ×, and add one by typing part of its title (or pasting
+  its friendly URL) in the box below the list.
 - Fields can be grouped into **tabs** by whoever modelled the type.
 - The **save bar is sticky** at the top: it stays visible however long the form is, and
   carries the post's title, its type, its field count, and whether you have permission to
