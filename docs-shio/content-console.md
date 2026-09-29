@@ -78,7 +78,8 @@ count on the collapsed dock is what you have not read yet.
 
 ### Choosing what the dock reports
 
-The bell icon in the header opens **What the dock reports**, with one switch per kind: your
+Open the dock and choose the **settings** control (the cog) in its panel. It opens **What
+the dock reports**, with one switch per kind: your
 own saves, agent runs, scheduled publishing, and form submissions. Turn off what you do not
 need. The choice is kept on your account, so it follows you to another browser.
 
