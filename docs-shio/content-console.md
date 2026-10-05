@@ -206,6 +206,11 @@ Drag the divider between them to change the width; the console remembers the wid
 in this browser. On a phone the panes become one, with a switch at the top between **Fields**
 and **Live preview**, and switching keeps whatever you have typed.
 
+The notes on one page sit beside that page. To see every open note across your sites, click the
+**Open notes** tile on the home page, or open **Content › Open notes**. Each row names the page
+and the field the note is about, says who left it and when, and links to the page. **Resolve**
+closes a note from the list, without opening the page.
+
 The **Preview** card renders the page from the values in the form, including ones you have not
 saved, so you can see a change before you commit to it. Nothing in the preview is saved. It refreshes
 when you open the post, when you save, and when you press **Refresh**. Turn on **Live** to have it
