@@ -43,6 +43,11 @@ the fastest route to a named screen is not a menu:
   page, focus lands on that page's title, so a screen reader announces where you arrived.
   A button that is working keeps its focus and is announced as busy until it finishes.
 
+Across the top, the header starts with the Shio name, which takes you home, and the search
+button that opens the command palette. At its right end is the theme button: choose
+**Light**, **Dark** or **System**, which follows your operating system. The console
+remembers your choice in this browser, and the login page uses it too.
+
 ---
 
 ## The assistant dock
