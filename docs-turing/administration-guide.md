@@ -42,6 +42,18 @@ The variable is only applied while the `admin` password is still unset. Once a p
 
 If the variable is not set, the console asks you to choose the `admin` password the first time it is opened (minimum 6 characters). After it is set, the setup screen is no longer reachable.
 
+### Calling the API from scripts and CI
+
+Scripts don't need the console's cookie-and-XSRF login. With local authentication (Keycloak off), send the user's credentials with HTTP Basic:
+
+```bash
+curl -u admin:your_password http://localhost:2700/api/sn
+```
+
+For connectors and long-lived automation, prefer an API token sent in the `Key` header, which works without a password.
+
+If Basic answers `401`, the password is wrong. The usual cause is a reused database: `TURING_ADMIN_PASSWORD` was ignored at startup because a password already existed (the log says so), so the admin password is still the one stored earlier.
+
 ---
 
 ## Users

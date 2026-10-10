@@ -131,7 +131,7 @@ curl -X POST "http://localhost:2700/api/sn/import" \
   -H "Key: <YOUR_API_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
-    "snJobItems": [
+    "turingDocuments": [
       {
         "locale": "en_US",
         "turSNJobAction": "CREATE",

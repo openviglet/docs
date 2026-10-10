@@ -172,7 +172,7 @@ In addition to site configuration import, Turing ES accepts **document-level ind
 POST /api/sn/import
 ```
 
-Accepts a JSON body with a list of job items: documents to index, deindex, or commit.
+Accepts a JSON body whose `turingDocuments` array lists the job items: documents to index, deindex, or commit. `snJobItems` is accepted as an alias. A body with no items answers `400` and names the expected property. That includes items sent under any other key, which used to be accepted silently with nothing indexed.
 
 **Example:**
 
@@ -181,7 +181,7 @@ curl -X POST "http://localhost:2700/api/sn/import" \
   -H "Key: <YOUR_API_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
-    "snJobItems": [
+    "turingDocuments": [
       {
         "locale": "en_US",
         "turSNJobAction": "CREATE",
