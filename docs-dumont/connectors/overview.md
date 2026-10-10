@@ -16,6 +16,7 @@ Connectors are the components that extract content from external sources and fee
 |---|---|---|---|
 | [**Web Crawler**](./web-crawler.md) | Websites | **Java Plugin**: loaded via `-Dloader.path` | `web-crawler-plugin.jar` |
 | [**AEM**](./aem.md) | Adobe Experience Manager | **Java Plugin**: loaded via `-Dloader.path` | `aem-plugin.jar` |
+| [**Catalog & JSON API**](./catalog.md) | Normalized catalog feeds and paged JSON APIs | **Java Plugin**: loaded via `-Dloader.path` | `catalog-plugin.jar` |
 | [**Database**](./database.md) | JDBC databases | **Standalone Java CLI**: runs independently | `dumont-db-indexer.jar` |
 | [**FileSystem**](./filesystem.md) | Local/network directories | **Standalone Java CLI**: runs independently | `dumont-filesystem-indexer.jar` |
 | [**WordPress**](./wordpress.md) | WordPress sites | **PHP Plugin**: installed inside WordPress | `viglet-turing-for-wordpress/` |
