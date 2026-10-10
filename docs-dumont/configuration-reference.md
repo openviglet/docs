@@ -91,6 +91,12 @@ logging:
 |---|---|---|
 | `server.port` | `30130` | HTTP port for the Dumont DEP application |
 
+### Admin Account
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.admin.password` | *(unset)* | Password for the local `admin` account, applied at startup while no password is stored. Set it (env `DUMONT_ADMIN_PASSWORD`, at least 6 characters) and a container or CI start comes up with a working login and no first-access setup screen. Once a password is stored, for example set in the console, the property is ignored and a log line says so. |
+
 ### Database
 
 | Property | Default | Description |
