@@ -30,7 +30,7 @@ Connectors extract content and feed it into the pipeline. They come in three for
 
 | Type | Connectors | How they connect |
 |---|---|---|
-| **Java Plugins** | Web Crawler, AEM | Loaded into `dumont-connector.jar` via `-Dloader.path`, one plugin per JVM |
+| **Java Plugins** | Web Crawler, AEM, Catalog & JSON API | Loaded into `dumont-connector.jar` via `-Dloader.path`, one plugin per JVM |
 | **Standalone CLI** | Database, FileSystem | Separate JARs that connect to a running Dumont DEP instance via REST API |
 | **PHP Plugin** | WordPress | Installed inside WordPress: sends content directly to Turing ES, bypasses Dumont |
 
@@ -122,6 +122,7 @@ See [Content Audit configuration](./configuration-reference.md#content-audit), t
 | **Database** | `db` | JDBC queries, batch chunking, multi-database support |
 | **FileSystem** | `filesystem` | Apache Tika text extraction, OCR, metadata mapping |
 | **AEM** | `aem` | Author servlets (infinity.json, QueryBuilder) or publish delivery APIs (model.json), tags, delta tracking, custom extensions |
+| **Catalog & JSON API** | `catalog` | Normalized catalog feeds, and paged JSON APIs run from a manifest (paging, call budgets, incremental expiry) |
 | **WordPress** | `wordpress` | PHP plugin: event-driven indexing inside WordPress |
 | **Commons** | `commons` | Shared models, interfaces, utilities |
 | **AEM Commons** | `aem-commons` | AEM extension interfaces, component extractors, content types and versioned recipes (published to Maven Central) |
