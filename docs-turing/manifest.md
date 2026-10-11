@@ -27,7 +27,7 @@ POST /api/sn/manifest
   "schemaVersion": "1",
   "locales": ["en_US", "pt_BR"],
   "fields": [
-    { "name": "title",  "type": "TEXT",     "mandatory": true,  "multiValued": false, "facet": false },
+    { "name": "title",  "type": "TEXT",     "mandatory": true,  "multiValued": false, "facet": false, "searchWeight": 3 },
     { "name": "brand",  "type": "STRING",   "mandatory": false, "multiValued": false, "facet": true  },
     { "name": "price",  "type": "CURRENCY", "mandatory": false, "multiValued": false, "facet": true  },
     { "name": "tags",   "type": "STRING",   "mandatory": false, "multiValued": true,  "facet": true  }
@@ -56,6 +56,10 @@ Run it a second time and everything moves to `fieldsSkipped`: the operation is *
 `type` is a `TurSEFieldType` enum name: `INT`, `LONG`, `STRING`, `TEXT`, `ARRAY`, `DATE`, `BOOL`, `FLOAT`, `DOUBLE`, `CURRENCY`. The same field spec is what the indexer carries at index time, the manifest path and the index-time auto-create path share one provisioner, so a manifested field and an auto-created field are identical.
 :::
 
+:::note Search weight
+`searchWeight` is optional. It sets how much a query match in the field counts, from 1 to 100, the same as the **Search weight** attribute in the [field detail form](./semantic-navigation.md#field-detail). Above, a match in `title` counts three times a match in a field with no weight. Each provision applies the declared weight to the field, so a weight lives in the manifest instead of being re-set by hand in the console. Leave it out and the field keeps whatever weight it already has. A value outside 1 to 100 is refused with HTTP 400.
+:::
+
 ---
 
 ## Schema-as-code: planner & migrations
@@ -73,7 +77,7 @@ Additive changes (new field, new locale) are safe and silent. But changing an **
 | `fieldsUnchanged` | Already match the manifest |
 | `breakingChanges` | A `type` or `multiValued` change on an existing field, requires a declared migration |
 
-Facet / mandatory / description tweaks are **not** breaking: they don't require a reindex, so the planner applies them without ceremony.
+Facet / mandatory / description tweaks are **not** breaking: they don't require a reindex, so the planner applies them without ceremony. Neither is a `searchWeight` change: it changes ranking at query time, not the schema.
 
 ### Declaring a migration
 
