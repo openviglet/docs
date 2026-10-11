@@ -101,13 +101,21 @@ logging:
 
 | Property | Default | Description |
 |---|---|---|
-| `dumont.enrichment.llm.enabled` | `false` | Lets connectors classify with an LLM through Turing ES (`/api/v2/summary`, using the configured `turing.url` and `turing.apiKey`). When off, connectors that support an LLM fallback classify with their own rules and dictionaries only. |
+| `dumont.enrichment.llm.enabled` | `false` | Lets connectors classify with an LLM through Turing ES (`/api/v2/summary`, using the configured `turing.url` and `turing.apiKey`). It also lets them extract lists from a record's text, such as the skills a job description names; only items that appear in the text are published. When off, connectors that support an LLM fallback classify with their own rules and dictionaries only. |
+
+### Run Alerts
+
+A run can finish and still carry a warning: a source reports something an operator should act on, or a field's coverage dropped sharply since the last run. The console marks such a run with a **Warning** badge on the Indexing Stats page.
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.alerts.webhook-url` | *(unset)* | URL that receives a JSON `POST` when a source's run starts carrying a warning (`event`, `source`, `provider`, `operationType`, `endTime`, `documentCount`, `partial`, `warnings`). Sent once when a source goes from healthy to warned, not on every warned run. The Turing API key is never sent. Unset, nothing is sent. |
 
 ### Database
 
 | Property | Default | Description |
 |---|---|---|
-| `spring.datasource.url` | `jdbc:h2:file:./store/db/dumontDB` | JDBC URL for the indexing state database |
+| `spring.datasource.url` | `jdbc:h2:file:./store/db/dumontDB;CASE_INSENSITIVE_IDENTIFIERS=TRUE` | JDBC URL for the indexing state database. If you override it with another H2 URL, keep `CASE_INSENSITIVE_IDENTIFIERS=TRUE`: without it, indexing runs fail when they finish. |
 | `spring.datasource.username` | `sa` | Database username |
 | `spring.datasource.password` | `""` | Database password |
 | `spring.datasource.driver-class-name` | `org.h2.Driver` | JDBC driver class |

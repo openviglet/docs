@@ -38,6 +38,12 @@ Triggers a full indexing operation for all content in the specified source.
 
 **Response:** `{"status": "sent"}`
 
+| Status | Meaning |
+|---|---|
+| `200` | The run started. |
+| `404` | No connector plugin manages a source with this name: `{"status": "unknown source", "reason": "..."}`. Create the source first. |
+| `409` | A run for this source is already in progress: `{"status": "already running"}`. |
+
 ---
 
 ### Index Specific Content
@@ -69,7 +75,7 @@ Deletes the existing index and reindexes all content from the source.
 |---|---|---|
 | `name` | Path | Source name |
 
-**Response:** `{"status": "sent"}`
+**Response:** `{"status": "sent"}`. Answers `404` and `409` exactly as [Index All Content](#index-all-content) does.
 
 ---
 
