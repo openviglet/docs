@@ -99,7 +99,7 @@ The Indexing Stats section provides a table of completed bulk indexing operation
 | Start Time | Timestamp when the operation started |
 | Source | Source that was operated on |
 | Operation | `INDEX_ALL` or `REINDEX_ALL` |
-| Documents | Number of documents processed |
+| Documents | Number of documents processed. A **Partial** badge marks a run that stopped before reaching the whole source (a call budget, a rate limit, an interruption), with the reason listed under the count. A partial run never removes documents it did not reach. |
 | Duration | Total elapsed time |
 | Docs/min | Throughput (documents per minute) |
 
