@@ -30,8 +30,9 @@ for (const file of files) {
   process.stdout.write(`    ${name} … `);
 
   try {
+    // mermaid-cli 12 replaced -w/-H with a single --size, which for an SVG sets its max-width.
     execSync(
-      `npx mmdc -p "${CONFIG}" -w 900 -H 600 -b transparent -i "${input}" -o "${output}"`,
+      `npx mmdc -p "${CONFIG}" --size 900 -b transparent -i "${input}" -o "${output}"`,
       { stdio: 'pipe' }
     );
     console.log('✓');
