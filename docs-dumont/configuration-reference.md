@@ -97,6 +97,12 @@ logging:
 |---|---|---|
 | `dumont.admin.password` | *(unset)* | Password for the local `admin` account, applied at startup while no password is stored. Set it (env `DUMONT_ADMIN_PASSWORD`, at least 6 characters) and a container or CI start comes up with a working login and no first-access setup screen. Once a password is stored, for example set in the console, the property is ignored and a log line says so. |
 
+### LLM Enrichment
+
+| Property | Default | Description |
+|---|---|---|
+| `dumont.enrichment.llm.enabled` | `false` | Lets connectors classify with an LLM through Turing ES (`/api/v2/summary`, using the configured `turing.url` and `turing.apiKey`). When off, connectors that support an LLM fallback classify with their own rules and dictionaries only. |
+
 ### Database
 
 | Property | Default | Description |
