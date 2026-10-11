@@ -284,6 +284,7 @@ Clicking a field opens its detail form:
 | **Enabled** | Whether this field is active |
 | **Required** | Whether the field must be present when indexing a document |
 | **Default Value** | Value used when a document is indexed without this field |
+| **Search weight** | How much a query match in this field counts, from 1 to 100 (empty means 1). Set `title` to 3 so a title match outranks the same word in the body. Works on Solr and the embedded Lucene engine |
 
 :::tip Secondary Facets
 A secondary facet is a regular facet that is additionally returned in a separate `secondaryFacet` section of the search response. This lets the front-end render it differently, for example, as horizontal tabs ("All · Articles · Videos"), while other facets appear as sidebar filters. The field must have **Facet** enabled first; **Secondary Facet** is a promotion, not a replacement.
@@ -953,7 +954,7 @@ Each report shows the term and its search count for the selected period. Use thi
 
 ### Result Ranking
 
-Configures boost expressions that influence search relevance. Each ranking expression boosts documents matching a set of conditions by a configured weight. Expressions are converted into Solr boost queries in the format `(condition)^weight` and applied at query time.
+Configures boost expressions that influence search relevance. Each ranking expression boosts documents matching a set of conditions by a configured weight, applied at query time. Ranking expressions work on both Solr and the embedded Lucene engine. They raise the score of matching documents and never remove results.
 
 #### Ranking Expression Form
 
@@ -971,7 +972,7 @@ A dynamic list of one or more field-value conditions. At least one condition is 
 | Attribute | Description |
 |---|---|
 | **Attribute** | An indexed field in the document, selected from the site's configured fields |
-| **Condition** | `Is` (equals) or `Is not` (not equals) |
+| **Condition** | `Is` (equals), `Is not` (not equals), or `Exists` (the document has any value in the field; the value is ignored) |
 | **Value** | The value to compare against |
 
 Multiple conditions are combined with AND logic: all conditions must match for the boost to apply.
@@ -981,6 +982,8 @@ Multiple conditions are combined with AND logic: all conditions must match for t
 A slider from **0** to **10** that sets the boost intensity. Higher weight causes matching documents to rank higher in results.
 
 **Example:** A condition `type Is news` with weight `8` causes documents of type "news" to rank significantly higher than other results.
+
+**Recency boost:** on a **date** field, the value `asc` boosts recent documents instead of matching a value. The boost decays smoothly with age: a document about a year old gets half the boost of one published today. For example, `publicationDate Is asc` with weight `3` favours fresh content without hiding older results.
 
 ---
 
