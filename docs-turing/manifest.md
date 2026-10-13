@@ -60,6 +60,58 @@ Run it a second time and everything moves to `fieldsSkipped`: the operation is *
 `searchWeight` is optional. It sets how much a query match in the field counts, from 1 to 100, the same as the **Search weight** attribute in the [field detail form](./semantic-navigation.md#field-detail). Above, a match in `title` counts three times a match in a field with no weight. Each provision applies the declared weight to the field, so a weight lives in the manifest instead of being re-set by hand in the console. Leave it out and the field keeps whatever weight it already has. A value outside 1 to 100 is refused with HTTP 400.
 :::
 
+### Custom facets
+
+A manifest can also declare **custom facets**: named buckets over one field, counted in the site's structured facets like any other facet. A job site, for example, can offer a posting-date filter with *last 24 hours*, *last 7 days* and *last 30 days*:
+
+```json
+POST /api/sn/manifest
+{
+  "name": "jobs",
+  "fields": [
+    { "name": "publishedAt", "type": "DATE", "mandatory": false, "multiValued": false, "facet": false }
+  ],
+  "customFacets": [
+    {
+      "field": "publishedAt",
+      "name": "postedSince",
+      "defaultLabel": "Posted",
+      "label": { "pt": "Publicada" },
+      "items": [
+        { "label": "Last 24 hours", "labels": { "pt": "Últimas 24 horas" }, "rangeStartDate": "NOW-1DAY" },
+        { "label": "Last 7 days",   "labels": { "pt": "Últimos 7 dias" },   "rangeStartDate": "NOW-7DAYS" },
+        { "label": "Last 30 days",  "labels": { "pt": "Últimos 30 dias" },  "rangeStartDate": "NOW-30DAYS" }
+      ]
+    }
+  ]
+}
+```
+
+Each item takes the same values as a custom facet item in the console:
+
+| Item key | Meaning |
+|---|---|
+| `label`, `labels` | The bucket's default label (required) and its per-locale labels |
+| `rangeStartDate`, `rangeEndDate` | Bounds for a `DATE` field: an ISO date (`2026-01-01`) or relative date math (`NOW-7DAYS`, `NOW/DAY`). Leave one out for an open range |
+| `rangeStart`, `rangeEnd` | Bounds for a numeric field |
+| `operator` | How the bounds apply, `BETWEEN_INCLUSIVE` when left out |
+| `position` | The bucket's order; by default, its place in the list |
+
+The facet's `field` must be declared in the same manifest or already exist on the site. Turing matches each declared facet to the live one by `field` and `name`: it creates a facet that is missing, replaces the labels and buckets of one that differs, and leaves an equal one alone, so re-posting the manifest changes nothing. A custom facet the manifest does not declare stays as the console left it. The response lists what changed in `customFacetsChanged`. An invalid bound, such as malformed date math, is refused with HTTP 400 before anything is written.
+
+From Java, the `TurSNManifest` builder takes the same declaration:
+
+```java
+TurSNManifest manifest = TurSNManifest.builder()
+        .name("jobs")
+        .field(publishedAtSpec)
+        .customFacet(TurSNManifestCustomFacet.of("publishedAt", "postedSince", "Posted", List.of(
+                TurSNManifestCustomFacetItem.since("Last 24 hours", "NOW-1DAY"),
+                TurSNManifestCustomFacetItem.since("Last 7 days", "NOW-7DAYS"),
+                TurSNManifestCustomFacetItem.since("Last 30 days", "NOW-30DAYS"))))
+        .build();
+```
+
 ---
 
 ## Schema-as-code: planner & migrations
@@ -76,6 +128,7 @@ Additive changes (new field, new locale) are safe and silent. But changing an **
 | `localesToAdd` | New locales: additive |
 | `fieldsUnchanged` | Already match the manifest |
 | `breakingChanges` | A `type` or `multiValued` change on an existing field, requires a declared migration |
+| `customFacetsToChange` | [Custom facets](#custom-facets) that provisioning would create or rewrite |
 
 Facet / mandatory / description tweaks are **not** breaking: they don't require a reindex, so the planner applies them without ceremony. Neither is a `searchWeight` change: it changes ranking at query time, not the schema.
 
