@@ -94,7 +94,10 @@ This provider downloads and runs the model **locally**. It does *not* call Huggi
 
 #### Zero-config local RAG at startup
 
-A fresh install (notably the public demo) can provision a complete local retrieval backend automatically, with no admin step. When a global [Default AI Agent](./ai-agents.md) is configured and no embedding model or vector store exists yet, Turing ES creates a local ONNX embedding model (`all-MiniLM-L6-v2`) plus an embedded [Lucene vector store](./embedding-stores.md), registers both as the global defaults, wires them onto the Default AI Agent (enabling RAG), then downloads the model and reindexes existing content into the store, so grounded chat works out of the box.
+A fresh install (notably the public demo) can provision a complete local retrieval backend automatically, with no admin step. When a global [Default AI Agent](./ai-agents.md) is configured and lacks an embedding model or a vector store, Turing ES fills in each missing piece, wires it onto the Default AI Agent (enabling RAG), then downloads the model and reindexes existing content into the store, so grounded chat works out of the box:
+
+- **Embedding model:** the global default embedding model when one is set; otherwise, when no embedding model exists at all, a new local ONNX model (`all-MiniLM-L6-v2`), registered as the global default.
+- **Vector store:** the global default store when one is set; otherwise an existing enabled [Lucene vector store](./embedding-stores.md) (such as the "Default Vector Store" a seed import brings); otherwise, when no store exists at all, a new embedded Lucene store, registered as the global default.
 
 It is controlled by `turing.startup.default-rag.*`:
 
@@ -109,7 +112,7 @@ It is controlled by `turing.startup.default-rag.*`:
 | `turing.startup.default-rag.reindex` | `true` | Reindex existing site content into the new store after provisioning. |
 | `turing.genai.embedding.local.cache-dir` | *(temp dir)* | Where downloaded ONNX/tokenizer resources are cached; set a persistent path to keep them across restarts. |
 
-The step is **idempotent**: it acts only on a fresh install (no embedding model and no store yet) and never overrides an existing setup.
+The step is **idempotent** and never overrides an existing setup: a Default AI Agent that already has an embedding model and a store is left alone, and when embedding models or stores exist but none is the global default (and no Lucene store is there to adopt), it does not pick among them. Each step logs what it did, or why it stopped, at startup.
 
 ---
 
