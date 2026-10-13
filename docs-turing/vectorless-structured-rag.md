@@ -172,6 +172,15 @@ drives retrieval.
 `GET /api/sn/{siteName}/copilot/available` reports whether a default LLM is
 configured (i.e. whether the copilot can answer).
 
+The site's regular chat endpoints answer through the copilot too, so a chat UI
+built for a vector site works unchanged on a vectorless one:
+`POST /api/sn/{siteName}/chat/conversation` (and the single-turn
+`GET /api/sn/{siteName}/chat`) route a vectorless site's turns to the copilot,
+and `GET /api/sn/{siteName}/chat/enabled` reports it ready on exactly the same
+condition: a usable default LLM, otherwise `MISSING_DEFAULT_LLM`. The chat
+endpoint returns the copilot's answer as one message once it is complete,
+rather than streaming it token by token.
+
 ### Ranking & superlative questions
 
 Superlative and comparative questions are understood out of the box: "the
