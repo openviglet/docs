@@ -185,6 +185,8 @@ The Knowledge Base is queried by the `search_knowledge_base` tool: available in 
 
 When **GenAI** is enabled for an SN Site, indexed documents are also embedded alongside their Solr representation. This allows the SN Site chat and AI Agents to retrieve relevant content via semantic similarity.
 
+Embedding never stands in the way of search. Each import batch is embedded once, fields left empty (a job posting with no salary) are simply left out of the chunk metadata, and if embedding a document fails, the failure is logged and the document is still indexed for search. Turning chat on for a site therefore cannot stop its connector's imports.
+
 Configure this in **Semantic Navigation → [Site] → Generative AI**. See [Semantic Navigation](./semantic-navigation.md#generative-ai).
 
 :::info Re-indexing required
