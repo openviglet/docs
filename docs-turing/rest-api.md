@@ -566,6 +566,8 @@ Pass `q` and `fq` to the search ([`POST /api/sn/{site}/search/query`](#post-nati
 
 The call spends one LLM completion, so it is gated like the site chat: a site in API-key mode requires its key, and anonymous calls share the chat's rate limit. From the SDKs, call `postNlFilters` ([JavaScript SDK](./javascript-sdk.md#low-level-api-functions)).
 
+The site chat and the catalog copilot read list-style questions ("quais vagas em São Paulo?") through the same extraction, so their answers are narrowed by the same checked values. To receive those filters in the chat stream, send `"includeFilters": true` in the body of `POST /api/sn/{siteName}/chat/conversation`: a list-style question then streams one `filters` event, carrying the same JSON as above, before the answer. It is off by default, because a client that predates the event would show it as answer text.
+
 ---
 
 ## GenAI API
