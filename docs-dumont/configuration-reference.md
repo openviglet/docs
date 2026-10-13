@@ -111,6 +111,33 @@ A run can finish and still carry a warning: a source reports something an operat
 |---|---|---|
 | `dumont.alerts.webhook-url` | *(unset)* | URL that receives a JSON `POST` when a source's run starts carrying a warning (`event`, `source`, `provider`, `operationType`, `endTime`, `documentCount`, `partial`, `warnings`). Sent once when a source goes from healthy to warned, not on every warned run. The Turing API key is never sent. Unset, nothing is sent. |
 
+### Run Metrics (Prometheus)
+
+Each source's last run is published for Prometheus at `/actuator/prometheus`. The endpoint is served on a separate management port only, never on `server.port`, and needs no login, so keep that port on your internal network. No other actuator endpoint is exposed.
+
+| Property | Default | Description |
+|---|---|---|
+| `management.server.port` | `30131` | Port that serves `/actuator/prometheus`. |
+
+Every metric carries the `source` and `provider` labels:
+
+| Metric | Meaning |
+|---|---|
+| `dumont_run_last_status` | `1` if the source's last run completed, `0` if it stopped short (a partial run) |
+| `dumont_run_last_finished_seconds` | When the last run ended, in Unix seconds |
+| `dumont_run_last_duration_seconds` | How long the last run took |
+| `dumont_run_last_documents` | Documents the last run indexed |
+| `dumont_runs_total` | Runs that ended, by `outcome` (`complete`, `warned`, `partial`) |
+
+The values are restored from the stored run history at startup, so a restart does not hide a source that has stopped running. Example alert rules:
+
+```yaml
+- alert: DumontRunFailed
+  expr: dumont_run_last_status == 0
+- alert: DumontRunStalled
+  expr: time() - dumont_run_last_finished_seconds > 2 * 3600
+```
+
 ### Database
 
 | Property | Default | Description |
