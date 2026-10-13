@@ -319,6 +319,15 @@ await postChatConversation(
 );
 ```
 
+To turn a visitor's description into your own search, `postNlFilters` returns the `q` and `fq` the search takes ([Natural-language filters](./rest-api.md#natural-language-filters)):
+
+```js
+import { postNlFilters, postSearch } from "@viglet/turing-sdk";
+
+const parsed = await postNlFilters(client, "jobs", "meio periodo em sao paulo", "pt_BR");
+const results = await postSearch(client, "jobs", { q: parsed.q || "*", fq: [...parsed.fq], locale: "pt_BR" });
+```
+
 Other functions include `fetchSearch`, `postClick`, `fetchAutoComplete`, `fetchSpellCheck`, `fetchSimilar`, `postSiteSlotUpload` (multimodal), `postSiteChatResume`, `dslSearch` / `dslQuery` ([DSL Query](./dsl-query.md)), `postSemanticChat`, `postAgentChat`, and discovery helpers (`fetchDiscovery`, `fetchFeatures`, `fetchSystemLocales`, `fetchLlmVendors`). `createTuringApi(client)` returns an object with all of them pre-bound to the client.
 
 ---

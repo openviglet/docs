@@ -42,6 +42,7 @@ Certain endpoints are publicly accessible, allowing client applications to perfo
 | `GET /api/sn/*/chat` | GenAI chat on an SN Site |
 | `GET /api/sn/*/ac` | Autocomplete |
 | `POST /api/sn/*/ac/query` | Autocomplete, JSON body |
+| `POST /api/sn/*/nl-filters` | A visitor's description as search filters ([Natural-language filters](#natural-language-filters)) |
 | `POST /api/genai/chat` | Direct GenAI chat |
 | `POST /api/ocr/**` | OCR text extraction |
 | `POST /api/v2/integration/**` | External integration endpoints |
@@ -513,6 +514,57 @@ GET http://localhost:2700/api/sn/{siteName}/{locale}/spell-check
 ```bash
 curl "http://localhost:2700/api/sn/Sample/en_US/spell-check?q=entirprise"
 ```
+
+---
+
+### Natural-language filters {#natural-language-filters}
+
+Turns a visitor's description into the `q` and `fq` of the site's own search, so a page can show the ranked, faceted results for "part-time job near the subway in Sao Paulo" instead of a chat answer.
+
+```
+POST http://localhost:2700/api/sn/{siteName}/nl-filters
+```
+
+| Body field | Required | Description |
+|---|---|---|
+| `text` | ✅ | The visitor's request |
+| `locale` | | Search locale; when left out, the site's first locale |
+
+**Example:**
+
+```bash
+curl -X POST "http://localhost:2700/api/sn/jobs/nl-filters" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "meio periodo em sao paulo, sem experiencia", "locale": "pt_BR"}'
+```
+
+```json
+{
+  "available": true,
+  "text": "meio periodo em sao paulo, sem experiencia",
+  "q": "sem experiencia",
+  "filters": [
+    { "field": "city", "values": ["São Paulo"], "rangeStart": null, "rangeEnd": null,
+      "sourceWords": ["sao paulo"], "confidence": 1.0, "grounded": true },
+    { "field": "workload", "values": ["Part-time"], "rangeStart": null, "rangeEnd": null,
+      "sourceWords": [], "confidence": 0.6, "grounded": true }
+  ],
+  "fq": ["city:São Paulo", "workload:Part-time"],
+  "dropped": []
+}
+```
+
+Pass `q` and `fq` to the search ([`POST /api/sn/{site}/search/query`](#post-native-search)) as they are. Turing checks every value against the values the site actually holds and spells it the way the site indexes it (`sao paulo` becomes `São Paulo`). A value the site does not hold is left out of `fq` and listed in `dropped` with the reason (`NOT_IN_SITE`, or `UNKNOWN_FIELD` for a field the site does not have).
+
+| Response field | Meaning |
+|---|---|
+| `q` | What is left to match as free text |
+| `fq` | `field:value` per value and `field:[start TO end]` per range, the form the search takes |
+| `filters[].sourceWords` | The words of the request each value was read from |
+| `filters[].confidence` | `1` when the request spells the value, `0.6` when it was inferred (a synonym, a translation), `0.3` when the engine could not list the field's values to check it |
+| `available` | `false` when no LLM is configured: nothing is filtered and `q` is the whole request |
+
+The call spends one LLM completion, so it is gated like the site chat: a site in API-key mode requires its key, and anonymous calls share the chat's rate limit. From the SDKs, call `postNlFilters` ([JavaScript SDK](./javascript-sdk.md#low-level-api-functions)).
 
 ---
 
