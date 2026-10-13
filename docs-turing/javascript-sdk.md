@@ -240,6 +240,23 @@ chat.destroy();  // release everything on teardown
 
 A `ChatMessage` carries far more than text, as the stream progresses it accumulates `options` (suggestion chips), `form`, `sources` (RAG provenance), `citations` (per-sentence grounds), `toolCalls` (live tool activity), `grounding` (answer-grounding verdict) and `secondOpinion` (cross-vendor critic). Render whichever your UI cares about.
 
+#### Scoping the chat to the current search
+
+An assistant next to a results page can answer within the visitor's current search. Pass `filters` (field → values, the same shape [`postNlFilters`](./rest-api.md#natural-language-filters) returns) at creation, and replace them for one turn with `send`'s second argument. Pass `onFilters` to receive the filters the server read from a list-style question ("quais vagas em São Paulo?"), so the page can offer "see these results":
+
+```js
+const chat = createChatController(client, {
+  site: "jobs",
+  filters: { uf: ["SP"] },                       // every turn, until replaced
+  onFilters: (parsed) => showSeeResults(parsed.fq), // the question's own filters
+});
+
+await chat.send("Which of these are remote?");
+await chat.send("And in Rio?", { filters: { uf: ["RJ"] } }); // this turn only
+```
+
+`postChatConversation` takes the same `filters` and `onFilters` options.
+
 #### Frontend "client tools" (generative UI)
 
 An agent can call a tool that runs **in the browser** (open a dialog, call your own API, mutate the page) and the SDK feeds the result back so the turn resumes. Register handlers up front or imperatively:

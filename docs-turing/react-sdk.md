@@ -359,6 +359,22 @@ React wrapper.
 
 ---
 
+### useTuringChat
+
+Streams a conversation with the site's chat (`/sn/{site}/chat/conversation`) inside a `TuringProvider`. It returns `messages`, `status`, `isStreaming`, `error` and `send(text, overrides?)`, plus `stop()` and `reset()`.
+
+To answer within the visitor's current search, pass `filters` (field → values, the shape [`postNlFilters`](./rest-api.md#natural-language-filters) returns); `send`'s second argument replaces them for one turn. `onFilters` receives the filters the server read from a list-style question, ahead of the answer:
+
+```tsx
+const { messages, send } = useTuringChat({
+  filters: { uf: [currentUf] },
+  onFilters: (parsed) => setSuggestedFq(parsed.fq),
+});
+
+await send("Quais são remotas?");
+await send("E no Rio?", { filters: { uf: ["RJ"] } }); // this turn only
+```
+
 ## UI Components
 
 All components are **unstyled** (headless). You control the look via render props and CSS.
