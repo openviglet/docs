@@ -148,6 +148,23 @@ agent (`POST /api/gateway/traffic/distill?agentId=…`, gated by
 `turing.distillation.enabled`): the recommendation is never applied
 automatically. Capturing prompts/answers is off by default and admin-managed.
 
+## Errors
+
+Errors use OpenAI's envelope (`{"error": {"message", "type", "code"}}`), so an
+OpenAI SDK raises the exception it would raise against OpenAI:
+
+| Situation | Status | `type` |
+| --- | --- | --- |
+| The provider is out of credits, or the tenant's monthly token budget is spent | 429 | `insufficient_quota` |
+| The provider rate-limited the call | 429 | `rate_limit_exceeded` (or the provider's own type) |
+| A virtual key's rate limit or hard cap | 429 | `rate_limit_exceeded` / `insufficient_quota` |
+| A parameter the model cannot honour (e.g. `response_format`) | 400 | `invalid_request_error`, with `param` set |
+| The provider did not answer | 502 | `api_error` |
+
+A provider's `Retry-After` is passed through on the 429. On a streamed call the
+status is already sent when tokens start, so a failure mid-stream arrives as the
+final chunk instead.
+
 ## Notes & limits
 
 - The gateway targets the subset of the OpenAI wire contract that most clients
