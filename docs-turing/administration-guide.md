@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: Administration Guide
-description: Manage users, groups, roles, API tokens, global settings, and system diagnostics in Turing ES.
+description: Manage users, groups, roles, API tokens, global settings, and system diagnostics in Viglet Turing.
 ---
 
 # Administration Guide
@@ -16,11 +16,11 @@ When Keycloak is enabled (`turing.keycloak=true`), the **Users**, **Groups**, an
 
 ## Login
 
-When accessing Turing ES, a login page is displayed. The default username is `admin`. Turing ES never ships a default password — you choose it in one of two ways on the first startup.
+When accessing Viglet Turing, a login page is displayed. The default username is `admin`. Turing never ships a default password: you choose it in one of two ways on the first startup.
 
-### Option 1 — the `TURING_ADMIN_PASSWORD` environment variable
+### Option 1: the `TURING_ADMIN_PASSWORD` environment variable
 
-Best for containers, unattended installs, and CI: the password is applied while the server boots, so the console goes straight to the login page. Set the variable before starting Turing ES for the first time:
+Best for containers, unattended installs, and CI: the password is applied while the server boots, so the console goes straight to the login page. Set the variable before starting Turing for the first time:
 
 **Windows**
 ```bat
@@ -32,13 +32,13 @@ set TURING_ADMIN_PASSWORD=your_password
 export TURING_ADMIN_PASSWORD=your_password
 ```
 
-The password must be at least **6 characters** — a shorter value is ignored (a warning is logged) and Turing ES falls back to Option 2.
+The password must be at least **6 characters**: a shorter value is ignored (a warning is logged) and Turing falls back to Option 2.
 
 :::info Applied once, never overwritten
-The variable is only applied while the `admin` password is still unset. Once a password exists — whether it came from this variable or from the setup screen — restarting with the variable still set changes nothing. To change the password afterwards, use the **Users** page in the console.
+The variable is only applied while the `admin` password is still unset. Once a password exists (whether it came from this variable or from the setup screen), restarting with the variable still set changes nothing. To change the password afterwards, use the **Users** page in the console.
 :::
 
-### Option 2 — the first-access setup screen
+### Option 2: the first-access setup screen
 
 If the variable is not set, the console asks you to choose the `admin` password the first time it is opened (minimum 6 characters). After it is set, the setup screen is no longer reachable.
 
@@ -230,7 +230,7 @@ The RAG Settings section is only visible if an embedding store is configured and
 
 ### Email Settings
 
-Used by Turing ES to send notifications and test email connectivity.
+Used by Turing to send notifications and test email connectivity.
 
 | Field | Description |
 |---|---|
@@ -245,7 +245,7 @@ Used by Turing ES to send notifications and test email connectivity.
 
 ## System Information
 
-The System Information page (`/admin/system-info`) is a diagnostic panel to monitor the health of the Turing ES instance. It contains two tabs.
+The System Information page (`/admin/system-info`) is a diagnostic panel to monitor the health of the Turing instance. It contains two tabs.
 
 ### Overview
 
@@ -253,7 +253,7 @@ The System Information page (`/admin/system-info`) is a diagnostic panel to moni
 
 | Item | Description |
 |---|---|
-| Version | Current Turing ES build version |
+| Version | Current Turing build version |
 | Java Version | JVM version in use |
 | Java Vendor | JVM vendor (e.g., Eclipse Adoptium) |
 | OS | Operating system name, version, and architecture |

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: DSL Query API
-description: "Elasticsearch-compatible Query DSL API for Turing ES: search across Solr, Lucene, and Elasticsearch with a unified query language."
+description: "Elasticsearch-compatible Query DSL API for Viglet Turing: search across Solr, Lucene, and Elasticsearch with a unified query language."
 ---
 
 # DSL Query API
 
-The **DSL Query API** lets you search any Semantic Navigation site with the **Elasticsearch Query DSL**: the same JSON query language whether the site is backed by Solr, Lucene, or Elasticsearch. Turing ES translates the DSL to the configured engine and returns an Elasticsearch-shaped response, so you write one query syntax and never re-learn it per backend.
+The **DSL Query API** lets you search any Semantic Navigation site with the **Elasticsearch Query DSL**: the same JSON query language whether the site is backed by Solr, Lucene, or Elasticsearch. Viglet Turing translates the DSL to the configured engine and returns an Elasticsearch-shaped response, so you write one query syntax and never re-learn it per backend.
 
 You'd reach for this over the simpler [`/search` REST endpoint](./rest-api.md) when you need the full expressive power of structured queries (bool composition, nested aggregations, range filters, `more_like_this`) or when you're porting an existing Elasticsearch client. The same query types are what AI Agents drive through the [DSL search tools](./tool-calling.md#dsl-search-6-tools).
 
@@ -27,8 +27,8 @@ The `GET` method performs a `match_all` search. The `POST` method accepts a JSON
 ### Engines that serve this API
 
 Solr, Elasticsearch and Lucene translate the whole syntax. [Adobe AEM Content
-AI](./search-engine.md#content-ai) serves a **defined subset** and refuses the rest —
-see [Compatibility Matrix → Adobe AEM Content
+AI](./search-engine.md#content-ai) serves a **defined subset** and refuses the rest.
+See [Compatibility Matrix → Adobe AEM Content
 AI](./dsl-compatibility.md#adobe-aem-content-ai-a-listed-subset).
 
 A site bound to an engine with no DSL implementation at all gets **`501 Not

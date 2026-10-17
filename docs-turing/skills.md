@@ -1,12 +1,12 @@
 ---
 sidebar_position: 9
 title: Skills
-description: Run Anthropic-compatible Skills inside Turing ES. A Skill is a portable folder (SKILL.md + scripts + references) that runs in a hardened Docker sandbox, activated by progressive disclosure, and usable in both chat and semantic navigation.
+description: Run Anthropic-compatible Skills inside Viglet Turing. A Skill is a portable folder (SKILL.md + scripts + references) that runs in a hardened Docker sandbox, activated by progressive disclosure, and usable in both chat and semantic navigation.
 ---
 
 # Skills
 
-> *A Custom Tool teaches an agent one function. An MCP server connects it to one system. A **Skill** packages a whole capability (instructions, scripts, reference material, and the runtime to execute them) into one portable folder that runs the same way in Claude **and** in Turing ES.*
+> *A Custom Tool teaches an agent one function. An MCP server connects it to one system. A **Skill** packages a whole capability (instructions, scripts, reference material, and the runtime to execute them) into one portable folder that runs the same way in Claude **and** in Viglet Turing.*
 
 A **Skill** is an [Anthropic-compatible](https://www.anthropic.com/news/skills) folder: a `SKILL.md` file at the root (with YAML frontmatter), optionally accompanied by `scripts/`, `references/`, and `assets/`. You author it like a mini project, store it in object storage, and Turing runs it inside a **Docker sandbox that is compatible with Anthropic's skill container**.
 

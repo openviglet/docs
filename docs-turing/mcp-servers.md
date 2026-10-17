@@ -1,14 +1,14 @@
 ---
 sidebar_position: 6
 title: MCP Servers
-description: "MCP works both ways in Turing ES: connect AI Agents to external tool servers (client), and expose Turing's own search/RAG/agent/analytics tools to Claude Desktop, Claude Code, or Cursor (server)."
+description: "MCP works both ways in Viglet Turing: connect AI Agents to external tool servers (client), and expose Turing's own search/RAG/agent/analytics tools to Claude Desktop, Claude Code, or Cursor (server)."
 ---
 
 # MCP Servers
 
-The **Model Context Protocol (MCP)** is an open standard that lets AI models call tools hosted on external servers, turning any API, database, or internal system into a capability that an AI Agent can use autonomously. If you are an administrator looking to extend your agents beyond the 27 built-in tools, MCP Servers let you connect to virtually any external service without writing custom code inside Turing ES.
+The **Model Context Protocol (MCP)** is an open standard that lets AI models call tools hosted on external servers, turning any API, database, or internal system into a capability that an AI Agent can use autonomously. If you are an administrator looking to extend your agents beyond the 27 built-in tools, MCP Servers let you connect to virtually any external service without writing custom code inside Viglet Turing.
 
-An **MCP Server** extends the capabilities of an AI Agent by connecting it to any external server that implements the **Model Context Protocol (MCP)**. This allows Turing ES agents to use tools defined completely outside the platform, a company-internal knowledge system, a proprietary data API, a database query interface, or any of the growing ecosystem of public MCP servers.
+An **MCP Server** extends the capabilities of an AI Agent by connecting it to any external server that implements the **Model Context Protocol (MCP)**. This allows Turing agents to use tools defined completely outside the platform, a company-internal knowledge system, a proprietary data API, a database query interface, or any of the growing ecosystem of public MCP servers.
 
 MCP Servers are configured in **Administration → MCP Servers** and then selected per [AI Agent](./ai-agents.md).
 
@@ -23,7 +23,7 @@ This first part of the page is about Turing as an MCP **client**, your agents ca
 | Field | Description |
 |---|---|
 | **Name** | Display name for the MCP server: shown when selecting it in an AI Agent |
-| **Transport type** | `HTTP` or `stdio`: how Turing ES communicates with the server |
+| **Transport type** | `HTTP` or `stdio`: how Turing communicates with the server |
 | **Command** | For `stdio`: the executable to launch the MCP server process (e.g., `npx`) |
 | **Arguments** | For `stdio`: command-line arguments passed to the process (e.g., `@modelcontextprotocol/server-filesystem /data`) |
 | **URL** | For `HTTP`: the MCP server endpoint URL |
@@ -176,7 +176,7 @@ The server also publishes MCP **resources** and **prompts** (not just tools), so
 | Page | Description |
 |---|---|
 | [AI Agents](./ai-agents.md) | Compose agents with native tools + MCP servers; `invoke_agent` exposes them over MCP |
-| [Tool Calling](./tool-calling.md) | The native tools built into Turing ES |
+| [Tool Calling](./tool-calling.md) | The native tools built into Turing |
 | [Semantic Navigation](./semantic-navigation.md) | The search surface the MCP read tools delegate to |
 | [Chat Analytics](./chat-analytics.md) | The data behind `search_metrics` / `content_gaps` |
 | [Chat](./chat.md) | Front-end chat interface where agents are used |

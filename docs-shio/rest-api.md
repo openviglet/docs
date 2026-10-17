@@ -150,7 +150,7 @@ page and the tree disagree.
 ### Ids are the server's to assign
 
 On a `POST`, leave the id out. The instance mints one and returns it, and a blank string is treated
-as "not set" rather than stored — a row keyed on an empty string is listed by the collection
+as "not set" rather than stored: a row keyed on an empty string is listed by the collection
 endpoint and reachable by nothing, since `/api/v2/thing/` does not match `/api/v2/thing/{id}`. If
 you deliberately assign your own key, send a non-empty one and it is kept.
 

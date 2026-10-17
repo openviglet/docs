@@ -11,14 +11,14 @@ graph TB
     end
 
     subgraph External [" 🌍 External (Not Java) "]
-        WP["📝 WordPress Plugin\nPHP plugin inside WordPress\n\nEvent-driven\nDirect HTTP to Turing ES"]
+        WP["📝 WordPress Plugin\nPHP plugin inside WordPress\n\nEvent-driven\nDirect HTTP to Viglet Turing"]
     end
 
     PIPELINE["⚙️ Pipeline Engine"]
 
     Plugins --> PIPELINE
     Standalone -->|"REST API"| PIPELINE
-    WP -->|"HTTP POST"| TUR["🔍 Turing ES"]
+    WP -->|"HTTP POST"| TUR["🔍 Turing"]
 
     classDef blue fill:#dbeafe,stroke:#4A90D9,stroke-width:2px,color:#1a1a1a
     classDef green fill:#dcfce7,stroke:#50B86C,stroke-width:2px,color:#1a1a1a

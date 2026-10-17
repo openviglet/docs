@@ -62,7 +62,7 @@ shio.marketplace.url=https://shio.viglet.org/marketplace/marketplace.json
 shio.marketplace.timeout-millis=5000
 ```
 
-With it off, listing the marketplace still answers — with the six built-ins and a
+With it off, listing the marketplace still answers, with the six built-ins and a
 `source` of `builtin-only`. That is deliberate: "the feature is off" and "this build has
 no packages" are different facts, and the listing says which. When a catalogue is
 configured but cannot be reached, the source reads `unreachable` and carries the reason,
@@ -78,7 +78,7 @@ shio apply --blueprint shio-blueprint-blog --site mysite
 ```
 
 **Installing is not applying.** `install` downloads the package and puts it where the
-registry can see it, and stops there — applying it to a site stays `shio apply
+registry can see it, and stops there: applying it to a site stays `shio apply
 --blueprint`. The separation is the point: you can read what you installed before
 anything writes to your content. `install --dry-run` goes further and does everything
 except the move into place, so an archive that is malformed, or that disagrees with the
@@ -87,14 +87,14 @@ catalogue about its own name, is caught before it lands.
 ### From the console and from an agent
 
 The console has the same catalogue under **Admin → Marketplace**. An agent reads it with
-the `shio_marketplace` MCP tool, which lists and describes — it does **not** install.
+the `shio_marketplace` MCP tool, which lists and describes: it does **not** install.
 That is a deliberate boundary, not an omission: installing a stranger's package is the
 operator's act, so it stays with a credential the operator holds.
 
 ### Who may install
 
 Browsing is open to anyone signed in. **Installing and uninstalling require an
-administrator**, over every surface — the console, the CLI and the REST API alike.
+administrator**, over every surface: the console, the CLI and the REST API alike.
 The reasoning is that merely re-reading the package directory already needs an
 administrator, because it changes what every later apply can do; installing is that act
 plus a download, so it cannot be gated more weakly than what it contains.
@@ -124,7 +124,7 @@ shio apply --blueprint marketing-site --site mysite --create-site \
 
 Everything lands as **drafts**. Publishing is yours.
 
-The two section packages — `marketing-site` and `landing` — arrive **editable on the page**:
+The two section packages (`marketing-site` and `landing`) arrive **editable on the page**:
 open one in the Universal Editor and every section's fields are there, plus the page's own
 title and description. A curator changes the words without opening the console form, and
 without anybody having built a template first.
@@ -159,7 +159,7 @@ follow from that, and each is a refusal rather than a convention:
   over REST).
 - **Substitution is `{{name}}` and nothing else.** No conditionals, no expressions: the
   same parameters always produce the same site. `site` is reserved and always available.
-  An unknown parameter is a teaching error, never quietly dropped — **except inside a
+  An unknown parameter is a teaching error, never quietly dropped, **except inside a
   template field** (`HTML`, `CSS`, `JAVASCRIPT`), where an unknown name belongs to the
   page renderer and passes through untouched. A package that ships a layout writes
   `{{post.title}}` there and means the renderer's, not yours; the trade is that a
@@ -177,7 +177,7 @@ follow from that, and each is a refusal rather than a convention:
   directory, reload, and read the refusal.
 - **A package cannot come from a URL.** The only sources are the instance's own classpath
   and one directory an operator names. Whoever set that path is vouching for what is in
-  it, and there is no fetch-by-URL — a blueprint writes pages under *your* credentials,
+  it, and there is no fetch-by-URL: a blueprint writes pages under *your* credentials,
   so moving that decision from a person to a network is the shape of every supply-chain
   incident. The `shio-blueprint-` name prefix is reserved for packages that did not ship
   with the instance, so the name tells you where something came from.

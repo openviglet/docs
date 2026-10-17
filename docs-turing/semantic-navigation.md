@@ -6,9 +6,9 @@ description: "Configure and manage Semantic Navigation Sites: behavior, facets, 
 
 # Semantic Navigation
 
-The **Semantic Navigation** page (`/admin/sn`) manages the search experiences that power every user-facing search in Turing ES. It is accessible from the **Enterprise Search** section of the sidebar.
+The **Semantic Navigation** page (`/admin/sn`) manages the search experiences that power every user-facing search in Viglet Turing. It is accessible from the **Enterprise Search** section of the sidebar.
 
-Each **Semantic Navigation Site** (SN Site) is a complete, independently configured search experience: it defines which content is indexed, which search engine backend is used, how results are presented, which AI features are enabled, and how the front-end should render the response. A single Turing ES instance can host multiple SN Sites.
+Each **Semantic Navigation Site** (SN Site) is a complete, independently configured search experience: it defines which content is indexed, which search engine backend is used, how results are presented, which AI features are enabled, and how the front-end should render the response. A single Turing instance can host multiple SN Sites.
 
 For a conceptual overview of what SN Sites are and how they relate to the rest of the system, see [Core Concepts](./getting-started/core-concepts.md).
 
@@ -333,7 +333,7 @@ Each item in a Custom Facet is defined by an operator that generates its Solr fi
 
 **How it works**
 
-Once a Custom Facet is saved, Turing ES generates the facet items automatically on every search request. Each item appears in the `widget.facet` (or `widget.secondaryFacet`) section of the response with its pre-built filter link, exactly like a regular facet value. The front-end renders it without any special handling: Custom Facets are indistinguishable from regular facets in the response structure.
+Once a Custom Facet is saved, Turing generates the facet items automatically on every search request. Each item appears in the `widget.facet` (or `widget.secondaryFacet`) section of the response with its pre-built filter link, exactly like a regular facet value. The front-end renders it without any special handling: Custom Facets are indistinguishable from regular facets in the response structure.
 
 **Example: Price range facet**
 
@@ -376,7 +376,7 @@ Custom Facet items use concrete `BigDecimal` values (for numeric fields) or `Ins
 
 ### Merge Providers
 
-Merge Providers enable Turing ES to detect when two connectors have indexed the same real-world document and merge their fields into a single enriched Solr document.
+Merge Providers enable Turing to detect when two connectors have indexed the same real-world document and merge their fields into a single enriched Solr document.
 
 #### What they are
 
@@ -384,7 +384,7 @@ Merge Providers solve the problem of having two independent connectors that inde
 
 A classic example: an **AEM connector** indexes structured data from the CMS (`model.json`), capturing content metadata such as content type, author, tags, and structured fields. A **WebCrawler** indexes the same page as rendered HTML, capturing the full readable text. Both connectors run independently and neither has access to the data the other collects.
 
-Merge Providers instruct Turing ES to detect when both connectors have indexed the same document and merge their content into a single, enriched Solr document.
+Merge Providers instruct Turing to detect when both connectors have indexed the same document and merge their content into a single, enriched Solr document.
 
 #### How they work
 
@@ -538,7 +538,7 @@ Result: documents matching any of the conditions: `segment=premium`, `segment=go
 
 #### Solr filter query generation
 
-Turing ES converts the rule type into Solr `fq` clauses automatically.
+Turing converts the rule type into Solr `fq` clauses automatically.
 
 **AND logic** (each attribute group becomes a clause, all clauses joined with AND):
 
@@ -641,7 +641,7 @@ Returns documents accessible to IT or Security groups, AND with clearance=confid
 
 #### Indexing requirements
 
-The targeting attributes must be **indexed fields** in the Solr schema and **populated at indexing time** by the Dumont DEP connector. Add the desired targeting fields to the SN Site's Fields configuration so they are included in the schema.
+The targeting attributes must be **indexed fields** in the Solr schema and **populated at indexing time** by the Viglet Dumont connector. Add the desired targeting fields to the SN Site's Fields configuration so they are included in the schema.
 
 If a document is indexed without a targeting attribute (the field is absent or empty), it is treated as unrestricted and always visible, the fallback clause ensures this.
 
@@ -721,7 +721,7 @@ Spotlights operate in two modes:
 
 **Managed mode:** The spotlight references documents that exist in the Solr index. The system retrieves live metadata from the index at query time, so the result always reflects the current state of the document (updated title, description, etc.).
 
-**Unmanaged mode:** The spotlight stores its own raw content (title, description, URL, type) independently of the index. This is useful for pinning external URLs or content that is not indexed in Turing ES.
+**Unmanaged mode:** The spotlight stores its own raw content (title, description, URL, type) independently of the index. This is useful for pinning external URLs or content that is not indexed in Turing.
 
 ---
 
@@ -939,7 +939,7 @@ When the user filters by `category:electronics`, add brand and price facets:
 
 ### Top Search Terms
 
-Displays reports of the most frequently searched terms for this site. Turing ES records every search query and aggregates statistics across four time windows:
+Displays reports of the most frequently searched terms for this site. Turing records every search query and aggregates statistics across four time windows:
 
 | Report | Description |
 |---|---|
@@ -1034,7 +1034,7 @@ An editor for the prompt template sent to the LLM on each chat request. The temp
 
 Saving is blocked if either variable is missing from the template.
 
-**How it works:** When documents are indexed, Turing ES extracts title, summary, and body text and stores their embeddings in the configured vector store. When a user sends a chat request (`GET /api/sn/{siteName}/chat?q=...`), the system performs a similarity search, builds the prompt with the retrieved context, sends it to the LLM, and returns the generated response via Server-Sent Events (SSE). See [Chat](./chat.md) for the front-end experience.
+**How it works:** When documents are indexed, Turing extracts title, summary, and body text and stores their embeddings in the configured vector store. When a user sends a chat request (`GET /api/sn/{siteName}/chat?q=...`), the system performs a similarity search, builds the prompt with the retrieved context, sends it to the LLM, and returns the generated response via Server-Sent Events (SSE). See [Chat](./chat.md) for the front-end experience.
 
 ---
 

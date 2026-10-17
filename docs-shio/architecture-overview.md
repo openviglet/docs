@@ -123,7 +123,7 @@ sequenceDiagram
 | **Database** | PostgreSQL · MariaDB/MySQL · H2 | H2 for development; the schema is DB-agnostic and Liquibase-managed |
 | **Schema** | Liquibase | `ddl-auto=none`; migrations are the source of truth |
 | **Template engine** | Handlebars.java | No script engine on the classpath |
-| **Search** | In-database full text; **optional** Viglet Turing ES client | Turing is off by default (`shio.turing.enabled=false`) |
+| **Search** | In-database full text; **optional** Viglet Turing client | Turing is off by default (`shio.turing.enabled=false`) |
 | **Cache** | Hazelcast (embedded), HTTP `ETag` / `Cache-Control`, per-transaction render caches | |
 | **File extraction** | Apache Tika | Text extraction from uploads |
 | **Console** | React 19 + TypeScript + Radix UI + Tailwind + Vite | Built into the JAR |
@@ -133,7 +133,7 @@ sequenceDiagram
 :::info Not dependencies
 Two things earlier documentation listed as part of the stack are **not**: there is no
 server-side JavaScript engine (the Nashorn artifact is explicitly excluded from the build),
-and **Elasticsearch is not a dependency**: search runs in your database, and Turing ES is
+and **Elasticsearch is not a dependency**: search runs in your database, and Turing is
 an optional client you enable if you want faceted enterprise search.
 :::
 
@@ -160,7 +160,7 @@ Shio + PostgreSQL (or MariaDB/MySQL). This is the shape most installations want:
 
 ### Containers
 
-`docker compose` with Shio, a database, and a volume for `store/`. Turing ES is a separate
+`docker compose` with Shio, a database, and a volume for `store/`. Turing is a separate
 compose service only if you enabled indexing.
 
 ### Multiple nodes

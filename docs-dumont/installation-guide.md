@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: Installation Guide
-description: "Install and configure Viglet Dumont DEP: connector JAR, connector plugins, classpath configuration, and service setup."
+description: "Install and configure Viglet Dumont: connector JAR, connector plugins, classpath configuration, and service setup."
 ---
 
-# Viglet Dumont DEP: Installation Guide
+# Viglet Dumont: Installation Guide
 
-Viglet Dumont DEP is an open-source data extraction platform that connects content sources to search engines. The connector application (`dumont-connector.jar`) provides the pipeline infrastructure (message queue, batch processing, strategies, and indexing plugins) while **connector plugins** (AEM, Web Crawler) provide the actual content extraction capabilities.
+Viglet Dumont is an open-source data extraction platform that connects content sources to search engines. The connector application (`dumont-connector.jar`) provides the pipeline infrastructure (message queue, batch processing, strategies, and indexing plugins) while **connector plugins** (AEM, Web Crawler) provide the actual content extraction capabilities.
 
 :::warning The connector JAR alone does not crawl content
 `dumont-connector.jar` is the pipeline engine. To actually extract content from sources, you must add a **connector plugin JAR** (AEM or Web Crawler) to the classpath via `-Dloader.path`. Without a plugin, the connector has no data source to crawl.
@@ -30,10 +30,10 @@ The connector JAR is built with Spring Boot's **ZIP layout** (PropertiesLauncher
 
 ## Installing Java
 
-Dumont DEP requires Java.
+Dumont requires Java.
 
 :::note
-Dumont DEP only supports **Java 21** or later.
+Dumont only supports **Java 21** or later.
 :::
 
 Set the `JAVA_HOME` environment variable and add `$JAVA_HOME/bin` to your `PATH`.
@@ -52,7 +52,7 @@ In addition:
 
 ---
 
-## Installing Dumont DEP
+## Installing Dumont
 
 ### Option 1: Docker (fastest)
 
@@ -102,7 +102,7 @@ cp web-crawler/wc-plugin/target/web-crawler-plugin.jar /appl/viglet/dumont/serve
 
 ## Starting with a Connector Plugin
 
-The key to running Dumont DEP is the `-Dloader.path` JVM property. It tells Spring Boot's PropertiesLauncher where to find the connector plugin JARs.
+The key to running Dumont is the `-Dloader.path` JVM property. It tells Spring Boot's PropertiesLauncher where to find the connector plugin JARs.
 
 ### With AEM Plugin
 
@@ -151,7 +151,7 @@ You can point to a directory or a specific JAR: `-Dloader.path=libs` or `-Dloade
 
 ## Database Configuration
 
-By default, Dumont DEP uses **H2** as its embedded database for tracking indexing state. For production, replace with PostgreSQL.
+By default, Dumont uses **H2** as its embedded database for tracking indexing state. For production, replace with PostgreSQL.
 
 ### H2 (default: development only)
 
@@ -182,9 +182,9 @@ java -Dloader.path=libs \
 
 ---
 
-## Connecting to Turing ES
+## Connecting to Viglet Turing
 
-Dumont DEP sends content to Turing ES by default. Configure the connection:
+Dumont sends content to Turing by default. Configure the connection:
 
 ```yaml
 turing:
@@ -192,10 +192,10 @@ turing:
   apiKey: <YOUR_TURING_API_KEY>
 ```
 
-Create an API Token in **Turing ES → Administration → API Tokens** and use it as the `apiKey` value.
+Create an API Token in **Turing → Administration → API Tokens** and use it as the `apiKey` value.
 
 :::warning API Token Required
-Dumont DEP cannot send content to Turing ES without a valid API Token. Create one in the Turing ES admin console before starting Dumont DEP.
+Dumont cannot send content to Turing without a valid API Token. Create one in the Turing admin console before starting Dumont.
 :::
 
 ---
@@ -230,7 +230,7 @@ As root, create `/etc/systemd/system/dumont-aem.service`:
 
 ```ini
 [Unit]
-Description=Viglet Dumont DEP (AEM)
+Description=Viglet Dumont (AEM)
 After=syslog.target
 
 [Service]
@@ -279,7 +279,7 @@ Create a separate systemd service for each (e.g., `dumont-aem.service`, `dumont-
 
 ## Standalone Connectors (Database & FileSystem)
 
-The **Database** and **FileSystem** connectors are **standalone CLI tools**: they do not run as plugins inside the connector application. Instead, they connect to a running Dumont DEP instance via its REST API.
+The **Database** and **FileSystem** connectors are **standalone CLI tools**: they do not run as plugins inside the connector application. Instead, they connect to a running Dumont instance via its REST API.
 
 ### Database Connector
 
@@ -311,7 +311,7 @@ These tools run independently and can be scheduled via cron jobs or CI/CD pipeli
 
 ## Docker Compose
 
-A full stack with Dumont DEP, Turing ES, Solr, and MariaDB:
+A full stack with Dumont, Turing, Solr, and MariaDB:
 
 ```yaml
 services:
@@ -346,7 +346,7 @@ services:
 
 ## Verifying the Installation
 
-After starting Dumont DEP, verify it is running:
+After starting Dumont, verify it is running:
 
 ```bash
 curl http://localhost:30130/api/v2/connector/status

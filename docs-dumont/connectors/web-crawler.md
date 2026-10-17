@@ -116,7 +116,7 @@ The crawler will:
 2. Follow all links matching `/docs/` paths
 3. Skip links to stylesheets, scripts, and images
 4. Extract each page's title, body text, and URL
-5. Send each page to the `Documentation` SN Site in Turing ES
+5. Send each page to the `Documentation` SN Site in Viglet Turing
 
 ---
 
@@ -147,7 +147,7 @@ If no locale extension is configured, the default locale from the source configu
 |---|---|
 | [Connectors Overview](./overview.md) | All available connectors |
 | [Core Concepts](../getting-started/core-concepts.md) | Pipeline, strategies, and change detection |
-| [Turing ES: Integration](/turing/integration) | How Turing ES receives content from connectors |
+| [Turing: Integration](/turing/integration) | How Turing receives content from connectors |
 
 ---
 

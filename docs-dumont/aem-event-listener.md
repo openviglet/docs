@@ -222,7 +222,7 @@ For AEM as a Cloud Service, set these variables in Cloud Manager:
 1. **Check bundle status:** AEM → Tools → Operations → Web Console → Bundles → search "dumont": should be **Active**
 2. **Check configuration:** Web Console → Configuration → search "TurAemIndexer": verify host and configName
 3. **Test:** Publish a page in AEM and check the Dumont connector logs for incoming requests
-4. **Monitor:** In Turing ES → Integration → Monitoring, filter by your AEM source to see indexing events
+4. **Monitor:** In Viglet Turing → Integration → Monitoring, filter by your AEM source to see indexing events
 
 ---
 
@@ -233,4 +233,4 @@ For AEM as a Cloud Service, set these variables in Cloud Manager:
 | [AEM Connector](./connectors/aem.md) | How the connector processes AEM content (infinity.json, tags, model.json) |
 | [Extending the AEM Connector](./extending-aem.md) | Custom extensions, configuration JSON, and Maven dependencies |
 | [Installation Guide](./installation-guide.md) | Deploying Dumont connector with the AEM plugin |
-| [Turing ES: AEM Integration](/turing/integration-aem) | Managing AEM indexing via the Turing ES admin console |
+| [Turing: AEM Integration](/turing/integration-aem) | Managing AEM indexing via the Turing admin console |

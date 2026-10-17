@@ -1,6 +1,6 @@
 ---
 slug: enterprise-search-for-adobe-aem
-title: "How to Add Enterprise Search to Adobe AEM with Viglet Turing ES"
+title: "How to Add Enterprise Search to Adobe AEM with Viglet Turing"
 description: "A step-by-step guide to indexing Adobe Experience Manager content into an open-source enterprise search engine with faceted navigation, semantic search, and RAG: an alternative to Algolia, Coveo, and Lucidworks."
 authors: [alexandre]
 tags: [aem, enterprise-search, semantic-search, open-source]
@@ -24,14 +24,14 @@ relevance tuning, multi-language sites, and increasingly, conversational
 Most teams reach for a SaaS layer (**Algolia, Coveo, or Lucidworks**) and pay
 per document and per query, while their content leaves their infrastructure.
 This guide shows the open-source alternative: indexing AEM into
-[**Viglet Turing ES**](https://www.viglet.org/turing/), an Apache-2.0 enterprise
+[**Viglet Turing**](https://www.viglet.org/turing/), an Apache-2.0 enterprise
 search platform you self-host, with semantic navigation and generative AI built in.
 
 <!-- truncate -->
 
 ## What you'll build
 
-By the end you'll have AEM pages flowing into a Turing ES search index, with:
+By the end you'll have AEM pages flowing into a Turing search index, with:
 
 - **Faceted search**: AEM tags become filterable facets automatically
 - **Real-time sync**: pages re-index the moment they're published in AEM
@@ -40,17 +40,17 @@ By the end you'll have AEM pages flowing into a Turing ES search index, with:
 
 ## The architecture in one picture
 
-Turing ES doesn't crawl AEM directly. A dedicated connector,
-[**Viglet Dumont DEP**](https://www.viglet.org/dumont/), sits between them: an
+Turing doesn't crawl AEM directly. A dedicated connector,
+[**Viglet Dumont**](https://www.viglet.org/dumont/), sits between them: an
 OSGi bundle inside AEM emits events, and the Dumont connector fetches the
-content and indexes it into Turing ES.
+content and indexes it into Turing.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px', 'lineColor': '#64748b'}}}%%
 flowchart LR
     AEM["<b>AEM</b><br/><small>Event Listener (OSGi)</small>"]
-    DUM["<b>Dumont DEP</b><br/><small>AEM Connector</small>"]
-    TUR["<b>Turing ES</b><br/><small>Solr / Lucene</small>"]
+    DUM["<b>Dumont</b><br/><small>AEM Connector</small>"]
+    TUR["<b>Turing</b><br/><small>Solr / Lucene</small>"]
 
     AEM -->|"page published<br/>POST /api/v2/aem/index"| DUM
     DUM -->|"index pipeline"| TUR
@@ -68,10 +68,10 @@ Three components, each documented in full:
 | Component | Runs where | Job |
 |---|---|---|
 | **AEM Event Listener** | Inside AEM (OSGi bundle) | Notifies the connector on publish/modify/delete |
-| **AEM Connector Plugin** | Dumont DEP process | Fetches content from AEM, indexes into Turing ES |
-| **Integration Instance** | Turing ES admin console | Proxy config + monitoring |
+| **AEM Connector Plugin** | Dumont process | Fetches content from AEM, indexes into Turing |
+| **Integration Instance** | Turing admin console | Proxy config + monitoring |
 
-## Step 1: Run Turing ES
+## Step 1: Run Turing
 
 The fastest path is Docker:
 
@@ -86,7 +86,7 @@ This is the index your AEM content will land in.
 
 ## Step 2: Configure the AEM source in Dumont
 
-In the Turing ES admin console, go to **Enterprise Search → Integration** and
+In the Turing admin console, go to **Enterprise Search → Integration** and
 add an AEM instance. The key source fields:
 
 | Field | Example | Notes |
@@ -94,7 +94,7 @@ add an AEM instance. The key source fields:
 | Endpoint | `http://localhost:4502` | Your AEM author or publish instance |
 | Root Path | `/content/wknd` | Where traversal starts |
 | Content Type | `cq:Page` | What to index |
-| SN Site (Publish) | `wknd-search` | The Turing ES index to feed |
+| SN Site (Publish) | `wknd-search` | The Turing index to feed |
 
 That's it for the happy path. AEM **tags are converted to facets
 automatically**, with no field mapping required.
@@ -116,7 +116,7 @@ curl -X POST http://localhost:30130/api/v2/aem/index/WKND \
 
 The connector calls AEM's `infinity.json` to read the full JCR node tree,
 pulls `jcr:content.tags.json` for facets, traverses children, and sends each
-page through the Dumont pipeline into Turing ES.
+page through the Dumont pipeline into Turing.
 
 For **large content trees**, switch from tree traversal to AEM's QueryBuilder
 discovery, which finds all pages in bulk and processes them in parallel:
@@ -177,7 +177,7 @@ filter panel.
 
 ## Step 6 (optional): Conversational answers (RAG)
 
-Because Turing ES already holds your AEM content, turning on **RAG** gives you
+Because Turing already holds your AEM content, turning on **RAG** gives you
 grounded AI answers with citations, over your own content, on your own
 infrastructure, with the LLM of your choice (OpenAI, Ollama, Anthropic, Gemini):
 
@@ -200,11 +200,11 @@ a third party.
 ## Next steps
 
 - 📘 [AEM Connector: full reference](/dumont/connectors/aem) (event listeners, QueryBuilder, custom extractors)
-- 📗 [Turing ES: AEM Integration](/turing/integration-aem)
+- 📗 [Turing: AEM Integration](/turing/integration-aem)
 - 📙 [Semantic Navigation](/turing/semantic-navigation) and [RAG](/turing/rag) guides
-- ⭐ [Star Turing ES on GitHub](https://github.com/openviglet/turing-ce) (it genuinely helps others find it)
+- ⭐ [Star Turing on GitHub](https://github.com/openviglet/turing-ce) (it genuinely helps others find it)
 - 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
 
-*Viglet Turing ES is open-source (Apache 2.0) enterprise search with semantic
+*Viglet Turing is open-source (Apache 2.0) enterprise search with semantic
 navigation and generative AI. Self-host it, index Adobe AEM, WordPress, databases,
 file systems, and web content, and own your search stack end to end.*

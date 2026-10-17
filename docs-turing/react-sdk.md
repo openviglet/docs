@@ -1,12 +1,12 @@
 ---
 sidebar_position: 6
 title: React SDK
-description: Headless hooks and unstyled UI components for building custom search experiences with Viglet Turing ES.
+description: Headless hooks and unstyled UI components for building custom search experiences with Viglet Turing.
 ---
 
 # React SDK
 
-The **@viglet/turing-react-sdk** provides headless hooks and unstyled UI components for building custom search experiences on top of the Viglet Turing ES Semantic Navigation API.
+The **@viglet/turing-react-sdk** provides headless hooks and unstyled UI components for building custom search experiences on top of the Viglet Turing Semantic Navigation API.
 
 - **Headless architecture**: zero built-in styles, full render control via render props
 - **Two modes**: manual (programmatic) or URL-synced (URL as source of truth)
@@ -133,7 +133,7 @@ const {
   search,        // Execute with given params
   searchRequest, // Execute from an explicit structured request
   searchQuery,   // New text query (resets page to 1)
-  toggleFacet,   // Toggle a structured facet item — or a result's own facet chip
+  toggleFacet,   // Toggle a structured facet item, or a result's own facet chip
   clearFacet,    // Clear one facet
   clearAllFilters,
   applySpellCheck, // Accept (or refuse) "did you mean"
@@ -195,14 +195,14 @@ Each `facetGroup` contains:
     label: string;
     selected: boolean;
     toggle: () => void; // Toggle this facet
-    link?: string;      // Legacy mode only — see below
+    link?: string;      // Legacy mode only (see below)
   }];
 }
 ```
 
 `link` is the server-rendered href for a facet value and exists **only** in
 legacy mode (`postNative: false`). The default POST-native mode returns a
-link-free response, so it is `undefined` there — use `toggle()`, and if you need
+link-free response, so it is `undefined` there: use `toggle()`, and if you need
 a crawlable anchor, handle the absence explicitly rather than rendering
 `<a href={facet.link}>` (which would link to the current page).
 
@@ -308,15 +308,15 @@ const store = useTuringUrlSearch();
 // submitSearch, toggleFacet, goToPage, navigate, setLocale, setSort, showAll, etc.
 ```
 
-`structured` holds the link-free response — the default. `data` holds the legacy
+`structured` holds the link-free response (the default). `data` holds the legacy
 link-bearing one and is `null` unless you set `urlSync.postNative: false`. Prefer
 the derived hooks above (and `useSearchView` below) over reading either directly.
 
 ### useSearchView
 
 Projects whichever response arrived onto one view model, so a component never
-learns which shape it got. It covers the parts the other hooks do not — the site
-icon, the locales, the applied-filter row and the spell-check offer — and resolves
+learns which shape it got. It covers the parts the other hooks do not (the site
+icon, the locales, the applied-filter row and the spell-check offer) and resolves
 each **action** with its state: removing an applied filter subtracts a filter query
 in the default mode and follows an href on the legacy transport, through the same
 `remove()` call.
@@ -343,17 +343,17 @@ return (
 
 | Field | Description |
 |---|---|
-| `source` | `"structured"` \| `"legacy"` \| `"none"` — which shape backed the view |
+| `source` | `"structured"` \| `"legacy"` \| `"none"`: which shape backed the view |
 | `ready` | `true` once a response of either shape arrived |
-| `siteIcon` | The site's Iconify name, or `null` — fall back to your own logo |
+| `siteIcon` | The site's Iconify name, or `null`: fall back to your own logo |
 | `locales` | `[{ locale }]` the site can be searched in |
 | `queryContext` | Counts, paging and default field names |
-| `appliedFilters` | `[{ key, label, remove() }]` — the "applied filters" row |
+| `appliedFilters` | `[{ key, label, remove() }]`: the "applied filters" row |
 | `spellCheck` | `{ correctedTextValue, applyCorrection(), applyOriginal() }` or `null` |
 | `multiSelectFacetItems` | `true` when the site's facets multi-select (draw checkboxes) |
 
 The projection itself is `toSearchView(store)` in
-[`@viglet/turing-sdk`](./javascript-sdk.md#tosearchview) — the same function, so a
+[`@viglet/turing-sdk`](./javascript-sdk.md#tosearchview), the same function, so a
 plain-JS host and a React one resolve a response identically. This hook is the
 React wrapper.
 
@@ -452,14 +452,14 @@ Renders search results using the slot/render-prop pattern.
 | `emptyComponent` | `() => ReactNode` | No-results state |
 | `loadingComponent` | `() => ReactNode` | Loading state |
 | `isLoading` | `boolean` | Show loading component |
-| `onResultClick` | `(document, index) => void` | Fires on a row click — wire it to `trackResultClick` |
+| `onResultClick` | `(document, index) => void` | Fires on a row click: wire it to `trackResultClick` |
 | `onToggleFacet` | `(target) => void` | Toggles a result's facet chip; forwarded to `itemComponent` |
 | `onNavigate` | `(href) => void` | Legacy: follows a chip's href; forwarded the same way |
 
 ### TuringDocumentChips
 
 Renders a result's facet chips (`document.raw.metadata`) as **actions**. A chip
-arrives in one of two shapes — a legacy `href` or a link-free `filterQuery` — and
+arrives in one of two shapes (a legacy `href` or a link-free `filterQuery`), and
 this narrows that for you: a filter query becomes an `aria-pressed` button, an
 href becomes an anchor that still carries the URL (for middle-click and crawlers)
 but calls your handler, and a chip you gave no handler for renders as plain text

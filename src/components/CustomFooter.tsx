@@ -44,9 +44,9 @@ const socialLinks: SocialLink[] = [
 ];
 
 const products: FooterLink[] = [
-  { label: "Turing ES", href: "/turing", dot: "#4169E1" },
-  { label: "Shio CMS", href: "/shio", dot: "#FF6347" },
-  { label: "Dumont DEP", href: "/dumont", dot: "#006400" },
+  { label: "Viglet Turing", href: "/turing", dot: "#4169E1" },
+  { label: "Viglet Shio", href: "/shio", dot: "#7C3AED" },
+  { label: "Viglet Dumont", href: "/dumont", dot: "#0F766E" },
 ];
 
 const resources: FooterLink[] = [

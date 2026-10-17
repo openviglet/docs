@@ -83,7 +83,7 @@ Files that Tika cannot extract text from are silently skipped.
 | Parameter | Required | Default | Description |
 |---|---|---|---|
 | `--source-dir` / `-d` | Yes | n/a | Root directory to scan |
-| `--server` / `-s` | Yes | n/a | Dumont DEP server URL |
+| `--server` / `-s` | Yes | n/a | Viglet Dumont server URL |
 | `--api-key` / `-a` | Yes | n/a | API key for authentication |
 | `--site` | Yes | n/a | Target Semantic Navigation Site name |
 | `--type` / `-t` | No | `Static File` | Content type label for all documents |

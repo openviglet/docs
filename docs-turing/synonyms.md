@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: Synonyms
-description: Author query-time synonyms once and Viglet Turing ES pushes them into Solr, Elasticsearch or Lucene with no reindex, plus a one-click import from Algolia and AI-assisted synonym suggestions mined from your search logs.
+description: Author query-time synonyms once and Viglet Turing pushes them into Solr, Elasticsearch or Lucene with no reindex, plus a one-click import from Algolia and AI-assisted synonym suggestions mined from your search logs.
 ---
 
 # Synonyms
 
-Synonyms make search forgiving: a shopper who types **tv** should still find products described as **television**, and **notebook** should match **laptop**. In **Viglet Turing ES** you author synonyms **once**, per Semantic Navigation Site and locale, and Turing pushes them into whichever search engine backs the site (Solr, Elasticsearch or the embedded Lucene store) as a **query-time** rule that takes effect **without reindexing**.
+Synonyms make search forgiving: a shopper who types **tv** should still find products described as **television**, and **notebook** should match **laptop**. In **Viglet Turing** you author synonyms **once**, per Semantic Navigation Site and locale, and Turing pushes them into whichever search engine backs the site (Solr, Elasticsearch or the embedded Lucene store) as a **query-time** rule that takes effect **without reindexing**.
 
 Manage synonyms from a Semantic Navigation Site: open the site and choose **Synonyms** from its settings.
 

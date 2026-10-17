@@ -1,7 +1,7 @@
 ---
 sidebar_position: 8
 title: DSL Compatibility Matrix
-description: Detailed compatibility matrix of Turing ES DSL Query API across Elasticsearch, Apache Solr, and Apache Lucene engines.
+description: Detailed compatibility matrix of Viglet Turing DSL Query API across Elasticsearch, Apache Solr, and Apache Lucene engines.
 ---
 
 export const N = () => (<span style={{backgroundColor: '#16a34a', color: '#fff', borderRadius: '4px', padding: '1px 7px', fontSize: '0.78em', fontWeight: 700, letterSpacing: '0.5px'}}>N</span>);
@@ -12,12 +12,12 @@ export const X = () => (<span style={{backgroundColor: '#d1d5db', color: '#6b728
 
 # DSL Compatibility Matrix
 
-This page is the **support map** for the [DSL Query API](./dsl-query.md): for every query type, aggregation, and option, it shows how faithfully each search engine backend (Elasticsearch, Solr, Lucene) implements it. Because Turing ES exposes one Elasticsearch-compatible syntax over three different engines, a feature that's native on one may be translated or only partially supported on another.
+This page is the **support map** for the [DSL Query API](./dsl-query.md): for every query type, aggregation, and option, it shows how faithfully each search engine backend (Elasticsearch, Solr, Lucene) implements it. Because Viglet Turing exposes one Elasticsearch-compatible syntax over three different engines, a feature that's native on one may be translated or only partially supported on another.
 
 Reach for this table when you're choosing a backend for a site, or when a DSL query behaves differently than you expected across engines: the badge tells you whether that's a 1:1 mapping, a translation, or a best-effort approximation. Read it alongside the query examples on the [DSL Query API](./dsl-query.md) page.
 
 :::info Content AI is not in this matrix
-A fourth engine — [Adobe AEM Content AI](./search-engine.md#content-ai) — serves the DSL
+A fourth engine, [Adobe AEM Content AI](./search-engine.md#content-ai), serves the DSL
 API over a small, explicitly listed subset rather than a translation of the whole
 syntax, so it has its own section: [Adobe AEM Content
 AI](#adobe-aem-content-ai-a-listed-subset) at the bottom of this page. The three
@@ -266,13 +266,13 @@ For **full DSL compatibility**, use Elasticsearch as the search engine backend. 
 ## Adobe AEM Content AI: a listed subset
 
 Content AI is a [federated, read-only index](./search-engine.md#content-ai) whose query
-language is Adobe's own — a filter DSL plus semantic and keyword queries, not Lucene
-syntax. So rather than approximate the whole Elasticsearch surface, Turing ES translates
+language is Adobe's own: a filter DSL plus semantic and keyword queries, not Lucene
+syntax. So rather than approximate the whole Elasticsearch surface, Turing translates
 a defined subset and **refuses the rest by name**, with `501 Not Implemented`:
 
 | Query / feature | Content AI | Notes |
 |---|:---:|---|
-| `match_all` | <T/> | `NOT exists(...)` over a reserved field name — an empty filter group is invalid in Adobe's schema |
+| `match_all` | <T/> | `NOT exists(...)` over a reserved field name: an empty filter group is invalid in Adobe's schema |
 | `match` | <T/> | A scoring `fulltext` query |
 | `term` | <T/> | `StringFilter`, `NumberFilter` or `BooleanFilter`, chosen from the value's type |
 | `terms` | <T/> | `InFilter` |
@@ -287,7 +287,7 @@ a defined subset and **refuses the rest by name**, with `501 Not Implemented`:
 | Everything else | <X/> | `knn`, `nested`, geo, `function_score`, span, join queries, other aggregations |
 
 **Why refuse rather than approximate.** A clause quietly dropped because it could not be
-translated would leave a query that still runs — and answers confidently from the wrong
+translated would leave a query that still runs, and answers confidently from the wrong
 set of documents. A `501` naming the clause is a worse response and a better answer.
 
 This subset is what the **vectorless copilot** needs, which is the point: that surface

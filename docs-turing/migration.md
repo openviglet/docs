@@ -1,12 +1,12 @@
 ---
 sidebar_position: 6
 title: Migrating from Algolia or Elasticsearch
-description: "Move a search index from Algolia or Elasticsearch to Viglet Turing ES: a concept-mapping table, a three-step import path (schema as code, bulk index, swap the SDK), and self-hosted search where your data stays in your own infrastructure."
+description: "Move a search index from Algolia or Elasticsearch to Viglet Turing: a concept-mapping table, a three-step import path (schema as code, bulk index, swap the SDK), and self-hosted search where your data stays in your own infrastructure."
 ---
 
 # Migrating from Algolia or Elasticsearch
 
-Already running search on **Algolia** or **Elasticsearch**? Viglet Turing ES keeps the search depth you rely on (facets, typo tolerance, synonyms, relevance tuning) and adds RAG, cited chat and AI agents, while running entirely on **your own infrastructure**. Your documents, embeddings and query logs never leave your network, and there is no per-record or per-search billing.
+Already running search on **Algolia** or **Elasticsearch**? Viglet Turing keeps the search depth you rely on (facets, typo tolerance, synonyms, relevance tuning) and adds RAG, cited chat and AI agents, while running entirely on **your own infrastructure**. Your documents, embeddings and query logs never leave your network, and there is no per-record or per-search billing.
 
 This page maps the concepts you already know to their Turing equivalents, then walks the concrete import path. It's a migration, not a rewrite: most of what you built carries over.
 
@@ -14,9 +14,9 @@ This page maps the concepts you already know to their Turing equivalents, then w
 
 ## Concept mapping
 
-The building blocks line up almost one-to-one. Where a hosted feature is paid, beta, or vendor-locked, Turing ES ships the equivalent in the box, running on the search engine you already operate (Apache Solr, Elasticsearch, or the embedded Lucene index).
+The building blocks line up almost one-to-one. Where a hosted feature is paid, beta, or vendor-locked, Turing ships the equivalent in the box, running on the search engine you already operate (Apache Solr, Elasticsearch, or the embedded Lucene index).
 
-| Concept | Algolia | Elasticsearch | Viglet Turing ES |
+| Concept | Algolia | Elasticsearch | Viglet Turing |
 |---|---|---|---|
 | Where documents live | Index | Index | Semantic Navigation (SN) site |
 | A single record | Record (JSON object) | Document (`_source`) | Document: indexed via REST or a connector |
@@ -180,7 +180,7 @@ curl -X POST "http://localhost:2700/api/sn/products/search" \
 
 ## Your data stays in your infrastructure
 
-The reason teams switch: a hosted SaaS keeps your index (and increasingly your users' queries) in someone else's cloud. Turing ES runs entirely on your own hardware.
+The reason teams switch: a hosted SaaS keeps your index (and increasingly your users' queries) in someone else's cloud. Turing runs entirely on your own hardware.
 
 - **Self-hosted under Apache 2.0**: no license fee, no vendor lock-in.
 - **Content, embeddings and query logs stay on-premises**: nothing leaves your network.

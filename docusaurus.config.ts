@@ -4,7 +4,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
   title: "Viglet Docs",
-  tagline: "Documentation for Turing ES, Shio CMS and Dumont DEP",
+  tagline: "Documentation for Viglet Turing, Viglet Shio and Viglet Dumont",
   favicon: "img/favicon.png",
 
   url: "https://docs.viglet.org",
@@ -53,13 +53,13 @@ const config: Config = {
   headTags: [
     {
       // schema.org structured data: helps search engines and LLMs identify
-      // Viglet Turing ES as enterprise search software for AEM/WordPress.
+      // Viglet Turing as enterprise search software for AEM/WordPress.
       tagName: "script",
       attributes: { type: "application/ld+json" },
       innerHTML: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        name: "Viglet Turing ES",
+        name: "Viglet Turing",
         alternateName: "Turing Enterprise Search",
         applicationCategory: "Enterprise Search Software",
         applicationSubCategory:
@@ -153,7 +153,7 @@ const config: Config = {
           routeBasePath: "blog",
           blogTitle: "Viglet Blog: Enterprise Search & AI",
           blogDescription:
-            "Guides and comparisons on enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing ES.",
+            "Guides and comparisons on enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing.",
           showReadingTime: true,
           blogSidebarTitle: "All posts",
           blogSidebarCount: "ALL",
@@ -162,7 +162,7 @@ const config: Config = {
             type: ["rss", "atom"],
             title: "Viglet Blog: Enterprise Search & AI",
             description:
-              "Enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing ES.",
+              "Enterprise search for Adobe AEM and WordPress, semantic search, RAG, and AI agents with Viglet Turing.",
             copyright: `Copyright © ${new Date().getFullYear()} Viglet.`,
             language: "en",
           },
@@ -242,25 +242,25 @@ const config: Config = {
       {
         title: "Viglet Docs",
         description:
-          "Documentation for Turing ES, Shio CMS and Dumont DEP",
+          "Documentation for Viglet Turing, Viglet Shio and Viglet Dumont",
         products: [
           {
             pluginId: "turing",
-            label: "Turing ES - Enterprise Search with Generative AI",
+            label: "Viglet Turing - Enterprise Search with Generative AI",
           },
           {
             pluginId: "shio",
-            label: "Shio CMS - Content Management System",
+            label: "Viglet Shio - Content Management System",
           },
           {
             pluginId: "dumont",
-            label: "Dumont DEP - Data Entry Platform",
+            label: "Viglet Dumont - Data Entry Platform",
           },
         ],
       },
     ],
     [
-      // SH715 — a URL is the one part of a page other people's documents point at, so renaming a
+      // SH715: a URL is the one part of a page other people's documents point at, so renaming a
       // slug without this converts their link into a 404 rather than into different wording. The
       // plugin is the FIRST deliverable and the rename the second; in the other order the rename
       // ships a defect that only shows up in somebody else's bookmark.
@@ -283,7 +283,7 @@ const config: Config = {
     image: "img/banner.jpg",
     metadata: [{ name: "twitter:card", content: "summary_large_image" }],
     navbar: {
-      title: "viglet",
+      title: "Viglet",
       logo: {
         alt: "Viglet Logo",
         src: "img/viglet_logo_sm.png",

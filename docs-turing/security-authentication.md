@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: Authentication
-description: Native authentication for Turing ES, session-based admin console login and API Key authentication for the REST API.
+description: Native authentication for Viglet Turing, session-based admin console login and API Key authentication for the REST API.
 ---
 
 # Authentication
 
-Turing ES supports three authentication modes:
+Viglet Turing supports three authentication modes:
 
 | Mode | Best for | External dependency |
 |---|---|---|
@@ -20,7 +20,7 @@ This page covers **native authentication**. For social login with Google, GitHub
 
 ## Native Authentication (default)
 
-When Keycloak is not enabled, Turing ES uses its own user store:
+When Keycloak is not enabled, Turing uses its own user store:
 
 ### Admin Console
 
@@ -80,7 +80,7 @@ The login page automatically shows buttons only for configured providers. See [S
 
 ## Switching to Keycloak SSO
 
-For production environments with SSO requirements, Turing ES can delegate authentication to Keycloak via OAuth2 / OpenID Connect. Enable it with:
+For production environments with SSO requirements, Turing can delegate authentication to Keycloak via OAuth2 / OpenID Connect. Enable it with:
 
 ```bash
 -Dturing.keycloak=true

@@ -167,7 +167,7 @@ silently. Each one names that side.
 
 The last row is the sharpest case, and the reason the rule is written rather than assumed.
 An open note is the instance's record of what somebody asked for, and it is the one
-projected file a curator edits in the console *while* your tree holds a copy — so the tree
+projected file a curator edits in the console *while* your tree holds a copy, so the tree
 reads it and never writes it. A site with nothing open **loses** the file rather than
 keeping an empty one, because a stale file listing a closed request reads exactly like a
 clean site.

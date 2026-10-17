@@ -99,23 +99,23 @@ their own.
 | `shio_verify` | Lint content and routes; a fix per finding |
 | `shio_digest` | A page's structural digest: the cheap proof a render still looks right. `include=editable` also lists the fields a curator could edit |
 | `shio_changes` | What changed since a cursor: what the curator did while you were away. `address` narrows it to one page |
-| `shio_remember` | Write the conventions the next session should inherit — and drop one, with `forget` |
+| `shio_remember` | Write the conventions the next session should inherit, and drop one, with `forget` |
 | `shio_assets` | The files a site holds |
-| `shio_marketplace` | The packages this instance could install. Lists and describes; it does not install — see [Blueprints § Who may install](./blueprints.md#who-may-install) |
+| `shio_marketplace` | The packages this instance could install. Lists and describes; it does not install. See [Blueprints § Who may install](./blueprints.md#who-may-install) |
 
 Three capabilities you might expect as tools are **parameters** instead, and that is the
 budget above being spent deliberately rather than an omission. Applying a starting point
 is `shio_apply`'s `blueprint` parameter, not a `shio_blueprint` tool; forgetting a
 convention is `shio_remember`'s `forget`; asking which fields a curator could edit is
 `shio_digest`'s `include=editable`, because it is another reading of a render that tool
-already takes. Each would otherwise be a schema paid for on every turn of every session —
+already takes. Each would otherwise be a schema paid for on every turn of every session:
 the third was measured at 24 tokens as a parameter against 146 as a tool of its own.
 
 `shio_context`'s `format` is the same budget spent the other way, and it documents **one**
 value rather than three. `format=json` is deliberately absent: the caller here is a model,
 terse is what it should read, and an option nobody should choose is still an option every
 turn pays to read. `agents-md` earns its place because it is the one rendering meant to be
-*written to a file* — and while it was CLI-only, the client most likely to have a file to
+*written to a file*, and while it was CLI-only, the client most likely to have a file to
 write it to was the one that could not ask for it.
 
 ### A call, and what comes back

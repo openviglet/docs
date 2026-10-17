@@ -1,14 +1,14 @@
 ---
 sidebar_position: 7
 title: Developer Guide
-description: Build Dumont DEP from source, understand the project structure, extension points, and how to contribute.
+description: Build Viglet Dumont from source, understand the project structure, extension points, and how to contribute.
 ---
 
 # Developer Guide
 
-Whether you're building custom extensions, contributing to the project, or integrating Dumont DEP into your CI/CD pipeline, this guide has everything you need.
+Whether you're building custom extensions, contributing to the project, or integrating Viglet Dumont into your CI/CD pipeline, this guide has everything you need.
 
-Dumont DEP is fully open-source at [github.com/openviglet/dumont-ce](https://github.com/openviglet/dumont-ce). All contributions are welcome.
+Dumont is fully open-source at [github.com/openviglet/dumont-ce](https://github.com/openviglet/dumont-ce). All contributions are welcome.
 
 ---
 
@@ -36,7 +36,7 @@ Dumont DEP is fully open-source at [github.com/openviglet/dumont-ce](https://git
 - Java 21 (Temurin recommended)
 - Maven 3.9+
 - Git
-- Turing ES running at `http://localhost:2700` (for end-to-end testing)
+- Viglet Turing running at `http://localhost:2700` (for end-to-end testing)
 - Node.js 26 and pnpm 11, to work on the console (the Maven build invokes them for you)
 
 ### Clone, Build, and Run
@@ -84,7 +84,7 @@ dumont/
 
 ## Extension Points
 
-Dumont DEP provides extension points at multiple levels:
+Dumont provides extension points at multiple levels:
 
 ### Connector-Level Extensions
 
@@ -97,8 +97,8 @@ Dumont DEP provides extension points at multiple levels:
 
 #### Creating a Custom Connector
 
-Most sources are worth modelling for their **structure** — a listing plus per-item detail pages
-with a typed schema — rather than as a link spider. For those, implement `DumStructuredSource`:
+Most sources are worth modelling for their **structure** (a listing plus per-item detail pages
+with a typed schema) rather than as a link spider. For those, implement `DumStructuredSource`:
 its identity, its schema, and the two methods that read the source.
 
 ```java
@@ -129,13 +129,13 @@ for every structured source:
 | You get | What it does |
 |---|---|
 | **Schema as code** | The schema is the single declaration of every field. It becomes the attribute specs published with each document, and it is sent to the backend *before* the first document so fields exist as declared instead of being inferred from the first value seen |
-| **Conservative grounding** | A null, blank or empty value is dropped at the record boundary rather than indexed. A field is absent or it has a value — never `""` in a facet |
+| **Conservative grounding** | A null, blank or empty value is dropped at the record boundary rather than indexed. A field is absent or it has a value, never `""` in a facet |
 | **Enrichment** | A chain of `DumEnricher`s runs between extract and publish, merging through the schema-bound builder so enrichment cannot break grounding, and a failing enricher is isolated |
 | **Safe partial runs** | An interrupted or failing run finishes *standalone*, skipping the deindex sweep, so the previous index survives instead of the un-visited ids being treated as removed |
 | **Coverage and drift** | Per-field coverage is recorded per run, so a layout change that silently stops extracting a field is reported instead of discovered months later |
 | **Dry-run preview** | A run can be previewed against the last full index's fingerprint before anything is published |
 
-If your source genuinely is not structured — an event-driven push, a protocol of its own — the
+If your source genuinely is not structured (an event-driven push, a protocol of its own), the
 low-level interface is still there:
 
 ```java
@@ -162,7 +162,7 @@ public interface DumIndexingPlugin {
     default void provision(DumIndexingSchema schema) { }
 
     /** Report what the index holds for a source, for the content audit's comparison.
-     *  Empty means "cannot answer" — distinct from a present, empty list. */
+     *  Empty means "cannot answer", distinct from a present, empty list. */
     default Optional<List<DumIndexInventoryEntry>> inventory(String siteName, String source) {
         return Optional.empty();
     }
@@ -177,7 +177,7 @@ Register your plugin as a Spring `@Component` with `@ConditionalOnProperty(name 
 
 Strategies are evaluated in priority order for each Job Item:
 
-![Dumont DEP, Processing Strategy Flow](/img/diagrams/dumont-strategy-flow.svg)
+![Dumont, Processing Strategy Flow](/img/diagrams/dumont-strategy-flow.svg)
 
 To add a custom strategy, implement the strategy interface and assign a priority between the existing ones.
 
@@ -216,7 +216,7 @@ Two details worth knowing before a build surprises you:
   than a tolerated count, and each list was emptied and then deleted. All three are errors
   everywhere now. If a rule needs that treatment again, name the files in `eslint.config.js` and
   say why at each one; never raise a ceiling, because a ceiling lets one change pay for another.
-  A genuine one-off exception is an `eslint-disable-next-line` with its reason on the line — there
+  A genuine one-off exception is an `eslint-disable-next-line` with its reason on the line: there
   is exactly one, in `use-grid-adapter.ts`.
 - **`set-state-in-effect` almost always means the value is not state.** Clearing that rule across
   the console took twenty-five fixes and produced two shapes, both of which delete the write rather
@@ -224,35 +224,35 @@ Two details worth knowing before a build surprises you:
   - **Derive it.** Most of them were facts, not state: whether the route is a new record, a blank
     entity the render can compute, which tab the URL names.
   - **Store the answer against the question.** A result kept together with the query that produced
-    it makes "loading" derivable — you are waiting while the answer in hand is not the answer to
-    what is being asked now — and the resets unnecessary. It also removes stale renders, which is
+    it makes "loading" derivable (you are waiting while the answer in hand is not the answer to
+    what is being asked now) and the resets unnecessary. It also removes stale renders, which is
     how it found two real bugs: an answer to a *previous* query can no longer be read as this
     one's.
 
   Do not wrap a synchronous write in `void (async () => { … })()`. The rule cannot see through it,
   the write is still synchronous, and that is a loophole rather than a fix. Calling an async
-  loader that way *is* accepted — `void (async () => { await load() })()`.
+  loader that way *is* accepted: `void (async () => { await load() })()`.
 - **The console build ends by checking that the federated remotes declared their types.** The
-  generator reports failure badly — it has printed an error and exited 0, and it has silently
-  written the wrong layout and exited 0 — so `scripts/check-mf-types.mjs` inspects the artefact
+  generator reports failure badly (it has printed an error and exited 0, and it has silently
+  written the wrong layout and exited 0), so `scripts/check-mf-types.mjs` inspects the artefact
   instead of trusting the exit code.
 
 The console runs in two places. Standalone it is served by the connector itself; inside
-Viglet Turing ES it is mounted as a Module Federation remote, and Turing supplies the surrounding
-chrome. Pages are written once and work in both — a fixed `local` integration id stands in for the
+Viglet Turing it is mounted as a Module Federation remote, and Turing supplies the surrounding
+chrome. Pages are written once and work in both: a fixed `local` integration id stands in for the
 one Turing would pass, and an axios interceptor strips it from API calls.
 
 ### Shared components
 
 Buttons, dialogs, tables, form controls and page chrome come from
-`@viglet/viglet-design-system`, the component library Dumont shares with Viglet Turing ES and
+`@viglet/viglet-design-system`, the component library Dumont shares with Viglet Turing and
 Viglet Shio. Import from it rather than writing a local copy: a copy drifts, and the three
 products stop looking like one.
 
 CI enforces this. `pnpm run lint:ds` fails the build when a component is declared here under a
 name the design system already exports, and each finding names the import that replaces it. Where
-a collision is deliberate — Dumont's `AppFooter` renders Dumont's own version and links, and
-merely shares a name — annotate the declaration with the reason:
+a collision is deliberate (Dumont's `AppFooter` renders Dumont's own version and links, and
+merely shares a name), annotate the declaration with the reason:
 
 ```ts
 // viglet-ds-allow-duplicate AppFooter -- renders Dumont's own logo, connector version and links
@@ -260,8 +260,8 @@ merely shares a name — annotate the declaration with the reason:
 
 ### Two generations of chrome
 
-Console surfaces are being moved to *bento* — the design system's newer visual language, the same
-one Turing uses — one page at a time. Both generations serve at once:
+Console surfaces are being moved to *bento* (the design system's newer visual language, the same
+one Turing uses), one page at a time. Both generations serve at once:
 
 | Tree | Path | Chrome |
 |---|---|---|
@@ -271,11 +271,11 @@ one Turing uses — one page at a time. Both generations serve at once:
 A page appears under `/bento` only once it has actually moved; its `/admin` route keeps working
 either way, so nothing breaks while the migration is in progress and a page can move back. Both
 trees read one navigation declaration (`src/app/nav.const.ts`), which is also what the command
-palette searches — so the sidebar, the rail and the palette can never disagree about which
+palette searches, so the sidebar, the rail and the palette can never disagree about which
 surfaces exist.
 
-**Every source surface has moved.** All six connector types — AEM, database, web crawler,
-filesystem assets, catalog bridge and Edge Delivery Services — list and edit under `/bento`, so
+**Every source surface has moved.** All six connector types (AEM, database, web crawler,
+filesystem assets, catalog bridge and Edge Delivery Services) list and edit under `/bento`, so
 configuring a source end to end never leaves the new shell. The remaining console surfaces
 (indexing rules, monitoring, statistics, coverage, plugins, system information) are reached from
 the rail's section hubs or `⌘K`, which link out to `/admin` until they move too.
@@ -284,7 +284,7 @@ the rail's section hubs or `⌘K`, which link out to `/admin` until they move to
 
 Run `pnpm run census` to see which surfaces are on which era, then:
 
-**A list page** is one `BentoSourceList` call — the shape is shared, so a new one supplies its
+**A list page** is one `BentoSourceList` call: the shape is shared, so a new one supplies its
 service, two field accessors and a translation prefix. Its path, icon and tone come from the
 navigation declaration by surface id, so a page cannot disagree with the rail about what it is
 called.
@@ -302,7 +302,7 @@ era-specific parts are the header and the section cards, so those read the chrom
 Inside the form, `AdaptiveFormHeader` renders the console's sticky header or the bento hero and
 its save-bar morph, and `AdaptiveSectionCard` renders a collapsible card or a frosted section.
 Both default to console chrome, so a form that knows nothing about this behaves exactly as it
-always did — and one form serves both eras rather than being forked into two that drift.
+always did, and one form serves both eras rather than being forked into two that drift.
 
 Finally set `migrated: true` on the surface in `nav.const.ts`. That is what gives it a
 `bentoRoute`, which is how the palette and the hubs know to stay inside the shell instead of

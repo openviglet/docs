@@ -15,8 +15,8 @@ import * as path from "path";
  * (`Access-Control-Allow-Origin: *`), so viglet.org can fetch it at runtime.
  *
  * Product mapping (`solutions`): explicit `viglet_products` frontmatter wins;
- * otherwise a conservative heuristic, every guide maps to Turing ES (the search
- * platform), plus Dumont DEP when the post concerns a source connector (AEM /
+ * otherwise a conservative heuristic, every guide maps to Turing (the search
+ * platform), plus Dumont when the post concerns a source connector (AEM /
  * WordPress). Override per-post with frontmatter when needed.
  */
 

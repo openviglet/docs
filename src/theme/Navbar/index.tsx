@@ -38,9 +38,9 @@ interface VersionsResult {
 }
 
 export const PRODUCTS: Product[] = [
-  { id: "dumont", label: "Dumont DEP", path: "/dumont", dot: "#006400", pluginId: "dumont", github: "https://github.com/openviglet/dumont-ce" },
-  { id: "shio", label: "Shio CMS", path: "/shio", dot: "#FF6347", pluginId: "shio", github: "https://github.com/openviglet/shio-ce", release: "2026.3" },
-  { id: "turing", label: "Turing ES", path: "/turing", dot: "#4169E1", pluginId: "turing", github: "https://github.com/openviglet/turing-ce", release: "2026.3" },
+  { id: "dumont", label: "Viglet Dumont", path: "/dumont", dot: "#0F766E", pluginId: "dumont", github: "https://github.com/openviglet/dumont-ce" },
+  { id: "shio", label: "Viglet Shio", path: "/shio", dot: "#7C3AED", pluginId: "shio", github: "https://github.com/openviglet/shio-ce", release: "2026.3" },
+  { id: "turing", label: "Viglet Turing", path: "/turing", dot: "#4169E1", pluginId: "turing", github: "https://github.com/openviglet/turing-ce", release: "2026.3" },
 ];
 
 function useScrolled(): boolean {
@@ -211,8 +211,8 @@ export default function Navbar(): JSX.Element {
         <div className="nav-container">
           {/* Logo */}
           <Link to="/" className="nav-logo">
-            <img src="/img/viglet_logo_sm.png" alt="Viglet" width={28} height={28} className="nav-logo-img" />
-            <span className="nav-logo-text">viglet</span>
+            <img src="/img/logos/viglet.svg" alt="Viglet" width={28} height={28} className="nav-logo-img" />
+            <span className="nav-logo-text">Viglet</span>
           </Link>
 
           {/* Desktop nav links */}

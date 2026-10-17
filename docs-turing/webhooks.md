@@ -8,7 +8,7 @@ description: Push chat conversations to your CRM or automation tools. Fire a web
 
 > *A visitor finishes a lead-capture conversation. Their name, company, and email are sitting in slots. What you really want is for that lead to land in Salesforce, automatically, the moment it's complete, without anyone copy-pasting. **Webhooks** are how Turing reaches out to the rest of your stack.*
 
-A **webhook** in Viglet Turing ES is an admin-declared outbound HTTP call. When something interesting happens in a conversation (a slot gets filled, a visitor is handed off, a flow reaches a node) Turing `POST`s a JSON payload (the conversation's slots, optionally the transcript) to a URL you configure. The receiver is almost always a CRM (Salesforce, HubSpot, Pipedrive) or an automation platform (Zapier, Make, n8n), but it can be any HTTP endpoint you control.
+A **webhook** in Viglet Turing is an admin-declared outbound HTTP call. When something interesting happens in a conversation (a slot gets filled, a visitor is handed off, a flow reaches a node) Turing `POST`s a JSON payload (the conversation's slots, optionally the transcript) to a URL you configure. The receiver is almost always a CRM (Salesforce, HubSpot, Pipedrive) or an automation platform (Zapier, Make, n8n), but it can be any HTTP endpoint you control.
 
 Webhooks are **deployment-wide**, not per-agent: you define one `push-to-salesforce` webhook and every agent and flow can use it. Manage them in the console under **Chat Webhooks**.
 

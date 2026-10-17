@@ -6,7 +6,7 @@ description: "@viglet/turing-cli, the `turing` command. Scaffold an agent projec
 
 # Turing CLI
 
-**`@viglet/turing-cli`** gives you the **`turing`** command, a developer CLI for building, deploying and testing Viglet Turing ES agents as **code in a Git repo** instead of clicking through the admin console. It's zero-dependency (compiled ESM, `tsc`-only) and needs a modern Node runtime (see the package's `engines`).
+**`@viglet/turing-cli`** gives you the **`turing`** command, a developer CLI for building, deploying and testing Viglet Turing agents as **code in a Git repo** instead of clicking through the admin console. It's zero-dependency (compiled ESM, `tsc`-only) and needs a modern Node runtime (see the package's `engines`).
 
 **When you'd reach for it.** Use the CLI when you want an **agent-as-code workflow**: keep your agent definition, chat flows, custom tools, skills and regression tests in version control; boot a local Turing stack to iterate; and `deploy` the whole thing to `local` / `staging` / `production` from a script or CI pipeline. It pairs naturally with **[`@viglet/turing-flow-dsl`](./flow-dsl.md)** (author flows as typed TypeScript that compile to the `flows/*.chat-flow.json` the CLI deploys).
 

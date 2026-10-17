@@ -1,12 +1,12 @@
 ---
 sidebar_position: 9
 title: Flow DSL
-description: "@viglet/turing-flow-dsl: author Viglet Turing ES chat flows as typed TypeScript source, then transpile to the editor's JSON wire format. TypeScript catches enum typos (tone, guardrail, trigger) at compile time. Zero-dependency."
+description: "@viglet/turing-flow-dsl: author Viglet Turing chat flows as typed TypeScript source, then transpile to the editor's JSON wire format. TypeScript catches enum typos (tone, guardrail, trigger) at compile time. Zero-dependency."
 ---
 
 # Flow DSL
 
-**`@viglet/turing-flow-dsl`** lets you author Viglet Turing ES [chat flows](./chat-flow.md) as **typed TypeScript source** instead of drawing them in the visual editor. You write a flow as a plain object, and the DSL **transpiles** it to the exact JSON wire format the editor imports: `{ graph: { nodes, edges }, name, slots, personas, … }`. Because it's typed, the TypeScript compiler catches enum typos (a misspelled `tone`, `guardrailMethod`, `triggerMode` or an unknown node `type`) at **build time**, before the flow ever reaches a running instance. Zero runtime dependencies.
+**`@viglet/turing-flow-dsl`** lets you author Viglet Turing [chat flows](./chat-flow.md) as **typed TypeScript source** instead of drawing them in the visual editor. You write a flow as a plain object, and the DSL **transpiles** it to the exact JSON wire format the editor imports: `{ graph: { nodes, edges }, name, slots, personas, … }`. Because it's typed, the TypeScript compiler catches enum typos (a misspelled `tone`, `guardrailMethod`, `triggerMode` or an unknown node `type`) at **build time**, before the flow ever reaches a running instance. Zero runtime dependencies.
 
 **When you'd reach for it.** Use the DSL when you want **flows-as-code**: reviewable diffs, refactoring across many flows, sub-flow reuse, and CI validation: the things a visual editor can't give you. It's the natural authoring layer for a **[`@viglet/turing-cli`](./cli.md)** project (`flows/*.chat-flow.json`), but it's independent: you can also paste the compiled JSON into the editor's **Import JSON** button.
 

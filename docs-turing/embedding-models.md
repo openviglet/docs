@@ -8,7 +8,7 @@ description: Configure embedding models for vector generation, supported provide
 
 An **Embedding Model** converts text into a high-dimensional numerical vector that captures its semantic meaning. These vectors enable similarity search, finding documents conceptually related to a query even when they share no common keywords.
 
-Turing ES uses embedding models in two phases:
+Viglet Turing uses embedding models in two phases:
 
 - **Indexing**: document chunks are vectorized and stored in the [Embedding Store](./embedding-stores.md)
 - **Querying**: the user's question is vectorized with the same model and compared against stored vectors
@@ -67,7 +67,7 @@ ollama pull nomic-embed-text
 
 ### Local Transformers (ONNX)
 
-Turing ES also supports running embedding models **locally, in-process** via ONNX Runtime, without an external LLM provider, API or key. This is useful for air-gapped deployments, custom/fine-tuned models, and zero-cost embeddings.
+Turing also supports running embedding models **locally, in-process** via ONNX Runtime, without an external LLM provider, API or key. This is useful for air-gapped deployments, custom/fine-tuned models, and zero-cost embeddings.
 
 | Setting | Description |
 |---|---|
@@ -94,7 +94,7 @@ This provider downloads and runs the model **locally**. It does *not* call Huggi
 
 #### Zero-config local RAG at startup
 
-A fresh install (notably the public demo) can provision a complete local retrieval backend automatically, with no admin step. When a global [Default AI Agent](./ai-agents.md) is configured and lacks an embedding model or a vector store, Turing ES fills in each missing piece, wires it onto the Default AI Agent (enabling RAG), then downloads the model and reindexes existing content into the store, so grounded chat works out of the box:
+A fresh install (notably the public demo) can provision a complete local retrieval backend automatically, with no admin step. When a global [Default AI Agent](./ai-agents.md) is configured and lacks an embedding model or a vector store, Turing fills in each missing piece, wires it onto the Default AI Agent (enabling RAG), then downloads the model and reindexes existing content into the store, so grounded chat works out of the box:
 
 - **Embedding model:** the global default embedding model when one is set; otherwise, when no embedding model exists at all, a new local ONNX model (`all-MiniLM-L6-v2`), registered as the global default.
 - **Vector store:** the global default store when one is set; otherwise an existing enabled [Lucene vector store](./embedding-stores.md) (such as the "Default Vector Store" a seed import brings); otherwise, when no store exists at all, a new embedded Lucene store, registered as the global default.
@@ -118,7 +118,7 @@ The step is **idempotent** and never overrides an existing setup: a Default AI A
 
 ## Advanced embedding capabilities
 
-Beyond plain text→vector, Turing ES exploits provider-specific embedding features. Each is **opt-in by model choice**: pick the right model on the right vendor and the capability engages; everything else keeps the classic per-chunk text path byte-for-byte.
+Beyond plain text→vector, Turing exploits provider-specific embedding features. Each is **opt-in by model choice**: pick the right model on the right vendor and the capability engages; everything else keeps the classic per-chunk text path byte-for-byte.
 
 ### Asymmetric task types (Gemini)
 

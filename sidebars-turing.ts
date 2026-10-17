@@ -4,7 +4,7 @@ const sidebars: SidebarsConfig = {
   turingSidebar: [
     {
       type: "category",
-      label: "Turing ES",
+      label: "Viglet Turing",
       link: {
         type: "doc",
         id: "index",

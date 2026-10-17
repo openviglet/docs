@@ -1,11 +1,11 @@
 ---
 sidebar_position: 1
-description: Viglet Shio CMS is an open-source, agent-native headless CMS. A coding agent builds the site, a curator approves it, and the Content Delivery API serves it.
+description: Viglet Shio is an open-source, agent-native headless CMS. A coding agent builds the site, a curator approves it, and the Content Delivery API serves it.
 ---
 
-# What is Shio CMS?
+# What is Viglet Shio?
 
-**Viglet Shio CMS** is an open-source headless Content Management System, with one
+**Viglet Shio** is an open-source headless Content Management System, with one
 difference that shapes everything else: its primary operator is a **coding agent**.
 
 Most CMSs are designed for a person clicking through forms, with an API added afterwards

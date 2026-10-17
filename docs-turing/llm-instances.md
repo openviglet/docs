@@ -1,14 +1,14 @@
 ---
 sidebar_position: 1
 title: LLM Instances
-description: "Configure and manage Language Model instances in Viglet Turing ES: 11 vendor types, per-vendor authentication, and the capability matrix."
+description: "Configure and manage Language Model instances in Viglet Turing: 11 vendor types, per-vendor authentication, and the capability matrix."
 ---
 
 # LLM Instances
 
 An **LLM Instance** is a named, configured connection to a Large Language Model provider, a vendor, a model name, credentials, and generation parameters bundled under a title you choose. It is the unit every Generative AI feature points at: an AI Agent, a Semantic Navigation site's RAG, the Chat interface, a reranker, or an embedding pipeline each select an instance by name.
 
-You'd reach for this page the moment you want Viglet Turing ES to *talk to a model*. Nothing in the GenAI surface works until at least one enabled instance exists. Because instances are independent, you can run several at once (a fast local Ollama model for low-stakes classification, Anthropic Claude for a complex reasoning agent, and a Voyage instance purely for embeddings) and wire each feature to the one that fits.
+You'd reach for this page the moment you want Viglet Turing to *talk to a model*. Nothing in the GenAI surface works until at least one enabled instance exists. Because instances are independent, you can run several at once (a fast local Ollama model for low-stakes classification, Anthropic Claude for a complex reasoning agent, and a Voyage instance purely for embeddings) and wire each feature to the one that fits.
 
 The **Language Model** page lives at `/admin/llm/instance`, under the **Generative AI** section of the sidebar.
 
@@ -28,7 +28,7 @@ That instance is now selectable in every agent, site, and the Chat tab.
 
 ## Zero-config: provision from `OPENAI_API_KEY` at startup
 
-For containerized and hands-off deployments (the public demo is the canonical case), Viglet Turing ES can create the first LLM instance for you at boot, straight from an environment variable, no admin visit required.
+For containerized and hands-off deployments (the public demo is the canonical case), Viglet Turing can create the first LLM instance for you at boot, straight from an environment variable, no admin visit required.
 
 **On startup, when all of these hold, Turing creates a GLOBAL OpenAI instance and sets it as the [Default LLM Instance](./genai-llm.md#global-settings):**
 
@@ -197,7 +197,7 @@ The **Find a model** launcher on the instance list opens the **Model Advisor** (
 
 ## Supported Vendors
 
-Viglet Turing ES ships **11 vendor types**, resolved by plugin identifier through `TurGenAiLlmProviderFactory`. The canonical set is `LlmProviderType.KNOWN`, seeded into the `llm_vendor` table by `TurLLMVendorOnStartup`. When a vendor is selected in the form, the Endpoint URL, Model Name, and generation defaults are pre-filled as shown below.
+Viglet Turing ships **11 vendor types**, resolved by plugin identifier through `TurGenAiLlmProviderFactory`. The canonical set is `LlmProviderType.KNOWN`, seeded into the `llm_vendor` table by `TurLLMVendorOnStartup`. When a vendor is selected in the form, the Endpoint URL, Model Name, and generation defaults are pre-filled as shown below.
 
 | Vendor (ID) | Plugin | Default Endpoint | Default Model |
 |---|---|---|---|

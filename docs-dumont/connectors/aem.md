@@ -20,14 +20,14 @@ sequenceDiagram
     participant AEM as AEM Instance
     participant EVT as AEM Event Listener<br/>(OSGi Bundle)
     participant API as Dumont Connector<br/>(AEM Plugin)
-    participant SE as Turing ES
+    participant SE as Turing
 
     Note over AEM,EVT: Option 1: Automatic (Event-Driven)
     AEM->>EVT: Page published / modified / deleted
     EVT->>API: POST /api/v2/aem/index/{source}<br/>{paths, event}
 
     Note over API: Option 2: Manual (Postman / curl)
-    Note over API: Option 3: Turing ES Admin Console<br/>(Integration → Indexing Manager)
+    Note over API: Option 3: Turing Admin Console<br/>(Integration → Indexing Manager)
 
     API->>AEM: GET {path}.infinity.json
     AEM-->>API: Full JCR node tree (JSON)
@@ -46,7 +46,7 @@ sequenceDiagram
 | **AEM Event Listeners** | Install the `aem-server` OSGi bundle inside AEM, it automatically sends indexing requests when content is published, modified, or deleted | Production: real-time content sync |
 | **Adobe I/O Events** | Register a webhook in Adobe Developer Console, optionally with the [journal consumer](#adobe-io-events) as its recovery path | Production on AEM as a Cloud Service, where you cannot install a bundle |
 | **Manual API Call** | Send a POST request to `/api/v2/aem/index/{source}` with a JSON payload containing paths and event type | Development, testing, one-off re-indexing |
-| **Turing ES Admin Console** | Use **Enterprise Search → Integration → Indexing Manager** to select paths and trigger indexing/deindexing/publishing operations | Operations: selective re-indexing via UI |
+| **Viglet Turing Admin Console** | Use **Enterprise Search → Integration → Indexing Manager** to select paths and trigger indexing/deindexing/publishing operations | Operations: selective re-indexing via UI |
 
 ---
 
@@ -107,13 +107,13 @@ GET https://delivery-p12345-e67890.adobeaemcloud.com/content/wknd/us/en.model.js
 
 `.model.json` is served by Core Components, is CDN-fronted, and needs no author access. The connector uses it for both jobs the author servlets were doing:
 
-- **Discovery and traversal** — the page model's `:children` lists the pages below it. When the root is a hierarchy root, that is the whole sub-tree in one request; otherwise the connector descends child by child.
-- **Page metadata** — title, template and last-modified date come from the same response. Content the delivery tier serves is published by definition, so every discovered page is treated as delivered.
+- **Discovery and traversal**: the page model's `:children` lists the pages below it. When the root is a hierarchy root, that is the whole sub-tree in one request; otherwise the connector descends child by child.
+- **Page metadata**: title, template and last-modified date come from the same response. Content the delivery tier serves is published by definition, so every discovered page is treated as delivered.
 
 Attribute extraction already read `.model.json`, so an extension written for the author strategy needs no change.
 
 :::warning Requires Core Components
-The delivery strategy depends on `.model.json` being served for the pages you index, which means Core Components (the Sling Model exporter) on the templates in scope. Content Fragments and Assets are not yet reached through their own delivery endpoints — index those through the author strategy.
+The delivery strategy depends on `.model.json` being served for the pages you index, which means Core Components (the Sling Model exporter) on the templates in scope. Content Fragments and Assets are not yet reached through their own delivery endpoints: index those through the author strategy.
 :::
 
 QueryBuilder is ignored for a delivery source even when `dumont.aem.querybuilder=true` is set globally.
@@ -144,7 +144,7 @@ For each page, the connector fetches tags:
 GET http://localhost:4502/content/wknd/us/en/my-page/jcr:content.tags.json
 ```
 
-Tags are **automatically converted to facets** in the search index, no manual configuration needed. Each tag becomes a filterable value in the Turing ES facet panel.
+Tags are **automatically converted to facets** in the search index, no manual configuration needed. Each tag becomes a filterable value in the Turing facet panel.
 
 ### 3. Fetch Model JSON (Optional: Requires Configuration)
 
@@ -178,7 +178,7 @@ For each page, the connector:
 - Applies **attribute mappings** from the configuration (global attributes + model-specific source→target mappings)
 - Runs **custom extension classes** (if configured via `className`)
 - Creates a **Job Item** for both author and publish environments (if enabled)
-- Sends the Job Item through the Dumont DEP pipeline to Turing ES
+- Sends the Job Item through the Viglet Dumont pipeline to Turing
 
 ---
 
@@ -202,7 +202,7 @@ sequenceDiagram
     participant EVT as AEM Event Listener<br/>(or Manual API)
     participant API as Dumont Connector
     participant DB as Indexing Store
-    participant SE as Turing ES
+    participant SE as Turing
 
     EVT->>API: POST /api/v2/aem/index/{source}<br/>{paths: ["/content/wknd/.../header"]}
     API->>SE: Index the updated path(s)
@@ -330,7 +330,7 @@ else is answered `200` and ignored. The path indexed is the event's `data.resour
 ### The journal (pull, recovery)
 
 A pushed webhook has no recovery. One lost to a `502`, a rolling restart, a network partition or an
-expired certificate is gone — Adobe retries for a bounded window and then drops it, and the content
+expired certificate is gone: Adobe retries for a bounded window and then drops it, and the content
 it described stays at whatever version the index last saw. The scheduled audit eventually notices,
 but it is a full re-discovery on a cron most deployments set to hours.
 
@@ -354,7 +354,7 @@ enabled automatically on every registration, so this costs no extra Adobe-side s
 Each poll reads a page of events, dispatches them, and only then persists the page's position. That
 ordering is what makes recovery exact: after downtime, a failed page or a crash mid-page, the next
 poll resumes from the last committed position instead of skipping ahead. Re-dispatching an event you
-already indexed is harmless — indexing a path is idempotent — while skipping one is not.
+already indexed is harmless (indexing a path is idempotent), while skipping one is not.
 
 | Property | Default | Purpose |
 |---|---|---|
@@ -367,7 +367,7 @@ already indexed is harmless — indexing a path is idempotent — while skipping
 | `dumont.aem.journal.sources.<source>` | – | Journal URL for that Dumont source |
 
 :::tip Run both
-The webhook stays the low-latency route — an editor publishes and the page is indexed within
+The webhook stays the low-latency route: an editor publishes and the page is indexed within
 seconds. The journal is the floor under it, catching what a push drops. Enabling the journal does
 not disable or change the webhook.
 :::
@@ -420,7 +420,7 @@ curl -X POST http://localhost:30130/api/v2/aem/index/WKND \
 
 ## Source Configuration
 
-Each AEM source defines connection details, content scope, author/publish environments, locale mappings, and delta tracking. Sources are configured in the **Turing ES Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Sources**.
+Each AEM source defines connection details, content scope, author/publish environments, locale mappings, and delta tracking. Sources are configured in the **Turing Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Sources**.
 
 For the JSON configuration file used by custom extensions (attributes, models, locale paths), see [Extending the AEM Connector](../extending-aem.md#aem-configuration-json).
 
@@ -449,7 +449,7 @@ Chooses which AEM tier the connector reads, per source: see [Publish-Tier Discov
 
 | Field | Description |
 |---|---|
-| Fetch Strategy | `Author servlets (infinity.json)` — the default, for on-premise and AMS — or `Publish delivery APIs (model.json)`, for AEM as a Cloud Service |
+| Fetch Strategy | `Author servlets (infinity.json)` (the default, for on-premise and AMS) or `Publish delivery APIs (model.json)`, for AEM as a Cloud Service |
 | Delivery URL Prefix | Host the delivery requests are sent to, e.g. `https://delivery-p12345-e67890.adobeaemcloud.com`. Shown only for the delivery strategy; leave blank to reuse the publish URL prefix |
 
 ### Delta Tracking
@@ -463,7 +463,7 @@ Controls incremental indexing: how the connector detects which content has chang
 
 ### Author / Publish
 
-Configures which AEM environments are indexed and how they map to Turing ES Semantic Navigation Sites.
+Configures which AEM environments are indexed and how they map to Turing Semantic Navigation Sites.
 
 | Field | Description |
 |---|---|
@@ -486,7 +486,7 @@ Maps content language codes to repository paths.
 
 ### Source Actions
 
-Each source has two action buttons available in the Turing ES admin console:
+Each source has two action buttons available in the Turing admin console:
 
 - **Index All**: triggers a full indexing run for all content in this source
 - **Reindex All**: forces a full reindexation, replacing all previously indexed content
@@ -495,7 +495,7 @@ Each source has two action buttons available in the Turing ES admin console:
 
 ## Indexing Rules
 
-Indexing Rules allow you to filter content during indexing, for example, to exclude error pages or draft content before it reaches the search index. Rules are configured in the **Turing ES Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Indexing Rules**.
+Indexing Rules allow you to filter content during indexing, for example, to exclude error pages or draft content before it reaches the search index. Rules are configured in the **Turing Admin Console** under **Enterprise Search → Integration → [your AEM instance] → Indexing Rules**.
 
 | Field | Description |
 |---|---|
@@ -512,7 +512,7 @@ Indexing Rules allow you to filter content during indexing, for example, to excl
 
 ## Indexing Manager
 
-The Indexing Manager provides a stepper form in the **Turing ES Admin Console** for targeting specific documents for manual operations.
+The Indexing Manager provides a stepper form in the **Turing Admin Console** for targeting specific documents for manual operations.
 
 | Operation | Description | Colour |
 |---|---|---|
@@ -560,8 +560,8 @@ Need custom attribute extractors, delta date logic, or content processors? See [
 |---|---|
 | [AEM Event Listener](../aem-event-listener.md) | Install the OSGi event listener bundle inside AEM for real-time indexing |
 | [Extending the AEM Connector](../extending-aem.md) | Custom attribute extractors, content processors, and configuration JSON reference |
-| [Turing ES: Integration](/turing/integration) | General integration management: monitoring, indexing stats, and system information |
-| [Turing ES: AEM Connector](/turing/integration-aem) | AEM integration overview from the Turing ES perspective |
-| [Turing ES: Semantic Navigation](/turing/semantic-navigation) | Configure the SN Sites that receive indexed content |
+| [Turing: Integration](/turing/integration) | General integration management: monitoring, indexing stats, and system information |
+| [Turing: AEM Connector](/turing/integration-aem) | AEM integration overview from the Turing perspective |
+| [Turing: Semantic Navigation](/turing/semantic-navigation) | Configure the SN Sites that receive indexed content |
 
 ---

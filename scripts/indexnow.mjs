@@ -45,7 +45,7 @@ async function sitemapUrls() {
 
 try {
   if (!(await waitForKey())) {
-    console.warn(`indexnow: ${keyLocation} never served the key — skipping.`);
+    console.warn(`indexnow: ${keyLocation} never served the key: skipping.`);
     process.exit(0);
   }
   const urls = await sitemapUrls();
@@ -60,5 +60,5 @@ try {
     console.log(`indexnow: ${urlList.length} URLs for ${host} -> ${res.status}`);
   }
 } catch (err) {
-  console.warn(`indexnow: ${err.message} — skipping.`);
+  console.warn(`indexnow: ${err.message}: skipping.`);
 }

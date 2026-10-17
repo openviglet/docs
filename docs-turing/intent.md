@@ -1,14 +1,14 @@
 ---
 sidebar_position: 4
 title: Intent
-description: Configure intent categories and action prompts for the Turing ES chat interface.
+description: Configure intent categories and action prompts for the Viglet Turing chat interface.
 ---
 
 # Intent
 
 > *The hardest part of any AI product isn't the AI: it's getting the user to ask the first question. **Intents** are how you put a hundred good first questions, in your customer's voice, on the chat home screen. And **Vibe Coding** is how you write all of them in five minutes.*
 
-The **Intent** feature (`/admin/intent/instance`) manages categorized prompt suggestions that appear in the Chat interface. Intents provide users with pre-built conversation starters organized by topic, making it easier to discover and use the AI capabilities of Turing ES.
+The **Intent** feature (`/admin/intent/instance`) manages categorized prompt suggestions that appear in the Chat interface. Intents provide users with pre-built conversation starters organized by topic, making it easier to discover and use the AI capabilities of Viglet Turing.
 
 Each intent represents a **category** (e.g., *"Boost my work productivity"*) containing one or more **actions**: each action is a labeled prompt that is sent directly to the chat when clicked.
 
@@ -86,7 +86,7 @@ Vibe Coding is especially powerful here because intents are usually authored *en
 
 ## Pre-loaded Intents
 
-Turing ES ships with four default intents:
+Turing ships with four default intents:
 
 | Intent | Icon | Actions |
 |---|---|---|

@@ -1,12 +1,12 @@
 ---
 sidebar_position: 10
 title: Transcription
-description: Speech-to-text in Viglet Turing ES, a config-selectable, chunk-capable transcription backend (cloud OpenAI or a self-hosted OpenAI-compatible server) that powers persona-from-audio, AUDIO chat slots, and async jobs for long recordings.
+description: Speech-to-text in Viglet Turing, a config-selectable, chunk-capable transcription backend (cloud OpenAI or a self-hosted OpenAI-compatible server) that powers persona-from-audio, AUDIO chat slots, and async jobs for long recordings.
 ---
 
 # Transcription (Speech-to-Text)
 
-**Transcription** turns an audio recording into text inside Viglet Turing ES. It is the engine behind three product surfaces: [drafting a persona from a voice recording](./personas.md#persona-from-audio-authoring), filling an **AUDIO chat slot** from an uploaded clip, and the standalone **async transcription jobs** API for long recordings.
+**Transcription** turns an audio recording into text inside Viglet Turing. It is the engine behind three product surfaces: [drafting a persona from a voice recording](./personas.md#persona-from-audio-authoring), filling an **AUDIO chat slot** from an uploaded clip, and the standalone **async transcription jobs** API for long recordings.
 
 You'd reach for this page when you want to point transcription at a specific backend (a cloud provider or a self-hosted, air-gapped server), when a recording is **larger than the provider's per-request upload limit**, or when you need to transcribe multi-hour audio without tying up a request thread.
 
@@ -54,7 +54,7 @@ Leave **Model** blank and each backend uses the right default: `gpt-transcribe` 
 | Model | Use it for | Notes |
 |---|---|---|
 | **`gpt-transcribe`** | Completed files and batches. The cloud default. | Cheaper than `whisper-1` and markedly more accurate on accents, numbers, jargon and noisy audio. Accepts the **Context prompt** and **Domain keywords** hints. Returns no per-segment scores, so the confidence-based fallback reports "no signal" rather than a made-up number. |
-| **`gpt-live-transcribe`** | Low-latency live transcription in realtime voice. | Used automatically by voice sessions — the server picks it, the browser just follows. Not available on `/audio/transcriptions`. |
+| **`gpt-live-transcribe`** | Low-latency live transcription in realtime voice. | Used automatically by voice sessions: the server picks it, the browser just follows. Not available on `/audio/transcriptions`. |
 | **`whisper-1`** | Timestamps, translation, subtitles. | Still fully supported and still the right pick when you need segment timestamps or a confidence score. The default for self-hosted servers. |
 
 :::note Nothing breaks
@@ -86,10 +86,10 @@ Then set the transcription **Endpoint** to `http://faster-whisper:8000/v1` (leav
 
 Speech models guess. Give one your vocabulary and it stops guessing. Global Settings → **Transcription** has two hints, both optional and both ignored by backends that can't use them:
 
-- **Context prompt** — free-form text describing the recording: the domain, who is speaking, the expected style. One or two sentences is plenty.
-- **Domain keywords** — a comma-separated list of terms that must come out spelled right: product names, model ids, SKUs, internal jargon. Capped at 100 terms; it is a hint, not a dictionary.
+- **Context prompt**: free-form text describing the recording: the domain, who is speaking, the expected style. One or two sentences is plenty.
+- **Domain keywords**: a comma-separated list of terms that must come out spelled right: product names, model ids, SKUs, internal jargon. Capped at 100 terms; it is a hint, not a dictionary.
 
-Turing already curates exactly this vocabulary elsewhere — your **Thesaurus**. Turn on **Add Thesaurus terms** and the same terms the search engine expands at query time are handed to the transcriber, broadest descriptors first. Keywords you typed yourself always come first.
+Turing already curates exactly this vocabulary elsewhere: your **Thesaurus**. Turn on **Add Thesaurus terms** and the same terms the search engine expands at query time are handed to the transcriber, broadest descriptors first. Keywords you typed yourself always come first.
 
 :::tip
 The keyword hint is read by the `gpt-transcribe` family. The context prompt works more widely, including `whisper-1`.
@@ -133,12 +133,12 @@ A job moves `QUEUED → RUNNING → SUCCEEDED | FAILED`. Work runs on a **bounde
 
 ### Watching the transcript arrive
 
-On a `gpt-transcribe` backend, a running job also streams the words it has heard so far as `partialTranscript` on each SSE snapshot — so a long recording shows text building instead of a spinner. The **persona from audio** flow renders this live.
+On a `gpt-transcribe` backend, a running job also streams the words it has heard so far as `partialTranscript` on each SSE snapshot, so a long recording shows text building instead of a spinner. The **persona from audio** flow renders this live.
 
 Two things to know:
 
 - It appears only for a recording that fits a **single chunk**. Chunks are transcribed in parallel, so relaying their text would show it out of order; a chunked recording keeps its `completedChunks / totalChunks` counter instead.
-- It is a **preview**, not the result. Always read the final `transcript` from the terminal snapshot (or a `GET` on the job) — `partialTranscript` is there to be shown, not stored.
+- It is a **preview**, not the result. Always read the final `transcript` from the terminal snapshot (or a `GET` on the job): `partialTranscript` is there to be shown, not stored.
 
 `whisper-1` does not stream; those jobs simply never carry the field. Set `turing.transcription.stream-partial-text: false` to turn the whole behaviour off.
 
@@ -146,7 +146,7 @@ Two things to know:
 
 ## Identifying speakers
 
-Turn **Identify speakers** on (Global Settings → Transcription, or `turing.transcription.diarization-enabled`) and a transcription comes back as attributable turns — who said what, and when — instead of one flat text. Useful for interviews, calls and meeting recordings.
+Turn **Identify speakers** on (Global Settings → Transcription, or `turing.transcription.diarization-enabled`) and a transcription comes back as attributable turns (who said what, and when) instead of one flat text. Useful for interviews, calls and meeting recordings.
 
 Each turn carries a `speaker` label, the `text`, and `start`/`end` offsets in seconds:
 
@@ -163,10 +163,10 @@ Each turn carries a `speaker` label, the `text`, and `start`/`end` offsets in se
 Three things to know:
 
 - **`transcript` is always authoritative.** `segments` annotates it; it never replaces it. Anything already reading `transcript` is unaffected whether diarization is on or off.
-- **A speaker label means "a distinct voice in this recording"** — not a person. Labels are assigned per request, so the same human gets no stable identity across two uploads.
+- **A speaker label means "a distinct voice in this recording"**, not a person. Labels are assigned per request, so the same human gets no stable identity across two uploads.
 - **It applies to a recording that fits a single request.** A longer recording is split into chunks, and because labels are assigned per request there is no way to tell chunk 2's "A" from chunk 1's "B". Rather than guess, Turing returns the flat transcript with no segments. In practice a ~50-minute recording is still one chunk, so most interviews are covered.
 
-Needs a `gpt-transcribe` model — `whisper-1` ignores the setting (its segments are timing boundaries with no speaker). Diarization also takes precedence over the live partial transcript above, since the two response formats are mutually exclusive.
+Needs a `gpt-transcribe` model: `whisper-1` ignores the setting (its segments are timing boundaries with no speaker). Diarization also takes precedence over the live partial transcript above, since the two response formats are mutually exclusive.
 
 ---
 
@@ -200,7 +200,7 @@ All keys live under `turing.transcription.*`. A non-blank value **wins** over th
 | `endpoint` | n/a | Dedicated OpenAI-compatible base URL (e.g. `http://faster-whisper:8000/v1`). |
 | `model` | per backend | Transcription model name. Blank = `gpt-transcribe` on `OPENAI`, `whisper-1` on `OPENAI_COMPATIBLE`. |
 | `prompt` | n/a | Free-form context handed to the model (domain, speakers, expected style). Ignored by backends that don't accept it. |
-| `keywords` | n/a | Domain terms the model should spell correctly — product names, model ids, jargon. Used by the `gpt-transcribe` family; capped at 100. |
+| `keywords` | n/a | Domain terms the model should spell correctly: product names, model ids, jargon. Used by the `gpt-transcribe` family; capped at 100. |
 | `keywords-from-thesaurus` | `false` | Top the keyword list up from your Thesaurus, so the vocabulary the search engine already expands also reaches the transcriber. Your own keywords come first. |
 | `stream-partial-text` | `true` | Stream a completed file's transcript as it is produced, so a running job carries `partialTranscript`. Only engages on a streaming-capable model and a single-chunk recording; any failure falls back to the ordinary call. |
 | `diarization-enabled` | `false` | Return attributable per-speaker turns (`segments`) alongside the transcript. Needs a `gpt-transcribe` model and a single-chunk recording. |

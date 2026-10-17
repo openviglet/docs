@@ -1,12 +1,12 @@
 ---
 sidebar_position: 10
 title: REST API Reference
-description: "Complete REST API reference for Dumont DEP: connector, monitoring, indexing rules, AEM plugin, and system information endpoints."
+description: "Complete REST API reference for Viglet Dumont: connector, monitoring, indexing rules, AEM plugin, and system information endpoints."
 ---
 
 # REST API Reference
 
-Dumont DEP exposes a REST API for triggering indexing operations, monitoring progress, managing sources, and configuring indexing rules. All endpoints use JSON and support CORS.
+Viglet Dumont exposes a REST API for triggering indexing operations, monitoring progress, managing sources, and configuring indexing rules. All endpoints use JSON and support CORS.
 
 ---
 
@@ -102,7 +102,7 @@ Deletes and reindexes specific documents.
 GET /api/v2/connector/validate/{source}
 ```
 
-Validates content differences between the source and the search index. Used by the Turing ES Double Check feature.
+Validates content differences between the source and the search index. Used by the Viglet Turing Double Check feature.
 
 | Parameter | Location | Description |
 |---|---|---|
@@ -118,7 +118,7 @@ Base path: `/api/v2/connector/orphans`
 
 An **orphan** is a document the search index still holds after it left the source. The content
 audit never deletes one, because an orphan is only an orphan if the discovery pass that failed to
-mention it was complete — a gateway that timed out, or a listing that paginated short, makes every
+mention it was complete: a gateway that timed out, or a listing that paginated short, makes every
 unlisted id look like a ghost. Deleting on that evidence would take live content out of the index.
 
 So each audit pass writes the ids it found into a dated report and stops there. You read the
@@ -127,13 +127,13 @@ it. Applying goes through the connector's own de-index path, so the indexing led
 index stay in step.
 
 The console has an **Orphan Reports** screen over these endpoints, which is the easier way to do
-the review — it shows each report's id count against how many documents the site indexes, so a
+the review: it shows each report's id count against how many documents the site indexes, so a
 report naming most of the index reads as a failed discovery pass rather than a cleanup. The
 endpoints below are for scripting it.
 
 A report is per source and per site, and only the newest one stands: a later pass supersedes the
-report it replaces, and a pass that finds no orphan retracts it. A report also expires — see
-[`dumont.audit.index.orphanTtl`](configuration-reference.md#content-audit) — because applying
+report it replaces, and a pass that finds no orphan retracts it. A report also expires (see
+[`dumont.audit.index.orphanTtl`](configuration-reference.md#content-audit)), because applying
 evidence that a reindex has since overtaken would delete live documents.
 
 To produce a report on demand rather than waiting for the cron, run the audit:
@@ -165,9 +165,9 @@ the report. **Response:** `{ "status": "applied", "deindexed": 12 }`.
 
 | Status | Meaning |
 |---|---|
-| `200` | Applied — `deindexed` says how many delete jobs were queued |
+| `200` | Applied: `deindexed` says how many delete jobs were queued |
 | `404` | No report carries that id, or a later pass superseded it |
-| `409` | Already applied or discarded — a decision is made once |
+| `409` | Already applied or discarded: a decision is made once |
 | `410` | The evidence aged past `dumont.audit.index.orphanTtl`; re-run the audit |
 
 ### Discard a Report
@@ -176,7 +176,7 @@ the report. **Response:** `{ "status": "applied", "deindexed": 12 }`.
 POST /api/v2/connector/orphans/{id}/discard
 ```
 
-Closes the report without deleting anything — the right answer when the source was unreachable
+Closes the report without deleting anything: the right answer when the source was unreachable
 during the pass that produced it. **Response:** `{ "status": "discarded" }`.
 
 ---
@@ -185,7 +185,7 @@ during the pass that produced it. **Response:** `{ "status": "discarded" }`.
 
 Base path: `/api/v2/connector/logging`
 
-The **indexing log** records every status a document passes through — prepared, sent to the queue,
+The **indexing log** records every status a document passes through: prepared, sent to the queue,
 delivered to the search engine. Each row names the document, the source that produced it and the
 transaction id of the run it belonged to, so you can ask what one source did or replay a single
 run end to end.
@@ -217,16 +217,16 @@ Read them together:
 | `configured: false` | The log is not part of this deployment | Nothing, unless you wanted it |
 | `enabled: false` | The store is named but unreachable | Check the URI and the credentials |
 | `writing: false` | The store answers, but nothing writes to it | Remove any `logging.config` override; the engine derives it (before 2026.3.7 the Docker image pinned one) |
-| all three `true` | The log is on, reachable and being written | — |
+| all three `true` | The log is on, reachable and being written | n/a |
 
-`writing` exists because the first two describe only the **reader** — this endpoint's own client.
+`writing` exists because the first two describe only the **reader**: this endpoint's own client.
 Rows are written by a Logback appender, and since **2026.3.7** the profile that declares it is
 derived from `dumont.logging.engine`, so the two cannot drift apart unless you override
 `logging.config` yourself. Gate a screen on `enabled`, and use `writing` to tell an empty history
 apart from one that nothing is filling.
 
 :::note
-`writing` is absent on connectors older than 2026.3.7. Absent is not `false` — those versions
+`writing` is absent on connectors older than 2026.3.7. Absent is not `false`: those versions
 cannot answer the question at all.
 :::
 
@@ -252,21 +252,21 @@ Filters combine, and any you omit is simply not applied. **Response:**
 `{ content, page, pageSize, totalElements, totalPages, unreadable }`.
 
 `unreadable` counts rows the engine skipped because it could not read them. It is normally `0`.
-On a Redis log carrying rows written before **2026.3.6** it will not be — those rows are not valid
+On a Redis log carrying rows written before **2026.3.6** it will not be: those rows are not valid
 JSON, and they are skipped one at a time rather than failing the query. They clear as the list
 rolls past its `maxEntries`, or immediately if you delete the key.
 
 Rows written by a connector older than 2026.3.6 carry no source or transaction id. They still
-appear in an unfiltered listing — an unattributed row is a fact about an old message, not
-something to hide — but they cannot answer a query that names a source.
+appear in an unfiltered listing (an unattributed row is a fact about an old message, not
+something to hide), but they cannot answer a query that names a source.
 
 :::note
 Both engines honour every filter above. The Redis engine applies them in memory after reading the
-whole list, so it slows as the log grows — pick MongoDB when you intend to query rather than tail.
+whole list, so it slows as the log grows: pick MongoDB when you intend to query rather than tail.
 :::
 
 :::warning A store that is down is not an empty log
-If the endpoint cannot reach its store it answers **503 Service Unavailable**, naming the engine —
+If the endpoint cannot reach its store it answers **503 Service Unavailable**, naming the engine,
 never `200` with an empty page. The distinction matters: an empty page means the connector logged
 nothing, a 503 means the log cannot be read and the connector may well have indexed everything.
 Earlier releases returned the empty page for both, so an outage read as an idle connector.
@@ -296,7 +296,7 @@ field manifest with a type per field.
 
 **Response:** `DumSourceDraft`: the shape, the strategy configuration, and the inferred fields.
 
-It proposes *structure* — selectors and field types — never content, and returns `UNKNOWN` rather
+It proposes *structure* (selectors and field types), never content, and returns `UNKNOWN` rather
 than guessing when the sample gives it nothing to go on.
 
 ### Dry-Run Preview
@@ -307,8 +307,8 @@ POST /api/v2/connector/source/infer/preview?sampleSize=20
 
 Extracts a bounded sample through the same discover → extract → enrich path a real run uses, and
 reports what would happen: per-field coverage, records that would be skipped for a missing
-mandatory field, and a diff against the last full index — added, changed, removed, and fields that
-would go newly empty — plus a schema diff. **Writes nothing.**
+mandatory field, and a diff against the last full index (added, changed, removed, and fields that
+would go newly empty), plus a schema diff. **Writes nothing.**
 
 | Parameter | Location | Default | Description |
 |---|---|---|---|
@@ -327,7 +327,7 @@ POST /api/v2/connector/source/infer/index
 ```
 
 Materialises the draft into a live structured source and indexes it. This is the only endpoint of
-the three that writes, and it acts on the draft in the request body — a proposal is never indexed
+the three that writes, and it acts on the draft in the request body: a proposal is never indexed
 without being sent back.
 
 **Body:** `{ "url", "sourceName", "siteNames": [...], "locale", "draft" }`
@@ -418,7 +418,7 @@ Returns indexing operation statistics (start time, document count, duration, thr
 GET /api/v2/connector/system-info
 ```
 
-Returns runtime system information consumed by the Turing ES Integration → System Information page:
+Returns runtime system information consumed by the Turing Integration → System Information page:
 
 - Application name and version
 - Java version, vendor, and JVM details
@@ -610,4 +610,4 @@ Returns an empty AEM source model for reference.
 |---|---|
 | [AEM Connector](./connectors/aem.md) | AEM indexing flow, event listeners, and manual triggering |
 | [Connectors Overview](./connectors/overview.md) | All connectors and how they're managed |
-| [Turing ES: Integration](/turing/integration) | Turing ES admin console for managing connectors |
+| [Turing: Integration](/turing/integration) | Turing admin console for managing connectors |

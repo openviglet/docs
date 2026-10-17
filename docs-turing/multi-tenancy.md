@@ -1,12 +1,12 @@
 ---
 sidebar_position: 4
 title: Multi-Tenancy
-description: "Run one Turing ES JVM that serves many fully isolated tenants: discriminator-column data isolation, a single Keycloak realm with a tenant claim, tenant-owned infrastructure, plan quotas, and tenant lifecycle."
+description: "Run one Viglet Turing JVM that serves many fully isolated tenants: discriminator-column data isolation, a single Keycloak realm with a tenant claim, tenant-owned infrastructure, plan quotas, and tenant lifecycle."
 ---
 
 # Multi-Tenancy
 
-Turing ES can run as a **single JVM process that serves many isolated tenants** (a SaaS / shared-platform deployment), or as a classic **single-tenant install**. The same binary does both: the behavior is controlled by one flag.
+Viglet Turing can run as a **single JVM process that serves many isolated tenants** (a SaaS / shared-platform deployment), or as a classic **single-tenant install**. The same binary does both: the behavior is controlled by one flag.
 
 :::info One paragraph summary
 Tenant data isolation is a **discriminator column**: Hibernate's native `@TenantId` adds the partition column to every insert and a `WHERE tenantId = ?` to every read, driven by a request-scoped current-tenant holder. Identity is a **single Keycloak realm plus a `tenant` claim**; a tenant aggregate and a membership join let one user belong to many tenants. Shared infrastructure (LLM, embedding, store, search-engine, MCP, integration instances) is **tenant-owned (bring-your-own keys) with an optional shared pool**.
@@ -138,7 +138,7 @@ The refusal is not a bare error. Its body names the resource, how much of the li
 
 ### Importing when a limit is close
 
-The limit applies to bulk creation too. Importing an archive — or installing a marketplace app — is refused when what it would **add** crosses your plan, and it is refused **whole**: nothing is written, rather than importing up to the cap and stopping halfway.
+The limit applies to bulk creation too. Importing an archive (or installing a marketplace app) is refused when what it would **add** crosses your plan, and it is refused **whole**: nothing is written, rather than importing up to the cap and stopping halfway.
 
 - Entries that match something you already have are **updates, not additions**. An archive that refreshes three agents you own is not refused on a three-agent plan.
 - The refusal says how much the archive would have added, so you know how much to trim.

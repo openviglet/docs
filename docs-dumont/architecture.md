@@ -1,22 +1,22 @@
 ---
 sidebar_position: 4
 title: Architecture Overview
-description: "System architecture of Viglet Dumont DEP: components, data flows, internal modules, and technology stack."
+description: "System architecture of Viglet Dumont: components, data flows, internal modules, and technology stack."
 ---
 
-# Dumont DEP: Architecture Overview
+# Viglet Dumont: Architecture Overview
 
 ## Introduction
 
-Viglet Dumont DEP is a modular data extraction platform that runs connectors independently and delivers indexed documents to a search engine via an asynchronous message queue. It is designed as a companion application to Viglet Turing ES, but can also deliver content directly to Apache Solr or Elasticsearch.
+Viglet Dumont is a modular data extraction platform that runs connectors independently and delivers indexed documents to a search engine via an asynchronous message queue. It is designed as a companion application to Viglet Turing, but can also deliver content directly to Apache Solr or Elasticsearch.
 
 ---
 
 ## System Overview
 
-The system has three layers: content sources on the left, the Dumont DEP pipeline in the center, and search engines on the right.
+The system has three layers: content sources on the left, the Dumont pipeline in the center, and search engines on the right.
 
-![Dumont DEP: High-Level Architecture](/img/diagrams/dumont-architecture.svg)
+![Dumont: High-Level Architecture](/img/diagrams/dumont-architecture.svg)
 
 Each numbered block is detailed in its own diagram below.
 
@@ -26,13 +26,13 @@ Each numbered block is detailed in its own diagram below.
 
 Connectors extract content and feed it into the pipeline. They come in three forms: Java plugins, standalone CLI tools, and the WordPress PHP plugin.
 
-![Dumont DEP: Connector Types](/img/diagrams/dumont-connectors.svg)
+![Dumont: Connector Types](/img/diagrams/dumont-connectors.svg)
 
 | Type | Connectors | How they connect |
 |---|---|---|
 | **Java Plugins** | Web Crawler, AEM, Catalog & JSON API | Loaded into `dumont-connector.jar` via `-Dloader.path`, one plugin per JVM |
-| **Standalone CLI** | Database, FileSystem | Separate JARs that connect to a running Dumont DEP instance via REST API |
-| **PHP Plugin** | WordPress | Installed inside WordPress: sends content directly to Turing ES, bypasses Dumont |
+| **Standalone CLI** | Database, FileSystem | Separate JARs that connect to a running Dumont instance via REST API |
+| **PHP Plugin** | WordPress | Installed inside WordPress: sends content directly to Turing, bypasses Dumont |
 
 For details on each connector, see [Connectors Overview](./connectors/overview.md).
 
@@ -42,14 +42,14 @@ For details on each connector, see [Connectors Overview](./connectors/overview.m
 
 Once a connector produces a Job Item, it passes through a multi-stage pipeline before reaching the search engine.
 
-![Dumont DEP: Pipeline Detail](/img/diagrams/dumont-pipeline-detail.svg)
+![Dumont: Pipeline Detail](/img/diagrams/dumont-pipeline-detail.svg)
 
 | Stage | Component | What it does |
 |---|---|---|
 | **①** | **Job Item** | A single document with fields, an action (INDEX / DELETE), and a locale |
 | **②** | **Processing Strategies** | Priority chain: deindex (P10) → ignore rules (P20) → index new (P30) → reindex changed (P40) → skip unchanged (P50) |
 | **③** | **Batch Processor + Queue** | Groups items into batches of 50, sends to Apache Artemis persistent queue |
-| **④** | **Indexing Plugin** | Delivers to Turing ES (default), Apache Solr, or Elasticsearch |
+| **④** | **Indexing Plugin** | Delivers to Turing (default), Apache Solr, or Elasticsearch |
 
 The **Indexing DB** stores checksums and status for every processed document, enabling incremental indexing on subsequent runs.
 
@@ -61,7 +61,7 @@ For the conceptual explanation of each stage, see [Core Concepts, The Processing
 
 The complete sequence from content source to search engine:
 
-![Dumont DEP, Indexing Flow](/img/diagrams/dumont-indexing-flow.svg)
+![Dumont, Indexing Flow](/img/diagrams/dumont-indexing-flow.svg)
 
 ---
 
@@ -76,14 +76,14 @@ own work, and it refuses to delete on weak evidence.
 |---|---|
 | **Content audit** | Re-enumerates each source on a cron and files a record for anything never queued |
 | **Index audit** | Compares source, ledger and index, and requeues documents that never landed or whose later write failed |
-| **Orphan reports** | Documents left in the index after leaving the source are written into a dated report you approve — never deleted by the audit itself |
+| **Orphan reports** | Documents left in the index after leaving the source are written into a dated report you approve, never deleted by the audit itself |
 | **Safe finish** | A run that was interrupted, or where too large a share of extractions failed, finishes *standalone*: the previously indexed documents are preserved rather than swept |
-| **Coverage & drift** | Per-field fill rates per run, with a warning when a field's coverage drops between runs — the signal of a layout or selector break |
+| **Coverage & drift** | Per-field fill rates per run, with a warning when a field's coverage drops between runs: the signal of a layout or selector break |
 | **Field provenance** | Every published field records the strategy and selector it came from, so a value can be traced instead of trusted |
 | **Indexing log** | Every status a document passed through, attributed to the source and run that caused it, so a claim about what happened can be checked rather than believed |
 
 The common rule is that removal is always the conservative branch. A pass that reports nothing, or
-much less than it should, never becomes a mass de-index — and the one case where deletion is right
+much less than it should, never becomes a mass de-index, and the one case where deletion is right
 is routed through a report a human applies.
 
 The same rule governs how these mechanisms *report*: a failure must never be readable as an
@@ -92,8 +92,8 @@ parsed costs its own row and is counted in `unreadable`, rather than emptying th
 log's `status` endpoint reports `configured` and `enabled` separately, so "someone set the flag"
 and "the store answers" cannot be mistaken for each other.
 
-It holds on the way in as well. A row the store refuses to accept is reported at `WARN` — once per
-outage, with a count of what was lost and a line when writes resume — rather than dropped in
+It holds on the way in as well. A row the store refuses to accept is reported at `WARN` (once per
+outage, with a count of what was lost and a line when writes resume) rather than dropped in
 silence, so a history that reads short can be told from a connector that was quiet. Those warnings
 are deliberately written to the file and the console rather than to the store being complained
 about, which is what stops an outage from swallowing the notice of itself.
@@ -117,7 +117,7 @@ See [Content Audit configuration](./configuration-reference.md#content-audit), t
 | **Processing Strategies** | `connector/strategy` | Priority-based chain: index, re-index, de-index, ignore, or skip |
 | **Batch Processor** | `connector/batch` | Thread-safe buffer that groups Job Items before queue delivery |
 | **Message Queue** | `connector/queue` | JMS listener on Apache Artemis: delegates to indexing plugins |
-| **Indexing Plugins** | `connector/indexing` | Output adapters: Turing ES, Apache Solr, Elasticsearch |
+| **Indexing Plugins** | `connector/indexing` | Output adapters: Turing, Apache Solr, Elasticsearch |
 | **Web Crawler** | `web-crawler` | JSoup, URL filtering, authentication, locale detection |
 | **Database** | `db` | JDBC queries, batch chunking, multi-database support |
 | **FileSystem** | `filesystem` | Apache Tika text extraction, OCR, metadata mapping |
@@ -140,14 +140,14 @@ The console serves every screen at two addresses, and you can use either:
 | `/bento/integration/instance/{id}/…` | A fixed navigation rail, a hub per section, and a `⌘K` (`Ctrl+K`) command palette that jumps to any screen by name |
 | `/admin/integration/instance/{id}/…` | The original interface: a collapsible sidebar |
 
-Every screen that configures or monitors a connector answers at both — the six source
+Every screen that configures or monitors a connector answers at both: the six source
 types and their detail forms, AI source inference, indexing rules, the indexing manager,
 monitoring, indexing statistics, field coverage, double-check, orphan reports, plugins,
 system information and AI insights. Nothing was removed from `/admin`; a bookmark or a
 deep link into it keeps working.
 
-The screens around the connector — sign-in, first-run setup, users, groups and roles, and
-your own profile — are served from `/admin` only.
+The screens around the connector (sign-in, first-run setup, users, groups and roles, and
+your own profile) are served from `/admin` only.
 
 Both interfaces read the same REST API and show the same data, so switching between them
 mid-task loses nothing.
@@ -167,7 +167,7 @@ mid-task loses nothing.
 | **Search Clients** | Turing Java SDK, SolrJ 10.0.0, ES Client 9.3.2 | One active per deployment |
 | **Build** | Apache Maven | Multi-module project |
 | **Console** | React 19, Vite, Tailwind CSS v4 | Built into the connector's static resources |
-| **Console components** | `@viglet/viglet-design-system` | Shared with Viglet Turing ES and Shio, so the three look like one product |
+| **Console components** | `@viglet/viglet-design-system` | Shared with Viglet Turing and Shio, so the three look like one product |
 
 ---
 
@@ -176,21 +176,21 @@ mid-task loses nothing.
 ### Development
 
 ```
-Dumont DEP (H2 embedded + Artemis embedded)
-    → Turing ES (http://localhost:2700)
+Dumont (H2 embedded + Artemis embedded)
+    → Turing (http://localhost:2700)
 ```
 
 ### Production
 
 ```
-Dumont DEP + PostgreSQL
-    → Turing ES + Apache Solr
+Dumont + PostgreSQL
+    → Turing + Apache Solr
 ```
 
-### Direct Indexing (without Turing ES)
+### Direct Indexing (without Turing)
 
 ```
-Dumont DEP + PostgreSQL
+Dumont + PostgreSQL
     → Apache Solr (direct via SolrJ)
     → Elasticsearch (direct via ES Client)
 ```
@@ -203,6 +203,6 @@ Dumont DEP + PostgreSQL
 |---|---|
 | [Core Concepts](./getting-started/core-concepts.md) | Pipeline stages, strategies, and change detection |
 | [Connectors Overview](./connectors/overview.md) | All connectors and deployment types |
-| [Indexing Plugins](./indexing-plugins.md) | Turing ES, Solr, Elasticsearch output targets |
+| [Indexing Plugins](./indexing-plugins.md) | Turing, Solr, Elasticsearch output targets |
 | [Installation Guide](./installation-guide.md) | Setup with `-Dloader.path` and systemd |
-| [Turing ES: Architecture](/turing/architecture-overview) | Search-side architecture: indexing reception, search flow, and deployment topologies |
+| [Turing: Architecture](/turing/architecture-overview) | Search-side architecture: indexing reception, search flow, and deployment topologies |

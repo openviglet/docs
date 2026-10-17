@@ -9,7 +9,7 @@ description: "The Viglet Shio curator's lifecycle tools: share a draft with a pr
 These are the tools that answer one question: **what happened to this page, and can I
 undo it?**
 
-They exist so a mistake is recoverable — but a person who does not know **Restore** exists
+They exist so a mistake is recoverable, but a person who does not know **Restore** exists
 experiences a mistake as unrecoverable anyway. This page is the half of the safety model
 that only helps if you have read it.
 
@@ -22,8 +22,8 @@ All of them live on the post's own edit screen, in the sticky bar at the top:
 
 Every post has two states, and it can be in **both at once**:
 
-- **Draft** — the working copy. Saving writes here.
-- **Published** — what visitors see.
+- **Draft**: the working copy. Saving writes here.
+- **Published**: what visitors see.
 
 Editing a published post changes only its draft; the live page keeps serving the
 published version until something publishes the new one. That is why nothing you type in
@@ -43,9 +43,9 @@ included, in a new tab.
 
 What happens depends on where the site's front end is:
 
-- **Shio renders the site itself** — the preview opens straight away. The console session
+- **Shio renders the site itself**: the preview opens straight away. The console session
   you are already signed in with is the authorization, and no credential is minted.
-- **The site has an external front end** (a Next.js app, say) — Shio mints a **short-lived
+- **The site has an external front end** (a Next.js app, say): Shio mints a **short-lived
   preview token**, confined to that one site, and opens the front end's preview route
   carrying it.
 
@@ -253,7 +253,7 @@ ana)"*.
 
 **The transition fires within a minute of the chosen time.** A background sweep runs
 every 60 seconds and applies whatever has come due, so nobody has to be at a keyboard at
-midnight — but do not schedule against a deadline finer than a minute.
+midnight, but do not schedule against a deadline finer than a minute.
 
 **A scheduled publish checks the site's publish gates when it fires, not when you schedule
 it.** If a gate stops the page at that moment, because the draft changed since or a gate was
@@ -269,7 +269,7 @@ checked the same way for every page it holds, and it goes live whole or not at a
 **Administration → Activity** answers "who did that": every create, update, publish,
 unpublish, delete and restore, with the name of whoever made it and when.
 
-It covers **every** surface — the console, the CLI, the delivery API and an agent — so a
+It covers **every** surface (the console, the CLI, the delivery API and an agent), so a
 change made by something that never opened a browser is attributed the same way as one
 you typed yourself.
 
@@ -292,16 +292,16 @@ Deleting is reversible. A deleted post or folder is marked deleted rather than r
 disappears from the console and the site, and can be restored from **Content → Trash**.
 Nothing expires it on a timer; **purge** is the only permanent act.
 
-The details — what one restore puts back, and why a folder delete is a single row in the
-trash — are on
+The details (what one restore puts back, and why a folder delete is a single row in the
+trash) are on
 [The content console § The trash](./content-console.md#the-trash).
 
 ---
 
 ## Related
 
-- [The content console](./content-console.md) — the browser, the post form, the trash
-- [Letting an agent in](./agent-safety.md) — draft-default, the review queue, reverting a run
-- [Universal Editor](./universal-editor.md) — editing and publishing on the rendered page
-- [Administration](./administration-guide.md) — activity, agent review, API tokens
-- [Content Modeling](./content-modeling.md) — the post types the form is generated from
+- [The content console](./content-console.md): the browser, the post form, the trash
+- [Letting an agent in](./agent-safety.md): draft-default, the review queue, reverting a run
+- [Universal Editor](./universal-editor.md): editing and publishing on the rendered page
+- [Administration](./administration-guide.md): activity, agent review, API tokens
+- [Content Modeling](./content-modeling.md): the post types the form is generated from

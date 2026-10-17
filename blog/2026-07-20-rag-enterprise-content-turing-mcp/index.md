@@ -1,6 +1,6 @@
 ---
 slug: rag-enterprise-content-turing-mcp
-title: "RAG Over Enterprise Content with Viglet Turing ES and MCP"
+title: "RAG Over Enterprise Content with Viglet Turing and MCP"
 description: "Combine retrieval-augmented generation over your indexed enterprise content with the Model Context Protocol (MCP), so AI agents can search your AEM, WordPress, and database content as a first-class tool."
 authors: [alexandre]
 tags: [rag, mcp, enterprise-search, semantic-search, open-source]
@@ -22,7 +22,7 @@ up rebuilding it for every new use case. The better pattern: **make your
 enterprise search index the retrieval layer**, and expose it to AI through the
 **Model Context Protocol (MCP)** so any agent can use it as a tool.
 
-That's what [**Viglet Turing ES**](https://www.viglet.org/turing/) does: your
+That's what [**Viglet Turing**](https://www.viglet.org/turing/) does: your
 indexed Adobe AEM, WordPress, database, and file content becomes both a search
 experience *and* a grounded RAG/agent capability, on your own infrastructure.
 
@@ -31,14 +31,14 @@ experience *and* a grounded RAG/agent capability, on your own infrastructure.
 ## RAG and search are the same retrieval problem
 
 A search query and a RAG prompt both need the same thing: the most relevant
-passages from your content. Turing ES already maintains that index (faceted,
+passages from your content. Turing already maintains that index (faceted,
 multi-language, [semantically ranked](/turing/semantic-navigation)), so RAG
 reuses it instead of standing up a parallel store:
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'lineColor': '#64748b'}}}%%
 flowchart LR
-    SRC["AEM · WordPress · DB · files"] --> IDX["Turing ES index<br/><small>keyword + vector</small>"]
+    SRC["AEM · WordPress · DB · files"] --> IDX["Turing index<br/><small>keyword + vector</small>"]
     IDX --> SRCH["Search UI"]
     IDX --> RAG["RAG answers<br/><small>grounded + cited</small>"]
     IDX --> MCP["MCP tools<br/><small>for any agent</small>"]
@@ -66,12 +66,12 @@ infrastructure.
 ## MCP: your search as a tool for any agent
 
 The [Model Context Protocol](/turing/mcp-servers) is an open standard that lets
-AI models call tools on external servers. Turing ES uses MCP in two directions:
+AI models call tools on external servers. Turing uses MCP in two directions:
 
-1. **As an MCP client**: an [AI Agent](/turing/ai-agents) in Turing ES can
+1. **As an MCP client**: an [AI Agent](/turing/ai-agents) in Turing can
    connect to external MCP servers (over `HTTP` or `stdio`) and use their tools
    alongside its 27 built-in tools. That can be a company knowledge system, a
-   proprietary API, or any public MCP server, with no custom code inside Turing ES.
+   proprietary API, or any public MCP server, with no custom code inside Turing.
 2. **As a retrieval capability**: your enterprise index is exposed through
    tools like `list_sites`, `get_site_fields`, and `search_site`, so an agent
    can discover and search your content autonomously.
@@ -91,11 +91,11 @@ agents.
 
 ## Next steps
 
-- 📘 [What is RAG in Turing ES](/turing/rag)
+- 📘 [What is RAG in Turing](/turing/rag)
 - 📗 [MCP Servers](/turing/mcp-servers) · [AI Agents](/turing/ai-agents)
 - 📙 [Index Adobe AEM](/blog/enterprise-search-for-adobe-aem) to build the retrieval layer
-- ⭐ [Turing ES on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
+- ⭐ [Turing on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
 
-*Viglet Turing ES is open-source enterprise search with semantic navigation,
+*Viglet Turing is open-source enterprise search with semantic navigation,
 generative AI, and MCP support. Index your enterprise content once and use it as
 search, grounded RAG, and a tool for AI agents, on your own infrastructure.*

@@ -98,7 +98,7 @@ graph TB
 2. **Persona system instruction**: the brand voice directive. Prepended to the agent's prompt.
 3. **Style guidelines block**: a small structured paragraph derived from `tone` + `verbosity` + `languageStyle` (e.g., *"Use an EXECUTIVE tone, verbosity 2 (concise), PERSUASIVE language."*).
 4. **Mandatory / forbidden vocabulary**: explicit *"Always use:"* and *"Never use:"* lists.
-5. **Brand context**: if a `brandContextMcpServer` is wired, Turing ES calls it once at session start and injects the returned facts ("current product catalog", "active promotions") into the prompt.
+5. **Brand context**: if a `brandContextMcpServer` is wired, Viglet Turing calls it once at session start and injects the returned facts ("current product catalog", "active promotions") into the prompt.
 6. **Few-shot examples**: if a `fewShotStore` is wired, the **user's first message** is embedded and the top-K most similar past Q/A pairs are retrieved and included before the user message. The LLM sees *real examples of how your company answers questions like this*.
 7. **Conversation history**: the running message list.
 8. **Current user message**: what they just typed.
@@ -122,7 +122,7 @@ So a `TECHNICAL`, verbosity-2 persona runs cooler and shorter (temperature 0.2, 
 
 ## Post-LLM Tone Validation
 
-The prompt-side guardrails (forbidden vocabulary in the system message) are necessary but not sufficient. LLMs occasionally drift, especially under tool-calling pressure or in long sessions. So Turing ES enforces forbidden terms **a second time, after the LLM responds**, before the response reaches the chat executor.
+The prompt-side guardrails (forbidden vocabulary in the system message) are necessary but not sufficient. LLMs occasionally drift, especially under tool-calling pressure or in long sessions. So Turing enforces forbidden terms **a second time, after the LLM responds**, before the response reaches the chat executor.
 
 `TurPersonaToneValidator` scans every assistant response for matches against the persona's forbidden list. Matches are **masked** (replaced with a neutral placeholder) rather than the entire response being blocked. Logs record the match so you know when your prompt isn't holding.
 
@@ -139,7 +139,7 @@ You don't need to choose. Both are on by default whenever a Persona is attached.
 
 ## The Few-Shot Store: Teach by Example
 
-The hardest part of a brand voice isn't the rules: it's the *feel*. You can describe FORMAL, but you can't fully describe *"the way Maria from sales answers a discount request"*. So Turing ES lets you point a Persona at a **vector store of past Q/A pairs**, and at every conversation it retrieves the most relevant ones to use as few-shot examples.
+The hardest part of a brand voice isn't the rules: it's the *feel*. You can describe FORMAL, but you can't fully describe *"the way Maria from sales answers a discount request"*. So Turing lets you point a Persona at a **vector store of past Q/A pairs**, and at every conversation it retrieves the most relevant ones to use as few-shot examples.
 
 **How to populate the store:**
 
@@ -150,7 +150,7 @@ The hardest part of a brand voice isn't the rules: it's the *feel*. You can desc
 **At chat time:**
 
 - The user's first message is embedded.
-- Turing ES retrieves the top similar Q/A pairs (default top 3, similarity ≥ 0.7).
+- Turing retrieves the top similar Q/A pairs (default top 3, similarity ≥ 0.7).
 - Pairs are injected before the user's message as `Example Q:` / `Example A:` blocks.
 - The LLM sees concrete examples of how your company answers similar questions.
 
@@ -171,7 +171,7 @@ If you bake those facts into the system prompt, two things happen:
 1. The prompt grows past the model's optimal range.
 2. Every time a price changes, marketing has to ask engineering to redeploy a prompt.
 
-The **Brand Context MCP** field solves this. It points the persona at an MCP server you control. At every conversation, Turing ES calls a single MCP tool (e.g., `get_brand_context`) and injects the JSON response into the system prompt as a *"Current brand facts:"* block.
+The **Brand Context MCP** field solves this. It points the persona at an MCP server you control. At every conversation, Turing calls a single MCP tool (e.g., `get_brand_context`) and injects the JSON response into the system prompt as a *"Current brand facts:"* block.
 
 You get:
 
@@ -310,11 +310,11 @@ For an **audience** persona (`AUDIENCE` or `BOTH`), the **Validate content** lau
 
 **Persona dialogue** runs an automatic, turn-by-turn conversation between **two or more** personas on a topic you choose. Because a dialogue is about peer speakers (none of which "owns" it) it's a **global** surface reached from the persona list (**Persona dialogue**), never scoped to a single persona. Like [Persona Match](#persona-match-nn-content-fit-projects), it is organized as **saved projects**: `/bento/persona/dialogue` is a mosaic of dialogue projects, each re-openable and re-runnable.
 
-Open (or create) a project, then configure it: a **topic**, a roster of **speaker personas** (two minimum, pick them in the shared persona grid; the number badge is the **speaking order**), an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 40). Only `SPEAKER`/`BOTH` personas are selectable (an audience-only persona can't talk). Turing ES seeds the first persona with the topic, then goes **round-robin** (feeding each persona the previous speaker's reply) until the budget is spent. The transcript is **streamed live** (each turn appears the moment it's generated, colour-coded per speaker) **and persisted**, so re-opening a project shows its last conversation; re-running replaces it. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the others. It's the quickest way to hear several brand voices play off each other, a live "voice diff". If a turn fails mid-way, the partial transcript is kept with a notice.
+Open (or create) a project, then configure it: a **topic**, a roster of **speaker personas** (two minimum, pick them in the shared persona grid; the number badge is the **speaking order**), an [LLM Instance](./llm-instances.md), and a **turn budget** (default **10**, capped at 40). Only `SPEAKER`/`BOTH` personas are selectable (an audience-only persona can't talk). Turing seeds the first persona with the topic, then goes **round-robin** (feeding each persona the previous speaker's reply) until the budget is spent. The transcript is **streamed live** (each turn appears the moment it's generated, colour-coded per speaker) **and persisted**, so re-opening a project shows its last conversation; re-running replaces it. To keep the conversation from stalling, **every persona is required to end each reply with a question** to the others. It's the quickest way to hear several brand voices play off each other, a live "voice diff". If a turn fails mid-way, the partial transcript is kept with a notice.
 
 ### Suggest the best-fit persona for content
 
-Content-fit answers "does this text fit *this* persona"; **Suggest persona** answers the inverse, "**which** audience persona is this content even *for*". Reached from the persona list, it opens a page where you paste a piece of content (optionally restricting the pool to a few personas), and Turing ES batches the [content-fit evaluator](#how-content-fit-is-scored) across **every enabled audience persona** and returns them **ranked best-fit first**. Each row shows the red/amber/green fit bar plus the same *fits*/*misfits* detail, with the top persona flagged as the best fit, degrading to the readability-only score when no default LLM is configured. It feeds editorial routing (who is this article for?) and A/B persona selection. `POST /api/persona/suggest`.
+Content-fit answers "does this text fit *this* persona"; **Suggest persona** answers the inverse, "**which** audience persona is this content even *for*". Reached from the persona list, it opens a page where you paste a piece of content (optionally restricting the pool to a few personas), and Turing batches the [content-fit evaluator](#how-content-fit-is-scored) across **every enabled audience persona** and returns them **ranked best-fit first**. Each row shows the red/amber/green fit bar plus the same *fits*/*misfits* detail, with the top persona flagged as the best fit, degrading to the readability-only score when no default LLM is configured. It feeds editorial routing (who is this article for?) and A/B persona selection. `POST /api/persona/suggest`.
 
 ---
 
@@ -326,7 +326,7 @@ A **project** groups three things:
 
 - **Contents**: added **once per project** (not per persona) as a **URL** (fetched behind the SSRF guard, see [Content ingestion](#content-ingestion-fetching-js-rendered-pages) if a URL is added but no text is extracted), an **indexed document** (picked from a Semantic Navigation site), or an **uploaded file** (PDF/DOC/… parsed to text). Each content's text is extracted and cached on add; a content hash lets re-runs skip work that hasn't changed.
 - **Personas**: any set of your existing personas, selected from the catalog.
-- A **schedule** (`Manual` / `Daily` / `Weekly`) and an optional **LLM Instance** (defaults to the Global default LLM). The instance you pick drives **both** halves of the project — the fit scores themselves and the suggested adjustments — so the numbers and the advice always come from the same model. Changing it re-scores on the next run rather than reusing the previous model's verdicts.
+- A **schedule** (`Manual` / `Daily` / `Weekly`) and an optional **LLM Instance** (defaults to the Global default LLM). The instance you pick drives **both** halves of the project (the fit scores themselves and the suggested adjustments), so the numbers and the advice always come from the same model. Changing it re-scores on the next run rather than reusing the previous model's verdicts.
 
 Running the analysis evaluates every **(content × persona)** pair and stores the result as a **matrix cell**: the same fused *readability ⊕ grounded-LLM* fit score, *fits*, and flagged *misfits* with rewrite suggestions you get from the single-persona report. The studio shows it three ways:
 
@@ -342,35 +342,35 @@ Because a project can hold a **single** persona, it also **replaces the old per-
 
 ### The tuning loop: fit trend, drift & suggested adjustments
 
-Every run keeps a **history point per matrix cell**, so a project that re-runs on a schedule remembers how each `(content, persona)` pair moved — not just where it stands today. Once a project has at least one run, the studio adds a **Tuning loop** section:
+Every run keeps a **history point per matrix cell**, so a project that re-runs on a schedule remembers how each `(content, persona)` pair moved, not just where it stands today. Once a project has at least one run, the studio adds a **Tuning loop** section:
 
-- **Average fit per run** — a line chart of the project's mean fit across runs, oldest to newest. Is the portfolio getting better or worse for these audiences?
-- **Dropped / Improved since last run** — the pairs that moved between the two most recent runs, sharpest movement first, with the before → after scores and a `±` delta. A pair that fell **below the 75% good-fit threshold** is flagged with a warning icon (*"this content dropped below fit for persona X since last run"*), and a pair whose text changed between runs is marked **content changed**, so you can tell an edit from a scoring shift.
+- **Average fit per run**: a line chart of the project's mean fit across runs, oldest to newest. Is the portfolio getting better or worse for these audiences?
+- **Dropped / Improved since last run**: the pairs that moved between the two most recent runs, sharpest movement first, with the before → after scores and a `±` delta. A pair that fell **below the 75% good-fit threshold** is flagged with a warning icon (*"this content dropped below fit for persona X since last run"*), and a pair whose text changed between runs is marked **content changed**, so you can tell an edit from a scoring shift.
 - Each heatmap cell also carries a small `±` caret, and the per-cell drawer shows a **sparkline** of that pair's whole series plus its movement since the last run.
 
-The trend and drift views are computed from the stored scores alone — no LLM call, so they work even on a project scored by readability only.
+The trend and drift views are computed from the stored scores alone: no LLM call, so they work even on a project scored by readability only.
 
 **Suggested adjustments.** Click **Suggest adjustments** for concrete edits on **both sides** of the loop:
 
-- **Adjust the content** — how to edit a content so it serves the personas scoring it low.
-- **Adjust the persona** — how to correct a persona's audience description when the contents consistently miss it (a reading level or vocabulary ceiling set wrong, an empty description).
+- **Adjust the content**: how to edit a content so it serves the personas scoring it low.
+- **Adjust the persona**: how to correct a persona's audience description when the contents consistently miss it (a reading level or vocabulary ceiling set wrong, an empty description).
 
-Suggestions come from the project's LLM Instance (or the Global default) grounded on the matrix, the flagged phrases and the drift; anything naming a content or persona outside the project is discarded. With **no LLM configured** — or if the model's answer can't be read — you still get a **deterministic** list built from the rewrite suggestions the evaluator already grounded in verbatim phrases. Use **Regenerate** for a fresh set.
+Suggestions come from the project's LLM Instance (or the Global default) grounded on the matrix, the flagged phrases and the drift; anything naming a content or persona outside the project is discarded. With **no LLM configured** (or if the model's answer can't be read), you still get a **deterministic** list built from the rewrite suggestions the evaluator already grounded in verbatim phrases. Use **Regenerate** for a fresh set.
 
 **Adjustments stay advisory.** Nothing is written to a content or a persona automatically. For a **content** that is the end of it: Turing does not own the CMS the page lives in, so the edit is yours to make there.
 
 #### Applying a persona adjustment
 
-A **persona**, though, is a Turing entity — so when a suggestion names a specific audience field that is set wrong, the card offers **Apply to this persona**: the suggestion is shown as a diff of the current value → the proposed one, with the reason, for each field it wants to change.
+A **persona**, though, is a Turing entity, so when a suggestion names a specific audience field that is set wrong, the card offers **Apply to this persona**: the suggestion is shown as a diff of the current value → the proposed one, with the reason, for each field it wants to change.
 
 You tick the fields you agree with and press **Apply**. Nothing is pre-ticked and there is no *accept all*:
 
-- Only the fields you tick are written. The rest of the audience profile is left exactly as it was — including the fields no suggestion may ever touch (**Accessibility notes** and **Primary language**).
+- Only the fields you tick are written. The rest of the audience profile is left exactly as it was, including the fields no suggestion may ever touch (**Accessibility notes** and **Primary language**).
 - Four fields are eligible: **Reading level**, **Domain expertise**, **Vocabulary ceiling** and **Comprehension notes**.
 - A field that can't be applied (a value outside the allowed set, or one already in place) is reported next to the panel and the rest of your ticks still go through.
 - Applying needs the same permission as editing a persona directly (`ROLE_ADMIN` or `AI_AGENT_EDIT`).
 
-The Apply button appears only when the suggestion actually names a field and a value. A deterministic suggestion (no LLM) can tell you a persona's reading level looks wrong but not which value is right, so it stays read-only — configure an LLM Instance on the project to get applicable suggestions.
+The Apply button appears only when the suggestion actually names a field and a value. A deterministic suggestion (no LLM) can tell you a persona's reading level looks wrong but not which value is right, so it stays read-only: configure an LLM Instance on the project to get applicable suggestions.
 
 **Every applied field is recorded** with the value it replaced, the suggestion's reason, which project proposed it, whether the LLM or the deterministic fallback produced it, and who confirmed it. That is what makes a later run's drift explainable: when a persona's scores move, the record says whether someone changed its audience definition and why.
 
@@ -490,7 +490,7 @@ Without a Persona, an Agent still works, but its voice is the LLM's default voic
 | `POST` | `/api/persona/{id}/content-fit` | Run the audience-fit report (`?sourceId` for one source, else the whole notebook) |
 | `POST` | `/api/persona/derive-from-audio` | Draft a `BOTH` persona from an audio recording (multipart; never auto-saved) |
 | `POST` | `/api/v2/persona/{id}/chat` | Talk directly to a persona (SSE; JSON or multipart) |
-| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-match` | Persona Match **projects**: CRUD, `PUT .../{id}/personas`, contents (`POST .../{id}/sources`, `/sources/upload`, `/sources/{sourceId}/extract`), `GET .../{id}/matrix` and `.../report`, and the run — `POST .../{id}/run` or `.../run/stream` (SSE, live heatmap fill) |
+| `GET`/`POST`/`PUT`/`DELETE` | `/api/persona-match` | Persona Match **projects**: CRUD, `PUT .../{id}/personas`, contents (`POST .../{id}/sources`, `/sources/upload`, `/sources/{sourceId}/extract`), `GET .../{id}/matrix` and `.../report`, and the run: `POST .../{id}/run` or `.../run/stream` (SSE, live heatmap fill) |
 | `GET` | `/api/persona-match/{id}/trend` | Per-cell fit history across runs + the run-average series |
 | `GET` | `/api/persona-match/{id}/drift` | How fit moved between the last two runs (sharpest regression first) |
 | `POST` | `/api/persona-match/{id}/adjustments` | Suggested content/persona adjustments (`?regenerate=true` for a fresh set) |

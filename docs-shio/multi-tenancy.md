@@ -89,7 +89,7 @@ is in the console header, next to your account menu: it lists the tenants you be
 marks the one you are in, and switching reloads the console so everything on screen is
 re-read under the new one.
 
-It appears only when there is somewhere to go — the instance runs multi-tenancy **and** you
+It appears only when there is somewhere to go: the instance runs multi-tenancy **and** you
 belong to more than one tenant. On a single-tenant install, or if you are a member of one
 tenant, there is no control and nothing to choose.
 
@@ -104,13 +104,13 @@ and answer **HTTP 402** when there is no room:
 | Plan | Sites | Posts | Storage |
 |---|---|---|---|
 | `free` | 2 | 200 | 512 MB |
-| unlimited | — | — | — |
+| unlimited | no limit | no limit | no limit |
 
 The check runs before a site or a post is created, so a tenant at its ceiling gets a clear
 refusal rather than a partially-created site.
 
-**Storage is reported, not yet enforced.** A tenant's stored bytes are metered — the figure is
-kept as files arrive and leave, so reading it costs nothing — and the plan's byte limit is
+**Storage is reported, not yet enforced.** A tenant's stored bytes are metered (the figure is
+kept as files arrive and leave, so reading it costs nothing), and the plan's byte limit is
 published alongside the other two. What does not happen yet is a refusal: the quota check compares
 a *current total*, which is exact for sites and posts because each write adds one, and would let a
 single large upload through under any limit. Rather than advertise a ceiling that a big enough file
@@ -136,7 +136,7 @@ teardown removes its own bytes and nothing else.
 ## Background work runs per tenant
 
 Anything the instance does **on a timer or off the request thread** has no tenant of its
-own, and tenant isolation is resolved per thread — so background work has to be told which
+own, and tenant isolation is resolved per thread, so background work has to be told which
 tenant it is acting for, or it acts for the default one.
 
 Two places this matters, and both behave the way you would want:
@@ -145,8 +145,8 @@ Two places this matters, and both behave the way you would want:
   skipped: publishing on behalf of an account the platform has stopped is worse than
   publishing late, and the request path already refuses it. A tenant provisioned while a
   sweep is running is picked up on the next one.
-- **Failures recorded asynchronously** — a webhook that gave up, a search index push that
-  did not land — are filed under the tenant whose site they belong to, so they appear in
+- **Failures recorded asynchronously** (a webhook that gave up, a search index push that
+  did not land) are filed under the tenant whose site they belong to, so they appear in
   that tenant's `/agent/diagnostics` and not in the platform's.
 
 Nothing here needs configuring. It is listed because "the timer fired for everyone" is the

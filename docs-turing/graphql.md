@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: GraphQL API
-description: "Query Semantic Navigation sites using the Turing ES GraphQL endpoint: schema, queries, dynamic fields, and examples."
+description: "Query Semantic Navigation sites using the Viglet Turing GraphQL endpoint: schema, queries, dynamic fields, and examples."
 ---
 
 # GraphQL API
 
-Turing ES exposes a GraphQL endpoint that provides the same Semantic Navigation search capabilities as the REST API but using GraphQL queries. The endpoint is **public**, no authentication required.
+Viglet Turing exposes a GraphQL endpoint that provides the same Semantic Navigation search capabilities as the REST API but using GraphQL queries. The endpoint is **public**, no authentication required.
 
 ```
 POST http://localhost:2700/graphql
@@ -23,7 +23,7 @@ An interactive GraphQL IDE is available in the admin console and at `/graphiql`.
 - **Query validation**: syntax and type errors are highlighted in real time
 - **Query history**: previously executed queries are saved locally
 
-The explorer synchronizes its theme (light/dark) with the Turing ES console.
+The explorer synchronizes its theme (light/dark) with the Turing console.
 
 ---
 

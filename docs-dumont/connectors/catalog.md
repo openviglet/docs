@@ -9,7 +9,7 @@ description: "Index an already-normalized catalog feed, or any paged JSON API de
 The Catalog connector republishes records that already exist as JSON. A source runs in one of two modes:
 
 - **Catalog URL**: one GET of a URL that returns a JSON array of records, or a `{ "courses": [...] }` envelope, with the fields of the built-in course schema.
-- **JSON API manifest**: any paged JSON API (a job board, a product catalog, a partner feed). You describe the request, the paging, the call budget and the field mapping in a JSON manifest, and Viglet Dumont DEP runs it. You don't write any Java.
+- **JSON API manifest**: any paged JSON API (a job board, a product catalog, a partner feed). You describe the request, the paging, the call budget and the field mapping in a JSON manifest, and Viglet Dumont runs it. You don't write any Java.
 
 When a source has a manifest, the manifest replaces the catalog URL and the manifest's fields become the schema.
 

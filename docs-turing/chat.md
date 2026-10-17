@@ -1,14 +1,14 @@
 ---
 sidebar_position: 3
 title: Chat
-description: The Turing ES Chat interface is where AI Agents meet customers. Direct LLM, Semantic Navigation grounded chat, and agent-per-tab, each tuned for a different conversion moment.
+description: The Viglet Turing Chat interface is where AI Agents meet customers. Direct LLM, Semantic Navigation grounded chat, and agent-per-tab, each tuned for a different conversion moment.
 ---
 
 # Chat
 
-> *Every conversation is a chance to convert. The Chat interface is where Turing ES's reasoning, search, and brand voice meet your customer's question.*
+> *Every conversation is a chance to convert. The Chat interface is where Viglet Turing's reasoning, search, and brand voice meet your customer's question.*
 
-The **Chat** interface is the front door of every AI capability in Turing ES. It's organized into three modes, each tuned for a different shape of conversation:
+The **Chat** interface is the front door of every AI capability in Turing. It's organized into three modes, each tuned for a different shape of conversation:
 
 | Mode | When it shines | What grounds the answer |
 |---|---|---|

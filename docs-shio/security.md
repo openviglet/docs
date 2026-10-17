@@ -149,8 +149,8 @@ rich-text field.
 
 ### Uploaded files are served as files
 
-Every response carrying uploaded bytes — `/file_source/**`, the static-file API and a site's
-assets — sends three headers:
+Every response carrying uploaded bytes (`/file_source/**`, the static-file API and a site's
+assets) sends three headers:
 
 | Header | What it does |
 |---|---|
@@ -194,14 +194,14 @@ meets the refusal.
 
 ### Rich text is cleaned when it is saved
 
-A field using the **HTML Editor** widget is cleaned against an allow-list on every save —
+A field using the **HTML Editor** widget is cleaned against an allow-list on every save,
 from the console, the REST API, an agent's batch or the Universal Editor. Scripts, event
 handlers and `javascript:`/`data:` URLs are removed; ordinary formatting, links, relative URLs,
 images and HTML5 sections (`header`, `main`, `section`, `footer`) stay, and clean markup is
 stored exactly as written.
 
 **Layout templates are not touched.** `PageLayout` and `Region` use the **Ace Editor - HTML**
-widget, where writing markup — scripts included — is the point.
+widget, where writing markup (scripts included) is the point.
 
 Two ways to find out before a visitor does:
 

@@ -30,7 +30,7 @@ Subscriptions are independent: two of them pointed at the same URL both fire, an
 catch-all plus a site-scoped subscription both matching one event both fire.
 
 :::caution
-**A subscription with no secret delivers nothing.** Signing is not optional — a target
+**A subscription with no secret delivers nothing.** Signing is not optional: a target
 with a blank secret is skipped, with a warning in the server log. Leave the field blank
 on creation and Shio generates one for you; do not clear it afterwards.
 :::
@@ -63,7 +63,7 @@ through the API does not return it. Copy it when you create it.
 | `occurredAt` | ISO-8601 instant of the transition. **Omitted** if unknown. |
 
 Two things the payload deliberately does **not** carry: the post's **content**, and the
-post's **locale**. It is a notification, not a delivery mechanism — fetch what you need
+post's **locale**. It is a notification, not a delivery mechanism: fetch what you need
 through the [Content Delivery API](./headless/content-delivery-api.md) using `postId`, or
 regenerate the route at `url`.
 
@@ -125,7 +125,7 @@ the endpoint.
 
 ## What delivery guarantees, and what it does not
 
-Be honest with your consumer about these — several answers are "unspecified", and that
+Be honest with your consumer about these: several answers are "unspecified", and that
 is a real answer rather than a missing one.
 
 | Question | Answer |
@@ -135,20 +135,20 @@ is a real answer rather than a missing one.
 | **Is it retried?** | Yes: **3 attempts** by default, with a linear back-off of 2s × attempt number. Connect timeout 3s, read timeout 5s. |
 | **What if all attempts fail?** | The event is **dropped**. There is no dead-letter queue and no replay. |
 | **Is ordering guaranteed?** | **No.** Deliveries are dispatched concurrently and retried independently. Two events for the same post can arrive out of order. |
-| **Is delivery exactly-once?** | **No — at-most-once per attempt, and a retry can duplicate.** A subscriber that timed out after doing the work still gets retried. |
+| **Is delivery exactly-once?** | **No, at-most-once per attempt, and a retry can duplicate.** A subscriber that timed out after doing the work still gets retried. |
 | **So must my consumer be idempotent?** | **Yes.** Treat the payload as "this route may have changed", not as an instruction to be executed exactly once. |
 
 The practical shape that follows: key your handler on `url` (or `postId`), make
 re-running it harmless, and do not derive state from the order events arrive in. If you
 need a guaranteed, ordered view of what changed, poll
-[`/api/v2/agent/changes`](./agent-surface.md) instead — that feed is commit-ordered and
+[`/api/v2/agent/changes`](./agent-surface.md) instead: that feed is commit-ordered and
 resumable, which is exactly what a webhook is not.
 
 ### When a delivery fails
 
 A failed delivery is recorded where it can be read back, not only in the server log. It
 appears in `GET /api/v2/agent/diagnostics`, attributed to the site whose content changed,
-with the target URL as its subject — so "published but the site never rebuilt" is a
+with the target URL as its subject, so "published but the site never rebuilt" is a
 question you can answer.
 
 ---
@@ -173,8 +173,8 @@ be deleted to make that true.
 
 ## Related
 
-- [Content Delivery API](./headless/content-delivery-api.md) — fetching what the event points at
-- [Next.js starter](./headless/nextjs-starter.md) — the receiver this signing scheme matches
-- [The agent surface](./agent-surface.md) — `/agent/changes`, the ordered alternative
-- [Administration § Webhooks](./administration-guide.md#webhooks) — the console screen
-- [Configuration Reference](./configuration-reference.md) — every `shio.webhook.*` setting
+- [Content Delivery API](./headless/content-delivery-api.md): fetching what the event points at
+- [Next.js starter](./headless/nextjs-starter.md): the receiver this signing scheme matches
+- [The agent surface](./agent-surface.md): `/agent/changes`, the ordered alternative
+- [Administration § Webhooks](./administration-guide.md#webhooks): the console screen
+- [Configuration Reference](./configuration-reference.md): every `shio.webhook.*` setting

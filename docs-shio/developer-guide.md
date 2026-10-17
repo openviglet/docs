@@ -10,7 +10,7 @@ Whether you are **building against Shio** or **contributing to it**, start here.
 
 Shio is an open-source, **agent-native** CMS. A coding agent builds and maintains the
 site; a curator approves what it produced; a headless delivery layer serves it. That order
-is the product, not a description of it — every capability lands on an agent-drivable
+is the product, not a description of it: every capability lands on an agent-drivable
 surface first, and a feature reachable only from the console is considered incomplete.
 
 The source lives at [github.com/openviglet/shio](https://github.com/openviglet/shio) and
@@ -25,7 +25,7 @@ drive:
 
 | Surface | What it is |
 |---|---|
-| **MCP server** (`POST /mcp`) | Model Context Protocol tools — `shio_context`, `shio_find`, `shio_read`, `shio_write`, `shio_apply`, `shio_publish`, `shio_assets`, `shio_changes`, `shio_verify`, `shio_digest`, `shio_remember`. See [MCP](./mcp.md). |
+| **MCP server** (`POST /mcp`) | Model Context Protocol tools: `shio_context`, `shio_find`, `shio_read`, `shio_write`, `shio_apply`, `shio_publish`, `shio_assets`, `shio_changes`, `shio_verify`, `shio_digest`, `shio_remember`. See [MCP](./mcp.md). |
 | **Agent gateway** (`/api/v2/agent/**`) | A manifest, a context pack, planned batches, teaching errors, a review queue, diagnostics. See [The agent surface](./agent-surface.md). |
 | **Content as files** (`shio/content/**`) | The whole site projected to front-mattered Markdown on disk, with a three-way merge back. See [Content as files](./content-as-files.md). |
 | **CLI** (`@viglet/shio`) | `pull`, `push`, `apply`, `publish`, `verify`, `clone`, `convert`, `types`, `dev`, `deploy`, and more. See [The `shio` CLI](./cli.md). |
@@ -42,9 +42,9 @@ console**.
 | Layer | Technology |
 |---|---|
 | **Backend** | Java 21 · Spring Boot 4.1.1 |
-| **Database** | H2 (dev) · PostgreSQL · MariaDB / MySQL · Oracle — schema owned by Liquibase |
+| **Database** | H2 (dev) · PostgreSQL · MariaDB / MySQL · Oracle; schema owned by Liquibase |
 | **Cache** | Hazelcast |
-| **Search** | In the database by default. Viglet Turing indexing is **optional and off by default** — see [Search & Caching](./search-caching.md). |
+| **Search** | In the database by default. Viglet Turing indexing is **optional and off by default**. See [Search & Caching](./search-caching.md). |
 | **Template Engine** | Handlebars.java (no server-side script engine) |
 | **Frontend** | React 19 · TypeScript · Radix UI · TailwindCSS · Vite |
 | **CLI / SDKs** | Node · TypeScript, a pnpm workspace |
@@ -84,7 +84,7 @@ graph TD
 ### Prerequisites
 
 - [Java 21](https://adoptium.net/temurin/releases/?package=jdk&version=21) (Temurin recommended)
-- [Maven 3.9+](https://maven.apache.org/download.cgi) — or use the bundled `./mvnw`
+- [Maven 3.9+](https://maven.apache.org/download.cgi), or use the bundled `./mvnw`
 - [Node 26+](https://nodejs.org/en/download/) and **pnpm 11+**
 - [Git](https://git-scm.com/downloads)
 - Docker, only if you want to run the cross-database integration tests
@@ -98,7 +98,7 @@ cd shio
 
 ### Install the JS workspace
 
-Once, at the repo root — it is a **pnpm workspace** covering the CLI, the SDKs and the
+Once, at the repo root: it is a **pnpm workspace** covering the CLI, the SDKs and the
 console:
 
 ```shell
@@ -159,7 +159,7 @@ pnpm conformance    # end-to-end checks against a running instance and the publi
 
 **Integration tests are opt-in**: add `-DskipITs=false` when your change touches
 multi-tenancy, the Liquibase schema, or CDA/static-file delivery. The two cross-database
-ITs are `@Testcontainers(disabledWithoutDocker = true)`, so **start Docker first** — without
+ITs are `@Testcontainers(disabledWithoutDocker = true)`, so **start Docker first**: without
 it they skip, and a green run proves nothing about PostgreSQL or MariaDB.
 
 ---
@@ -199,7 +199,7 @@ shio/
 │       ├── schedule/        # Scheduled publish/unpublish sweep
 │       ├── spring/          # Security configuration
 │       └── onstartup/       # Seed data
-│   └── src/main/resources/db/  # Liquibase changelogs — the schema's owner
+│   └── src/main/resources/db/  # Liquibase changelogs, the schema's owner
 ├── shio-react/              # React console
 ├── cli/                     # The `shio` CLI and the conformance suites
 ├── sdk/                     # TypeScript delivery SDKs
@@ -223,7 +223,7 @@ The optional properties file overrides database configuration and anything else 
 
 :::note Spring Boot 4
 JAR files are no longer directly executable. Launch with `java -jar`, and load external
-properties with `--spring.config.additional-location` — the `.conf` pattern used by older
+properties with `--spring.config.additional-location`: the `.conf` pattern used by older
 versions is gone.
 :::
 
@@ -233,16 +233,16 @@ versions is gone.
 
 These are binding, and a change that breaks one is wrong even if it was asked for:
 
-1. **Agent-first order** — MCP → files/CLI → REST → console. A console-only feature is incomplete.
-2. **One call replaces a session** — discovery is a feature: the manifest and context pack, not a docs problem.
-3. **Tokens are a measured budget** — response budgets are asserted; a token regression fails the build.
-4. **Files beat APIs for authoring** — `Edit`, `Write` and `Grep` are an agent's cheapest tools.
-5. **Determinism over cleverness** — stable ordering, path addressing, idempotent writes, byte-identical serialization.
-6. **Errors are instructions** — every 4xx carries `fix` / `allowed` / `didYouMean` / `example`.
-7. **Never surprise the curator** — draft-default, dry runs, explicit publish, confirm tokens, attribution, a review queue.
-8. **Skipping steps needs appliable units** — blueprints, not prose recipes.
-9. **Close the perception loop** — cheap textual proof (lint, routes, render digest) instead of asking someone to look.
-10. **Compose, don't fork** — MCP is a *shape* over the delivery API and console services, never a third contract.
+1. **Agent-first order**: MCP → files/CLI → REST → console. A console-only feature is incomplete.
+2. **One call replaces a session**: discovery is a feature: the manifest and context pack, not a docs problem.
+3. **Tokens are a measured budget**: response budgets are asserted; a token regression fails the build.
+4. **Files beat APIs for authoring**: `Edit`, `Write` and `Grep` are an agent's cheapest tools.
+5. **Determinism over cleverness**: stable ordering, path addressing, idempotent writes, byte-identical serialization.
+6. **Errors are instructions**: every 4xx carries `fix` / `allowed` / `didYouMean` / `example`.
+7. **Never surprise the curator**: draft-default, dry runs, explicit publish, confirm tokens, attribution, a review queue.
+8. **Skipping steps needs appliable units**: blueprints, not prose recipes.
+9. **Close the perception loop**: cheap textual proof (lint, routes, render digest) instead of asking someone to look.
+10. **Compose, don't fork**: MCP is a *shape* over the delivery API and console services, never a third contract.
 
 Three things Shio deliberately does **not** do: host a model or run prompts, replace the
 Java backend, or add a parallel API semantic.
@@ -262,7 +262,7 @@ Java backend, or add a parallel API semantic.
 
 1. **Fork** [openviglet/shio](https://github.com/openviglet/shio).
 2. **Branch**: `git checkout -b feature/my-improvement`.
-3. **Run the suites** — `./mvnw -pl shio-app -am clean test -Dskip.npm=true` and `pnpm test`. A red suite blocks the change.
+3. **Run the suites**: `./mvnw -pl shio-app -am clean test -Dskip.npm=true` and `pnpm test`. A red suite blocks the change.
 4. **Commit** with clear, descriptive messages.
 5. **Open a pull request** describing what changed and why.
 

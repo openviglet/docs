@@ -1,12 +1,12 @@
 ---
 sidebar_position: 4
 title: Thesaurus
-description: "Enrich indexing with a curated, hierarchical controlled vocabulary: Viglet Turing ES recognises the terms a document mentions and expands it with their broader concepts at index time, adding recall, a concept-facet browse, and related-concept suggestions. Includes a seed library, XML import, and AI-assisted generation."
+description: "Enrich indexing with a curated, hierarchical controlled vocabulary: Viglet Turing recognises the terms a document mentions and expands it with their broader concepts at index time, adding recall, a concept-facet browse, and related-concept suggestions. Includes a seed library, XML import, and AI-assisted generation."
 ---
 
 # Thesaurus
 
-A **thesaurus** is a curated, hierarchical **controlled vocabulary**, the concepts of a domain, arranged from broad to narrow, with the synonyms and spelling variants people actually type. In **Viglet Turing ES** a thesaurus enriches your index with structure the search engine can't infer on its own: at **index time**, every document is expanded with the *broader concepts* of each term it mentions, written to a dedicated field. A page about **pneumonia** is silently tagged with **respiratory disease** and **disease** too, so a search for the broad term still finds the specific page, and visitors can browse by concept.
+A **thesaurus** is a curated, hierarchical **controlled vocabulary**, the concepts of a domain, arranged from broad to narrow, with the synonyms and spelling variants people actually type. In **Viglet Turing** a thesaurus enriches your index with structure the search engine can't infer on its own: at **index time**, every document is expanded with the *broader concepts* of each term it mentions, written to a dedicated field. A page about **pneumonia** is silently tagged with **respiratory disease** and **disease** too, so a search for the broad term still finds the specific page, and visitors can browse by concept.
 
 You'd reach for a thesaurus when embedding search and synonyms aren't enough on their own. Embeddings find text that is *semantically near*; [synonyms](./synonyms.md) rewrite the *query* so equivalent words match. Neither gives you a **curated, hierarchical, domain-controlled** vocabulary, the deliberate "these concepts nest under those" structure a librarian or subject-matter expert maintains. A thesaurus complements both: it works at **index time** on the *document*, so query time stays fast and simple.
 

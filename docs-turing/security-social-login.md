@@ -1,12 +1,12 @@
 ---
 sidebar_position: 4
 title: Social Login (OAuth2)
-description: Configure Google, GitHub, and Microsoft social login for Turing ES using Spring Security OAuth2.
+description: Configure Google, GitHub, and Microsoft social login for Viglet Turing using Spring Security OAuth2.
 ---
 
 # Social Login (OAuth2)
 
-Turing ES supports **social login** via OAuth2 with Google, GitHub, and Microsoft. When configured, users can sign in with their existing accounts from these providers, no separate password required.
+Viglet Turing supports **social login** via OAuth2 with Google, GitHub, and Microsoft. When configured, users can sign in with their existing accounts from these providers, no separate password required.
 
 This is ideal for development environments, small teams, and scenarios where a full Keycloak deployment is not needed. For enterprise SSO with LDAP/AD federation, MFA, and centralized user management, see [Security & Keycloak](./security-keycloak.md).
 
@@ -17,19 +17,19 @@ This is ideal for development environments, small teams, and scenarios where a f
 ```mermaid
 sequenceDiagram
     participant User
-    participant Turing ES
+    participant Turing
     participant OAuth2 Provider
 
-    User->>Turing ES: Click "Sign in with Google"
-    Turing ES->>OAuth2 Provider: Redirect to authorization
+    User->>Turing: Click "Sign in with Google"
+    Turing->>OAuth2 Provider: Redirect to authorization
     OAuth2 Provider->>User: Show consent screen
     User->>OAuth2 Provider: Approve
-    OAuth2 Provider->>Turing ES: Redirect with authorization code
-    Turing ES->>OAuth2 Provider: Exchange code for token + user info
-    Turing ES->>User: Create session, redirect to /admin
+    OAuth2 Provider->>Turing: Redirect with authorization code
+    Turing->>OAuth2 Provider: Exchange code for token + user info
+    Turing->>User: Create session, redirect to /admin
 ```
 
-When a user signs in via a social provider for the first time, Turing ES **automatically creates a local user** with the profile information from the provider (name, email, avatar). Subsequent logins update the profile data.
+When a user signs in via a social provider for the first time, Turing **automatically creates a local user** with the profile information from the provider (name, email, avatar). Subsequent logins update the profile data.
 
 ---
 

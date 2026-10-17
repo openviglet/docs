@@ -15,7 +15,7 @@ reachable from that first screen.
 
 :::note The console moved from `/console` to `/bento`
 Older bookmarks still work. Every `/console/**` address redirects to the same surface
-under `/bento`, keeping any query string and anchor — so a saved search still arrives
+under `/bento`, keeping any query string and anchor, so a saved search still arrives
 searched. The redirect replaces the entry in your history rather than adding to it,
 so **Back** goes where you expect instead of bouncing forward again.
 :::
@@ -30,7 +30,7 @@ and **Administration**, each an icon with its name under it. Choosing an area op
 one click from the rail. The rail carries the areas rather than every screen, because
 the fastest route to a named screen is not a menu:
 
-- **The command palette** — <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere,
+- **The command palette**: <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere,
   or just <kbd>/</kbd> when you are not typing in a field. It lists every surface in the
   console and searches their descriptions as well as their names, so *restorable* finds
   the Trash and *credentials* finds API Tokens.
@@ -118,16 +118,16 @@ permissions. To reject a change, open it in the review queue, where you can say 
 A site is a tree of **folders** holding **posts**. The browser walks it the way a file
 browser does: click a folder to go in, use the path to come back out.
 
-- **The path** — from the site down to where you are, in the browser's own toolbar.
+- **The path**: from the site down to where you are, in the browser's own toolbar.
   Every segment is clickable. This is the one trail the console still draws, because it
   is the one place you move up and down a tree all day.
-- **New \[Post Type]** — creates a post of the type you used last, remembered per
+- **New \[Post Type]**: creates a post of the type you used last, remembered per
   browser. The grid icon beside it opens the full post-type picker if you want a
   different one.
 - **New Folder** and **Import** sit next to it.
 - **Sort**, **Select**, **Action in batch** are on the right.
 
-Each row shows the item's name, when it changed, its type, and — on hover — the
+Each row shows the item's name, when it changed, its type, and, on hover, the
 actions for that one item: view, edit, clone, copy, move, delete.
 
 ### Filtering the list
@@ -171,7 +171,7 @@ Posts arrive **50 at a time**. Folders do not: a folder's children folders are a
 returned at once, so the folder half of the screen is always complete.
 
 The counter above the list is the folder's **real** post count, not the number of rows
-loaded. If it says 480 and you can see 50, both numbers are correct — and this is the
+loaded. If it says 480 and you can see 50, both numbers are correct, and this is the
 distinction that decides what "select all" means, below.
 
 ---
@@ -249,7 +249,7 @@ had typed it.
 
 A refused save says **why**, in the server's own words, with what to do about it: the reason,
 then the fix, the name you probably meant, or the values that are allowed. Where the refusal is
-about one field — a URL another live post already uses, say — that field is marked in red with
+about one field (a URL another live post already uses, say), that field is marked in red with
 the message under it, and the mark clears on your next save. The same refusal an agent receives
 over the API is what a curator reads here.
 
@@ -258,7 +258,7 @@ shown as a message that disappears, so it waits until you have read it. From the
 \<field\>** takes you to the field it is about, and **Use "\<suggestion\>"** puts in the
 correction the server proposed.
 
-Saving writes a **draft**. Publishing is a separate act with its own permission — see
+Saving writes a **draft**. Publishing is a separate act with its own permission: see
 [Letting an agent in](./agent-safety.md) for the full draft-and-publish model.
 
 ---
@@ -266,24 +266,24 @@ Saving writes a **draft**. Publishing is a separate act with its own permission 
 ## The Media Library
 
 **Content → Media Library** is where every file lives: images, video, audio, documents,
-archives. It is one screen, not two — the media browser and the static-file manager are
+archives. It is one screen, not two: the media browser and the static-file manager are
 the same thing.
 
 - **Upload** by dragging files onto the page or clicking **Upload**. Pick the site to
   upload into first. A file added through a **File** field on a post lands here too.
 - **Browse** as a grid or a list, filter by category (Images, Videos, Audio, Documents,
   Archives, Other), or search by name.
-- Each file shows its type, size, folder, upload date and — for images — its dimensions.
+- Each file shows its type, size, folder, upload date and, for images, its dimensions.
 - **Copy URL** puts the file's public URL on the clipboard; **Download** fetches it.
 - Select several files to **move**, **copy** or delete them in one go. A media delete is
-  **not** the reversible trash — the confirmation says so.
+  **not** the reversible trash: the confirmation says so.
 
 Selecting a file opens its details, where you can set:
 
-- **Alt text** — describes the image for accessibility and search engines.
-- **Caption** — optional.
-- **Tags** — type and press Enter.
-- **Used in** — the content that references this file, or *"Not referenced by any
+- **Alt text**: describes the image for accessibility and search engines.
+- **Caption**: optional.
+- **Tags**: type and press Enter.
+- **Used in**: the content that references this file, or *"Not referenced by any
   content"*. Check it before deleting.
 
 Those three values are declared fields on the **File** content type, alongside the path,
@@ -317,11 +317,11 @@ a number.
 
 A folder full of images copies as a folder full of images: each copied file gets its own
 stored bytes, not a pointer at the original's. That matters when you later delete one of
-them — removing an image from the original section leaves the copy's image working.
+them: removing an image from the original section leaves the copy's image working.
 
 ### What a move does to names
 
-A move **relocates and changes nothing else**. The post keeps its URL — which is the
+A move **relocates and changes nothing else**. The post keeps its URL, which is the
 point, because that URL may be live and linked from elsewhere. A post that has no URL
 yet gets one on the way.
 
@@ -344,7 +344,7 @@ disabled.
 - A **copy** needs write on the destination and **read** on every source.
 
 The check runs over the whole selection **before** anything moves. A batch you are only
-partly allowed to move moves **nothing** — it does not relocate the items you happened
+partly allowed to move moves **nothing**: it does not relocate the items you happened
 to list first and then stop.
 
 The console and the agent surface enforce the identical rule. Where they ever
@@ -360,7 +360,7 @@ checkbox, so it is worth reading once.
 | Choice | What it selects |
 |---|---|
 | **Folders** | Every folder here. Folders are never paged, so this really is all of them. |
-| **Content** | Every post that matches — **not** just the 50 on screen. It pages the rest in first. |
+| **Content** | Every post that matches, **not** just the 50 on screen. It pages the rest in first. |
 | **Everything** | Both of the above. |
 | **Invert** | The rows **currently loaded**, inverted. |
 | **Nothing** | Clears the selection. |
@@ -411,7 +411,7 @@ switch that turns it on. How a site renders a form and issues its token is in
 **Deleting is reversible.** Deleting a post or a folder marks it deleted; it does not
 remove it.
 
-- **Deleting a folder** trashes everything beneath it — every post, every sub-folder — as
+- **Deleting a folder** trashes everything beneath it (every post, every sub-folder) as
   one act, stamped with one instant.
 - **Trashed items disappear from the browser** everywhere, including from search and from
   the delivery API. To a reader the site behaves as though they are gone.
@@ -423,7 +423,7 @@ Each row offers two things, **Restore** as its button and **Purge** in the row's
 menu:
 
 - **Restore** puts back exactly what *that* deletion removed. Something that was already
-  in the trash before that delete stays in the trash — restoring a folder does not
+  in the trash before that delete stays in the trash: restoring a folder does not
   resurrect things you threw away last month that happen to live inside it.
 - **Purge** is the permanent one. This is where the content is really removed, where its
   uploaded files are cleaned up, and where any webhook subscribers are told it is gone.
@@ -441,7 +441,7 @@ activity history.
 
 ## Related
 
-- [Content Modeling](./content-modeling.md) — the post types the form is generated from
-- [Letting an agent in](./agent-safety.md) — drafts, publishing, the review queue
-- [Universal Editor](./universal-editor.md) — editing on the rendered page itself
-- [Administration](./administration-guide.md) — the console's admin and configuration screens
+- [Content Modeling](./content-modeling.md): the post types the form is generated from
+- [Letting an agent in](./agent-safety.md): drafts, publishing, the review queue
+- [Universal Editor](./universal-editor.md): editing on the rendered page itself
+- [Administration](./administration-guide.md): the console's admin and configuration screens

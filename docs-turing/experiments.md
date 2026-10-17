@@ -8,7 +8,7 @@ description: A/B test your chat flows natively. Split traffic across variants by
 
 > *Is the friendlier welcome message actually converting better, or does it just feel better? "Ask for the email first" vs. "ask for it last", which one finishes more conversations? **Experiments** turn those hunches into measured decisions, built right into the chat flow.*
 
-Viglet Turing ES has **native A/B testing** for [chat flows](./chat-flow.md). You don't bolt on a third-party experimentation tool: you mark two (or more) flows as variants of the same experiment, and the engine handles traffic splitting, sticky assignment, significance testing, and even automatic winner promotion.
+Viglet Turing has **native A/B testing** for [chat flows](./chat-flow.md). You don't bolt on a third-party experimentation tool: you mark two (or more) flows as variants of the same experiment, and the engine handles traffic splitting, sticky assignment, significance testing, and even automatic winner promotion.
 
 This page covers the experiment subsystem end to end. The conversation-quality metrics it measures against live in [Chat Analytics](./chat-analytics.md).
 

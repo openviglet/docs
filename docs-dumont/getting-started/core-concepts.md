@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: Core Concepts
-description: "The fundamental concepts of Dumont DEP: connectors, job items, the processing pipeline, strategies, and indexing plugins."
+description: "The fundamental concepts of Viglet Dumont: connectors, job items, the processing pipeline, strategies, and indexing plugins."
 ---
 
 # Core Concepts
 
-This page explains the fundamental concepts of Dumont DEP in plain terms. No configuration files, no code, just the mental model you need before diving into the technical documentation.
+This page explains the fundamental concepts of Viglet Dumont in plain terms. No configuration files, no code, just the mental model you need before diving into the technical documentation.
 
 ---
 
@@ -18,7 +18,7 @@ A **Connector** is a component that knows how to extract content from a specific
 2. **Extracts** documents according to its configuration
 3. **Emits** each document as a **Job Item** into the processing pipeline
 
-Dumont DEP ships with five connectors:
+Dumont ships with five connectors:
 
 | Connector | Source | How it works |
 |---|---|---|
@@ -41,7 +41,7 @@ A **Job Item** is a single document moving through the pipeline. It contains:
 - **Provider**: which connector produced this item
 - **Locale**: the language/country of the content (e.g., `en_US`, `pt_BR`)
 
-Job Items are the universal data format inside Dumont DEP. Every connector produces them, every strategy evaluates them, and every indexing plugin consumes them.
+Job Items are the universal data format inside Dumont. Every connector produces them, every strategy evaluates them, and every indexing plugin consumes them.
 
 ---
 
@@ -49,7 +49,7 @@ Job Items are the universal data format inside Dumont DEP. Every connector produ
 
 When a connector extracts a document, it does not send it directly to the search engine. Instead, the document passes through a multi-stage pipeline designed for reliability, efficiency, and flexibility.
 
-![Dumont DEP, Processing Pipeline](/img/diagrams/dumont-pipeline.svg)
+![Dumont, Processing Pipeline](/img/diagrams/dumont-pipeline.svg)
 
 ### Stage 1: Extraction
 
@@ -83,11 +83,11 @@ Queue messages are persisted to disk (`store/queue/`) and survive application re
 
 ### Stage 5: Delivery
 
-The **Indexing Plugin** consumes messages from the queue and delivers them to the configured search engine. Dumont DEP supports three output targets:
+The **Indexing Plugin** consumes messages from the queue and delivers them to the configured search engine. Dumont supports three output targets:
 
 | Plugin | Target | Description |
 |---|---|---|
-| **Turing** (default) | Viglet Turing ES | Uses the Turing Java SDK to deliver documents via REST API |
+| **Turing** (default) | Viglet Turing | Uses the Turing Java SDK to deliver documents via REST API |
 | **Solr** | Apache Solr | Uses SolrJ to add documents directly to a Solr collection |
 | **Elasticsearch** | Elasticsearch | Uses the Elasticsearch Java Client for bulk indexing |
 
@@ -109,7 +109,7 @@ Indexing Rules are configured per source in the admin console and are evaluated 
 
 ## Change Detection
 
-Dumont DEP tracks every document it has processed using a persistent indexing database. For each document, it stores:
+Dumont tracks every document it has processed using a persistent indexing database. For each document, it stores:
 
 - **Object ID**: the unique identifier from the source
 - **Checksum**: a CRC32 hash of the document's content
@@ -125,8 +125,8 @@ This mechanism enables efficient **incremental indexing**, only changed content 
 ## Data Quality
 
 An indexing run that reports success is not the same thing as an index you can trust. A selector
-that stops matching, a write that fails after the ledger recorded it, a run killed halfway — each
-leaves the pipeline reporting nothing wrong. Dumont DEP surfaces all three.
+that stops matching, a write that fails after the ledger recorded it, a run killed halfway: each
+leaves the pipeline reporting nothing wrong. Dumont surfaces all three.
 
 ### Field coverage and drift
 
@@ -140,8 +140,8 @@ See it under **Enterprise Search → Integration → [your instance] → Coverag
 
 ### Field provenance
 
-Every published field is tagged with where its value came from — the source, or the named enricher
-that derived it — and the tags travel with the document as a compact `dum_provenance` attribute.
+Every published field is tagged with where its value came from (the source, or the named enricher
+that derived it), and the tags travel with the document as a compact `dum_provenance` attribute.
 So "why does this document say that" is answerable from the index itself, and a field that stops
 being produced stays auditable: the connector keeps a per-source record of when each field was
 last seen.
@@ -152,8 +152,8 @@ A full index normally ends by de-indexing whatever it did not see, which is how 
 the source leaves the index. That is exactly the wrong thing to do when the run itself failed: the
 ids it never reached look identical to ids that were removed.
 
-So a run that does not complete — an exception, an interruption, or a **wave of extraction
-failures** past a set ratio — finishes *standalone*: the de-index sweep is skipped and the
+So a run that does not complete (an exception, an interruption, or a **wave of extraction
+failures** past a set ratio) finishes *standalone*: the de-index sweep is skipped and the
 previously indexed documents survive. A single hung fetch cannot stall the whole run either; a
 per-extract timeout cancels the overrun and counts it as one failed extraction.
 
@@ -164,7 +164,7 @@ that hangs; see [Extraction Resilience](../configuration-reference.md#extraction
 ### The audit finds what the run missed
 
 A scheduled audit re-enumerates each source and, where the backend can report what it holds,
-compares against the search index itself — finding documents that never landed, landed and then
+compares against the search index itself, finding documents that never landed, landed and then
 went stale, or linger in the index after leaving the source. See
 [Content Audit](../configuration-reference.md#content-audit).
 
@@ -195,7 +195,7 @@ Every document's journey through the pipeline is tracked with a status code:
 | I want to... | Go to |
 |---|---|
 | Understand the full system architecture | [Architecture](../architecture.md) |
-| Install Dumont DEP | [Installation Guide](../installation-guide.md) |
+| Install Dumont | [Installation Guide](../installation-guide.md) |
 | Configure a Web Crawler | [Web Crawler Connector](../connectors/web-crawler.md) |
 | Index a database | [Database Connector](../connectors/database.md) |
 | Understand the indexing plugins | [Indexing Plugins](../indexing-plugins.md) |

@@ -54,7 +54,7 @@ graph TD
 | **External SQL files** | Load queries from files using the `file://` protocol |
 | **Batch processing** | Configurable chunk size for memory-efficient processing |
 | **Max content size** | Limits per-document content size (default: 5 MB) to prevent oversized documents |
-| **Standalone CLI** | Run imports from the command line without the full Dumont DEP application |
+| **Standalone CLI** | Run imports from the command line without the full Viglet Dumont application |
 | **Custom extensions** | `DumDbExtCustomImpl` interface for custom row processing logic |
 | **Locale support** | Configurable default locale for all extracted documents |
 
@@ -70,7 +70,7 @@ The standalone Database Connector accepts the following command-line parameters:
 | `--connect` | Yes | n/a | JDBC connection string |
 | `--query` / `-q` | Yes | n/a | SQL query or `file://path/to/query.sql` |
 | `--site` | Yes | n/a | Target Semantic Navigation Site name |
-| `--server` / `-s` | Yes | n/a | Dumont DEP server URL |
+| `--server` / `-s` | Yes | n/a | Dumont server URL |
 | `--api-key` / `-a` | Yes | n/a | API key for authentication |
 | `--locale` | No | `en_US` | Default locale for documents |
 | `--chunk` / `-z` | No | *(varies)* | Batch size for processing |
@@ -132,7 +132,7 @@ This will:
 
 ## Tips
 
-- **Use aliases** in your SQL query to match the field names expected by Turing ES (e.g., `SELECT name AS title`).
+- **Use aliases** in your SQL query to match the field names expected by Viglet Turing (e.g., `SELECT name AS title`).
 - **External SQL files** (`file://` protocol) keep complex queries maintainable and version-controlled.
 - **De-index before importing** (`--deindex-before-importing`) is useful for full refreshes: it removes stale documents that no longer exist in the database.
 - **Chunk size** affects memory usage: larger chunks are faster but use more memory. Start with 100 and adjust based on document size.

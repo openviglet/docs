@@ -8,7 +8,7 @@ description: Put a person in the conversation when it matters. Pause a flow for 
 
 > *Most of the time you want the AI to just handle it. But some moments need a human: approving a refund, signing off on a contract clause, or quietly stepping into a conversation that's going sideways. **Human-in-the-loop (HITL)** gives you both, an asynchronous approval checkpoint baked into the flow, and a live spectator + co-pilot console for real-time intervention.*
 
-Viglet Turing ES has two complementary HITL surfaces:
+Viglet Turing has two complementary HITL surfaces:
 
 1. **`humanApproval` node**: a graph-declared checkpoint that **parks** a conversation until a person approves or rejects, notified over their channel of choice.
 2. **Spectator + co-pilot mode**: an operator watches any live conversation and can **take the wheel** for a turn.

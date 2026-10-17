@@ -1,14 +1,14 @@
 ---
 sidebar_position: 5
 title: Developer Guide
-description: "Build with and contribute to Viglet Turing ES: setup, APIs, SDKs, and more."
+description: "Build with and contribute to Viglet Turing: setup, APIs, SDKs, and more."
 ---
 
 # Developer Guide
 
-Whether you're **building a search experience** on top of Turing ES or **contributing to the project itself**, this guide has everything you need to get up and running quickly.
+Whether you're **building a search experience** on top of Viglet Turing or **contributing to the project itself**, this guide has everything you need to get up and running quickly.
 
-Turing ES is a fully open-source enterprise search platform with semantic navigation and GenAI capabilities. The source code lives at [github.com/openviglet/turing-ce](https://github.com/openviglet/turing-ce) and all contributions are welcome.
+Turing is a fully open-source enterprise search platform with semantic navigation and GenAI capabilities. The source code lives at [github.com/openviglet/turing-ce](https://github.com/openviglet/turing-ce) and all contributions are welcome.
 
 ---
 
@@ -30,7 +30,7 @@ Understanding the stack helps you navigate the codebase and decide where to plug
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph TD
-    A["💻 Your IDE"] -->|"mvn spring-boot:run"| B["☕ Turing ES Backend\nSpring Boot / Java 21"]
+    A["💻 Your IDE"] -->|"mvn spring-boot:run"| B["☕ Turing Backend\nSpring Boot / Java 21"]
     A -->|"npm run dev"| C["⚛️ React Admin Console\nlocalhost:5173"]
     B --> D["🔎 Apache Solr\nlocalhost:8983"]
     B --> E["📨 Apache Artemis\nMessage Queue"]
@@ -70,7 +70,7 @@ cd turing
 
 ### Start Services with Docker Compose
 
-Apache Solr is the only external service required to run Turing ES. Apache Artemis runs **embedded** inside the application and requires no separate installation. The easiest way to start Solr locally is with Docker Compose:
+Apache Solr is the only external service required to run Turing. Apache Artemis runs **embedded** inside the application and requires no separate installation. The easiest way to start Solr locally is with Docker Compose:
 
 ```shell
 docker-compose up -d
@@ -85,7 +85,7 @@ Wait for Solr to be fully ready before starting the backend. You can check at `h
 
 ---
 
-## Running Turing ES
+## Running Turing
 
 ### Backend (Spring Boot)
 
@@ -188,11 +188,11 @@ mvn package
 
 ## Database Migrations with Liquibase
 
-Turing ES uses **[Liquibase](https://www.liquibase.org/)** (v5.0.2) for database schema management. All schema changes (tables, columns, indexes, foreign keys) are tracked as versioned changelogs and applied automatically on startup. This ensures every environment (dev, staging, production) runs the exact same schema, regardless of the database platform.
+Turing uses **[Liquibase](https://www.liquibase.org/)** (v5.0.2) for database schema management. All schema changes (tables, columns, indexes, foreign keys) are tracked as versioned changelogs and applied automatically on startup. This ensures every environment (dev, staging, production) runs the exact same schema, regardless of the database platform.
 
 ### How it works
 
-When Turing ES starts, Spring Boot runs Liquibase before the application context is fully initialized. Liquibase reads the master changelog, compares it against the `DATABASECHANGELOG` tracking table, and applies any pending changesets. This means:
+When Turing starts, Spring Boot runs Liquibase before the application context is fully initialized. Liquibase reads the master changelog, compares it against the `DATABASECHANGELOG` tracking table, and applies any pending changesets. This means:
 
 - **First startup**: all migrations run, creating the full schema from scratch
 - **Upgrades**: only new changesets (added since the last startup) are applied
@@ -319,7 +319,7 @@ Liquibase handles type mappings (e.g., `VARCHAR(255)` on MySQL vs `VARCHAR2(255)
 
 ## Code Quality
 
-Turing ES maintains high code quality standards. You can check the project health at any time:
+Turing maintains high code quality standards. You can check the project health at any time:
 
 | Tool | Link |
 |---|---|
@@ -331,7 +331,7 @@ Turing ES maintains high code quality standards. You can check the project healt
 
 ## Search Engine Plugin Architecture
 
-Turing ES uses a **plugin architecture** to support multiple search backends behind a unified interface. This abstraction allows the same application code to work with Apache Solr, Elasticsearch, or Lucene: the active plugin is resolved at runtime based on the vendor configured per Search Engine instance.
+Turing uses a **plugin architecture** to support multiple search backends behind a unified interface. This abstraction allows the same application code to work with Apache Solr, Elasticsearch, or Lucene: the active plugin is resolved at runtime based on the vendor configured per Search Engine instance.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
@@ -407,7 +407,7 @@ If a vendor is unrecognised or unavailable, `TurSearchEnginePluginFactory` falls
 
 ## REST API
 
-Turing ES exposes a REST API for integrating search and AI capabilities into any application. All endpoints use **JSON**. Authentication uses the `Key` header with an API Token created in **Administration → API Tokens**.
+Turing exposes a REST API for integrating search and AI capabilities into any application. All endpoints use **JSON**. Authentication uses the `Key` header with an API Token created in **Administration → API Tokens**.
 
 For the full endpoint reference (search, autocomplete, spell check, latest searches, GenAI chat, and token usage) see **[REST API Reference](./rest-api.md)**.
 
@@ -417,7 +417,7 @@ For interactive exploration, use the built-in Swagger UI at `http://localhost:27
 
 ## Contributing
 
-We'd love your help making Turing ES better. Here's how to get involved:
+We'd love your help making Turing better. Here's how to get involved:
 
 1. **Fork** the [openviglet/turing-ce](https://github.com/openviglet/turing-ce) repository.
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`

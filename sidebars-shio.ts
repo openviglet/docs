@@ -4,7 +4,7 @@ const sidebars: SidebarsConfig = {
   shioSidebar: [
     {
       type: "category",
-      label: "Shio CMS",
+      label: "Viglet Shio",
       link: {
         type: "doc",
         id: "index",

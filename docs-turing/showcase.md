@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: Reference showcase (Atlas Store)
-description: "Atlas Store: the installable reference app that exercises the maximum surface of Viglet Turing ES, walked end-to-end (typed catalog, faceted + hybrid search, RAG chat, agent power, creative compositions, voice/memory/ops)."
+description: "Atlas Store: the installable reference app that exercises the maximum surface of Viglet Turing, walked end-to-end (typed catalog, faceted + hybrid search, RAG chat, agent power, creative compositions, voice/memory/ops)."
 ---
 
 # Reference showcase: Atlas Store
 
-**Atlas Store** is the canonical reference application for Viglet Turing ES, the "see it all wired together" artifact. It's a commerce-catalog copilot whose single job is to **exercise the maximum surface of the platform**: a living demo, an SDK-vs-real-backend integration test, and the answer to *"what can Turing actually do?"*
+**Atlas Store** is the canonical reference application for Viglet Turing, the "see it all wired together" artifact. It's a commerce-catalog copilot whose single job is to **exercise the maximum surface of the platform**: a living demo, an SDK-vs-real-backend integration test, and the answer to *"what can Turing actually do?"*
 
 If you've read the feature pages one at a time, this is where they connect. Atlas Store is the through-line: a typed catalog feeds faceted + hybrid **search**, the same index grounds a RAG **chat**, the chat gains **agent power** (client tools, code interpreter, skills), and a handful of **creative compositions** only possible because Turing owns search *and* agents. This page walks that surface in the order a visitor experiences it, linking the deep page for each capability, making it a good map for the [learning path](./getting-started/intro.md).
 

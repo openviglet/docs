@@ -6,7 +6,7 @@ description: "The mental model behind Viglet Shio: sites, folders and posts, pos
 
 # Core Concepts
 
-[What is Shio CMS?](./intro.md) explains who operates it. This page is the vocabulary,
+[What is Viglet Shio?](./intro.md) explains who operates it. This page is the vocabulary,
 one level deeper: the words the API, the CLI, the files on disk and the console all use.
 
 ---
@@ -182,7 +182,7 @@ The console shows you everything; a reader gets only what is published. Concrete
 Full-text search over your content works with no extra infrastructure: it runs in the
 database, and the console's search box and the delivery API's query endpoint both use it.
 
-Indexing into **Viglet Turing ES**: for faceted navigation, autocomplete, semantic search
+Indexing into **Viglet Turing**: for faceted navigation, autocomplete, semantic search
 and generative AI, is a separate, **opt-in** integration: you configure it, mark which
 post types are searchable, and content reaches the index when it is **published**. It is
 off until you turn it on. See [Search & Caching](../search-caching.md).
@@ -193,7 +193,7 @@ off until you turn it on. See [Search & Caching](../search-caching.md).
 
 | Page | Description |
 |---|---|
-| [What is Shio CMS?](./intro.md) | Who operates it, and why it is shaped this way |
+| [What is Viglet Shio?](./intro.md) | Who operates it, and why it is shaped this way |
 | [Content Modeling](../content-modeling.md) | Post types and fields in practice |
 | [Pages, Layouts & Regions](../website-development.md) | The render model in full |
 | [Architecture Overview](../architecture-overview.md) | Components, request flow, deployment |

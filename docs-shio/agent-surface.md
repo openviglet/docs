@@ -90,7 +90,7 @@ including what it *cannot*, which is the half a caller otherwise discovers by ge
 
 An unknown `format` is a teaching `400`, not a silent fallback.
 
-`startHere` in the manifest does not list everything — it **routes**. Two facts that are
+`startHere` in the manifest does not list everything: it **routes**. Two facts that are
 true whatever you came to do, then a line per intent, so you match your own situation
 instead of mapping it onto a catalogue:
 
@@ -124,14 +124,14 @@ optional: the single-site case is a bare `GET`.
 | `ids=true` | Put the raw UUID back on every row. Off by default: rows are addressable without one, and an id is the most expensive field a row can carry |
 
 A narrowed pack tells you what it left out. `include=instance` returns four scalars and
-an `omitted` list naming the sections it dropped — because narrowing a *discovery*
+an `omitted` list naming the sections it dropped, because narrowing a *discovery*
 response is done by a caller who does not yet know what is there, and a silent `200` is
 worse than an error they would have read. It is separate from `budget.truncated`: one is
 your own doing and the remedy is to ask for the section, the other is the instance
 hitting its ceiling and the remedy is a bigger budget or the `from=` cursor.
 
 Each post in the sitemap carries `published: true` when it is also live. The pack prefers
-the draft row, so without it every page of a fully published site read as `DRAFT` — and a
+the draft row, so without it every page of a fully published site read as `DRAFT`, and a
 session that opens with the pack would have been misinformed about all of them. Absent
 rather than `false` when a page is not live, so a site with no published page pays
 nothing for the field.
@@ -150,7 +150,7 @@ nothing for the field.
 
 Reads are **draft-preferred**, so you always see your own unpublished edits. `state=`
 overrides that: `state=published` returns the live row and `state=draft` the editable one.
-Two reads of the same address — one with `state=published`, one without — are the answer to
+Two reads of the same address (one with `state=published`, one without) are the answer to
 "what will change when I publish this", and `shio diff --against published` is that pair as
 one command.
 
@@ -185,13 +185,13 @@ with `403` for a production one rather than answered with the published version.
 `GET /api/v2/events` is the same change feed, held open as [Server-Sent
 Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events). Each event is one
 page of the feed, and its event `id` is the cursor after it, so a connection that drops and
-reconnects with `Last-Event-ID` resumes exactly where it stopped — nothing written in between is
+reconnects with `Last-Event-ID` resumes exactly where it stopped: nothing written in between is
 lost. `since=` does the same for a client that cannot set the header, `site=` scopes it, and with
 neither you are told about what happens from now on rather than about everything that already did.
 
 The stream reads with **your** rights: an entry you may not read is withheld from your connection
 and sent to one whose credentials allow it. Scheduled publishes report their outcome on the same
-feed — a failure arrives with the command that retries it — and a form submission arrives marked as
+feed: a failure arrives with the command that retries it, and a form submission arrives marked as
 one, with the title and summary its form collected.
 
 On the command line this is `shio changes --follow`: it holds the connection open, prints each
@@ -237,7 +237,7 @@ The vocabulary is closed. Fifteen ops:
 |---|---|
 | `site.upsert` | Create a blank site, or fill an empty `url`/`description`/`furl` on one that exists. `data.postTypeLayout` binds a post type to a Page Layout title, per key. `data.reindex: true` back-fills the search index. **Never replaces a value somebody set.** |
 | `site.delete` | Trash a site and every folder and post in it. Needs `confirm` |
-| `site.restore` | Undo a site trash, with its content. Addressed `site:<name>` — a trashed site keeps its name |
+| `site.restore` | Undo a site trash, with its content. Addressed `site:<name>`: a trashed site keeps its name |
 | `folder.upsert` | Create a folder at that whole name chain, or confirm it is there |
 | `folder.move` | Rename or relocate a section. `to` is the whole new name chain, so its last segment is the new name. **No post's URL changes** |
 | `folder.copy` | Duplicate a section and everything under it, **as drafts**. `to` is the copy's own name chain; an occupied one is refused rather than numbered. Unlike a move, it may cross sites |
@@ -252,7 +252,7 @@ The vocabulary is closed. Fifteen ops:
 | `render.provision` | Create the `PageLayout`/`Region`/`Theme` post types this instance renders with, idempotently. **Takes no address**: it acts on the instance's model. `data.reconcile: true` also adds fields an older instance is missing; `data.types` installs vocabulary types by name |
 
 Every delete goes to the **trash** and has a restore beside it. On any of the three,
-`data.purge: true` removes instead of trashing — it frees the file bytes, fires the
+`data.purge: true` removes instead of trashing: it frees the file bytes, fires the
 `DELETE` webhook, and there is no undo.
 
 Do `render.provision` **once before writing a layout**: `post.upsert` cannot create a
@@ -356,7 +356,7 @@ consent, not the caller's.
 ## What a curator could change
 
 Building a page is half the job. The other half is whether the person who approves it can
-*edit* it afterwards — a page that renders correctly and exposes nothing to change is a
+*edit* it afterwards: a page that renders correctly and exposes nothing to change is a
 screenshot with extra steps.
 
 ```http
@@ -385,8 +385,8 @@ same ones the Universal Editor uses in the browser, so a front end of your own t
 them answers this call too.
 
 `source` matters when the list is empty. `rendered` means the page composed and genuinely
-has nothing annotated; `content` means it does not render yet — no layout bound, or no
-friendly URL — which is the normal state of a site mid-build and not the same answer at
+has nothing annotated; `content` means it does not render yet (no layout bound, or no
+friendly URL), which is the normal state of a site mid-build and not the same answer at
 all.
 
 `regions` lists every region the page declares, including empty ones, because an empty
@@ -415,7 +415,7 @@ administration:
       somewhere rather than a capability
 ```
 
-Every screen is either answered — by a `tool`, an `endpoint` or an `op` — or carries a
+Every screen is either answered by a `tool`, an `endpoint` or an `op`, or carries a
 reason it is not, from a closed vocabulary: `navigation`, `operator-only`, `rest-only`,
 `chrome`, `accessibility`, `cache`, `preference`, `contract-leg`, and `gap` for the ones
 that are simply missing. A screen with neither fails the build, so the list cannot quietly
@@ -476,13 +476,13 @@ useful, and both are ones a caller meets *before* any other:
 - **A rejected credential.** `401` and `403` are written by the security chain, which
   runs before any controller, so they used to carry Spring's own
   `{timestamp, status, error, path}`. They are now problem documents whose `fix` names
-  the credential *that path* wants — a `FORM` token for `/cda/form`, an `AGENT` token
+  the credential *that path* wants (a `FORM` token for `/cda/form`, an `AGENT` token
   for the agent surface and MCP, a CDA token for the CDA and GraphQL, a console session
-  elsewhere — and the call that mints one. `401` and `403` mean different things: no
+  elsewhere) and the call that mints one. `401` and `403` mean different things: no
   usable credential, versus one that authenticated and does not reach here.
 - **An unknown post-type name.** `GET /api/v2/post-type/Nope` answered `404` with an
   empty body, so a renamed type and one that never existed were the same answer. It now
-  carries `allowed`, `didYouMean` and a `fix` naming both next moves — post-types are
+  carries `allowed`, `didYouMean` and a `fix` naming both next moves: post-types are
   the one name-keyed surface, so a typo is the likeliest way to arrive.
 
 ---

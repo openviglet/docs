@@ -151,14 +151,14 @@ always the same on both:
 |---|---|
 | `hit.id` | Document id |
 | `hit.score` | Relevance score (`null` for browse-all) |
-| `hit.content` | The matched **passage** — the piece of the document that matched, not the whole thing |
+| `hit.content` | The matched **passage**: the piece of the document that matched, not the whole thing |
 
 `turingSearch.ann(...)` searches the vector store and always fills `content` with the
 matched chunk. `turingSearch.sn(...)` searches the site index; there `content` appears
 only when the search engine returns passages of its own, which today means an
 [Adobe AEM Content AI](./search-engine.md#content-ai) index with
 `turing.content-ai.include-chunks` enabled. On Solr, Lucene and Elasticsearch the key
-is **absent** — Turing indexed that content itself, so the document's own `abstract`
+is **absent**: Turing indexed that content itself, so the document's own `abstract`
 and `text` fields are what you ground on:
 
 ```groovy
@@ -394,7 +394,7 @@ When an agent runs, the system builds a tool catalog the LLM uses to pick. Each 
 }
 ```
 
-The model decides on its own when to call it. When it does, Turing ES:
+The model decides on its own when to call it. When it does, Viglet Turing:
 
 1. Validates the arguments against the parameter declaration.
 2. Executes the Groovy script with the bindings.

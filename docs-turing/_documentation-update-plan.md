@@ -1,4 +1,4 @@
-# Turing ES: Documentation Update Plan (RETIRED)
+# Viglet Turing: Documentation Update Plan (RETIRED)
 
 > **Working/planning artifact, not a published page.** The leading `_` keeps
 > Docusaurus from including this file in the build or sidebar.

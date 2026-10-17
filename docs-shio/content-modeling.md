@@ -126,7 +126,7 @@ PUT /api/v2/post-type/Article?dryRun=true
 |---|---|
 | `required-field-violated` | how many published posts have no value for a field you are making required, with a sample |
 | `removed-field-still-read` | a template interpolates a field this change removes, so those pages would render nothing there |
-| `declared-field-unread` | fields no template reads. Not a defect — a field can be delivered over the CDA — but it is the list to check before adding another |
+| `declared-field-unread` | fields no template reads. Not a defect: a field can be delivered over the CDA, but it is the list to check before adding another |
 | `stored-key-undeclared` | keys the content stores that no field declares, so nothing validates them and the console cannot edit them |
 
 The last two are true of the model as it stands, so sending a type back to itself is a
@@ -142,7 +142,7 @@ shio propose --from post:mysite/products/one --from post:mysite/products/two    
 ```
 
 Every proposed field says how many of the instances carry it and names the ones that do
-not — a field two of three share is a different proposal from one all three do. A field
+not: a field two of three share is a different proposal from one all three do. A field
 only a minority carries is reported separately rather than folded in, because it is more
 likely another type's field than an optional one. The report ends by saying it is
 evidence about the instances it read, which is the honest limit of the method.
@@ -228,12 +228,12 @@ it. Publishing can be scheduled. Deleting moves the post to the trash. See
 act on those states.
 
 A post also carries a **locale**, and a translation is a linked sibling post rather than a
-field on this one — which decides your URL structure, so read
+field on this one, which decides your URL structure, so read
 [Content in several languages](./content-i18n.md) before writing the second language.
 
 ### Required fields are checked when you publish, not when you save
 
-A draft may be incomplete — that is what a draft is for, and a page you have half written
+A draft may be incomplete: that is what a draft is for, and a page you have half written
 saves like any other. **Publishing refuses** while a field the post type declares required
 is empty, from every writer: the console's Publish, the REST call, the agent's
 `post.publish`, a scheduled transition, approving a run in the review queue, a `PATCH` that
@@ -246,7 +246,7 @@ which fields would stop the publish, beside anything a publish gate would stop i
 
 One way past it, and it is the same door a gate has: a curator can **waive** the check with
 a reason, which is recorded on the page's history and on the version that goes live. An
-agent cannot — waiving is a person's decision, and this is one of the things that stays
+agent cannot: waiving is a person's decision, and this is one of the things that stays
 that way.
 
 :::note A container field is never "empty"

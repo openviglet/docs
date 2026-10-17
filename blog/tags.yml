@@ -21,7 +21,7 @@ semantic-search:
 comparison:
   label: Comparison
   permalink: /comparison
-  description: How Viglet Turing ES compares to other search platforms.
+  description: How Viglet Turing compares to other search platforms.
 
 rag:
   label: RAG

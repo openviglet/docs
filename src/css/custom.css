@@ -19,9 +19,9 @@
 
   /* Product colors */
   --color-product-turing: #4169E1;
-  --color-product-shio: #FF6347;
-  --color-product-shio-text: #C73E00;
-  --color-product-dumont: #006400;
+  --color-product-shio: #7C3AED;
+  --color-product-shio-text: #7C3AED;
+  --color-product-dumont: #0F766E;
 
   /* shadcn/ui semantic tokens */
   --color-background: #ffffff;
@@ -69,15 +69,17 @@
 }
 
 /* ── VigletLogo glow animation ── */
-@keyframes vg-glow {
-  0%,  100% { text-shadow: 0 0 8px snow, 0 -25px 50px tomato,  -25px 25px 50px yellow, 25px 25px 50px tomato; }
-  33%        { text-shadow: 0 0 8px snow, 0 -25px 50px cyan,    -25px 25px 50px tomato, 25px 25px 50px cyan;   }
-  66%        { text-shadow: 0 0 8px snow, 0 -25px 50px yellow,  -25px 25px 50px cyan,   25px 25px 50px yellow; }
+.vg-cube-glow {
+  animation: vg-cube-glow 4s ease-in-out infinite;
 }
 
-.vg-logo-glow {
-  animation: vg-glow 2s ease-in-out both infinite;
-  display: inline-block;
+@keyframes vg-cube-glow {
+  0%, 100% { filter: drop-shadow(0 6px 14px rgba(255, 222, 173, 0.35)); }
+  50%      { filter: drop-shadow(0 8px 24px rgba(255, 222, 173, 0.65)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vg-cube-glow { animation: none; filter: drop-shadow(0 6px 14px rgba(255, 222, 173, 0.4)); }
 }
 
 /* ── Global: remove underline from all links ── */
@@ -1037,16 +1039,16 @@ a {
 
 /* ── Product-specific colors (kept outside Tailwind to avoid purge) ── */
 .product-tab-active-turing { background-color: rgba(65, 105, 225, 0.08) !important; color: #4169E1 !important; }
-.product-tab-active-shio   { background-color: rgba(199, 62, 0, 0.08) !important; color: #C73E00 !important; }
-.product-tab-active-dumont { background-color: rgba(0, 100, 0, 0.08) !important; color: #006400 !important; }
+.product-tab-active-shio   { background-color: rgba(124, 58, 237, 0.08) !important; color: #7C3AED !important; }
+.product-tab-active-dumont { background-color: rgba(15, 118, 110, 0.08) !important; color: #0F766E !important; }
 
 [data-theme="dark"] .product-tab-active-turing { background-color: rgba(65, 105, 225, 0.15) !important; color: #6d8ef0 !important; }
-[data-theme="dark"] .product-tab-active-shio   { background-color: rgba(255, 99, 71, 0.15) !important; color: #FF6347 !important; }
-[data-theme="dark"] .product-tab-active-dumont { background-color: rgba(0, 100, 0, 0.15) !important; color: #4ade80 !important; }
+[data-theme="dark"] .product-tab-active-shio   { background-color: rgba(124, 58, 237, 0.15) !important; color: #a78bfa !important; }
+[data-theme="dark"] .product-tab-active-dumont { background-color: rgba(15, 118, 110, 0.15) !important; color: #2dd4bf !important; }
 
 .product-nav-link-turing:hover { color: #4169E1 !important; }
-.product-nav-link-shio:hover   { color: #C73E00 !important; }
-.product-nav-link-dumont:hover { color: #006400 !important; }
+.product-nav-link-shio:hover   { color: #7C3AED !important; }
+.product-nav-link-dumont:hover { color: #0F766E !important; }
 
 /* ── Sidebar ── */
 .menu__link {

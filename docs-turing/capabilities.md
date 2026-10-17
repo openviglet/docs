@@ -1,12 +1,12 @@
 ---
 sidebar_position: 8
 title: Capabilities
-description: "The capability registry and two-level gate in Viglet Turing ES: how provider-native server tools, request options, and Turing's own tools surface in one taxonomy and run in one tool loop."
+description: "The capability registry and two-level gate in Viglet Turing: how provider-native server tools, request options, and Turing's own tools surface in one taxonomy and run in one tool loop."
 ---
 
 # Capabilities
 
-A **capability** is anything a Large Language Model can *do beyond plain text generation*: search the web, run code, generate an image, return citations, or reason with a larger compute budget. Different vendors expose these as server-side primitives with different names and shapes; Turing ES collapses them into **one taxonomy** so the admin sees "web search" once, not "OpenAI `web_search` vs Anthropic `web_search_20250305` vs Gemini `google_search`."
+A **capability** is anything a Large Language Model can *do beyond plain text generation*: search the web, run code, generate an image, return citations, or reason with a larger compute budget. Different vendors expose these as server-side primitives with different names and shapes; Viglet Turing collapses them into **one taxonomy** so the admin sees "web search" once, not "OpenAI `web_search` vs Anthropic `web_search_20250305` vs Gemini `google_search`."
 
 You'd reach for this page when you want an agent to use a **provider-native** feature (Claude's web search, OpenAI's hosted code interpreter, Gemini's Google Search grounding) rather than (or alongside) Turing's own [native tools](./tool-calling.md). The key idea to internalize: a native capability only fires when it is switched on in **two** places. Miss either gate and the request silently falls back to the standard Spring AI path, as if the capability didn't exist.
 

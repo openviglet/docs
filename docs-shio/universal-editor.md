@@ -133,7 +133,7 @@ origin is allowed to frame it:
 ```
 
 If you compose pages from `@viglet/shio-sections`, the components already emit the
-annotations — pass the section post's id and they become editable:
+annotations: pass the section post's id and they become editable:
 
 ```jsx
 <Hero data={section.data} postId={section.id} />

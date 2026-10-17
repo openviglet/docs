@@ -8,7 +8,7 @@ description: "Run long work asynchronously inside a conversation. A routine is a
 
 > *Some steps take a while. Generating a proposal PDF, calling a slow third-party API, signing a document, none of those finish inside the few hundred milliseconds a chat turn should take. A **routine** lets the conversation kick off that work, tell the visitor "working on it…", and pick the conversation back up the moment the result is ready.*
 
-A **routine** in Viglet Turing ES is a named, reusable **async job**. A [Chat Flow](./chat-flow.md) fires a routine from a `scheduleAgent` node: the node enqueues the work and returns control to the chat turn immediately, a background worker runs the routine, and when it finishes it writes the result into a **slot**, which automatically resumes the parked flow.
+A **routine** in Viglet Turing is a named, reusable **async job**. A [Chat Flow](./chat-flow.md) fires a routine from a `scheduleAgent` node: the node enqueues the work and returns control to the chat turn immediately, a background worker runs the routine, and when it finishes it writes the result into a **slot**, which automatically resumes the parked flow.
 
 Routines are **deployment-wide**, not agent-scoped: one `generate_proposal_pdf` routine serves every flow on every agent. Manage them in the console under **Routines**.
 

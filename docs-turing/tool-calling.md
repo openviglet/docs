@@ -1,14 +1,14 @@
 ---
 sidebar_position: 5
 title: Tool Calling
-description: Native tool calling capabilities available to AI Agents in Turing ES, DSL-based search tools, RAG, web crawling, and more.
+description: Native tool calling capabilities available to AI Agents in Viglet Turing, DSL-based search tools, RAG, web crawling, and more.
 ---
 
 # Tool Calling
 
 A **Tool Calling** is a function that the LLM can invoke autonomously during a conversation to retrieve information or perform an action. Instead of relying purely on training data, the LLM calls tools to fetch live data, search indexed content, execute code, and more, then incorporates the results into its reasoning.
 
-Turing ES includes native tools organized into categories, plus support for external tools via [MCP Servers](./mcp-servers.md). Tools are enabled per [AI Agent](./ai-agents.md), each agent selects only the tools it needs.
+Viglet Turing includes native tools organized into categories, plus support for external tools via [MCP Servers](./mcp-servers.md). Tools are enabled per [AI Agent](./ai-agents.md), each agent selects only the tools it needs.
 
 ---
 

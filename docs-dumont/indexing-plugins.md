@@ -1,12 +1,12 @@
 ---
 sidebar_position: 5
 title: Indexing Plugins
-description: Configure where Dumont DEP delivers content, Turing ES (default), Apache Solr, or Elasticsearch.
+description: Configure where Viglet Dumont delivers content, Viglet Turing (default), Apache Solr, or Elasticsearch.
 ---
 
 # Indexing Plugins
 
-An **Indexing Plugin** is the output adapter that delivers processed documents from the Dumont DEP pipeline to a search engine. Dumont DEP supports three targets: you choose one per deployment.
+An **Indexing Plugin** is the output adapter that delivers processed documents from the Viglet Dumont pipeline to a search engine. Dumont supports three targets: you choose one per deployment.
 
 ---
 
@@ -14,15 +14,15 @@ An **Indexing Plugin** is the output adapter that delivers processed documents f
 
 | Plugin | Target | Client Library | Use Case |
 |---|---|---|---|
-| **Turing** (default) | Viglet Turing ES | Turing Java SDK 2026.2.4 | Full enterprise search with GenAI, facets, spotlights |
-| **Solr** | Apache Solr | SolrJ 10.0.0 | Direct Solr indexing without Turing ES |
-| **Elasticsearch** | Elasticsearch | ES Java Client 9.3.2 | Direct Elasticsearch indexing without Turing ES |
+| **Turing** (default) | Viglet Turing | Turing Java SDK 2026.2.4 | Full enterprise search with GenAI, facets, spotlights |
+| **Solr** | Apache Solr | SolrJ 10.0.0 | Direct Solr indexing without Turing |
+| **Elasticsearch** | Elasticsearch | ES Java Client 9.3.2 | Direct Elasticsearch indexing without Turing |
 
 ---
 
-## Turing ES Plugin (default)
+## Turing Plugin (default)
 
-The default plugin delivers documents to Turing ES via its REST API, using the official Turing Java SDK.
+The default plugin delivers documents to Turing via its REST API, using the official Turing Java SDK.
 
 ### Configuration
 
@@ -38,26 +38,26 @@ turing:
 
 | Property | Description |
 |---|---|
-| `turing.url` | Base URL of the Turing ES instance |
-| `turing.apiKey` | API Token created in Turing ES → Administration → API Tokens |
+| `turing.url` | Base URL of the Turing instance |
+| `turing.apiKey` | API Token created in Turing → Administration → API Tokens |
 
 ### How It Works
 
 1. Receives a batch of Job Items from the message queue
 2. Creates a `TurSNServer` instance using the Turing Java SDK
 3. Calls `TurSNJobUtils.importItems()` to submit the batch
-4. Turing ES validates each document against the target SN Site configuration
-5. Documents are queued internally in Turing ES for Solr indexing
+4. Turing validates each document against the target SN Site configuration
+5. Documents are queued internally in Turing for Solr indexing
 
 :::warning API Token required
-The Turing plugin cannot deliver content without a valid API Token. Create one in **Turing ES → Administration → API Tokens** before starting Dumont DEP.
+The Turing plugin cannot deliver content without a valid API Token. Create one in **Turing → Administration → API Tokens** before starting Dumont.
 :::
 
 ---
 
 ## Apache Solr Plugin
 
-The Solr plugin delivers documents directly to an Apache Solr collection, bypassing Turing ES entirely. Use this when you want Dumont DEP as a pure data extraction tool without Turing ES features.
+The Solr plugin delivers documents directly to an Apache Solr collection, bypassing Turing entirely. Use this when you want Dumont as a pure data extraction tool without Turing features.
 
 ### Configuration
 
@@ -121,15 +121,15 @@ Authentication is optional: leave `username` and `password` empty for unauthenti
 
 ---
 
-## Why Use Turing ES Instead of Solr or Elasticsearch Directly?
+## Why Use Turing Instead of Solr or Elasticsearch Directly?
 
 The Solr and Elasticsearch plugins deliver raw documents to the search engine: your application is responsible for everything else: building queries, rendering facets, managing spotlights, handling locales, and building the search UI.
 
-**Turing ES adds an entire enterprise search platform on top of the search engine.** Here's what you get by choosing the Turing plugin over direct Solr or Elasticsearch indexing:
+**Turing adds an entire enterprise search platform on top of the search engine.** Here's what you get by choosing the Turing plugin over direct Solr or Elasticsearch indexing:
 
 ### Search Experience Layer
 
-| Capability | With Turing ES | Direct Solr / Elasticsearch |
+| Capability | With Turing | Direct Solr / Elasticsearch |
 |---|---|---|
 | **Faceted navigation** | Configured per site: facet types, sort, AND/OR operators, secondary facets, custom facets with ranges | Build manually with query params |
 | **Spotlights** | Curated results pinned to search terms, injected at configured positions | Not available: build from scratch |
@@ -144,7 +144,7 @@ The Solr and Elasticsearch plugins deliver raw documents to the search engine: y
 
 ### Generative AI & RAG
 
-| Capability | With Turing ES | Direct Solr / Elasticsearch |
+| Capability | With Turing | Direct Solr / Elasticsearch |
 |---|---|---|
 | **RAG (Retrieval-Augmented Generation)** | Documents are automatically embedded as vectors during indexing, users ask questions in natural language and get grounded answers | Not available |
 | **AI Agents** | Compose assistants that combine LLM + search + web browsing + code execution + MCP tools | Not available |
@@ -156,7 +156,7 @@ The Solr and Elasticsearch plugins deliver raw documents to the search engine: y
 
 ### Administration & Operations
 
-| Capability | With Turing ES | Direct Solr / Elasticsearch |
+| Capability | With Turing | Direct Solr / Elasticsearch |
 |---|---|---|
 | **Admin console** | Browser-based React UI for all configuration | Solr Admin UI (limited) / Kibana (separate) |
 | **Multi-site** | Multiple SN Sites on one instance, each with independent fields, facets, and AI settings | Manage collections/indices manually |
@@ -168,7 +168,7 @@ The Solr and Elasticsearch plugins deliver raw documents to the search engine: y
 
 ### Integration
 
-| Capability | With Turing ES | Direct Solr / Elasticsearch |
+| Capability | With Turing | Direct Solr / Elasticsearch |
 |---|---|---|
 | **REST API** | Self-describing search response with pre-built navigation links | Raw query/response |
 | **GraphQL** | Built-in endpoint | Not available |
@@ -179,12 +179,12 @@ The Solr and Elasticsearch plugins deliver raw documents to the search engine: y
 
 The Solr and Elasticsearch plugins are appropriate when:
 
-- You already have a search infrastructure and only need Dumont DEP as a **data extraction tool**
+- You already have a search infrastructure and only need Dumont as a **data extraction tool**
 - You have your own search UI and query layer built on top of Solr/Elasticsearch
 - You don't need the GenAI, faceted navigation, or admin console features
 - You're integrating with a third-party system that requires direct Solr/Elasticsearch access
 
-For all other cases (especially when building a new search experience) **Turing ES is the recommended target** because it provides a complete, ready-to-use enterprise search platform with GenAI capabilities on top of the same Apache Solr engine.
+For all other cases (especially when building a new search experience) **Turing is the recommended target** because it provides a complete, ready-to-use enterprise search platform with GenAI capabilities on top of the same Apache Solr engine.
 
 ---
 
@@ -211,9 +211,9 @@ Only one plugin is active per deployment. All connectors share the same output t
 |---|---|
 | [Configuration Reference](./configuration-reference.md) | All application.yaml properties |
 | [Architecture](./architecture.md) | Where indexing plugins fit in the pipeline |
-| [Turing ES: REST API](/turing/rest-api) | Turing ES indexing API reference |
-| [Turing ES: Semantic Navigation](/turing/semantic-navigation) | SN Sites, facets, spotlights, and search configuration |
-| [Turing ES: RAG](/turing/rag) | Retrieval-Augmented Generation and vector embeddings |
+| [Turing: REST API](/turing/rest-api) | Turing indexing API reference |
+| [Turing: Semantic Navigation](/turing/semantic-navigation) | SN Sites, facets, spotlights, and search configuration |
+| [Turing: RAG](/turing/rag) | Retrieval-Augmented Generation and vector embeddings |
 
 ---
 

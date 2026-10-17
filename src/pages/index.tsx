@@ -38,27 +38,27 @@ interface CommunityLink {
 const products: Product[] = [
   {
     id: "dumont",
-    title: "Dumont DEP",
+    title: "Viglet Dumont",
     description:
       "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
     link: "/dumont",
     release: "2026.3",
     github: "https://github.com/openviglet/dumont-ce",
-    color: "#006400",
+    color: "#0F766E",
   },
   {
     id: "shio",
-    title: "Shio CMS",
+    title: "Viglet Shio",
     description:
       "Content Management System with GraphQL, Javascript sites, native cache and search.",
     link: "/shio",
     release: "2026.3",
     github: "https://github.com/openviglet/shio-ce",
-    color: "#FF6347",
+    color: "#7C3AED",
   },
   {
     id: "turing",
-    title: "Turing ES",
+    title: "Viglet Turing",
     description:
       "Enterprise Search Intelligence: semantic navigation and faceted discovery fused with Generative AI: RAG, streaming chat, and tool-using agents that act on your content, indexed in Solr, Elasticsearch, or Lucene.",
     link: "/turing",
@@ -191,8 +191,8 @@ function HeroSection(): JSX.Element {
           className="hero-fade-in text-lg text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed"
           style={{ animationDelay: "0.2s" }}
         >
-          Explore guides, API references, and tutorials for Turing ES,
-          Shio CMS, and Dumont DEP.
+          Explore guides, API references, and tutorials for Viglet Turing,
+          Viglet Shio, and Viglet Dumont.
         </p>
 
         <div className="hero-fade-in flex gap-3 justify-center flex-wrap" style={{ animationDelay: "0.3s" }}>

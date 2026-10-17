@@ -1,7 +1,7 @@
 ---
 sidebar_position: 6
 title: WordPress Connector
-description: A PHP plugin installed inside WordPress that automatically indexes posts, pages, and custom content types into Turing ES in real time.
+description: A PHP plugin installed inside WordPress that automatically indexes posts, pages, and custom content types into Viglet Turing in real time.
 ---
 
 # WordPress Connector
@@ -9,12 +9,12 @@ description: A PHP plugin installed inside WordPress that automatically indexes 
 The WordPress Connector is a **PHP plugin installed directly inside WordPress**, not a Java connector plugin. It hooks into WordPress publish, update, and delete events to keep the search index synchronized with your content in real time.
 
 :::note This is a WordPress plugin, not a Java plugin
-Unlike the AEM and Web Crawler connectors (which are Java JARs loaded via `-Dloader.path`), the WordPress Connector is a **PHP plugin** that you install in your WordPress `wp-content/plugins/` directory. It communicates directly with Turing ES via HTTP, no `dumont-connector.jar` needed.
+Unlike the AEM and Web Crawler connectors (which are Java JARs loaded via `-Dloader.path`), the WordPress Connector is a **PHP plugin** that you install in your WordPress `wp-content/plugins/` directory. It communicates directly with Viglet Turing via HTTP, no `dumont-connector.jar` needed.
 :::
 
 ---
 
-Unlike the AEM and Web Crawler connectors, the WordPress plugin is **not part of the Dumont connector application**: it runs entirely inside WordPress and sends content directly to Turing ES via HTTP. No `dumont-connector.jar` is needed.
+Unlike the AEM and Web Crawler connectors, the WordPress plugin is **not part of the Dumont connector application**: it runs entirely inside WordPress and sends content directly to Turing via HTTP. No `dumont-connector.jar` is needed.
 
 ---
 
@@ -25,7 +25,7 @@ Unlike the AEM and Web Crawler connectors, the WordPress plugin is **not part of
 graph LR
     WP["📝 WordPress"]
     PLG["🔌 Viglet Dumont\nPHP Plugin"]
-    TUR["🔍 Turing ES\n(Search Engine)"]
+    TUR["🔍 Turing\n(Search Engine)"]
 
     WP -->|"publish / update / delete"| PLG
     PLG -->|"HTTP POST"| TUR
@@ -41,7 +41,7 @@ graph LR
 
 The plugin integrates with WordPress hooks to automatically push content to the search index:
 
-1. **On publish**: When a post or page is published, the plugin extracts its content and sends it to Turing ES
+1. **On publish**: When a post or page is published, the plugin extracts its content and sends it to Turing
 2. **On update**: When published content is modified, the index is updated automatically
 3. **On delete**: When content is trashed or deleted, it is removed from the index
 4. **On status change**: When a published post is changed to draft or private, it is removed from the index
@@ -71,10 +71,10 @@ wp-content/plugins/viglet-turing-for-wordpress/
 
 | Field | Default | Description |
 |---|---|---|
-| **Host** | `localhost` | Turing ES server hostname |
-| **Port** | `2700` | Turing ES server port |
+| **Host** | `localhost` | Turing server hostname |
+| **Port** | `2700` | Turing server port |
 | **Path** | `/dumont` | Base path for the indexing endpoint |
-| **Site Name** | *(required)* | Semantic Navigation Site name in Turing ES |
+| **Site Name** | *(required)* | Semantic Navigation Site name in Turing |
 
 ### Indexing Options
 
@@ -101,7 +101,7 @@ wp-content/plugins/viglet-turing-for-wordpress/
 
 ## Indexed Fields
 
-The plugin extracts and sends these fields to Turing ES:
+The plugin extracts and sends these fields to Turing:
 
 | Field | Source |
 |---|---|
@@ -132,17 +132,17 @@ The plugin adds action buttons to the WordPress admin settings page:
 
 | Action | Description |
 |---|---|
-| **Ping** | Tests the connection to Turing ES |
+| **Ping** | Tests the connection to Turing |
 | **Index all Posts** | Bulk indexes all published posts (batches of 250) |
 | **Index all Pages** | Bulk indexes all published pages (batches of 250) |
-| **Delete all** | Removes all WordPress content from the Turing ES index |
+| **Delete all** | Removes all WordPress content from the Turing index |
 | **Optimize** | Triggers index optimization on the search engine |
 
 ---
 
 ## Architecture
 
-The plugin includes its own PHP HTTP client library (`DumontPhpClient`) for communicating with Turing ES:
+The plugin includes its own PHP HTTP client library (`DumontPhpClient`) for communicating with Turing:
 
 ```
 viglet-turing-for-wordpress/
@@ -150,7 +150,7 @@ viglet-turing-for-wordpress/
 ├── viglet-turing-options-page.php     # Admin settings page
 ├── DumontPhpClient/
 │   └── Viglet/Dumont/
-│       ├── Service.php                # HTTP client for Turing ES
+│       ├── Service.php                # HTTP client for Turing
 │       ├── Document.php               # Document model
 │       ├── Response.php               # Response parser
 │       └── HttpTransport/

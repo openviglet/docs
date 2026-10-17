@@ -6,7 +6,7 @@ description: The read-only, headless Content Delivery API for serving published 
 
 # Content Delivery API (CDA)
 
-Shio CMS is **headless-first**: your content engine runs on Java/Spring Boot, but
+Viglet Shio is **headless-first**: your content engine runs on Java/Spring Boot, but
 the sites and apps that consume it are pure **JavaScript/TypeScript**. The
 **Content Delivery API (CDA)** is the stable, read-only contract that JS clients
 depend on.

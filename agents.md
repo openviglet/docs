@@ -7,7 +7,7 @@ This file contains conventions and architectural knowledge for AI agents working
 ## Project Overview
 
 - **Site:** docs.viglet.org, a Docusaurus 3 documentation portal
-- **Products:** Turing ES, Dumont DEP, Shio CMS
+- **Products:** Viglet Turing, Viglet Dumont, Viglet Shio
 - **Hosting:** GitHub Pages via GitHub Actions (`.github/workflows/deploy.yml`)
 - **Node:** 20+, npm
 - **Organization:** [github.com/openviglet](https://github.com/openviglet)
@@ -16,9 +16,9 @@ This file contains conventions and architectural knowledge for AI agents working
 
 ```
 vigletdocs.github.io/
-├── docs-turing/          # Turing ES documentation (Docusaurus plugin: turing)
-├── docs-dumont/          # Dumont DEP documentation (Docusaurus plugin: dumont)
-├── docs-shio/            # Shio CMS documentation (Docusaurus plugin: shio)
+├── docs-turing/          # Turing documentation (Docusaurus plugin: turing)
+├── docs-dumont/          # Dumont documentation (Docusaurus plugin: dumont)
+├── docs-shio/            # Shio documentation (Docusaurus plugin: shio)
 ├── diagrams/             # Mermaid .mmd source files (pre-rendered to SVG)
 ├── static/img/diagrams/  # Pre-rendered SVG output from diagrams/
 ├── scripts/
@@ -62,7 +62,7 @@ Rewrite according to the job the dash was doing:
 
 | The dash was | Use instead |
 |---|---|
-| introducing an explanation or a list | a colon: `## Step 1: Run Turing ES` |
+| introducing an explanation or a list | a colon: `## Step 1: Run Turing` |
 | labelling a bullet or a table cell | a colon: `- **Facets**: AEM tags become filters` |
 | wrapping an aside mid-sentence | parentheses: `the connector (a PHP plugin) talks over HTTP` |
 | attaching an appositive or trailing phrase | a comma |
@@ -109,7 +109,7 @@ Copy the pattern from `docs-turing/index.mdx` when creating new product landing 
 
 ## Spring Boot 4 Conventions
 
-All Viglet products (Turing ES, Dumont DEP) run on Spring Boot 4:
+All Viglet products (Turing and Dumont) run on Spring Boot 4:
 
 - JAR files are **NOT directly executable** (no `./app.jar` pattern)
 - Must use `java -jar app.jar` explicitly
@@ -119,7 +119,7 @@ All Viglet products (Turing ES, Dumont DEP) run on Spring Boot 4:
 
 ---
 
-## Dumont DEP Connector Architecture
+## Dumont Connector Architecture
 
 - `dumont-connector.jar` is the **pipeline engine only**: it does NOT crawl content by itself
 - Connector plugins (AEM, Web Crawler) are **separate JARs** loaded via `-Dloader.path=libs/`
@@ -127,7 +127,7 @@ All Viglet products (Turing ES, Dumont DEP) run on Spring Boot 4:
 - Only **one connector plugin per JVM** instance: to run AEM and Web Crawler, start two separate instances on different ports
 - Database and FileSystem connectors are **standalone CLI tools** (`dumont-db-indexer.jar`, `dumont-filesystem-indexer.jar`), not plugins
 - WordPress connector is a **PHP plugin** installed inside WordPress (`wp-content/plugins/`), not a Java artifact
-- Connector plugins are managed via the **Turing ES Admin Console** under Enterprise Search → Integration
+- Connector plugins are managed via the **Turing Admin Console** under Enterprise Search → Integration
 
 ### Dumont Launch Pattern
 
@@ -162,11 +162,11 @@ else.
 
 | Product | Config Location | Current Version | Has older versions? |
 |---|---|---|---|
-| Turing ES | `docusaurus.config.ts` preset `docs` | `2026.3` | Yes (0.3.5–0.3.9) |
-| Dumont DEP | `docusaurus.config.ts` plugin `dumont` | `2026.3` | No |
-| Shio CMS | `docusaurus.config.ts` plugin `shio` | `2026.3` | No |
+| Turing | `docusaurus.config.ts` preset `docs` | `2026.3` | Yes (0.3.5–0.3.9) |
+| Dumont | `docusaurus.config.ts` plugin `dumont` | `2026.3` | No |
+| Shio | `docusaurus.config.ts` plugin `shio` | `2026.3` | No |
 
-Version labels are set via `lastVersion: "current"` + `versions: { current: { label: "2026.3" } }` to avoid showing "Next" in the navbar. **This table is read, not guessed** — check it against `docusaurus.config.ts` when a version rolls, because a stale row here is what let `docs-shio` sit at `0.3.7` while the product shipped 2026.3.
+Version labels are set via `lastVersion: "current"` + `versions: { current: { label: "2026.3" } }` to avoid showing "Next" in the navbar. **This table is read, not guessed**: check it against `docusaurus.config.ts` when a version rolls, because a stale row here is what let `docs-shio` sit at `0.3.7` while the product shipped 2026.3.
 
 ---
 

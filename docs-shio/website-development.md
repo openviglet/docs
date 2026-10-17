@@ -174,7 +174,7 @@ Handlebars data variables you read inside the block: `@page`, `@pages`, `@total`
 per row. The counts are real totals, not a "has more" flag.
 
 They are data variables rather than row values because the pager is a property of the
-*listing*, not of any one post — and `{{#if @last}}` is how you draw it **once**, since
+*listing*, not of any one post, and `{{#if @last}}` is how you draw it **once**, since
 the block body repeats per row:
 
 ```handlebars
@@ -190,7 +190,7 @@ the block body repeats per row:
 {{/query}}
 ```
 
-`page=` reads whatever the template gives it — `param.page` for a request-driven
+`page=` reads whatever the template gives it: `param.page` for a request-driven
 archive, a literal for a fixed second page, or a field on the page itself.
 
 A listing may contain a listing: each block keeps its own `@index`, `@last` and pager
@@ -264,7 +264,7 @@ unrecognised position falls back to `bodyEnd`: never `head`, because a typo must
 move a script *earlier* than its author wrote it. `category` is carried for a layout
 that gates its own emission; Shio itself never acts on it.
 
-Because a layout has to emit them, `verify` reports a bound layout that never does —
+Because a layout has to emit them, `verify` reports a bound layout that never does:
 that is `site-scripts-dropped`, and for a public site with a consent banner it is a
 compliance defect that renders perfectly. Some layouts leave them out **on purpose**:
 a transactional email template, a print stylesheet, an AMP variant, an embed a partner
@@ -295,15 +295,15 @@ settings declare what it holds:
 
 That declaration is what makes the composition verifiable: `shio verify` resolves each
 URL and reports the ones that are not there. A `Multi Select` without the key stays
-tags — and if a type from this shipped vocabulary has lost the key on your instance,
+tags; and if a type from this shipped vocabulary has lost the key on your instance,
 `verify` reports that too (`vocabulary-drift`), because a page naming a section that does
 not exist would otherwise report nothing at all. Sections are content a template reads: a region iterates them through
 `{{#getRelation}}`, so a section-composed page renders through the ordinary path.
 
 ## Forms
 
-`{{#form type="Contact"}}` renders the fields of a post type — each with its label,
-input type, widget and whether it is required — so a contact form is the post type you
+`{{#form type="Contact"}}` renders the fields of a post type (each with its label,
+input type, widget and whether it is required), so a contact form is the post type you
 already modelled rather than a second form builder:
 
 ```handlebars
@@ -319,7 +319,7 @@ already modelled rather than a second form builder:
 ```
 
 `site.formAction` is this site's submission endpoint and `site.formHoneypot` is the field name the
-server checks — so neither the URL nor the honeypot's name is a literal you keep in step by hand.
+server checks, so neither the URL nor the honeypot's name is a literal you keep in step by hand.
 
 The endpoint takes JSON and reads the token from a `Key` header, so submit with `fetch` rather than
 letting the browser post the form natively:
@@ -344,19 +344,19 @@ invisible to visitors until somebody publishes it, and it is an ordinary post fo
 trash, export, permissions and the agent API. What arrived through a form is still
 told apart from what a curator wrote: the console's **Forms** page lists one site's
 submissions, with a **Move to trash** on each row for the ones dealt with, and the same
-question is the `submission=true` filter on every content listing — `/agent/find`,
+question is the `submission=true` filter on every content listing: `/agent/find`,
 `shio_find`, `shio find` and the console search (`submission=false` leaves them out).
 
 ### Letting a site accept submissions
 
-Two things, and neither lives in the template — a folder chosen in a template is a
+Two things, and neither lives in the template: a folder chosen in a template is a
 folder anyone who can edit a template can choose:
 
 1. **Configure the site**, on the Forms page's settings panel or with
    `POST /api/v2/site-form`: the site, the folder submissions land in, the post types it
    invites (comma-separated), the browser origins it accepts, and `enabled`. Creating the
    configuration does **not** turn it on; set `enabled` when you are ready. The folder
-   must already exist — a submission never creates one — and `shio verify` reports
+   must already exist (a submission never creates one), and `shio verify` reports
    `form-destination-missing` for an enabled form whose folder is gone, which the
    endpoint otherwise answers with an error only the visitor sees.
 2. **Issue a `FORM` API token** for that site and put it in the page. It is public by
@@ -365,7 +365,7 @@ folder anyone who can edit a template can choose:
    anywhere but this endpoint.
 
 `PageLayout`, `Region`, `Theme`, `SiteScripts`, `Redirect` and `File` can **never** be
-submitted, whatever the allow-list says — the first three are templates the renderer
+submitted, whatever the allow-list says: the first three are templates the renderer
 executes.
 
 Send the token as the `Key` header:
@@ -375,7 +375,7 @@ curl -X POST https://cms.example.com/api/v2/cda/form/acme   -H "Key: $SHIO_FORM_
 ```
 
 A success answers `{"received": true, "id": "...", "state": "DRAFT"}`. A refusal
-answers `received: false` with a `title` and a `fix` — the site is not accepting, the
+answers `received: false` with a `title` and a `fix`: the site is not accepting, the
 type is not invited, the configured folder is missing. Submissions are rate-limited per
 token by the same budget as the rest of the delivery API.
 
@@ -442,7 +442,7 @@ strictness is load-bearing: a page served from `/sites/mysite/` carrying
 three-segment shape, and a lenient format slot answered those with the *home page* at
 200. A browser expecting an image got HTML, and a missing asset stopped being
 something an author could see. `{locale}` is checked the same way: accepted when the
-site has published content in that locale, or when it is the default — see
+site has published content in that locale, or when it is the default. See
 [Content in several languages](./content-i18n.md) for what fills that segment.
 
 Root-relative `href`s are rebased into whichever space is serving the page, so a link
@@ -498,7 +498,7 @@ slots it:
 | `duplicate-template-title` | two layouts or regions share a title, so a binding is ambiguous |
 | `dangling-reference` | a section or file reference that resolves to nothing |
 | `section-not-accepted` | a warning: a page composes a section of a type its layout's `sh-accepts` does not name. The finding lists the types the layout does accept; replace the section, or add its type to `sh-accepts`. A layout that declares nothing reports nothing |
-| `site-scripts-dropped` | a bound layout whose HTML never emits `site.scripts` — tick **Omits site scripts on purpose** on the layout if that is deliberate |
+| `site-scripts-dropped` | a bound layout whose HTML never emits `site.scripts`; tick **Omits site scripts on purpose** on the layout if that is deliberate |
 | `dangling-relation` | a `{{#getRelation "/some/url"}}` naming an address the site has no post at, so the block silently renders its `{{else}}` on every page |
 | `redirect-target-missing` | a `Redirect` pointing at a page that is not there |
 

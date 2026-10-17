@@ -1,9 +1,9 @@
 ---
 title: The Persona Book
-description: The complete, didactic, strategic guide to Personas in Viglet Turing ES, from why a generic AI voice costs you money to Persona Match, Dialogue, and Synthetic User Research, with worked examples for every feature.
+description: The complete, didactic, strategic guide to Personas in Viglet Turing, from why a generic AI voice costs you money to Persona Match, Dialogue, and Synthetic User Research, with worked examples for every feature.
 ---
 
-# Personas in Viglet Turing ES
+# Personas in Viglet Turing
 
 ### The Book: A Complete, Didactic, Strategic Guide
 
@@ -18,7 +18,7 @@ This is the long-form companion guide to Personas. For a concise, technical over
 ## How to read this book
 
 This document is a **complete guide** to everything a Persona can do in Viglet
-Turing ES. It was written to be read three ways:
+Turing. It was written to be read three ways:
 
 - **From start to finish**, like a book, if you want to understand deeply why the
   Persona exists and how it changes a company's day-to-day work.
@@ -1331,4 +1331,4 @@ representative of your brand. Swap the LLM, swap the tools: **the voice stays**.
 
 ---
 
-*Viglet Turing ES: Enterprise Search Intelligence. This guide tracks the current platform release; the concise technical reference lives in [Personas](./personas.md).*
+*Viglet Turing: Enterprise Search Intelligence. This guide tracks the current platform release; the concise technical reference lives in [Personas](./personas.md).*

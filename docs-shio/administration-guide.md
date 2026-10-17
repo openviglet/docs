@@ -9,15 +9,15 @@ description: "The operator's half of the Viglet Shio console: home, users, group
 Everything an operator configures lives in the Shio console under **Administration**,
 at `/bento/admin` on your instance. This page walks those screens in order.
 
-The curator's half — the content browser, the post form, copy and move, the trash — is on
+The curator's half (the content browser, the post form, copy and move, the trash) is on
 [The content console](./content-console.md).
 
 ---
 
 ## Finding your way around
 
-The **navigation rail** down the left carries **Home** and two areas — **Content** and
-**Administration** — rather than a list of every screen. Each area opens its **hub**, which
+The **navigation rail** down the left carries **Home** and two areas (**Content** and
+**Administration**) rather than a list of every screen. Each area opens its **hub**, which
 lists every screen of the area as a tile in small labelled groups; Administration's are
 *Access*, *Agent and audit*, *Integrations* and *This instance*, and `/bento/admin` lands
 there. To reach a named screen directly, use the **command palette**: <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> from anywhere, or
@@ -29,8 +29,8 @@ titles, so *credentials* finds API Tokens.
 | **Content** | Sites · Search · Post Types · Media Library · Trash · Universal Editor |
 | **Administration** | Users (users, groups, roles) · API Tokens · Tenants · Authentication Providers · Exchange Providers · Email · Webhooks · Activity · Agent Review · GraphQL |
 
-Every list of records here — users, groups, roles, tokens, providers, webhooks, tenants,
-and Content's sites — is a **table** you can sort by its column headers, with the create
+Every list of records here (users, groups, roles, tokens, providers, webhooks, tenants,
+and Content's sites) is a **table** you can sort by its column headers, with the create
 action at the top right. Every editor keeps **Save** in its header, and a bar with Save
 fades in once you scroll the header away; it tells you when a field has an **unsaved
 change**. Delete, and a tenant's Suspend, are in the header's **⋯** menu.
@@ -120,12 +120,12 @@ action in the content browser.
 - A grant is a **subject** (user, group or role) plus a **permission**: **Read** or
   **Write**.
 - Grants are **inherited** down the tree: a grant on a folder covers what is inside it.
-- An item with **no grants is open** — anyone signed in can reach it. The console says
+- An item with **no grants is open**: anyone signed in can reach it. The console says
   so on the panel: *"No restrictions — anyone signed in can access this. Add a grant to
   restrict it."* Adding the first grant is what starts restricting it.
 
 The same ACL is enforced on every surface. An agent's token reaches exactly what a
-curator's session reaches, and no more — a copy needs read on its sources, a move needs
+curator's session reaches, and no more: a copy needs read on its sources, a move needs
 write on both ends. See [Letting an agent in](./agent-safety.md).
 
 ---
@@ -145,8 +145,8 @@ A token carries a **scope**, and the scope is the whole of what it may do:
 An Agent token also has a **May publish** switch, **off by default**. An agent token
 without it writes drafts that a curator then approves in Agent Review.
 
-A token is additionally tagged as a **Production** or **Preview** environment key —
-production reads published content, preview reads draft-preferred — so the same front end
+A token is additionally tagged as a **Production** or **Preview** environment key:
+production reads published content, preview reads draft-preferred, so the same front end
 can be pointed at either by swapping only the token.
 
 By default a token reaches every site. Turn **All sites** off to restrict it to the sites
@@ -166,7 +166,7 @@ reaches.
 ## Tenants
 
 **Administration → Tenants** lists the isolated workspaces on this instance. Each tenant
-has its own content, and the reserved `shio` tenant is the single-tenant default — it
+has its own content, and the reserved `shio` tenant is the single-tenant default: it
 cannot be renamed, disabled or deleted.
 
 A tenant name is lowercase, has no spaces, and is **immutable once created** because it is
@@ -186,7 +186,7 @@ authenticated. Shio ships one provider: **Shio Native**, the built-in username a
 password store described above. The screen exists so an external identity source can be
 added as a second provider instance.
 
-For the authentication and authorization mechanics — sessions, CSRF, CORS, token auth —
+For the authentication and authorization mechanics (sessions, CSRF, CORS, token auth),
 see [Security](./security.md).
 
 ---
@@ -205,7 +205,7 @@ See [Import & Export](./import-export.md) for the package format and the import 
 
 **Administration → Email** configures the outgoing SMTP server Shio sends mail through:
 host, port, credentials and whether the connection is secured. The same settings can be
-supplied as properties at startup — see the
+supplied as properties at startup. See the
 [Configuration Reference](./configuration-reference.md).
 
 ---
@@ -226,7 +226,7 @@ what delivery does and does not guarantee are on [Webhooks](./webhooks.md).
 
 **Administration → Activity** is the audit trail of content changes: who created, edited,
 published, unpublished, deleted or restored what, and when. Every write through any
-surface — console, CLI, CDA, agent — is recorded here under the name of whoever made it.
+surface (console, CLI, CDA, agent) is recorded here under the name of whoever made it.
 
 ---
 

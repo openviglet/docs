@@ -1,12 +1,12 @@
 ---
 sidebar_position: 10
 title: Field Manifest & Schema-as-Code
-description: "Provision and evolve a Semantic Navigation site's field schema declaratively in Viglet Turing ES: idempotent manifests, planner/migrations, LLM-assisted derivation, hybrid ranking, and field-coverage observability."
+description: "Provision and evolve a Semantic Navigation site's field schema declaratively in Viglet Turing: idempotent manifests, planner/migrations, LLM-assisted derivation, hybrid ranking, and field-coverage observability."
 ---
 
 # Field Manifest & Schema-as-Code
 
-A **field manifest** is a single declarative document that describes a Semantic Navigation site and its field schema, the site name, its locales, and the ordered list of fields (each with a type, and whether it's a facet, mandatory, or multi-valued). You `POST` it once and Turing ES **converges** the live site to match it: it creates the site if missing, adds any new fields, and reports what changed. Re-posting the same manifest is a no-op.
+A **field manifest** is a single declarative document that describes a Semantic Navigation site and its field schema, the site name, its locales, and the ordered list of fields (each with a type, and whether it's a facet, mandatory, or multi-valued). You `POST` it once and Viglet Turing **converges** the live site to match it: it creates the site if missing, adds any new fields, and reports what changed. Re-posting the same manifest is a no-op.
 
 You'd reach for this when you want your search schema to live in version control next to your code instead of being clicked together by hand in the admin: "Liquibase for the SN field schema." It's the backbone of repeatable onboarding: a new environment, a new tenant, or a CI pipeline can stand up an identical, reviewed schema from one file. Around that core, Turing adds four things: a **planner** that diffs a manifest against the live site (so breaking changes can't slip through silently), **LLM-assisted derivation** that drafts a manifest from sample documents, **hybrid RRF ranking** for the public search, and **field-coverage** observability so you can see which fields are actually populated.
 

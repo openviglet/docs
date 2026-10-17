@@ -4,7 +4,7 @@ const sidebars: SidebarsConfig = {
   dumontSidebar: [
     {
       type: "category",
-      label: "Dumont DEP",
+      label: "Viglet Dumont",
       link: {
         type: "doc",
         id: "index",

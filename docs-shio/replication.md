@@ -21,8 +21,8 @@ That is three commands (`clone`, `propose`, `convert`) and one decision you shou
 |---|---|---|
 | What `convert` writes | The source's markup, verbatim, behind a Theme + Page Layout + Page | The captured blocks as **sections**: real fields, in a generated layout that annotates each one |
 | How close it looks | Pixel-identical is achievable and has been achieved | The pixels have moved: the captured CSS classes are dropped and the page is drawn with Shio's own vocabulary, styled by a theme whose colours are taken from the source |
-| Can a curator edit it? | **Not on its own** — verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit. `convert --annotate` adds them without touching the pixels: see [Fidelity with editable blocks](#fidelity-with-editable-blocks) | **Yes.** Every field is annotated and editable |
-| On a page that mixes them | The kept markup is a section of its own, movable and replaceable — see below | The accepted blocks, in the same list, in source order |
+| Can a curator edit it? | **Not on its own**: verbatim markup carries no field annotations, so the Universal Editor opens a page with nothing to edit. `convert --annotate` adds them without touching the pixels: see [Fidelity with editable blocks](#fidelity-with-editable-blocks) | **Yes.** Every field is annotated and editable |
+| On a page that mixes them | The kept markup is a section of its own, movable and replaceable: see below | The accepted blocks, in the same list, in source order |
 | Use it for | Proving the capture is faithful; archiving a site as-is | Actually adopting the site into a CMS |
 
 You choose by what you accept in the `propose` step: **accept nothing and you get
@@ -35,7 +35,7 @@ the ordinary one: accept the hero, leave the source's header and footer, and the
 **mixed**.
 
 The kept markup on such a page is not a leftover you have to live with. Each run of it is
-a **`SectionMarkup` post in the page's own `sections` list**, in the place it stood — so a
+a **`SectionMarkup` post in the page's own `sections` list**, in the place it stood, so a
 curator can move it, replace it with a real section, or delete it, from the same control
 they compose the rest of the page with. That is how a replica becomes authorable one block
 at a time instead of all at once.
@@ -64,7 +64,7 @@ shio convert --site mysite --create-site --annotate
 ```
 
 `propose` already worked out which node on a captured page is a heading and which is an
-intro; the authorable mode spends that mapping one way — read the values out, write them
+intro; the authorable mode spends that mapping one way: read the values out, write them
 into section posts, redraw the page with Shio's vocabulary. `--annotate` spends it the
 other way: the mapping is **stamped onto the source's own markup** as editable fields, and
 nothing else about the page changes. Strip the annotations back out and the bytes are the
@@ -81,7 +81,7 @@ Three things worth knowing before you use it:
   what keeps that definition true. Without `--annotate`, nothing changes.
 - **Wholly verbatim pages only.** On a mixed page the kept markup is split into
   `SectionMarkup` posts, and a field has to live on the post holding the bytes it
-  annotates — so the run annotates the pages nobody accepted a block on.
+  annotates, so the run annotates the pages nobody accepted a block on.
 - **Nothing is stored until somebody edits it.** The text is already in the markup, so an
   untouched annotation costs no field, no post-type change and no bytes. Edit one and the
   page shows your value in place of the source's; the rest of the page is untouched.
@@ -114,7 +114,7 @@ are all present but unreferenced is not a replica.
 
 #### Re-capturing without paying for it again
 
-A capture of a real site is the expensive step — a few hundred pages and a few hundred
+A capture of a real site is the expensive step: a few hundred pages and a few hundred
 files can take minutes and tens of megabytes, while everything after it reads the
 inventory off disk and runs in seconds. `--refresh` re-checks a capture you already have:
 
@@ -126,7 +126,7 @@ Pass no URL. The existing capture says where the site is, so a mistyped origin c
 refresh against a different host. Every page **and every asset** is asked for
 conditionally, using what the last capture recorded about it, and anything the server
 reports as unchanged costs one request and no download. The report says what it did:
-how many pages and assets were unchanged, how many were re-read, and — when it happens —
+how many pages and assets were unchanged, how many were re-read, and, when it happens,
 which files it had to fetch in full because they were no longer in the tree.
 
 Two things to know. A refresh re-checks **what was captured**; it does not walk for pages
@@ -146,14 +146,14 @@ would carry, the markup it would keep, and **what each conversion would lose**. 
 column is why this is a separate step and not a flag, you are approving a lossy
 transformation, so you get to see the loss.
 
-Every candidate also carries **`keeps N%`** — how much of that block's own text the fields
+Every candidate also carries **`keeps N%`**: how much of that block's own text the fields
 would actually hold. The rest has no field to live in, so it is what a converted page loses
 even when the section type is right. A block that would keep less than half its text is
 walked into rather than accepted whole, and the ones that cannot be improved on are named in
 a note before anything is written.
 
 Each candidate names the **evidence** that proposed its type, so you can check the claim against
-the page instead of taking the type name on trust — *two or more `<details>`, which is a disclosure
+the page instead of taking the type name on trust: *two or more `<details>`, which is a disclosure
 list*, *3 `<dt>`/`<dd>` pairs, which is a definition list*, *4 repeated units, each with text*. A
 block whose shape matches no rule is proposed as a post-type of its own rather than forced into the
 nearest one: the classifier answers "I do not know" instead of guessing, and that answer is the one
@@ -162,7 +162,7 @@ worth trusting the others by.
 `--accept all` **declines a candidate whose derivation cannot fill a field the section type
 requires**, and says which and why. Those blocks stay verbatim markup, which keeps their
 content, instead of becoming a section `shio verify` would refuse with
-`required-field-empty`. Naming an id accepts it anyway — that is your call — and the command
+`required-field-empty`. Naming an id accepts it anyway (that is your call), and the command
 tells you what the gate will say about it.
 
 It also proposes the captured stylesheet as **design tokens plus CSS**, and the captured
@@ -185,7 +185,7 @@ at **the paths their source used**.
 Everything lands as **drafts**.
 
 Add `--annotate` to keep the source's bytes *and* get editable fields on the pages that
-kept all of their markup — see [Fidelity with editable
+kept all of their markup: see [Fidelity with editable
 blocks](#fidelity-with-editable-blocks).
 
 #### The site remembers where it came from
@@ -204,8 +204,8 @@ travels with `shio export`, and a later conversion replaces it.
 
 An authorable page is redrawn with Shio's vocabulary, and the source's own `<nav>` is part
 of what that drops. `convert` puts one back, from what the capture recorded rather than
-from the content model: `clone` reads `<nav>` and `[role=navigation]` — a footer's links
-are links — keeps the entries **in source order**, and counts how many pages each appears
+from the content model: `clone` reads `<nav>` and `[role=navigation]` (a footer's links
+are links), keeps the entries **in source order**, and counts how many pages each appears
 on. An entry that appears on every page is a menu item; one that appears on a single page
 is a link, and is left out.
 
@@ -219,14 +219,14 @@ The run says what it took and what it saw:
 menu: 2 entry(ies) from the source's own navigation, in ITS order, of 4 link(s) it recorded
 ```
 
-Both numbers, because the difference is what you check — the two that did not become
+Both numbers, because the difference is what you check: the two that did not become
 entries were considered. **A source that states no navigation** gets the previous
 behaviour: the layout lists the site's pages by title.
 
 #### The theme an authorable replica is presented with
 
-An authorable page is drawn with Shio's own `shio-*` vocabulary — a container, a stack, a
-grid, a card — and the `Theme` `convert` writes styles every one of those roles. Its
+An authorable page is drawn with Shio's own `shio-*` vocabulary (a container, a stack, a
+grid, a card), and the `Theme` `convert` writes styles every one of those roles. Its
 **values come from the source**: `convert` reads the palette `propose` extracted and fills
 the theme's tokens from it, matching each one by the role the source uses it in rather than
 by the name the source gave it.
@@ -249,18 +249,18 @@ What is taken depends on what the source can be said to have *stated*, and the r
 by the kind of value:
 
 - **Colour** needs a page-level statement, because the same colour is text in one rule and a
-  background in another — only `body { color: … }` says which is the page's. A colour the
+  background in another: only `body { color: … }` says which is the page's. A colour the
   stylesheet repeats more often does not outrank it; it falls to the next slot, so a card
   colour used five times becomes the muted one rather than the body copy.
 - **A corner radius or a font stack** is taken from the value the stylesheet uses most: there
   is only one thing a `border-radius` can mean, so there is nothing to disambiguate.
 - **A type scale is refused.** The theme has five text sizes ordered by size, and a stylesheet
-  ranks its font sizes by how often it uses them — those are not the same order, so only the
+  ranks its font sizes by how often it uses them: those are not the same order, so only the
   step the page states outright (`body { font-size: … }`) is taken and the rest keep their
   defaults.
 - **The accent is read off your buttons.** A rule that sets a background *and* sets its text
-  to the page's own background colour is an element turned inside out — a button, a badge, a
-  call-to-action — and that background is your accent. It is found this way because it is
+  to the page's own background colour is an element turned inside out (a button, a badge, a
+  call-to-action), and that background is your accent. It is found this way because it is
   rarely stated anywhere else: an accent is almost never a `fill` or a `caret-color`, and a
   name like `--brand` is a word rather than evidence. A band painted in the page's own text
   colour, such as a dark footer, is the page inverted rather than an accent, and is not taken.
@@ -269,7 +269,7 @@ Two things the palette will **not** do, whatever the source says:
 
 - **A colour that paints nothing is refused.** A fully transparent value is a reset rather than
   a palette entry, and a page background taken from one shows whatever happens to sit behind
-  it — which looks correct on a light layout and breaks on a dark one.
+  it, which looks correct on a light layout and breaks on a dark one.
 - **A pair you could not read is refused.** The text colour and the page it sits on are checked
   together, and where there is no contrast between them the source's half gives way to the
   theme's default. This catches the case where nothing about the source is wrong: a source that
@@ -293,7 +293,7 @@ than a stylesheet rewrite.
 
 :::note Palettes declared inside `@layer`
 A stylesheet built by a modern toolchain usually declares its custom properties inside
-`@layer theme { :root, :host { … } }`. That is read as the source declaring its palette — a
+`@layer theme { :root, :host { … } }`. That is read as the source declaring its palette: a
 layer only orders the cascade. A palette declared under `@media (prefers-color-scheme: dark)`
 or under a `.dark` class is a *variant*, has two values and no default, and is reported rather
 than written: picking one of them would choose a theme nobody asked for.
@@ -358,7 +358,7 @@ annotation.
 
 `shio annotations post:mysite/` does that count for you, and it reports the one finding that
 matters: a field whose **value is on the page** with nothing making it editable. A field the
-template simply does not draw is listed apart and does not fail the check — including on a
+template simply does not draw is listed apart and does not fail the check, including on a
 page converted with `--annotate`, which declares the vocabulary's fields and draws the
 source's own markup instead.
 
@@ -375,7 +375,7 @@ shio judge --site mysite
 instrument reads **NOT RUN**, never green. Every finding is graded against a bar written
 down in `acceptance.properties`: at or below it, the round is **ACCEPTED** and the finding
 prints as a task for later; above it, or of a kind the bar does not name, it **HOLDS** and
-the command exits 1. **INCONCLUSIVE** is the third answer, and it is the one that matters —
+the command exits 1. **INCONCLUSIVE** is the third answer, and it is the one that matters:
 an instrument the bar rests on did not run, so there is nothing to conclude.
 
 The mode is read from the plan rather than assumed, so a fidelity site is graded by the
@@ -391,7 +391,7 @@ shio judge --site mysite --since --record
 
 `--record` appends the round to `shio/judge-rounds.json`; `--since` reports what moved
 against the last one. A count that **rose** holds the round, graded by the same bar as any
-other finding; a count that fell is reported and never held — a replica that got better is
+other finding; a count that fell is reported and never held: a replica that got better is
 not a reason to stop.
 
 ---
@@ -408,7 +408,7 @@ not a reason to stop.
   editable half.
 - **Authorable mode arrives styled, but not as the source.** The captured classes are dropped
   and the page is redrawn with Shio's own vocabulary, so the layout, the spacing and the type
-  are the theme's rather than the source's — the colours, the corner radius and the font stack
+  are the theme's rather than the source's; the colours, the corner radius and the font stack
   are the source's where its stylesheet states them plainly ([the theme an authorable replica
   is presented with](#the-theme-an-authorable-replica-is-presented-with)). This is the trade you
   accepted at `propose`.

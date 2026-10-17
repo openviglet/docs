@@ -1,13 +1,13 @@
 ---
 sidebar_position: 13
 title: Governed LLM Gateway
-description: "Point any OpenAI-compatible client at Viglet Turing ES: virtual keys, per-key budgets and rate limits, semantic cache, guardrails, model-name routing into agents and RAG, and native tools."
+description: "Point any OpenAI-compatible client at Viglet Turing: virtual keys, per-key budgets and rate limits, semantic cache, guardrails, model-name routing into agents and RAG, and native tools."
 ---
 
 # Governed LLM Gateway
 
 The **Governed LLM Gateway** exposes an **OpenAI-compatible inbound API** so any
-existing app can point its `base_url` at **Viglet Turing ES** with *zero code
+existing app can point its `base_url` at **Viglet Turing** with *zero code
 change*, and, in doing so, transparently gain the governance and intelligence
 Turing already provides: virtual keys, per-key budgets and rate limits, spend
 tracking, a semantic cache, guardrails, model-name routing into your agents and

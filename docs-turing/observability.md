@@ -1,14 +1,14 @@
 ---
 sidebar_position: 12
 title: "Observability: Prometheus & Grafana"
-description: The metrics, dashboards, and traces that turn Turing ES from a black box into a glass box. Prometheus scrapes Spring Boot Actuator, Grafana renders the story, and you sleep through the night.
+description: The metrics, dashboards, and traces that turn Viglet Turing from a black box into a glass box. Prometheus scrapes Spring Boot Actuator, Grafana renders the story, and you sleep through the night.
 ---
 
 # Observability: Prometheus & Grafana
 
 > *You can't fix what you can't see. And in production, "I'll add some logs and check tomorrow" is what tomorrow's incident is built on.*
 
-Turing ES ships with a complete observability stack designed to be **flipped on at install time and left alone**:
+Viglet Turing ships with a complete observability stack designed to be **flipped on at install time and left alone**:
 
 - **Spring Boot Actuator** exposes a Prometheus endpoint at `/actuator/prometheus`.
 - **Prometheus** scrapes it every 5 seconds and stores the time series.
@@ -25,7 +25,7 @@ You don't have to write a single PromQL query to get value. The default dashboar
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'primaryColor': '#fff', 'primaryBorderColor': '#c0c0c0', 'lineColor': '#888', 'textColor': '#333'}}}%%
 graph LR
-    APP["☕ Turing ES<br/>Spring Boot 4"]
+    APP["☕ Turing<br/>Spring Boot 4"]
     ACT["📡 Actuator<br/>/actuator/prometheus"]
     MICR["📊 Micrometer<br/>+ Observation API"]
     PROM["📈 Prometheus<br/>scrape every 5s"]
@@ -51,23 +51,23 @@ graph LR
 
 | Component | Role | Where it runs |
 |---|---|---|
-| **Spring Boot Actuator** | Exposes the metrics endpoint | Inside Turing ES, port 2700 |
-| **Micrometer** | Metrics library: counters, timers, gauges | Embedded in Turing ES |
-| **Observation API** | Unified abstraction: one observation, two outputs (metric + span) | Embedded in Turing ES |
+| **Spring Boot Actuator** | Exposes the metrics endpoint | Inside Turing, port 2700 |
+| **Micrometer** | Metrics library: counters, timers, gauges | Embedded in Turing |
+| **Observation API** | Unified abstraction: one observation, two outputs (metric + span) | Embedded in Turing |
 | **Prometheus** | Pull-based scraper, time-series database | `containers/prometheus/` (port 9090) |
 | **Grafana** | Visualization, dashboards, alerts | `containers/grafana/` (port 3000) |
 
-Both Prometheus and Grafana are provisioned as Docker images in the `containers/` directory. A `docker compose up` brings them up alongside Turing ES.
+Both Prometheus and Grafana are provisioned as Docker images in the `containers/` directory. A `docker compose up` brings them up alongside Turing.
 
 :::info You don't have to use them
-Observability is **optional**. Turing ES runs perfectly without Prometheus or Grafana: Actuator just exposes the endpoint, and nothing scrapes it. But once you've seen a real incident through these dashboards, you'll wonder how you operated anything without them.
+Observability is **optional**. Turing runs perfectly without Prometheus or Grafana: Actuator just exposes the endpoint, and nothing scrapes it. But once you've seen a real incident through these dashboards, you'll wonder how you operated anything without them.
 :::
 
 ---
 
 ## What Gets Measured
 
-Stable metric names are the contract between Turing ES and your dashboards. They're documented in `TurMeterNames.java` and treated as a public API: they don't change between minor versions without a migration note.
+Stable metric names are the contract between Turing and your dashboards. They're documented in `TurMeterNames.java` and treated as a public API: they don't change between minor versions without a migration note.
 
 ### LLM Calls
 
@@ -92,7 +92,7 @@ Every call to a search engine plugin (Solr, Elasticsearch, Lucene) is observed.
 | `turing.search.pipeline` | Timer | `stage`, `status` | Java-side pipeline stages: `search.total`, `snapshot.build`, `search.response`, `result.process`, `widget.build` |
 | `turing.search.snapshot.cache` | Counter | `outcome` (`hit` / `miss` / `evict`) | Snapshot cache hit ratio: drives latency dramatically |
 
-The split between `turing.search.calls` and `turing.search.pipeline` is deliberate: the first is the *backend* engine call (mostly Solr time); the second is everything Turing ES does *around* the call (snapshot lookup, result mapping, facet processing, widget assembly). When latency spikes, you'll know whether to blame the engine or the orchestration.
+The split between `turing.search.calls` and `turing.search.pipeline` is deliberate: the first is the *backend* engine call (mostly Solr time); the second is everything Turing does *around* the call (snapshot lookup, result mapping, facet processing, widget assembly). When latency spikes, you'll know whether to blame the engine or the orchestration.
 
 ### Chat Analytics
 
@@ -148,9 +148,9 @@ Once running:
 
 ### Production
 
-For production, Prometheus runs as part of your existing observability stack (often Kubernetes-deployed), scraping Turing ES via the same `/actuator/prometheus` endpoint. The dashboards in `containers/grafana/dashboards/` are JSON files: drop them into your existing Grafana instance via *Configuration → Dashboards → Import JSON*.
+For production, Prometheus runs as part of your existing observability stack (often Kubernetes-deployed), scraping Turing via the same `/actuator/prometheus` endpoint. The dashboards in `containers/grafana/dashboards/` are JSON files: drop them into your existing Grafana instance via *Configuration → Dashboards → Import JSON*.
 
-The Infinity datasource (used by the Chat Analytics dashboard) reads from Turing ES's REST API directly, no Prometheus needed for that one. It needs:
+The Infinity datasource (used by the Chat Analytics dashboard) reads from Turing's REST API directly, no Prometheus needed for that one. It needs:
 
 - Allow-list for the URL `http://<turing-host>:2700/api/system/chat-analytics/*`
 - A datasource named `turing-chat-analytics` so the dashboards find it
@@ -221,7 +221,7 @@ histogram_quantile(0.95,
   sum by (le, stage) (rate(turing_search_pipeline_seconds_bucket[5m])))
 ```
 
-If the engine number is fast but the pipeline is slow, the bottleneck is in Turing ES's orchestration (often `snapshot.build`).
+If the engine number is fast but the pipeline is slow, the bottleneck is in Turing's orchestration (often `snapshot.build`).
 
 ### "What's our cache hit ratio?"
 
@@ -335,7 +335,7 @@ Add the metric name to `TurMeterNames.java` so it's part of the public observabi
 
 Metrics tell you *something is wrong*. Logs tell you *what is wrong*.
 
-Turing ES uses standard SLF4J logging. In production, three options:
+Turing uses standard SLF4J logging. In production, three options:
 
 | Approach | When |
 |---|---|
@@ -343,7 +343,7 @@ Turing ES uses standard SLF4J logging. In production, three options:
 | **MongoDB Logback appender** | When operators need to read logs from the admin console without server access. See [Logging](./logging.md). |
 | **Both** | Common in production. Stdout for the platform team, MongoDB for product/support. |
 
-Metrics + logs + traces is the classic three-pillar observability story. Turing ES gives you all three out of the box; the only thing you have to wire is the destination.
+Metrics + logs + traces is the classic three-pillar observability story. Turing gives you all three out of the box; the only thing you have to wire is the destination.
 
 ---
 

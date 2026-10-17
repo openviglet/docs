@@ -1,12 +1,12 @@
 ---
 sidebar_position: 3
 title: Configuration Reference
-description: Complete reference for the Turing ES application.yaml configuration file.
+description: Complete reference for the Viglet Turing application.yaml configuration file.
 ---
 
 # Configuration Reference
 
-This page documents every significant property in the Turing ES `application.yaml` file. The file uses standard Spring Boot configuration: any property can be overridden via environment variables, JVM system properties (`-Dkey=value`), or a separate `application-production.yaml` file in the working directory.
+This page documents every significant property in the Viglet Turing `application.yaml` file. The file uses standard Spring Boot configuration: any property can be overridden via environment variables, JVM system properties (`-Dkey=value`), or a separate `application-production.yaml` file in the working directory.
 
 :::tip Override pattern
 To override a property at runtime without editing the file, use the environment variable convention: replace `.` and `-` with `_` and uppercase everything. For example, `turing.storage.type` becomes `TURING_STORAGE_TYPE=minio`.
@@ -249,7 +249,7 @@ spring:
 
 ### Message Queue (Apache Artemis)
 
-Apache Artemis runs **embedded inside Turing ES** by default: no separate installation is required. For high-availability or multi-node deployments, you can switch to an external Artemis broker.
+Apache Artemis runs **embedded inside Turing** by default: no separate installation is required. For high-availability or multi-node deployments, you can switch to an external Artemis broker.
 
 | Property | Default | Description |
 |---|---|---|
@@ -297,17 +297,17 @@ To use an external Artemis broker (e.g., for multi-node deployments), set `sprin
 
 ---
 
-### Turing ES Core
+### Turing Core {#turing-es-core}
 
 | Property | Default | Description |
 |---|---|---|
-| `turing.url` | `http://localhost:2700` | Public base URL of this Turing ES instance |
+| `turing.url` | `http://localhost:2700` | Public base URL of this Turing instance |
 | `turing.allowedOrigins` | `http://localhost:4200, http://localhost:5173` | CORS allowed origins for the REST API and GraphQL. Add your frontend URL here. |
 | `turing.keycloak` | `false` | Set `true` to enable Keycloak OAuth2/OIDC. See [Security & Keycloak](./security-keycloak.md). |
 | `turing.tenancy.enabled` | `false` | Enable multi-tenant mode (one JVM, many isolated tenants). Default `false` = single-tenant, byte-for-byte legacy behavior. See [Multi-Tenancy](./multi-tenancy.md). |
 | `turing.open-browser` | `true` | Automatically open the admin console in the browser on startup |
 | `turing.permissions` | `true` | When `true`, users get only their real group/role authorities. When `false`, **any** authenticated principal is granted `ROLE_ADMIN` + all privileges (trusted single-user mode only, logs a `SECURITY` warning at startup). See [Security Hardening](./security-hardening.md#2-turingpermissions-defaults-to-true-authn--admin). |
-| `turing.admin.password` | *(blank → env `TURING_ADMIN_PASSWORD`)* | Seeds the local `admin` password at startup (minimum 6 characters) so a container/CI deploy skips the first-access setup screen. Applied only while the password is still unset — it never overwrites an existing one. See [Login](./administration-guide.md#login). |
+| `turing.admin.password` | *(blank → env `TURING_ADMIN_PASSWORD`)* | Seeds the local `admin` password at startup (minimum 6 characters) so a container/CI deploy skips the first-access setup screen. Applied only while the password is still unset: it never overwrites an existing one. See [Login](./administration-guide.md#login). |
 | `turing.ai.crypto.key` | *(blank → env `TURING_AI_CRYPTO_KEY`)* | AES/GCM key encrypting all stored provider credentials. **Required in production**, the app fails to start on the `production` profile with a blank or known-sample value. |
 | `turing.code-interpreter.python-executable` | *(auto-detected)* | Absolute path to the Python 3 binary used by the Code Interpreter GenAI tool. When blank, Turing searches standard OS locations automatically. |
 
@@ -377,9 +377,8 @@ Guardrails for the agent-as-MCP-client path. See [MCP Servers](./mcp-servers.md)
 
 ### Adobe AEM Content AI (`turing.content-ai`) {#content-ai}
 
-Settings for a Search Engine instance whose vendor is `CONTENTAI` — a **federated,
-read-only** backend that queries an Adobe AEM Content AI index instead of one Turing
-ES filled. See [Search Engine → Adobe AEM Content AI](./search-engine.md#content-ai)
+Settings for a Search Engine instance whose vendor is `CONTENTAI`, a **federated,
+read-only** backend that queries an Adobe AEM Content AI index instead of one Turing filled. See [Search Engine → Adobe AEM Content AI](./search-engine.md#content-ai)
 for what the backend can and cannot do.
 
 The **endpoint URL is not here**: it is the Search Engine instance's own Endpoint
@@ -388,24 +387,24 @@ URL, so each instance can point at a different Adobe bucket.
 | Property | Default | Description |
 |---|---|---|
 | `turing.content-ai.enabled` | `false` | Master switch. With `false` the backend refuses every query and reports `DOWN` in System Information |
-| `turing.content-ai.token` | — | Bearer token from the Adobe Developer Console ("AEM Content AI" card) |
-| `turing.content-ai.api-key` | — | `x-api-key` credential, the alternative the search endpoints accept. Used only when `token` is blank |
+| `turing.content-ai.token` | *(none)* | Bearer token from the Adobe Developer Console ("AEM Content AI" card) |
+| `turing.content-ai.api-key` | *(none)* | `x-api-key` credential, the alternative the search endpoints accept. Used only when `token` is blank |
 | `turing.content-ai.source-type` | `ACQUISITION` | Type of the Adobe content source: `ACQUISITION`, `AEM_AUTHOR`, `AEM_PUBLISH` or `CUSTOM` |
-| `turing.content-ai.sources.<site>` | — | Adobe content source name for one SN Site. Unmapped sites fall back to the site's core name |
+| `turing.content-ai.sources.<site>` | *(none)* | Adobe content source name for one SN Site. Unmapped sites fall back to the site's core name |
 | `turing.content-ai.hybrid` | `true` | Query semantically **and** lexically (Adobe's own hybrid shape). `false` sends the keyword query alone |
 | `turing.content-ai.vector-boost` | `1.0` | Relevance weight of the semantic half |
 | `turing.content-ai.fulltext-boost` | `1.0` | Relevance weight of the keyword half |
-| `turing.content-ai.vector-space` | — | Vector space name from the Adobe source's IndexConfig. Blank uses Adobe's default |
-| `turing.content-ai.lexical-space` | — | Lexical space name. Blank uses Adobe's default |
+| `turing.content-ai.vector-space` | *(none)* | Vector space name from the Adobe source's IndexConfig. Blank uses Adobe's default |
+| `turing.content-ai.lexical-space` | *(none)* | Lexical space name. Blank uses Adobe's default |
 | `turing.content-ai.facet-size` | `10` | Facet values requested per field |
 | `turing.content-ai.max-page-walk` | `10` | How deep a result page may be reached. Adobe pages by cursor with no offset, so page *N* costs *N* requests; past this the page comes back empty with the total intact |
 | `turing.content-ai.timeout-seconds` | `10` | Per-request timeout |
 | `turing.content-ai.source-cache-seconds` | `300` | How long the list of your Adobe content sources is reused. It is read to check your configuration (see below), not to serve searches |
 | `turing.content-ai.include-chunks` | `false` | Ask Adobe for the matched passages alongside each document, and expose the best one to an agent as `hit.content` (see [Custom Tools → `turingSearch`](./custom-tools.md#turingsearch-what-a-hit-gives-you)). Off by default: it increases response size, and a script already reading `hit.content` will start seeing a passage |
 
-Two limits come from Adobe's API rather than from Turing ES, and you will see them:
+Two limits come from Adobe's API rather than from Turing, and you will see them:
 a page can hold **at most 50 results** (a larger row count is reduced to 50), and
-there is no way to jump to a page — hence `max-page-walk`.
+there is no way to jump to a page, hence `max-page-walk`.
 
 :::warning
 Never commit the token to `application.yaml`. Pass it as the environment variable
@@ -421,7 +420,7 @@ Never commit the token to `application.yaml`. Pass it as the environment variabl
 | `turing.search.metrics.enabled` | `true` | Record search metrics (query terms, result counts, timestamps) |
 | `turing.search.cache.enabled` | `false` | Enable server-side search result caching |
 | `turing.search.cache.ttl` | `24h` | Interval of the **backstop** sweep that clears the cache. Unit-bearing: `24h`, `PT1H`, `30m` (a bare number is milliseconds) |
-| `turing.search.cache.ttl.seconds` | — | **Deprecated** — despite its name the value was *milliseconds*, so `3600` meant a sweep every 3.6 seconds. Still honoured (as milliseconds) with a startup warning; use `turing.search.cache.ttl` |
+| `turing.search.cache.ttl.seconds` | *(none)* | **Deprecated**: despite its name the value was *milliseconds*, so `3600` meant a sweep every 3.6 seconds. Still honoured (as milliseconds) with a startup warning; use `turing.search.cache.ttl` |
 
 A cached answer does **not** wait for the sweep to become correct: indexing,
 deindexing and commit each evict the cache of the site they wrote, so a reindexed
@@ -510,7 +509,7 @@ MongoDB is used to persist application logs, making them accessible from the adm
 | `logging.file.name` | `store/logs/turing.log` | Log file path |
 | `logging.logback.rollingpolicy.max-file-size` | `25MB` | Maximum size of each log file before rotation |
 | `logging.logback.rollingpolicy.max-history` | `10` | Number of rotated log files to keep |
-| `logging.level.com.viglet` | `INFO` | Log level for Turing ES application code |
+| `logging.level.com.viglet` | `INFO` | Log level for Turing application code |
 | `logging.level.org.springframework` | `INFO` | Log level for Spring framework |
 | `logging.level.dev.langchain4j` | `INFO` | Log level for LangChain4j (LLM library) |
 

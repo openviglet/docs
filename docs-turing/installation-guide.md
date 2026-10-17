@@ -1,22 +1,22 @@
 ---
 sidebar_position: 1
 title: Installation Guide
-description: Viglet Turing ES Installation Guide
+description: Viglet Turing Installation Guide
 ---
 
-# Viglet Turing ES: Installation Guide
+# Viglet Turing: Installation Guide
 
-Viglet Turing ES ([https://www.viglet.org/turing/](https://www.viglet.org/turing/)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
+Viglet Turing ([https://www.viglet.org/turing/](https://www.viglet.org/turing/)) is an open source enterprise search platform ([https://github.com/openviglet](https://github.com/openviglet)) with Semantic Navigation and Generative AI as its main features. All content is indexed in Apache Solr as the primary search engine.
 
 ## Installing Java
 
-Turing ES requires Java.
+Turing requires Java.
 
 :::note
-Turing ES only supports Java 21.
+Turing only supports Java 21.
 :::
 
-During installation, Turing ES reads the JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
+During installation, Turing reads the JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
 
 - **On Windows:**
   - Set the JAVA_HOME system variable to point to the JAVA location.
@@ -26,15 +26,15 @@ During installation, Turing ES reads the JAVA_HOME and PATH variables to install
   - Create an environment variable called JAVA_HOME.
   - Provide the JAVA bin path in the PATH variable.
 
-## Turing ES Requirements
+## Turing Requirements
 
-The information below describes the resource modes available to run Turing ES.
+The information below describes the resource modes available to run Turing.
 
 :::note
 Use a screen resolution of at least 1024 x 768 for optimum clarity.
 :::
 
-This section describes the minimum and suggested features for systems on which you can configure Turing ES.
+This section describes the minimum and suggested features for systems on which you can configure Turing.
 
 ### Hardware Requirements
 
@@ -49,11 +49,11 @@ In addition, the following is required:
 
 ## Installing and Configuring Databases
 
-Turing ES supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Turing ES. The following sections describe these requirements.
+Turing supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Turing. The following sections describe these requirements.
 
-### Turing ES Database Table Requirements
+### Turing Database Table Requirements
 
-Turing ES uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.
+Turing uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.
 
 ### Oracle Database Requirements
 
@@ -61,20 +61,20 @@ This section describes configuration requirements for an existing database.
 
 To set up an Oracle database:
 
-1. Install and configure a single database instance for use by Turing ES.
-2. Create a database schema to contain the Turing ES system tables.
-3. Configure the Turing ES admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.
+1. Install and configure a single database instance for use by Turing.
+2. Create a database schema to contain the Turing system tables.
+3. Configure the Turing admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.
 
 ### Microsoft SQL Server Database Requirements
 
-This section discusses the steps required to configure Microsoft SQL Server for your Turing ES databases.
+This section discusses the steps required to configure Microsoft SQL Server for your Turing databases.
 
-When creating the Turing ES database, use the following options:
+When creating the Turing database, use the following options:
 
 - You must install the Database Engine feature and Management Tools are recommended. All other features are optional.
 - Set the Collation configuration variable to `SQL_Latin1_General_CP1_CS_AS` or `Latin1_General / Case-sensitive / Accent-Sensitive`.
 - Set authentication mode to mixed mode.
-- Turing ES system user cannot be sa.
+- Turing system user cannot be sa.
 
 #### Configuring the SQL Server Database and Schemas
 
@@ -123,14 +123,14 @@ GO
 
 ### PostgreSQL Database Requirements
 
-This section discusses the steps required to configure PostgreSQL for your Turing ES databases:
+This section discusses the steps required to configure PostgreSQL for your Turing databases:
 
 - Installing and configuring the PostgreSQL Database
-- Configuring the Turing ES user, database, and schema
+- Configuring the Turing user, database, and schema
 
 #### Installing and configuring the PostgreSQL Database
 
-This section describes the steps required to install and configure a PostgreSQL database for your Turing ES environment. You will also need to configure the Turing user, database and schemas.
+This section describes the steps required to install and configure a PostgreSQL database for your Turing environment. You will also need to configure the Turing user, database and schemas.
 
 To install the PostgreSQL database:
 
@@ -148,7 +148,7 @@ autovacuum = off
 ```
 
 :::important
-The autovacuum daemon is used to reclaim memory/storage space the database is no longer using. You must re-enable this utility after you have finished installing and configuring Turing ES.
+The autovacuum daemon is used to reclaim memory/storage space the database is no longer using. You must re-enable this utility after you have finished installing and configuring Turing.
 :::
 
 :::note
@@ -158,29 +158,29 @@ Configuration values will vary for higher transaction environments and numbers o
 #### Configuring the Turing user, database, and schemas
 
 :::note
-You must be a PostgreSQL super-user or have createuser privileges to create Turing users. To create and configure the Turing ES database, you must be a super-user or have create privileges.
+You must be a PostgreSQL super-user or have createuser privileges to create Turing users. To create and configure the Turing database, you must be a super-user or have create privileges.
 :::
 
 :::important
 When you create a database table in PostgreSQL, the field name must be lowercase.
 :::
 
-To configure the Turing ES user:
+To configure the Turing user:
 
-1. Create a user as the owner of the Turing ES database:
+1. Create a user as the owner of the Turing database:
 
 ```sql
 CREATE USER turing PASSWORD <password> with createuser;
 ```
 
-2. Create a Turing ES database:
+2. Create a Turing database:
 
 ```sql
 CREATE DATABASE turing_db;
 ALTER DATABASE turing_db OWNER TO turing;
 ```
 
-To create and access the Turing ES user and schema:
+To create and access the Turing user and schema:
 
 - Log in to the turing (database) using the turing account:
 
@@ -203,7 +203,7 @@ ALTER USER turing SET SEARCH_PATH = turing;
 
 ## Turing Utils
 
-First you need install Turing Utils, that contains sample configurations and script to facilitate the use of Turing ES, so go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Integration > Utils" link to download it.
+First you need install Turing Utils, that contains sample configurations and script to facilitate the use of Turing, so go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Integration > Utils" link to download it.
 
 Extract the turing-utils.zip to `/appl/viglet/turing/utils`:
 
@@ -214,13 +214,13 @@ unzip turing-utils.zip -d /appl/viglet/turing/utils
 
 ## Keycloak
 
-For production deployments that require SSO, Keycloak integrates with Turing ES via OAuth2 / OpenID Connect. Full setup instructions (including database creation, keystore generation, Keycloak configuration, realm and client setup, JVM properties, and Apache reverse proxy configuration) are covered in the [Security & Keycloak](./security-keycloak.md) guide.
+For production deployments that require SSO, Keycloak integrates with Turing via OAuth2 / OpenID Connect. Full setup instructions (including database creation, keystore generation, Keycloak configuration, realm and client setup, JVM properties, and Apache reverse proxy configuration) are covered in the [Security & Keycloak](./security-keycloak.md) guide.
 
 ## Solr Configuration
 
 You need to configure Solr to be able to store Semantic Navigation data.
 
-With Solr running, go to Turing Utils and create the Solr collection that will be used by Turing ES:
+With Solr running, go to Turing Utils and create the Solr collection that will be used by Turing:
 
 ```shell
 cd <SOLR_DIR>/bin
@@ -229,9 +229,9 @@ cd <SOLR_DIR>/bin
 
 Start the Solr service after the collection is created.
 
-## Installing Turing ES
+## Installing Turing
 
-### Turing ES Download
+### Turing Download
 
 #### Option 1: Docker (fastest)
 
@@ -242,7 +242,7 @@ docker pull ghcr.io/openviglet/turing-ce:latest
 docker run -p 2700:2700 -e TURING_ADMIN_PASSWORD=your_password ghcr.io/openviglet/turing-ce:latest
 ```
 
-`TURING_ADMIN_PASSWORD` (minimum 6 characters) seeds the `admin` password while the container boots, so the console opens on the login page instead of the first-access setup screen. Omit it and you choose the password in the browser on first access — see [Login](./administration-guide.md#login).
+`TURING_ADMIN_PASSWORD` (minimum 6 characters) seeds the `admin` password while the container boots, so the console opens on the login page instead of the first-access setup screen. Omit it and you choose the password in the browser on first access (see [Login](./administration-guide.md#login)).
 
 :::tip Image tags
 Besides `latest`, every run also publishes the project version (for example `2026.3.4`) and a commit tag (`sha-<short>`). Pin a specific tag in production instead of tracking `latest`.
@@ -250,7 +250,7 @@ Besides `latest`, every run also publishes the project version (for example `202
 
 #### Option 2: JAR download
 
-Go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Download Turing ES" button to download `viglet-turing.jar`.
+Go to [https://www.viglet.org/turing/download/](https://www.viglet.org/turing/download/) and click on "Download Turing" button to download `viglet-turing.jar`.
 
 Copy the `viglet-turing.jar` to `/appl/viglet/turing/server`:
 
@@ -304,20 +304,20 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 ```
 
-Then start Turing ES referencing the properties file:
+Then start Turing referencing the properties file:
 
 ```bash
 java -Xmx1g -Xms1g -jar viglet-turing.jar \
   --spring.config.additional-location=file:/appl/viglet/turing/server/viglet-turing.properties
 ```
 
-### Creating Turing ES Service on Linux
+### Creating Turing Service on Linux
 
 As root, create a `/etc/systemd/system/turing.service` file with the following lines:
 
 ```ini
 [Unit]
-Description=Viglet Turing ES
+Description=Viglet Turing
 After=syslog.target
 
 [Service]
@@ -334,7 +334,7 @@ WantedBy=multi-user.target
 ```
 
 :::note Spring Boot 4
-Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-turing.jar`). You must launch Turing ES using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported: use `--spring.config.additional-location` to load external properties instead.
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-turing.jar`). You must launch Turing using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported: use `--spring.config.additional-location` to load external properties instead.
 :::
 
 Enable and start the service:
@@ -353,9 +353,9 @@ systemctl restart turing.service
 systemctl status turing.service
 ```
 
-### Starting Turing ES
+### Starting Turing
 
-When Turing ES is started for the first time, it will perform initial setup.
+When Turing is started for the first time, it will perform initial setup.
 
 ```
 $ java -jar viglet-turing.jar
@@ -375,13 +375,13 @@ Configuration finished.
 
 ### Accessing the Turing Console
 
-Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing ES. The default port is **2700**.
+Turing provides remote access to administration, configuration, and management through its Web application interfaces. Once setup is complete, the Console become browser-accessible through the following URL: `http://<host>:<port>/console` where `<host>:<port>` is the listening host and port for the Turing. The default port is **2700**.
 
 The default username is **admin**. Set its password either via the `TURING_ADMIN_PASSWORD` environment variable before the first startup, or in the first-access setup screen the console shows when that variable is not set: see the [Administration Guide](./administration-guide.md#login) for details.
 
 ## Appendix A: Installation Modes
 
-### Turing ES Server
+### Turing Server
 
 #### Simple
 
@@ -397,12 +397,12 @@ Minimal setup using an embedded H2 database. Suitable for local development and 
 
 #### Docker Compose
 
-Turing ES and its dependencies installed via Docker Compose, including:
+Turing and its dependencies installed via Docker Compose, including:
 
-- MariaDB, Turing ES system tables
+- MariaDB, Turing system tables
 - Solr: Semantic Navigation search backend
 - Nginx: reverse proxy on port 80
-- Turing ES
+- Turing
 
 **Prerequisites:**
 1. Linux server with Docker and Docker Compose installed
@@ -413,12 +413,12 @@ Turing ES and its dependencies installed via Docker Compose, including:
 
 #### Kubernetes
 
-Turing ES and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
+Turing and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
 
-- MariaDB, Turing ES system tables
+- MariaDB, Turing system tables
 - Solr: Semantic Navigation search backend
 - Nginx: reverse proxy
-- Turing ES
+- Turing
 
 **Prerequisites:**
 1. Linux server with Kubernetes, or a cloud Kubernetes service (GKE, EKS, AKS)
@@ -431,10 +431,10 @@ Turing ES and its dependencies deployed via Kubernetes manifests (available in t
 
 Each service installed individually following this guide:
 
-- MariaDB, Turing ES system tables
+- MariaDB, Turing system tables
 - Solr + Zookeeper: Semantic Navigation search backend
 - Apache HTTP Server: reverse proxy (required for Keycloak integration)
-- Turing ES
+- Turing
 
 **Prerequisites:**
 1. One to four Linux servers
@@ -443,7 +443,7 @@ Each service installed individually following this guide:
 
 ### Connectors
 
-Content ingestion is handled by **Viglet Dumont DEP**, a separate application. Available connectors include WebCrawler (Apache Nutch), Database, FileSystem, AEM, and WordPress. Refer to the [Dumont DEP documentation](/dumont) for connector setup.
+Content ingestion is handled by **Viglet Dumont**, a separate application. Available connectors include WebCrawler (Apache Nutch), Database, FileSystem, AEM, and WordPress. Refer to the [Dumont documentation](/dumont) for connector setup.
 
 **Prerequisites:**
 1. A server with access to the content sources to be indexed
@@ -451,7 +451,7 @@ Content ingestion is handled by **Viglet Dumont DEP**, a separate application. A
 
 ## Appendix B: Docker Compose
 
-You can start the Turing ES using MariaDB, Solr and Nginx.
+You can start the Turing using MariaDB, Solr and Nginx.
 
 ```shell
 ./gradlew turing-app:build -x test -i --stacktrace

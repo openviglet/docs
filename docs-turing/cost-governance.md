@@ -8,7 +8,7 @@ description: See and control your AI spend. Turing freezes a USD cost on every t
 
 > *AI spend is easy to lose track of: a chatty agent here, an expensive model there, a background summarizer running every night. **Cost Governance** turns that fog into a number: every turn carries its own USD cost, every agent can carry a budget, and one dashboard shows you where the money goes.*
 
-Cost Governance is Viglet Turing ES's **provider-agnostic** spend layer. It works on OpenAI, Anthropic, Gemini, Ollama, and embedded models alike, because it's built on the token usage Turing already records, not on any one vendor's billing API. Local and embedded models simply record **$0**.
+Cost Governance is Viglet Turing's **provider-agnostic** spend layer. It works on OpenAI, Anthropic, Gemini, Ollama, and embedded models alike, because it's built on the token usage Turing already records, not on any one vendor's billing API. Local and embedded models simply record **$0**.
 
 It has three parts: a **price table** you edit, a per-turn **cost capture** that freezes a USD amount on every LLM call, and a live **dashboard** plus a per-agent **budget gate**. Find it in the console under **AI Analytics → Cost Governance**.
 

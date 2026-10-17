@@ -1,12 +1,12 @@
 ---
 sidebar_position: 4
 title: Logging
-description: Monitor server activity, indexing pipeline, and AEM connector logs from the Turing ES admin console.
+description: Monitor server activity, indexing pipeline, and AEM connector logs from the Viglet Turing admin console.
 ---
 
 # Logging
 
-The **Logging** console (`/admin/logging/instance`) provides centralized visibility into Turing ES operations. It is accessible from the sidebar and requires MongoDB to be enabled.
+The **Logging** console (`/admin/logging/instance`) provides centralized visibility into Viglet Turing operations. It is accessible from the sidebar and requires MongoDB to be enabled.
 
 :::info MongoDB required
 The Logging console requires `turing.mongodb.enabled: true`. Logs are stored in MongoDB collections and automatically purged after the configured retention period. See [Configuration Reference](./configuration-reference.md#mongodb-application-logs) for setup details.
@@ -28,7 +28,7 @@ The logging landing page displays three cards, each linking to a dedicated log v
 
 ## Server Logging
 
-Displays general application logs captured from the Turing ES runtime.
+Displays general application logs captured from the Turing runtime.
 
 **Filters:**
 
@@ -87,7 +87,7 @@ Tracks every document through the indexing pipeline, from connector receipt to f
 | `PREPARE_UNCHANGED` | Clock | No changes detected since last indexing |
 | `PREPARE_REINDEX` | Refresh | Preparing a reindexation |
 | `PREPARE_FORCED_REINDEX` | Zap | Forced reindexation triggered |
-| `RECEIVED_AND_SENT_TO_TURING` | Send | Document received by the connector and forwarded to Turing ES |
+| `RECEIVED_AND_SENT_TO_TURING` | Send | Document received by the connector and forwarded to Turing |
 | `SENT_TO_QUEUE` | Arrow | Document placed in the Artemis processing queue |
 | `RECEIVED_FROM_QUEUE` | Database | Document consumed from the queue by the indexing pipeline |
 | `INDEXED` | Check | Document successfully indexed |

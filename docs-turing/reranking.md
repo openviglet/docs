@@ -1,7 +1,7 @@
 ---
 sidebar_position: 9
 title: Reranking
-description: "The reranking stage in Viglet Turing ES: a selectable, fail-open second pass (LLM, cross-encoder, Cohere, Voyage, Bedrock, Vertex AI) that sharpens retrieved context before generation."
+description: "The reranking stage in Viglet Turing: a selectable, fail-open second pass (LLM, cross-encoder, Cohere, Voyage, Bedrock, Vertex AI) that sharpens retrieved context before generation."
 ---
 
 # Reranking
@@ -26,7 +26,7 @@ Query ──► Hybrid retrieval (BM25 + vector, fused by RRF) ──► top-N c
                                                   keep top-K ──► LLM prompt
 ```
 
-Reranking operates on whatever the retrieval stage hands it. In Turing ES that's **hybrid retrieval**: a vector pass and a BM25 keyword pass run in parallel and are fused by **Reciprocal Rank Fusion (RRF, `k=60`)** before the reranker ever sees them. The reranker then narrows that fused pool to the best few. See [What is RAG?](./rag.md) for the full retrieval flow and [Search Engine](./search-engine.md) for the BM25 backings.
+Reranking operates on whatever the retrieval stage hands it. In Viglet Turing that's **hybrid retrieval**: a vector pass and a BM25 keyword pass run in parallel and are fused by **Reciprocal Rank Fusion (RRF, `k=60`)** before the reranker ever sees them. The reranker then narrows that fused pool to the best few. See [What is RAG?](./rag.md) for the full retrieval flow and [Search Engine](./search-engine.md) for the BM25 backings.
 
 :::note Hybrid retrieval has two BM25 backings
 The BM25 half of hybrid retrieval can live in one of two places, chosen per SN site:
@@ -55,7 +55,7 @@ If anything goes wrong with the chosen strategy, you won't see an error: you'll 
 
 ## Strategies
 
-Turing ES treats reranking as a **selectable strategy** so you can match cost, latency, and precision to your deployment. All strategies share the same fail-open facade.
+Turing treats reranking as a **selectable strategy** so you can match cost, latency, and precision to your deployment. All strategies share the same fail-open facade.
 
 | Strategy | What it is | Auth | When to use |
 |---|---|---|---|
@@ -75,7 +75,7 @@ There is intentionally no `MISTRAL` strategy: Mistral exposes no managed rerank 
 
 ## Fail-open by design
 
-Reranking is wrapped in a single fail-open facade (`TurRagReranker`). If the chosen strategy **errors, times out, isn't configured, or returns nothing usable**, Turing ES silently falls back to the original retrieval order. A corrupt strategy value parses leniently back to `LLM` rather than throwing. The net effect: enabling reranking can only improve or be neutral: it can never degrade results below the no-rerank baseline.
+Reranking is wrapped in a single fail-open facade (`TurRagReranker`). If the chosen strategy **errors, times out, isn't configured, or returns nothing usable**, Turing silently falls back to the original retrieval order. A corrupt strategy value parses leniently back to `LLM` rather than throwing. The net effect: enabling reranking can only improve or be neutral: it can never degrade results below the no-rerank baseline.
 
 ```mermaid
 flowchart TD
@@ -112,7 +112,7 @@ All reranker settings live in Global Settings (`/api/system/global-settings`) an
 | `GLOBAL_RAG_SN_RERANK_CACHE_ENABLED` | `false` | all | Cache ordered rerank results |
 
 :::info The API key is write-only
-Like every secret in Turing ES, the rerank API key is encrypted, never returned by GET (which reports a `…ApiKeySet` boolean instead), and preserved if you leave it blank on edit. For Vertex AI, the encrypted key field holds the service-account JSON; with none set it falls back to Application Default Credentials. For Bedrock, IAM credentials follow the same chain as the [Bedrock LLM vendor](./llm-instances.md#authentication-by-vendor).
+Like every secret in Turing, the rerank API key is encrypted, never returned by GET (which reports a `…ApiKeySet` boolean instead), and preserved if you leave it blank on edit. For Vertex AI, the encrypted key field holds the service-account JSON; with none set it falls back to Application Default Credentials. For Bedrock, IAM credentials follow the same chain as the [Bedrock LLM vendor](./llm-instances.md#authentication-by-vendor).
 :::
 
 ---

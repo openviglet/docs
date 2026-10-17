@@ -1,12 +1,12 @@
 ---
 sidebar_position: 7
 title: JavaScript SDK (vanilla)
-description: "@viglet/turing-sdk, a zero-dependency, framework-agnostic JavaScript client for Viglet Turing ES. Observable controllers for search, chat, autocomplete, slots and analytics; built for Adobe EDS, plain <script>, Astro, WordPress or any bundler."
+description: "@viglet/turing-sdk, a zero-dependency, framework-agnostic JavaScript client for Viglet Turing. Observable controllers for search, chat, autocomplete, slots and analytics; built for Adobe EDS, plain <script>, Astro, WordPress or any bundler."
 ---
 
 # JavaScript SDK (vanilla)
 
-**`@viglet/turing-sdk`** is a **zero-dependency**, framework-agnostic JavaScript client for the Viglet Turing ES API. No React, no axios, just native `fetch`, `TextDecoder`, `EventSource` and `crypto.randomUUID`. It ships as a self-contained ESM bundle (`dist/turing-sdk.js`) plus a UMD build and TypeScript types.
+**`@viglet/turing-sdk`** is a **zero-dependency**, framework-agnostic JavaScript client for the Viglet Turing API. No React, no axios, just native `fetch`, `TextDecoder`, `EventSource` and `crypto.randomUUID`. It ships as a self-contained ESM bundle (`dist/turing-sdk.js`) plus a UMD build and TypeScript types.
 
 **When you'd reach for it.** Use this SDK when you're building a search box or chat widget **outside React**: an [Adobe Edge Delivery Services (EDS)](#adobe-eds) block, a plain `<script>` tag, an Astro island, a WordPress theme, or any bundler-based app. If you're in a React app, use **[`@viglet/turing-react-sdk`](./react-sdk.md)** instead: it's the same backend and the same `Tur*` types, exposed as hooks. This vanilla SDK was extracted from the React SDK's framework-agnostic `core/` layer (axios → `fetch`), so the two stay in lockstep.
 
@@ -131,7 +131,7 @@ The controller talks to the [POST-native search endpoint](./rest-api.md#post-nat
 and asks for the **link-free** response, so `state.structured` is authoritative:
 facets, pagination, locales and spell-check arrive as data, and every navigation
 above is a change to `state.request` rather than a URL to parse. That is what
-makes a filter value containing `&`, `=`, `+`, `#`, `%` or a space safe — there is
+makes a filter value containing `&`, `=`, `+`, `#`, `%` or a space safe: there is
 no query string for it to break.
 
 Render facets straight from that state:
@@ -151,7 +151,7 @@ search.subscribe((state) => {
 ```
 
 A result's own facet chips (`document.metadata[]`) carry the same three fields the
-action needs — `field`, `filterQuery` and `action` — plus `selected`, so a chip can
+action needs (`field`, `filterQuery` and `action`) plus `selected`, so a chip can
 render as already-applied and be toggled *off* rather than only added. Hand it
 straight to the same call:
 
@@ -162,22 +162,22 @@ for (const chip of doc.metadata ?? []) {
 ```
 
 `state.params` is still kept in sync (handy for building a shareable GET URL), and
-`state.data` — the legacy link-bearing body — is `null` in this mode. Pass
+`state.data` (the legacy link-bearing body) is `null` in this mode. Pass
 `{ postNative: false }` as a controller option to go back to the GET contract and
 `state.data`.
 
-In that mode, render the response's hrefs as **real anchors** — that is what they
+In that mode, render the response's hrefs as **real anchors**: that is what they
 are good for (deep-linking, SEO, no-JS). `navigate(href)` and `parseHrefToParams`
 still work, but they are deprecated, log a one-time console notice, and are
 **scheduled for removal in the next major**: parsing a server URL back into
 params is the round-trip that made reserved characters fragile in the first
 place. The server-rendered links themselves are not going anywhere.
 
-#### `toSearchView` — reading either shape {#tosearchview}
+#### `toSearchView`: reading either shape {#tosearchview}
 
 Supporting both transports means every component has to ask which one arrived.
 `toSearchView(store)` answers it once, for the parts of the response the facet and
-pagination examples above do not cover — and it resolves the **actions** with the
+pagination examples above do not cover, and it resolves the **actions** with the
 state, so the component that renders an applied-filter chip never learns whether
 removing it subtracts a filter query or follows an href:
 
@@ -196,14 +196,14 @@ search.subscribe((state) => {
   if (view.spellCheck?.correctedText) {
     offerCorrection(view.spellCheck.correctedTextValue, view.spellCheck.applyCorrection);
   }
-  // `facetItemType: OR` — draw checkboxes rather than radio buttons.
+  // `facetItemType: OR`: draw checkboxes rather than radio buttons.
   setMultiSelect(view.multiSelectFacetItems);
 });
 ```
 
 `view.source` tells you which shape backed the projection (`"structured"`,
 `"legacy"` or `"none"` before the first response), and `view.ready` is the render
-gate — gating on `state.data` alone renders nothing in the default mode.
+gate: gating on `state.data` alone renders nothing in the default mode.
 
 The React SDK re-exports the same function, and `useSearchView()` wraps it.
 

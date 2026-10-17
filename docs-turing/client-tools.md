@@ -1,7 +1,7 @@
 ---
 sidebar_position: 11
 title: Client Tools & Agent↔UI (AG-UI)
-description: "Live tool-call events, browser-executed client tools, the park/resume protocol, and generative UI in Viglet Turing ES: the agent↔UI surface."
+description: "Live tool-call events, browser-executed client tools, the park/resume protocol, and generative UI in Viglet Turing: the agent↔UI surface."
 ---
 
 # Client Tools & Agent↔UI (AG-UI)

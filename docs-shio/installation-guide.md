@@ -1,22 +1,22 @@
 ---
 sidebar_position: 1
 title: Installation Guide
-description: "Viglet Shio CMS Installation Guide: Docker, JAR, build from source, database setup, and Linux service."
+description: "Viglet Shio Installation Guide: Docker, JAR, build from source, database setup, and Linux service."
 ---
 
-# Viglet Shio CMS: Installation Guide
+# Viglet Shio: Installation Guide
 
-Viglet Shio CMS ([https://www.viglet.org/shio/](https://www.viglet.org/shio/)) is an open-source headless CMS ([https://github.com/openviglet/shio-ce](https://github.com/openviglet/shio-ce)) that lets you model content, query it via GraphQL, and build websites using JavaScript with native caching and search.
+Viglet Shio ([https://www.viglet.org/shio/](https://www.viglet.org/shio/)) is an open-source headless CMS ([https://github.com/openviglet/shio-ce](https://github.com/openviglet/shio-ce)) that lets you model content, query it via GraphQL, and build websites using JavaScript with native caching and search.
 
 ## Installing Java
 
-Shio CMS requires Java.
+Shio requires Java.
 
 :::note
-Shio CMS only supports Java 21.
+Shio only supports Java 21.
 :::
 
-During installation, Shio CMS reads the JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
+During installation, Shio reads the JAVA_HOME and PATH variables to install the necessary services. Therefore, you must modify the variables as specified here:
 
 - **On Windows:**
   - Set the JAVA_HOME system variable to point to the JAVA location.
@@ -26,9 +26,9 @@ During installation, Shio CMS reads the JAVA_HOME and PATH variables to install 
   - Create an environment variable called JAVA_HOME.
   - Provide the JAVA bin path in the PATH variable.
 
-## Shio CMS Requirements
+## Shio Requirements {#shio-cms-requirements}
 
-The information below describes the resource modes available to run Shio CMS.
+The information below describes the resource modes available to run Shio.
 
 :::note
 Use a screen resolution of at least 1024 x 768 for optimum clarity.
@@ -47,11 +47,11 @@ In addition, the following is required:
 
 ## Installing and Configuring Databases
 
-Shio CMS supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Shio CMS.
+Shio supports multiple database platforms, each with specific unique requirements to maximize effectiveness with Shio.
 
-### Shio CMS Database Table Requirements
+### Shio Database Table Requirements {#shio-cms-database-table-requirements}
 
-Shio CMS uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.
+Shio uses multiple tables in multiple databases (also called database schemas by some vendors such as Oracle). You must create new databases / schemas that will contain the sets of tables described below.
 
 ### Oracle Database Requirements
 
@@ -59,18 +59,18 @@ This section describes configuration requirements for an existing database.
 
 To set up an Oracle database:
 
-1. Install and configure a single database instance for use by Shio CMS.
-2. Create a database schema to contain the Shio CMS system tables.
-3. Configure the Shio CMS admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.
+1. Install and configure a single database instance for use by Shio.
+2. Create a database schema to contain the Shio system tables.
+3. Configure the Shio admin user for the database. For Oracle, the database user with the grant of the CONNECT and RESOURCE roles. Make sure the user has UNLIMITED TABLESPACE and CREATE VIEW privileges.
 
 ### Microsoft SQL Server Database Requirements
 
-When creating the Shio CMS database, use the following options:
+When creating the Shio database, use the following options:
 
 - You must install the Database Engine feature and Management Tools are recommended.
 - Set the Collation configuration variable to `SQL_Latin1_General_CP1_CS_AS` or `Latin1_General / Case-sensitive / Accent-Sensitive`.
 - Set authentication mode to mixed mode.
-- Shio CMS system user cannot be sa.
+- Shio system user cannot be sa.
 
 #### Configuring the SQL Server Database and Schemas
 
@@ -133,7 +133,7 @@ autovacuum = off
 ```
 
 :::important
-The autovacuum daemon must be re-enabled after installing and configuring Shio CMS.
+The autovacuum daemon must be re-enabled after installing and configuring Shio.
 :::
 
 #### Configuring the Shio user, database, and schemas
@@ -169,7 +169,7 @@ ALTER USER shio SET SEARCH_PATH = shio;
 
 ---
 
-## Installing Shio CMS
+## Installing Shio {#installing-shio-cms}
 
 ### Option 1: Docker (fastest)
 
@@ -182,7 +182,7 @@ docker run -p 2710:2710 -e SHIO_ADMIN_PASSWORD=change-me-please ghcr.io/openvigl
 
 `SHIO_ADMIN_PASSWORD` (minimum six characters) gives the container a usable `admin` login on its
 first start, instead of waiting for someone to open the console and set one. Leave it out and the
-console asks on first access instead — see
+console asks on first access instead. See
 [Setting the admin password without the console](#setting-the-admin-password-without-the-console).
 
 :::tip Image tags
@@ -191,7 +191,7 @@ Besides `latest`, every run also publishes the project version and a commit tag 
 
 ### Option 2: JAR download
 
-Go to [https://www.viglet.org/shio/download/](https://www.viglet.org/shio/download/) and click on "Download Shio CMS" button to download the `viglet-shio.jar` executable.
+Go to [https://www.viglet.org/shio/download/](https://www.viglet.org/shio/download/) and click on "Download Shio" button to download the `viglet-shio.jar` executable.
 
 Copy the `viglet-shio.jar` to `/appl/viglet/shio/server`:
 
@@ -245,7 +245,7 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQL94Dialect
 ```
 
-Then start Shio CMS referencing the properties file:
+Then start Shio referencing the properties file:
 
 ```bash
 java -Xmx1g -Xms1g -jar viglet-shio.jar \
@@ -254,13 +254,13 @@ java -Xmx1g -Xms1g -jar viglet-shio.jar \
 
 ---
 
-### Creating Shio CMS Service on Linux
+### Creating Shio Service on Linux {#creating-shio-cms-service-on-linux}
 
 As root, create a `/etc/systemd/system/shio.service` file with the following lines:
 
 ```ini
 [Unit]
-Description=Viglet Shio CMS
+Description=Viglet Shio
 After=syslog.target
 
 [Service]
@@ -277,7 +277,7 @@ WantedBy=multi-user.target
 ```
 
 :::note Spring Boot 4
-Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-shio.jar`). You must launch Shio CMS using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported: use `--spring.config.additional-location` to load external properties instead.
+Starting with Spring Boot 4, JAR files are no longer directly executable (`./viglet-shio.jar`). You must launch Shio using `java -jar` explicitly. The `.conf` file pattern used in older versions is no longer supported: use `--spring.config.additional-location` to load external properties instead.
 :::
 
 Enable and start the service:
@@ -300,19 +300,19 @@ systemctl status shio.service
 
 Shio provides remote access through its Web application interfaces at: [http://localhost:2710](http://localhost:2710).
 
-The administrator user is **`admin`**. Viglet Shio ships **no default password** — the `admin`
+The administrator user is **`admin`**. Viglet Shio ships **no default password**: the `admin`
 user is created without one, so there is no shipped credential to change or to forget to change.
 You choose the password on first access, in one of two ways:
 
 - **The first-access screen.** Open the console and Shio asks you to set the `admin` password
   before anything else. This is the right path for an installation someone is sitting in front of.
 - **`SHIO_ADMIN_PASSWORD`.** Set it before the first start and Shio applies it for you, skipping
-  the screen. This is the path for a container, a Compose file or an automated deploy — see
+  the screen. This is the path for a container, a Compose file or an automated deploy: see
   [Setting the admin password without the console](#setting-the-admin-password-without-the-console).
 
 :::note Every surface answers 401 until a password exists
 This is deliberate, not a startup delay. Until the `admin` password is set, the REST API, the CDA
-and the MCP server all refuse — so an instance can never be reachable with a credential nobody
+and the MCP server all refuse, so an instance can never be reachable with a credential nobody
 chose.
 :::
 
@@ -334,7 +334,7 @@ Three properties make it safe to leave in a Compose file or a systemd unit perma
 - **It never overwrites a password that is already set.** A restart is a no-op, and a password an
   administrator changed in the console is not reverted by their next deployment.
 - **It never prevents startup.** Unset, blank, or shorter than the six-character minimum is a log
-  line and nothing more — a typo in an environment variable does not become an outage.
+  line and nothing more: a typo in an environment variable does not become an outage.
 - **It is stored encoded**, so the value in your Compose file is not sitting in the database in
   clear text.
 
@@ -359,11 +359,11 @@ Minimal setup using an embedded H2 database. Suitable for local development and 
 
 ### Docker Compose
 
-Shio CMS and its dependencies installed via Docker Compose, including:
+Shio and its dependencies installed via Docker Compose, including:
 
-- MariaDB: Shio CMS system tables
+- MariaDB: Shio system tables
 - Nginx: reverse proxy on port 80
-- Shio CMS
+- Shio
 
 **Prerequisites:**
 1. Linux server with Docker and Docker Compose installed
@@ -374,11 +374,11 @@ Shio CMS and its dependencies installed via Docker Compose, including:
 
 ### Kubernetes
 
-Shio CMS and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
+Shio and its dependencies deployed via Kubernetes manifests (available in the `k8s/` directory), including:
 
-- MariaDB: Shio CMS system tables
+- MariaDB: Shio system tables
 - Nginx: reverse proxy
-- Shio CMS
+- Shio
 
 **Prerequisites:**
 1. Linux server with Kubernetes, or a cloud Kubernetes service (GKE, EKS, AKS)
@@ -391,8 +391,8 @@ Shio CMS and its dependencies deployed via Kubernetes manifests (available in th
 
 Each service installed individually following this guide:
 
-- MariaDB: Shio CMS system tables
-- Shio CMS
+- MariaDB: Shio system tables
+- Shio
 
 **Prerequisites:**
 1. One to two Linux servers
@@ -403,7 +403,7 @@ Each service installed individually following this guide:
 
 ## Appendix B: Docker Compose
 
-You can start Shio CMS using MariaDB and Nginx.
+You can start Shio using MariaDB and Nginx.
 
 ```shell
 mvn clean package -pl shio-app

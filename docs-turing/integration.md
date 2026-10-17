@@ -1,14 +1,14 @@
 ---
 sidebar_position: 3
 title: Integration
-description: Manage content connectors that import and index content from external sources into Turing ES.
+description: Manage content connectors that import and index content from external sources into Viglet Turing.
 ---
 
 # Integration
 
-The **Integration** page (`/admin/integration/instance`) manages connectors that import and index content from external sources (such as AEM, web crawlers, or other content repositories) into the Turing ES search engine. It is accessible from the **Enterprise Search** section of the sidebar.
+The **Integration** page (`/admin/integration/instance`) manages connectors that import and index content from external sources (such as AEM, web crawlers, or other content repositories) into the Viglet Turing search engine. It is accessible from the **Enterprise Search** section of the sidebar.
 
-Each **Integration instance** represents a configured connection to a content connector application. The connector runs as a separate process (for example, Viglet Dumont DEP) and communicates with Turing ES via REST. Turing ES acts as a proxy: the API path `/api/v2/integration/{integrationId}/**` forwards requests to the configured connector endpoint, with built-in SSRF protection.
+Each **Integration instance** represents a configured connection to a content connector application. The connector runs as a separate process (for example, Viglet Dumont) and communicates with Turing via REST. Turing acts as a proxy: the API path `/api/v2/integration/{integrationId}/**` forwards requests to the configured connector endpoint, with built-in SSRF protection.
 
 ---
 
@@ -41,7 +41,7 @@ The creation and edit form is divided into two sections.
 
 ## Integration Detail: Sections
 
-After an integration is created, its detail page provides navigation to several sections. The sections below are common to all connector types. For AEM-specific configuration, see the [Turing ES AEM Connector](./integration-aem.md) overview and the full [Dumont DEP AEM Connector](/dumont/connectors/aem) documentation.
+After an integration is created, its detail page provides navigation to several sections. The sections below are common to all connector types. For AEM-specific configuration, see the [Turing AEM Connector](./integration-aem.md) overview and the full [Dumont AEM Connector](/dumont/connectors/aem) documentation.
 
 ---
 
@@ -80,7 +80,7 @@ Results are paginated and sortable.
 | `PREPARE_UNCHANGED` | No changes detected since last indexing |
 | `PREPARE_REINDEX` | Preparing a reindexation |
 | `PREPARE_FORCED_REINDEX` | Forced reindexation triggered |
-| `RECEIVED_AND_SENT_TO_TURING` | Document received by the connector and forwarded to Turing ES |
+| `RECEIVED_AND_SENT_TO_TURING` | Document received by the connector and forwarded to Turing |
 | `SENT_TO_QUEUE` | Document placed in the Artemis processing queue |
 | `RECEIVED_FROM_QUEUE` | Document consumed from the queue by the indexing pipeline |
 | `INDEXED` | Document successfully indexed in Solr |
@@ -107,7 +107,7 @@ The Indexing Stats section provides a table of completed bulk indexing operation
 
 ### Double Check
 
-The Double Check section validates the consistency between the connector's content and the Turing ES search index. It detects drift between what the connector knows about and what is actually indexed.
+The Double Check section validates the consistency between the connector's content and the Turing search index. It detects drift between what the connector knows about and what is actually indexed.
 
 - Select a **Source** to inspect
 - Results are shown in two views:
@@ -148,7 +148,7 @@ Displays live diagnostic information from the remote connector application.
 
 ## Architecture
 
-Turing ES acts as a transparent proxy to the connector. The API path `/api/v2/integration/{integrationId}/**` forwards all requests to the configured connector endpoint, including authentication headers. This design keeps the connector application decoupled: it does not need to be publicly accessible, only reachable from the Turing ES server.
+Turing acts as a transparent proxy to the connector. The API path `/api/v2/integration/{integrationId}/**` forwards all requests to the configured connector endpoint, including authentication headers. This design keeps the connector application decoupled: it does not need to be publicly accessible, only reachable from the Turing server.
 
 Built-in SSRF protection validates the endpoint before forwarding. Requests to private IP ranges, loopback addresses, or disallowed schemes are rejected.
 
@@ -162,8 +162,8 @@ Built-in SSRF protection validates the endpoint before forwarding. Requests to p
 | [Semantic Navigation](./semantic-navigation.md) | Configure the SN Sites that receive indexed content |
 | [Architecture Overview](./architecture-overview.md) | End-to-end indexing flow from connector to Solr |
 | [REST API Reference](./rest-api.md) | API endpoints for programmatic indexing |
-| [Dumont DEP: Connectors](/dumont/connectors/overview) | Available connectors (Web Crawler, AEM, Database, FileSystem, WordPress) and how to deploy them |
-| [Dumont DEP: REST API](/dumont/rest-api) | Connector-side API for triggering indexing, monitoring, and source management |
+| [Dumont: Connectors](/dumont/connectors/overview) | Available connectors (Web Crawler, AEM, Database, FileSystem, WordPress) and how to deploy them |
+| [Dumont: REST API](/dumont/rest-api) | Connector-side API for triggering indexing, monitoring, and source management |
 
 ---
 

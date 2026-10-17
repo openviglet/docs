@@ -1,18 +1,18 @@
 ---
 sidebar_position: 7
 title: GraphQL
-description: Query content in Viglet Shio CMS using GraphQL with the built-in GraphiQL console.
+description: Query content in Viglet Shio using GraphQL with the built-in GraphiQL console.
 ---
 
 # GraphQL
 
-Shio CMS provides a **GraphQL** API for querying content. GraphQL is ideal for decoupled frontends, mobile applications, and any scenario where you need to request exactly the data you need in a single request.
+Viglet Shio provides a **GraphQL** API for querying content. GraphQL is ideal for decoupled frontends, mobile applications, and any scenario where you need to request exactly the data you need in a single request.
 
 ---
 
 ## GraphiQL Console
 
-Shio CMS includes a built-in **GraphiQL** interactive console for exploring and testing GraphQL queries:
+Shio includes a built-in **GraphiQL** interactive console for exploring and testing GraphQL queries:
 
 ```
 http://localhost:2710/graphiql

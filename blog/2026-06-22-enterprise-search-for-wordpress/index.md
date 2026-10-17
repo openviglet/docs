@@ -1,6 +1,6 @@
 ---
 slug: enterprise-search-for-wordpress
-title: "Adding Enterprise Search to WordPress with Viglet Turing ES"
+title: "Adding Enterprise Search to WordPress with Viglet Turing"
 description: "Index WordPress posts, pages, and custom post types into an open-source enterprise search engine with faceted navigation and semantic search: a self-hosted alternative to Algolia and ElasticPress."
 authors: [alexandre]
 tags: [wordpress, enterprise-search, semantic-search, open-source]
@@ -24,7 +24,7 @@ slows down as your database grows. Most teams reach for a SaaS layer
 record and per query.
 
 This guide shows the open-source alternative: indexing WordPress into
-[**Viglet Turing ES**](https://www.viglet.org/turing/), an Apache-2.0 enterprise
+[**Viglet Turing**](https://www.viglet.org/turing/), an Apache-2.0 enterprise
 search platform you self-host, with faceted search, semantic navigation, and
 generative AI (RAG), and your content staying on your own infrastructure.
 
@@ -33,8 +33,8 @@ generative AI (RAG), and your content staying on your own infrastructure.
 ## The connector is a WordPress plugin, not a Java service
 
 The [Adobe AEM connector](/dumont/connectors/aem) is a Java plugin loaded into
-the Dumont DEP process. The WordPress connector works differently: it is a
-**PHP plugin you install directly inside WordPress**. It talks to Turing ES over
+the Viglet Dumont process. The WordPress connector works differently: it is a
+**PHP plugin you install directly inside WordPress**. It talks to Turing over
 HTTP, so there is no separate connector JAR to run.
 
 ```mermaid
@@ -42,7 +42,7 @@ HTTP, so there is no separate connector JAR to run.
 flowchart LR
     WP["<b>WordPress</b><br/><small>publish / update / delete</small>"]
     PLG["<b>Viglet Dumont</b><br/><small>PHP plugin</small>"]
-    TUR["<b>Turing ES</b><br/><small>Solr / Lucene</small>"]
+    TUR["<b>Turing</b><br/><small>Solr / Lucene</small>"]
 
     WP -->|"post hooks"| PLG
     PLG -->|"HTTP POST"| TUR
@@ -59,7 +59,7 @@ Indexing is **event-driven**, with no cron or scheduled re-crawl:
 
 | WordPress event | What happens |
 |---|---|
-| Post/page published | Extracted and sent to Turing ES |
+| Post/page published | Extracted and sent to Turing |
 | Published content updated | Index updated automatically |
 | Content trashed / deleted | Removed from the index |
 | Published → draft/private | Removed from the index |
@@ -67,7 +67,7 @@ Indexing is **event-driven**, with no cron or scheduled re-crawl:
 For the first load, the admin panel bulk-indexes all posts or pages in batches
 of 250.
 
-## Step 1: Run Turing ES
+## Step 1: Run Turing
 
 The fastest path is Docker:
 
@@ -90,14 +90,14 @@ wp-content/plugins/viglet-turing-for-wordpress/
 
 Then activate it in **WordPress Admin → Plugins**.
 
-## Step 3: Connect to Turing ES
+## Step 3: Connect to Turing
 
-In **Settings → Viglet Dumont**, point the plugin at your Turing ES server:
+In **Settings → Viglet Dumont**, point the plugin at your Turing server:
 
 | Field | Example | Notes |
 |---|---|---|
-| Host | `localhost` | Turing ES hostname |
-| Port | `2700` | Turing ES port |
+| Host | `localhost` | Turing hostname |
+| Port | `2700` | Turing port |
 | Path | `/dumont` | Base path for the indexing endpoint |
 | Site Name | `wp-search` | The SN Site you created in step 1 |
 
@@ -130,7 +130,7 @@ blog in the network and tags each document with `blogid`, `blogdomain`, and
 
 ## Step 4: Query it
 
-Your WordPress content is now searchable through the Turing ES API, via REST,
+Your WordPress content is now searchable through the Turing API, via REST,
 GraphQL, or the SDK:
 
 ```bash
@@ -147,7 +147,7 @@ inside your theme without building a front end from scratch.
 
 ## Step 5 (optional): Conversational answers (RAG)
 
-Because Turing ES already holds your WordPress content, turning on **RAG** gives
+Because Turing already holds your WordPress content, turning on **RAG** gives
 you grounded AI answers with citations over your own posts, with the LLM of your
 choice (OpenAI, Ollama, Anthropic, Gemini):
 
@@ -168,9 +168,9 @@ curl "http://localhost:2700/api/sn/wp-search/chat?q=How+do+I+reset+my+password"
 - 📘 [WordPress Connector: full reference](/dumont/connectors/wordpress)
 - 📗 [Semantic Navigation](/turing/semantic-navigation) and [RAG](/turing/rag) guides
 - 📙 [How to add enterprise search to Adobe AEM](/blog/enterprise-search-for-adobe-aem), the same approach for the other major CMS
-- ⭐ [Star Turing ES on GitHub](https://github.com/openviglet/turing-ce)
+- ⭐ [Star Turing on GitHub](https://github.com/openviglet/turing-ce)
 - 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
 
-*Viglet Turing ES is open-source (Apache 2.0) enterprise search with semantic
+*Viglet Turing is open-source (Apache 2.0) enterprise search with semantic
 navigation and generative AI. Self-host it, index WordPress, Adobe AEM,
 databases, file systems, and web content, and own your search stack end to end.*

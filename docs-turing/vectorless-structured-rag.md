@@ -7,7 +7,7 @@ description: Answer questions over a structured catalog (products, prices, specs
 # Vectorless (Structured-Data) RAG
 
 **Talk to a structured catalog, grounded, cited, with no vector database.** Viglet
-Turing ES can answer questions over your product catalog, price list, spec sheet,
+Turing can answer questions over your product catalog, price list, spec sheet,
 or model registry using only a language model and your existing search index, no
 embeddings, no vector store, and no chunking pipeline to stand up.
 
@@ -90,7 +90,7 @@ Switch back to **Vector** or **Hybrid** to re-enable embedding indexing.
 
 ## Rendering titles, descriptions and facet labels
 
-A structured feed carries **its own** field names — a model catalog indexes `label`,
+A structured feed carries **its own** field names: a model catalog indexes `label`,
 `vendor`, `kind`, `contextWindow`, … and has no `title` or `abstract`. Search results
 and facets are rendered through the site's *default field* mapping and its facet
 labels, so a feed-indexed site can return the right number of results while showing
@@ -100,7 +100,7 @@ blank titles and label-less facet headers.
 conventional field names (`title`, `abstract`, `text`, `url`, `image`,
 `publication_date`), and a facet field with no label configured gets a **humanized
 field name** as its group header (`pricing_inputPer1M` renders as *"Pricing Input Per
-1M"*). Nothing is ever blank — but the fallback can only name conventional fields, so
+1M"*). Nothing is ever blank, but the fallback can only name conventional fields, so
 declare the mapping when your feed's names differ.
 
 **Declare it in the feed source.** When the scheduled ingester provisions the site,
@@ -129,7 +129,7 @@ turing:
 
 Both are applied only where the value is still **blank**: re-running provisioning is a
 no-op, and anything you later change on the site's admin forms is never overwritten.
-Declaring a label does not turn a field into a facet — that stays the field manifest's
+Declaring a label does not turn a field into a facet: that stays the field manifest's
 decision.
 
 **Or declare labels in the field manifest.** A field in the manifest may name its own
@@ -213,8 +213,8 @@ English vocabulary, which is what every locale did before.
 
 #### Teaching Turing your catalog's own ranking words
 
-If your catalog has a quality of its own — "the **torquiest** engine", "the
-**lightest** frame" — you can teach it, per site, under **Semantic Navigation →
+If your catalog has a quality of its own ("the **torquiest** engine", "the
+**lightest** frame"), you can teach it, per site, under **Semantic Navigation →
 your site → GenAI → Copilot Query Planning → Ranking vocabulary**.
 
 The field takes a small JSON bundle. It **extends** the shipped vocabulary rather
@@ -233,21 +233,21 @@ than replacing it, so list only what is missing:
 
 | Key | What it declares |
 | --- | --- |
-| `ascWords` | Words that mean *smallest first* — the sort is ascending |
-| `descWords` | Words that mean *largest first* — the sort is descending |
+| `ascWords` | Words that mean *smallest first*: the sort is ascending |
+| `descWords` | Words that mean *largest first*: the sort is descending |
 | `synonyms` | Which of your fields a word is about: the word on the left, tokens from the target field's name or description on the right |
 | `sortTriggers` | Extra "sorted by" phrasings, e.g. `["ranked on"]` |
 | `stopwords` | Words to ignore when matching a field |
 
 Leave it empty to rank with the shipped vocabulary alone. A bundle that does not
-parse is ignored at ranking time — a typo costs you the extra words, never the
+parse is ignored at ranking time: a typo costs you the extra words, never the
 sort.
 
 Which is exactly why the field has a **Check vocabulary** button next to it. Type
 a question your users would ask, press it, and Turing answers with three things:
 whether the bundle parsed, which words it added that the shipped vocabulary did
 not already have, and the sort your sample question actually resolves to. That
-last one is the answer you cannot get any other way — a bundle can parse, add a
+last one is the answer you cannot get any other way: a bundle can parse, add a
 real word, and still resolve nothing because the word bridges to no numeric field
 in your schema. The check works on what is in the box, so you can try a bundle
 before saving it.
@@ -256,7 +256,7 @@ To add a whole language, or the same vocabulary to every site at once, point
 `turing.genai.copilot.ranking.lexicon-dir` at a directory of
 `lexicon-<language>.json` files in the same shape. Each is merged over the shipped
 bundle for that language, and a file for a language Turing does not ship (say
-`lexicon-fr.json`) adds it — name its `stemmer` after the Snowball language
+`lexicon-fr.json`) adds it. Name its `stemmer` after the Snowball language
 (`French`, `Italian`, `German`, …) so inflections still collapse:
 
 ```yaml
@@ -267,7 +267,7 @@ turing:
         lexicon-dir: /etc/turing/lexicons
 ```
 
-After editing a file there, reload the lexicons — no restart needed:
+After editing a file there, reload the lexicons (no restart needed):
 
 ```bash
 curl -X POST https://your-turing/api/system/cache/ranking-lexicons/reload
@@ -293,7 +293,7 @@ Planning**:
 Pick **Hybrid** if you have seen a question return no results that clearly should
 have matched, or your users ask in a language with no ranking vocabulary. Pick
 **LLM-assisted** if most of your traffic is in such a language. **Deterministic**
-(the default) is the cheapest and needs no LLM budget beyond the single parse — and
+(the default) is the cheapest and needs no LLM budget beyond the single parse, and
 since it understands English, Portuguese and Spanish ranking phrases, a
 multilingual audience is no longer a reason on its own to leave it.
 

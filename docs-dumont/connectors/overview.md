@@ -1,12 +1,12 @@
 ---
 sidebar_position: 1
 title: Connectors Overview
-description: "Overview of all Dumont DEP connectors: web crawler, database, filesystem, AEM, and WordPress."
+description: "Overview of all Viglet Dumont connectors: web crawler, database, filesystem, AEM, and WordPress."
 ---
 
 # Connectors Overview
 
-Connectors are the components that extract content from external sources and feed it into the Dumont DEP processing pipeline. Each connector specializes in a specific type of content source and knows how to navigate, extract, and map content into Job Items that the pipeline can process.
+Connectors are the components that extract content from external sources and feed it into the Viglet Dumont processing pipeline. Each connector specializes in a specific type of content source and knows how to navigate, extract, and map content into Job Items that the pipeline can process.
 
 ---
 
@@ -73,7 +73,7 @@ All connectors implement the `DumConnectorPlugin` interface:
 
 ## Connector Plugins vs. Standalone Tools
 
-Dumont DEP connectors are distributed in two forms:
+Dumont connectors are distributed in two forms:
 
 ### Connector Plugins (AEM, Web Crawler)
 
@@ -100,7 +100,7 @@ Only **one connector plugin** can be loaded per JVM instance. To run multiple co
 
 ### Standalone CLI Tools (Database, FileSystem)
 
-The **Database** and **FileSystem** connectors are **standalone command-line tools**, separate JARs that run independently and connect to a running Dumont DEP instance via REST API:
+The **Database** and **FileSystem** connectors are **standalone command-line tools**, separate JARs that run independently and connect to a running Dumont instance via REST API:
 
 ```bash
 # Database import (standalone JAR)
@@ -125,18 +125,18 @@ These tools can be scheduled via cron jobs or CI/CD pipelines.
 
 ---
 
-## Managing Connectors via the Turing ES Console
+## Managing Connectors via the Viglet Turing Console
 
-The AEM and Web Crawler connector plugins can be managed through the **Turing ES Admin Console**. To connect a running `dumont-connector.jar` instance to the Turing ES UI:
+The AEM and Web Crawler connector plugins can be managed through the **Turing Admin Console**. To connect a running `dumont-connector.jar` instance to the Turing UI:
 
-1. Open the Turing ES Admin Console
+1. Open the Turing Admin Console
 2. Navigate to **Enterprise Search → Integration**
 3. Click **New** to create a new integration instance
 4. Set the **Integration Type** (AEM or Web Crawler)
-5. Set the **Endpoint** to the URL of your Dumont DEP connector instance (e.g., `http://localhost:30130`)
+5. Set the **Endpoint** to the URL of your Dumont connector instance (e.g., `http://localhost:30130`)
 6. Enable the integration
 
-Once connected, the Turing ES console provides a graphical interface for:
+Once connected, the Turing console provides a graphical interface for:
 
 - Configuring sources, content types, and field mappings
 - Triggering full indexing and re-indexing operations
@@ -144,9 +144,9 @@ Once connected, the Turing ES console provides a graphical interface for:
 - Viewing indexing statistics and status
 - Running double-check consistency validation
 
-For full details on the Integration UI (including monitoring, indexing stats, and double-check) see the [Turing ES Integration documentation](/turing/integration).
+For full details on the Integration UI (including monitoring, indexing stats, and double-check) see the [Turing Integration documentation](/turing/integration).
 
-For AEM-specific configuration (sources, content types, author/publish, delta tracking, locales, indexing rules) see [Turing ES AEM Connector documentation](/turing/integration-aem).
+For AEM-specific configuration (sources, content types, author/publish, delta tracking, locales, indexing rules) see [Turing AEM Connector documentation](/turing/integration-aem).
 
 ---
 
@@ -157,15 +157,15 @@ guessing at field types. The console does that first pass for you and then lets 
 anything is indexed.
 
 **1. Propose.** Give the **AI Source Inference** wizard a URL. Dumont fetches a sample, works out
-what shape the source is — a `sitemap.xml`, a listing page whose links go to detail pages, or a
-table where each row is a record — and proposes a draft: the extraction strategy plus a field
+what shape the source is (a `sitemap.xml`, a listing page whose links go to detail pages, or a
+table where each row is a record) and proposes a draft: the extraction strategy plus a field
 manifest with a type per field.
 
 It proposes *structure*, never content. Selectors and types, not values. When the sample gives it
 nothing to go on it reports `UNKNOWN` and proposes nothing, rather than inventing a shape.
 
 **2. Edit.** The draft is yours to correct in the wizard. A field the inference named badly, a type
-it read as text that should be a date, a selector that caught one element too many — fix them
+it read as text that should be a date, a selector that caught one element too many: fix them
 before going further. Nothing has been written yet.
 
 **3. Dry run.** The **Dry-run preview** action extracts a small sample through exactly the path a
@@ -173,8 +173,8 @@ real run uses, and reports what indexing *would* do:
 
 - per-field coverage, so a selector that matches nothing shows as 0% now rather than after a run;
 - records that would be skipped for a missing mandatory field;
-- a diff against the last full index — added, changed, removed, and fields that would go newly
-  empty — plus a schema diff.
+- a diff against the last full index (added, changed, removed, and fields that would go newly
+  empty), plus a schema diff.
 
 It writes nothing. On a source's first onboarding there is no baseline, so everything reads as
 added.
@@ -195,7 +195,7 @@ Every connector needs at least these pieces of information:
 |---|---|
 | **Source** | Where to read content (URL, connection string, directory path, AEM endpoint) |
 | **Credentials** | Authentication (username/password, API key, or none) |
-| **Target SN Site** | The Turing ES Semantic Navigation Site that will receive the content |
+| **Target SN Site** | The Turing Semantic Navigation Site that will receive the content |
 | **Locale** | The language/country code for the content (e.g., `en_US`) |
 | **Field Mapping** | How source fields map to search index fields |
 
@@ -205,8 +205,8 @@ Every connector needs at least these pieces of information:
 
 | Connector | Configuration Method | Where |
 |---|---|---|
-| **Web Crawler** | Turing ES Admin Console | [Turing ES → Integration](/turing/integration) |
-| **AEM** | JSON file + Turing ES Admin Console | `export/` directory + [Turing ES → Integration](/turing/integration-aem) |
+| **Web Crawler** | Turing Admin Console | [Turing → Integration](/turing/integration) |
+| **AEM** | JSON file + Turing Admin Console | `export/` directory + [Turing → Integration](/turing/integration-aem) |
 | **Database** | CLI parameters | Command-line: see [Database Connector](./database.md) |
 | **FileSystem** | CLI parameters | Command-line: see [FileSystem Connector](./filesystem.md) |
 | **WordPress** | WordPress Admin UI | WordPress → Settings → Viglet Dumont |

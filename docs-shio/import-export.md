@@ -1,12 +1,12 @@
 ---
 sidebar_position: 2
 title: Import & Export
-description: Exchange providers, content migration, and site backup/restore in Viglet Shio CMS.
+description: Exchange providers, content migration, and site backup/restore in Viglet Shio.
 ---
 
 # Import & Export
 
-Shio CMS provides built-in import/export functionality for content migration, backup, and integration with external content management systems.
+Viglet Shio provides built-in import/export functionality for content migration, backup, and integration with external content management systems.
 
 ---
 

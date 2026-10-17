@@ -10,7 +10,7 @@ description: "Turn thousands of chat conversations into the voice of your custom
 
 By the time a thousand customers have talked to your AI Agent, you have a thousand small data points about your product, your messaging, and your funnel. The question isn't whether the data is there: it's whether you can hear it.
 
-**Chat Analytics** in Turing ES turns finished chat sessions into a queryable, AI-classified, dashboardable stream:
+**Chat Analytics** in Viglet Turing turns finished chat sessions into a queryable, AI-classified, dashboardable stream:
 
 - Every session emits a row to the analytics store the moment it ends.
 - A scheduled **AI-on-AI classifier** then reads each transcript and labels it with **intent**, **goal achievement**, **sentiment**, and **key terms**.
@@ -34,7 +34,7 @@ turing:
 Three problems Chat Analytics solves that vanilla logging doesn't:
 
 1. **Aggregate analytics from semi-structured conversations.** A log file tells you *"the request happened"*. It doesn't tell you *"the customer asked about pricing, the agent answered well, and the customer left positive."* Analytics needs structure on top of raw logs.
-2. **Decoupled from chat hot path.** Recording analytics shouldn't slow down the chat. Turing ES emits session events asynchronously: the store doesn't block a single millisecond on the conversation.
+2. **Decoupled from chat hot path.** Recording analytics shouldn't slow down the chat. Turing emits session events asynchronously: the store doesn't block a single millisecond on the conversation.
 3. **Engine-agnostic dashboards.** Mongo and Redis are very different stores. The Grafana dashboards, the REST API, and the React drill-down don't know which one you're using. Swap with a config change.
 
 ---

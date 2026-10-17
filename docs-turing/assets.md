@@ -1,12 +1,12 @@
 ---
 sidebar_position: 1
 title: Assets
-description: Manage files and train the RAG knowledge base with Viglet Turing ES Assets.
+description: Manage files and train the RAG knowledge base with Viglet Turing Assets.
 ---
 
 # Assets
 
-Assets is the file manager that feeds the RAG Knowledge Base in Turing ES. Content managers and administrators use it to upload documents (PDFs, Word files, spreadsheets, and more) that are automatically indexed as vector embeddings and made available to AI Agents for semantic search. It is the bridge between your files and the Knowledge Base, everything uploaded here becomes part of what the AI can reference when answering questions.
+Assets is the file manager that feeds the RAG Knowledge Base in Viglet Turing. Content managers and administrators use it to upload documents (PDFs, Word files, spreadsheets, and more) that are automatically indexed as vector embeddings and made available to AI Agents for semantic search. It is the bridge between your files and the Knowledge Base, everything uploaded here becomes part of what the AI can reference when answering questions.
 
 The **Assets** section (`/console/asset`) is a file manager with built-in RAG training capabilities. It is available in the **Management** section of the sidebar and is only visible when a **storage backend is configured** (`turing.storage.type` is `minio` or `filesystem`).
 
@@ -127,7 +127,7 @@ The **AI column** in the file table shows the indexing state of each file:
 
 ### Automatic Training on Upload
 
-When a file is uploaded, Turing ES dispatches an **asynchronous event** that indexes the file individually without any user action required. Similarly, when a file is deleted, its embeddings are automatically purged from the vector store.
+When a file is uploaded, Turing dispatches an **asynchronous event** that indexes the file individually without any user action required. Similarly, when a file is deleted, its embeddings are automatically purged from the vector store.
 
 ### Batch Training
 
@@ -138,7 +138,7 @@ To index all existing files at once (useful after enabling RAG on an existing in
 sequenceDiagram
     participant Admin
     participant UI as Assets UI
-    participant API as Turing ES
+    participant API as Turing
     participant MinIO
     participant Tika as Apache Tika
     participant VS as Vector Store
@@ -233,7 +233,7 @@ turing:
 
 The bucket (`turing-assets` by default) is **created automatically on startup** if it does not exist.
 
-With Docker Compose, add the MinIO service alongside Turing ES:
+With Docker Compose, add the MinIO service alongside Turing:
 
 ```yaml
 minio:

@@ -79,9 +79,9 @@ That's the shift. Not "better ranking". A different job.
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px', 'lineColor': '#64748b'}}}%%
 flowchart LR
-    AEM["Adobe AEM<br/><small>pages · DAM · fragments</small>"] --> DEP["Dumont DEP<br/><small>AEM connector</small>"]
+    AEM["Adobe AEM<br/><small>pages · DAM · fragments</small>"] --> DEP["Dumont<br/><small>AEM connector</small>"]
     OTHER["WordPress · databases<br/>file shares · APIs"] --> DEP
-    DEP --> TUR["Turing ES<br/><small>hybrid index + LLM</small>"]
+    DEP --> TUR["Turing<br/><small>hybrid index + LLM</small>"]
     TUR --> SEARCH["Search results<br/><small>facets · semantic</small>"]
     TUR --> CHAT["Cited answers<br/><small>streaming chat</small>"]
 
@@ -213,7 +213,7 @@ This matters as much as the features:
   [React SDK](/turing/react-sdk), dropped into an AEM component or an
   **Adobe Edge Delivery Services** block.
 - **AEM 6.5+ and AEM as a Cloud Service**, via the
-  [Dumont DEP connector](/dumont/connectors/aem).
+  [Viglet Dumont connector](/dumont/connectors/aem).
 - **Apache 2.0, self-hosted.** No per-query pricing that punishes you for the
   search traffic you worked to earn, and no discovery call before you can see it
   work.
@@ -238,12 +238,12 @@ catalog, hybrid search, RAG chat, agents, voice.
 ## Take a look
 
 - 🔗 **[turing.viglet.org/aem-search](https://turing.viglet.org/aem-search)**: the AEM search page (live demo + CTAs)
-- 📘 [Index Adobe AEM into Turing ES](/blog/enterprise-search-for-adobe-aem): the hands-on walkthrough
-- 📗 [AEM Connector docs](/turing/integration-aem) · [Dumont DEP connector](/dumont/connectors/aem)
+- 📘 [Index Adobe AEM into Viglet Turing](/blog/enterprise-search-for-adobe-aem): the hands-on walkthrough
+- 📗 [AEM Connector docs](/turing/integration-aem) · [Dumont connector](/dumont/connectors/aem)
 - 📙 [Semantic & vector search on AEM](/blog/semantic-vector-search-aem) · [MCP servers](/turing/mcp-servers)
-- ⭐ [Turing ES on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
+- ⭐ [Turing on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
 
-*Viglet Turing ES is open-source enterprise search with semantic navigation and
+*Viglet Turing is open-source enterprise search with semantic navigation and
 generative AI. Index Adobe Experience Manager alongside your other content
 sources, add hybrid search and cited conversational answers, and keep everything
 on your own infrastructure.*

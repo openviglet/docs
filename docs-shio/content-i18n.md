@@ -7,7 +7,7 @@ description: "The locale axis in Viglet Shio: every post carries a locale, a tra
 # Content in several languages
 
 Shio has one locale axis, and it is worth reading before you write the content rather
-than after — the single decision that is expensive to change later is **the URL**, and it
+than after: the single decision that is expensive to change later is **the URL**, and it
 is decided the moment the first translation is created.
 
 ---
@@ -18,7 +18,7 @@ is decided the moment the first translation is created.
 tag such as `en` or `pt-br`.
 
 When nothing sets it, it is **`en`**. The column is nullable in the database, but no read
-ever returns a blank one — an empty `lang` attribute does not mean *unspecified* to a
+ever returns a blank one: an empty `lang` attribute does not mean *unspecified* to a
 browser or a screen reader, it asserts that the language is unknown, which is worse than
 a default that is merely not what you meant.
 
@@ -52,7 +52,7 @@ not exempt them.**
 
 An address is `post:<site>/<friendly-url>` and it carries **no locale**, so two posts at
 one URL are two posts the CMS cannot tell apart by name. `shio verify` reports them as a
-`duplicate-url` finding — and says explicitly when the two claimants differ only by
+`duplicate-url` finding, and says explicitly when the two claimants differ only by
 locale, so you can see that the collision was a deliberate choice rather than an
 accident. A move onto an occupied URL is refused for the same reason.
 
@@ -164,7 +164,7 @@ GET /api/v2/cda/post/by-url?siteId=…&url=/about&locale=pt-br
   is in.
 
 **There is no fallback.** Asking for a locale that has no translation at that URL returns
-nothing — a `404`, not the English page. That is deliberate: a silent fallback would make
+nothing: a `404`, not the English page. That is deliberate: a silent fallback would make
 a half-translated site look finished, and a front end that wants a fallback can implement
 the one it actually wants.
 
@@ -198,7 +198,7 @@ Pages Shio renders itself are served at:
 GET /sites/{site}/{format}/{locale}/{path}
 ```
 
-So the locale is in every published URL — which is usually the first place a reader meets
+So the locale is in every published URL, which is usually the first place a reader meets
 it, before deciding whether they want translations at all.
 
 - `{locale}` is **checked against the site**: it is accepted when the site has published
@@ -250,7 +250,7 @@ In a Handlebars template:
 {{/translations}}
 ```
 
-- **`post.locale`** is on every page and is never blank — safe to put straight into
+- **`post.locale`** is on every page and is never blank: safe to put straight into
   `<html lang>`.
 - **`{{#translations}}`** takes no arguments: a translation set is a property of *this*
   page, not something the template selects.
@@ -268,7 +268,7 @@ have the sibling set on the page rather than fetched.
 
 ## Related
 
-- [Content Modeling](./content-modeling.md) — post types, fields and the publish states
-- [Pages, Layouts & Regions](./website-development.md) — templates, helpers and the delivery grammar
-- [Content Delivery API](./headless/content-delivery-api.md) — `?locale` and `availableLocales`
-- [The content console](./content-console.md) — where the Translations menu lives
+- [Content Modeling](./content-modeling.md): post types, fields and the publish states
+- [Pages, Layouts & Regions](./website-development.md): templates, helpers and the delivery grammar
+- [Content Delivery API](./headless/content-delivery-api.md): `?locale` and `availableLocales`
+- [The content console](./content-console.md): where the Translations menu lives

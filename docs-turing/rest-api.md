@@ -6,7 +6,7 @@ description: REST API endpoints for Semantic Navigation search, autocomplete, sp
 
 # REST API Reference
 
-Turing ES exposes a REST API for integrating search and AI capabilities into any application. All endpoints use **JSON**. Public endpoints (search, chat, autocomplete) require no authentication. Administrative endpoints require a `Key` header.
+Viglet Turing exposes a REST API for integrating search and AI capabilities into any application. All endpoints use **JSON**. Public endpoints (search, chat, autocomplete) require no authentication. Administrative endpoints require a `Key` header.
 
 For authentication details, see [Authentication](./security-authentication.md). For the interactive API explorer, visit `http://localhost:2700/swagger-ui.html`.
 
@@ -169,7 +169,7 @@ The search response is a **self-describing navigational JSON**: every link a use
 2. **Document metadata navigation**: Each result's metadata values carry filter links (e.g., click a `type:article` tag to filter all articles)
 3. **Pagination**: Next/previous/specific page links are included; no offset calculation needed
 
-A Turing ES search UI can be built as a **pure rendering layer**: render results, facets, tags, pagination, and locale switchers directly from the response. Adding a new facet to the SN Site configuration propagates automatically, with no client code changes.
+A Turing search UI can be built as a **pure rendering layer**: render results, facets, tags, pagination, and locale switchers directly from the response. Adding a new facet to the SN Site configuration propagates automatically, with no client code changes.
 
 **Locale selection:**
 
@@ -234,7 +234,7 @@ POST http://localhost:2700/api/sn/{siteName}/search/query
 ```
 
 Use it when a filter value can contain a character that means something in a query
-string — `&`, `=`, `+`, `#`, `%` or a space. A JSON body has no query-string
+string: `&`, `=`, `+`, `#`, `%` or a space. A JSON body has no query-string
 grammar, so a value like `section:RAG & Chat` cannot be mis-read as query
 structure. Nothing is deprecated: `GET /search` and its links stay, and are still
 the right choice for deep-linkable, bookmarkable, SEO-crawlable and no-JS search
@@ -251,9 +251,9 @@ pages.
 | `fq` / `fqAnd` / `fqOr` | `string[]` | Filter queries, each a raw `field:value` |
 | `fqOperator` / `fqItemOperator` | `string` | Operators between / within facet groups |
 | `fieldList` (alias `fl`) | `string[]` | Restrict which fields are returned |
-| `targetingRules` | `string[]` | Targeting rules (no conditional maps — read-only) |
+| `targetingRules` | `string[]` | Targeting rules (no conditional maps, read-only) |
 | `autoCorrectionDisabled` | `boolean` | Skip spelling auto-correction (default `true`) |
-| `responseFormat` | `string` | `LINKS` (default) or `STRUCTURED` — see below |
+| `responseFormat` | `string` | `LINKS` (default) or `STRUCTURED` (see below) |
 | `includeSortOptions` | `boolean` | `false`. When `true`, a `STRUCTURED` response also carries `sortOptions` |
 
 The endpoint is anonymous and **CSRF-exempt**, so a browser client needs no
@@ -336,26 +336,26 @@ site or the request produced them:
 
 | Field | When it appears |
 |---|---|
-| `icon` | the site configured an icon. A plain [Iconify](https://icon-sets.iconify.design/) name (`tabler:building-store`) — render it as the search header's brand mark, falling back to your own logo when absent |
-| `similar` | the request named a seed document — the "more like this" neighbours, each `{ id, title, type, url }` |
-| `spotlights` | the site pinned documents for this query — each `{ id, position, title, type, referenceId, content, link }`, `position` being the 1-based slot to inject it at |
+| `icon` | the site configured an icon. A plain [Iconify](https://icon-sets.iconify.design/) name (`tabler:building-store`). Render it as the search header's brand mark, falling back to your own logo when absent |
+| `similar` | the request named a seed document: the "more like this" neighbours, each `{ id, title, type, url }` |
+| `spotlights` | the site pinned documents for this query: each `{ id, position, title, type, referenceId, content, link }`, `position` being the 1-based slot to inject it at |
 | `sortOptions` | the request asked for `includeSortOptions` (see below) |
 
 `url` and `link` above are the **documents' own destinations**, the same kind of
-value `results[].fields.url` carries — not search actions. Every *navigation*
+value `results[].fields.url` carries, not search actions. Every *navigation*
 that used to be a URL is a value to put on the next request:
 
 | Instead of following… | Do this |
 |---|---|
 | a facet item's `link` | apply `item.action` (`ADD` / `REMOVE` / `REPLACE`) to `request.fq` using `item.filterQuery` |
-| a document's `metadata[].href` | apply the chip's own `action` to `request.fq` using its `filterQuery` — exactly as for a facet item, because it is the same action (chips are `{field, value, filterQuery, text, selected, action}` here) |
+| a document's `metadata[].href` | apply the chip's own `action` to `request.fq` using its `filterQuery`, exactly as for a facet item, because it is the same action (chips are `{field, value, filterQuery, text, selected, action}` here) |
 | a facet's `cleanUpLink` | remove `facet.clearFilterQueries` from `request.fq` |
 | the widget's `cleanUpFacets` | clear `request.fq` (see `selectedFilterQueries`) |
 | a pagination `href` | set `request.page = page.page` |
 | a locale `link` | set `request.locale` |
 | a spell-check `link` | set `request.q = spellCheck.correctedTextValue` |
 
-Both JavaScript SDKs do this for you — see
+Both JavaScript SDKs do this for you: see
 [`@viglet/turing-sdk`](./javascript-sdk.md) (`toggleFacet`, `clearFacet`,
 `clearAllFilters`, `goToPage`, `applySpellCheck`) and
 [`@viglet/turing-react-sdk`](./react-sdk.md).
@@ -364,14 +364,14 @@ Both JavaScript SDKs do this for you — see
 
 The sort option list has its own endpoint
 (`GET /api/sn/{siteName}/search/sort-options`) and is **not** part of the
-response by default — the control is already rendered on every request after the
+response by default: the control is already rendered on every request after the
 first. To paint it on the *first* frame without a second call, ask for it:
 
 ```json
 { "q": "chat", "responseFormat": "STRUCTURED", "includeSortOptions": true }
 ```
 
-The response then carries a `sortOptions` array of `{ "value", "label" }` —
+The response then carries a `sortOptions` array of `{ "value", "label" }`,
 exactly what the dedicated endpoint serves. Put the chosen `value` on
 `request.sort`.
 
@@ -382,7 +382,7 @@ response.
 #### `responseFormat` on GET
 
 `responseFormat` is a plain request field, not an `Accept` header, so the GET
-search endpoint honours it too — handy for comparing the two shapes against one
+search endpoint honours it too, handy for comparing the two shapes against one
 query, or for a server-rendered page that wants facet *data* without parsing
 links:
 
@@ -441,7 +441,7 @@ curl "http://localhost:2700/api/sn/Sample/ac?q=enter&_setlocale=en_US"
 ```
 
 A `POST /api/sn/{siteName}/ac/query` variant takes the same JSON body as
-[POST-native search](#post-native-search) — use it when a filter narrowing the
+[POST-native search](#post-native-search): use it when a filter narrowing the
 suggestions contains a query-string character.
 
 ---
@@ -804,7 +804,7 @@ For full details, see [Logging](./logging.md).
 
 ## GraphQL API
 
-Turing ES exposes a GraphQL endpoint that provides the same Semantic Navigation search capabilities as the REST API using GraphQL queries. The endpoint is **public** (no authentication required).
+Turing exposes a GraphQL endpoint that provides the same Semantic Navigation search capabilities as the REST API using GraphQL queries. The endpoint is **public** (no authentication required).
 
 ```
 POST http://localhost:2700/graphql

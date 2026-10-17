@@ -1,14 +1,14 @@
 ---
 sidebar_position: 7
 title: AI Agents
-description: AI Agents are purpose-built specialists you compose from an LLM, tools, and a persona. They are the conversion engine of Turing ES.
+description: AI Agents are purpose-built specialists you compose from an LLM, tools, and a persona. They are the conversion engine of Viglet Turing.
 ---
 
 # AI Agents
 
 > *Hire a salesperson. Hire a solutions engineer. Hire an onboarding coach. Hire them all in an afternoon, and have them on duty 24/7 by sundown.*
 
-An **AI Agent** in Turing ES is the specialist you don't have to recruit, train, or replace. It's a small, named bundle of:
+An **AI Agent** in Viglet Turing is the specialist you don't have to recruit, train, or replace. It's a small, named bundle of:
 
 - a **brain**, an [LLM Instance](./llm-instances.md) you've already configured,
 - a set of **hands**: [native tools](./tool-calling.md) and [MCP servers](./mcp-servers.md) that let the agent actually *do* things (search your content, fetch live data, run code),
@@ -22,10 +22,10 @@ Configure agents in **Administration → AI Agents**.
 
 ## What "Agent" Actually Means
 
-The word "agent" is overloaded. In Turing ES, an Agent has two non-negotiable properties:
+The word "agent" is overloaded. In Turing, an Agent has two non-negotiable properties:
 
 1. **It's a composition, not a model.** You're not picking a model from a marketplace and renaming it. You're combining decisions (*which* LLM, *which* tools, *which* voice) into a single, deployable unit. Change any of the three, and you've changed the agent.
-2. **It can act, not just answer.** The defining feature of an agent over a plain chatbot is its ability to call tools: search a knowledge base, look up a stock quote, run a Python script, query an MCP server. The model doesn't just generate words; it *requests an action*, Turing ES executes it, and the model reasons over the result.
+2. **It can act, not just answer.** The defining feature of an agent over a plain chatbot is its ability to call tools: search a knowledge base, look up a stock quote, run a Python script, query an MCP server. The model doesn't just generate words; it *requests an action*, Turing executes it, and the model reasons over the result.
 
 Together, these mean an agent is a **business process expressed as a conversation**. A user asks; the agent searches your documentation, fetches their account data, summarizes the answer, and books a follow-up, in one exchange.
 
@@ -117,7 +117,7 @@ When a user sends a message, this loop runs end-to-end. Understanding it is the 
 
 ### Step 1: Prompt assembly
 
-Turing ES builds the prompt in this exact order:
+Turing builds the prompt in this exact order:
 
 1. **Persona system instruction** (if a persona is attached)
 2. **Style guidelines block**: derived from the persona's tone + verbosity + language style
@@ -142,7 +142,7 @@ This decision is the agent's "thinking step". Tool-capable models (Claude, GPT-4
 
 ### Step 3: Tool execution
 
-If the model requested a tool, Turing ES:
+If the model requested a tool, Turing:
 
 1. Validates the call (does the agent have access to that tool? are the arguments valid JSON?).
 2. Routes it to the correct executor: native tool implementation or MCP server.

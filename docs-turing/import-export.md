@@ -6,7 +6,7 @@ description: Export and import Semantic Navigation site configurations and conte
 
 # Import & Export
 
-Turing ES supports exporting and importing **Semantic Navigation site configurations** as ZIP archives. This allows you to migrate sites between environments, create backups, or share configurations across teams.
+Viglet Turing supports exporting and importing **Semantic Navigation site configurations** as ZIP archives. This allows you to migrate sites between environments, create backups, or share configurations across teams.
 
 ---
 
@@ -47,13 +47,13 @@ The `export.json` inside the ZIP archive contains:
 | `store` | Embedding store instance references |
 | `se` | Search engine instance references |
 
-Instance references never carry an owning tenant. When [multi-tenancy](./multi-tenancy.md) is enabled, a tenant id only identifies the installation that created it, so it is left out of the archive — an imported instance is claimed by whoever imports it, and one imported with no tenant bound stays shared (GLOBAL).
+Instance references never carry an owning tenant. When [multi-tenancy](./multi-tenancy.md) is enabled, a tenant id only identifies the installation that created it, so it is left out of the archive: an imported instance is claimed by whoever imports it, and one imported with no tenant bound stays shared (GLOBAL).
 
 ---
 
 ## Seeding a fresh installation
 
-On the **first** startup against an empty database, Turing ES imports every `.zip` it finds in the `export/` directory of its working directory (alphabetical order). Use this to open a new environment with your sites, LLM instances, search engines and embedding stores already configured — no admin clicks, no API calls.
+On the **first** startup against an empty database, Turing imports every `.zip` it finds in the `export/` directory of its working directory (alphabetical order). Use this to open a new environment with your sites, LLM instances, search engines and embedding stores already configured: no admin clicks, no API calls.
 
 ```
 /app/export/           # in the Docker image
@@ -82,7 +82,7 @@ The official image ships `/app/export/defaults.zip` with two shared instances, b
 
 Both live under `/app/store`, which the image declares as a volume, and both are shared: with multi-tenancy enabled, every tenant can use them without configuring anything of their own.
 
-No LLM instance is seeded — an exported LLM carries its API key encrypted with the key of the installation that exported it. Set `OPENAI_API_KEY` or `GEMINI_API_KEY` instead and Turing ES provisions a default LLM at startup (see [LLM instances](./llm-instances.md)).
+No LLM instance is seeded: an exported LLM carries its API key encrypted with the key of the installation that exported it. Set `OPENAI_API_KEY` or `GEMINI_API_KEY` instead and Turing provisions a default LLM at startup (see [LLM instances](./llm-instances.md)).
 
 ### Seeding your own defaults
 
@@ -94,15 +94,15 @@ docker run -v ./my-defaults.zip:/app/export/my-defaults.zip \
   viglet/turing
 ```
 
-Export from a configured environment to produce the bundle — the archive an admin export gives you is exactly the format this reads.
+Export from a configured environment to produce the bundle: the archive an admin export gives you is exactly the format this reads.
 
 :::caution One shot per database
-Once every ZIP in `export/` has imported, Turing ES records an `EXPORT_AUTO_IMPORT` marker and never scans the directory again, so changing a bundle later has no effect on an existing database. Adding a ZIP still works if the directory was **absent or empty** at first startup, because nothing was recorded then.
+Once every ZIP in `export/` has imported, Turing records an `EXPORT_AUTO_IMPORT` marker and never scans the directory again, so changing a bundle later has no effect on an existing database. Adding a ZIP still works if the directory was **absent or empty** at first startup, because nothing was recorded then.
 :::
 
 ### When a seed ZIP fails
 
-A ZIP that fails to import — a truncated file, a missing `export.json`, a malformed archive — is **retried on the next startup**. The "done" marker is written only when every ZIP in the directory succeeded, so a bad seed does not quietly disable seeding for that database.
+A ZIP that fails to import (a truncated file, a missing `export.json`, a malformed archive) is **retried on the next startup**. The "done" marker is written only when every ZIP in the directory succeeded, so a bad seed does not quietly disable seeding for that database.
 
 Archives that did import are recorded individually and are **not** imported a second time on that retry. This matters: re-importing a bundle that contains a site *replaces* that site, discarding changes made to it since, so only the failures are re-run.
 
@@ -116,15 +116,15 @@ ones are recorded and will not be re-imported; the failures will be retried on
 the next start.
 ```
 
-Fix the archive and restart. To force a completed directory to be imported again, delete the `EXPORT_AUTO_IMPORT*` rows from the `config_var` table — but read the replacement warning above first.
+Fix the archive and restart. To force a completed directory to be imported again, delete the `EXPORT_AUTO_IMPORT*` rows from the `config_var` table, but read the replacement warning above first.
 
-If your deployment runs more than one container, give them all the same encryption key — otherwise the API keys inside a seeded bundle cannot be decrypted. See [Security & authentication](./security-authentication.md).
+If your deployment runs more than one container, give them all the same encryption key. Otherwise the API keys inside a seeded bundle cannot be decrypted. See [Security & authentication](./security-authentication.md).
 
 ---
 
 ## Import
 
-The import page (`/admin/exchange/import`) accepts a ZIP file previously exported from Turing ES and recreates the site configurations in the target environment.
+The import page (`/admin/exchange/import`) accepts a ZIP file previously exported from Turing and recreates the site configurations in the target environment.
 
 ### Using the Admin Console
 
@@ -133,7 +133,7 @@ The import page (`/admin/exchange/import`) accepts a ZIP file previously exporte
 3. The upload progress is displayed in real time (percentage bar)
 4. On success, you are automatically redirected to the SN Sites listing after 2 seconds
 
-**Supported formats:** `.zip` files exported from Turing ES.
+**Supported formats:** `.zip` files exported from Turing.
 
 **UI states:**
 
@@ -164,7 +164,7 @@ curl -X POST "http://localhost:2700/api/import" \
 
 ## Content Import (SN Job Items)
 
-In addition to site configuration import, Turing ES accepts **document-level indexing jobs** via the SN Import API. This is used by connectors and custom integrations to push content into the search index.
+In addition to site configuration import, Turing accepts **document-level indexing jobs** via the SN Import API. This is used by connectors and custom integrations to push content into the search index.
 
 ### JSON Import
 
@@ -203,7 +203,7 @@ curl -X POST "http://localhost:2700/api/sn/import" \
 POST /api/sn/import/zip
 ```
 
-Accepts a `multipart/form-data` ZIP file containing an `export.json` with job items. Document attributes can reference embedded files using the `file://` protocol, Turing ES extracts text from these files using Apache Tika before indexing.
+Accepts a `multipart/form-data` ZIP file containing an `export.json` with job items. Document attributes can reference embedded files using the `file://` protocol, Turing extracts text from these files using Apache Tika before indexing.
 
 ### Job Actions
 

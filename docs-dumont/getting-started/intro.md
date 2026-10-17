@@ -1,18 +1,18 @@
 ---
 sidebar_position: 1
-title: What is Dumont DEP?
-description: Viglet Dumont DEP is an open-source data extraction platform that connects your content sources to Turing ES for indexing and search.
+title: What is Viglet Dumont?
+description: Viglet Dumont is an open-source data extraction platform that connects your content sources to Viglet Turing for indexing and search.
 ---
 
-# What is Dumont DEP?
+# What is Viglet Dumont?
 
-**Viglet Dumont DEP** is an open-source data extraction platform. It connects your content (wherever it lives) to [Viglet Turing ES](/turing) for indexing and search.
+**Viglet Dumont** is an open-source data extraction platform. It connects your content (wherever it lives) to [Viglet Turing](/turing) for indexing and search.
 
-Think of Dumont DEP as the bridge between your content sources and the search engine. It crawls websites, queries databases, scans file systems, reads AEM repositories, and pulls from WordPress, then delivers every document to Turing ES through a reliable, asynchronous pipeline.
+Think of Dumont as the bridge between your content sources and the search engine. It crawls websites, queries databases, scans file systems, reads AEM repositories, and pulls from WordPress, then delivers every document to Turing through a reliable, asynchronous pipeline.
 
 ---
 
-## What can you do with Dumont DEP?
+## What can you do with Dumont?
 
 ### Crawl websites
 
@@ -32,11 +32,11 @@ The **AEM Connector** indexes content from Adobe Experience Manager author and p
 
 ### Integrate with WordPress
 
-The **WordPress Connector** indexes posts, pages, and custom content types from WordPress installations directly into Turing ES.
+The **WordPress Connector** indexes posts, pages, and custom content types from WordPress installations directly into Turing.
 
 ### Send to any search engine
 
-Beyond Turing ES, Dumont DEP can deliver content directly to **Apache Solr** or **Elasticsearch** via pluggable indexing adapters, no Turing ES required.
+Beyond Turing, Dumont can deliver content directly to **Apache Solr** or **Elasticsearch** via pluggable indexing adapters, no Turing required.
 
 ---
 
@@ -50,9 +50,9 @@ graph LR
     AEM["📦 AEM"]
     WP["📝 WordPress"]
 
-    DUM["Dumont DEP\n(Connectors + Pipeline)"]
+    DUM["Dumont\n(Connectors + Pipeline)"]
 
-    TUR["Turing ES\n(Search + GenAI)"]
+    TUR["Turing\n(Search + GenAI)"]
 
     WEB --> DUM
     DB --> DUM
@@ -63,18 +63,18 @@ graph LR
     DUM -->|"REST API\n+ Message Queue"| TUR
 ```
 
-Content flows from its original source through Dumont DEP connectors, into an internal message queue for reliable processing, and out to the search engine, where it becomes immediately searchable.
+Content flows from its original source through Dumont connectors, into an internal message queue for reliable processing, and out to the search engine, where it becomes immediately searchable.
 
 ---
 
 ## Key concepts
 
-These are the main building blocks you will work with in Dumont DEP. You do not need to understand all of them before getting started: come back to each one as you need it.
+These are the main building blocks you will work with in Dumont. You do not need to understand all of them before getting started: come back to each one as you need it.
 
 | Concept | What it is | Learn more |
 |---|---|---|
 | **Connector** | A component that extracts content from a specific source type (web, database, files, AEM, WordPress) | [Connectors](../connectors/overview.md) |
-| **Indexing Plugin** | The output adapter that delivers documents to a search engine, Turing ES (default), Apache Solr, or Elasticsearch | [Indexing Plugins](../indexing-plugins.md) |
+| **Indexing Plugin** | The output adapter that delivers documents to a search engine, Turing (default), Apache Solr, or Elasticsearch | [Indexing Plugins](../indexing-plugins.md) |
 | **Job Item** | A single document being processed through the pipeline, with fields, metadata, and an action (index, de-index, update) | [Core Concepts](./core-concepts.md) |
 | **Batch Processor** | Groups individual job items into configurable batches (default: 50) for efficient queue delivery | [Core Concepts](./core-concepts.md) |
 | **Message Queue** | Apache Artemis (embedded): decouples connector extraction from indexing delivery for reliability and throughput | [Architecture](../architecture.md) |
@@ -87,10 +87,10 @@ These are the main building blocks you will work with in Dumont DEP. You do not 
 
 Not sure where to start? Here is a suggested path depending on what you want to do:
 
-**I want to understand how Dumont DEP works**
+**I want to understand how Dumont works**
 → Read [Core Concepts](./core-concepts.md) first, then [Architecture](../architecture.md).
 
-**I want to install Dumont DEP**
+**I want to install Dumont**
 → Go to the [Installation Guide](../installation-guide.md).
 
 **I want to crawl a website**
@@ -102,7 +102,7 @@ Not sure where to start? Here is a suggested path depending on what you want to 
 **I want to index files from a directory**
 → Go to [FileSystem Connector](../connectors/filesystem.md).
 
-**I want to connect AEM to Turing ES**
+**I want to connect AEM to Turing**
 → Go to [AEM Connector](../connectors/aem.md).
 
 **I want to index WordPress content**
