@@ -85,6 +85,15 @@ The `model` string routes the request into the Turing stack:
 
 The `cost` / `quality` / `ttft` strategies order the declared deployments by the public model catalog's pricing / intelligence index / time-to-first-token for each deployment's configured model. A deployment whose model has no catalog value for the chosen metric sorts **last**, so a missing figure never wins a "cheapest" or "fastest" pick.
 
+## Sampling parameters
+
+`temperature`, `top_p`, `max_tokens` and `stop` on a request override the model
+instance's own settings for that call, on every provider; anything the request
+leaves out keeps the instance's value. They are applied best-effort, as in the
+OpenAI API: a reasoning model that rejects sampling parameters is retried
+without them. Turing-routed models (`turing-agent:`, `turing-sn:`, copilot)
+answer with their own settings.
+
 ## JSON mode
 
 Send OpenAI's `response_format` to get JSON back instead of prose:
