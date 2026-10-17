@@ -159,6 +159,7 @@ These shipped blocks are engineering, repository, or marketing concerns with no 
 | **Block D.9**: SDK & frontend surface | Engine-era SDK/frontend work; the shipped consumer surfaces are documented on [developer-guide](./developer-guide.md) and the SDK pages |
 | **Block O**: GEO / LLM discoverability | Marketing-site + `llms.txt` concern (`turing.viglet.org`), not the product docs |
 | **Block AB**: public site & top-of-funnel | Marketing site (`turing.viglet.org`), separate app |
+| **Block CD** (T1093+): turing.viglet.org relevance pass (search-console-driven titles, FAQ and inbound links) | Marketing site (`turing.viglet.org`), not the product docs |
 | **Block AE**: this documentation round | Meta: produced the pages in this very matrix |
 | **Block AG**: Bento admin UI redesign + console retirement | UI/design change (frosted-glass admin reskin); no new capability, config, or API, the admin surfaces work the same, only re-skinned. Admin URLs moved `/admin/*` → `/bento/*` with transparent redirects, so bookmarks/deep-links still resolve. Doc screenshots refreshed opportunistically, not gated here |
 | **Block AX** (T735–T738): bento header consistency (`BentoFormHero` hero→sticky-save-bar morph + `←` back-arrow breadcrumb across every own-hero admin form) | UI-consistency refactor within the Block AG reskin: the same admin forms, fields, validation and save behavior. Only the header/save-bar chrome is now produced by one shared component instead of being hand-wired per page. No new capability, config, API or SDK surface |
