@@ -76,8 +76,13 @@ version ranges (`0.3.5–0.3.9`, `8–15`, `40°C`).
 Before committing, confirm nothing crept back in:
 
 ```bash
-grep -rnP "\x{2014}" docs-turing docs-shio docs-dumont blog src diagrams *.md *.ts
+LC_ALL=C grep -rn $'\xe2\x80\x94' docs-turing docs-shio docs-dumont blog src diagrams *.md *.ts
 ```
+
+This searches for the character's UTF-8 bytes, so it works in any locale and the
+command does not match itself. The older spelling, `grep -rnP "\x{2014}"`, is
+refused by Git Bash's grep ("character value in \x{} is too large") and prints no
+match, which reads as a clean tree.
 
 ### No Manual Page Breaks
 

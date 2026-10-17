@@ -6,7 +6,7 @@
 - 💭 **DOC5** (deps: —) (requires: search-console) **the blog stopped on 27/07/2026, though its posts bring the generic queries** — A post written for a query that already has impressions is the cheapest source of generic search traffic. → §DOC5
 - 💭 **DOC6** (deps: viglet.org W42) **the docs and viglet.org apply different privacy rules to the same visitor** — The docs load Google Analytics without consent while viglet.org waits for it, and one decision should cover both. → §DOC6
 - 💭 **DOC7** (deps: —) (requires: turing-site) **the docs search does not use the product the docs describe** — Searching the docs with Viglet Turing makes every query a demonstration, the dogfooding bet viglet.org already makes. → §DOC7
-- 📋 **DOC8** (deps: —) **14 em dashes are back in Turing and Shio pages, and the check AGENTS.md gives finds none on Git Bash** — The no-em-dash rule has no gate, so new product pages bring them back unnoticed. → §DOC8
+- ⏳ **DOC8** (deps: —) (requires: owner-decision) **14 em dashes are back in Turing and Shio pages, and the check AGENTS.md gives finds none on Git Bash** — All 14 quote real Shio and Turing output, so rewriting them misquotes it; the owner picks the policy before a CI gate. → §DOC8
 
 ## Done when — DOC1
 
@@ -17,5 +17,11 @@
 - **Clicks and CTR measured a month after the rewrite** Search Console clicks and CTR on
   the rewritten pages, compared over the 30 days after each rewrite against the 90 days
   before it (3 clicks on 2,121 impressions).
+
+## Done when — DOC8
+
+- **CI fails a change that adds an em dash the policy does not allow** A deploy.yml step
+  before the build runs the agents.md check (or the fenced-block-aware script under
+  policy b) and fails the job; checked by a branch that adds one.
 
 ## Non-goals

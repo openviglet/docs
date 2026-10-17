@@ -57,18 +57,22 @@ instance indexing docs.viglet.org, with the local index as the fallback when tha
 endpoint is down (never an error or an endless spinner), the same graceful-degradation
 rule viglet.org's Block B sets.
 
-### §DOC8 Em dashes need a gate, not a memory
+### §DOC8 Em dashes in quoted product output: a policy, then a gate
 
-AGENTS.md says the repository holds zero em dashes, but on 17/10/2026 the check it
-prescribes finds 14, in docs-turing/import-export.md and five Shio files
-(administration-guide, agent-surface, content-lifecycle, replication and COVERAGE). They
-arrived with recent product pages, so the rule is enforced by memory, not by a gate.
+On 17/10/2026 the agents.md check, now spelled with the UTF-8 bytes so it runs on Git
+Bash, finds 14 em dashes. None is prose: every one quotes what a product prints.
+Turing's auto-import log line (import-export.md), two Shio console strings (acl.openHint
+in acl.json, content.notYetPublished in content.json), Shio's agent intents digest
+(ShAgentIntents.java, quoted in agent-surface.md), the convert run's palette report
+(replication.md) and a page title shape in docs-shio/COVERAGE.md. Rewriting them would
+make the docs misquote the products.
 
-Rewrite each one by the table in AGENTS.md (colon, parentheses, comma or two sentences;
-never a hyphen or an en dash). Then make the rule a gate: a step in
-.github/workflows/deploy.yml, before the build, that runs the AGENTS.md grep under a
-UTF-8 locale and fails the job when it matches. The grep in AGENTS.md uses `-P` with
-`\x{2014}`, which Git Bash's grep rejects ("character value too large") and so reports
-nothing; the gate should search for the literal character with `LC_ALL=C.UTF-8`, and
-AGENTS.md should show that spelling. Done when the grep returns nothing and a pull
-request that adds an em dash fails CI.
+The owner decides between two policies. (a) Fix the source: drop the em dash from those
+strings in Shio and Turing (each product's own roadmap), then update the quotes here.
+(b) Exempt verbatim output: the rule covers what the docs say, not what they quote, so
+the gate skips fenced code blocks and the quoted UI strings are shown as code.
+
+Either way the gate follows: a step in .github/workflows/deploy.yml, before the build,
+that runs the agents.md check and fails the job on a match (under (b), a small script
+that skips fenced blocks). Done when the check returns nothing the policy allows and a
+change that adds an em dash fails CI.
