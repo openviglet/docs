@@ -26,6 +26,9 @@ This post builds on
 shows how to add vector/semantic search and RAG on top, all open source, on
 your own infrastructure.
 
+For the overview of AEM search with Viglet Turing, with a live demo, see
+**[turing.viglet.org/aem-search](https://turing.viglet.org/aem-search/)**.
+
 <!-- truncate -->
 
 ## Keyword vs. semantic: what changes

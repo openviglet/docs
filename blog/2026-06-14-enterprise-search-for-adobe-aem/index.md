@@ -27,6 +27,10 @@ This guide shows the open-source alternative: indexing AEM into
 [**Viglet Turing**](https://www.viglet.org/turing/), an Apache-2.0 enterprise
 search platform you self-host, with semantic navigation and generative AI built in.
 
+For what AEM search with Viglet Turing looks like on a live site, start at
+**[turing.viglet.org/aem-search](https://turing.viglet.org/aem-search/)**; this
+guide is the how-to behind it.
+
 <!-- truncate -->
 
 ## What you'll build

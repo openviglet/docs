@@ -21,20 +21,6 @@ Turing"), not only the feature name. Keep slugs. Done when every page in the Sea
 Console's top 25 by impressions has been reviewed, and measured a month later by clicks
 and CTR on those pages.
 
-### §DOC2 One AEM front door
-
-The AEM queries ("aem search", "aem search component", "aem search engine", "search in
-aem") land on turing.viglet.org/aem-search/, at positions 36 to 50; docs.viglet.org
-shows up only through a tag page (/blog/tags/aem/ for "aem search engine", position 27)
-and the AEM post. Two Viglet pages answering the same query split what little standing
-each has.
-
-Make turing.viglet.org/aem-search/ the one AEM front door: the three AEM posts on this
-blog (enterprise-search-for-adobe-aem, semantic-vector-search-aem, turing-aem-search)
-link to it near the top, and it links back to them as the how-to. The viglet.org task
-W40 is narrowed to the same thing (link to that page, build no competing one). Measure
-the three AEM queries for that URL in the Search Console against this baseline.
-
 ### §DOC3 Out of the index: COVERAGE, old versions, tag pages
 
 Three kinds of page sit in Google that should not. The COVERAGE pages
