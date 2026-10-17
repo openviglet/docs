@@ -327,6 +327,31 @@ When the bar turns **yellow**, compact proactively. By the time it's red, the mo
 
 See [REST API Reference → GenAI API](./rest-api.md#genai-api) for request/response shapes and examples.
 
+### Per-call options on Direct LLM chat
+
+Besides `messages`, a Direct LLM request can override the instance's own
+settings for that call. Any field left out keeps the instance's value.
+
+```json
+{
+  "messages": [{ "role": "user", "content": "List three colours as JSON." }],
+  "temperature": 0,
+  "topP": 0.9,
+  "maxTokens": 200,
+  "stop": ["END"],
+  "responseFormat": "json_object"
+}
+```
+
+`temperature`, `topP`, `maxTokens` and `stop` apply on every provider,
+best-effort: a reasoning model that rejects sampling parameters is retried
+without them. `responseFormat` takes `json_object`, or `json_schema` together
+with `responseSchema` (the JSON schema) and an optional `strict`. JSON output
+works on providers served over the OpenAI API (OpenAI, OpenAI-compatible
+endpoints, Gemini's OpenAI endpoint, Mistral, Cohere). On any other provider
+the request is refused with HTTP 400 naming `responseFormat`, never answered in
+prose.
+
 ---
 
 ## Related Pages
