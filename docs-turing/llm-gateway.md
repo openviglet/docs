@@ -85,6 +85,28 @@ The `model` string routes the request into the Turing stack:
 
 The `cost` / `quality` / `ttft` strategies order the declared deployments by the public model catalog's pricing / intelligence index / time-to-first-token for each deployment's configured model. A deployment whose model has no catalog value for the chosen metric sorts **last**, so a missing figure never wins a "cheapest" or "fastest" pick.
 
+## JSON mode
+
+Send OpenAI's `response_format` to get JSON back instead of prose:
+
+```json
+{"model": "gpt-4o-mini",
+ "response_format": {"type": "json_object"},
+ "messages": [{"role": "user", "content": "List three colours as a JSON object."}]}
+```
+
+`json_object` and `json_schema` (with the schema under `json_schema.schema`, and
+`strict` honoured) are passed to the provider when the model is served over the
+OpenAI wire: OpenAI, OpenAI-compatible endpoints, Gemini (OpenAI endpoint),
+Mistral and Cohere. This works for blocking and streamed calls.
+
+Where JSON mode cannot be honoured, the request is refused with HTTP 400 and
+`"param": "response_format"`, never answered in prose. That covers other
+providers (Anthropic, Gemini native, Ollama, Bedrock, …), the `turing-agent:`,
+`turing-sn:` and copilot routes, and `x-turing-tools` turns. With
+`x-turing-cache: semantic`, a JSON-mode answer is cached apart from the plain-text
+answer to the same prompt.
+
 ## Cross-cutting headers
 
 Stack these on **any** `model` to add behaviour without changing your payload:
