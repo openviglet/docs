@@ -21,20 +21,6 @@ Turing"), not only the feature name. Keep slugs. Done when every page in the Sea
 Console's top 25 by impressions has been reviewed, and measured a month later by clicks
 and CTR on those pages.
 
-### §DOC3 Out of the index: COVERAGE, old versions, tag pages
-
-Three kinds of page sit in Google that should not. The COVERAGE pages
-(/turing/COVERAGE/, /shio/COVERAGE/) are internal engineering matrices, with legends
-such as "orphan (missing, fix it)", and are in the sitemap. The old Turing versions
-0.3.5 to 0.3.9 are built and crawlable, each self-canonical and without noindex: five
-copies of earlier docs that can compete with the current one. The blog tag pages rank in
-place of the posts they list (/blog/tags/aem/ for "aem search engine").
-
-Move COVERAGE out of the published docs (or keep them unlisted, noindex and out of the
-sitemap), mark the versioned pages noindex or point their canonical at the current
-version, and mark tag pages noindex. Done when the built sitemap lists none of them and
-their HTML carries noindex or the new canonical.
-
 ### §DOC4 Docs home: Turing first, plain words
 
 The docs home has 223 impressions at position 5 and no click. It lists Dumont, Shio,

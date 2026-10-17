@@ -2,6 +2,16 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
+// The plugin's default exclusions, plus COVERAGE.md: an internal engineering
+// matrix kept beside the docs it gates, never a published page.
+const docsExclude = [
+  "**/_*.{js,jsx,ts,tsx,md,mdx}",
+  "**/_*/**",
+  "**/*.test.{js,jsx,ts,tsx}",
+  "**/__tests__/**",
+  "**/COVERAGE.md",
+];
+
 const config: Config = {
   title: "Viglet Docs",
   tagline: "Documentation for Viglet Turing, Viglet Shio and Viglet Dumont",
@@ -130,6 +140,7 @@ const config: Config = {
           path: "docs-turing",
           routeBasePath: "turing",
           sidebarPath: "./sidebars-turing.ts",
+          exclude: docsExclude,
           editUrl:
             "https://github.com/vigletdocs/vigletdocs.github.io/tree/main/",
           lastVersion: "current",
@@ -200,6 +211,7 @@ const config: Config = {
         path: "docs-shio",
         routeBasePath: "shio",
         sidebarPath: "./sidebars-shio.ts",
+        exclude: docsExclude,
         editUrl:
           "https://github.com/vigletdocs/vigletdocs.github.io/tree/main/",
         lastVersion: "current",
@@ -218,6 +230,7 @@ const config: Config = {
         path: "docs-dumont",
         routeBasePath: "dumont",
         sidebarPath: "./sidebars-dumont.ts",
+        exclude: docsExclude,
         editUrl:
           "https://github.com/vigletdocs/vigletdocs.github.io/tree/main/",
         lastVersion: "current",
