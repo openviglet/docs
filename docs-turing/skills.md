@@ -1,7 +1,8 @@
 ---
 sidebar_position: 9
-title: Skills
-description: Run Anthropic-compatible Skills inside Viglet Turing. A Skill is a portable folder (SKILL.md + scripts + references) that runs in a hardened Docker sandbox, activated by progressive disclosure, and usable in both chat and semantic navigation.
+title: Run Anthropic-Compatible Agent Skills in Viglet Turing
+sidebar_label: Skills
+description: "Import, author and run Anthropic-compatible Agent Skills (a SKILL.md folder with scripts and references) in a Docker sandbox. Skills exported from Claude run unchanged in chat and search."
 ---
 
 # Skills

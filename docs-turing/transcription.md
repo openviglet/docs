@@ -1,7 +1,8 @@
 ---
 sidebar_position: 10
-title: Transcription
-description: Speech-to-text in Viglet Turing, a config-selectable, chunk-capable transcription backend (cloud OpenAI or a self-hosted OpenAI-compatible server) that powers persona-from-audio, AUDIO chat slots, and async jobs for long recordings.
+title: Transcribe Audio to Text with OpenAI or a Self-Hosted Whisper Server
+sidebar_label: Transcription
+description: "Set up speech-to-text in Viglet Turing with OpenAI or a self-hosted OpenAI-compatible server, split recordings past the upload limit, and transcribe multi-hour audio as async jobs."
 ---
 
 # Transcription (Speech-to-Text)

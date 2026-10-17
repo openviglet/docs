@@ -1,10 +1,12 @@
 ---
 slug: turing-es-vs-coveo-lucidworks
-title: "Viglet Turing vs. Coveo vs. Lucidworks Fusion"
-description: "A head-to-head comparison of three enterprise search platforms for large content portals (Coveo, Lucidworks Fusion, and the open-source Viglet Turing) on pricing, data residency, connectors, semantic search, and RAG."
+title: "Coveo vs. Lucidworks Fusion (and an Open-Source Option)"
+description: "Coveo is managed SaaS priced per query; Lucidworks Fusion is licensed, Solr-based and runs in your perimeter. How they compare on pricing, data residency, connectors and RAG, plus Viglet Turing as the open-source alternative."
 authors: [alexandre]
 tags: [comparison, enterprise-search, semantic-search, open-source]
 keywords:
+  - Coveo vs Lucidworks
+  - Lucidworks vs Coveo
   - Coveo alternative
   - Lucidworks alternative
   - Lucidworks Fusion alternative
@@ -15,12 +17,17 @@ image: https://docs.viglet.org/turing/img/banner.jpg
 viglet_products: [turing]
 ---
 
-If you run a large content portal (intranet, knowledge base, support site, or
-a public site on Adobe AEM), you have probably evaluated **Coveo** and
-**Lucidworks Fusion**. Both are mature, capable enterprise search platforms.
-This post compares them head-to-head with the open-source option,
-[**Viglet Turing**](https://www.viglet.org/turing/), so you can see where
-each fits.
+**Coveo** is fully managed SaaS with strong ML relevance out of the box, priced
+per query or seat, and your index lives in Coveo's cloud. **Lucidworks Fusion**
+is a licensed, Solr-based platform you can run inside your own perimeter, with
+more pipeline control and more infrastructure to operate.
+
+That is the short answer. If you run a large content portal (intranet,
+knowledge base, support site, or a public site on Adobe AEM), the sections
+below compare the two on pricing, data residency, connectors, semantic search
+and RAG, and add the open-source option,
+[**Viglet Turing**](https://www.viglet.org/turing/), for teams that want
+neither a per-query bill nor a license.
 
 We covered the [open-source alternatives to Algolia and Coveo for AEM](/blog/open-source-alternative-to-algolia-for-aem)
 broadly; this one zooms into the enterprise-portal end of the market.

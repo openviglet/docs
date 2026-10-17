@@ -100,3 +100,19 @@ From 2027, when Turing is the active bet, serve the docs search through a Viglet
 instance indexing docs.viglet.org, with the local index as the fallback when that
 endpoint is down (never an error or an endless spinner), the same graceful-degradation
 rule viglet.org's Block B sets.
+
+### §DOC8 Em dashes need a gate, not a memory
+
+AGENTS.md says the repository holds zero em dashes, but on 17/10/2026 the check it
+prescribes finds 14, in docs-turing/import-export.md and five Shio files
+(administration-guide, agent-surface, content-lifecycle, replication and COVERAGE). They
+arrived with recent product pages, so the rule is enforced by memory, not by a gate.
+
+Rewrite each one by the table in AGENTS.md (colon, parentheses, comma or two sentences;
+never a hyphen or an en dash). Then make the rule a gate: a step in
+.github/workflows/deploy.yml, before the build, that runs the AGENTS.md grep under a
+UTF-8 locale and fails the job when it matches. The grep in AGENTS.md uses `-P` with
+`\x{2014}`, which Git Bash's grep rejects ("character value too large") and so reports
+nothing; the gate should search for the literal character with `LC_ALL=C.UTF-8`, and
+AGENTS.md should show that spelling. Done when the grep returns nothing and a pull
+request that adds an em dash fails CI.

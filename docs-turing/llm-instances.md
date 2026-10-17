@@ -1,7 +1,8 @@
 ---
 sidebar_position: 1
-title: LLM Instances
-description: "Configure and manage Language Model instances in Viglet Turing: 11 vendor types, per-vendor authentication, and the capability matrix."
+title: Configure LLM Instances in Viglet Turing
+sidebar_label: LLM Instances
+description: "Connect Viglet Turing to OpenAI, Anthropic Claude, Gemini, Ollama and 7 other model providers: credentials per vendor, generation parameters, and which features each model supports."
 ---
 
 # LLM Instances
