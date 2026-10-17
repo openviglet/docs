@@ -14,7 +14,8 @@ const docsExclude = [
 
 const config: Config = {
   title: "Viglet Docs",
-  tagline: "Documentation for Viglet Turing, Viglet Shio and Viglet Dumont",
+  tagline:
+    "Install and run Viglet Turing for enterprise search, RAG and AI agents over your own content, with Viglet Dumont connectors and the Viglet Shio headless CMS.",
   favicon: "img/favicon.png",
 
   url: "https://docs.viglet.org",

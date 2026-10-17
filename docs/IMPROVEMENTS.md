@@ -21,22 +21,6 @@ Turing"), not only the feature name. Keep slugs. Done when every page in the Sea
 Console's top 25 by impressions has been reviewed, and measured a month later by clicks
 and CTR on those pages.
 
-### §DOC4 Docs home: Turing first, plain words
-
-The docs home has 223 impressions at position 5 and no click. It lists Dumont, Shio,
-Turing in that order, though Turing is the centre of the story (Dumont brings the
-content Turing indexes, Shio is the CMS of the same family). Its descriptions are
-puffery: "Enterprise Search Intelligence: semantic navigation and faceted discovery
-fused with Generative AI" and "Data Exchange Platform for seamless data integration,
-transformation, and orchestration". A stats band (3 products, 100% open source, Apache
-2.0, Java + React) repeats the headline.
-
-Put Turing first, describe each product in one plain line (the same line viglet.org
-uses, from its W38), drop the stats band, and say in the headline what the docs help
-someone do. Dumont is "Data Exchange Platform" here and "Data Extraction Platform" on
-viglet.org: use the one the owner settles. Copy follows the ai-writing pass and
-agents.md (no em dashes, no invented claims).
-
 ### §DOC5 A post a month, chosen by the Search Console
 
 The blog published 8 posts between 14/06 and 27/07/2026 and none since, yet the posts

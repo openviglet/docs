@@ -20,13 +20,6 @@ interface Product {
   color: string;
 }
 
-interface Stat {
-  value: string;
-  label: string;
-  icon: JSX.Element;
-  iconBg?: string;
-}
-
 interface CommunityLink {
   title: string;
   description: string;
@@ -37,10 +30,20 @@ interface CommunityLink {
 
 const products: Product[] = [
   {
+    id: "turing",
+    title: "Viglet Turing",
+    description:
+      "Enterprise search, cited RAG and AI agents over your content. Self-hosted, with your choice of search engine and LLM.",
+    link: "/turing",
+    release: "2026.3",
+    github: "https://github.com/openviglet/turing-ce",
+    color: "#4169E1",
+  },
+  {
     id: "dumont",
     title: "Viglet Dumont",
     description:
-      "Data Exchange Platform for seamless data integration, transformation, and orchestration across systems.",
+      "Data extraction platform that feeds Viglet Turing with content from Adobe AEM, WordPress, databases, files and the web.",
     link: "/dumont",
     release: "2026.3",
     github: "https://github.com/openviglet/dumont-ce",
@@ -50,65 +53,11 @@ const products: Product[] = [
     id: "shio",
     title: "Viglet Shio",
     description:
-      "Content Management System with GraphQL, Javascript sites, native cache and search.",
+      "Headless CMS: model content and deliver it over a versioned REST and GraphQL API, with native cache and search.",
     link: "/shio",
     release: "2026.3",
     github: "https://github.com/openviglet/shio-ce",
     color: "#7C3AED",
-  },
-  {
-    id: "turing",
-    title: "Viglet Turing",
-    description:
-      "Enterprise Search Intelligence: semantic navigation and faceted discovery fused with Generative AI: RAG, streaming chat, and tool-using agents that act on your content, indexed in Solr, Elasticsearch, or Lucene.",
-    link: "/turing",
-    release: "2026.3",
-    github: "https://github.com/openviglet/turing-ce",
-    color: "#4169E1",
-  },
-];
-
-const stats: Stat[] = [
-  {
-    value: "3",
-    label: "Products",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
-        <path d="M12 3l8 4.5v9l-8 4.5-8-4.5v-9l8-4.5z" />
-        <path d="M12 12l8-4.5" />
-        <path d="M12 12v9" />
-        <path d="M12 12L4 7.5" />
-        <path d="M16 5.25l-8 4.5" />
-      </svg>
-    ),
-  },
-  {
-    value: "100%",
-    label: "Open Source",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
-        <path d="M7 8l-4 4 4 4" />
-        <path d="M17 8l4 4-4 4" />
-        <path d="M14 4l-4 16" />
-      </svg>
-    ),
-  },
-  {
-    value: "Apache 2.0",
-    label: "License",
-    iconBg: "bg-emerald-50",
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-emerald-600">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23A11.52 11.52 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.29-1.552 3.297-1.23 3.297-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z" />
-      </svg>
-    ),
-  },
-  {
-    value: "Java + React",
-    label: "Stack",
-    icon: (
-      <span className="text-brand font-extrabold text-sm">Java</span>
-    ),
   },
 ];
 
@@ -182,22 +131,22 @@ function HeroSection(): JSX.Element {
           className="hero-fade-in font-extrabold text-foreground tracking-tight leading-tight mb-4"
           style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", animationDelay: "0.1s" }}
         >
-          Documentation for{" "}
-          <span className="gradient-text">Viglet</span>{" "}
-          Products
+          Run search and AI on{" "}
+          <span className="gradient-text">your own content</span>
         </h1>
 
         <p
           className="hero-fade-in text-lg text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed"
           style={{ animationDelay: "0.2s" }}
         >
-          Explore guides, API references, and tutorials for Viglet Turing,
-          Viglet Shio, and Viglet Dumont.
+          Install, configure and extend Viglet Turing, the open-source search and
+          AI platform, with Viglet Dumont to bring your content in and Viglet
+          Shio as the headless CMS of the same family.
         </p>
 
         <div className="hero-fade-in flex gap-3 justify-center flex-wrap" style={{ animationDelay: "0.3s" }}>
           <Button asChild>
-            <Link to="/#products">Get Started</Link>
+            <Link to="/turing/">Start with Turing</Link>
           </Button>
           <Button variant="outline" asChild>
             <a href="https://github.com/openviglet" target="_blank" rel="noopener noreferrer">
@@ -208,30 +157,6 @@ function HeroSection(): JSX.Element {
             </a>
           </Button>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function TrustBar(): JSX.Element {
-  return (
-    <section className="home-section border-y border-border bg-white dark:bg-background px-6">
-      <div className="home-section-inner flex justify-center flex-wrap">
-        {stats.map((s, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-3 py-5 px-8"
-            style={{ borderRight: i < stats.length - 1 ? "1px solid var(--color-border)" : "none" }}
-          >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${s.iconBg || "bg-brand-bg"}`}>
-              {s.icon}
-            </div>
-            <div>
-              <div className="font-bold text-foreground text-[0.9375rem]">{s.value}</div>
-              <div className="text-xs text-muted-foreground">{s.label}</div>
-            </div>
-          </div>
-        ))}
       </div>
     </section>
   );
@@ -346,10 +271,9 @@ function CommunitySection(): JSX.Element {
 export default function Home(): JSX.Element {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout title="Home" description={siteConfig.tagline}>
+    <Layout title="Viglet Turing, Dumont and Shio Documentation" description={siteConfig.tagline}>
       <main>
         <HeroSection />
-        <TrustBar />
         <ProductsSection />
         <CommunitySection />
       </main>
