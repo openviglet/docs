@@ -17,3 +17,7 @@ build
 # Misc
 .DS_Store
 *.log
+
+# roadkeep: the vendored engine and the local MCP declaration
+/.roadkeep
+/.mcp.json
