@@ -46,7 +46,7 @@ held = 60
 # Not a dep: `pick` offers a line needing one only to a caller that says it has it,
 # with `--have`. Uncomment and name your own; an undeclared word is refused.
 [requirements]
-declared = ["search-console"]
+declared = ["search-console", "turing-site"]
 
 [install]
 wired = "0.2.511"
