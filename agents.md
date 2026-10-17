@@ -157,9 +157,12 @@ banner on the `index.mdx` landing pages.
 
 ### CI/CD
 
-The GitHub Actions workflow (`deploy.yml`) installs Chromium, pre-renders the
-Mermaid diagrams, builds the site, and uploads `build/` to GitHub Pages. Nothing
-else.
+The GitHub Actions workflow (`deploy.yml`) fails on any em dash (the check under
+No Em Dashes), installs Chromium, pre-renders the Mermaid diagrams, builds the
+site, uploads `build/` to GitHub Pages, and pings IndexNow. Nothing else.
+
+When the docs quote product output (a log line, a console string, a CLI report),
+an em dash in it is fixed in the product's source, then quoted here as it now reads.
 
 ---
 

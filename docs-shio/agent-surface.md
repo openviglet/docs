@@ -97,7 +97,7 @@ instead of mapping it onto a catalogue:
 ```
 picking up where a previous session left off → GET /api/v2/agent/changes?site=<site>&format=terse
 before deriving a convention, check this instance already worked it out → GET /api/v2/agent/context?format=terse
-building a section — check something already applies it → GET /api/v2/agent/blueprints?format=terse
+building a section: check something already applies it → GET /api/v2/agent/blueprints?format=terse
 creating or changing content without holding a UUID → POST /api/v2/agent/batch with dryRun:true
 proving what you just wrote is correct without asking anyone → GET /api/v2/agent/verify?site=<site>&format=terse
 a call answered 5xx and you need to know what failed → GET /api/v2/agent/diagnostics?format=terse

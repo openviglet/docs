@@ -19,6 +19,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      # agents.md: the docs hold no em dashes. Searched as UTF-8 bytes so the
+      # locale does not matter; any match fails the deploy and is printed.
+      - name: No em dashes
+        shell: bash
+        run: |
+          if LC_ALL=C grep -rn $'\xe2\x80\x94' docs-turing docs-shio docs-dumont blog src diagrams *.md *.ts; then
+            echo "::error::Em dashes found (see agents.md, No Em Dashes)"
+            exit 1
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:

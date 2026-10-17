@@ -121,7 +121,7 @@ action in the content browser.
   **Write**.
 - Grants are **inherited** down the tree: a grant on a folder covers what is inside it.
 - An item with **no grants is open**: anyone signed in can reach it. The console says
-  so on the panel: *"No restrictions — anyone signed in can access this. Add a grant to
+  so on the panel: *"No restrictions: anyone signed in can access this. Add a grant to
   restrict it."* Adding the first grant is what starts restricting it.
 
 The same ACL is enforced on every surface. An agent's token reaches exactly what a

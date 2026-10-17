@@ -234,14 +234,14 @@ by the name the source gave it.
 The run says what came from where, and what kept a default:
 
 ```
-presented by mysite (Shio) — the one stylesheet the layout names
+presented by mysite (Shio), the one stylesheet the layout names
 palette: 5 of 9 token(s) from the captured stylesheet, under this theme's own names
-  --color-ink #10243a — ink (text#1)
-  --color-accent #ff6600 — color.accent-1 (accent#1)
-  --color-line #d9e2ec — color.border-1 (border#1)
-  --size-radius 6px — radius (radius#1)
-  --text-family "Fixture Sans", system-ui, sans-serif — font.body (font.family#1)
-  --color-ink-muted #5a6373 — the source states no text#2, so this theme's default
+  --color-ink #10243a from ink (text#1)
+  --color-accent #ff6600 from color.accent-1 (accent#1)
+  --color-line #d9e2ec from color.border-1 (border#1)
+  --size-radius 6px from radius (radius#1)
+  --text-family "Fixture Sans", system-ui, sans-serif from font.body (font.family#1)
+  --color-ink-muted #5a6373: the source states no text#2, so this theme's default
     stands. Edit the Theme post's TOKENS to set it
 ```
 
@@ -280,9 +280,9 @@ A refusal is printed with the reason and, for contrast, the ratio:
 
 ```
 palette: 1 of 9 token(s) from the captured stylesheet, under this theme's own names, 2 refused
-  --color-surface #ffffff — REFUSED: the source's background#1 is #0000, which paints nothing.
+  --color-surface #ffffff REFUSED: the source's background#1 is #0000, which paints nothing.
     This theme's default stands; fix it in the source, or edit the Theme post's TOKENS
-  --color-ink #12151a — REFUSED: #f9fafb from vg.foreground reads at 1.05:1 against
+  --color-ink #12151a REFUSED: #f9fafb from vg.foreground reads at 1.05:1 against
     --color-surface #ffffff, under the 1.5:1 floor. …
 ```
 

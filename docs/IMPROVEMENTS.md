@@ -56,23 +56,3 @@ From 2027, when Turing is the active bet, serve the docs search through a Viglet
 instance indexing docs.viglet.org, with the local index as the fallback when that
 endpoint is down (never an error or an endless spinner), the same graceful-degradation
 rule viglet.org's Block B sets.
-
-### §DOC8 Em dashes in quoted product output: a policy, then a gate
-
-On 17/10/2026 the agents.md check, now spelled with the UTF-8 bytes so it runs on Git
-Bash, finds 14 em dashes. None is prose: every one quotes what a product prints.
-Turing's auto-import log line (import-export.md), two Shio console strings (acl.openHint
-in acl.json, content.notYetPublished in content.json), Shio's agent intents digest
-(ShAgentIntents.java, quoted in agent-surface.md), the convert run's palette report
-(replication.md) and a page title shape in docs-shio/COVERAGE.md. Rewriting them would
-make the docs misquote the products.
-
-The owner decides between two policies. (a) Fix the source: drop the em dash from those
-strings in Shio and Turing (each product's own roadmap), then update the quotes here.
-(b) Exempt verbatim output: the rule covers what the docs say, not what they quote, so
-the gate skips fenced code blocks and the quoted UI strings are shown as code.
-
-Either way the gate follows: a step in .github/workflows/deploy.yml, before the build,
-that runs the agents.md check and fails the job on a match (under (b), a small script
-that skips fenced blocks). Done when the check returns nothing the policy allows and a
-change that adds an em dash fails CI.

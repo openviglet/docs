@@ -111,7 +111,7 @@ The startup log says which is which:
 ```
 Successfully auto-imported 'defaults.zip'.
 Failed to auto-import 'my-sites.zip': Missing required export.json in ZIP
-Auto-import from 'export' incomplete — 1 of 2 ZIP file(s) failed. The successful
+Auto-import from 'export' incomplete: 1 of 2 ZIP file(s) failed. The successful
 ones are recorded and will not be re-imported; the failures will be retried on
 the next start.
 ```

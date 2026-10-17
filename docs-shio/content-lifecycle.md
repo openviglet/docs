@@ -108,7 +108,7 @@ Pick two and the dialog compares them. It opens on the question you usually have
 changed between the live page and the draft:
 
 - The header says *"N field(s) changed since last publish"*, *"No changes since last
-  publish"*, or *"Not yet published — nothing to compare"*.
+  publish"*, or *"Not yet published, so there is nothing to compare"*.
 - Each changed field is shown with the change inside it, word by word for text and block by
   block for rich text. A sentence that moved in a long body is marked where it moved, not left
   for you to find in two copies of the whole field.
