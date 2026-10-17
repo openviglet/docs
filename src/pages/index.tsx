@@ -53,7 +53,7 @@ const products: Product[] = [
     id: "shio",
     title: "Viglet Shio",
     description:
-      "Headless CMS: model content and deliver it over a versioned REST and GraphQL API, with native cache and search.",
+      "Agent-ready CMS: run it from the console or a coding agent, render pages, or deliver content over REST and GraphQL.",
     link: "/shio",
     release: "2026.3",
     github: "https://github.com/openviglet/shio-ce",
@@ -141,7 +141,7 @@ function HeroSection(): JSX.Element {
         >
           Install, configure and extend Viglet Turing, the open-source search and
           AI platform, with Viglet Dumont to bring your content in and Viglet
-          Shio as the headless CMS of the same family.
+          Shio as the agent-ready CMS of the same family.
         </p>
 
         <div className="hero-fade-in flex gap-3 justify-center flex-wrap" style={{ animationDelay: "0.3s" }}>
