@@ -170,9 +170,11 @@ OpenAI SDK raises the exception it would raise against OpenAI:
 | A parameter the model cannot honour (e.g. `response_format`) | 400 | `invalid_request_error`, with `param` set |
 | The provider did not answer | 502 | `api_error` |
 
-A provider's `Retry-After` is passed through on the 429. On a streamed call the
-status is already sent when tokens start, so a failure mid-stream arrives as the
-final chunk instead.
+A provider's `Retry-After` is passed through on the 429. Streamed calls answer
+the same statuses when the provider refuses before the first token, which is
+where quota and rate limits land. A failure after tokens have started arrives as
+a final `data: {"error": {...}}` event, the shape OpenAI clients raise as an
+error.
 
 ## Notes & limits
 
