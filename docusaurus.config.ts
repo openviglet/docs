@@ -81,7 +81,7 @@ const config: Config = {
         url: "https://www.viglet.org/turing/",
         downloadUrl: "https://www.viglet.org/turing/download/",
         softwareHelp: "https://docs.viglet.org/turing/",
-        codeRepository: "https://github.com/openviglet/turing-ce",
+        codeRepository: "https://github.com/openviglet/turing",
         license: "https://www.apache.org/licenses/LICENSE-2.0",
         isAccessibleForFree: true,
         offers: {

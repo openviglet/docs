@@ -116,7 +116,7 @@ your own infrastructure.
 - 📘 [Index Adobe AEM into Turing](/blog/enterprise-search-for-adobe-aem) (start here)
 - 📗 [Embedding models](/turing/embedding-models) · [Embedding stores](/turing/embedding-stores)
 - 📙 [Semantic Navigation](/turing/semantic-navigation) · [RAG](/turing/rag)
-- ⭐ [Turing on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
+- ⭐ [Turing on GitHub](https://github.com/openviglet/turing) (Apache 2.0)
 
 *Viglet Turing is open-source enterprise search with semantic navigation and
 generative AI. Index Adobe AEM, add embedding-based vector search and RAG, and

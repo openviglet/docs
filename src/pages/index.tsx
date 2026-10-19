@@ -36,7 +36,7 @@ const products: Product[] = [
       "Enterprise search, cited RAG and AI agents over your content. Self-hosted, with your choice of search engine and LLM.",
     link: "/turing",
     release: "2026.3",
-    github: "https://github.com/openviglet/turing-ce",
+    github: "https://github.com/openviglet/turing",
     color: "#4169E1",
   },
   {
@@ -46,7 +46,7 @@ const products: Product[] = [
       "Data extraction platform that feeds Viglet Turing with content from Adobe AEM, WordPress, databases, files and the web.",
     link: "/dumont",
     release: "2026.3",
-    github: "https://github.com/openviglet/dumont-ce",
+    github: "https://github.com/openviglet/dumont",
     color: "#0F766E",
   },
   {
@@ -56,7 +56,7 @@ const products: Product[] = [
       "Agent-ready CMS: run it from the console or a coding agent, render pages, or deliver content over REST and GraphQL.",
     link: "/shio",
     release: "2026.3",
-    github: "https://github.com/openviglet/shio-ce",
+    github: "https://github.com/openviglet/shio",
     color: "#7C3AED",
   },
 ];

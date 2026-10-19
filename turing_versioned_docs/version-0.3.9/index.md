@@ -14,7 +14,7 @@ slug: /
 **Viglet Turing ES** is an open source solution for **Semantic Navigation** and **Chatbot**. You can choose from several NLPs to enrich the data. All content is indexed in Solr as search engine.
 
 - **Release:** 0.3.9
-- **GitHub:** [https://github.com/openviglet/turing-ce](https://github.com/openviglet/turing-ce)
+- **GitHub:** [https://github.com/openviglet/turing](https://github.com/openviglet/turing)
 
 ## Documentation
 

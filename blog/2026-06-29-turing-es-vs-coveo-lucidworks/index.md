@@ -109,7 +109,7 @@ docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
 - ⚖️ [Turing vs Algolia, Coveo, Lucidworks, Elasticsearch and DIY RAG](https://turing.viglet.org/compare/#coveo-vs-lucidworks): the full capability matrix
 - 📘 [Adobe AEM enterprise search guide](/blog/enterprise-search-for-adobe-aem)
 - 📗 [RAG over your content](/turing/rag) · [Semantic Navigation](/turing/semantic-navigation)
-- ⭐ [Turing on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
+- ⭐ [Turing on GitHub](https://github.com/openviglet/turing) (Apache 2.0)
 
 *Viglet Turing is open-source enterprise search with semantic navigation and
 generative AI: a self-hosted alternative to Coveo and Lucidworks Fusion for

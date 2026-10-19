@@ -262,7 +262,7 @@ cp viglet-turing.jar /appl/viglet/turing/server
 #### Option 3: Build from source
 
 ```bash
-git clone https://github.com/openviglet/turing-ce.git
+git clone https://github.com/openviglet/turing.git
 cd turing
 mvn clean package -pl turing-app
 cp turing-app/target/viglet-turing.jar /appl/viglet/turing/server/

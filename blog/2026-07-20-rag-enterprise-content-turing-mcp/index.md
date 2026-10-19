@@ -94,7 +94,7 @@ agents.
 - 📘 [What is RAG in Turing](/turing/rag)
 - 📗 [MCP Servers](/turing/mcp-servers) · [AI Agents](/turing/ai-agents)
 - 📙 [Index Adobe AEM](/blog/enterprise-search-for-adobe-aem) to build the retrieval layer
-- ⭐ [Turing on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
+- ⭐ [Turing on GitHub](https://github.com/openviglet/turing) (Apache 2.0)
 
 *Viglet Turing is open-source enterprise search with semantic navigation,
 generative AI, and MCP support. Index your enterprise content once and use it as

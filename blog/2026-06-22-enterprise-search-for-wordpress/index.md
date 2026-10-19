@@ -168,8 +168,8 @@ curl "http://localhost:2700/api/sn/wp-search/chat?q=How+do+I+reset+my+password"
 - 📘 [WordPress Connector: full reference](/dumont/connectors/wordpress)
 - 📗 [Semantic Navigation](/turing/semantic-navigation) and [RAG](/turing/rag) guides
 - 📙 [How to add enterprise search to Adobe AEM](/blog/enterprise-search-for-adobe-aem), the same approach for the other major CMS
-- ⭐ [Star Turing on GitHub](https://github.com/openviglet/turing-ce)
-- 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
+- ⭐ [Star Turing on GitHub](https://github.com/openviglet/turing)
+- 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing/discussions)
 
 *Viglet Turing is open-source (Apache 2.0) enterprise search with semantic
 navigation and generative AI. Self-host it, index WordPress, Adobe AEM,

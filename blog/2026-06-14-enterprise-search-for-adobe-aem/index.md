@@ -206,8 +206,8 @@ a third party.
 - 📘 [AEM Connector: full reference](/dumont/connectors/aem) (event listeners, QueryBuilder, custom extractors)
 - 📗 [Turing: AEM Integration](/turing/integration-aem)
 - 📙 [Semantic Navigation](/turing/semantic-navigation) and [RAG](/turing/rag) guides
-- ⭐ [Star Turing on GitHub](https://github.com/openviglet/turing-ce) (it genuinely helps others find it)
-- 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing-ce/discussions)
+- ⭐ [Star Turing on GitHub](https://github.com/openviglet/turing) (it genuinely helps others find it)
+- 💬 [Ask in GitHub Discussions](https://github.com/openviglet/turing/discussions)
 
 *Viglet Turing is open-source (Apache 2.0) enterprise search with semantic
 navigation and generative AI. Self-host it, index Adobe AEM, WordPress, databases,

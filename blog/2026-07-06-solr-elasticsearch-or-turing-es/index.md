@@ -107,7 +107,7 @@ docker run -p 2700:2700 ghcr.io/openviglet/turing-ce:latest
 
 - 📘 [Pluggable search engine](/turing/search-engine)
 - 📗 [Open-source alternatives to Algolia/Coveo for AEM](/blog/open-source-alternative-to-algolia-for-aem)
-- ⭐ [Turing on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
+- ⭐ [Turing on GitHub](https://github.com/openviglet/turing) (Apache 2.0)
 
 *Viglet Turing is an open-source enterprise search platform that runs on
 Apache Solr, Elasticsearch, or Lucene, adding connectors, faceted and semantic

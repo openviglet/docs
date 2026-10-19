@@ -8,7 +8,7 @@ description: Build Viglet Dumont from source, understand the project structure, 
 
 Whether you're building custom extensions, contributing to the project, or integrating Viglet Dumont into your CI/CD pipeline, this guide has everything you need.
 
-Dumont is fully open-source at [github.com/openviglet/dumont-ce](https://github.com/openviglet/dumont-ce). All contributions are welcome.
+Dumont is fully open-source at [github.com/openviglet/dumont](https://github.com/openviglet/dumont). All contributions are welcome.
 
 ---
 
@@ -42,7 +42,7 @@ Dumont is fully open-source at [github.com/openviglet/dumont-ce](https://github.
 ### Clone, Build, and Run
 
 ```bash
-git clone https://github.com/openviglet/dumont-ce.git
+git clone https://github.com/openviglet/dumont.git
 cd dumont
 mvn clean install
 
@@ -325,7 +325,7 @@ For the full API surface, start the application and visit the Swagger UI.
 
 ## Contributing
 
-1. **Fork** the [openviglet/dumont-ce](https://github.com/openviglet/dumont-ce) repository
+1. **Fork** the [openviglet/dumont](https://github.com/openviglet/dumont) repository
 2. **Create a branch** for your feature or fix: `git checkout -b feature/my-improvement`
 3. **Commit** with clear, descriptive messages
 4. **Open a Pull Request**: describe what you changed and why

@@ -85,7 +85,7 @@ cp web-crawler-plugin.jar /appl/viglet/dumont/server/libs/
 ### Option 3: Build from source
 
 ```bash
-git clone https://github.com/openviglet/dumont-ce.git
+git clone https://github.com/openviglet/dumont.git
 cd dumont
 mvn clean install
 

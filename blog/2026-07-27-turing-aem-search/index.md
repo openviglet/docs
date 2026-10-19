@@ -241,7 +241,7 @@ catalog, hybrid search, RAG chat, agents, voice.
 - 📘 [Index Adobe AEM into Viglet Turing](/blog/enterprise-search-for-adobe-aem): the hands-on walkthrough
 - 📗 [AEM Connector docs](/turing/integration-aem) · [Dumont connector](/dumont/connectors/aem)
 - 📙 [Semantic & vector search on AEM](/blog/semantic-vector-search-aem) · [MCP servers](/turing/mcp-servers)
-- ⭐ [Turing on GitHub](https://github.com/openviglet/turing-ce) (Apache 2.0)
+- ⭐ [Turing on GitHub](https://github.com/openviglet/turing) (Apache 2.0)
 
 *Viglet Turing is open-source enterprise search with semantic navigation and
 generative AI. Index Adobe Experience Manager alongside your other content
