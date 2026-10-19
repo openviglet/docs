@@ -13,7 +13,6 @@ keywords:
   - self-hosted WordPress search
 image: https://docs.viglet.org/turing/img/banner.jpg
 viglet_products: [turing, dumont]
-draft: true
 ---
 
 WordPress ships with a built-in search that runs a `LIKE` query against the

@@ -13,7 +13,6 @@ keywords:
   - MCP server search
 image: https://docs.viglet.org/turing/img/banner.jpg
 viglet_products: [turing]
-draft: true
 ---
 
 Retrieval-Augmented Generation (RAG) is only as good as what it retrieves. If
